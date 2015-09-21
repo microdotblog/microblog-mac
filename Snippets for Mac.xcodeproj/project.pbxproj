@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; settings = {ASSET_TAGS = (); }; };
+		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; settings = {ASSET_TAGS = (); }; };
 		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; settings = {ASSET_TAGS = (); }; };
 		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; settings = {ASSET_TAGS = (); }; };
@@ -18,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
+		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
+		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Snippets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snippets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = "<group>"; };
 		4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = "<group>"; };
@@ -72,6 +77,8 @@
 				4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */,
 				4B7F0B071BAF5792004553A6 /* RFPostingBarView.h */,
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
+				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
+				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -81,6 +88,7 @@
 			children = (
 				4B7F0AFB1BAF4C67004553A6 /* Info.plist */,
 				4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */,
+				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 			);
 			name = Resources;
@@ -151,6 +159,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
 				4B7F0AFC1BAF4C67004553A6 /* Info.plist in Resources */,
@@ -164,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
@@ -174,6 +184,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B4DC44E1BB04B970095CCBB /* Base */,
+			);
+			name = Timeline.xib;
+			sourceTree = "<group>";
+		};
 		4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

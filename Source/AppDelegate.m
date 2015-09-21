@@ -8,26 +8,18 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate ()
-
-@property (weak) IBOutlet NSWindow *window;
-@end
+#import "RFTimelineController.h"
 
 @implementation AppDelegate
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
-	[self setupTextView];
+	self.timelineController = [[RFTimelineController alloc] init];
+	[self.timelineController showWindow:nil];
 }
 
 - (void) applicationWillTerminate:(NSNotification *)notification
 {
-}
-
-- (void) setupTextView
-{
-	self.textView.font = [NSFont systemFontOfSize:15 weight:NSFontWeightLight];
-	self.textView.backgroundColor = [NSColor colorWithCalibratedWhite:0.973 alpha:1.000];
 }
 
 @end

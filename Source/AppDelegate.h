@@ -8,9 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RFTimelineController;
+
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
-@property (strong, nonatomic) IBOutlet NSTextView* textView;
+@property (strong, nonatomic) RFTimelineController* timelineController;
 
 @end
 
