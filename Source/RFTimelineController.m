@@ -35,7 +35,7 @@
 
 - (void) setupWebView
 {
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://snippets.today/"]];
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://micro.blog/"]];
 	[[self.webView mainFrame] loadRequest:request];
 }
 

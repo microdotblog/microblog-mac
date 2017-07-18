@@ -7,18 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; settings = {ASSET_TAGS = (); }; };
-		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; settings = {ASSET_TAGS = (); }; };
-		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
-		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; settings = {ASSET_TAGS = (); }; };
-		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; settings = {ASSET_TAGS = (); }; };
-		4B7F0AFC1BAF4C67004553A6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AFB1BAF4C67004553A6 /* Info.plist */; settings = {ASSET_TAGS = (); }; };
-		4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
+		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
+		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
+		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; };
+		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
+		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; };
+		4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */; };
 		4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7F0B011BAF4F73004553A6 /* WebKit.framework */; };
-		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; settings = {ASSET_TAGS = (); }; };
-		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; settings = {ASSET_TAGS = (); }; };
-		4BE541201BDEA26E00E1868B /* Paddle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE5411F1BDEA26E00E1868B /* Paddle.framework */; settings = {ASSET_TAGS = (); }; };
-		4BE541221BDEA35400E1868B /* Paddle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BE5411F1BDEA26E00E1868B /* Paddle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
+		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,7 +25,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4BE541221BDEA35400E1868B /* Paddle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,7 +34,7 @@
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
-		4B7F0AD81BAF4B78004553A6 /* Snippets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snippets.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = "<group>"; };
 		4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = "<group>"; };
 		4B7F0AF01BAF4C27004553A6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
@@ -50,7 +46,6 @@
 		4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBackgroundView.m; path = Source/RFHeaderBackgroundView.m; sourceTree = "<group>"; };
 		4B7F0B071BAF5792004553A6 /* RFPostingBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFPostingBarView.h; path = Source/RFPostingBarView.h; sourceTree = "<group>"; };
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
-		4BE5411F1BDEA26E00E1868B /* Paddle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Paddle.framework; path = Shared/Paddle/Paddle.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +53,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BE541201BDEA26E00E1868B /* Paddle.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,7 +73,7 @@
 		4B7F0AD91BAF4B78004553A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4B7F0AD81BAF4B78004553A6 /* Snippets.app */,
+				4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,7 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				4B7F0B011BAF4F73004553A6 /* WebKit.framework */,
-				4BE5411F1BDEA26E00E1868B /* Paddle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -138,7 +131,7 @@
 			);
 			name = Snippets;
 			productName = "Snippets for Mac";
-			productReference = 4B7F0AD81BAF4B78004553A6 /* Snippets.app */;
+			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -147,11 +140,13 @@
 		4B7F0AD01BAF4B77004553A6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Riverfold Software";
 				TargetAttributes = {
 					4B7F0AD71BAF4B77004553A6 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 3F9MDJ6K4E;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -181,7 +176,6 @@
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
-				4B7F0AFC1BAF4C67004553A6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,8 +229,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -258,7 +254,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -278,8 +274,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -295,7 +293,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -305,16 +303,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Shared/Paddle",
-				);
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.riverfold.snippets.mac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
+				PRODUCT_NAME = Micro.blog;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -322,16 +320,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Shared/Paddle",
-				);
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.riverfold.snippets.mac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
+				PRODUCT_NAME = Micro.blog;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
