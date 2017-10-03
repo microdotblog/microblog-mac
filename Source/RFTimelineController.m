@@ -35,7 +35,30 @@
 
 - (void) setupWebView
 {
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://micro.blog/"]];
+	[self showTimeline:nil];
+}
+
+- (IBAction) showTimeline:(id)sender
+{
+	NSString* token = [[NSUserDefaults standardUserDefaults] objectForKey:@"SnippetsToken"];
+	CGFloat pane_width = self.webView.bounds.size.width;
+	NSInteger timezone_minutes = 0;
+	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d", token, pane_width, timezone_minutes];
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
+}
+
+- (IBAction) showMentions:(id)sender
+{
+	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/mentions"];
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
+}
+
+- (IBAction) showFavorites:(id)sender
+{
+	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/favorites"];
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 }
 

@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A279b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -16,11 +16,11 @@
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
-                <menuItem title="Snippets" id="1Xt-HY-uBw">
+                <menuItem title="Micro.blog" id="1Xt-HY-uBw">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Snippets" systemMenu="apple" id="uQy-DD-JDr">
+                    <menu key="submenu" title="Micro.blog" systemMenu="apple" id="uQy-DD-JDr">
                         <items>
-                            <menuItem title="About Snippets" id="5kV-Vb-QxS">
+                            <menuItem title="About Micro.blog" id="5kV-Vb-QxS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
@@ -34,7 +34,7 @@
                                 <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                            <menuItem title="Hide Snippets" keyEquivalent="h" id="Olw-nP-bQN">
+                            <menuItem title="Hide Micro.blog" keyEquivalent="h" id="Olw-nP-bQN">
                                 <connections>
                                     <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
                                 </connections>
@@ -52,7 +52,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                            <menuItem title="Quit Snippets" keyEquivalent="q" id="4sb-4s-VLi">
+                            <menuItem title="Quit Micro.blog" keyEquivalent="q" id="4sb-4s-VLi">
                                 <connections>
                                     <action selector="terminate:" target="-1" id="Te7-pn-YzF"/>
                                 </connections>
@@ -311,6 +311,28 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Timeline" id="ped-pS-EeC">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Timeline" id="SsD-pp-s3v">
+                        <items>
+                            <menuItem title="Posts" keyEquivalent="1" id="gDe-lV-GE1">
+                                <connections>
+                                    <action selector="showTimeline:" target="-1" id="Lmg-tI-oSH"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Mentions" keyEquivalent="2" id="ODm-SZ-Tin">
+                                <connections>
+                                    <action selector="showMentions:" target="-1" id="gd9-oQ-pfl"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Favorites" keyEquivalent="3" id="ACN-rZ-vlg">
+                                <connections>
+                                    <action selector="showFavorites:" target="-1" id="DhZ-W0-ff1"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Window" id="aUF-d1-5bR">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
@@ -340,7 +362,7 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
-                            <menuItem title="Snippets Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                            <menuItem title="Micro.blog Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                 <connections>
                                     <action selector="showHelp:" target="-1" id="y7X-2Q-9no"/>
                                 </connections>
