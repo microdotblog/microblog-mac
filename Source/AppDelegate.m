@@ -30,7 +30,7 @@
 	NSURL* url = [urls firstObject];
 	NSString* param = [url.path stringByReplacingOccurrencesOfString:@"/" withString:@""];
 	if ([url.host isEqualToString:@"open"]) {
-//		[self showOptionsMenuWithPostID:param];
+		[self showOptionsMenuWithPostID:param];
 	}
 	else if ([url.host isEqualToString:@"user"]) {
 //		[self showProfileWithUsername:param];
@@ -48,6 +48,10 @@
 }
 
 #pragma mark -
+
+- (void) showOptionsMenuWithPostID:(NSString *)postID
+{
+}
 
 - (void) showSigninWithToken:(NSString *)token
 {
