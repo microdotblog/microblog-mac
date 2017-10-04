@@ -10,6 +10,7 @@
 
 #import "RFMenuCell.h"
 #import "RFOptionsController.h"
+#import "RFPostController.h"
 
 static CGFloat const kDefaultSplitViewPosition = 170.0;
 
@@ -57,6 +58,27 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self showTimeline:nil];
 }
 
+#pragma mark -
+
+- (IBAction) newDocument:(id)sender
+{
+	self.postController = [[RFPostController alloc] init];
+
+	NSRect r = self.webView.bounds;
+	r.origin.x = kDefaultSplitViewPosition + 1;
+	self.postController.view.frame = r;
+	self.postController.view.alphaValue = 0.0;
+	
+	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:self.webView];
+
+	self.postController.view.animator.alphaValue = 1.0;
+}
+
+- (IBAction) performClose:(id)sender
+{
+	[self.postController.view removeFromSuperview];
+}
+
 - (IBAction) showTimeline:(id)sender
 {
 	NSString* token = [[NSUserDefaults standardUserDefaults] objectForKey:@"SnippetsToken"];
@@ -69,6 +91,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
 
 	[self.optionsPopover performClose:nil];
+	[self performClose:nil];
 }
 
 - (IBAction) showMentions:(id)sender

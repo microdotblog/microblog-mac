@@ -6,12 +6,52 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-2" userLabel="File's Owner" customClass="RFPostController">
+            <connections>
+                <outlet property="textView" destination="NeT-rM-aUD" id="57U-hK-zZF"/>
+                <outlet property="view" destination="c22-O7-iKe" id="EtC-Rp-dqb"/>
+            </connections>
+        </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="c22-O7-iKe">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+        <customView wantsLayer="YES" id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZx-60-jkm">
+                    <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
+                    <clipView key="contentView" id="ao9-YX-6JT">
+                        <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="NeT-rM-aUD">
+                                <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="minSize" width="419" height="414"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                                <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="yFI-u4-HdJ">
+                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="VgA-4D-Op5">
+                        <rect key="frame" x="403" y="0.0" width="16" height="414"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="fZx-60-jkm" secondAttribute="bottom" id="FAT-KX-a7E"/>
+                <constraint firstAttribute="trailing" secondItem="fZx-60-jkm" secondAttribute="trailing" id="bpR-Sh-uj4"/>
+                <constraint firstItem="fZx-60-jkm" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="lqs-Et-vDs"/>
+                <constraint firstItem="fZx-60-jkm" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="zEY-dx-tF9"/>
+            </constraints>
+            <point key="canvasLocation" x="100.5" y="239"/>
         </customView>
     </objects>
 </document>

@@ -25,6 +25,7 @@
 		4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7F0B011BAF4F73004553A6 /* WebKit.framework */; };
 		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
 		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
+		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,6 +70,8 @@
 		4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBackgroundView.m; path = Source/RFHeaderBackgroundView.m; sourceTree = "<group>"; };
 		4B7F0B071BAF5792004553A6 /* RFPostingBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFPostingBarView.h; path = Source/RFPostingBarView.h; sourceTree = "<group>"; };
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
+		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
+		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +126,8 @@
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
 				4B5650671F8585C900B03FFD /* RFRoundedImageView.h */,
 				4B5650681F8585C900B03FFD /* RFRoundedImageView.m */,
+				4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */,
+				4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 			files = (
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
+				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,

@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
+@class RFPostController;
+
 @interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
@@ -16,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet WebView* webView;
 
 @property (strong, nonatomic) NSPopover* optionsPopover;
+@property (strong, nonatomic) RFPostController* postController;
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 

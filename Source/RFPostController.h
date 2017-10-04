@@ -8,6 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RFHighlightingTextStorage;
+
 @interface RFPostController : NSViewController
+
+@property (strong, nonatomic) IBOutlet NSTextView* textView;
+
+@property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
 
 @end
