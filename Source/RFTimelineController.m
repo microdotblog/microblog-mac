@@ -8,6 +8,8 @@
 
 #import "RFTimelineController.h"
 
+#import "RFMenuCell.h"
+
 static CGFloat const kDefaultSplitViewPosition = 180.0;
 
 @implementation RFTimelineController
@@ -58,7 +60,7 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 {
 	NSString* token = [[NSUserDefaults standardUserDefaults] objectForKey:@"SnippetsToken"];
 	CGFloat pane_width = self.webView.bounds.size.width;
-	NSInteger timezone_minutes = 0;
+	int timezone_minutes = 0;
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width, timezone_minutes];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
@@ -85,15 +87,36 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	return 3;
 }
 
-- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn row:(NSInteger)row
-{
-	return @"";
-}
-
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
-	NSTableRowView* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
+	RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
+	
+	if (row == 0) {
+		cell.titleField.stringValue = @"Timeline";
+	}
+	else if (row == 1) {
+		cell.titleField.stringValue = @"Mentions";
+	}
+	else if (row == 2) {
+		cell.titleField.stringValue = @"Favorites";
+	}
+
 	return cell;
+}
+
+- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+	if (row == 0) {
+		[self showTimeline:nil];
+	}
+	else if (row == 1) {
+		[self showMentions:nil];
+	}
+	else if (row == 2) {
+		[self showFavorites:nil];
+	}
+
+	return YES;
 }
 
 #pragma mark -

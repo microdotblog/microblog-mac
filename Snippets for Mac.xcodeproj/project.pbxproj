@@ -12,6 +12,7 @@
 		4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A25061F83FE37007C548F /* RFWelcomeController.m */; };
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
+		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
 		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
 		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; };
@@ -41,6 +42,8 @@
 		4B5A25061F83FE37007C548F /* RFWelcomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWelcomeController.m; path = Source/RFWelcomeController.m; sourceTree = "<group>"; };
 		4B5A25091F83FE4D007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Welcome.xib; sourceTree = "<group>"; };
 		4B5A250C1F8497B1007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MenuCell.xib; sourceTree = "<group>"; };
+		4B5A250E1F849AF2007C548F /* RFMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMenuCell.h; path = Source/RFMenuCell.h; sourceTree = "<group>"; };
+		4B5A250F1F849AF2007C548F /* RFMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMenuCell.m; path = Source/RFMenuCell.m; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = "<group>"; };
 		4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = "<group>"; };
@@ -97,6 +100,8 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4B5A250E1F849AF2007C548F /* RFMenuCell.h */,
+				4B5A250F1F849AF2007C548F /* RFMenuCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
 			);
@@ -203,6 +208,7 @@
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
+				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */,
 			);

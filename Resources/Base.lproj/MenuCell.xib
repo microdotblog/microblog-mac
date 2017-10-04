@@ -9,20 +9,30 @@
         <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="WOV-ev-LvX" customClass="NSTableRowView">
+        <customView id="WOV-ev-LvX" customClass="RFMenuCell">
             <rect key="frame" x="0.0" y="0.0" width="176" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HZB-bv-PgW">
-                    <rect key="frame" x="10" y="13" width="147" height="27"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HZB-bv-PgW">
+                    <rect key="frame" x="10" y="9" width="147" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="ac7-Jj-IxR"/>
+                    </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Testing" id="i7D-au-ecM">
-                        <font key="font" size="16" name="Avenir-Book"/>
+                        <font key="font" size="15" name="Avenir-Book"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
             </subviews>
+            <constraints>
+                <constraint firstItem="HZB-bv-PgW" firstAttribute="leading" secondItem="WOV-ev-LvX" secondAttribute="leading" constant="12" id="3aV-FC-TUk"/>
+                <constraint firstItem="HZB-bv-PgW" firstAttribute="top" secondItem="WOV-ev-LvX" secondAttribute="top" constant="10" id="520-VZ-rDb"/>
+                <constraint firstAttribute="trailing" secondItem="HZB-bv-PgW" secondAttribute="trailing" constant="21" id="Rr1-1F-IXe"/>
+            </constraints>
+            <connections>
+                <outlet property="titleField" destination="HZB-bv-PgW" id="bsw-ye-Jis"/>
+            </connections>
             <point key="canvasLocation" x="-231" y="-60"/>
         </customView>
     </objects>
