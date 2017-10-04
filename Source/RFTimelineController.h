@@ -15,4 +15,8 @@
 @property (strong, nonatomic) IBOutlet NSSplitView* splitView;
 @property (strong, nonatomic) IBOutlet WebView* webView;
 
+@property (strong, nonatomic) NSPopover* optionsPopover;
+
+- (void) showOptionsMenuWithPostID:(NSString *)postID;
+
 @end

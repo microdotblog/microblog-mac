@@ -21,7 +21,7 @@
 
 - (IBAction) openSignin:(id)sender
 {
-	NSString* url = @"https://micro.blog/account";
+	NSString* url = @"https://micro.blog/account/mac";
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
 }
 

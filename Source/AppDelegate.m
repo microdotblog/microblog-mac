@@ -23,6 +23,8 @@
 		self.welcomeController = [[RFWelcomeController alloc] init];
 		[self.welcomeController showWindow:nil];
 	}
+	
+	[self setupNotifications];
 }
 
 - (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
@@ -47,10 +49,24 @@
 {
 }
 
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signOutNotification:) name:@"RFSignOut" object:nil];
+}
+
 #pragma mark -
+
+- (void) signOutNotification:(NSNotification *)notification
+{
+	[self.timelineController close];
+	
+	self.welcomeController = [[RFWelcomeController alloc] init];
+	[self.welcomeController showWindow:nil];
+}
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID
 {
+	[self.timelineController showOptionsMenuWithPostID:postID];
 }
 
 - (void) showSigninWithToken:(NSString *)token

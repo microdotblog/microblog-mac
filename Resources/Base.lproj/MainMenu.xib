@@ -64,7 +64,7 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="File" id="bib-Uj-vzu">
                         <items>
-                            <menuItem title="New" keyEquivalent="n" id="Was-JA-tGl">
+                            <menuItem title="New Post" keyEquivalent="n" id="Was-JA-tGl">
                                 <connections>
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
@@ -88,6 +88,13 @@
                             <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
                                 <connections>
                                     <action selector="saveDocumentAs:" target="-1" id="mDf-zr-I0C"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="EWd-1i-I6l"/>
+                            <menuItem title="Sign Out" id="tFo-tJ-1IJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="signOut:" target="-1" id="crw-Sa-IQK"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -315,17 +322,17 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Timeline" id="SsD-pp-s3v">
                         <items>
-                            <menuItem title="Posts" keyEquivalent="1" id="gDe-lV-GE1">
+                            <menuItem title="Show Timeline" keyEquivalent="1" id="gDe-lV-GE1">
                                 <connections>
                                     <action selector="showTimeline:" target="-1" id="Lmg-tI-oSH"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Mentions" keyEquivalent="2" id="ODm-SZ-Tin">
+                            <menuItem title="Show Mentions" keyEquivalent="2" id="ODm-SZ-Tin">
                                 <connections>
                                     <action selector="showMentions:" target="-1" id="gd9-oQ-pfl"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Favorites" keyEquivalent="3" id="ACN-rZ-vlg">
+                            <menuItem title="Show Favorites" keyEquivalent="3" id="ACN-rZ-vlg">
                                 <connections>
                                     <action selector="showFavorites:" target="-1" id="DhZ-W0-ff1"/>
                                 </connections>

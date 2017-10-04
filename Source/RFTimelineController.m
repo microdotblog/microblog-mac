@@ -9,8 +9,9 @@
 #import "RFTimelineController.h"
 
 #import "RFMenuCell.h"
+#import "RFOptionsController.h"
 
-static CGFloat const kDefaultSplitViewPosition = 180.0;
+static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 @implementation RFTimelineController
 
@@ -66,6 +67,8 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	[[self.webView mainFrame] loadRequest:request];
 	
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+
+	[self.optionsPopover performClose:nil];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -75,6 +78,8 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	[[self.webView mainFrame] loadRequest:request];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+
+	[self.optionsPopover performClose:nil];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -84,6 +89,44 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	[[self.webView mainFrame] loadRequest:request];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
+
+	[self.optionsPopover performClose:nil];
+}
+
+- (IBAction) signOut:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SnippetsToken"];
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
+}
+
+- (void) showOptionsMenuWithPostID:(NSString *)postID
+{
+	[self.optionsPopover performClose:nil];
+
+	RFOptionsController* options_controller = [[RFOptionsController alloc] init];
+	self.optionsPopover = [[NSPopover alloc] init];
+	self.optionsPopover.contentViewController = options_controller;
+
+	NSRect r = [self rectOfPostID:postID];
+	[self.optionsPopover showRelativeToRect:r ofView:self.webView preferredEdge:NSRectEdgeMinY];
+}
+
+- (NSRect) rectOfPostID:(NSString *)postID
+{
+	NSString* top_js = [NSString stringWithFormat:@"$('#post_%@').position().top;", postID];
+	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
+	
+	NSString* top_s = [self.webView stringByEvaluatingJavaScriptFromString:top_js];
+	NSString* height_s = [self.webView stringByEvaluatingJavaScriptFromString:height_js];
+
+	CGFloat top_f = [top_s floatValue];
+	top_f -= 0; // self.webView.scrollView.contentOffset.y;
+	
+	// adjust to full cell width
+	CGFloat left_f = 0.0;
+	CGFloat width_f = self.webView.bounds.size.width;
+	
+	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
 }
 
 #pragma mark -
