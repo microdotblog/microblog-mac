@@ -8,6 +8,8 @@
 
 #import "RFTimelineController.h"
 
+static CGFloat const kDefaultSplitViewPosition = 180.0;
+
 @implementation RFTimelineController
 
 - (instancetype) init
@@ -23,6 +25,7 @@
 {
 	[super windowDidLoad];
 
+	[self setupTable];
 	[self setupSplitView];
 	[self setupWebView];
 }
@@ -33,9 +36,17 @@
 //	self.textView.backgroundColor = [NSColor colorWithCalibratedWhite:0.973 alpha:1.000];
 //}
 
+- (void) setupTable
+{
+	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"MenuCell" bundle:nil] forIdentifier:@"MenuCell"];
+	self.tableView.delegate = self;
+	self.tableView.dataSource = self;
+}
+
 - (void) setupSplitView
 {
-	[self.splitView setPosition:180 ofDividerAtIndex:0];
+	[self.splitView setPosition:kDefaultSplitViewPosition ofDividerAtIndex:0];
+	self.splitView.delegate = self;
 }
 
 - (void) setupWebView
@@ -65,6 +76,36 @@
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+}
+
+#pragma mark -
+
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
+{
+	return 3;
+}
+
+- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	return @"";
+}
+
+- (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
+{
+	NSTableRowView* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
+	return cell;
+}
+
+#pragma mark -
+
+- (CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+	return kDefaultSplitViewPosition;
+}
+
+- (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+	return kDefaultSplitViewPosition;
 }
 
 @end

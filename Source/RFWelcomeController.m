@@ -19,4 +19,10 @@
 	return self;
 }
 
+- (IBAction) openSignin:(id)sender
+{
+	NSString* url = @"https://micro.blog/account";
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+}
+
 @end
