@@ -4,11 +4,13 @@
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <plugIn identifier="com.apple.WebKitIBPlugin" version="13196"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFTimelineController">
             <connections>
+                <outlet property="splitView" destination="fkA-Zg-Ds4" id="a8c-6k-c9Q"/>
                 <outlet property="webView" destination="O0D-ep-0xS" id="ohS-4X-e3L"/>
                 <outlet property="window" destination="zQt-7i-HMD" id="btK-bf-6Ad"/>
             </connections>
@@ -18,27 +20,100 @@
         <window title="Micro.blog" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="zQt-7i-HMD">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="500" height="600"/>
+            <rect key="contentRect" x="335" y="390" width="540" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
-            <value key="minSize" type="size" width="500" height="300"/>
-            <value key="maxSize" type="size" width="500" height="2000"/>
+            <value key="minSize" type="size" width="540" height="300"/>
+            <value key="maxSize" type="size" width="540" height="2000"/>
             <view key="contentView" id="ugu-9q-Cxg">
-                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fkA-Zg-Ds4">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                         <subviews>
                             <customView fixedFrame="YES" id="kIC-ao-4PD">
-                                <rect key="frame" x="0.0" y="0.0" width="122" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="179" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <box fixedFrame="YES" boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="aQA-f2-uq2">
+                                        <rect key="frame" x="0.0" y="534" width="179" height="66"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <view key="contentView" ambiguous="YES" id="ppR-hI-pWf">
+                                            <rect key="frame" x="0.0" y="0.0" width="179" height="66"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                        <color key="fillColor" white="0.81739783653846154" alpha="0.49734613549618323" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </box>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ETu-Lx-u0c">
+                                        <rect key="frame" x="8" y="543" width="48" height="48"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="3fM-yc-tNH"/>
+                                    </imageView>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqw-tG-vVO">
+                                        <rect key="frame" x="62" y="564" width="108" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Manton Reece" id="D2q-sQ-CLj">
+                                            <font key="font" size="13" name="Avenir-Medium"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HD9-1U-V6d">
+                                        <rect key="frame" x="62" y="545" width="108" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="@manton" id="3ND-A9-PxE">
+                                            <font key="font" size="13" name="Avenir-Medium"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="RaW-cT-qWq">
+                                        <rect key="frame" x="0.0" y="532" width="179" height="5"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </box>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="101-WX-DBD">
+                                        <rect key="frame" x="8" y="500" width="162" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Timeline" id="lBI-oo-SNg">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8TK-2n-j7e">
+                                        <rect key="frame" x="8" y="460" width="162" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Mentions" id="fGy-F1-e7k">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UEo-4y-aOz">
+                                        <rect key="frame" x="8" y="418" width="162" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Favorites" id="ScU-mZ-arQ">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="0bq-Hi-Su4">
+                                        <rect key="frame" x="0.0" y="489" width="179" height="5"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </box>
+                                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="T5B-OY-oZw">
+                                        <rect key="frame" x="0.0" y="449" width="179" height="5"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </box>
+                                </subviews>
                             </customView>
                             <customView id="tQN-jO-jUp">
-                                <rect key="frame" x="123" y="0.0" width="377" height="600"/>
+                                <rect key="frame" x="180" y="0.0" width="360" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <webView translatesAutoresizingMaskIntoConstraints="NO" id="O0D-ep-0xS">
-                                        <rect key="frame" x="0.0" y="0.0" width="377" height="600"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="360" height="600"/>
                                         <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
                                             <nil key="identifier"/>
                                         </webPreferences>

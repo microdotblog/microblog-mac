@@ -23,14 +23,19 @@
 {
 	[super windowDidLoad];
 
-	[self setupTextView];
+	[self setupSplitView];
 	[self setupWebView];
 }
 
-- (void) setupTextView
+//- (void) setupTextView
+//{
+//	self.textView.font = [NSFont systemFontOfSize:15 weight:NSFontWeightLight];
+//	self.textView.backgroundColor = [NSColor colorWithCalibratedWhite:0.973 alpha:1.000];
+//}
+
+- (void) setupSplitView
 {
-	self.textView.font = [NSFont systemFontOfSize:15 weight:NSFontWeightLight];
-	self.textView.backgroundColor = [NSColor colorWithCalibratedWhite:0.973 alpha:1.000];
+	[self.splitView setPosition:180 ofDividerAtIndex:0];
 }
 
 - (void) setupWebView

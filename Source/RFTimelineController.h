@@ -11,7 +11,7 @@
 
 @interface RFTimelineController : NSWindowController
 
-@property (strong, nonatomic) IBOutlet NSTextView* textView;
+@property (strong, nonatomic) IBOutlet NSSplitView* splitView;
 @property (strong, nonatomic) IBOutlet WebView* webView;
 
 @end
