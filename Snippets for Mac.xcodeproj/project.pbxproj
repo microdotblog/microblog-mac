@@ -13,6 +13,7 @@
 		4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B56505D1F8561A300B03FFD /* RFPostController.m */; };
 		4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650601F85626200B03FFD /* RFOptionsController.m */; };
 		4B5650661F8564AE00B03FFD /* Options.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650641F8562B900B03FFD /* Options.xib */; };
+		4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650681F8585C900B03FFD /* RFRoundedImageView.m */; };
 		4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A25061F83FE37007C548F /* RFWelcomeController.m */; };
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
@@ -48,6 +49,8 @@
 		4B56505F1F85626200B03FFD /* RFOptionsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFOptionsController.h; path = Source/RFOptionsController.h; sourceTree = "<group>"; };
 		4B5650601F85626200B03FFD /* RFOptionsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFOptionsController.m; path = Source/RFOptionsController.m; sourceTree = "<group>"; };
 		4B5650651F8562B900B03FFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Options.xib; sourceTree = "<group>"; };
+		4B5650671F8585C900B03FFD /* RFRoundedImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFRoundedImageView.h; path = Source/RFRoundedImageView.h; sourceTree = "<group>"; };
+		4B5650681F8585C900B03FFD /* RFRoundedImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFRoundedImageView.m; path = Source/RFRoundedImageView.m; sourceTree = "<group>"; };
 		4B5A25051F83FE37007C548F /* RFWelcomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFWelcomeController.h; path = Source/RFWelcomeController.h; sourceTree = "<group>"; };
 		4B5A25061F83FE37007C548F /* RFWelcomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWelcomeController.m; path = Source/RFWelcomeController.m; sourceTree = "<group>"; };
 		4B5A25091F83FE4D007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Welcome.xib; sourceTree = "<group>"; };
@@ -118,6 +121,8 @@
 				4B5A250F1F849AF2007C548F /* RFMenuCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
+				4B5650671F8585C900B03FFD /* RFRoundedImageView.h */,
+				4B5650681F8585C900B03FFD /* RFRoundedImageView.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 			files = (
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
+				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,

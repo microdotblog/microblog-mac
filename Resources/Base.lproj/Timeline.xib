@@ -45,7 +45,7 @@
                                         </view>
                                         <color key="fillColor" white="0.81739783653846154" alpha="0.49734613549618323" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </box>
-                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ETu-Lx-u0c">
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ETu-Lx-u0c" customClass="RFRoundedImageView">
                                         <rect key="frame" x="8" y="543" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="igt-Gu-FAA"/>
