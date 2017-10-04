@@ -64,6 +64,8 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width, timezone_minutes];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+	
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -71,6 +73,8 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/mentions"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -78,6 +82,8 @@ static CGFloat const kDefaultSplitViewPosition = 180.0;
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
 }
 
 #pragma mark -

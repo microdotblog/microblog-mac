@@ -37,10 +37,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <box fixedFrame="YES" boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="aQA-f2-uq2">
-                                        <rect key="frame" x="0.0" y="534" width="179" height="66"/>
+                                        <rect key="frame" x="0.0" y="534" width="181" height="66"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <view key="contentView" ambiguous="YES" id="ppR-hI-pWf">
-                                            <rect key="frame" x="0.0" y="0.0" width="179" height="66"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="181" height="66"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                         <color key="fillColor" white="0.81739783653846154" alpha="0.49734613549618323" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
