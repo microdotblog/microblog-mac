@@ -340,6 +340,18 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Format" id="xCn-of-Gnu">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Format" id="o4H-1q-ott">
+                        <items>
+                            <menuItem title="Bold" keyEquivalent="b" id="6mw-jW-3BX"/>
+                            <menuItem title="Italic" keyEquivalent="i" id="HCb-ac-uOo"/>
+                            <menuItem title="Link" id="ulH-2Z-zYS">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Window" id="aUF-d1-5bR">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
