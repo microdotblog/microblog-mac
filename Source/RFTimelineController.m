@@ -72,11 +72,17 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.postController.view.animator.alphaValue = 1.0;
+	[self.window makeFirstResponder:self.postController.textView];
+	self.postController.nextResponder = self;
 }
 
 - (IBAction) performClose:(id)sender
 {
-	[self.postController.view removeFromSuperview];
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+		self.postController.view.animator.alphaValue = 0.0;
+	} completionHandler:^{
+		[self.postController.view removeFromSuperview];
+	}];
 }
 
 - (IBAction) showTimeline:(id)sender

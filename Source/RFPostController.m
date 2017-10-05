@@ -27,6 +27,19 @@
 	
 	self.textStorage = [[RFHighlightingTextStorage alloc] init];
 	[self.textStorage addLayoutManager:self.textView.layoutManager];
+
+	self.view.layer.masksToBounds = YES;
+	self.view.layer.cornerRadius = 10.0;
+	self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
 }
+
+- (void) viewDidAppear
+{
+	[super viewDidAppear];
+}
+
+//- (IBAction) close:(id)sender
+//{
+//}
 
 @end

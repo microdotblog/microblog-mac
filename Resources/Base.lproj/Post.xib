@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFPostController">
             <connections>
-                <outlet property="textView" destination="NeT-rM-aUD" id="57U-hK-zZF"/>
+                <outlet property="textView" destination="NeT-rM-aUD" id="h36-Yq-1DK"/>
                 <outlet property="view" destination="c22-O7-iKe" id="EtC-Rp-dqb"/>
             </connections>
         </customObject>
@@ -19,16 +19,16 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZx-60-jkm">
-                    <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
+                    <rect key="frame" x="7" y="0.0" width="405" height="363"/>
                     <clipView key="contentView" id="ao9-YX-6JT">
-                        <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="405" height="363"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="NeT-rM-aUD">
-                                <rect key="frame" x="0.0" y="0.0" width="419" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="405" height="363"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="419" height="414"/>
+                                <size key="minSize" width="405" height="363"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </textView>
@@ -40,18 +40,60 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="VgA-4D-Op5">
-                        <rect key="frame" x="403" y="0.0" width="16" height="414"/>
+                        <rect key="frame" x="389" y="0.0" width="16" height="363"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WGb-Wi-5DC">
+                    <rect key="frame" x="346" y="376" width="67" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="55" id="Y2J-jo-guJ"/>
+                        <constraint firstAttribute="height" constant="21" id="mor-jl-LbA"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="Post" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s2d-v4-h2h">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gdA-dC-fjJ">
+                    <rect key="frame" x="7" y="383" width="23" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="23" id="Wwn-7v-m5f"/>
+                        <constraint firstAttribute="height" constant="21" id="j8w-O1-fvh"/>
+                    </constraints>
+                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="CloseNormal" imagePosition="only" alignment="center" alternateImage="ClosePressed" imageScaling="proportionallyDown" inset="2" id="I0I-QM-c0X">
+                        <behavior key="behavior" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="performClose:" target="-1" id="NOX-se-JpE"/>
+                    </connections>
+                </button>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hL2-H5-aN9">
+                    <rect key="frame" x="12" y="370" width="395" height="4"/>
+                    <constraints>
+                        <constraint firstAttribute="height" id="lv2-MM-Iwb"/>
+                    </constraints>
+                </box>
             </subviews>
             <constraints>
+                <constraint firstItem="gdA-dC-fjJ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="10" id="8ca-NF-LWn"/>
                 <constraint firstAttribute="bottom" secondItem="fZx-60-jkm" secondAttribute="bottom" id="FAT-KX-a7E"/>
-                <constraint firstAttribute="trailing" secondItem="fZx-60-jkm" secondAttribute="trailing" id="bpR-Sh-uj4"/>
-                <constraint firstItem="fZx-60-jkm" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="lqs-Et-vDs"/>
-                <constraint firstItem="fZx-60-jkm" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="zEY-dx-tF9"/>
+                <constraint firstItem="fZx-60-jkm" firstAttribute="top" secondItem="hL2-H5-aN9" secondAttribute="bottom" constant="9" id="HUX-c7-WhW"/>
+                <constraint firstAttribute="trailing" secondItem="hL2-H5-aN9" secondAttribute="trailing" constant="12" id="OgL-Li-4U6"/>
+                <constraint firstItem="gdA-dC-fjJ" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="7" id="W66-fR-fpW"/>
+                <constraint firstAttribute="trailing" secondItem="fZx-60-jkm" secondAttribute="trailing" constant="7" id="bpR-Sh-uj4"/>
+                <constraint firstAttribute="trailing" secondItem="WGb-Wi-5DC" secondAttribute="trailing" constant="12" id="jOk-PB-pxe"/>
+                <constraint firstItem="hL2-H5-aN9" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="kJE-dh-s6c"/>
+                <constraint firstItem="fZx-60-jkm" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="7" id="lqs-Et-vDs"/>
+                <constraint firstItem="hL2-H5-aN9" firstAttribute="top" secondItem="WGb-Wi-5DC" secondAttribute="bottom" constant="11" id="o5c-ld-b4c"/>
+                <constraint firstItem="WGb-Wi-5DC" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="10" id="qwG-bP-UNf"/>
             </constraints>
             <point key="canvasLocation" x="100.5" y="239"/>
         </customView>
     </objects>
+    <resources>
+        <image name="CloseNormal" width="20" height="20"/>
+        <image name="ClosePressed" width="20" height="20"/>
+    </resources>
 </document>

@@ -8,6 +8,8 @@
 
 #import "RFHighlightingTextStorage.h"
 
+static CGFloat const kDefaultFontSize = 16.0;
+
 @implementation RFHighlightingTextStorage
 {
 	NSMutableAttributedString *_imp;
@@ -79,7 +81,7 @@
 
 - (void) processBold
 {
-	NSFont* bold_font = [NSFont fontWithName:@"Avenir-Heavy" size:18];
+	NSFont* bold_font = [NSFont fontWithName:@"Avenir-Heavy" size:kDefaultFontSize];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_bold = NO;
 	for (NSInteger i = 0; i < self.string.length; i++) {
@@ -110,7 +112,7 @@
 
 - (void) processItalic
 {
-	NSFont* italic_font = [NSFont fontWithName:@"Avenir-Oblique" size:18];
+	NSFont* italic_font = [NSFont fontWithName:@"Avenir-Oblique" size:kDefaultFontSize];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_italic = NO;
 	
@@ -273,7 +275,7 @@
 
 - (void) processHeaders
 {
-	NSFont* header_font = [NSFont fontWithName:@"Avenir-Heavy" size:18];
+	NSFont* header_font = [NSFont fontWithName:@"Avenir-Heavy" size:kDefaultFontSize];
 	NSColor* header_c = [NSColor blueColor];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_header = NO;
@@ -318,7 +320,7 @@
 {
 	// clear fonts and color**
 	NSRange paragraph_r = NSMakeRange (0, self.string.length);
-	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:18];
+	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
 	[self safe_removeAttribute:NSForegroundColorAttributeName range:paragraph_r];
 	[self safe_removeAttribute:NSFontAttributeName range:paragraph_r];
 	[self safe_addAttribute:NSFontAttributeName value:normal_font range:paragraph_r];
