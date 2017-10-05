@@ -16,6 +16,9 @@
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSSplitView* splitView;
 @property (strong, nonatomic) IBOutlet WebView* webView;
+@property (strong, nonatomic) IBOutlet NSTextField* fullNameField;
+@property (strong, nonatomic) IBOutlet NSTextField* usernameField;
+@property (strong, nonatomic) IBOutlet NSImageView* profileImageView;
 
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;

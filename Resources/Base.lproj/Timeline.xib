@@ -10,8 +10,11 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFTimelineController">
             <connections>
+                <outlet property="fullNameField" destination="zqw-tG-vVO" id="31N-Ds-nPA"/>
+                <outlet property="profileImageView" destination="ETu-Lx-u0c" id="zaO-Pm-113"/>
                 <outlet property="splitView" destination="fkA-Zg-Ds4" id="a8c-6k-c9Q"/>
                 <outlet property="tableView" destination="8Jx-Dq-dhg" id="0q3-12-wI1"/>
+                <outlet property="usernameField" destination="HD9-1U-V6d" id="tn9-my-Ie7"/>
                 <outlet property="webView" destination="PSE-41-OeU" id="nrt-2v-vfP"/>
                 <outlet property="window" destination="zQt-7i-HMD" id="btK-bf-6Ad"/>
             </connections>
@@ -56,7 +59,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqw-tG-vVO">
                                         <rect key="frame" x="62" y="564" width="108" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Manton Reece" id="D2q-sQ-CLj">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Test User" id="D2q-sQ-CLj">
                                             <font key="font" size="13" name="Avenir-Medium"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -65,7 +68,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HD9-1U-V6d">
                                         <rect key="frame" x="62" y="545" width="108" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="@manton" id="3ND-A9-PxE">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="@test" id="3ND-A9-PxE">
                                             <font key="font" size="13" name="Avenir-Medium"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

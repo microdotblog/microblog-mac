@@ -26,6 +26,18 @@
 		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
 		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
+		4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDF1F867A3200906C86 /* UUDataCache.m */; };
+		4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD91F867A3200906C86 /* UUDate.m */; };
+		4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDE41F867A3300906C86 /* UUDictionary.m */; };
+		4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDB1F867A3200906C86 /* UUHttpClient.m */; };
+		4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDA1F867A3200906C86 /* UUHttpResponseHandler.m */; };
+		4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDD1F867A3200906C86 /* UUHttpSession.m */; };
+		4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDEC1F867B1E00906C86 /* UUString.m */; };
+		4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDEE1F8681D000906C86 /* RFClient.m */; };
+		4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF31F86820500906C86 /* NSString+Extras.m */; };
+		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
+		4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF91F86823D00906C86 /* SSKeychain.m */; };
+		4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,6 +84,30 @@
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
 		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
 		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
+		4B8FBDD91F867A3200906C86 /* UUDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDate.m; path = Shared/UUToolbox/UUDate.m; sourceTree = "<group>"; };
+		4B8FBDDA1F867A3200906C86 /* UUHttpResponseHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUHttpResponseHandler.m; path = Shared/UUToolbox/UUHttpResponseHandler.m; sourceTree = "<group>"; };
+		4B8FBDDB1F867A3200906C86 /* UUHttpClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUHttpClient.m; path = Shared/UUToolbox/UUHttpClient.m; sourceTree = "<group>"; };
+		4B8FBDDC1F867A3200906C86 /* UUHttpClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUHttpClient.h; path = Shared/UUToolbox/UUHttpClient.h; sourceTree = "<group>"; };
+		4B8FBDDD1F867A3200906C86 /* UUHttpSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUHttpSession.m; path = Shared/UUToolbox/UUHttpSession.m; sourceTree = "<group>"; };
+		4B8FBDDE1F867A3200906C86 /* UUDate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUDate.h; path = Shared/UUToolbox/UUDate.h; sourceTree = "<group>"; };
+		4B8FBDDF1F867A3200906C86 /* UUDataCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDataCache.m; path = Shared/UUToolbox/UUDataCache.m; sourceTree = "<group>"; };
+		4B8FBDE01F867A3300906C86 /* UUHttpResponseHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUHttpResponseHandler.h; path = Shared/UUToolbox/UUHttpResponseHandler.h; sourceTree = "<group>"; };
+		4B8FBDE11F867A3300906C86 /* UUHttpSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUHttpSession.h; path = Shared/UUToolbox/UUHttpSession.h; sourceTree = "<group>"; };
+		4B8FBDE21F867A3300906C86 /* UUDataCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUDataCache.h; path = Shared/UUToolbox/UUDataCache.h; sourceTree = "<group>"; };
+		4B8FBDE31F867A3300906C86 /* UUDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUDictionary.h; path = Shared/UUToolbox/UUDictionary.h; sourceTree = "<group>"; };
+		4B8FBDE41F867A3300906C86 /* UUDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDictionary.m; path = Shared/UUToolbox/UUDictionary.m; sourceTree = "<group>"; };
+		4B8FBDEB1F867B1E00906C86 /* UUString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UUString.h; path = Shared/UUToolbox/UUString.h; sourceTree = "<group>"; };
+		4B8FBDEC1F867B1E00906C86 /* UUString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUString.m; path = Shared/UUToolbox/UUString.m; sourceTree = "<group>"; };
+		4B8FBDEE1F8681D000906C86 /* RFClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFClient.m; path = Source/RFClient.m; sourceTree = "<group>"; };
+		4B8FBDEF1F8681D000906C86 /* RFClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFClient.h; path = Source/RFClient.h; sourceTree = "<group>"; };
+		4B8FBDF01F8681D000906C86 /* RFMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMacros.h; path = Source/RFMacros.h; sourceTree = "<group>"; };
+		4B8FBDF21F86820500906C86 /* NSString+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+Extras.h"; path = "Source/NSString+Extras.h"; sourceTree = "<group>"; };
+		4B8FBDF31F86820500906C86 /* NSString+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extras.m"; path = "Source/NSString+Extras.m"; sourceTree = "<group>"; };
+		4B8FBDF71F86823D00906C86 /* SSKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
+		4B8FBDF81F86823D00906C86 /* SSKeychainQuery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
+		4B8FBDF91F86823D00906C86 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
+		4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
+		4B8FBDFB1F86827800906C86 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				4B7F0AEC1BAF4C16004553A6 /* Source */,
+				4B8FBDD71F867A1D00906C86 /* Shared */,
 				4B7F0AED1BAF4C1A004553A6 /* Resources */,
 				4B7F0B031BAF4F7D004553A6 /* Frameworks */,
 				4B7F0AD91BAF4B78004553A6 /* Products */,
@@ -108,6 +146,9 @@
 			isa = PBXGroup;
 			children = (
 				4B7F0AF01BAF4C27004553A6 /* main.m */,
+				4B8FBDF01F8681D000906C86 /* RFMacros.h */,
+				4B8FBDEF1F8681D000906C86 /* RFClient.h */,
+				4B8FBDEE1F8681D000906C86 /* RFClient.m */,
 				4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */,
 				4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */,
 				4B7F0B041BAF520C004553A6 /* RFHeaderBackgroundView.h */,
@@ -128,6 +169,8 @@
 				4B5650681F8585C900B03FFD /* RFRoundedImageView.m */,
 				4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */,
 				4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */,
+				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
+				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -150,9 +193,52 @@
 		4B7F0B031BAF4F7D004553A6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4B8FBDFB1F86827800906C86 /* Security.framework */,
 				4B7F0B011BAF4F73004553A6 /* WebKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4B8FBDD71F867A1D00906C86 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				4B8FBDF51F86823C00906C86 /* SSKeychain */,
+				4B8FBDD81F867A2800906C86 /* UUToolbox */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		4B8FBDD81F867A2800906C86 /* UUToolbox */ = {
+			isa = PBXGroup;
+			children = (
+				4B8FBDE21F867A3300906C86 /* UUDataCache.h */,
+				4B8FBDDF1F867A3200906C86 /* UUDataCache.m */,
+				4B8FBDDE1F867A3200906C86 /* UUDate.h */,
+				4B8FBDD91F867A3200906C86 /* UUDate.m */,
+				4B8FBDE31F867A3300906C86 /* UUDictionary.h */,
+				4B8FBDE41F867A3300906C86 /* UUDictionary.m */,
+				4B8FBDDC1F867A3200906C86 /* UUHttpClient.h */,
+				4B8FBDDB1F867A3200906C86 /* UUHttpClient.m */,
+				4B8FBDE01F867A3300906C86 /* UUHttpResponseHandler.h */,
+				4B8FBDDA1F867A3200906C86 /* UUHttpResponseHandler.m */,
+				4B8FBDE11F867A3300906C86 /* UUHttpSession.h */,
+				4B8FBDDD1F867A3200906C86 /* UUHttpSession.m */,
+				4B8FBDEB1F867B1E00906C86 /* UUString.h */,
+				4B8FBDEC1F867B1E00906C86 /* UUString.m */,
+			);
+			name = UUToolbox;
+			sourceTree = "<group>";
+		};
+		4B8FBDF51F86823C00906C86 /* SSKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				4B8FBDF71F86823D00906C86 /* SSKeychain.h */,
+				4B8FBDF81F86823D00906C86 /* SSKeychainQuery.h */,
+				4B8FBDF91F86823D00906C86 /* SSKeychain.m */,
+				4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */,
+			);
+			name = SSKeychain;
+			path = Shared/SSKeychain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,16 +318,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
+				4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
+				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
+				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
+				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
+				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
+				4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */,
+				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
+				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */,
+				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
+				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,6 +11,7 @@
 #import "RFMenuCell.h"
 #import "RFOptionsController.h"
 #import "RFPostController.h"
+#import "SSKeychain.h"
 
 static CGFloat const kDefaultSplitViewPosition = 170.0;
 
@@ -32,6 +33,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupTable];
 	[self setupSplitView];
 	[self setupWebView];
+	[self setupUser];
 }
 
 //- (void) setupTextView
@@ -56,6 +58,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) setupWebView
 {
 	[self showTimeline:nil];
+}
+
+- (void) setupUser
+{
+	NSString* full_name = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountFullName"];
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* gravatar_url = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountGravatarURL"];
+	
+	self.fullNameField.stringValue = full_name;
+	self.usernameField.stringValue = [NSString stringWithFormat:@"@%@", username];
 }
 
 #pragma mark -
@@ -87,7 +99,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) showTimeline:(id)sender
 {
-	NSString* token = [[NSUserDefaults standardUserDefaults] objectForKey:@"SnippetsToken"];
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
+	
 	CGFloat pane_width = self.webView.bounds.size.width;
 	int timezone_minutes = 0;
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width, timezone_minutes];
@@ -124,7 +138,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) signOut:(id)sender
 {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SnippetsToken"];
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	[SSKeychain deletePasswordForService:@"Micro.blog" account:username];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountUsername"];
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }
 

@@ -10,12 +10,15 @@
 
 #import "RFTimelineController.h"
 #import "RFWelcomeController.h"
+#import "RFClient.h"
+#import "RFMacros.h"
+#import "SSKeychain.h"
 
 @implementation AppDelegate
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
-	if ([[NSUserDefaults standardUserDefaults] objectForKey:@"SnippetsToken"]) {
+	if ([[NSUserDefaults standardUserDefaults] objectForKey:@"AccountUsername"]) {
 		self.timelineController = [[RFTimelineController alloc] init];
 		[self.timelineController showWindow:nil];
 	}
@@ -41,7 +44,7 @@
 //		[self showConversationWithPostID:param];
 	}
 	else if ([url.host isEqualToString:@"signin"]) {
-		[self showSigninWithToken:param];
+		[self verifyAppToken:param];
 	}
 }
 
@@ -69,17 +72,57 @@
 	[self.timelineController showOptionsMenuWithPostID:postID];
 }
 
-- (void) showSigninWithToken:(NSString *)token
+- (void) loadTimelineWithToken:(NSString *)token
 {
-	// TODO: verify token and save name, etc.
-	// TODO: switch to keychain for storing token
-
-	[[NSUserDefaults standardUserDefaults] setObject:token forKey:@"SnippetsToken"];
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	[SSKeychain setPassword:token forService:@"Micro.blog" account:username];
 	
 	[self.welcomeController close];
 	
-	self.timelineController = [[RFTimelineController alloc] init];
+	if (self.timelineController == nil) {
+		self.timelineController = [[RFTimelineController alloc] init];
+	}
+	
 	[self.timelineController showWindow:nil];
+}
+
+- (void) verifyAppToken:(NSString *)token
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/account/verify"];
+	NSDictionary* args = @{
+		@"token": token
+	};
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		NSString* error = [response.parsedResponse objectForKey:@"error"];
+		if (error) {
+			RFDispatchMainAsync ((^{
+//				[Answers logLoginWithMethod:@"Token" success:@NO customAttributes:nil];
+//				[self showMessage:[NSString stringWithFormat:@"Error signing in: %@", error]];
+			}));
+		}
+		else {
+			NSString* full_name = [response.parsedResponse objectForKey:@"full_name"];
+			NSString* username = [response.parsedResponse objectForKey:@"username"];
+			NSString* email = [response.parsedResponse objectForKey:@"email"];
+			NSString* gravatar_url = [response.parsedResponse objectForKey:@"gravatar_url"];
+			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
+			NSNumber* is_fullaccess = [response.parsedResponse objectForKey:@"is_fullaccess"];
+			NSNumber* default_site = [response.parsedResponse objectForKey:@"default_site"];
+			
+			[[NSUserDefaults standardUserDefaults] setObject:full_name forKey:@"AccountFullName"];
+			[[NSUserDefaults standardUserDefaults] setObject:username forKey:@"AccountUsername"];
+			[[NSUserDefaults standardUserDefaults] setObject:default_site forKey:@"AccountDefaultSite"];
+			[[NSUserDefaults standardUserDefaults] setObject:email forKey:@"AccountEmail"];
+			[[NSUserDefaults standardUserDefaults] setObject:gravatar_url forKey:@"AccountGravatarURL"];
+			[[NSUserDefaults standardUserDefaults] setBool:[has_site boolValue] forKey:@"HasSnippetsBlog"];
+			[[NSUserDefaults standardUserDefaults] setBool:[is_fullaccess boolValue] forKey:@"IsFullAccess"];
+		
+			RFDispatchMainAsync (^{
+//				[Answers logLoginWithMethod:@"Token" success:@YES customAttributes:nil];
+				[self loadTimelineWithToken:token];
+			});
+		}
+	}];
 }
 
 @end
