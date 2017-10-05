@@ -318,25 +318,26 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Timeline" id="ped-pS-EeC">
+                <menuItem title="View" id="ped-pS-EeC">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Timeline" id="SsD-pp-s3v">
+                    <menu key="submenu" title="View" id="SsD-pp-s3v">
                         <items>
-                            <menuItem title="Show Timeline" keyEquivalent="1" id="gDe-lV-GE1">
+                            <menuItem title="Timeline" keyEquivalent="1" id="gDe-lV-GE1">
                                 <connections>
                                     <action selector="showTimeline:" target="-1" id="Lmg-tI-oSH"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Show Mentions" keyEquivalent="2" id="ODm-SZ-Tin">
+                            <menuItem title="Mentions" keyEquivalent="2" id="ODm-SZ-Tin">
                                 <connections>
                                     <action selector="showMentions:" target="-1" id="gd9-oQ-pfl"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Show Favorites" keyEquivalent="3" id="ACN-rZ-vlg">
+                            <menuItem title="Favorites" keyEquivalent="3" id="ACN-rZ-vlg">
                                 <connections>
                                     <action selector="showFavorites:" target="-1" id="DhZ-W0-ff1"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="ZZH-sJ-y5R"/>
                         </items>
                     </menu>
                 </menuItem>
