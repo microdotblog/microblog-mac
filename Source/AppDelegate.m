@@ -13,6 +13,7 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "SSKeychain.h"
+#import "RFConstants.h"
 
 @implementation AppDelegate
 
@@ -55,6 +56,7 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signOutNotification:) name:@"RFSignOut" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnselectedNotification:) name:kPostWasUnselectedNotification object:nil];
 }
 
 #pragma mark -
@@ -65,6 +67,12 @@
 	
 	self.welcomeController = [[RFWelcomeController alloc] init];
 	[self.welcomeController showWindow:nil];
+}
+
+- (void) postWasUnselectedNotification:(NSNotification *)notification
+{
+	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
+	[self.timelineController setSelected:NO withPostID:post_id];
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID

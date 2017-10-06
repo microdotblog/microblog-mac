@@ -8,12 +8,17 @@
 
 #import "RFOptionsController.h"
 
+#import "RFConstants.h"
+
 @implementation RFOptionsController
 
-- (id) init
+- (instancetype) initWithPostID:(NSString *)postID username:(NSString *)username popoverType:(RFOptionsPopoverType)popoverType
 {
 	self = [super initWithNibName:@"Options" bundle:nil];
 	if (self) {
+		self.postID = postID;
+		self.username = username;
+		self.popoverType = popoverType;
 	}
 	
 	return self;
@@ -24,6 +29,34 @@
 	[super viewDidLoad];
 
 	// ...
+}
+
+- (IBAction) reply:(id)sender
+{
+	[self sendUnselectedNotification];
+}
+
+- (IBAction) favorite:(id)sender
+{
+	[self sendUnselectedNotification];
+}
+
+- (IBAction) conversation:(id)sender
+{
+	[self sendUnselectedNotification];
+}
+
+// favorite
+// unfavorite
+// conversation
+// deletePost
+// share
+
+- (void) sendUnselectedNotification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostWasUnselectedNotification object:self userInfo:@{
+		kShowReplyPostIDKey: self.postID
+	}];
 }
 
 @end

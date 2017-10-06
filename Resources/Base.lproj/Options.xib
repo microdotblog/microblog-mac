@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,6 +24,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" size="14" name="Avenir-Book"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="reply:" target="-2" id="dyY-GW-Ded"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPW-aZ-zko">
                     <rect key="frame" x="166" y="3" width="90" height="32"/>
@@ -31,6 +35,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" size="14" name="Avenir-Book"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="conversation:" target="-2" id="BCH-2B-YKC"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTK-M1-RPy">
                     <rect key="frame" x="87" y="3" width="62" height="32"/>
@@ -39,6 +46,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" size="14" name="Avenir-Book"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="favorite:" target="-2" id="FGH-iF-xFF"/>
+                    </connections>
                 </button>
             </subviews>
             <point key="canvasLocation" x="35.5" y="52"/>

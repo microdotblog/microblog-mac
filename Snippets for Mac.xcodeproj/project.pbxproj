@@ -108,6 +108,7 @@
 		4B8FBDF91F86823D00906C86 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		4B8FBDFB1F86827800906C86 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		4B8FBDFF1F86F5F700906C86 /* RFConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConstants.h; path = Source/RFConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				4B7F0AF01BAF4C27004553A6 /* main.m */,
+				4B8FBDFF1F86F5F700906C86 /* RFConstants.h */,
 				4B8FBDF01F8681D000906C86 /* RFMacros.h */,
 				4B8FBDEF1F8681D000906C86 /* RFClient.h */,
 				4B8FBDEE1F8681D000906C86 /* RFClient.m */,

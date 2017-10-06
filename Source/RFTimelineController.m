@@ -12,6 +12,7 @@
 #import "RFOptionsController.h"
 #import "RFPostController.h"
 #import "SSKeychain.h"
+#import "RFConstants.h"
 
 static CGFloat const kDefaultSplitViewPosition = 170.0;
 
@@ -147,26 +148,51 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID
 {
-	[self.optionsPopover performClose:nil];
+	RFOptionsController* options_controller;
+	
+	if (self.optionsPopover) {
+		options_controller = (RFOptionsController *)self.optionsPopover.contentViewController;
+		[self setSelected:NO withPostID:options_controller.postID];
+		
+		[self.optionsPopover performClose:nil];
+		self.optionsPopover = nil;
+	}
+	else {
+		[self setSelected:YES withPostID:postID];
 
-	RFOptionsController* options_controller = [[RFOptionsController alloc] init];
-	self.optionsPopover = [[NSPopover alloc] init];
-	self.optionsPopover.contentViewController = options_controller;
+		options_controller = [[RFOptionsController alloc] initWithPostID:postID username:@"" popoverType:kOptionsPopoverDefault];
+		self.optionsPopover = [[NSPopover alloc] init];
+		self.optionsPopover.contentViewController = options_controller;
 
-	NSRect r = [self rectOfPostID:postID];
-	[self.optionsPopover showRelativeToRect:r ofView:self.webView preferredEdge:NSRectEdgeMinY];
+		NSRect r = [self rectOfPostID:postID];
+		[self.optionsPopover showRelativeToRect:r ofView:self.webView preferredEdge:NSRectEdgeMinY];
+	}
+}
+
+- (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID
+{
+	NSString* js;
+	if (isSelected) {
+		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_selected');", postID];
+	}
+	else {
+		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
+	}
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (NSRect) rectOfPostID:(NSString *)postID
 {
 	NSString* top_js = [NSString stringWithFormat:@"$('#post_%@').position().top;", postID];
 	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
-	
+	NSString* scroll_js = [NSString stringWithFormat:@"$('body').scrollTop();"];
+
 	NSString* top_s = [self.webView stringByEvaluatingJavaScriptFromString:top_js];
 	NSString* height_s = [self.webView stringByEvaluatingJavaScriptFromString:height_js];
+	NSString* scroll_s = [self.webView stringByEvaluatingJavaScriptFromString:scroll_js];
 
-	CGFloat top_f = [top_s floatValue];
-	top_f -= 0; // self.webView.scrollView.contentOffset.y;
+	CGFloat top_f = self.webView.bounds.size.height - [top_s floatValue] - [height_s floatValue];
+	top_f += [scroll_s floatValue];
 	
 	// adjust to full cell width
 	CGFloat left_f = 0.0;

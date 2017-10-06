@@ -24,5 +24,6 @@
 @property (strong, nonatomic) RFPostController* postController;
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
+- (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
 
 @end
