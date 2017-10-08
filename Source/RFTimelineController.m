@@ -146,6 +146,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }
 
+- (void) showReplyWithUsername:(NSString *)username
+{
+	[self newDocument:nil];
+}
+
 - (void) showOptionsMenuWithPostID:(NSString *)postID
 {
 	RFOptionsController* options_controller;

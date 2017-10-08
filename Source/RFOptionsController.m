@@ -34,6 +34,11 @@
 - (IBAction) reply:(id)sender
 {
 	[self sendUnselectedNotification];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowReplyPostNotification object:self userInfo:@{
+		kShowReplyPostIDKey: self.postID,
+		kShowReplyPostUsernameKey: self.username
+	}];
 }
 
 - (IBAction) favorite:(id)sender
