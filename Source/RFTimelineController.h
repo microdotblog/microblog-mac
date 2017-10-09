@@ -23,7 +23,9 @@
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
 
-- (void) showReplyWithUsername:(NSString *)username;
+- (IBAction) performClose:(id)sender;
+
+- (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
 

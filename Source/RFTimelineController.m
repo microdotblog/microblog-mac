@@ -75,18 +75,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) newDocument:(id)sender
 {
-	self.postController = [[RFPostController alloc] init];
-
-	NSRect r = self.webView.bounds;
-	r.origin.x = kDefaultSplitViewPosition + 1;
-	self.postController.view.frame = r;
-	self.postController.view.alphaValue = 0.0;
-	
-	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:self.webView];
-
-	self.postController.view.animator.alphaValue = 1.0;
-	[self.window makeFirstResponder:self.postController.textView];
-	self.postController.nextResponder = self;
+	RFPostController* controller = [[RFPostController alloc] init];
+	[self showPostController:controller];
 }
 
 - (IBAction) performClose:(id)sender
@@ -146,9 +136,26 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }
 
-- (void) showReplyWithUsername:(NSString *)username
+- (void) showPostController:(RFPostController *)controller
 {
-	[self newDocument:nil];
+	self.postController = controller;
+
+	NSRect r = self.webView.bounds;
+	r.origin.x = kDefaultSplitViewPosition + 1;
+	self.postController.view.frame = r;
+	self.postController.view.alphaValue = 0.0;
+	
+	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:self.webView];
+
+	self.postController.view.animator.alphaValue = 1.0;
+	[self.window makeFirstResponder:self.postController.textView];
+	self.postController.nextResponder = self;
+}
+
+- (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username
+{
+	RFPostController* controller = [[RFPostController alloc] initWithPostID:postID username:username];
+	[self showPostController:controller];
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID
@@ -164,8 +171,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 	else {
 		[self setSelected:YES withPostID:postID];
+		NSString* username = [self usernameOfPostID:postID];
 
-		options_controller = [[RFOptionsController alloc] initWithPostID:postID username:@"" popoverType:kOptionsPopoverDefault];
+		options_controller = [[RFOptionsController alloc] initWithPostID:postID username:username popoverType:kOptionsPopoverDefault];
 		self.optionsPopover = [[NSPopover alloc] init];
 		self.optionsPopover.contentViewController = options_controller;
 
@@ -204,6 +212,20 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	CGFloat width_f = self.webView.bounds.size.width;
 	
 	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
+}
+
+- (NSString *) usernameOfPostID:(NSString *)postID
+{
+	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_username').text();", postID];
+	NSString* username_s = [self.webView stringByEvaluatingJavaScriptFromString:username_js];
+	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (NSString *) linkOfPostID:(NSString *)postID
+{
+	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_link').text();", postID];
+	NSString* username_s = [self.webView stringByEvaluatingJavaScriptFromString:username_js];
+	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 #pragma mark -

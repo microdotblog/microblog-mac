@@ -9,6 +9,7 @@
 #import "RFOptionsController.h"
 
 #import "RFConstants.h"
+#import "RFMacros.h"
 
 @implementation RFOptionsController
 
@@ -34,11 +35,7 @@
 - (IBAction) reply:(id)sender
 {
 	[self sendUnselectedNotification];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:kShowReplyPostNotification object:self userInfo:@{
-		kShowReplyPostIDKey: self.postID,
-		kShowReplyPostUsernameKey: self.username
-	}];
+	[self sendReplyNotification];
 }
 
 - (IBAction) favorite:(id)sender
@@ -56,6 +53,14 @@
 // conversation
 // deletePost
 // share
+
+- (void) sendReplyNotification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowReplyPostNotification object:self userInfo:@{
+		kShowReplyPostIDKey: self.postID,
+		kShowReplyPostUsernameKey: self.username
+	}];
+}
 
 - (void) sendUnselectedNotification
 {

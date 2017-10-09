@@ -58,6 +58,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signOutNotification:) name:@"RFSignOut" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnselectedNotification:) name:kPostWasUnselectedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showReplyPostNotification:) name:kShowReplyPostNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+
 }
 
 #pragma mark -
@@ -72,15 +74,23 @@
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification
 {
-	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
-	[self.timelineController setSelected:NO withPostID:post_id];
+//	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
+//	[self.timelineController setSelected:NO withPostID:post_id];
+	
+	[self showOptionsMenuWithPostID:nil];
 }
 
 - (void) showReplyPostNotification:(NSNotification *)notification
 {
+	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
 	NSString* username = [notification.userInfo objectForKey:kShowReplyPostUsernameKey];
 
-	[self.timelineController showReplyWithUsername:username];
+	[self.timelineController showReplyWithPostID:post_id username:username];
+}
+
+- (void) closePostingNotification:(NSNotification *)notification
+{
+	[self.timelineController performClose:nil];
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID

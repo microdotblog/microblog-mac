@@ -20,6 +20,12 @@
 		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
 		4B6AE76E1F8AE19F00CB7950 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; };
 		4B6AE76F1F8AE1EF00CB7950 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
+		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
+		4B6AE77E1F8B37D900CB7950 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */; };
+		4B6AE7801F8B37E200CB7950 /* Crashlytics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; };
+		4B6AE7871F8B387900CB7950 /* Fabric.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
 		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; };
@@ -50,6 +56,8 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4B6AE76F1F8AE1EF00CB7950 /* Sparkle.framework in CopyFiles */,
+				4B6AE7871F8B387900CB7950 /* Fabric.framework in CopyFiles */,
+				4B6AE7801F8B37E200CB7950 /* Crashlytics.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +82,12 @@
 		4B5A250E1F849AF2007C548F /* RFMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMenuCell.h; path = Source/RFMenuCell.h; sourceTree = "<group>"; };
 		4B5A250F1F849AF2007C548F /* RFMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMenuCell.m; path = Source/RFMenuCell.m; sourceTree = "<group>"; };
 		4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
+		4B6AE7701F8B335C00CB7950 /* RFMicropub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMicropub.h; path = Source/RFMicropub.h; sourceTree = "<group>"; };
+		4B6AE7711F8B335C00CB7950 /* RFMicropub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMicropub.m; path = Source/RFMicropub.m; sourceTree = "<group>"; };
+		4B6AE7731F8B336600CB7950 /* RFPhoto.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhoto.m; path = Source/RFPhoto.m; sourceTree = "<group>"; };
+		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
+		4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Shared/Crashlytics.framework; sourceTree = "<group>"; };
+		4B6AE7831F8B386100CB7950 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Shared/Fabric.framework; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = "<group>"; };
 		4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = "<group>"; };
@@ -123,6 +137,8 @@
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 				4B6AE76E1F8AE19F00CB7950 /* Sparkle.framework in Frameworks */,
+				4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */,
+				4B6AE77E1F8B37D900CB7950 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +184,10 @@
 				4B56505D1F8561A300B03FFD /* RFPostController.m */,
 				4B56505F1F85626200B03FFD /* RFOptionsController.h */,
 				4B5650601F85626200B03FFD /* RFOptionsController.m */,
+				4B6AE7741F8B336600CB7950 /* RFPhoto.h */,
+				4B6AE7731F8B336600CB7950 /* RFPhoto.m */,
+				4B6AE7701F8B335C00CB7950 /* RFMicropub.h */,
+				4B6AE7711F8B335C00CB7950 /* RFMicropub.m */,
 				4B5A250E1F849AF2007C548F /* RFMenuCell.h */,
 				4B5A250F1F849AF2007C548F /* RFMenuCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
@@ -200,6 +220,8 @@
 		4B7F0B031BAF4F7D004553A6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4B6AE7831F8B386100CB7950 /* Fabric.framework */,
+				4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */,
 				4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */,
 				4B8FBDFB1F86827800906C86 /* Security.framework */,
 				4B7F0B011BAF4F73004553A6 /* WebKit.framework */,
@@ -260,6 +282,7 @@
 				4B7F0AD51BAF4B77004553A6 /* Frameworks */,
 				4B7F0AD61BAF4B77004553A6 /* Resources */,
 				4BE541211BDEA34800E1868B /* CopyFiles */,
+				4B6AE7761F8B345500CB7950 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -321,6 +344,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4B6AE7761F8B345500CB7950 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Shared/Fabric.framework/run 8dad69922a39f4f51a31347f60f2e16d40193eb5 2492a44f53c59554cc623477936514640948a414be2668ba256d9d0ee55d9fb6";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4B7F0AD41BAF4B77004553A6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -332,6 +371,7 @@
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
+				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
 				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
 				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
@@ -340,6 +380,7 @@
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
 				4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
+				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
@@ -498,9 +539,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Shared/Sparkle",
+					"$(PROJECT_DIR)/Shared",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -518,9 +562,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Shared/Sparkle",
+					"$(PROJECT_DIR)/Shared",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
