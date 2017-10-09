@@ -49,6 +49,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://help.micro.blog/appcast.xml</string>
+	<string>https://s3.amazonaws.com/micro.blog/mac/appcast.xml</string>
 </dict>
 </plist>
