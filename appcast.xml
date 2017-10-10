@@ -5,14 +5,17 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 
-<!-- 
 		<item>
-			<title>Version 1.0</title>
- 			<description>Changes here.</description>
-			<pubDate>Sun, 08 Oct 2017 12:00:00 +0000</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b2.zip" sparkle:version="1.0b2" length="1623481" type="application/octet-stream" />
+			<title>Version 1.0b2</title>
+ 			<description><![CDATA[
+ 				<ul>
+ 					<li>Added user profile image.</li>
+ 					<li>Added Refresh menu item.</li> 					
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 10 Oct 2017 15:30:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b2.zip" sparkle:shortVersionString="1.0b2" sparkle:version="3" length="1623481" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
 		</item>		
- -->
 	</channel>
 </rss>
