@@ -11,6 +11,12 @@
 
 @class RFPostController;
 
+typedef enum {
+	kSelectionTimeline = 0,
+	kSelectionMentions = 1,
+	kSelectionFavorites = 2
+} RFSelectedTimelineType;
+
 @interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
@@ -22,6 +28,7 @@
 
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
+@property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
 
 - (IBAction) performClose:(id)sender;
 

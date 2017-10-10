@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
     </dependencies>
     <objects>
@@ -341,6 +340,12 @@
                             <menuItem title="Favorites" keyEquivalent="3" id="ACN-rZ-vlg">
                                 <connections>
                                     <action selector="showFavorites:" target="-1" id="DhZ-W0-ff1"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="SvD-l1-Axj"/>
+                            <menuItem title="Refresh" keyEquivalent="R" id="x5U-wS-VS9">
+                                <connections>
+                                    <action selector="refreshTimeline:" target="-1" id="hUn-P2-s2o"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ZZH-sJ-y5R"/>

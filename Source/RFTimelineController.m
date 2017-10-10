@@ -90,6 +90,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) showTimeline:(id)sender
 {
+	self.selectedTimeline = kSelectionTimeline;
+
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
 	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
 	
@@ -107,6 +109,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) showMentions:(id)sender
 {
+	self.selectedTimeline = kSelectionMentions;
+
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/mentions"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
@@ -118,6 +122,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) showFavorites:(id)sender
 {
+	self.selectedTimeline = kSelectionFavorites;
+
 	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
@@ -125,6 +131,19 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
 
 	[self.optionsPopover performClose:nil];
+}
+
+- (IBAction) refreshTimeline:(id)sender
+{
+	if (self.selectedTimeline == kSelectionTimeline) {
+		[self showTimeline:nil];
+	}
+	else if (self.selectedTimeline == kSelectionMentions) {
+		[self showMentions:nil];
+	}
+	else if (self.selectedTimeline == kSelectionFavorites) {
+		[self showFavorites:nil];
+	}
 }
 
 - (IBAction) signOut:(id)sender
