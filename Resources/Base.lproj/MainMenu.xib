@@ -356,10 +356,21 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Format" id="o4H-1q-ott">
                         <items>
-                            <menuItem title="Bold" keyEquivalent="b" id="6mw-jW-3BX"/>
-                            <menuItem title="Italic" keyEquivalent="i" id="HCb-ac-uOo"/>
+                            <menuItem title="Bold" keyEquivalent="b" id="6mw-jW-3BX">
+                                <connections>
+                                    <action selector="applyFormatBold:" target="-1" id="vlP-pJ-1f6"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Italic" keyEquivalent="i" id="HCb-ac-uOo">
+                                <connections>
+                                    <action selector="applyFormatItalic:" target="-1" id="AF9-ja-CLy"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Link" id="ulH-2Z-zYS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="applyFormatLink:" target="-1" id="zqp-CZ-vH5"/>
+                                </connections>
                             </menuItem>
                         </items>
                     </menu>

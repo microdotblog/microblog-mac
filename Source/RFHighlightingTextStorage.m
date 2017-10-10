@@ -8,8 +8,6 @@
 
 #import "RFHighlightingTextStorage.h"
 
-static CGFloat const kDefaultFontSize = 16.0;
-
 @implementation RFHighlightingTextStorage
 {
 	NSMutableAttributedString *_imp;
@@ -63,6 +61,8 @@ static CGFloat const kDefaultFontSize = 16.0;
 	[self endEditing];
 }
 
+#pragma mark -
+
 - (void) safe_addAttribute:(NSAttributedStringKey)name value:(id)value range:(NSRange)range;
 {
 	NSString* s = self.string;
@@ -78,6 +78,8 @@ static CGFloat const kDefaultFontSize = 16.0;
 		[self removeAttribute:name range:range];
 	}
 }
+
+#pragma mark -
 
 - (void) processBold
 {
@@ -318,7 +320,7 @@ static CGFloat const kDefaultFontSize = 16.0;
 
 - (void) processEditing
 {
-	// clear fonts and color**
+	// clear fonts and colors
 	NSRange paragraph_r = NSMakeRange (0, self.string.length);
 	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
 	[self safe_removeAttribute:NSForegroundColorAttributeName range:paragraph_r];
@@ -333,7 +335,6 @@ static CGFloat const kDefaultFontSize = 16.0;
 	[self processUsernames];
 	[self processHeaders];
 
-	// call super after, as it finalizes the attributes and calls the delegate methods
 	[super processEditing];
 }
 

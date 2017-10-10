@@ -54,6 +54,11 @@
 	if (self.replyUsername) {
 		self.textView.string = [NSString stringWithFormat:@"@%@ ", self.replyUsername];
 	}
+	
+	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
+	self.textView.typingAttributes = @{
+		NSFontAttributeName: normal_font
+	};
 }
 
 - (void) viewDidAppear
@@ -89,6 +94,46 @@
 }
 
 #pragma mark -
+
+- (IBAction) applyFormatBold:(id)sender
+{
+	[self replaceSelectionBySurrounding:@[ @"**", @"**" ]];
+}
+
+- (IBAction) applyFormatItalic:(id)sender
+{
+	[self replaceSelectionBySurrounding:@[ @"_", @"_" ]];
+}
+
+- (IBAction) applyFormatLink:(id)sender
+{
+	NSRange r = self.textView.selectedRange;
+	if (r.length == 0) {
+		[self.textView insertText:@"[]()"];
+		r = self.textView.selectedRange;
+		r.location = r.location - 3;
+		self.textView.selectedRange = r;
+	}
+	else {
+		[self replaceSelectionBySurrounding:@[ @"[", @"]()" ]];
+		r = self.textView.selectedRange;
+		r.location = r.location - 1;
+		self.textView.selectedRange = r;
+	}
+}
+
+- (void) replaceSelectionBySurrounding:(NSArray *)markup
+{
+	NSRange r = self.textView.selectedRange;
+	if (r.length == 0) {
+		[self.textView replaceCharactersInRange:r withString:[markup firstObject]];
+	}
+	else {
+		NSString* s = [[self currentText] substringWithRange:r];
+		NSString* new_s = [NSString stringWithFormat:@"%@%@%@", [markup firstObject], s, [markup lastObject]];
+		[self.textView replaceCharactersInRange:r withString:new_s];
+	}
+}
 
 - (IBAction) sendPost:(id)sender
 {

@@ -26,6 +26,7 @@
 		4B6AE7801F8B37E200CB7950 /* Crashlytics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; };
 		4B6AE7871F8B387900CB7950 /* Fabric.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
 		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
 		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; };
@@ -88,6 +89,8 @@
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
 		4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Shared/Crashlytics.framework; sourceTree = "<group>"; };
 		4B6AE7831F8B386100CB7950 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Shared/Fabric.framework; sourceTree = "<group>"; };
+		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
+		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = "<group>"; };
 		4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = "<group>"; };
@@ -196,6 +199,8 @@
 				4B5650681F8585C900B03FFD /* RFRoundedImageView.m */,
 				4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */,
 				4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */,
+				4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */,
+				4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
 			);
@@ -299,7 +304,7 @@
 		4B7F0AD01BAF4B77004553A6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Riverfold Software";
 				TargetAttributes = {
 					4B7F0AD71BAF4B77004553A6 = {
@@ -366,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
+				4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */,
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
@@ -454,20 +460,26 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -484,7 +496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -499,14 +511,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -523,7 +541,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
