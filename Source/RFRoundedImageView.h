@@ -10,4 +10,6 @@
 
 @interface RFRoundedImageView : NSImageView
 
+- (void) loadFromURL:(NSString *)url;
+
 @end

@@ -11,6 +11,7 @@
 #import "RFMenuCell.h"
 #import "RFOptionsController.h"
 #import "RFPostController.h"
+#import "RFRoundedImageView.h"
 #import "SSKeychain.h"
 #import "RFConstants.h"
 
@@ -69,6 +70,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	
 	self.fullNameField.stringValue = full_name;
 	self.usernameField.stringValue = [NSString stringWithFormat:@"@%@", username];
+	[self.profileImageView loadFromURL:gravatar_url];
 }
 
 #pragma mark -

@@ -10,6 +10,7 @@
 #import <WebKit/WebKit.h>
 
 @class RFPostController;
+@class RFRoundedImageView;
 
 typedef enum {
 	kSelectionTimeline = 0,
@@ -24,7 +25,7 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSTextField* fullNameField;
 @property (strong, nonatomic) IBOutlet NSTextField* usernameField;
-@property (strong, nonatomic) IBOutlet NSImageView* profileImageView;
+@property (strong, nonatomic) IBOutlet RFRoundedImageView* profileImageView;
 
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
