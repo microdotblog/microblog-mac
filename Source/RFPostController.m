@@ -148,10 +148,14 @@
 
 - (void) showProgressHeader:(NSString *)statusText
 {
+	self.postButton.enabled = NO;
+	[self.progressSpinner startAnimation:nil];
 }
 
 - (void) hideProgressHeader
 {
+	self.postButton.enabled = YES;
+	[self.progressSpinner stopAnimation:nil];
 }
 
 - (void) uploadText:(NSString *)text
