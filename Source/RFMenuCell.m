@@ -16,4 +16,9 @@
 	NSRectFill (self.bounds);
 }
 
+- (NSBackgroundStyle) interiorBackgroundStyle
+{
+	return NSBackgroundStyleLight;
+}
+
 @end
