@@ -188,11 +188,12 @@
 	[attr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange (0, s.length)];
 
 	if (num_chars <= 140) {
-		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:NSMakeRange (0, num_len)];
+		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor colorWithCalibratedRed:0.2588 green:0.5450 blue:0.7921 alpha:1.0] range:NSMakeRange (0, num_len)];
 		self.remainingField.attributedStringValue = attr;
 	}
 	else if (num_remaining < 0) {
-		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor redColor] range:NSMakeRange (0, num_len)];
+		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor colorWithCalibratedRed:1.0 green:0.3764 blue:0.3411 alpha:1.0] range:NSMakeRange (0, num_len)];
+		self.remainingField.attributedStringValue = attr;
 	}
 	else {
 		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange (0, num_len)];
