@@ -18,7 +18,7 @@ typedef enum {
 	kSelectionFavorites = 2
 } RFSelectedTimelineType;
 
-@interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource>
+@interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource, WebPolicyDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSSplitView* splitView;

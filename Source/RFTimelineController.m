@@ -60,6 +60,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) setupWebView
 {
+	self.webView.policyDelegate = self;
+
 	[self showTimeline:nil];
 }
 
@@ -278,6 +280,42 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_link').text();", postID];
 	NSString* username_s = [self.webView stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (void) showURL:(NSURL *)url
+{
+	BOOL found_microblog_url = NO;
+	
+	NSString* hostname = [url host];
+	NSString* path = [url path];
+	if ([hostname isEqualToString:@"micro.blog"]) {
+		NSString* username = [path stringByReplacingOccurrencesOfString:@"/" withString:@""];
+		if (username.length > 0) {
+			found_microblog_url = YES;
+			[[NSNotificationCenter defaultCenter] postNotificationName:kShowUserProfileNotification object:self userInfo:@{ kShowUserProfileUsernameKey: username }];
+		}
+	}
+	
+	if (!found_microblog_url) {
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+#pragma mark -
+
+- (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
+{
+	if ([[actionInformation objectForKey:WebActionNavigationTypeKey] integerValue] == WebNavigationTypeLinkClicked) {
+		[self showURL:request.URL];
+		[listener ignore];
+	}
+	else if ([request.URL.scheme isEqualToString:@"microblog"]) {
+		[[NSWorkspace sharedWorkspace] openURL:request.URL];
+		[listener ignore];
+	}
+	else {
+		[listener use];
+	}
 }
 
 #pragma mark -
