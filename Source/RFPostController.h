@@ -10,12 +10,13 @@
 
 @class RFHighlightingTextStorage;
 
-@interface RFPostController : NSViewController
+@interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextView* textView;
 @property (strong, nonatomic) IBOutlet NSButton* postButton;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSTextField* remainingField;
 
 @property (assign, nonatomic) BOOL isReply;
 @property (strong, nonatomic) NSString* replyPostID;

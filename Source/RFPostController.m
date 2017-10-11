@@ -59,6 +59,9 @@
 	self.textView.typingAttributes = @{
 		NSFontAttributeName: normal_font
 	};
+	
+	self.textView.delegate = self;
+	self.textView.textStorage.delegate = self;
 }
 
 - (void) viewDidAppear
@@ -69,6 +72,11 @@
 - (IBAction) close:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
+}
+
+- (void) textDidChange:(NSNotification *)notification
+{
+	[self updateRemainingChars];
 }
 
 #pragma mark -
@@ -156,6 +164,41 @@
 {
 	self.postButton.enabled = YES;
 	[self.progressSpinner stopAnimation:nil];
+}
+
+- (void) updateRemainingChars
+{
+	if (!self.isReply && self.titleField.stringValue.length > 0) {
+		self.remainingField.hidden = YES;
+	}
+	else {
+		self.remainingField.hidden = NO;
+	}
+
+	NSInteger max_chars = 280;
+	NSInteger num_chars = [self currentText].length;
+	NSInteger num_remaining = max_chars - num_chars;
+
+	NSString* s = [NSString stringWithFormat:@"%ld/%ld", (long)num_chars, (long)max_chars];
+	NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:s];
+	NSUInteger num_len = [[s componentsSeparatedByString:@"/"] firstObject].length;
+
+	NSMutableParagraphStyle* para = [[NSMutableParagraphStyle alloc] init];
+	para.alignment = NSTextAlignmentRight;
+	[attr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange (0, s.length)];
+
+	if (num_chars <= 140) {
+		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:NSMakeRange (0, num_len)];
+		self.remainingField.attributedStringValue = attr;
+	}
+	else if (num_remaining < 0) {
+		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor redColor] range:NSMakeRange (0, num_len)];
+	}
+	else {
+		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange (0, num_len)];
+	}
+
+	self.remainingField.attributedStringValue = attr;
 }
 
 - (void) uploadText:(NSString *)text
