@@ -97,8 +97,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[self hideOptionsMenu];
 
-	RFPostController* controller = [[RFPostController alloc] init];
-	[self showPostController:controller];
+	if (!self.postController) {
+		RFPostController* controller = [[RFPostController alloc] init];
+		[self showPostController:controller];
+	}
 }
 
 - (IBAction) performClose:(id)sender
@@ -107,6 +109,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.postController.view.animator.alphaValue = 0.0;
 	} completionHandler:^{
 		[self.postController.view removeFromSuperview];
+		self.postController = nil;
 	}];
 }
 
@@ -119,7 +122,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	
 	CGFloat pane_width = self.webView.bounds.size.width;
 	int timezone_minutes = 0;
-	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width, timezone_minutes];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width, timezone_minutes];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 	
@@ -135,7 +138,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	self.selectedTimeline = kSelectionMentions;
 
-	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/mentions"];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/mentions"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 
@@ -151,7 +154,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	self.selectedTimeline = kSelectionFavorites;
 
-	NSString* url = [NSString stringWithFormat:@"http://micro.blog/hybrid/favorites"];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 
