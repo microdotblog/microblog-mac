@@ -62,6 +62,8 @@
 	
 	self.textView.delegate = self;
 	self.textView.textStorage.delegate = self;
+	
+	[self updateRemainingChars];
 }
 
 - (void) viewDidAppear
