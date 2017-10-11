@@ -36,6 +36,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupSplitView];
 	[self setupWebView];
 	[self setupUser];
+	[self setupNotifications];
 }
 
 //- (void) setupTextView
@@ -73,10 +74,27 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.profileImageView loadFromURL:gravatar_url];
 }
 
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineDidScroll:) name:NSScrollViewWillStartLiveScrollNotification object:nil];
+}
+
 #pragma mark -
+
+-(void) timelineDidScroll:(NSNotification *)notification
+{
+	if ([notification.object isKindOfClass:[NSView class]]) {
+		NSView* view = (NSView *)notification.object;
+		if ([view isDescendantOf:self.webView]) {
+			[self hideOptionsMenu];
+		}
+	}
+}
 
 - (IBAction) newDocument:(id)sender
 {
+	[self hideOptionsMenu];
+
 	RFPostController* controller = [[RFPostController alloc] init];
 	[self showPostController:controller];
 }
@@ -106,6 +124,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
 
 	[self.optionsPopover performClose:nil];
+	self.optionsPopover = nil;
+
 	[self performClose:nil];
 }
 
@@ -120,6 +140,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 
 	[self.optionsPopover performClose:nil];
+	self.optionsPopover = nil;
+
+	[self performClose:nil];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -133,6 +156,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
 
 	[self.optionsPopover performClose:nil];
+	self.optionsPopover = nil;
+
+	[self performClose:nil];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -181,25 +207,30 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID
 {
-	RFOptionsController* options_controller;
-	
 	if (self.optionsPopover) {
-		options_controller = (RFOptionsController *)self.optionsPopover.contentViewController;
-		[self setSelected:NO withPostID:options_controller.postID];
-		
-		[self.optionsPopover performClose:nil];
-		self.optionsPopover = nil;
+		[self hideOptionsMenu];
 	}
 	else {
 		[self setSelected:YES withPostID:postID];
 		NSString* username = [self usernameOfPostID:postID];
 
-		options_controller = [[RFOptionsController alloc] initWithPostID:postID username:username popoverType:kOptionsPopoverDefault];
+		RFOptionsController* options_controller = [[RFOptionsController alloc] initWithPostID:postID username:username popoverType:kOptionsPopoverDefault];
 		self.optionsPopover = [[NSPopover alloc] init];
 		self.optionsPopover.contentViewController = options_controller;
 
 		NSRect r = [self rectOfPostID:postID];
 		[self.optionsPopover showRelativeToRect:r ofView:self.webView preferredEdge:NSRectEdgeMinY];
+	}
+}
+
+- (void) hideOptionsMenu
+{
+	if (self.optionsPopover) {
+		RFOptionsController* options_controller = (RFOptionsController *)self.optionsPopover.contentViewController;
+		[self setSelected:NO withPostID:options_controller.postID];
+		
+		[self.optionsPopover performClose:nil];
+		self.optionsPopover = nil;
 	}
 }
 

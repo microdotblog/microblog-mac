@@ -35,6 +35,7 @@ typedef enum {
 
 - (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
+- (void) hideOptionsMenu;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
 
 @end
