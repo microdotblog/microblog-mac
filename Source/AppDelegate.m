@@ -115,6 +115,7 @@
 	[SSKeychain setPassword:token forService:@"Micro.blog" account:username];
 	
 	[self.welcomeController close];
+	self.welcomeController = nil;
 	
 	if (self.timelineController == nil) {
 		self.timelineController = [[RFTimelineController alloc] init];
