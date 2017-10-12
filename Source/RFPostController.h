@@ -17,7 +17,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* postButton;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSTextField* remainingField;
-@property (strong, nonatomic) IBOutlet NSTextField* hostnameField;
+@property (strong, nonatomic) IBOutlet NSTextField* blognameField;
 @property (strong, nonatomic) IBOutlet NSButton* photoButton;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
 

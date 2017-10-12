@@ -7,7 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFPostController">
             <connections>
-                <outlet property="hostnameField" destination="W2B-cl-D6d" id="iPD-ES-YdD"/>
+                <outlet property="blognameField" destination="W2B-cl-D6d" id="9UM-bo-ohV"/>
                 <outlet property="photoButton" destination="d95-L8-OAI" id="lUI-LJ-3FE"/>
                 <outlet property="photosCollectionView" destination="kw4-c5-1p5" id="lGQ-ZL-sHv"/>
                 <outlet property="postButton" destination="WGb-Wi-5DC" id="N0I-La-hd9"/>

@@ -51,6 +51,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	[self setupText];
 	[self setupColletionView];
+	[self setupBlogName];
 }
 
 - (void) viewDidAppear
@@ -83,7 +84,28 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	if (self.isReply) {
 		self.photoButton.hidden = YES;
-		self.hostnameField.hidden = YES;
+	}
+}
+
+- (void) setupBlogName
+{
+	if (self.isReply) {
+		self.blognameField.hidden = YES;
+	}
+	else {
+		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+			self.blognameField.stringValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"AccountDefaultSite"];
+		}
+		else if ([self hasMicropubBlog]) {
+			NSString* endpoint_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMe"];
+			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
+			self.blognameField.stringValue = endpoint_url.host;
+		}
+		else {
+			NSString* endpoint_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
+			self.blognameField.stringValue = endpoint_url.host;
+		}
 	}
 }
 
