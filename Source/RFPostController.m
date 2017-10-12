@@ -17,6 +17,8 @@
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
+static NSString* const kPhotoCellIdentifier = @"PhotoCell";
+
 @implementation RFPostController
 
 - (id) init
@@ -64,6 +66,11 @@
 	self.textView.textStorage.delegate = self;
 	
 	[self updateRemainingChars];
+	
+	if (self.isReply) {
+		self.photoButton.hidden = YES;
+		self.hostnameField.hidden = YES;
+	}
 }
 
 - (void) viewDidAppear
@@ -71,14 +78,50 @@
 	[super viewDidAppear];
 }
 
+- (void) setupColletionView
+{
+	self.photosCollectionView.delegate = self;
+	self.photosCollectionView.dataSource = self;
+	
+	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
+}
+
 - (IBAction) close:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 }
 
+- (IBAction) choosePhoto:(id)sender
+{
+	NSOpenPanel* panel = [NSOpenPanel openPanel];
+	panel.allowedFileTypes = @[ @"public.image" ];
+	[panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
+		if (result == NSModalResponseOK) {
+			NSArray* urls = panel.URLs;
+			NSLog (@"urls: %@", urls);
+		}
+	}];
+}
+
 - (void) textDidChange:(NSNotification *)notification
 {
 	[self updateRemainingChars];
+}
+
+#pragma mark -
+
+- (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+	return self.attachedPhotos.count;
+}
+
+- (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
+	
+	NSCollectionViewItem* item = [collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	
+	return item;
 }
 
 #pragma mark -
