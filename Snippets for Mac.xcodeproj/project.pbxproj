@@ -11,6 +11,7 @@
 		4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */; };
 		4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */; };
 		4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */; };
+		4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAB61F90002500D9B10E /* RFMacApplication.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -31,7 +32,7 @@
 		4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; };
 		4B6AE7871F8B387900CB7950 /* Fabric.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
-		4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */; };
+		4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
 		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; };
 		4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */; };
@@ -75,6 +76,8 @@
 		4B2CAAB01F8FE99900D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Preferences.xib; sourceTree = "<group>"; };
 		4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPreferencesController.h; path = Source/RFPreferencesController.h; sourceTree = "<group>"; };
 		4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPreferencesController.m; path = Source/RFPreferencesController.m; sourceTree = "<group>"; };
+		4B2CAAB51F90002500D9B10E /* RFMacApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMacApplication.h; path = Source/RFMacApplication.h; sourceTree = "<group>"; };
+		4B2CAAB61F90002500D9B10E /* RFMacApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMacApplication.m; path = Source/RFMacApplication.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -102,8 +105,8 @@
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = "<group>"; };
-		4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = "<group>"; };
+		4B7F0AEE1BAF4C27004553A6 /* RFAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFAppDelegate.h; path = Source/RFAppDelegate.h; sourceTree = "<group>"; };
+		4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFAppDelegate.m; path = Source/RFAppDelegate.m; sourceTree = "<group>"; };
 		4B7F0AF01BAF4C27004553A6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		4B7F0AF61BAF4C37004553A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4B7F0AFB1BAF4C67004553A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
@@ -185,8 +188,10 @@
 				4B8FBDF01F8681D000906C86 /* RFMacros.h */,
 				4B8FBDEF1F8681D000906C86 /* RFClient.h */,
 				4B8FBDEE1F8681D000906C86 /* RFClient.m */,
-				4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */,
-				4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */,
+				4B7F0AEE1BAF4C27004553A6 /* RFAppDelegate.h */,
+				4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */,
+				4B2CAAB51F90002500D9B10E /* RFMacApplication.h */,
+				4B2CAAB61F90002500D9B10E /* RFMacApplication.m */,
 				4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */,
 				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
 				4B7F0B041BAF520C004553A6 /* RFHeaderBackgroundView.h */,
@@ -394,6 +399,7 @@
 				4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
+				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
 				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
@@ -410,7 +416,7 @@
 				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */,
-				4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */,
+				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,

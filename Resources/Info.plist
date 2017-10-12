@@ -47,7 +47,7 @@
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<string>RFMacApplication</string>
 	<key>SUFeedURL</key>
 	<string>https://s3.amazonaws.com/micro.blog/mac/appcast.xml</string>
 </dict>

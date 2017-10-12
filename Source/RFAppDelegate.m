@@ -6,7 +6,7 @@
 //  Copyright © 2015 Riverfold Software. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "RFAppDelegate.h"
 
 #import "RFTimelineController.h"
 #import "RFWelcomeController.h"
@@ -16,7 +16,7 @@
 #import "SSKeychain.h"
 #import "RFConstants.h"
 
-@implementation AppDelegate
+@implementation RFAppDelegate
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
