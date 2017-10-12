@@ -32,7 +32,11 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                <connections>
+                                    <action selector="showPreferences:" target="-1" id="ogV-sN-xDJ"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -366,8 +370,7 @@
                                     <action selector="applyFormatItalic:" target="-1" id="AF9-ja-CLy"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Link" id="ulH-2Z-zYS">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Link" keyEquivalent="l" id="ulH-2Z-zYS">
                                 <connections>
                                     <action selector="applyFormatLink:" target="-1" id="zqp-CZ-vH5"/>
                                 </connections>

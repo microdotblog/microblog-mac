@@ -10,6 +10,7 @@
 
 #import "RFTimelineController.h"
 #import "RFWelcomeController.h"
+#import "RFPreferencesController.h"
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "SSKeychain.h"
@@ -59,6 +60,17 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnselectedNotification:) name:kPostWasUnselectedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showReplyPostNotification:) name:kShowReplyPostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+}
+
+#pragma mark -
+
+- (IBAction) showPreferences:(id)sender
+{
+	if (!self.prefsController) {
+		self.prefsController = [[RFPreferencesController alloc] init];
+	}
+
+	[self.prefsController showWindow:nil];
 }
 
 #pragma mark -

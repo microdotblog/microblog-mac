@@ -10,11 +10,13 @@
 
 @class RFTimelineController;
 @class RFWelcomeController;
+@class RFPreferencesController;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 @property (strong, nonatomic) RFTimelineController* timelineController;
 @property (strong, nonatomic) RFWelcomeController* welcomeController;
+@property (strong, nonatomic) RFPreferencesController* prefsController;
 
 @end
 

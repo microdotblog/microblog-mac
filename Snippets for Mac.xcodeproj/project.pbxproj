@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */; };
 		4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */; };
+		4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */; };
+		4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -70,6 +72,9 @@
 		4B2CAAAA1F8FCB7100D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoCell.xib; sourceTree = "<group>"; };
 		4B2CAAAC1F8FCBC800D9B10E /* RFPhotoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoCell.h; path = Source/RFPhotoCell.h; sourceTree = "<group>"; };
 		4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoCell.m; path = Source/RFPhotoCell.m; sourceTree = "<group>"; };
+		4B2CAAB01F8FE99900D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Preferences.xib; sourceTree = "<group>"; };
+		4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPreferencesController.h; path = Source/RFPreferencesController.h; sourceTree = "<group>"; };
+		4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPreferencesController.m; path = Source/RFPreferencesController.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -182,6 +187,8 @@
 				4B8FBDEE1F8681D000906C86 /* RFClient.m */,
 				4B7F0AEE1BAF4C27004553A6 /* AppDelegate.h */,
 				4B7F0AEF1BAF4C27004553A6 /* AppDelegate.m */,
+				4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */,
+				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
 				4B7F0B041BAF520C004553A6 /* RFHeaderBackgroundView.h */,
 				4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */,
 				4B7F0B071BAF5792004553A6 /* RFPostingBarView.h */,
@@ -223,6 +230,7 @@
 				4B5650641F8562B900B03FFD /* Options.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
+				4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */,
 				4B5A250B1F8497B1007C548F /* MenuCell.xib */,
 				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
@@ -352,6 +360,7 @@
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
+				4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +413,7 @@
 				4B7F0AF11BAF4C27004553A6 /* AppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
+				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,6 +427,14 @@
 				4B2CAAAA1F8FCB7100D9B10E /* Base */,
 			);
 			name = PhotoCell.xib;
+			sourceTree = "<group>";
+		};
+		4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B2CAAB01F8FE99900D9B10E /* Base */,
+			);
+			name = Preferences.xib;
 			sourceTree = "<group>";
 		};
 		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {
