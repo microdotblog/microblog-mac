@@ -22,4 +22,6 @@ static NSString* const kAttachPhotoKey = @"photo";
 - (id) initWithAsset:(PHAsset *)asset;
 - (id) initWithThumbnail:(NSImage *)image;
 
+- (NSData *) jpegData;
+
 @end

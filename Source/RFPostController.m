@@ -12,6 +12,7 @@
 #import "RFMacros.h"
 #import "RFClient.h"
 #import "RFPhoto.h"
+#import "RFPhotoCell.h"
 #import "RFMicropub.h"
 #import "RFHighlightingTextStorage.h"
 #import <Fabric/Fabric.h>
@@ -25,6 +26,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	self = [super initWithNibName:@"Post" bundle:nil];
 	if (self) {
+		self.attachedPhotos = @[];
+		self.queuedPhotos = @[];
 	}
 	
 	return self;
@@ -45,7 +48,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
-	
+
+	[self setupText];
+	[self setupColletionView];
+}
+
+- (void) viewDidAppear
+{
+	[super viewDidAppear];
+}
+
+- (void) setupText
+{
 	self.textStorage = [[RFHighlightingTextStorage alloc] init];
 	[self.textStorage addLayoutManager:self.textView.layoutManager];
 
@@ -73,11 +87,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 }
 
-- (void) viewDidAppear
-{
-	[super viewDidAppear];
-}
-
 - (void) setupColletionView
 {
 	self.photosCollectionView.delegate = self;
@@ -95,11 +104,24 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
 	panel.allowedFileTypes = @[ @"public.image" ];
+	panel.allowsMultipleSelection = YES;
+	
 	[panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
 		if (result == NSModalResponseOK) {
 			NSArray* urls = panel.URLs;
-			NSLog (@"urls: %@", urls);
+			NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
+			
+			for (NSURL* file_url in urls) {
+				NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
+				RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+				[new_photos addObject:photo];
+			}
+			
+			self.attachedPhotos = new_photos;
+			[self.photosCollectionView reloadData];
 		}
+		
+		[self becomeFirstResponder];
 	}];
 }
 
@@ -119,9 +141,16 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
 	
-	NSCollectionViewItem* item = [collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	item.thumbnailImageView.image = photo.thumbnailImage;
 	
 	return item;
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+{
+	NSIndexPath* index_path = [indexPaths anyObject];
+	[self performSelector:@selector(removePhotoAtIndex:) withObject:index_path afterDelay:0.1];
 }
 
 #pragma mark -
@@ -458,8 +487,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		[self showProgressHeader:@"Uploading photo..."];
 	}
 	
-	NSImage* img = photo.thumbnailImage;
-	NSData* d = nil; // FIXME UIImageJPEGRepresentation (img, 0.6);
+	NSData* d = [photo jpegData];
 	if (d) {
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
@@ -560,6 +588,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 #endif
 		}
 	}
+}
+
+- (void) removePhotoAtIndex:(NSIndexPath *)indexPath
+{
+	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
+	[new_photos removeObjectAtIndex:indexPath.item];
+	self.attachedPhotos = new_photos;
+	[self.photosCollectionView deleteItemsAtIndexPaths:[NSSet setWithObject:indexPath]];
 }
 
 @end

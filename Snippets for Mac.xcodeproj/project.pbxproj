@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */; };
+		4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -65,6 +67,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B2CAAAA1F8FCB7100D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoCell.xib; sourceTree = "<group>"; };
+		4B2CAAAC1F8FCBC800D9B10E /* RFPhotoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoCell.h; path = Source/RFPhotoCell.h; sourceTree = "<group>"; };
+		4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoCell.m; path = Source/RFPhotoCell.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -193,6 +198,8 @@
 				4B6AE7711F8B335C00CB7950 /* RFMicropub.m */,
 				4B5A250E1F849AF2007C548F /* RFMenuCell.h */,
 				4B5A250F1F849AF2007C548F /* RFMenuCell.m */,
+				4B2CAAAC1F8FCBC800D9B10E /* RFPhotoCell.h */,
+				4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
 				4B5650671F8585C900B03FFD /* RFRoundedImageView.h */,
@@ -217,6 +224,7 @@
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B5A250B1F8497B1007C548F /* MenuCell.xib */,
+				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 			);
 			name = Resources;
@@ -337,6 +345,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
@@ -384,6 +393,7 @@
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
+				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
@@ -401,6 +411,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B2CAAAA1F8FCB7100D9B10E /* Base */,
+			);
+			name = PhotoCell.xib;
+			sourceTree = "<group>";
+		};
 		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

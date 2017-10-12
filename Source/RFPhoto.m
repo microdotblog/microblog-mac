@@ -30,4 +30,11 @@
 	return self;
 }
 
+- (NSData *) jpegData
+{
+	NSBitmapImageRep* rep = (NSBitmapImageRep *)self.thumbnailImage.representations.firstObject;
+	NSData* d = [rep representationUsingType:NSBitmapImageFileTypeJPEG properties:@{}];
+	return d;
+}
+
 @end
