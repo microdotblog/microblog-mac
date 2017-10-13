@@ -10,10 +10,13 @@
 
 #import "RFMacros.h"
 #import "RFXMLLinkParser.h"
+#import "RFXMLRPCRequest.h"
+#import "RFXMLRPCParser.h"
 #import "RFWordpressController.h"
 #import "NSString+Extras.h"
 #import "UUHttpSession.h"
 #import "UUString.h"
+#import "SSKeychain.h"
 
 @implementation RFPreferencesController
 
@@ -34,7 +37,10 @@
 	[self setupNotifications];
 	
 	[self updateRadioButtons];
+	[self updateMenus];
 	[self hideMessage];
+	
+	[self loadCategories];
 }
 
 - (void) setupFields
@@ -50,6 +56,47 @@
 
 - (void) setupNotifications
 {
+}
+
+- (void) loadCategories
+{
+	[self.progressSpinner startAnimation:nil];
+
+	NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+	NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
+	NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
+	NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:@"default"];
+	
+	NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
+	NSString* taxonomy = @"category";
+	
+	NSArray* params = @[ blog_id, username, password, taxonomy ];
+	
+	RFXMLRPCRequest* request = [[RFXMLRPCRequest alloc] initWithURL:xmlrpc_endpoint];
+	[request sendMethod:@"wp.getTerms" params:params completion:^(UUHttpResponse* response) {
+		RFXMLRPCParser* xmlrpc = [RFXMLRPCParser parsedResponseFromData:response.rawResponse];
+
+		NSMutableArray* new_categories = [NSMutableArray array];
+		NSMutableArray* new_ids = [NSMutableArray array];
+		for (NSDictionary* cat_info in xmlrpc.responseParams.firstObject) {
+			[new_categories addObject:cat_info[@"name"]];
+			[new_ids addObject:cat_info[@"term_id"]];
+		}
+
+		RFDispatchMainAsync (^{
+			[self.categoryPopup removeAllItems];
+			[self.categoryPopup addItemsWithTitles:new_categories];
+			
+			for (NSInteger i = 0; i < new_ids.count; i++) {
+				NSMenuItem* item = [self.categoryPopup.itemArray objectAtIndex:i];
+				NSNumber* cat_id = new_ids[0];
+				item.tag = cat_id.integerValue;
+			}
+			
+			[self updateMenus];
+			[self.progressSpinner stopAnimation:nil];
+		});
+	}];
 }
 
 #pragma mark -
@@ -72,6 +119,19 @@
 	[self checkWebsite];
 }
 
+- (IBAction) postFormatChanged:(NSPopUpButton *)sender
+{
+	NSString* s = [[sender selectedItem] title];
+	[[NSUserDefaults standardUserDefaults] setObject:s forKey:@"ExternalBlogFormat"];
+}
+
+- (IBAction) categoryChanged:(NSPopUpButton *)sender
+{
+	NSInteger tag = [[sender selectedItem] tag];
+	NSString* s = [NSString stringWithFormat:@"%ld", (long)tag];
+	[[NSUserDefaults standardUserDefaults] setObject:s forKey:@"ExternalBlogCategory"];
+}
+
 - (void) controlTextDidChange:(NSNotification *)notification
 {
 	NSString* s = self.websiteField.stringValue;
@@ -88,9 +148,6 @@
 	[self hideReturnButton];
 	[self checkWebsite];
 }
-
-//	[[NSUserDefaults standardUserDefaults] setObject:self.selectedFormat forKey:@"ExternalBlogFormat"];
-//	[[NSUserDefaults standardUserDefaults] setObject:self.selectedCategory forKey:@"ExternalBlogCategory"];
 
 #pragma mark -
 
@@ -132,6 +189,15 @@
 		self.publishHostedBlog.state = NSControlStateValueOff;
 		self.publishWordPressBlog.state = NSControlStateValueOn;
 	}
+}
+
+-  (void) updateMenus
+{
+	NSString* selected_format = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogFormat"];
+	NSString* selected_category = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogCategory"];
+
+	[self.postFormatPopup selectItemWithTitle:selected_format];
+	[self.postFormatPopup selectItemWithTag:selected_category.integerValue];
 }
 
 - (void) showReturnButton

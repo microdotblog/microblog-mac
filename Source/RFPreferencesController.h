@@ -19,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet NSButton* returnButton;
 @property (strong, nonatomic) IBOutlet NSTextField* websiteField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSPopUpButton* postFormatPopup;
+@property (strong, nonatomic) IBOutlet NSPopUpButton* categoryPopup;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 
