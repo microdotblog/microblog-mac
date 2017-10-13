@@ -8,6 +8,8 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RFPreferencesController">
             <connections>
                 <outlet property="progressSpinner" destination="GsW-0h-utd" id="Gty-Zd-J7e"/>
+                <outlet property="publishHostedBlog" destination="8Eh-Mk-bT3" id="msC-FJ-7pL"/>
+                <outlet property="publishWordPressBlog" destination="T0C-fL-nk1" id="uJN-8G-DXX"/>
                 <outlet property="returnButton" destination="yk6-d0-KBL" id="Z43-hF-jJz"/>
                 <outlet property="websiteField" destination="1e3-uC-J1t" id="MVu-b2-eYH"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="hRW-hv-vMb"/>
@@ -17,7 +19,8 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="408" height="215"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="61" y="510" width="408" height="215"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="408" height="215"/>
@@ -39,6 +42,9 @@
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="setHostedBlog:" target="-2" id="Jb3-UJ-LXn"/>
+                        </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T0C-fL-nk1">
                         <rect key="frame" x="41" y="108" width="352" height="26"/>
@@ -47,6 +53,9 @@
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="setWordPressBlog:" target="-2" id="K8I-y2-84P"/>
+                        </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VRq-Zm-nw2">
                         <rect key="frame" x="14" y="61" width="95" height="24"/>
@@ -92,7 +101,7 @@
                         </popUpButtonCell>
                     </popUpButton>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yk6-d0-KBL">
-                        <rect key="frame" x="370" y="64" width="22" height="22"/>
+                        <rect key="frame" x="371" y="64" width="22" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="bevel" title="↩︎" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="3SU-eb-WSy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -103,7 +112,7 @@
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="GsW-0h-utd">
-                        <rect key="frame" x="373" y="68" width="16" height="16"/>
+                        <rect key="frame" x="374" y="68" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                 </subviews>

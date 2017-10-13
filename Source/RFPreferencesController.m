@@ -25,6 +25,8 @@
 
 	[self setupFields];
 	[self setupNotifications];
+	
+	[self updateRadioButtons];
 }
 
 - (void) setupFields
@@ -38,6 +40,18 @@
 }
 
 #pragma mark -
+
+- (IBAction) setHostedBlog:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ExternalBlogIsPreferred"];
+	[self updateRadioButtons];
+}
+
+- (IBAction) setWordPressBlog:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
+	[self updateRadioButtons];
+}
 
 - (IBAction) returnButtonPressed:(id)sender
 {
@@ -60,6 +74,20 @@
 {
 	[self hideReturnButton];
 	[self checkWebsite];
+}
+
+#pragma mark -
+
+- (void) updateRadioButtons
+{
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"ExternalBlogIsPreferred"]) {
+		self.publishHostedBlog.state = NSControlStateValueOn;
+		self.publishWordPressBlog.state = NSControlStateValueOff;
+	}
+	else {
+		self.publishHostedBlog.state = NSControlStateValueOff;
+		self.publishWordPressBlog.state = NSControlStateValueOn;
+	}
 }
 
 - (void) showReturnButton
