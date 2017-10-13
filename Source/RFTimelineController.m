@@ -79,11 +79,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineDidScroll:) name:NSScrollViewWillStartLiveScrollNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 }
 
 #pragma mark -
 
--(void) timelineDidScroll:(NSNotification *)notification
+- (void) timelineDidScroll:(NSNotification *)notification
 {
 	if ([notification.object isKindOfClass:[NSView class]]) {
 		NSView* view = (NSView *)notification.object;
@@ -91,6 +92,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 			[self hideOptionsMenu];
 		}
 	}
+}
+
+- (void) openPostingNotification:(NSNotification *)notification
+{
+	[self newDocument:nil];
 }
 
 - (IBAction) newDocument:(id)sender

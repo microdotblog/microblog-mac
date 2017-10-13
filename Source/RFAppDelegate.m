@@ -12,9 +12,11 @@
 #import "RFWelcomeController.h"
 #import "RFPreferencesController.h"
 #import "RFClient.h"
+#import "RFMicropub.h"
 #import "RFMacros.h"
 #import "SSKeychain.h"
 #import "RFConstants.h"
+#import "UUString.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -50,6 +52,9 @@
 	}
 	else if ([url.host isEqualToString:@"signin"]) {
 		[self verifyAppToken:param];
+	}
+	else if ([url.host isEqualToString:@"micropub"]) {
+		[self showMicropubWithURL:[url absoluteString]];
 	}
 }
 
@@ -169,6 +174,67 @@
 			});
 		}
 	}];
+}
+
+- (void) showMicropubWithURL:(NSString *)url
+{
+	NSString* code = [[url uuFindQueryStringArg:@"code"] uuUrlDecoded];
+	NSString* state = [[url uuFindQueryStringArg:@"state"] uuUrlDecoded];
+	NSString* me = [[url uuFindQueryStringArg:@"me"] uuUrlDecoded];
+
+	if (!code || !state || !me) {
+		NSString* msg = [NSString stringWithFormat:@"Authorization \"code\", \"state\", or \"me\" parameters were missing."];
+		// FIXME
+//		[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
+		return;
+	}
+	
+	NSString* saved_state = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubState"];
+	NSString* saved_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubTokenEndpoint"];
+	
+	if (![state isEqualToString:saved_state]) {
+		// FIXME
+//		[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:@"Authorization state did not match." button:@"OK" completionHandler:NULL];
+	}
+	else {
+		NSDictionary* info = @{
+			@"grant_type": @"authorization_code",
+			@"me": me,
+			@"code": code,
+			@"redirect_uri": @"https://micro.blog/micropub/redirect",
+			@"client_id": @"https://micro.blog/",
+			@"state": state
+		};
+		
+		RFMicropub* mp = [[RFMicropub alloc] initWithURL:saved_endpoint];
+		[mp postWithParams:info completion:^(UUHttpResponse* response) {
+			RFDispatchMain (^{
+				if ([response.parsedResponse isKindOfClass:[NSString class]]) {
+					NSString* msg = response.parsedResponse;
+					if (msg.length > 200) {
+						msg = @"";
+					}
+					// FIXME
+//					[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
+				}
+				else {
+					NSString* access_token = [response.parsedResponse objectForKey:@"access_token"];
+					if (access_token == nil) {
+						NSString* msg = [response.parsedResponse objectForKey:@"error_description"];
+						// FIXME
+//						[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else {
+						[[NSUserDefaults standardUserDefaults] setObject:me forKey:@"ExternalMicropubMe"];
+						[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
+						[SSKeychain setPassword:access_token forService:@"ExternalMicropub" account:@"default"];
+					}
+					
+					[self.prefsController showMessage:@"Micropub API settings have been updated."];
+				}
+			});
+		}];
+	}
 }
 
 @end
