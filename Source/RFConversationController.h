@@ -15,4 +15,8 @@
 @property (strong, nonatomic) IBOutlet NSTextField* headerField;
 @property (strong, nonatomic) IBOutlet WebView* webView;
 
+@property (strong, nonatomic) NSString* postID;
+
+- (instancetype) initWithPostID:(NSString *)postID;
+
 @end

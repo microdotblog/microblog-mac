@@ -13,6 +13,8 @@ static NSString* const kClosePostingNotification = @"RFClosePosting";
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
 
+#define kPopNavigationNotification @"RFPopNavigationNotification"
+
 #define kShowUserProfileNotification @"RFShowUserProfileNotification"
 #define kShowUserProfileUsernameKey @"username"
 

@@ -86,6 +86,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasFavoritedNotification:) name:kPostWasFavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 }
 
 #pragma mark -
@@ -94,7 +95,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	if ([notification.object isKindOfClass:[NSView class]]) {
 		NSView* view = (NSView *)notification.object;
-		if ([view isDescendantOf:self.webView]) {
+		if ([view isDescendantOf:[self currentWebView]]) {
 			[self hideOptionsMenu];
 		}
 	}
@@ -109,24 +110,29 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 	NSString* js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_favorite');", post_id];
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) postWasUnfavoritedNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_favorite');", post_id];
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) showConversationNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
-	
-	// ...
-	
-	self.conversationController = [[RFConversationController alloc] init];
-	[self pushController:self.conversationController];
+
+	self.conversationController = [[RFConversationController alloc] initWithPostID:post_id];
+	self.conversationController.webView.policyDelegate = self;
+
+	[self pushViewController:self.conversationController];
+}
+
+- (void) popNavigationNotification:(NSNotification *)notification
+{
+	[self popViewController];
 }
 
 #pragma mark -
@@ -263,7 +269,19 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }
 
-- (void) pushController:(NSViewController *)controller
+#pragma mark -
+
+- (WebView *) currentWebView
+{
+	if (self.conversationController) {
+		return self.conversationController.webView;
+	}
+	else {
+		return self.webView;
+	}
+}
+
+- (void) pushViewController:(NSViewController *)controller
 {
 //	self.topController = controller;
 
@@ -287,6 +305,22 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}];
 }
 
+- (void) popViewController
+{
+	NSRect back_final_r = self.conversationController.view.frame;
+
+	NSRect pushed_final_r = self.conversationController.view.frame;
+	pushed_final_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
+
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+		self.conversationController.view.animator.frame = pushed_final_r;
+		self.webView.animator.frame = back_final_r;
+	} completionHandler:^{
+		[self.conversationController.view removeFromSuperview];
+		self.conversationController = nil;
+	}];
+}
+
 - (void) showPostController:(RFPostController *)controller
 {
 	self.postController = controller;
@@ -296,7 +330,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController.view.frame = r;
 	self.postController.view.alphaValue = 0.0;
 	
-	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:self.webView];
+	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
 
 	self.postController.view.animator.alphaValue = 1.0;
 	[self.window makeFirstResponder:self.postController.textView];
@@ -325,7 +359,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.optionsPopover.contentViewController = options_controller;
 
 		NSRect r = [self rectOfPostID:postID];
-		[self.optionsPopover showRelativeToRect:r ofView:self.webView preferredEdge:NSRectEdgeMinY];
+		[self.optionsPopover showRelativeToRect:r ofView:[self currentWebView] preferredEdge:NSRectEdgeMinY];
 	}
 }
 
@@ -349,7 +383,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else {
 		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
 	}
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (NSRect) rectOfPostID:(NSString *)postID
@@ -358,16 +392,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
 	NSString* scroll_js = [NSString stringWithFormat:@"$('body').scrollTop();"];
 
-	NSString* top_s = [self.webView stringByEvaluatingJavaScriptFromString:top_js];
-	NSString* height_s = [self.webView stringByEvaluatingJavaScriptFromString:height_js];
-	NSString* scroll_s = [self.webView stringByEvaluatingJavaScriptFromString:scroll_js];
+	NSString* top_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:top_js];
+	NSString* height_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:height_js];
+	NSString* scroll_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:scroll_js];
 
-	CGFloat top_f = self.webView.bounds.size.height - [top_s floatValue] - [height_s floatValue];
+	CGFloat top_f = [self currentWebView].bounds.size.height - [top_s floatValue] - [height_s floatValue];
 	top_f += [scroll_s floatValue];
 	
 	// adjust to full cell width
 	CGFloat left_f = 0.0;
-	CGFloat width_f = self.webView.bounds.size.width;
+	CGFloat width_f = [self currentWebView].bounds.size.width;
 	
 	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
 }
@@ -375,14 +409,14 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (NSString *) usernameOfPostID:(NSString *)postID
 {
 	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_username').text();", postID];
-	NSString* username_s = [self.webView stringByEvaluatingJavaScriptFromString:username_js];
+	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 - (NSString *) linkOfPostID:(NSString *)postID
 {
 	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_link').text();", postID];
-	NSString* username_s = [self.webView stringByEvaluatingJavaScriptFromString:username_js];
+	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
@@ -391,8 +425,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* is_favorite_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_favorite');", postID];
 	NSString* is_deletable_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_deletable');", postID];
 
-	NSString* is_favorite_s = [self.webView stringByEvaluatingJavaScriptFromString:is_favorite_js];
-	NSString* is_deletable_s = [self.webView stringByEvaluatingJavaScriptFromString:is_deletable_js];
+	NSString* is_favorite_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_favorite_js];
+	NSString* is_deletable_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_deletable_js];
 
 	if ([is_favorite_s boolValue]) {
 		return kOptionsPopoverWithUnfavorite;
