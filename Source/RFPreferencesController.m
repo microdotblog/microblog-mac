@@ -10,6 +10,7 @@
 
 #import "RFMacros.h"
 #import "RFXMLLinkParser.h"
+#import "RFWordpressController.h"
 #import "NSString+Extras.h"
 #import "UUHttpSession.h"
 #import "UUString.h"
@@ -83,6 +84,9 @@
 	[self checkWebsite];
 }
 
+//	[[NSUserDefaults standardUserDefaults] setObject:self.selectedFormat forKey:@"ExternalBlogFormat"];
+//	[[NSUserDefaults standardUserDefaults] setObject:self.selectedCategory forKey:@"ExternalBlogCategory"];
+
 #pragma mark -
 
 - (void) showMessage:(NSString *)message
@@ -148,9 +152,10 @@
 			NSString* rsd_url = [rsd_parser.foundURLs firstObject];
             RFDispatchMainAsync (^{
 				[self.progressSpinner stopAnimation:nil];
-				// FIXME
-//                RFWordpressController* wordpress_controller = [[RFWordpressController alloc] initWithWebsite:full_url rsdURL:rsd_url];
-//                [self.navigationController pushViewController:wordpress_controller animated:YES];
+
+                self.wordpressController = [[RFWordpressController alloc] initWithWebsite:full_url rsdURL:rsd_url];
+				[self.window beginSheet:self.wordpressController.window completionHandler:^(NSModalResponse returnCode) {
+				}];
             });
 		}
 		else {

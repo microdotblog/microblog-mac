@@ -44,6 +44,8 @@
 		4B2CAB1B1F90667300D9B10E /* clean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAF51F90655A00D9B10E /* clean.c */; };
 		4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAF61F90655A00D9B10E /* mappedio.c */; };
 		4B2CAB1D1F90667300D9B10E /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAFC1F90655A00D9B10E /* parser.c */; };
+		4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB1F1F907E9C00D9B10E /* RFWordpressController.m */; };
+		4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB241F90818B00D9B10E /* Wordpress.xib */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -175,6 +177,9 @@
 		4B2CAB001F90655A00D9B10E /* utf8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utf8.h; sourceTree = "<group>"; };
 		4B2CAB011F90655A00D9B10E /* win32tc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = win32tc.h; sourceTree = "<group>"; };
 		4B2CAB021F90655A00D9B10E /* forward.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = forward.h; sourceTree = "<group>"; };
+		4B2CAB1E1F907E9B00D9B10E /* RFWordpressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFWordpressController.h; path = Source/RFWordpressController.h; sourceTree = "<group>"; };
+		4B2CAB1F1F907E9C00D9B10E /* RFWordpressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWordpressController.m; path = Source/RFWordpressController.m; sourceTree = "<group>"; };
+		4B2CAB251F90818B00D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Wordpress.xib; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -386,6 +391,8 @@
 				4B2CAAB61F90002500D9B10E /* RFMacApplication.m */,
 				4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */,
 				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
+				4B2CAB1E1F907E9B00D9B10E /* RFWordpressController.h */,
+				4B2CAB1F1F907E9C00D9B10E /* RFWordpressController.m */,
 				4B7F0B041BAF520C004553A6 /* RFHeaderBackgroundView.h */,
 				4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */,
 				4B7F0B071BAF5792004553A6 /* RFPostingBarView.h */,
@@ -438,6 +445,7 @@
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */,
+				4B2CAB241F90818B00D9B10E /* Wordpress.xib */,
 				4B5A250B1F8497B1007C548F /* MenuCell.xib */,
 				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
@@ -562,6 +570,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
+				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
@@ -626,6 +635,7 @@
 				4B2CAB121F90667300D9B10E /* lexer.c in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
+				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
 				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
 				4B2CAB0D1F90667300D9B10E /* attrs.c in Sources */,
 				4B2CAB1A1F90667300D9B10E /* config.c in Sources */,
@@ -676,6 +686,14 @@
 				4B2CAAB01F8FE99900D9B10E /* Base */,
 			);
 			name = Preferences.xib;
+			sourceTree = "<group>";
+		};
+		4B2CAB241F90818B00D9B10E /* Wordpress.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B2CAB251F90818B00D9B10E /* Base */,
+			);
+			name = Wordpress.xib;
 			sourceTree = "<group>";
 		};
 		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {

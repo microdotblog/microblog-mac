@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RFWordpressController;
+
 @interface RFPreferencesController : NSWindowController <NSTextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
@@ -17,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet NSButton* returnButton;
 @property (strong, nonatomic) IBOutlet NSTextField* websiteField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+
+@property (strong, nonatomic) RFWordpressController* wordpressController;
 
 - (void) showMessage:(NSString *)message;
 

@@ -15,6 +15,10 @@
 #import "RFPhotoCell.h"
 #import "RFMicropub.h"
 #import "RFHighlightingTextStorage.h"
+#import "UUString.h"
+#import "RFXMLRPCRequest.h"
+#import "RFXMLRPCParser.h"
+#import "SSKeychain.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -404,7 +408,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			}];
 		}
 		else {
-#if 0 // WordPress
 			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
@@ -425,10 +428,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSMutableDictionary* content = [NSMutableDictionary dictionary];
 				
 				content[@"post_status"] = @"publish";
-				content[@"post_title"] = self.titleField.text;
+				content[@"post_title"] = self.titleField.stringValue;
 				content[@"post_content"] = post_text;
 				if (post_format.length > 0) {
-					if (self.titleField.text.length > 0) {
+					if (self.titleField.stringValue.length > 0) {
 						content[@"post_format"] = @"Standard";
 					}
 					else {
@@ -466,7 +469,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 				}));
 			}];
-#endif
 		}
 	}
 }
@@ -555,7 +557,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			}];
 		}
 		else {
-#if 0 // WordPress
 			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
@@ -607,7 +608,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 				}));
 			}];
-#endif
 		}
 	}
 }
