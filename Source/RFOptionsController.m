@@ -10,12 +10,19 @@
 
 #import "RFConstants.h"
 #import "RFMacros.h"
+#import "RFClient.h"
 
 @implementation RFOptionsController
 
 - (instancetype) initWithPostID:(NSString *)postID username:(NSString *)username popoverType:(RFOptionsPopoverType)popoverType
 {
-	self = [super initWithNibName:@"Options" bundle:nil];
+	if (popoverType == kOptionsPopoverWithUnfavorite) {
+		self = [super initWithNibName:@"OptionsWithUnfavorite" bundle:nil];
+	}
+	else {
+		self = [super initWithNibName:@"Options" bundle:nil];
+	}
+	
 	if (self) {
 		self.postID = postID;
 		self.username = username;
@@ -28,8 +35,6 @@
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
-
-	// ...
 }
 
 - (IBAction) reply:(id)sender
@@ -41,16 +46,32 @@
 - (IBAction) favorite:(id)sender
 {
 	[self sendUnselectedNotification];
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/favorites"];
+	NSDictionary* args = @{ @"id": self.postID };
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[[NSNotificationCenter defaultCenter] postNotificationName:kPostWasFavoritedNotification object:self userInfo:@{ kPostNotificationPostIDKey: self.postID}];
+		});
+	}];
+}
+
+- (IBAction) unfavorite:(id)sender
+{
+	[self sendUnselectedNotification];
+
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/favorites/%@", self.postID];
+	[client deleteWithObject:nil completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[[NSNotificationCenter defaultCenter] postNotificationName:kPostWasUnfavoritedNotification object:self userInfo:@{ kPostNotificationPostIDKey: self.postID}];
+		});
+	}];
 }
 
 - (IBAction) conversation:(id)sender
 {
-	[self sendUnselectedNotification];
 }
 
-// favorite
-// unfavorite
-// conversation
 // deletePost
 // share
 

@@ -13,7 +13,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="273" height="38"/>
+            <rect key="frame" x="0.0" y="0.0" width="294" height="38"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j4E-VA-qdu">
@@ -27,8 +27,19 @@
                         <action selector="reply:" target="-2" id="dyY-GW-Ded"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTK-M1-RPy">
+                    <rect key="frame" x="82" y="3" width="90" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Unfavorite" bezelStyle="regularSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" size="14" name="Avenir-Book"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="unfavorite:" target="-2" id="krw-Wa-UGQ"/>
+                    </connections>
+                </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPW-aZ-zko">
-                    <rect key="frame" x="166" y="3" width="90" height="32"/>
+                    <rect key="frame" x="184" y="3" width="90" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Conversation" bezelStyle="regularSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="L4Q-5A-Zv8">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -38,19 +49,8 @@
                         <action selector="conversation:" target="-2" id="BCH-2B-YKC"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTK-M1-RPy">
-                    <rect key="frame" x="87" y="3" width="62" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Favorite" bezelStyle="regularSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" size="14" name="Avenir-Book"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="favorite:" target="-2" id="FGH-iF-xFF"/>
-                    </connections>
-                </button>
             </subviews>
-            <point key="canvasLocation" x="35.5" y="52"/>
+            <point key="canvasLocation" x="46" y="52"/>
         </customView>
     </objects>
 </document>

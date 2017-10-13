@@ -82,6 +82,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineDidScroll:) name:NSScrollViewWillStartLiveScrollNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasFavoritedNotification:) name:kPostWasFavoritedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
 }
 
 #pragma mark -
@@ -100,6 +102,22 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[self newDocument:nil];
 }
+
+- (void) postWasFavoritedNotification:(NSNotification *)notification
+{
+	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
+	NSString* js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_favorite');", post_id];
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
+}
+
+- (void) postWasUnfavoritedNotification:(NSNotification *)notification
+{
+	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
+	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_favorite');", post_id];
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
+}
+
+#pragma mark -
 
 - (IBAction) newDocument:(id)sender
 {
@@ -263,8 +281,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else {
 		[self setSelected:YES withPostID:postID];
 		NSString* username = [self usernameOfPostID:postID];
+		RFOptionsPopoverType popover_type = [self popoverTypeOfPostID:postID];
 
-		RFOptionsController* options_controller = [[RFOptionsController alloc] initWithPostID:postID username:username popoverType:kOptionsPopoverDefault];
+		RFOptionsController* options_controller = [[RFOptionsController alloc] initWithPostID:postID username:username popoverType:popover_type];
+		
 		self.optionsPopover = [[NSPopover alloc] init];
 		self.optionsPopover.contentViewController = options_controller;
 
@@ -328,6 +348,25 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_link').text();", postID];
 	NSString* username_s = [self.webView stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (RFOptionsPopoverType) popoverTypeOfPostID:(NSString *)postID
+{
+	NSString* is_favorite_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_favorite');", postID];
+	NSString* is_deletable_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_deletable');", postID];
+
+	NSString* is_favorite_s = [self.webView stringByEvaluatingJavaScriptFromString:is_favorite_js];
+	NSString* is_deletable_s = [self.webView stringByEvaluatingJavaScriptFromString:is_deletable_js];
+
+	if ([is_favorite_s boolValue]) {
+		return kOptionsPopoverWithUnfavorite;
+	}
+	else if ([is_deletable_s boolValue]) {
+		return kOptionsPopoverWithDelete;
+	}
+	else {
+		return kOptionsPopoverDefault;
+	}
 }
 
 - (void) showURL:(NSURL *)url
