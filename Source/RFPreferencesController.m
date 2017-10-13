@@ -39,8 +39,13 @@
 
 - (void) setupFields
 {
-	self.websiteField.delegate = self;
 	self.returnButton.alphaValue = 0.0;
+	self.websiteField.delegate = self;
+	
+	NSString* s = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogURL"];
+	if (s) {
+		self.websiteField.stringValue = s;
+	}
 }
 
 - (void) setupNotifications
@@ -144,6 +149,7 @@
 	[self.progressSpinner startAnimation:nil];
 
 	NSString* full_url = [self normalizeURL:self.websiteField.stringValue];
+	[[NSUserDefaults standardUserDefaults] setObject:full_url forKey:@"ExternalBlogURL"];
 
 	UUHttpRequest* request = [UUHttpRequest getRequest:full_url queryArguments:nil];
 	[UUHttpSession executeRequest:request completionHandler:^(UUHttpResponse* response) {
@@ -155,6 +161,9 @@
 
                 self.wordpressController = [[RFWordpressController alloc] initWithWebsite:full_url rsdURL:rsd_url];
 				[self.window beginSheet:self.wordpressController.window completionHandler:^(NSModalResponse returnCode) {
+					if (returnCode == NSModalResponseOK) {
+						[self showMessage:@"Weblog settings have been updated."];
+					}
 				}];
             });
 		}

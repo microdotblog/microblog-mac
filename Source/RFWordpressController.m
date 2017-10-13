@@ -86,7 +86,7 @@
 
 - (IBAction) cancel:(id)sender
 {
-	[self.window.sheetParent endSheet:self.window];
+	[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction) finish:(id)sender
@@ -105,7 +105,7 @@
 //						[self.navigationController pushViewController:categories_controller animated:YES];
 					}
 					
-					[self cancel:nil];
+					[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 				}];
 			}
 			else {
