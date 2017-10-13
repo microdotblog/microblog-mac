@@ -411,7 +411,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
-			NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:@"default"];
+			NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:username];
 			
 			NSString* post_text = text;
 			NSString* app_key = @"";
@@ -560,7 +560,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
-			NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:@"default"];
+			NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:username];
 			
 			NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
 			NSString* filename = [[[[NSString uuGenerateUUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByAppendingPathExtension:@"jpg"];

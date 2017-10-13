@@ -6,15 +6,15 @@
 		<language>en</language>
 
 		<item>
-			<title>Version 1.0b3</title>
+			<title>Version 1.0b4</title>
  			<description><![CDATA[
  				<ul>
- 					<li>Added photo upload for hosted sites.</li>
+ 					<li>Finished Micropub and WordPress posting.</li>
  					<li>More improvements.</li> 					
  				</ul>
  			]]></description>
-			<pubDate>Thu, 12 Oct 2017 12:50:00 +0000</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b3.zip" sparkle:shortVersionString="1.0b3" sparkle:version="4" length="1623481" type="application/octet-stream" />
+			<pubDate>Fri, 13 Oct 2017 10:05:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b4.zip" sparkle:shortVersionString="1.0b4" sparkle:version="5" length="1623481" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
 		</item>		
 	</channel>

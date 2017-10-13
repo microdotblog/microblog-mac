@@ -14,6 +14,8 @@
 #import "RFRoundedImageView.h"
 #import "SSKeychain.h"
 #import "RFConstants.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 static CGFloat const kDefaultSplitViewPosition = 170.0;
 
@@ -103,9 +105,22 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[self hideOptionsMenu];
 
-	if (!self.postController) {
-		RFPostController* controller = [[RFPostController alloc] init];
-		[self showPostController:controller];
+	BOOL has_hosted = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasSnippetsBlog"];
+	NSString* micropub = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMe"];
+	NSString* xmlrpc = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+	if (has_hosted || micropub || xmlrpc) {
+		if (!self.postController) {
+			RFPostController* controller = [[RFPostController alloc] init];
+			[self showPostController:controller];
+		}
+	}
+	else {
+		NSAlert* alert = [[NSAlert alloc] init];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"No hosted or external blog configured."];
+		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+		}];
 	}
 }
 
@@ -187,9 +202,33 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) signOut:(id)sender
 {
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	[SSKeychain deletePasswordForService:@"Micro.blog" account:username];
+	NSString* microblog_username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* external_username = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogUsername"];
+
+	[SSKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
+	[SSKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
+	[SSKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
+
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountUsername"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountGravatarURL"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountDefaultSite"];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HasSnippetsBlog"];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogUsername"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogApp"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogEndpoint"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogID"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogIsPreferred"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogURL"];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMe"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubTokenEndpoint"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubPostingEndpoint"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMediaEndpoint"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubState"];
+
+	[Answers logCustomEventWithName:@"Sign Out" customAttributes:nil];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }

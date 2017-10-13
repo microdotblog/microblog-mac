@@ -49,7 +49,7 @@
 	[[NSUserDefaults standardUserDefaults] setObject:xmlrpcEndpointURL forKey:@"ExternalBlogEndpoint"];
 	[[NSUserDefaults standardUserDefaults] setObject:blogID forKey:@"ExternalBlogID"];
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
-	[SSKeychain setPassword:self.passwordField.stringValue forService:@"ExternalBlog" account:@"default"];
+	[SSKeychain setPassword:self.passwordField.stringValue forService:@"ExternalBlog" account:self.usernameField.stringValue];
 	
 	if ([xmlrpcEndpointURL containsString:@"xmlrpc.php"]) {
 		[[NSUserDefaults standardUserDefaults] setObject:@"WordPress" forKey:@"ExternalBlogApp"];

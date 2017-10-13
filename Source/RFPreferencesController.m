@@ -39,8 +39,12 @@
 	[self updateRadioButtons];
 	[self updateMenus];
 	[self hideMessage];
-	
+}
+
+- (void) windowDidBecomeKeyNotification:(NSNotification *)notification
+{
 	[self loadCategories];
+	[self showMenusIfWordPress];
 }
 
 - (void) setupFields
@@ -56,48 +60,52 @@
 
 - (void) setupNotifications
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
 }
 
 - (void) loadCategories
 {
-	[self.progressSpinner startAnimation:nil];
-
 	NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
-	NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
-	NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
-	NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:@"default"];
-	
-	NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
-	NSString* taxonomy = @"category";
-	
-	NSArray* params = @[ blog_id, username, password, taxonomy ];
-	
-	RFXMLRPCRequest* request = [[RFXMLRPCRequest alloc] initWithURL:xmlrpc_endpoint];
-	[request sendMethod:@"wp.getTerms" params:params completion:^(UUHttpResponse* response) {
-		RFXMLRPCParser* xmlrpc = [RFXMLRPCParser parsedResponseFromData:response.rawResponse];
+	if (xmlrpc_endpoint) {
+		[self.progressSpinner startAnimation:nil];
 
-		NSMutableArray* new_categories = [NSMutableArray array];
-		NSMutableArray* new_ids = [NSMutableArray array];
-		for (NSDictionary* cat_info in xmlrpc.responseParams.firstObject) {
-			[new_categories addObject:cat_info[@"name"]];
-			[new_ids addObject:cat_info[@"term_id"]];
-		}
+		NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+		NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
+		NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
+		NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:username];
+		
+		NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
+		NSString* taxonomy = @"category";
+		
+		NSArray* params = @[ blog_id, username, password, taxonomy ];
+		
+		RFXMLRPCRequest* request = [[RFXMLRPCRequest alloc] initWithURL:xmlrpc_endpoint];
+		[request sendMethod:@"wp.getTerms" params:params completion:^(UUHttpResponse* response) {
+			RFXMLRPCParser* xmlrpc = [RFXMLRPCParser parsedResponseFromData:response.rawResponse];
 
-		RFDispatchMainAsync (^{
-			[self.categoryPopup removeAllItems];
-			[self.categoryPopup addItemsWithTitles:new_categories];
-			
-			for (NSInteger i = 0; i < new_ids.count; i++) {
-				NSMenuItem* item = [self.categoryPopup.itemArray objectAtIndex:i];
-				NSNumber* cat_id = new_ids[i];
-				item.tag = cat_id.integerValue;
+			NSMutableArray* new_categories = [NSMutableArray array];
+			NSMutableArray* new_ids = [NSMutableArray array];
+			for (NSDictionary* cat_info in xmlrpc.responseParams.firstObject) {
+				[new_categories addObject:cat_info[@"name"]];
+				[new_ids addObject:cat_info[@"term_id"]];
 			}
-			
-			self.hasLoadedCategories = YES;
-			[self updateMenus];
-			[self.progressSpinner stopAnimation:nil];
-		});
-	}];
+
+			RFDispatchMainAsync (^{
+				[self.categoryPopup removeAllItems];
+				[self.categoryPopup addItemsWithTitles:new_categories];
+				
+				for (NSInteger i = 0; i < new_ids.count; i++) {
+					NSMenuItem* item = [self.categoryPopup.itemArray objectAtIndex:i];
+					NSNumber* cat_id = new_ids[i];
+					item.tag = cat_id.integerValue;
+				}
+				
+				self.hasLoadedCategories = YES;
+				[self updateMenus];
+				[self.progressSpinner stopAnimation:nil];
+			});
+		}];
+	}
 }
 
 #pragma mark -
@@ -192,10 +200,12 @@
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"ExternalBlogIsPreferred"]) {
 		self.publishHostedBlog.state = NSControlStateValueOn;
 		self.publishWordPressBlog.state = NSControlStateValueOff;
+		self.websiteField.enabled = NO;
 	}
 	else {
 		self.publishHostedBlog.state = NSControlStateValueOff;
 		self.publishWordPressBlog.state = NSControlStateValueOn;
+		self.websiteField.enabled = YES;
 	}
 }
 
