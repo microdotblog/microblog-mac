@@ -89,10 +89,11 @@
 			
 			for (NSInteger i = 0; i < new_ids.count; i++) {
 				NSMenuItem* item = [self.categoryPopup.itemArray objectAtIndex:i];
-				NSNumber* cat_id = new_ids[0];
+				NSNumber* cat_id = new_ids[i];
 				item.tag = cat_id.integerValue;
 			}
 			
+			self.hasLoadedCategories = YES;
 			[self updateMenus];
 			[self.progressSpinner stopAnimation:nil];
 		});
@@ -179,6 +180,13 @@
 	[self.window setContentSize:win_size];
 }
 
+- (void) showMenusIfWordPress
+{
+	if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogApp"] isEqualToString:@"WordPress"]) {
+		// ...
+	}
+}
+
 - (void) updateRadioButtons
 {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"ExternalBlogIsPreferred"]) {
@@ -196,8 +204,18 @@
 	NSString* selected_format = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogFormat"];
 	NSString* selected_category = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogCategory"];
 
-	[self.postFormatPopup selectItemWithTitle:selected_format];
-	[self.postFormatPopup selectItemWithTag:selected_category.integerValue];
+	if (self.hasLoadedCategories) {
+		self.postFormatPopup.enabled = YES;
+		self.categoryPopup.enabled = YES;
+	}
+
+	if (selected_format) {
+		[self.postFormatPopup selectItemWithTitle:selected_format];
+	}
+	
+	if (selected_category) {
+		[self.categoryPopup selectItemWithTag:selected_category.integerValue];
+	}
 }
 
 - (void) showReturnButton

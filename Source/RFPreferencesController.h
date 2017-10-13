@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet NSPopUpButton* categoryPopup;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
+@property (assign, nonatomic) BOOL hasLoadedCategories;
 
 - (void) showMessage:(NSString *)message;
 

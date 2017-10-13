@@ -100,11 +100,9 @@
 			if (xmlrpcEndpointURL && blogID) {
 				[self verifyUsername:self.usernameField.stringValue password:self.passwordField.stringValue forEndpoint:xmlrpcEndpointURL withCompletion:^{
 					[self saveAccountWithEndpointURL:xmlrpcEndpointURL blogID:blogID];
-					if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogApp"] isEqualToString:@"WordPress"]) {
-//						RFCategoriesController* categories_controller = [[RFCategoriesController alloc] init];
-//						[self.navigationController pushViewController:categories_controller animated:YES];
-					}
-					
+
+					[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMe"];
+
 					[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 				}];
 			}
