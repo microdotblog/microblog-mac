@@ -174,6 +174,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	self.selectedTimeline = kSelectionTimeline;
 
+	[self closeOverlays];
+
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
 	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
 	
@@ -184,43 +186,32 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[self.webView mainFrame] loadRequest:request];
 	
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
-
-	[self.optionsPopover performClose:nil];
-	self.optionsPopover = nil;
-
-	[self performClose:nil];
 }
 
 - (IBAction) showMentions:(id)sender
 {
 	self.selectedTimeline = kSelectionMentions;
 
+	[self closeOverlays];
+
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/mentions"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
-
-	[self.optionsPopover performClose:nil];
-	self.optionsPopover = nil;
-
-	[self performClose:nil];
 }
 
 - (IBAction) showFavorites:(id)sender
 {
 	self.selectedTimeline = kSelectionFavorites;
 
+	[self closeOverlays];
+
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
-
-	[self.optionsPopover performClose:nil];
-	self.optionsPopover = nil;
-
-	[self performClose:nil];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -271,6 +262,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 #pragma mark -
 
+- (void) closeOverlays
+{
+	[self popViewController];
+	
+	[self.optionsPopover performClose:nil];
+	self.optionsPopover = nil;
+
+	[self performClose:nil];
+}
+
 - (WebView *) currentWebView
 {
 	if (self.conversationController) {
@@ -307,18 +308,22 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) popViewController
 {
-	NSRect back_final_r = self.conversationController.view.frame;
-
-	NSRect pushed_final_r = self.conversationController.view.frame;
-	pushed_final_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
-
-	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-		self.conversationController.view.animator.frame = pushed_final_r;
-		self.webView.animator.frame = back_final_r;
-	} completionHandler:^{
-		[self.conversationController.view removeFromSuperview];
+	NSViewController* controller = self.conversationController;
+	if (controller) {
 		self.conversationController = nil;
-	}];
+
+		NSRect back_final_r = controller.view.frame;
+
+		NSRect pushed_final_r = controller.view.frame;
+		pushed_final_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
+
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+			controller.view.animator.frame = pushed_final_r;
+			self.webView.animator.frame = back_final_r;
+		} completionHandler:^{
+			[controller.view removeFromSuperview];
+		}];
+	}
 }
 
 - (void) showPostController:(RFPostController *)controller
