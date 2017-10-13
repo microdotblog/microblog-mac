@@ -70,6 +70,9 @@
 
 - (IBAction) conversation:(id)sender
 {
+	[self sendUnselectedNotification];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowConversationNotification object:self userInfo:@{ kPostNotificationPostIDKey: self.postID}];
 }
 
 // deletePost

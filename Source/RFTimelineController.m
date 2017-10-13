@@ -11,6 +11,7 @@
 #import "RFMenuCell.h"
 #import "RFOptionsController.h"
 #import "RFPostController.h"
+#import "RFConversationController.h"
 #import "RFRoundedImageView.h"
 #import "SSKeychain.h"
 #import "RFConstants.h"
@@ -84,6 +85,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasFavoritedNotification:) name:kPostWasFavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
 }
 
 #pragma mark -
@@ -115,6 +117,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_favorite');", post_id];
 	[self.webView stringByEvaluatingJavaScriptFromString:js];
+}
+
+- (void) showConversationNotification:(NSNotification *)notification
+{
+	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
+	
+	// ...
+	
+	self.conversationController = [[RFConversationController alloc] init];
+	[self pushController:self.conversationController];
 }
 
 #pragma mark -
@@ -249,6 +261,30 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[Answers logCustomEventWithName:@"Sign Out" customAttributes:nil];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
+}
+
+- (void) pushController:(NSViewController *)controller
+{
+//	self.topController = controller;
+
+	NSRect pushed_final_r = self.webView.bounds;
+	pushed_final_r.origin.x = kDefaultSplitViewPosition + 1;
+
+	NSRect pushed_start_r = self.webView.bounds;
+	pushed_start_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
+
+	NSRect top_r = self.webView.frame;
+	top_r.origin.x = top_r.origin.x - self.webView.bounds.size.width - 1;
+
+	controller.view.frame = pushed_start_r;
+
+	[self.window.contentView addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
+
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+		controller.view.animator.frame = pushed_final_r;
+		self.webView.animator.frame = top_r;
+	} completionHandler:^{
+	}];
 }
 
 - (void) showPostController:(RFPostController *)controller

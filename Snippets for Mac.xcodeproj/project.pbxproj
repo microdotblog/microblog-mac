@@ -47,6 +47,8 @@
 		4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB1F1F907E9C00D9B10E /* RFWordpressController.m */; };
 		4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB241F90818B00D9B10E /* Wordpress.xib */; };
 		4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */; };
+		4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB2A1F912E4900D9B10E /* Conversation.xib */; };
+		4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -182,6 +184,9 @@
 		4B2CAB1F1F907E9C00D9B10E /* RFWordpressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWordpressController.m; path = Source/RFWordpressController.m; sourceTree = "<group>"; };
 		4B2CAB251F90818B00D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Wordpress.xib; sourceTree = "<group>"; };
 		4B2CAB281F91201F00D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/OptionsWithUnfavorite.xib; sourceTree = "<group>"; };
+		4B2CAB2B1F912E4900D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Conversation.xib; sourceTree = "<group>"; };
+		4B2CAB2D1F912EAF00D9B10E /* RFConversationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConversationController.h; path = Source/RFConversationController.h; sourceTree = "<group>"; };
+		4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFConversationController.m; path = Source/RFConversationController.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -401,6 +406,8 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4B2CAB2D1F912EAF00D9B10E /* RFConversationController.h */,
+				4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
 				4B56505D1F8561A300B03FFD /* RFPostController.m */,
 				4B56505F1F85626200B03FFD /* RFOptionsController.h */,
@@ -443,6 +450,7 @@
 				4B7F0AFB1BAF4C67004553A6 /* Info.plist */,
 				4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */,
 				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
+				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B5650641F8562B900B03FFD /* Options.xib */,
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
@@ -572,6 +580,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */,
@@ -649,6 +658,7 @@
 				4B2CAAC31F90652800D9B10E /* RFXMLElementStack.m in Sources */,
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
+				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
 				4B2CAB051F90667300D9B10E /* streamio.c in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
@@ -706,6 +716,14 @@
 				4B2CAB281F91201F00D9B10E /* Base */,
 			);
 			name = OptionsWithUnfavorite.xib;
+			sourceTree = "<group>";
+		};
+		4B2CAB2A1F912E4900D9B10E /* Conversation.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B2CAB2B1F912E4900D9B10E /* Base */,
+			);
+			name = Conversation.xib;
 			sourceTree = "<group>";
 		};
 		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {

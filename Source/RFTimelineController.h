@@ -11,6 +11,7 @@
 
 @class RFPostController;
 @class RFRoundedImageView;
+@class RFConversationController;
 
 typedef enum {
 	kSelectionTimeline = 0,
@@ -30,6 +31,7 @@ typedef enum {
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
+@property (strong, nonatomic) RFConversationController* conversationController;
 
 - (IBAction) performClose:(id)sender;
 
