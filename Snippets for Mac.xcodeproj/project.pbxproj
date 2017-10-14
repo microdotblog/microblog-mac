@@ -49,6 +49,7 @@
 		4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */; };
 		4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB2A1F912E4900D9B10E /* Conversation.xib */; };
 		4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */; };
+		4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB311F91B8F800D9B10E /* WebView+Swipe.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -187,6 +188,8 @@
 		4B2CAB2B1F912E4900D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Conversation.xib; sourceTree = "<group>"; };
 		4B2CAB2D1F912EAF00D9B10E /* RFConversationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConversationController.h; path = Source/RFConversationController.h; sourceTree = "<group>"; };
 		4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFConversationController.m; path = Source/RFConversationController.m; sourceTree = "<group>"; };
+		4B2CAB301F91B8F800D9B10E /* WebView+Swipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WebView+Swipe.h"; path = "Source/WebView+Swipe.h"; sourceTree = "<group>"; };
+		4B2CAB311F91B8F800D9B10E /* WebView+Swipe.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "WebView+Swipe.m"; path = "Source/WebView+Swipe.m"; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -430,6 +433,8 @@
 				4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
+				4B2CAB301F91B8F800D9B10E /* WebView+Swipe.h */,
+				4B2CAB311F91B8F800D9B10E /* WebView+Swipe.m */,
 				4B2CAABE1F90652700D9B10E /* RFXMLElementStack.h */,
 				4B2CAAB91F90652600D9B10E /* RFXMLElementStack.m */,
 				4B2CAABA1F90652700D9B10E /* RFXMLLinkParser.h */,
@@ -669,6 +674,7 @@
 				4B2CAB181F90667300D9B10E /* alloc.c in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
+				4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
 				4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */,
