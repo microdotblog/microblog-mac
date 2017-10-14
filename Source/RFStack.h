@@ -1,5 +1,5 @@
 //
-//  RFXMLElementStack.h
+//  RFStack.h
 //  Snippets
 //
 //  Created by Manton Reece on 9/1/15.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RFXMLElementStack : NSObject
+@interface RFStack : NSObject
 
 @property (strong, nonatomic) NSMutableArray* stackArray;
 

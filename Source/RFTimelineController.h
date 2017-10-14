@@ -12,6 +12,7 @@
 @class RFPostController;
 @class RFRoundedImageView;
 @class RFConversationController;
+@class RFStack;
 
 typedef enum {
 	kSelectionTimeline = 0,
@@ -31,10 +32,16 @@ typedef enum {
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
-@property (strong, nonatomic) RFConversationController* conversationController;
+@property (strong, nonatomic) RFStack* navigationStack;
+
+// NOTES:
+// have stack of NSViewControllers (use RFXMLElementStack, rename it)
+// rename RFTimelineController to RFMainController
+// make an RFTimelineController that is just a web view
 
 - (IBAction) performClose:(id)sender;
 
+- (void) showProfileWithUsername:(NSString *)username;
 - (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 - (void) hideOptionsMenu;

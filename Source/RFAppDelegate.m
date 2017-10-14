@@ -45,7 +45,7 @@
 		[self showOptionsMenuWithPostID:param];
 	}
 	else if ([url.host isEqualToString:@"user"]) {
-//		[self showProfileWithUsername:param];
+		[self showProfileWithUsername:param];
 	}
 	else if ([url.host isEqualToString:@"conversation"]) {
 //		[self showConversationWithPostID:param];
@@ -120,6 +120,11 @@
 - (void) showOptionsMenuWithPostID:(NSString *)postID
 {
 	[self.timelineController showOptionsMenuWithPostID:postID];
+}
+
+- (void) showProfileWithUsername:(NSString *)username
+{
+	[self.timelineController showProfileWithUsername:username];
 }
 
 - (void) loadTimelineWithToken:(NSString *)token

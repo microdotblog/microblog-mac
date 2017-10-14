@@ -8,7 +8,7 @@
 
 #import "RFXMLRPCParser.h"
 
-#import "RFXMLElementStack.h"
+#import "RFStack.h"
 
 @implementation RFXMLRPCParser
 
@@ -17,7 +17,7 @@
 	self = [super init];
 	if (self) {
 		self.responseParams = [NSMutableArray array];
-		self.responseStack = [[RFXMLElementStack alloc] init];
+		self.responseStack = [[RFStack alloc] init];
 	}
 	
 	return self;

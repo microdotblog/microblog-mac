@@ -1,14 +1,14 @@
 //
-//  RFXMLElementStack.m
+//  RFStack.m
 //  Snippets
 //
 //  Created by Manton Reece on 9/1/15.
 //  Copyright © 2015 Riverfold Software. All rights reserved.
 //
 
-#import "RFXMLElementStack.h"
+#import "RFStack.h"
 
-@implementation RFXMLElementStack
+@implementation RFStack
 
 - (instancetype) init
 {

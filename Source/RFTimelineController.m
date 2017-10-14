@@ -12,9 +12,11 @@
 #import "RFOptionsController.h"
 #import "RFPostController.h"
 #import "RFConversationController.h"
+#import "RFUserController.h"
 #import "RFRoundedImageView.h"
 #import "SSKeychain.h"
 #import "RFConstants.h"
+#import "RFStack.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -26,6 +28,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	self = [super initWithWindowNibName:@"Timeline"];
 	if (self) {
+		self.navigationStack = [[RFStack alloc] init];
 	}
 	
 	return self;
@@ -124,10 +127,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 
-	self.conversationController = [[RFConversationController alloc] initWithPostID:post_id];
-	self.conversationController.webView.policyDelegate = self;
+	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:post_id];
+	controller.webView.policyDelegate = self;
 
-	[self pushViewController:self.conversationController];
+	[self pushViewController:controller];
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification
@@ -274,8 +277,14 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (WebView *) currentWebView
 {
-	if (self.conversationController) {
-		return self.conversationController.webView;
+	NSViewController* controller = [self.navigationStack peek];
+	if ([controller isKindOfClass:[RFConversationController class]]) {
+		RFConversationController* conversation_controller = (RFConversationController *)controller;
+		return conversation_controller.webView;
+	}
+	else if ([controller isKindOfClass:[RFUserController class]]) {
+		RFUserController* user_controller = (RFUserController *)controller;
+		return user_controller.webView;
 	}
 	else {
 		return self.webView;
@@ -284,7 +293,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) pushViewController:(NSViewController *)controller
 {
-//	self.topController = controller;
+	[self.navigationStack push:controller];
 
 	NSRect pushed_final_r = self.webView.bounds;
 	pushed_final_r.origin.x = kDefaultSplitViewPosition + 1;
@@ -308,10 +317,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) popViewController
 {
-	NSViewController* controller = self.conversationController;
+	NSViewController* controller = [self.navigationStack pop];
 	if (controller) {
-		self.conversationController = nil;
-
 		NSRect back_final_r = controller.view.frame;
 
 		NSRect pushed_final_r = controller.view.frame;
@@ -340,6 +347,14 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController.view.animator.alphaValue = 1.0;
 	[self.window makeFirstResponder:self.postController.textView];
 	self.postController.nextResponder = self;
+}
+
+- (void) showProfileWithUsername:(NSString *)username
+{
+	RFUserController* user_controller = [[RFUserController alloc] initWithUsername:username];
+	user_controller.webView.policyDelegate = self;
+
+	[self pushViewController:user_controller];
 }
 
 - (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username

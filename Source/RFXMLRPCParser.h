@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class RFXMLElementStack;
+@class RFStack;
 
 @interface RFXMLRPCParser : NSObject <NSXMLParserDelegate>
 
-@property (strong, nonatomic) RFXMLElementStack* responseStack;
+@property (strong, nonatomic) RFStack* responseStack;
 @property (strong, nonatomic) NSMutableArray* responseParams;
 @property (strong, nonatomic) NSDictionary* responseFault;
 @property (strong, nonatomic) NSMutableString* currentMemberName;
