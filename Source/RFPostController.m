@@ -145,6 +145,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			
 			self.attachedPhotos = new_photos;
 			[self.photosCollectionView reloadData];
+
+			[self checkMediaEndpoint];
 		}
 		
 		[self becomeFirstResponder];
@@ -618,6 +620,37 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[new_photos removeObjectAtIndex:indexPath.item];
 	self.attachedPhotos = new_photos;
 	[self.photosCollectionView deleteItemsAtIndexPaths:[NSSet setWithObject:indexPath]];
+}
+
+- (void) checkMediaEndpoint
+{
+	if ([self hasMicropubBlog]) {
+		NSString* media_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMediaEndpoint"];
+		if (media_endpoint.length == 0) {
+			NSString* micropub_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubPostingEndpoint"];
+			RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
+			NSDictionary* args = @{
+				@"q": @"config"
+			};
+			[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+				BOOL found = NO;
+				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+					NSString* new_endpoint = [response.parsedResponse objectForKey:@"media-endpoint"];
+					if (new_endpoint) {
+						[[NSUserDefaults standardUserDefaults] setObject:new_endpoint forKey:@"ExternalMicropubMediaEndpoint"];
+						found = YES;
+					}
+				}
+				
+				if (!found) {
+					RFDispatchMain (^{
+						// FIXME
+//						[UIAlertView uuShowOneButtonAlert:@"Error Checking Server" message:@"Micropub media-endpoint was not found." button:@"OK" completionHandler:NULL];
+					});
+				}
+			}];
+		}
+	}
 }
 
 @end
