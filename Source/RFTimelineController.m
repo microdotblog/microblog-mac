@@ -287,14 +287,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 			NSNumber* count = [response.parsedResponse objectForKey:@"count"];
 			NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
 			if (count.integerValue > 0) {
+				NSString* msg;
 				if (count.integerValue == 1) {
-					self.messageField.stringValue = @"1 new post";
+					msg = @"1 new post";
 				}
 				else {
-					self.messageField.stringValue = [NSString stringWithFormat:@"%@ new posts", count];
+					msg = [NSString stringWithFormat:@"%@ new posts", count];
 				}
 
 				RFDispatchMainAsync (^{
+					self.messageField.stringValue = msg;
 					self.messageTopConstraint.animator.constant = -1;
 				});
 			}
