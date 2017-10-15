@@ -303,7 +303,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMediaEndpoint"];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubState"];
 
-	[Answers logCustomEventWithName:@"Sign Out" customAttributes:nil];
+//	[Answers logCustomEventWithName:@"Sign Out" customAttributes:nil];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }

@@ -153,7 +153,7 @@
 		NSString* error = [response.parsedResponse objectForKey:@"error"];
 		if (error) {
 			RFDispatchMainAsync ((^{
-				[Answers logLoginWithMethod:@"Token" success:@NO customAttributes:nil];
+//				[Answers logLoginWithMethod:@"Token" success:@NO customAttributes:nil];
 //				[self showMessage:[NSString stringWithFormat:@"Error signing in: %@", error]];
 			}));
 		}
@@ -175,7 +175,7 @@
 			[[NSUserDefaults standardUserDefaults] setBool:[is_fullaccess boolValue] forKey:@"IsFullAccess"];
 		
 			RFDispatchMainAsync (^{
-				[Answers logLoginWithMethod:@"Token" success:@YES customAttributes:nil];
+//				[Answers logLoginWithMethod:@"Token" success:@YES customAttributes:nil];
 				[self loadTimelineWithToken:token];
 			});
 		}

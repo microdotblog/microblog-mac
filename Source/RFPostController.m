@@ -316,7 +316,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		};
 		[client postWithParams:args completion:^(UUHttpResponse* response) {
 			RFDispatchMainAsync (^{
-				[Answers logCustomEventWithName:@"Sent Reply" customAttributes:nil];
+//				[Answers logCustomEventWithName:@"Sent Reply" customAttributes:nil];
 				[self close:nil];
 			});
 		}];
@@ -353,7 +353,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
-						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
+//						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
 						[self close:nil];
 					}
 				});
@@ -402,7 +402,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
-						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
+//						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
 						[self close:nil];
 					}
 				});
@@ -464,7 +464,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						self.photoButton.hidden = NO;
 					}
 					else {
-						[Answers logCustomEventWithName:@"Sent External" customAttributes:nil];
+//						[Answers logCustomEventWithName:@"Sent External" customAttributes:nil];
 						[self close:nil];
 					}
 				}));
@@ -527,7 +527,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 					else {
 						photo.publishedURL = image_url;
-						[Answers logCustomEventWithName:@"Uploaded Photo" customAttributes:nil];
+//						[Answers logCustomEventWithName:@"Uploaded Photo" customAttributes:nil];
 						handler();
 					}
 				});
@@ -548,7 +548,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 					else {
 						photo.publishedURL = image_url;
-						[Answers logCustomEventWithName:@"Uploaded Micropub" customAttributes:nil];
+//						[Answers logCustomEventWithName:@"Uploaded Micropub" customAttributes:nil];
 						handler();
 					}
 				});
@@ -597,7 +597,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						else {
 							photo.publishedURL = image_url;
 
-							[Answers logCustomEventWithName:@"Uploaded External" customAttributes:nil];
+//							[Answers logCustomEventWithName:@"Uploaded External" customAttributes:nil];
 							handler();
 						}
 					}

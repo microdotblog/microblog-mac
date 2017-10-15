@@ -71,9 +71,7 @@
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
 		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
 		4B6AE77E1F8B37D900CB7950 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */; };
-		4B6AE7801F8B37E200CB7950 /* Crashlytics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; };
-		4B6AE7871F8B387900CB7950 /* Fabric.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
 		4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
@@ -105,8 +103,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4B6AE76F1F8AE1EF00CB7950 /* Sparkle.framework in CopyFiles */,
-				4B6AE7871F8B387900CB7950 /* Fabric.framework in CopyFiles */,
-				4B6AE7801F8B37E200CB7950 /* Crashlytics.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
