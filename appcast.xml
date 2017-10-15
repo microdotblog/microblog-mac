@@ -6,6 +6,19 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b6</title>
+ 			<description><![CDATA[
+ 				<ul>
+ 					<li>Added checking for new posts.</li>
+ 					<li>Fixed Micropub photo posting.</li> 					
+ 				</ul>
+ 			]]></description>
+			<pubDate>Sat, 14 Oct 2017 22:21:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b6.zip" sparkle:shortVersionString="1.0b6" sparkle:version="7" length="1623481" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b5</title>
  			<description><![CDATA[
  				<ul>
