@@ -227,6 +227,19 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
 }
 
+- (IBAction) showDiscover:(id)sender
+{
+	self.selectedTimeline = kSelectionDiscover;
+
+	[self closeOverlays];
+
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover"];
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:3] byExtendingSelection:NO];
+}
+
 - (IBAction) refreshTimeline:(id)sender
 {
 	if (self.selectedTimeline == kSelectionTimeline) {
@@ -238,7 +251,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else if (self.selectedTimeline == kSelectionFavorites) {
 		[self showFavorites:nil];
 	}
-	
+	else if (self.selectedTimeline == kSelectionDiscover) {
+		[self showDiscover:nil];
+	}
+
 	self.messageTopConstraint.animator.constant = -35;
 }
 
@@ -554,7 +570,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return 3;
+	return 4;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
@@ -570,6 +586,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Favorites";
 	}
+	else if (row == 3) {
+		cell.titleField.stringValue = @"Discover";
+	}
+	else if (row == 4) {
+		cell.titleField.stringValue = @"Drafts";
+	}
 
 	return cell;
 }
@@ -584,6 +606,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 	else if (row == 2) {
 		[self showFavorites:nil];
+	}
+	else if (row == 3) {
+		[self showDiscover:nil];
 	}
 
 	return YES;

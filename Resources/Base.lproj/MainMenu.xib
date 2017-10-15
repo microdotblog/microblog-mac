@@ -346,6 +346,11 @@
                                     <action selector="showFavorites:" target="-1" id="DhZ-W0-ff1"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Discover" keyEquivalent="4" id="puO-XK-VhQ">
+                                <connections>
+                                    <action selector="showDiscover:" target="-1" id="ixf-UX-iOF"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="SvD-l1-Axj"/>
                             <menuItem title="Refresh" keyEquivalent="R" id="x5U-wS-VS9">
                                 <connections>

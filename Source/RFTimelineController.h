@@ -17,7 +17,9 @@
 typedef enum {
 	kSelectionTimeline = 0,
 	kSelectionMentions = 1,
-	kSelectionFavorites = 2
+	kSelectionFavorites = 2,
+	kSelectionDiscover = 3,
+	kSelectionDrafts = 4
 } RFSelectedTimelineType;
 
 @interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource, WebPolicyDelegate>
