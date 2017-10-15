@@ -345,7 +345,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) closeOverlays
 {
-	[self popViewController];
+	[self popToRootViewController];
 	
 	[self.optionsPopover performClose:nil];
 	self.optionsPopover = nil;
@@ -408,6 +408,13 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		} completionHandler:^{
 			[controller.view removeFromSuperview];
 		}];
+	}
+}
+
+- (void) popToRootViewController
+{
+	while ([self.navigationStack peek] != nil) {
+		[self popViewController];
 	}
 }
 
