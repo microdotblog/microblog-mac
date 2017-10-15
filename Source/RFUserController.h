@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSButton* followButton;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSButton* followingUsersButton;
 
 @property (strong, nonatomic) NSString* username;
 

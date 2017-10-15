@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="fullNameField" destination="zqw-tG-vVO" id="31N-Ds-nPA"/>
                 <outlet property="messageField" destination="sjC-OC-Bf6" id="qc3-KL-3VF"/>
+                <outlet property="messageSpinner" destination="lWZ-mP-RW1" id="0al-7N-DQ4"/>
                 <outlet property="messageTopConstraint" destination="9mz-iW-zWv" id="dYj-m6-pnk"/>
                 <outlet property="profileImageView" destination="ETu-Lx-u0c" id="zaO-Pm-113"/>
                 <outlet property="splitView" destination="fkA-Zg-Ds4" id="a8c-6k-c9Q"/>
@@ -207,7 +208,18 @@
                                                         <action selector="refreshTimeline:" target="-2" id="eN5-PF-iOl"/>
                                                     </connections>
                                                 </button>
+                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="lWZ-mP-RW1">
+                                                    <rect key="frame" x="336" y="8" width="16" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="16" id="Elo-Io-9Hy"/>
+                                                        <constraint firstAttribute="height" constant="16" id="PEn-I2-KDl"/>
+                                                    </constraints>
+                                                </progressIndicator>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="lWZ-mP-RW1" firstAttribute="top" secondItem="gUd-Pe-vB8" secondAttribute="top" constant="8" id="I6E-yf-mze"/>
+                                                <constraint firstAttribute="trailing" secondItem="lWZ-mP-RW1" secondAttribute="trailing" constant="8" id="Mh2-b8-Gea"/>
+                                            </constraints>
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="ghE-L7-WSl"/>

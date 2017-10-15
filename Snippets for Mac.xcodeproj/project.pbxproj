@@ -53,6 +53,8 @@
 		4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB361F91C04200D9B10E /* RFUserController.m */; };
 		4B2CAB381F924CA200D9B10E /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB331F91C01B00D9B10E /* User.xib */; };
 		4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */; };
+		4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3D1F93EFB400D9B10E /* Friends.xib */; };
+		4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB411F93F00000D9B10E /* RFFriendsController.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -199,6 +201,9 @@
 		4B2CAB391F939DD900D9B10E /* Micro.blog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Micro.blog.entitlements; sourceTree = "<group>"; };
 		4B2CAB3A1F93A04600D9B10E /* NSAlert+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSAlert+Extras.h"; path = "Source/NSAlert+Extras.h"; sourceTree = "<group>"; };
 		4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSAlert+Extras.m"; path = "Source/NSAlert+Extras.m"; sourceTree = "<group>"; };
+		4B2CAB3E1F93EFB400D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Friends.xib; sourceTree = "<group>"; };
+		4B2CAB401F93F00000D9B10E /* RFFriendsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFFriendsController.h; path = Source/RFFriendsController.h; sourceTree = "<group>"; };
+		4B2CAB411F93F00000D9B10E /* RFFriendsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFFriendsController.m; path = Source/RFFriendsController.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -421,6 +426,8 @@
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 				4B2CAB2D1F912EAF00D9B10E /* RFConversationController.h */,
 				4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */,
+				4B2CAB401F93F00000D9B10E /* RFFriendsController.h */,
+				4B2CAB411F93F00000D9B10E /* RFFriendsController.m */,
 				4B2CAB351F91C04200D9B10E /* RFUserController.h */,
 				4B2CAB361F91C04200D9B10E /* RFUserController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
@@ -471,6 +478,7 @@
 				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
+				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
 				4B5650641F8562B900B03FFD /* Options.xib */,
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
@@ -610,6 +618,7 @@
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
+				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
@@ -689,6 +698,7 @@
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
 				4B2CAB051F90667300D9B10E /* streamio.c in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
+				4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */,
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
 				4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */,
@@ -761,6 +771,14 @@
 				4B2CAB341F91C01B00D9B10E /* Base */,
 			);
 			name = User.xib;
+			sourceTree = "<group>";
+		};
+		4B2CAB3D1F93EFB400D9B10E /* Friends.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B2CAB3E1F93EFB400D9B10E /* Base */,
+			);
+			name = Friends.xib;
 			sourceTree = "<group>";
 		};
 		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {

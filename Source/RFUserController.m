@@ -28,13 +28,11 @@
 {
 	[super viewDidLoad];
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/posts/%@", self.username];
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-
 	[self checkFollowing];
 	[self fetchUserInfo];
 }
+
+#pragma mark -
 
 - (void) checkFollowing
 {
@@ -68,23 +66,34 @@
             if (userInfo) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self updateAppearanceFromDictionary:userInfo];
+                    [self loadUserPosts];
                 });
             }
         }
     }];
 }
 
+- (void) loadUserPosts
+{
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/posts/%@", self.username];
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
+}
+
 - (void) updateAppearanceFromDictionary:(NSDictionary*)userInfo
 {
-	NSDictionary* microBlogInfo = [userInfo objectForKey:@"_microblog"];
-	NSDictionary* authorInfo = [userInfo objectForKey:@"author"];
+	NSDictionary* microblog_info = [userInfo objectForKey:@"_microblog"];
+	NSDictionary* author_info = [userInfo objectForKey:@"author"];
 
-	self.headerField.stringValue = [authorInfo objectForKey:@"name"];
+	self.headerField.stringValue = [author_info objectForKey:@"name"];
 	self.headerField.hidden = NO;
 
-	self.bioField.stringValue = [microBlogInfo objectForKey:@"bio"];
+	self.bioField.stringValue = [microblog_info objectForKey:@"bio"];
 	self.bioField.hidden = NO;
 	self.bioDivider.hidden = NO;
+
+	self.followingUsersButton.title = [NSString stringWithFormat:@"Following %@", [microblog_info objectForKey:@"following_count"]];;
+	self.followingUsersButton.hidden = NO;
 
 //	self.blogAddressLabel.text = [authorInfo objectForKey:@"url"];
 //	self.pathToBlog = [authorInfo objectForKey:@"url"];
@@ -103,6 +112,8 @@
 		self.followButton.target = self;
 	}
 }
+
+#pragma mark -
 
 - (void) follow:(id)sender
 {
@@ -134,6 +145,11 @@
 			[self setupFollowing:NO];
 		});
 	}];
+}
+
+- (IBAction) showFollowing:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowUserFollowingNotification object:self userInfo:@{ kShowUserFollowingUsernameKey: self.username }];
 }
 
 - (IBAction) back:(id)sender

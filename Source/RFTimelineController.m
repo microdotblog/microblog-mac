@@ -12,6 +12,7 @@
 #import "RFOptionsController.h"
 #import "RFPostController.h"
 #import "RFConversationController.h"
+#import "RFFriendsController.h"
 #import "RFUserController.h"
 #import "RFRoundedImageView.h"
 #import "SSKeychain.h"
@@ -95,6 +96,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 }
 
 - (void) setupTimer
@@ -138,6 +140,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:post_id];
+	controller.webView.policyDelegate = self;
+
+	[self pushViewController:controller];
+}
+
+- (void) showUserFollowingNotification:(NSNotification *)notification
+{
+	NSString* username = [notification.userInfo objectForKey:kShowUserFollowingUsernameKey];
+
+	RFFriendsController* controller = [[RFFriendsController alloc] initWithUsername:username];
 	controller.webView.policyDelegate = self;
 
 	[self pushViewController:controller];
@@ -242,6 +254,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) refreshTimeline:(id)sender
 {
+	[self.messageSpinner startAnimation:nil];
+	
 	if (self.selectedTimeline == kSelectionTimeline) {
 		[self showTimeline:nil];
 	}
@@ -255,7 +269,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		[self showDiscover:nil];
 	}
 
-	self.messageTopConstraint.animator.constant = -35;
+	RFDispatchSeconds (1.5, ^{
+		self.messageTopConstraint.animator.constant = -35;
+		[self.messageSpinner stopAnimation:nil];
+	});
 }
 
 - (IBAction) signOut:(id)sender

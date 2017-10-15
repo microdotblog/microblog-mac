@@ -12,6 +12,7 @@
                 <outlet property="bioDivider" destination="GcO-9J-7o0" id="LFK-6U-JRX"/>
                 <outlet property="bioField" destination="gXv-am-2Se" id="9IU-LJ-HSW"/>
                 <outlet property="followButton" destination="pcd-J8-4cb" id="7U4-L8-EZg"/>
+                <outlet property="followingUsersButton" destination="kzQ-oe-lTh" id="wgL-3o-H2G"/>
                 <outlet property="headerField" destination="WFZ-4E-LSZ" id="uVK-RZ-Dfh"/>
                 <outlet property="progressSpinner" destination="7T1-Rs-eHs" id="7nw-3i-CYC"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mt4-Ha-Cj8"/>
@@ -25,13 +26,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box boxType="custom" borderType="none" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln">
-                    <rect key="frame" x="0.0" y="338" width="340" height="110"/>
+                    <rect key="frame" x="0.0" y="328" width="340" height="120"/>
                     <view key="contentView" id="MnU-VL-RXJ">
-                        <rect key="frame" x="0.0" y="0.0" width="340" height="110"/>
+                        <rect key="frame" x="0.0" y="0.0" width="340" height="120"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pcd-J8-4cb">
-                                <rect key="frame" x="254" y="72" width="81" height="32"/>
+                                <rect key="frame" x="254" y="82" width="81" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="69" id="Lzk-zP-61N"/>
                                     <constraint firstAttribute="height" constant="21" id="but-vi-0kU"/>
@@ -42,17 +43,14 @@
                                 </buttonCell>
                             </button>
                             <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="7T1-Rs-eHs">
-                                <rect key="frame" x="236" y="82" width="16" height="16"/>
+                                <rect key="frame" x="236" y="92" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="MrT-U1-mCC"/>
                                     <constraint firstAttribute="height" constant="16" id="mWe-0o-va3"/>
                                 </constraints>
                             </progressIndicator>
                             <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gXv-am-2Se">
-                                <rect key="frame" x="12" y="7" width="319" height="51"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="51" id="43x-0v-HeV"/>
-                                </constraints>
+                                <rect key="frame" x="12" y="45" width="319" height="23"/>
                                 <textFieldCell key="cell" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Bio" id="aHX-Rd-m2M">
                                     <font key="font" size="13" name="Avenir-Book"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -60,7 +58,7 @@
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Kvs-M2-DAj">
-                                <rect key="frame" x="12" y="64" width="316" height="5"/>
+                                <rect key="frame" x="12" y="74" width="316" height="5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="dfd-Gk-x9j"/>
                                 </constraints>
@@ -71,17 +69,33 @@
                                     <constraint firstAttribute="height" constant="1" id="F9n-px-rHV"/>
                                 </constraints>
                             </box>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kzQ-oe-lTh">
+                                <rect key="frame" x="12" y="13" width="316" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="2Dr-DD-2k7"/>
+                                    <constraint firstAttribute="width" constant="316" id="dxu-m4-uN5"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" title="Following 123" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="oFS-4s-Kog">
+                                    <behavior key="behavior" lightByContents="YES"/>
+                                    <font key="font" size="13" name="Avenir-Medium"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="showFollowing:" target="-2" id="id5-4z-InE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="7T1-Rs-eHs" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="12" id="085-qO-pae"/>
                             <constraint firstItem="Kvs-M2-DAj" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="12" id="1t0-9L-Szq"/>
                             <constraint firstAttribute="trailing" secondItem="GcO-9J-7o0" secondAttribute="trailing" constant="12" id="6GO-eY-hSQ"/>
                             <constraint firstItem="pcd-J8-4cb" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="10" id="8GS-KO-TCT"/>
+                            <constraint firstItem="kzQ-oe-lTh" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="12" id="8nh-SN-lEA"/>
                             <constraint firstItem="pcd-J8-4cb" firstAttribute="leading" secondItem="7T1-Rs-eHs" secondAttribute="trailing" constant="8" id="FQt-Sl-owP"/>
                             <constraint firstAttribute="trailing" secondItem="pcd-J8-4cb" secondAttribute="trailing" constant="11" id="M1V-J2-qc7"/>
                             <constraint firstItem="gXv-am-2Se" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="14" id="Myt-U1-7bR"/>
                             <constraint firstItem="Kvs-M2-DAj" firstAttribute="top" secondItem="pcd-J8-4cb" secondAttribute="bottom" constant="12" id="Ndf-me-MMl"/>
-                            <constraint firstItem="GcO-9J-7o0" firstAttribute="top" secondItem="gXv-am-2Se" secondAttribute="bottom" constant="6" id="Rk0-2V-qQj"/>
+                            <constraint firstItem="GcO-9J-7o0" firstAttribute="top" secondItem="kzQ-oe-lTh" secondAttribute="bottom" constant="12" id="Pul-tj-E2e"/>
+                            <constraint firstItem="GcO-9J-7o0" firstAttribute="top" secondItem="gXv-am-2Se" secondAttribute="bottom" constant="44" id="Rk0-2V-qQj"/>
                             <constraint firstAttribute="trailing" secondItem="gXv-am-2Se" secondAttribute="trailing" constant="11" id="TmS-cA-gVc"/>
                             <constraint firstItem="GcO-9J-7o0" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="12" id="Vs7-8S-3hs"/>
                             <constraint firstItem="gXv-am-2Se" firstAttribute="top" secondItem="Kvs-M2-DAj" secondAttribute="bottom" constant="8" id="uA2-Wo-g4Q"/>
@@ -89,13 +103,10 @@
                             <constraint firstAttribute="bottom" secondItem="GcO-9J-7o0" secondAttribute="bottom" id="y9m-Y8-PWv"/>
                         </constraints>
                     </view>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="110" id="Chv-cB-jVj"/>
-                    </constraints>
                     <color key="fillColor" white="1" alpha="1" colorSpace="deviceWhite"/>
                 </box>
                 <webView translatesAutoresizingMaskIntoConstraints="NO" id="7LD-DW-RCG">
-                    <rect key="frame" x="0.0" y="0.0" width="340" height="338"/>
+                    <rect key="frame" x="0.0" y="0.0" width="340" height="328"/>
                     <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
                         <nil key="identifier"/>
                     </webPreferences>
