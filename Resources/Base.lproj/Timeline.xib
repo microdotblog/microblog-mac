@@ -9,6 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFTimelineController">
             <connections>
+                <outlet property="containerView" destination="tQN-jO-jUp" id="RoL-n7-2dx"/>
                 <outlet property="fullNameField" destination="zqw-tG-vVO" id="31N-Ds-nPA"/>
                 <outlet property="messageField" destination="sjC-OC-Bf6" id="qc3-KL-3VF"/>
                 <outlet property="messageSpinner" destination="lWZ-mP-RW1" id="0al-7N-DQ4"/>

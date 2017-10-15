@@ -26,6 +26,7 @@ typedef enum {
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSSplitView* splitView;
+@property (strong, nonatomic) IBOutlet NSView* containerView;
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSTextField* fullNameField;
 @property (strong, nonatomic) IBOutlet NSTextField* usernameField;

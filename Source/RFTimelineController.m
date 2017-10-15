@@ -373,14 +373,14 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[self.navigationStack push:controller];
 
-	NSRect pushed_final_r = self.webView.bounds;
+	NSRect pushed_final_r = self.containerView.bounds;
 	pushed_final_r.origin.x = kDefaultSplitViewPosition + 1;
 
-	NSRect pushed_start_r = self.webView.bounds;
-	pushed_start_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
+	NSRect pushed_start_r = self.containerView.bounds;
+	pushed_start_r.origin.x = kDefaultSplitViewPosition + 1 + self.containerView.bounds.size.width;
 
-	NSRect top_r = self.webView.frame;
-	top_r.origin.x = top_r.origin.x - self.webView.bounds.size.width - 1;
+	NSRect top_r = self.containerView.frame;
+	top_r.origin.x = top_r.origin.x - self.containerView.bounds.size.width - 1;
 
 	controller.view.frame = pushed_start_r;
 
