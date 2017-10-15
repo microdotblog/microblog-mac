@@ -12,6 +12,7 @@
 #import "RFXMLRPCParser.h"
 #import "RFMacros.h"
 #import "SSKeychain.h"
+#import "NSAlert+Extras.h"
 
 @implementation RFWordpressController
 
@@ -71,8 +72,7 @@
 		RFDispatchMainAsync ((^{
 			if (xmlrpc.responseFault) {
 				NSString* s = [NSString stringWithFormat:@"%@ (error: %@)", xmlrpc.responseFault[@"faultString"], xmlrpc.responseFault[@"faultCode"]];
-				// FIXME
-//				[UIAlertView uuShowOneButtonAlert:@"Error Signing In" message:s button:@"OK" completionHandler:NULL];
+				[NSAlert rf_showOneButtonAlert:@"Error Signing In" message:s button:@"OK" completionHandler:NULL];
 				[self.progressSpinner stopAnimation:nil];
 			}
 			else {
@@ -107,12 +107,7 @@
 				}];
 			}
 			else {
-				// FIXME
-//				[UIAlertView uuShowTwoButtonAlert:@"Error Discovering Settings" message:@"Could not find the XML-RPC endpoint for your weblog. Please see help.micro.blog for troubleshooting tips." buttonOne:@"Visit Help" buttonTwo:@"OK" completionHandler:^(NSInteger buttonIndex) {
-//					if (buttonIndex == 0) {
-//						[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://help.micro.blog/"]];
-//					}
-//				}];
+				[NSAlert rf_showOneButtonAlert:@"Error Discovering Settings" message:@"Could not find the XML-RPC endpoint or Micropub API for your weblog." button:@"OK" completionHandler:NULL];
 			}
 		});
 	}];

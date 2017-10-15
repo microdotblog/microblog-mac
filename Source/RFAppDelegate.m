@@ -17,6 +17,7 @@
 #import "SSKeychain.h"
 #import "RFConstants.h"
 #import "UUString.h"
+#import "NSAlert+Extras.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -189,8 +190,7 @@
 
 	if (!code || !state || !me) {
 		NSString* msg = [NSString stringWithFormat:@"Authorization \"code\", \"state\", or \"me\" parameters were missing."];
-		// FIXME
-//		[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
+		[NSAlert rf_showOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
 		return;
 	}
 	
@@ -198,8 +198,7 @@
 	NSString* saved_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubTokenEndpoint"];
 	
 	if (![state isEqualToString:saved_state]) {
-		// FIXME
-//		[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:@"Authorization state did not match." button:@"OK" completionHandler:NULL];
+		[NSAlert rf_showOneButtonAlert:@"Micropub Error" message:@"Authorization state did not match." button:@"OK" completionHandler:NULL];
 	}
 	else {
 		NSDictionary* info = @{
@@ -219,15 +218,13 @@
 					if (msg.length > 200) {
 						msg = @"";
 					}
-					// FIXME
-//					[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
+					[NSAlert rf_showOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
 				}
 				else {
 					NSString* access_token = [response.parsedResponse objectForKey:@"access_token"];
 					if (access_token == nil) {
 						NSString* msg = [response.parsedResponse objectForKey:@"error_description"];
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
 						[[NSUserDefaults standardUserDefaults] setObject:me forKey:@"ExternalMicropubMe"];

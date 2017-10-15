@@ -19,6 +19,7 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "SSKeychain.h"
+#import "NSAlert+Extras.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -349,8 +350,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 						[self hideProgressHeader];
 						NSString* msg = response.parsedResponse[@"error_description"];
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
 						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
@@ -399,8 +399,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 						[self hideProgressHeader];
 						NSString* msg = response.parsedResponse[@"error_description"];
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
 						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
@@ -460,8 +459,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				RFDispatchMainAsync ((^{
 					if (xmlrpc.responseFault) {
 						NSString* s = [NSString stringWithFormat:@"%@ (error: %@)", xmlrpc.responseFault[@"faultString"], xmlrpc.responseFault[@"faultCode"]];
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Sending Post" message:s button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:s button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 						self.photoButton.hidden = NO;
 					}
@@ -524,8 +522,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{
 					if (image_url == nil) {
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 					}
 					else {
@@ -546,8 +543,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{
 					if (image_url == nil) {
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 					}
 					else {
@@ -568,8 +564,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			NSString* filename = [[[[NSString uuGenerateUUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByAppendingPathExtension:@"jpg"];
 			
 			if (!blog_id || !username || !password) {
-				// FIXME
-//				[UIAlertView uuShowOneButtonAlert:@"Error Uploading Photo" message:@"Your blog settings were not saved correctly. Try signing out and trying again." button:@"OK" completionHandler:NULL];
+				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Your blog settings were not saved correctly. Try signing out and trying again." button:@"OK" completionHandler:NULL];
 				[self hideProgressHeader];
 				self.photoButton.hidden = NO;
 				return;
@@ -588,16 +583,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				RFDispatchMainAsync ((^{
 					if (xmlrpc.responseFault) {
 						NSString* s = [NSString stringWithFormat:@"%@ (error: %@)", xmlrpc.responseFault[@"faultString"], xmlrpc.responseFault[@"faultCode"]];
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Uploading Photo" message:s button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:s button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 						self.photoButton.hidden = NO;
 					}
 					else {
 						NSString* image_url = [[xmlrpc.responseParams firstObject] objectForKey:@"link"];
 						if (image_url == nil) {
-							// FIXME
-//							[UIAlertView uuShowOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+							[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
 							[self hideProgressHeader];
 							self.photoButton.hidden = NO;
 						}
@@ -644,8 +637,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				
 				if (!found) {
 					RFDispatchMain (^{
-						// FIXME
-//						[UIAlertView uuShowOneButtonAlert:@"Error Checking Server" message:@"Micropub media-endpoint was not found." button:@"OK" completionHandler:NULL];
+						[NSAlert rf_showOneButtonAlert:@"Error Checking Server" message:@"Micropub media-endpoint was not found." button:@"OK" completionHandler:NULL];
 					});
 				}
 			}];

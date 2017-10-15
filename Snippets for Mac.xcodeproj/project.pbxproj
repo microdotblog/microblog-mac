@@ -52,6 +52,7 @@
 		4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB311F91B8F800D9B10E /* WebView+Swipe.m */; };
 		4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB361F91C04200D9B10E /* RFUserController.m */; };
 		4B2CAB381F924CA200D9B10E /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB331F91C01B00D9B10E /* User.xib */; };
+		4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -195,6 +196,9 @@
 		4B2CAB341F91C01B00D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/User.xib; sourceTree = "<group>"; };
 		4B2CAB351F91C04200D9B10E /* RFUserController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserController.h; path = Source/RFUserController.h; sourceTree = "<group>"; };
 		4B2CAB361F91C04200D9B10E /* RFUserController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserController.m; path = Source/RFUserController.m; sourceTree = "<group>"; };
+		4B2CAB391F939DD900D9B10E /* Micro.blog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Micro.blog.entitlements; sourceTree = "<group>"; };
+		4B2CAB3A1F93A04600D9B10E /* NSAlert+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSAlert+Extras.h"; path = "Source/NSAlert+Extras.h"; sourceTree = "<group>"; };
+		4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSAlert+Extras.m"; path = "Source/NSAlert+Extras.m"; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -376,6 +380,7 @@
 		4B7F0ACF1BAF4B77004553A6 = {
 			isa = PBXGroup;
 			children = (
+				4B2CAB391F939DD900D9B10E /* Micro.blog.entitlements */,
 				4B7F0AEC1BAF4C16004553A6 /* Source */,
 				4B8FBDD71F867A1D00906C86 /* Shared */,
 				4B7F0AED1BAF4C1A004553A6 /* Resources */,
@@ -442,6 +447,8 @@
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
 				4B2CAB301F91B8F800D9B10E /* WebView+Swipe.h */,
 				4B2CAB311F91B8F800D9B10E /* WebView+Swipe.m */,
+				4B2CAB3A1F93A04600D9B10E /* NSAlert+Extras.h */,
+				4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */,
 				4B2CAABE1F90652700D9B10E /* RFStack.h */,
 				4B2CAAB91F90652600D9B10E /* RFStack.m */,
 				4B2CAABA1F90652700D9B10E /* RFXMLLinkParser.h */,
@@ -567,6 +574,11 @@
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 3F9MDJ6K4E;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -678,6 +690,7 @@
 				4B2CAB051F90667300D9B10E /* streamio.c in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
+				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
 				4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
@@ -900,6 +913,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Micro.blog.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
@@ -923,6 +937,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Micro.blog.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
