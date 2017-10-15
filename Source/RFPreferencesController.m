@@ -93,12 +93,13 @@
 
 			RFDispatchMainAsync (^{
 				[self.categoryPopup removeAllItems];
-				[self.categoryPopup addItemsWithTitles:new_categories];
 				
 				for (NSInteger i = 0; i < new_ids.count; i++) {
-					NSMenuItem* item = [self.categoryPopup.itemArray objectAtIndex:i];
+					NSString* cat_title = new_categories[i];
 					NSNumber* cat_id = new_ids[i];
+					NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:cat_title action:NULL keyEquivalent:@""];
 					item.tag = cat_id.integerValue;
+					[self.categoryPopup.menu addItem:item];
 				}
 				
 				self.hasLoadedCategories = YES;
