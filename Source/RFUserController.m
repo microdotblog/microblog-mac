@@ -28,13 +28,12 @@
 {
 	[super viewDidLoad];
 
-	self.headerField.stringValue = [NSString stringWithFormat:@"@%@", self.username];
-
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/posts/%@", self.username];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 
 	[self checkFollowing];
+	[self fetchUserInfo];
 }
 
 - (void) checkFollowing
@@ -58,6 +57,37 @@
 			});
 		}
 	}];
+}
+
+- (void) fetchUserInfo
+{
+    RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/posts/%@", self.username]];
+    [client getWithQueryArguments:nil completion:^(UUHttpResponse *response) {
+		if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+            NSDictionary* userInfo = response.parsedResponse;
+            if (userInfo) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateAppearanceFromDictionary:userInfo];
+                });
+            }
+        }
+    }];
+}
+
+- (void) updateAppearanceFromDictionary:(NSDictionary*)userInfo
+{
+	NSDictionary* microBlogInfo = [userInfo objectForKey:@"_microblog"];
+	NSDictionary* authorInfo = [userInfo objectForKey:@"author"];
+
+	self.headerField.stringValue = [authorInfo objectForKey:@"name"];
+	self.headerField.hidden = NO;
+
+	self.bioField.stringValue = [microBlogInfo objectForKey:@"bio"];
+	self.bioField.hidden = NO;
+	self.bioDivider.hidden = NO;
+
+//	self.blogAddressLabel.text = [authorInfo objectForKey:@"url"];
+//	self.pathToBlog = [authorInfo objectForKey:@"url"];
 }
 
 - (void) setupFollowing:(BOOL)isFollowing
