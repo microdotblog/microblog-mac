@@ -13,6 +13,8 @@
 
 @property (strong, nonatomic) IBOutlet NSTextField* headerField;
 @property (strong, nonatomic) IBOutlet WebView* webView;
+@property (strong, nonatomic) IBOutlet NSButton* followButton;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSString* username;
 

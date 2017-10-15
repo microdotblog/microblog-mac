@@ -9,7 +9,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFUserController">
             <connections>
+                <outlet property="followButton" destination="pcd-J8-4cb" id="7U4-L8-EZg"/>
                 <outlet property="headerField" destination="WFZ-4E-LSZ" id="uVK-RZ-Dfh"/>
+                <outlet property="progressSpinner" destination="7T1-Rs-eHs" id="7nw-3i-CYC"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mt4-Ha-Cj8"/>
                 <outlet property="webView" destination="7LD-DW-RCG" id="usv-AY-zgp"/>
             </connections>
@@ -25,6 +27,32 @@
                     <view key="contentView" id="MnU-VL-RXJ">
                         <rect key="frame" x="0.0" y="0.0" width="340" height="43"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pcd-J8-4cb">
+                                <rect key="frame" x="254" y="5" width="81" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="69" id="SpW-oj-pd1"/>
+                                    <constraint firstAttribute="height" constant="21" id="Z14-q5-9fo"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Unfollow" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i76-6D-CKi">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="7T1-Rs-eHs">
+                                <rect key="frame" x="236" y="15" width="16" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="16" id="Lq2-j3-NmJ"/>
+                                    <constraint firstAttribute="width" constant="16" id="aTh-rv-YAB"/>
+                                </constraints>
+                            </progressIndicator>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="7T1-Rs-eHs" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="12" id="IuZ-x6-Cyu"/>
+                            <constraint firstItem="pcd-J8-4cb" firstAttribute="leading" secondItem="7T1-Rs-eHs" secondAttribute="trailing" constant="8" id="NcJ-YL-wSm"/>
+                            <constraint firstItem="pcd-J8-4cb" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="10" id="enQ-YO-dl8"/>
+                            <constraint firstAttribute="trailing" secondItem="pcd-J8-4cb" secondAttribute="trailing" constant="11" id="uMN-n1-9b2"/>
+                        </constraints>
                     </view>
                     <constraints>
                         <constraint firstAttribute="height" constant="43" id="pjy-Ug-95j"/>
@@ -58,12 +86,11 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WFZ-4E-LSZ">
-                    <rect key="frame" x="161" y="419" width="167" height="21"/>
+                    <rect key="frame" x="90" y="419" width="142" height="21"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="163" id="Ucf-wN-nae"/>
-                        <constraint firstAttribute="height" constant="21" id="cgX-4o-b9t"/>
+                        <constraint firstAttribute="height" constant="21" id="zVo-st-o51"/>
                     </constraints>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="@username" id="P3V-g9-LlR">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="@username" id="P3V-g9-LlR">
                         <font key="font" size="13" name="Avenir-Medium"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -72,19 +99,20 @@
             </subviews>
             <constraints>
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="top" secondItem="Kvs-M2-DAj" secondAttribute="bottom" id="0Ob-5z-6bU"/>
+                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="8" id="1rj-J8-QsA"/>
                 <constraint firstItem="Kvs-M2-DAj" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="8QZ-OP-uHI"/>
                 <constraint firstAttribute="trailing" secondItem="7LD-DW-RCG" secondAttribute="trailing" id="Ds4-wp-amK"/>
                 <constraint firstItem="Y2P-ns-QQm" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="8" id="EKe-9y-8LX"/>
                 <constraint firstAttribute="bottom" secondItem="7LD-DW-RCG" secondAttribute="bottom" id="H0W-JU-WUp"/>
+                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="leading" secondItem="Y2P-ns-QQm" secondAttribute="trailing" constant="39" id="Jm2-tt-rUG"/>
                 <constraint firstItem="3gz-se-iln" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="TYz-bI-eta"/>
                 <constraint firstItem="3gz-se-iln" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="UXv-sc-b6z"/>
+                <constraint firstAttribute="trailing" secondItem="WFZ-4E-LSZ" secondAttribute="trailing" constant="110" id="WFO-1R-c7G"/>
                 <constraint firstAttribute="trailing" secondItem="Kvs-M2-DAj" secondAttribute="trailing" constant="12" id="WxB-WW-cvj"/>
                 <constraint firstItem="Kvs-M2-DAj" firstAttribute="top" secondItem="Y2P-ns-QQm" secondAttribute="bottom" constant="6" id="a43-Ya-MNO"/>
-                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="8" id="o48-dy-OER"/>
                 <constraint firstAttribute="trailing" secondItem="3gz-se-iln" secondAttribute="trailing" id="pBi-1t-l3B"/>
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="pUd-pf-egI"/>
                 <constraint firstItem="Y2P-ns-QQm" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="10" id="qWg-dc-BhA"/>
-                <constraint firstAttribute="trailing" secondItem="WFZ-4E-LSZ" secondAttribute="trailing" constant="14" id="qw6-yS-Y2Z"/>
             </constraints>
             <point key="canvasLocation" x="68" y="168"/>
         </customView>

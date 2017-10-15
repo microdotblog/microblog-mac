@@ -524,7 +524,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		NSString* username = [path stringByReplacingOccurrencesOfString:@"/" withString:@""];
 		if (username.length > 0) {
 			found_microblog_url = YES;
-			[[NSNotificationCenter defaultCenter] postNotificationName:kShowUserProfileNotification object:self userInfo:@{ kShowUserProfileUsernameKey: username }];
+			[self showProfileWithUsername:username];
 		}
 	}
 	
