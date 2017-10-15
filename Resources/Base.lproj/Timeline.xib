@@ -10,6 +10,8 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RFTimelineController">
             <connections>
                 <outlet property="fullNameField" destination="zqw-tG-vVO" id="31N-Ds-nPA"/>
+                <outlet property="messageField" destination="sjC-OC-Bf6" id="qc3-KL-3VF"/>
+                <outlet property="messageTopConstraint" destination="9mz-iW-zWv" id="dYj-m6-pnk"/>
                 <outlet property="profileImageView" destination="ETu-Lx-u0c" id="zaO-Pm-113"/>
                 <outlet property="splitView" destination="fkA-Zg-Ds4" id="a8c-6k-c9Q"/>
                 <outlet property="tableView" destination="8Jx-Dq-dhg" id="0q3-12-wI1"/>
@@ -174,17 +176,54 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <webView translatesAutoresizingMaskIntoConstraints="NO" id="PSE-41-OeU">
-                                        <rect key="frame" x="0.0" y="0.0" width="360" height="600"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="360" height="567"/>
                                         <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
                                             <nil key="identifier"/>
                                         </webPreferences>
                                     </webView>
+                                    <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="ad0-0M-Keo">
+                                        <rect key="frame" x="-1" y="567" width="362" height="34"/>
+                                        <view key="contentView" id="gUd-Pe-vB8">
+                                            <rect key="frame" x="1" y="1" width="360" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
+                                                    <rect key="frame" x="7" y="6" width="320" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1 new post" id="NQ2-w9-WtX">
+                                                        <font key="font" size="13" name="Avenir-Medium"/>
+                                                        <color key="textColor" red="0.20392156862745098" green="0.4392156862745098" blue="0.55686274509803924" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWu-A3-x42">
+                                                    <rect key="frame" x="0.0" y="0.0" width="360" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" transparent="YES" imageScaling="proportionallyDown" inset="2" id="71i-AI-mSN">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="refreshTimeline:" target="-2" id="eN5-PF-iOl"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="ghE-L7-WSl"/>
+                                        </constraints>
+                                        <color key="borderColor" red="0.20392156862745098" green="0.4392156862745098" blue="0.55686274509803924" alpha="0.25417461832061067" colorSpace="calibratedRGB"/>
+                                        <color key="fillColor" red="0.85490196078431369" green="0.92941176470588238" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </box>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="ad0-0M-Keo" firstAttribute="leading" secondItem="tQN-jO-jUp" secondAttribute="leading" constant="-1" id="2lX-4C-RmU"/>
                                     <constraint firstItem="PSE-41-OeU" firstAttribute="leading" secondItem="tQN-jO-jUp" secondAttribute="leading" id="3BA-Rc-4Vh"/>
-                                    <constraint firstItem="PSE-41-OeU" firstAttribute="top" secondItem="tQN-jO-jUp" secondAttribute="top" id="Her-89-OCd"/>
+                                    <constraint firstItem="ad0-0M-Keo" firstAttribute="top" secondItem="tQN-jO-jUp" secondAttribute="top" constant="-1" id="9mz-iW-zWv"/>
+                                    <constraint firstAttribute="trailing" secondItem="ad0-0M-Keo" secondAttribute="trailing" constant="-1" id="J9V-py-7b2"/>
                                     <constraint firstAttribute="bottom" secondItem="PSE-41-OeU" secondAttribute="bottom" id="djA-lu-Ok2"/>
                                     <constraint firstAttribute="trailing" secondItem="PSE-41-OeU" secondAttribute="trailing" id="mO0-4e-gkb"/>
+                                    <constraint firstItem="PSE-41-OeU" firstAttribute="top" secondItem="ad0-0M-Keo" secondAttribute="bottom" id="x3G-GK-6jl"/>
                                 </constraints>
                             </customView>
                         </subviews>

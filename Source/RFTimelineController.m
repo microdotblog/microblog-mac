@@ -16,6 +16,8 @@
 #import "RFRoundedImageView.h"
 #import "SSKeychain.h"
 #import "RFConstants.h"
+#import "RFMacros.h"
+#import "RFClient.h"
 #import "RFStack.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -29,6 +31,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self = [super initWithWindowNibName:@"Timeline"];
 	if (self) {
 		self.navigationStack = [[RFStack alloc] init];
+		self.checkSeconds = @5;
 	}
 	
 	return self;
@@ -43,6 +46,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupWebView];
 	[self setupUser];
 	[self setupNotifications];
+	[self setupTimer];
 }
 
 //- (void) setupTextView
@@ -66,6 +70,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) setupWebView
 {
+	self.messageTopConstraint.constant = -35;
 	self.webView.policyDelegate = self;
 
 	[self showTimeline:nil];
@@ -90,6 +95,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
+}
+
+- (void) setupTimer
+{
+	self.checkTimer = [NSTimer scheduledTimerWithTimeInterval:self.checkSeconds.floatValue target:self selector:@selector(checkPostsFromTimer:) userInfo:nil repeats:NO];
 }
 
 #pragma mark -
@@ -228,6 +238,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else if (self.selectedTimeline == kSelectionFavorites) {
 		[self showFavorites:nil];
 	}
+	
+	self.messageTopConstraint.animator.constant = -35;
 }
 
 - (IBAction) signOut:(id)sender
@@ -264,6 +276,37 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 }
 
 #pragma mark -
+
+- (void) checkPostsFromTimer:(NSTimer *)timer
+{
+	NSString* top_post_id = [self topPostID];
+	if (top_post_id.length > 0) {
+		RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
+		NSDictionary* args = @{ @"since_id": top_post_id };
+		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+			NSNumber* count = [response.parsedResponse objectForKey:@"count"];
+			NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
+			if (count.integerValue > 0) {
+				if (count.integerValue == 1) {
+					self.messageField.stringValue = @"1 new post";
+				}
+				else {
+					self.messageField.stringValue = [NSString stringWithFormat:@"%@ new posts", count];
+				}
+
+				RFDispatchMainAsync (^{
+					self.messageTopConstraint.animator.constant = -1;
+				});
+			}
+
+			if (check_seconds.integerValue > 2) { // sanity check value
+				self.checkSeconds = check_seconds;
+			}
+		}];
+	}
+
+	[self setupTimer];
+}
 
 - (void) closeOverlays
 {
@@ -351,6 +394,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) showProfileWithUsername:(NSString *)username
 {
+	[self hideOptionsMenu];
+	
 	RFUserController* user_controller = [[RFUserController alloc] initWithUsername:username];
 	user_controller.webView.policyDelegate = self;
 
@@ -392,6 +437,14 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		[self.optionsPopover performClose:nil];
 		self.optionsPopover = nil;
 	}
+}
+
+- (NSString *) topPostID
+{
+	// class: "post post_1234"
+	NSString* js = @"$('.post')[0].id.split('_')[1]";
+	NSString* post_id = [self.webView stringByEvaluatingJavaScriptFromString:js];
+	return post_id;
 }
 
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID
