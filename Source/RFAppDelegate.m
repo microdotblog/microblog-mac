@@ -36,9 +36,19 @@
 	
 	[self setupCrashlytics];
 	[self setupNotifications];
+	[self setupURLs];
 }
 
-- (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
+// 10.13
+// - (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
+
+- (void) handleGetURLEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+	NSURL* url = [NSURL URLWithString:[[event paramDescriptorForKeyword:keyDirectObject] stringValue]];
+	[self handleURLs:@[ url ]];
+}
+
+- (void) handleURLs:(NSArray *)urls
 {
 	NSURL* url = [urls firstObject];
 	NSString* param = [url.path stringByReplacingOccurrencesOfString:@"/" withString:@""];
@@ -74,6 +84,12 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnselectedNotification:) name:kPostWasUnselectedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showReplyPostNotification:) name:kShowReplyPostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+}
+
+- (void) setupURLs
+{
+	NSAppleEventManager* manager = [NSAppleEventManager sharedAppleEventManager];
+	[manager setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
 }
 
 #pragma mark -

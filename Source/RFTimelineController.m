@@ -312,32 +312,34 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) checkPostsFromTimer:(NSTimer *)timer
 {
-	NSString* top_post_id = [self topPostID];
-	if (top_post_id.length > 0) {
-		RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
-		NSDictionary* args = @{ @"since_id": top_post_id };
-		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-			NSNumber* count = [response.parsedResponse objectForKey:@"count"];
-			NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
-			if (count.integerValue > 0) {
-				NSString* msg;
-				if (count.integerValue == 1) {
-					msg = @"1 new post";
-				}
-				else {
-					msg = [NSString stringWithFormat:@"%@ new posts", count];
+	if (self.selectedTimeline == kSelectionTimeline) {
+		NSString* top_post_id = [self topPostID];
+		if (top_post_id.length > 0) {
+			RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
+			NSDictionary* args = @{ @"since_id": top_post_id };
+			[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+				NSNumber* count = [response.parsedResponse objectForKey:@"count"];
+				NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
+				if (count.integerValue > 0) {
+					NSString* msg;
+					if (count.integerValue == 1) {
+						msg = @"1 new post";
+					}
+					else {
+						msg = [NSString stringWithFormat:@"%@ new posts", count];
+					}
+
+					RFDispatchMainAsync (^{
+						self.messageField.stringValue = msg;
+						self.messageTopConstraint.animator.constant = -1;
+					});
 				}
 
-				RFDispatchMainAsync (^{
-					self.messageField.stringValue = msg;
-					self.messageTopConstraint.animator.constant = -1;
-				});
-			}
-
-			if (check_seconds.integerValue > 2) { // sanity check value
-				self.checkSeconds = check_seconds;
-			}
-		}];
+				if (check_seconds.integerValue > 2) { // sanity check value
+					self.checkSeconds = check_seconds;
+				}
+			}];
+		}
 	}
 
 	[self setupTimer];

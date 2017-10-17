@@ -10,6 +10,8 @@
 
 @implementation RFPhoto
 
+#if 0 // 10.13
+
 - (id) initWithAsset:(PHAsset *)asset
 {
 	self = [super init];
@@ -19,6 +21,8 @@
 	
 	return self;
 }
+
+#endif
 
 - (id) initWithThumbnail:(NSImage *)image
 {

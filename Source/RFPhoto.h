@@ -15,11 +15,11 @@ static NSString* const kAttachPhotoKey = @"photo";
 
 @interface RFPhoto : NSObject
 
-@property (strong) PHAsset* asset;
+//@property (strong) PHAsset* asset;
 @property (strong) NSImage* thumbnailImage;
 @property (strong) NSString* publishedURL;
 
-- (id) initWithAsset:(PHAsset *)asset;
+//- (id) initWithAsset:(PHAsset *)asset;
 - (id) initWithThumbnail:(NSImage *)image;
 
 - (NSData *) jpegData;

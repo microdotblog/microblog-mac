@@ -6,6 +6,42 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b11</title>
+ 			<description><![CDATA[
+ 				<ul>
+ 					<li>Now supports both 10.12 Sierra and 10.13 High Sierra.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 17 Oct 2017 09:23:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b11.zip" sparkle:shortVersionString="1.0b11" sparkle:version="12" length="1623481" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+			<title>Version 1.0b10</title>
+ 			<description><![CDATA[
+ 				<ul>
+ 					<li>Fixed refresh count.</li>
+ 					<li>Disabled sandboxing.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Sun, 15 Oct 2017 21:20:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b10.zip" sparkle:shortVersionString="1.0b10" sparkle:version="11" length="1623481" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
+			<title>Version 1.0b10</title>
+ 			<description><![CDATA[
+ 				<ul>
+ 					<li>Fixed refresh count.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Sun, 15 Oct 2017 20:05:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b10.zip" sparkle:shortVersionString="1.0b10" sparkle:version="11" length="1623481" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b9</title>
  			<description><![CDATA[
  				<ul>
