@@ -652,4 +652,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	return kDefaultSplitViewPosition;
 }
 
+- (NSRect) splitView:(NSSplitView *)splitView effectiveRect:(NSRect)proposedEffectiveRect forDrawnRect:(NSRect)drawnRect ofDividerAtIndex:(NSInteger)dividerIndex
+{
+	return NSZeroRect;
+}
+
 @end
