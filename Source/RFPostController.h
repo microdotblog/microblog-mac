@@ -29,5 +29,6 @@
 @property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
 
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
+- (void) finishClose;
 
 @end

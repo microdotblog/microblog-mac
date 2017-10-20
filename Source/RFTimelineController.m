@@ -190,6 +190,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		self.postController.view.animator.alphaValue = 0.0;
 	} completionHandler:^{
+		[self.postController finishClose];
 		[self.postController.view removeFromSuperview];
 		self.postController = nil;
 	}];

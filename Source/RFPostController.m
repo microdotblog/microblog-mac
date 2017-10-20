@@ -76,6 +76,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if (self.replyUsername) {
 		self.textView.string = [NSString stringWithFormat:@"@%@ ", self.replyUsername];
 	}
+	else {
+		NSString* draft = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftPrefKey];
+		if (draft) {
+			self.textView.string = draft;
+		}
+	}
 	
 	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
 	self.textView.typingAttributes = @{
@@ -120,6 +126,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	self.photosCollectionView.dataSource = self;
 	
 	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
+}
+
+- (void) closeWithoutSaving
+{
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftPrefKey];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
+}
+
+- (void) finishClose
+{
+	if (!self.isReply) {
+		NSString* draft = [self currentText];
+		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftPrefKey];
+	}
 }
 
 - (IBAction) close:(id)sender
@@ -317,7 +337,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		[client postWithParams:args completion:^(UUHttpResponse* response) {
 			RFDispatchMainAsync (^{
 //				[Answers logCustomEventWithName:@"Sent Reply" customAttributes:nil];
-				[self close:nil];
+				[self closeWithoutSaving];
 			});
 		}];
 	}
@@ -354,7 +374,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 					else {
 //						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
-						[self close:nil];
+						[self closeWithoutSaving];
 					}
 				});
 			}];
@@ -403,7 +423,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 					else {
 //						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
-						[self close:nil];
+						[self closeWithoutSaving];
 					}
 				});
 			}];
@@ -465,7 +485,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					}
 					else {
 //						[Answers logCustomEventWithName:@"Sent External" customAttributes:nil];
-						[self close:nil];
+						[self closeWithoutSaving];
 					}
 				}));
 			}];
