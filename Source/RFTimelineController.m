@@ -204,9 +204,13 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
 	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
 	
+	CGFloat scroller_width = 0;
+	if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
+		scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
+	}
 	CGFloat pane_width = self.webView.bounds.size.width;
 	int timezone_minutes = 0;
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width, timezone_minutes];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1", token, pane_width - scroller_width, timezone_minutes];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 	
