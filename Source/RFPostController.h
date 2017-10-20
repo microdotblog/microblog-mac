@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* photoButton;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
 
+@property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;

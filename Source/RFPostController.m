@@ -130,13 +130,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) closeWithoutSaving
 {
+	self.isSent = YES;
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftPrefKey];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 }
 
 - (void) finishClose
 {
-	if (!self.isReply) {
+	if (!self.isReply && !self.isSent) {
 		NSString* draft = [self currentText];
 		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftPrefKey];
 	}
