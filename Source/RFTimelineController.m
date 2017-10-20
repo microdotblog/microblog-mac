@@ -140,6 +140,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:post_id];
+	[controller view];
 	controller.webView.policyDelegate = self;
 
 	[self pushViewController:controller];
@@ -150,6 +151,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* username = [notification.userInfo objectForKey:kShowUserFollowingUsernameKey];
 
 	RFFriendsController* controller = [[RFFriendsController alloc] initWithUsername:username];
+	[controller view];
 	controller.webView.policyDelegate = self;
 
 	[self pushViewController:controller];
@@ -371,6 +373,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		RFUserController* user_controller = (RFUserController *)controller;
 		return user_controller.webView;
 	}
+	else if ([controller isKindOfClass:[RFFriendsController class]]) {
+		RFFriendsController* friends_controller = (RFFriendsController *)controller;
+		return friends_controller.webView;
+	}
 	else {
 		return self.webView;
 	}
@@ -445,10 +451,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[self hideOptionsMenu];
 	
-	RFUserController* user_controller = [[RFUserController alloc] initWithUsername:username];
-	user_controller.webView.policyDelegate = self;
+	RFUserController* controller = [[RFUserController alloc] initWithUsername:username];
+	[controller view];
+	controller.webView.policyDelegate = self;
 
-	[self pushViewController:user_controller];
+	[self pushViewController:controller];
 }
 
 - (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username
