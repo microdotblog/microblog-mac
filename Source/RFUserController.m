@@ -91,6 +91,11 @@
 	self.bioField.stringValue = [microblog_info objectForKey:@"bio"];
 	self.bioField.hidden = NO;
 	self.bioDivider.hidden = NO;
+	
+	if (self.bioField.stringValue.length == 0) {
+		// effectively hide the unused space for the bio field
+		self.bioSpacingConstraint.constant = 10;
+	}
 
 	self.followingUsersButton.title = [NSString stringWithFormat:@"Following %@", [microblog_info objectForKey:@"following_count"]];;
 	self.followingUsersButton.hidden = NO;

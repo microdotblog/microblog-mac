@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <plugIn identifier="com.apple.WebKitIBPlugin" version="13196"/>
         <capability name="box content view" minToolsVersion="7.0"/>
@@ -11,6 +12,7 @@
             <connections>
                 <outlet property="bioDivider" destination="GcO-9J-7o0" id="LFK-6U-JRX"/>
                 <outlet property="bioField" destination="gXv-am-2Se" id="9IU-LJ-HSW"/>
+                <outlet property="bioSpacingConstraint" destination="Rk0-2V-qQj" id="Q04-9q-bbq"/>
                 <outlet property="followButton" destination="pcd-J8-4cb" id="7U4-L8-EZg"/>
                 <outlet property="followingUsersButton" destination="kzQ-oe-lTh" id="wgL-3o-H2G"/>
                 <outlet property="headerField" destination="WFZ-4E-LSZ" id="uVK-RZ-Dfh"/>

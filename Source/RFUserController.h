@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet NSTextField* headerField;
 @property (strong, nonatomic) IBOutlet NSTextField* bioField;
 @property (strong, nonatomic) IBOutlet NSBox* bioDivider;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* bioSpacingConstraint;
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSButton* followButton;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
