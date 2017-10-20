@@ -6,6 +6,23 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b12</title>
+ 			<description><![CDATA[
+ 				<ul>
+ 					<li>Added sidebar icons.</li>
+ 					<li>Added automatic saving of latest new post draft.</li>
+ 					<li>Improved layout when there's no user description.</li>
+ 					<li>Fixed issues opening some links in default browser.</li>
+ 					<li>Fixed split view divider cursor.</li>
+ 					<li>Fixed layout issue when scrollbars are always shown.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Fri, 20 Oct 2017 14:30:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b12.zip" sparkle:shortVersionString="1.0b12" sparkle:version="13" length="1623481" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b11</title>
  			<description><![CDATA[
  				<ul>
