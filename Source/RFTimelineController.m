@@ -609,18 +609,23 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	
 	if (row == 0) {
 		cell.titleField.stringValue = @"Timeline";
+		cell.iconView.image = [NSImage imageNamed:@"kind_timeline"];
 	}
 	else if (row == 1) {
 		cell.titleField.stringValue = @"Mentions";
+		cell.iconView.image = [NSImage imageNamed:@"kind_mentions"];
 	}
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Favorites";
+		cell.iconView.image = [NSImage imageNamed:@"kind_favorites"];
 	}
 	else if (row == 3) {
 		cell.titleField.stringValue = @"Discover";
+		cell.iconView.image = [NSImage imageNamed:@"kind_discover"];
 	}
 	else if (row == 4) {
 		cell.titleField.stringValue = @"Drafts";
+		cell.iconView.image = nil;
 	}
 
 	return cell;

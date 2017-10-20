@@ -11,5 +11,6 @@
 @interface RFMenuCell : NSTableRowView
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
+@property (strong, nonatomic) IBOutlet NSImageView* iconView;
 
 @end
