@@ -12,6 +12,9 @@ static NSString* const kClosePostingNotification = @"RFClosePosting";
 
 static NSString* const kLatestDraftPrefKey = @"LatestDraftText";
 
+#define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
+#define kOpenMicroblogURLKey @"url"
+
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
 

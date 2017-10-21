@@ -609,7 +609,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		[listener ignore];
 	}
 	else if ([request.URL.scheme isEqualToString:@"microblog"]) {
-		[[NSWorkspace sharedWorkspace] openURL:request.URL];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenMicroblogURLNotification object:self userInfo:@{ kOpenMicroblogURLKey: request.URL }];
 		[listener ignore];
 	}
 	else {

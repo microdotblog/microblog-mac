@@ -84,6 +84,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnselectedNotification:) name:kPostWasUnselectedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showReplyPostNotification:) name:kShowReplyPostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
 }
 
 - (void) setupURLs
@@ -132,6 +133,12 @@
 - (void) closePostingNotification:(NSNotification *)notification
 {
 	[self.timelineController performClose:nil];
+}
+
+- (void) openMicroblogURLNotification:(NSNotification *)notification
+{
+	NSURL* url = [notification.userInfo objectForKey:kOpenMicroblogURLKey];
+	[self handleURLs:@[ url ]];
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID
