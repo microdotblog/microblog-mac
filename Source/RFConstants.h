@@ -15,6 +15,9 @@ static NSString* const kLatestDraftPrefKey = @"LatestDraftText";
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
 
+#define kAttachFilesNotification @"RFAttachFilesNotification"
+#define kAttachFilesPathsKey @"paths"
+
 #define kPopNavigationNotification @"RFPopNavigationNotification"
 
 #define kShowUserFollowingNotification @"RFShowUserFollowingNotification"

@@ -57,6 +57,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self setupText];
 	[self setupColletionView];
 	[self setupBlogName];
+	[self setupNotifications];
 }
 
 - (void) viewDidAppear
@@ -128,6 +129,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
 }
 
+- (void) setupDragging
+{
+	[self.textView registerForDraggedTypes:@[ NSFilenamesPboardType ]];
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
+}
+
+#pragma mark -
+
 - (void) closeWithoutSaving
 {
 	self.isSent = YES;
@@ -178,6 +191,34 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) textDidChange:(NSNotification *)notification
 {
 	[self updateRemainingChars];
+}
+
+- (void) attachFilesNotification:(NSNotification *)notification
+{
+	NSArray* paths = [notification.userInfo objectForKey:kAttachFilesPathsKey];
+
+	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
+	BOOL too_many_photos = NO;
+	
+	for (NSString* filepath in paths) {
+		if (new_photos.count < 10) {
+			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+			[new_photos addObject:photo];
+		}
+		else {
+			too_many_photos = YES;
+		}
+	}
+
+	self.attachedPhotos = new_photos;
+	[self.photosCollectionView reloadData];
+
+	[self checkMediaEndpoint];
+
+	if (too_many_photos) {
+		[NSAlert rf_showOneButtonAlert:@"Only 10 Photos Added" message:@"The first 10 photos were added to your post." button:@"OK" completionHandler:NULL];
+	}
 }
 
 #pragma mark -

@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface RFHighlightingTextView : NSTextView
+@interface RFHighlightingTextView : NSTextView <NSDraggingDestination>
 
 @property (assign, nonatomic) NSRange restoredSelection;
 
