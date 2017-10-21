@@ -396,6 +396,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	top_r.origin.x = top_r.origin.x - self.containerView.bounds.size.width - 1;
 
 	controller.view.frame = pushed_start_r;
+	controller.view.autoresizingMask = NSViewHeightSizable;
 
 	[self.window.contentView addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
 
@@ -403,6 +404,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		controller.view.animator.frame = pushed_final_r;
 		self.webView.animator.frame = top_r;
 	} completionHandler:^{
+		self.webView.hidden = YES;
 	}];
 }
 
@@ -414,6 +416,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 		NSRect pushed_final_r = controller.view.frame;
 		pushed_final_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
+
+		self.webView.hidden = NO;
 
 		[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
 			controller.view.animator.frame = pushed_final_r;
@@ -445,6 +449,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController.view.animator.alphaValue = 1.0;
 	[self.window makeFirstResponder:self.postController.textView];
 	self.postController.nextResponder = self;
+	self.postController.view.autoresizingMask = NSViewHeightSizable;
 }
 
 - (void) showProfileWithUsername:(NSString *)username
@@ -494,6 +499,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.optionsPopover = nil;
 	}
 }
+
+#pragma mark -
 
 - (NSString *) topPostID
 {
