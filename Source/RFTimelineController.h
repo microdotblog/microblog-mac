@@ -22,7 +22,7 @@ typedef enum {
 	kSelectionDrafts = 4
 } RFSelectedTimelineType;
 
-@interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource, WebPolicyDelegate>
+@interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource, WebPolicyDelegate, WebResourceLoadDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSSplitView* splitView;

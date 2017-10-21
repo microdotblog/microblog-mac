@@ -72,9 +72,15 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) setupWebView
 {
 	self.messageTopConstraint.constant = -35;
-	self.webView.policyDelegate = self;
-
+	
+	[self setupWebDelegates:self.webView];
 	[self showTimeline:nil];
+}
+
+- (void) setupWebDelegates:(WebView *)webView
+{
+	webView.policyDelegate = self;
+	webView.resourceLoadDelegate = self;
 }
 
 - (void) setupUser
@@ -141,7 +147,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:post_id];
 	[controller view];
-	controller.webView.policyDelegate = self;
+	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
 }
@@ -152,7 +158,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 	RFFriendsController* controller = [[RFFriendsController alloc] initWithUsername:username];
 	[controller view];
-	controller.webView.policyDelegate = self;
+	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
 }
@@ -458,7 +464,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	
 	RFUserController* controller = [[RFUserController alloc] initWithUsername:username];
 	[controller view];
-	controller.webView.policyDelegate = self;
+	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
 }
@@ -609,6 +615,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else {
 		[listener use];
 	}
+}
+
+- (void) webView:(WebView *)sender resource:(id)identifier didFailLoadingWithError:(NSError *)error fromDataSource:(WebDataSource *)dataSource
+{
+	NSLog (@"WebView did fail: %@", error);
 }
 
 #pragma mark -
