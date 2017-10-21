@@ -617,6 +617,32 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 }
 
+- (void) webView:(WebView *)sender resource:(id)identifier didReceiveResponse:(NSURLResponse *)response fromDataSource:(WebDataSource *)dataSource
+{
+	NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
+	NSInteger status_code = [url_response statusCode];
+	if (status_code == 500) {
+		[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
+	
+		NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
+	
+		NSAlert* alert = [[NSAlert alloc] init];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"Error loading Micro.blog timeline"];
+		[alert setInformativeText:msg];
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+		}];
+	}
+}
+
+- (void) webView:(WebView *)sender resource:(id)identifier didFinishLoadingFromDataSource:(WebDataSource *)dataSource
+{
+	NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)dataSource.response;
+	NSInteger status_code = [url_response statusCode];
+	if (status_code == 500) {
+	}
+}
+
 - (void) webView:(WebView *)sender resource:(id)identifier didFailLoadingWithError:(NSError *)error fromDataSource:(WebDataSource *)dataSource
 {
 	NSLog (@"WebView did fail: %@", error);
