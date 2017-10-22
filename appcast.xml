@@ -8,8 +8,16 @@
 		<item>
 			<title>Version 1.0b13</title>
  			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
  				<p>Thank you for supporting Micro.blog! Here is what's new:</p>
- 				<ul style="margin-left: 0px; padding-left: 20px;">
+ 				<ul>
  					<li>Added replies to user profile screen.</li>
  					<li>Added dragging image files to text view to attach them.</li>
  					<li>Improved header spacing, button highlighting, and other layout tweaks.</li>
