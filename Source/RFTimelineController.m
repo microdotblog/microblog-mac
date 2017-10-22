@@ -81,6 +81,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	webView.policyDelegate = self;
 	webView.resourceLoadDelegate = self;
+	webView.UIDelegate = self;
 }
 
 - (void) setupUser
@@ -646,6 +647,28 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) webView:(WebView *)sender resource:(id)identifier didFailLoadingWithError:(NSError *)error fromDataSource:(WebDataSource *)dataSource
 {
 	NSLog (@"WebView did fail: %@", error);
+}
+
+- (NSArray *) webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+	NSMutableArray* new_items = [NSMutableArray array];
+
+	for (NSMenuItem* item in defaultMenuItems) {
+		switch (item.tag) {
+			case 2000: // Open Link
+			case WebMenuItemTagOpenLinkInNewWindow:
+			case WebMenuItemTagDownloadLinkToDisk:
+			case WebMenuItemTagOpenImageInNewWindow:
+			case WebMenuItemTagDownloadImageToDisk:
+				break;
+			
+			default:
+				[new_items addObject:item];
+				break;
+		}
+	}
+
+	return new_items;
 }
 
 #pragma mark -
