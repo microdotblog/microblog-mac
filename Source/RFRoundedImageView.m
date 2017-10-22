@@ -8,6 +8,8 @@
 
 #import "RFRoundedImageView.h"
 
+#import "RFMacros.h"
+
 @implementation RFRoundedImageView
 
 - (void) awakeFromNib
@@ -32,8 +34,12 @@
 
 - (void) loadFromURL:(NSString *)url
 {
-	NSImage* img = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
-	self.image = img;
+	RFDispatchThread (^{
+		NSImage* img = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+		RFDispatchMainAsync (^{
+			self.image = img;
+		});
+	});
 }
 
 @end
