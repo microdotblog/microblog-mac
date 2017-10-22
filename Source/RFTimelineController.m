@@ -42,6 +42,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[super windowDidLoad];
 
+	[self setupFullScreen];
 	[self setupTable];
 	[self setupSplitView];
 	[self setupWebView];
@@ -55,6 +56,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 //	self.textView.font = [NSFont systemFontOfSize:15 weight:NSFontWeightLight];
 //	self.textView.backgroundColor = [NSColor colorWithCalibratedWhite:0.973 alpha:1.000];
 //}
+
+- (void) setupFullScreen
+{
+	self.window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
+}
 
 - (void) setupTable
 {
