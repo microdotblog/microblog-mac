@@ -16,6 +16,10 @@ typedef enum {
 
 @interface RFOptionsController : NSViewController
 
+@property (strong, nonatomic) IBOutlet NSButton* replyButton;
+@property (strong, nonatomic) IBOutlet NSButton* favoriteButton;
+@property (strong, nonatomic) IBOutlet NSButton* conversationButton;
+
 @property (strong, nonatomic) NSString* postID;
 @property (strong, nonatomic) NSString* username;
 @property (assign, nonatomic) RFOptionsPopoverType popoverType;

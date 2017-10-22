@@ -35,7 +35,15 @@
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
+	
+	[self setupButtons];
 }
+
+- (void) setupButtons
+{
+}
+
+#pragma mark -
 
 - (IBAction) reply:(id)sender
 {

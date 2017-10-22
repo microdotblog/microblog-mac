@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFOptionsController">
             <connections>
+                <outlet property="conversationButton" destination="qPW-aZ-zko" id="ADi-NO-Onq"/>
+                <outlet property="favoriteButton" destination="mTK-M1-RPy" id="lxH-zL-Yx1"/>
+                <outlet property="replyButton" destination="j4E-VA-qdu" id="bdo-C1-E6R"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="noY-5l-4wo"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="Hz6-mo-xeY">
+        <customView wantsLayer="YES" id="Hz6-mo-xeY">
             <rect key="frame" x="0.0" y="0.0" width="294" height="38"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
