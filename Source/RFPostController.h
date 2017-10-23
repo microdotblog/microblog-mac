@@ -20,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet NSTextField* blognameField;
 @property (strong, nonatomic) IBOutlet NSButton* photoButton;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
 
 @property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;

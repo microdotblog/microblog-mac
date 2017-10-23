@@ -24,6 +24,8 @@
 #import <Crashlytics/Crashlytics.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
+static CGFloat const kTextViewTitleHiddenTop = 9;
+static CGFloat const kTextViewTitleShownTop = 54;
 
 @implementation RFPostController
 
@@ -58,6 +60,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self setupColletionView];
 	[self setupBlogName];
 	[self setupNotifications];
+	
+	[self updateTitleHeaderWithAnimation:NO];
 }
 
 - (void) viewDidAppear
@@ -139,6 +143,35 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
 }
 
+- (void) updateTitleHeader
+{
+	[self updateTitleHeaderWithAnimation:YES];
+}
+
+- (void) updateTitleHeaderWithAnimation:(BOOL)animate
+{
+	if (!self.isReply && ([[self currentText] length] > 280)) {
+		if (animate) {
+			self.titleField.animator.alphaValue = 1.0;
+			self.textTopConstraint.animator.constant = kTextViewTitleShownTop;
+		}
+		else {
+			self.titleField.alphaValue = 1.0;
+			self.textTopConstraint.constant = kTextViewTitleShownTop;
+		}
+	}
+	else {
+		if (animate) {
+			self.titleField.animator.alphaValue = 0.0;
+			self.textTopConstraint.animator.constant = kTextViewTitleHiddenTop;
+		}
+		else {
+			self.titleField.alphaValue = 0.0;
+			self.textTopConstraint.constant = kTextViewTitleHiddenTop;
+		}
+	}
+}
+
 #pragma mark -
 
 - (void) closeWithoutSaving
@@ -191,6 +224,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) textDidChange:(NSNotification *)notification
 {
 	[self updateRemainingChars];
+	[self updateTitleHeader];
 }
 
 - (void) attachFilesNotification:(NSNotification *)notification
