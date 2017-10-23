@@ -155,6 +155,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) updateTitleHeaderWithAnimation:(BOOL)animate
 {
 	if (!self.isReply && ([[self currentText] length] > 280)) {
+		self.titleField.hidden = NO;
+		
 		if (animate) {
 			self.titleField.animator.alphaValue = 1.0;
 			self.textTopConstraint.animator.constant = kTextViewTitleShownTop;
@@ -166,12 +168,17 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		if (animate) {
-			self.titleField.animator.alphaValue = 0.0;
-			self.textTopConstraint.animator.constant = kTextViewTitleHiddenTop;
+			[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+				self.titleField.animator.alphaValue = 0.0;
+				self.textTopConstraint.animator.constant = kTextViewTitleHiddenTop;
+			} completionHandler:^{
+				self.titleField.hidden = YES;
+			}];
 		}
 		else {
 			self.titleField.alphaValue = 0.0;
 			self.textTopConstraint.constant = kTextViewTitleHiddenTop;
+			self.titleField.hidden = YES;
 		}
 	}
 }
