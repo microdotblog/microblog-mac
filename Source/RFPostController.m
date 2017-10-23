@@ -82,7 +82,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.textView.string = [NSString stringWithFormat:@"@%@ ", self.replyUsername];
 	}
 	else {
-		NSString* draft = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftPrefKey];
+		NSString* title = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftTitlePrefKey];
+		NSString* draft = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftTextPrefKey];
+		if (title) {
+			self.titleField.stringValue = title;
+		}
 		if (draft) {
 			self.textView.string = draft;
 		}
@@ -177,15 +181,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) closeWithoutSaving
 {
 	self.isSent = YES;
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftPrefKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTitlePrefKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTextPrefKey];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 }
 
 - (void) finishClose
 {
 	if (!self.isReply && !self.isSent) {
+		NSString* title = [self currentTitle];
 		NSString* draft = [self currentText];
-		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftPrefKey];
+		[[NSUserDefaults standardUserDefaults] setObject:title forKey:kLatestDraftTitlePrefKey];
+		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftTextPrefKey];
 	}
 }
 
@@ -225,6 +232,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	[self updateRemainingChars];
 	[self updateTitleHeader];
+}
+
+- (IBAction) titleFieldDidChange:(id)sender
+{
+	[self updateRemainingChars];
 }
 
 - (void) attachFilesNotification:(NSNotification *)notification
@@ -293,6 +305,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (BOOL) prefersExternalBlog
 {
 	return [[NSUserDefaults standardUserDefaults] boolForKey:@"ExternalBlogIsPreferred"];
+}
+
+- (NSString *) currentTitle
+{
+	if (self.titleField.alphaValue > 0.0) {
+		return self.titleField.stringValue;
+	}
+	else {
+		return @"";
+	}
 }
 
 - (NSString *) currentText
@@ -370,7 +392,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) updateRemainingChars
 {
-	if (!self.isReply && self.titleField.stringValue.length > 0) {
+	if (!self.isReply && [self currentTitle].length > 0) {
 		self.remainingField.hidden = YES;
 	}
 	else {
@@ -432,14 +454,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				}
 				
 				args = @{
-					@"name": self.titleField.stringValue,
+					@"name": [self currentTitle],
 					@"content": text,
 					@"photo[]": photo_urls
 				};
 			}
 			else {
 				args = @{
-					@"name": self.titleField.stringValue,
+					@"name": [self currentTitle],
 					@"content": text
 				};
 			}
@@ -471,7 +493,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				if (photo_urls.count == 1) {
 					args = @{
 						@"h": @"entry",
-						@"name": self.titleField.stringValue,
+						@"name": [self currentTitle],
 						@"content": text,
 						@"photo": [photo_urls firstObject]
 					};
@@ -479,7 +501,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				else {
 					args = @{
 						@"h": @"entry",
-						@"name": self.titleField.stringValue,
+						@"name": [self currentTitle],
 						@"content": text,
 						@"photo[]": photo_urls
 					};
@@ -488,7 +510,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			else {
 				args = @{
 					@"h": @"entry",
-					@"name": self.titleField.stringValue,
+					@"name": [self currentTitle],
 					@"content": text
 				};
 			}
@@ -528,10 +550,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				NSMutableDictionary* content = [NSMutableDictionary dictionary];
 				
 				content[@"post_status"] = @"publish";
-				content[@"post_title"] = self.titleField.stringValue;
+				content[@"post_title"] = [self currentTitle];
 				content[@"post_content"] = post_text;
 				if (post_format.length > 0) {
-					if (self.titleField.stringValue.length > 0) {
+					if ([self currentTitle].length > 0) {
 						content[@"post_format"] = @"Standard";
 					}
 					else {

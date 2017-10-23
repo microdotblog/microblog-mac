@@ -170,6 +170,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <action selector="titleFieldDidChange:" target="-2" id="nFT-QA-qPA"/>
+                    </connections>
                 </textField>
             </subviews>
             <constraints>
