@@ -24,7 +24,7 @@
 #import <Crashlytics/Crashlytics.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
-static CGFloat const kTextViewTitleHiddenTop = 9;
+static CGFloat const kTextViewTitleHiddenTop = 10;
 static CGFloat const kTextViewTitleShownTop = 54;
 
 @implementation RFPostController
