@@ -344,12 +344,15 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) sendPost:(id)sender
 {
-	if (self.attachedPhotos.count > 0) {
-		self.queuedPhotos = [self.attachedPhotos copy];
-		[self uploadNextPhoto];
-	}
-	else {
-		[self uploadText:[self currentText]];
+	NSString* s = [self currentText];
+	if ((s.length > 0) || (self.attachedPhotos.count > 0)) {
+		if (self.attachedPhotos.count > 0) {
+			self.queuedPhotos = [self.attachedPhotos copy];
+			[self uploadNextPhoto];
+		}
+		else {
+			[self uploadText:s];
+		}
 	}
 }
 

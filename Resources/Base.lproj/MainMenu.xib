@@ -79,12 +79,21 @@
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Send Post" id="Ajj-u2-KN0">
+                                <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                <connections>
+                                    <action selector="sendPost:" target="-1" id="jqT-AB-2ts"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="EWd-1i-I6l"/>
                             <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                 <connections>
                                     <action selector="performClose:" target="-1" id="HmO-Ls-i7Q"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="EWd-1i-I6l"/>
+                            <menuItem isSeparatorItem="YES" id="dOw-pu-zNE"/>
                             <menuItem title="Sign Out" id="tFo-tJ-1IJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
