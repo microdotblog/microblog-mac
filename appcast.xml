@@ -6,6 +6,32 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b14</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thank you for supporting Micro.blog! Here is what's new:</p>
+ 				<ul>
+ 					<li>Added new featured posts in the Discover section.</li>
+ 					<li>Added support for long posts with titles. Type or paste more than 280 characters to reveal a title field.</li>
+ 					<li>Added command-return shortcut and Send Post menu item.</li>
+ 					<li>Fixed crash when no internet connection.</li>
+ 					<li>Fixed potential 10.12 full-screen issues, missing button in welcome window.</li>
+ 					<li>Fixed some minor layout spacing issues.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 23 Oct 2017 09:15:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b14.zip" sparkle:shortVersionString="1.0b14" sparkle:version="16" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b13</title>
  			<description><![CDATA[
 				<style>
