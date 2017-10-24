@@ -6,6 +6,29 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b15</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thank you for supporting Micro.blog! Here is what's new:</p>
+ 				<ul>
+ 					<li>Fixed not being able to click or select text in post editing pane.</li>
+ 					<li>Fixed potential layout issue in welcome window (hopefully).
+ 					<li>Improved main window to allow closing. Re-opens when app icon clicked or command-0.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 24 Oct 2017 11:25:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b15.zip" sparkle:shortVersionString="1.0b15" sparkle:version="17" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b14</title>
  			<description><![CDATA[
 				<style>
