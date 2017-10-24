@@ -39,6 +39,11 @@
 	[self setupURLs];
 }
 
+- (void) applicationDidBecomeActive:(NSNotification *)notification
+{
+	[self showMainWindow:nil];
+}
+
 // 10.13
 // - (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
 
@@ -94,6 +99,11 @@
 }
 
 #pragma mark -
+
+- (IBAction) showMainWindow:(id)sender
+{
+	[self.timelineController showWindow:nil];
+}
 
 - (IBAction) showPreferences:(id)sender
 {
