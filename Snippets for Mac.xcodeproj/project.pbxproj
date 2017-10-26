@@ -93,6 +93,7 @@
 		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
 		4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF91F86823D00906C86 /* SSKeychain.m */; };
 		4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */; };
+		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -265,6 +266,8 @@
 		4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		4B8FBDFB1F86827800906C86 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4B8FBDFF1F86F5F700906C86 /* RFConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConstants.h; path = Source/RFConstants.h; sourceTree = "<group>"; };
+		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
+		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,6 +431,8 @@
 				4B2CAB361F91C04200D9B10E /* RFUserController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
 				4B56505D1F8561A300B03FFD /* RFPostController.m */,
+				4BA983641FA21FF000E230CC /* RFPostContainerView.h */,
+				4BA983651FA21FF000E230CC /* RFPostContainerView.m */,
 				4B56505F1F85626200B03FFD /* RFOptionsController.h */,
 				4B5650601F85626200B03FFD /* RFOptionsController.m */,
 				4B6AE7741F8B336600CB7950 /* RFPhoto.h */,
@@ -676,6 +681,7 @@
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
+				4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */,
 				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
 				4B2CAB121F90667300D9B10E /* lexer.c in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
