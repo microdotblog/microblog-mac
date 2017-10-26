@@ -74,6 +74,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.textStorage = [[RFHighlightingTextStorage alloc] init];
 	[self.textStorage addLayoutManager:self.textView.layoutManager];
 
+	self.textUndoManager = [[NSUndoManager alloc] init];
+
 	self.view.layer.masksToBounds = YES;
 	self.view.layer.cornerRadius = 10.0;
 	self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
@@ -184,6 +186,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 }
 
 #pragma mark -
+
+- (NSUndoManager *) undoManagerForTextView:(NSTextView *)textView
+{
+	return self.textUndoManager;
+}
 
 - (void) closeWithoutSaving
 {

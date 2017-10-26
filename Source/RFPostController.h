@@ -29,6 +29,7 @@
 @property (strong, nonatomic) NSArray* attachedPhotos; // RFPhoto
 @property (strong, nonatomic) NSArray* queuedPhotos; // RFPhoto
 @property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
+@property (strong, nonatomic) NSUndoManager* textUndoManager;
 
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;
