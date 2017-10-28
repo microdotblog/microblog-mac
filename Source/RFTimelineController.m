@@ -354,6 +354,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 						self.messageTopConstraint.animator.constant = -1;
 					});
 				}
+				else {
+					RFDispatchMainAsync (^{
+						self.messageTopConstraint.animator.constant = -35;
+						[self.messageSpinner stopAnimation:nil];
+					});
+				}
 
 				if (check_seconds.integerValue > 2) { // sanity check value
 					self.checkSeconds = check_seconds;
