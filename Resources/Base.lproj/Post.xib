@@ -11,6 +11,7 @@
                 <outlet property="blognameField" destination="W2B-cl-D6d" id="9UM-bo-ohV"/>
                 <outlet property="photoButton" destination="d95-L8-OAI" id="lUI-LJ-3FE"/>
                 <outlet property="photosCollectionView" destination="kw4-c5-1p5" id="lGQ-ZL-sHv"/>
+                <outlet property="photosHeightConstraint" destination="oNP-ay-KXG" id="YVn-30-3Fu"/>
                 <outlet property="postButton" destination="WGb-Wi-5DC" id="N0I-La-hd9"/>
                 <outlet property="progressSpinner" destination="OX7-xz-xq3" id="wHH-74-hFo"/>
                 <outlet property="remainingField" destination="lHJ-qQ-HDX" id="Kyq-Gn-u2C"/>
@@ -130,14 +131,14 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PXv-lv-SgZ">
+                <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PXv-lv-SgZ">
                     <rect key="frame" x="0.0" y="35" width="419" height="100"/>
                     <clipView key="contentView" drawsBackground="NO" id="cEk-1D-aYN">
                         <rect key="frame" x="0.0" y="0.0" width="419" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView wantsLayer="YES" selectable="YES" id="kw4-c5-1p5">
-                                <rect key="frame" x="0.0" y="0.0" width="419" height="158"/>
+                                <rect key="frame" x="0.0" y="0.0" width="419" height="100"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" scrollDirection="horizontal" id="gSN-Zg-3uX">
                                     <size key="itemSize" width="100" height="100"/>
@@ -155,8 +156,8 @@
                         <rect key="frame" x="0.0" y="84" width="395" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="AcZ-HQ-eQX">
-                        <rect key="frame" x="403" y="0.0" width="16" height="100"/>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="AcZ-HQ-eQX">
+                        <rect key="frame" x="-100" y="-100" width="16" height="100"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>

@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* photoButton;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* photosHeightConstraint;
 
 @property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;

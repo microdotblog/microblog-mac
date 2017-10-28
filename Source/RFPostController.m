@@ -137,6 +137,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.photosCollectionView.dataSource = self;
 	
 	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
+
+	self.photosHeightConstraint.constant = 0;
 }
 
 - (void) setupDragging
@@ -231,7 +233,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
 				[new_photos addObject:photo];
 			}
-			
+
+			self.photosHeightConstraint.animator.constant = 100;
+
 			self.attachedPhotos = new_photos;
 			[self.photosCollectionView reloadData];
 
@@ -270,6 +274,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			too_many_photos = YES;
 		}
 	}
+
+	self.photosHeightConstraint.animator.constant = 100;
 
 	self.attachedPhotos = new_photos;
 	[self.photosCollectionView reloadData];
@@ -748,6 +754,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[new_photos removeObjectAtIndex:indexPath.item];
 	self.attachedPhotos = new_photos;
 	[self.photosCollectionView deleteItemsAtIndexPaths:[NSSet setWithObject:indexPath]];
+
+	if (self.attachedPhotos.count == 0) {
+		self.photosHeightConstraint.animator.constant = 0;
+	}
 }
 
 - (void) checkMediaEndpoint
