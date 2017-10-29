@@ -20,6 +20,7 @@
 #import "RFXMLRPCParser.h"
 #import "SSKeychain.h"
 #import "NSAlert+Extras.h"
+#import "NSImage+Extras.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -230,7 +231,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			
 			for (NSURL* file_url in urls) {
 				NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
-				RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+				NSImage* scaled_img = [img rf_scaleToWidth:1200];
+				RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 				[new_photos addObject:photo];
 			}
 
@@ -267,7 +269,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	for (NSString* filepath in paths) {
 		if (new_photos.count < 10) {
 			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
-			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+			NSImage* scaled_img = [img rf_scaleToWidth:1200];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 			[new_photos addObject:photo];
 		}
 		else {

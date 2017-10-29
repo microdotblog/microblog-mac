@@ -66,6 +66,7 @@
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
 		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
+		4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */; };
 		4B6AE76E1F8AE19F00CB7950 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; };
 		4B6AE76F1F8AE1EF00CB7950 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
@@ -218,6 +219,8 @@
 		4B5A250C1F8497B1007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MenuCell.xib; sourceTree = "<group>"; };
 		4B5A250E1F849AF2007C548F /* RFMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMenuCell.h; path = Source/RFMenuCell.h; sourceTree = "<group>"; };
 		4B5A250F1F849AF2007C548F /* RFMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMenuCell.m; path = Source/RFMenuCell.m; sourceTree = "<group>"; };
+		4B5EF5ED1FA6120100CB7A02 /* NSImage+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSImage+Extras.h"; path = "Source/NSImage+Extras.h"; sourceTree = "<group>"; };
+		4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSImage+Extras.m"; path = "Source/NSImage+Extras.m"; sourceTree = "<group>"; };
 		4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		4B6AE7701F8B335C00CB7950 /* RFMicropub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMicropub.h; path = Source/RFMicropub.h; sourceTree = "<group>"; };
 		4B6AE7711F8B335C00CB7950 /* RFMicropub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMicropub.m; path = Source/RFMicropub.m; sourceTree = "<group>"; };
@@ -381,6 +384,13 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		4B5EF5F01FA6160700CB7A02 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
 		4B7F0ACF1BAF4B77004553A6 = {
 			isa = PBXGroup;
 			children = (
@@ -431,6 +441,7 @@
 				4B2CAB361F91C04200D9B10E /* RFUserController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
 				4B56505D1F8561A300B03FFD /* RFPostController.m */,
+				4B5EF5F01FA6160700CB7A02 /* New Group */,
 				4BA983641FA21FF000E230CC /* RFPostContainerView.h */,
 				4BA983651FA21FF000E230CC /* RFPostContainerView.m */,
 				4B56505F1F85626200B03FFD /* RFOptionsController.h */,
@@ -453,6 +464,8 @@
 				4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
+				4B5EF5ED1FA6120100CB7A02 /* NSImage+Extras.h */,
+				4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */,
 				4B2CAB301F91B8F800D9B10E /* WebView+Swipe.h */,
 				4B2CAB311F91B8F800D9B10E /* WebView+Swipe.m */,
 				4B2CAB3A1F93A04600D9B10E /* NSAlert+Extras.h */,
@@ -675,6 +688,7 @@
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
+				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
