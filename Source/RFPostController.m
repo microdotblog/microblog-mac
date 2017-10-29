@@ -236,11 +236,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				[new_photos addObject:photo];
 			}
 
-			self.photosHeightConstraint.animator.constant = 100;
-
 			self.attachedPhotos = new_photos;
 			[self.photosCollectionView reloadData];
 
+			self.photosHeightConstraint.animator.constant = 100;
+			
 			[self checkMediaEndpoint];
 		}
 		
@@ -278,10 +278,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 	}
 
-	self.photosHeightConstraint.animator.constant = 100;
-
 	self.attachedPhotos = new_photos;
 	[self.photosCollectionView reloadData];
+
+	self.photosHeightConstraint.animator.constant = 100;
 
 	[self checkMediaEndpoint];
 
@@ -759,7 +759,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self.photosCollectionView deleteItemsAtIndexPaths:[NSSet setWithObject:indexPath]];
 
 	if (self.attachedPhotos.count == 0) {
-		self.photosHeightConstraint.animator.constant = 0;
+//		self.photosHeightConstraint.animator.constant = 0;
 	}
 }
 
