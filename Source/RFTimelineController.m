@@ -85,6 +85,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) setupWebDelegates:(WebView *)webView
 {
+	webView.frameLoadDelegate = self;
 	webView.policyDelegate = self;
 	webView.resourceLoadDelegate = self;
 	webView.UIDelegate = self;
@@ -614,6 +615,13 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 }
 
 #pragma mark -
+
+- (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame
+{
+	NSScrollView* scrollview = webView.mainFrame.frameView.documentView.enclosingScrollView;
+	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
+	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
+}
 
 - (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
 {
