@@ -379,6 +379,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.optionsPopover performClose:nil];
 	self.optionsPopover = nil;
 
+	self.messageTopConstraint.animator.constant = -35;
+	[self.messageSpinner stopAnimation:nil];
+
 	[self performClose:nil];
 }
 
