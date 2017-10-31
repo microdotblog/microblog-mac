@@ -34,6 +34,7 @@
 		[self.welcomeController showWindow:nil];
 	}
 	
+	[self setupDefaults];
 	[self setupCrashlytics];
 	[self setupNotifications];
 	[self setupURLs];
@@ -76,6 +77,11 @@
 
 - (void) applicationWillTerminate:(NSNotification *)notification
 {
+}
+
+- (void) setupDefaults
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ kTextSizePrefKey: @(kTextSizeMedium) }];
 }
 
 - (void) setupCrashlytics

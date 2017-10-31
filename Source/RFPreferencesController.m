@@ -8,6 +8,7 @@
 
 #import "RFPreferencesController.h"
 
+#import "RFConstants.h"
 #import "RFMacros.h"
 #import "RFXMLLinkParser.h"
 #import "RFXMLRPCRequest.h"
@@ -35,6 +36,7 @@
 	[super windowDidLoad];
 
 	[self setupFields];
+	[self setupTextPopup];
 	[self setupNotifications];
 	
 	[self updateRadioButtons];
@@ -57,6 +59,30 @@
 	if (s) {
 		self.websiteField.stringValue = s;
 	}
+}
+
+- (void) setupTextPopup
+{
+	for (NSMenuItem* item in self.textSizePopup.menu.itemArray) {
+		if ([item.title isEqualToString:@"Tiny"]) {
+			item.tag = kTextSizeTiny;
+		}
+		else if ([item.title isEqualToString:@"Small"]) {
+			item.tag = kTextSizeSmall;
+		}
+		else if ([item.title isEqualToString:@"Medium"]) {
+			item.tag = kTextSizeMedium;
+		}
+		else if ([item.title isEqualToString:@"Large"]) {
+			item.tag = kTextSizeLarge;
+		}
+		else if ([item.title isEqualToString:@"Huge"]) {
+			item.tag = kTextSizeHuge;
+		}
+	}
+
+	NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
+	[self.textSizePopup selectItemWithTag:text_size];
 }
 
 - (void) setupNotifications
@@ -158,6 +184,20 @@
 {
 	[self hideReturnButton];
 	[self checkWebsite];
+}
+
+- (IBAction) textSizeChanged:(NSPopUpButton *)sender
+{
+	NSInteger tag = [[sender selectedItem] tag];
+	[[NSUserDefaults standardUserDefaults] setInteger:tag forKey:kTextSizePrefKey];
+
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
+
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&fontsize=%ld", token, (long)tag];
+	[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+		// ..
+	}];
 }
 
 #pragma mark -

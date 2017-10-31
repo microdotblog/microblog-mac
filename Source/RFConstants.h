@@ -13,6 +13,13 @@ static NSString* const kClosePostingNotification = @"RFClosePosting";
 static NSString* const kLatestDraftTitlePrefKey = @"LatestDraftTitle";
 static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";
 
+static NSString* const kTextSizePrefKey = @"TextSize";
+static NSInteger const kTextSizeTiny = 12;
+static NSInteger const kTextSizeSmall = 13;
+static NSInteger const kTextSizeMedium = 15;
+static NSInteger const kTextSizeLarge = 17;
+static NSInteger const kTextSizeHuge = 19;
+
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url"
 

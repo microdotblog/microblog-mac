@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* postFormatPopup;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* categoryPopup;
+@property (strong, nonatomic) IBOutlet NSPopUpButton* textSizePopup;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasLoadedCategories;
