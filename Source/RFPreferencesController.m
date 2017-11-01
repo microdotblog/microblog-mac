@@ -20,6 +20,8 @@
 #import "SSKeychain.h"
 #import "NSAlert+Extras.h"
 
+static CGFloat const kWordPressMenusHeight = 125;
+
 @implementation RFPreferencesController
 
 - (instancetype) init
@@ -41,7 +43,9 @@
 	
 	[self updateRadioButtons];
 	[self updateMenus];
+	
 	[self hideMessage];
+	[self hideWordPressMenus];
 }
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
@@ -142,12 +146,14 @@
 {
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ExternalBlogIsPreferred"];
 	[self updateRadioButtons];
+	[self showMenusIfWordPress];
 }
 
 - (IBAction) setWordPressBlog:(id)sender
 {
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
 	[self updateRadioButtons];
+	[self showMenusIfWordPress];
 }
 
 - (IBAction) returnButtonPressed:(id)sender
@@ -211,8 +217,8 @@
 	if (self.messageTopConstraint.constant < -1) {
 		[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
 			NSRect win_r = self.window.frame;
-			win_r.size.height += 44;
-			win_r.origin.y -= 44;
+			win_r.size.height += self.messageHeader.bounds.size.height;
+			win_r.origin.y -= self.messageHeader.bounds.size.height;
 
 			context.duration = [self.window animationResizeTime:win_r];
 			
@@ -225,18 +231,43 @@
 
 - (void) hideMessage
 {
-	self.messageTopConstraint.constant = -44;
+	self.messageTopConstraint.constant = -(self.messageHeader.bounds.size.height);
 	
 	NSSize win_size = self.window.frame.size;
-	win_size.height -= 44;
+	win_size.height -= self.messageHeader.bounds.size.height;
 	[self.window setContentSize:win_size];
 }
 
 - (void) showMenusIfWordPress
 {
-	if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogApp"] isEqualToString:@"WordPress"]) {
-		// ...
+	NSRect win_r = self.window.frame;
+
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	if ([defaults boolForKey:@"ExternalBlogIsPreferred"] && [[defaults objectForKey:@"ExternalBlogApp"] isEqualToString:@"WordPress"]) {
+		if (!self.isShowingWordPressMenus) {
+			win_r.size.height += kWordPressMenusHeight;
+			win_r.origin.y -= kWordPressMenusHeight;
+			[self.window.animator setFrame:win_r display:YES];
+			self.isShowingWordPressMenus = YES;
+		}
 	}
+	else {
+		if (self.isShowingWordPressMenus) {
+			win_r.size.height -= kWordPressMenusHeight;
+			win_r.origin.y += kWordPressMenusHeight;
+			[self.window.animator setFrame:win_r display:YES];
+			self.isShowingWordPressMenus = NO;
+		}
+	}
+}
+
+- (void) hideWordPressMenus
+{
+	NSRect win_r = self.window.frame;
+	win_r.size.height -= kWordPressMenusHeight;
+	win_r.origin.y += kWordPressMenusHeight;
+	[self.window setFrame:win_r display:YES];
+	self.isShowingWordPressMenus = NO;
 }
 
 - (void) updateRadioButtons

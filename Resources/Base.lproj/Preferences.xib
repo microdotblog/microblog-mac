@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="categoryPopup" destination="dAB-WX-QVA" id="V2f-wZ-Eve"/>
                 <outlet property="messageField" destination="UK6-9N-kOk" id="6BJ-sH-62d"/>
+                <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
                 <outlet property="messageTopConstraint" destination="xBT-xn-WX9" id="drj-is-oYf"/>
                 <outlet property="postFormatPopup" destination="uK0-xJ-ygW" id="Ygg-pX-V8O"/>
                 <outlet property="progressSpinner" destination="GsW-0h-utd" id="Gty-Zd-J7e"/>

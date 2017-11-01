@@ -13,6 +13,7 @@
 @interface RFPreferencesController : NSWindowController <NSTextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
+@property (strong, nonatomic) IBOutlet NSBox* messageHeader;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* messageTopConstraint;
 @property (strong, nonatomic) IBOutlet NSButton* publishHostedBlog;
 @property (strong, nonatomic) IBOutlet NSButton* publishWordPressBlog;
@@ -25,6 +26,7 @@
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasLoadedCategories;
+@property (assign, nonatomic) BOOL isShowingWordPressMenus;
 
 - (void) showMessage:(NSString *)message;
 
