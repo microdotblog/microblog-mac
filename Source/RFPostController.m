@@ -368,8 +368,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		[self replaceSelectionBySurrounding:@[ @"[", @"]()" ]];
-		r = self.textView.selectedRange;
-		r.location = r.location - 1;
+
+		NSInteger markdown_length = [@"[]()" length];
+		r.location = r.location + r.length + markdown_length - 1;
+		r.length = 0;
 		self.textView.selectedRange = r;
 	}
 }
@@ -379,11 +381,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	NSRange r = self.textView.selectedRange;
 	if (r.length == 0) {
 		[self.textView replaceCharactersInRange:r withString:[markup firstObject]];
+		r.location = r.location + [markup.firstObject length];
+		self.textView.selectedRange = r;
 	}
 	else {
 		NSString* s = [[self currentText] substringWithRange:r];
 		NSString* new_s = [NSString stringWithFormat:@"%@%@%@", [markup firstObject], s, [markup lastObject]];
 		[self.textView replaceCharactersInRange:r withString:new_s];
+
+		NSInteger markdown_length = [[markup componentsJoinedByString:@""] length];
+		r.location = r.location + r.length + markdown_length;
+		r.length = 0;
+		self.textView.selectedRange = r;
 	}
 }
 
