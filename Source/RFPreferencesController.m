@@ -51,7 +51,10 @@ static CGFloat const kWordPressMenusHeight = 125;
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
 {
 	[self loadCategories];
-	[self showMenusIfWordPress];
+	RFDispatchSeconds (0.5, ^{
+		// delay slightly to give message pane time to potentially finish
+		[self showMenusIfWordPress];
+	});
 }
 
 - (void) setupFields
@@ -186,10 +189,12 @@ static CGFloat const kWordPressMenusHeight = 125;
 	}
 }
 
-- (IBAction) websiteTextChanged:(id)sender
+- (IBAction) websiteTextChanged:(NSTextField *)sender
 {
 	[self hideReturnButton];
-	[self checkWebsite];
+	if (sender.stringValue.length > 0) {
+		[self checkWebsite];
+	}
 }
 
 - (IBAction) textSizeChanged:(NSPopUpButton *)sender
