@@ -6,6 +6,36 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b18</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thank you for supporting Micro.blog! Here is what's new:</p>
+ 				<ul>
+ 					<li>Fixed post text disappearing from timeline.</li>
+ 				</ul>
+
+ 				<p>Plus the recent changes from 1.0b17:</p>
+ 				<ul>
+ 					<li>Added text size preference.</li>
+ 					<li>Improved timeline to bounce when scrolled.</li>
+ 					<li>Fixed hiding the new posts message pane.</li>
+ 					<li>Fixed preferences window controls hiding as needed.</li>
+ 					<li>Fixed text selection for Markdown shortcuts.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Wed, 01 Nov 2017 12:55:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b18.zip" sparkle:shortVersionString="1.0b18" sparkle:version="20" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b17</title>
  			<description><![CDATA[
 				<style>
