@@ -235,6 +235,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	int timezone_minutes = 0;
 
 	NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
+	if (text_size == 0) {
+		text_size = kTextSizeMedium;
+	}
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld", token, pane_width - scroller_width, timezone_minutes, (long)text_size];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
