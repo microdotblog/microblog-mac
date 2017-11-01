@@ -25,8 +25,8 @@
  					<li>Fixed text selection for Markdown shortcuts.</li>
  				</ul>
  			]]></description>
-			<pubDate>Sun, 29 Oct 2017 12:21:00 +0000</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b16.zip" sparkle:shortVersionString="1.0b16" sparkle:version="18" length="2573998" type="application/octet-stream" />
+			<pubDate>Wed, 01 Nov 2017 09:19:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b17.zip" sparkle:shortVersionString="1.0b17" sparkle:version="19" length="2573998" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
 		</item>		
 
