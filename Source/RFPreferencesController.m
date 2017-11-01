@@ -196,7 +196,9 @@
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&fontsize=%ld", token, (long)tag];
 	[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
-		// ..
+		RFDispatchMainAsync (^{
+			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTimelineNotification object:self];
+		});
 	}];
 }
 

@@ -111,6 +111,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 }
 
 - (void) setupTimer
@@ -169,6 +170,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
+}
+
+- (void) refreshTimelineNotification:(NSNotification *)notification
+{
+	[self refreshTimeline:nil];
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification
