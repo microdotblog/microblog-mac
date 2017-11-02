@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0b19</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thank you for supporting Micro.blog! Here is what's new:</p>
+ 				<ul>
+ 					<li>Updated keychain and internal preferences. You will be prompted to sign in again.</li>
+ 					<li>Moved older sandboxed container files to the Trash if they are there from a previous version. Should fix some issues with preferences being lost.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Thu, 02 Nov 2017 16:06:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0b19.zip" sparkle:shortVersionString="1.0b19" sparkle:version="21" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b18</title>
  			<description><![CDATA[
 				<style>
