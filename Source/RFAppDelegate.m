@@ -25,23 +25,14 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
-	if (token) {
-		self.timelineController = [[RFTimelineController alloc] init];
-		[self.timelineController showWindow:nil];
-	}
-	else {
-		self.welcomeController = [[RFWelcomeController alloc] init];
-		[self.welcomeController showWindow:nil];
-	}
-	
 	[self removeSandboxedContainer];
 	
 	[self setupDefaults];
 	[self setupCrashlytics];
 	[self setupNotifications];
 	[self setupURLs];
+
+	[self showTimelineOrWelcome];
 }
 
 - (void) applicationDidBecomeActive:(NSNotification *)notification
@@ -98,6 +89,28 @@
 				[fm trashItemAtURL:microblog_url resultingItemURL:nil error:NULL];
 			}
 		}
+	}
+}
+
+- (void) showTimelineOrWelcome
+{
+	BOOL show_timeline = NO;
+	
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	if (username) {
+		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
+		if (token) {
+			show_timeline = YES;
+		}
+	}
+	
+	if (show_timeline) {
+		self.timelineController = [[RFTimelineController alloc] init];
+		[self.timelineController showWindow:nil];
+	}
+	else {
+		self.welcomeController = [[RFWelcomeController alloc] init];
+		[self.welcomeController showWindow:nil];
 	}
 }
 
