@@ -9,7 +9,7 @@
 #import "RFMicropub.h"
 
 #import "NSString+Extras.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 
 @implementation RFMicropub
 
@@ -32,7 +32,7 @@
 	
 	[headers setObject:@"application/json" forKey:@"Accept"];
 	
-	NSString* token = [SSKeychain passwordForService:@"ExternalMicropub" account:@"default"];
+	NSString* token = [SAMKeychain passwordForService:@"ExternalMicropub" account:@"default"];
 	if (token) {
 		NSString* s = [NSString stringWithFormat:@"Bearer %@", token];
 		[headers setObject:s forKey:@"Authorization"];

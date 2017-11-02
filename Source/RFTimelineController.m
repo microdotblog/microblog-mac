@@ -15,7 +15,7 @@
 #import "RFFriendsController.h"
 #import "RFUserController.h"
 #import "RFRoundedImageView.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
 #import "RFClient.h"
@@ -225,7 +225,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self closeOverlays];
 
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
+	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 	
 	CGFloat scroller_width = 0;
 	if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
@@ -313,9 +313,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* microblog_username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
 	NSString* external_username = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogUsername"];
 
-	[SSKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
-	[SSKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
-	[SSKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
+	[SAMKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
+	[SAMKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
+	[SAMKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
 
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountUsername"];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountGravatarURL"];

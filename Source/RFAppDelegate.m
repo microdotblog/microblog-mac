@@ -14,7 +14,7 @@
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "RFConstants.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
@@ -25,7 +25,9 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
-	if ([[NSUserDefaults standardUserDefaults] objectForKey:@"AccountUsername"]) {
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
+	if (token) {
 		self.timelineController = [[RFTimelineController alloc] init];
 		[self.timelineController showWindow:nil];
 	}
@@ -190,7 +192,7 @@
 - (void) loadTimelineWithToken:(NSString *)token
 {
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	[SSKeychain setPassword:token forService:@"Micro.blog" account:username];
+	[SAMKeychain setPassword:token forService:@"Micro.blog" account:username];
 	
 	[self.welcomeController close];
 	self.welcomeController = nil;
@@ -288,7 +290,7 @@
 					else {
 						[[NSUserDefaults standardUserDefaults] setObject:me forKey:@"ExternalMicropubMe"];
 						[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
-						[SSKeychain setPassword:access_token forService:@"ExternalMicropub" account:@"default"];
+						[SAMKeychain setPassword:access_token forService:@"ExternalMicropub" account:@"default"];
 					}
 					
 					[self.prefsController showMessage:@"Micropub API settings have been updated."];

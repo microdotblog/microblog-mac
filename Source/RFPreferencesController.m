@@ -17,7 +17,7 @@
 #import "NSString+Extras.h"
 #import "UUHttpSession.h"
 #import "UUString.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
 
 static CGFloat const kWordPressMenusHeight = 125;
@@ -106,7 +106,7 @@ static CGFloat const kWordPressMenusHeight = 125;
 		NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 		NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 		NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
-		NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:username];
+		NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
 		
 		NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
 		NSString* taxonomy = @"category";
@@ -203,7 +203,7 @@ static CGFloat const kWordPressMenusHeight = 125;
 	[[NSUserDefaults standardUserDefaults] setInteger:tag forKey:kTextSizePrefKey];
 
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	NSString* token = [SSKeychain passwordForService:@"Micro.blog" account:username];
+	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&fontsize=%ld", token, (long)tag];
 	[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {

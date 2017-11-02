@@ -92,9 +92,9 @@
 		4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDEE1F8681D000906C86 /* RFClient.m */; };
 		4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF31F86820500906C86 /* NSString+Extras.m */; };
 		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
-		4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF91F86823D00906C86 /* SSKeychain.m */; };
-		4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
+		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
+		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -263,14 +263,14 @@
 		4B8FBDF01F8681D000906C86 /* RFMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMacros.h; path = Source/RFMacros.h; sourceTree = "<group>"; };
 		4B8FBDF21F86820500906C86 /* NSString+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+Extras.h"; path = "Source/NSString+Extras.h"; sourceTree = "<group>"; };
 		4B8FBDF31F86820500906C86 /* NSString+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extras.m"; path = "Source/NSString+Extras.m"; sourceTree = "<group>"; };
-		4B8FBDF71F86823D00906C86 /* SSKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
-		4B8FBDF81F86823D00906C86 /* SSKeychainQuery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
-		4B8FBDF91F86823D00906C86 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		4B8FBDFB1F86827800906C86 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4B8FBDFF1F86F5F700906C86 /* RFConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConstants.h; path = Source/RFConstants.h; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
+		4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
+		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
+		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
+		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -521,8 +521,8 @@
 		4B8FBDD71F867A1D00906C86 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4BC826CF1FAB663700A58AD4 /* SAMKeychain */,
 				4B2CAAC71F90655A00D9B10E /* CTidy */,
-				4B8FBDF51F86823C00906C86 /* SSKeychain */,
 				4B8FBDD81F867A2800906C86 /* UUToolbox */,
 			);
 			name = Shared;
@@ -549,16 +549,16 @@
 			name = UUToolbox;
 			sourceTree = "<group>";
 		};
-		4B8FBDF51F86823C00906C86 /* SSKeychain */ = {
+		4BC826CF1FAB663700A58AD4 /* SAMKeychain */ = {
 			isa = PBXGroup;
 			children = (
-				4B8FBDF71F86823D00906C86 /* SSKeychain.h */,
-				4B8FBDF81F86823D00906C86 /* SSKeychainQuery.h */,
-				4B8FBDF91F86823D00906C86 /* SSKeychain.m */,
-				4B8FBDFA1F86823D00906C86 /* SSKeychainQuery.m */,
+				4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */,
+				4BC826D21FAB663700A58AD4 /* SAMKeychain.h */,
+				4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */,
+				4BC826D51FAB663700A58AD4 /* SAMKeychain.m */,
 			);
-			name = SSKeychain;
-			path = Shared/SSKeychain;
+			name = SAMKeychain;
+			path = Shared/SAMKeychain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -676,8 +676,8 @@
 				4B2CAB151F90667300D9B10E /* win32tc.c in Sources */,
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */,
-				4B8FBDFD1F8682BC00906C86 /* SSKeychain.m in Sources */,
 				4B2CAAC41F90652800D9B10E /* RFXMLRPCRequest.m in Sources */,
+				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4B2CAAC51F90652800D9B10E /* RFXMLRPCParser.m in Sources */,
 				4B2CAB161F90667300D9B10E /* iconvtc.c in Sources */,
@@ -696,6 +696,7 @@
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
 				4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */,
+				4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */,
 				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
 				4B2CAB121F90667300D9B10E /* lexer.c in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
@@ -717,7 +718,6 @@
 				4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */,
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
-				4B8FBDFE1F8682BC00906C86 /* SSKeychainQuery.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
 				4B2CAB181F90667300D9B10E /* alloc.c in Sources */,

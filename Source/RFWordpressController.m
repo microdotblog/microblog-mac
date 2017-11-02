@@ -11,7 +11,7 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "RFMacros.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
 
 @implementation RFWordpressController
@@ -50,7 +50,7 @@
 	[[NSUserDefaults standardUserDefaults] setObject:xmlrpcEndpointURL forKey:@"ExternalBlogEndpoint"];
 	[[NSUserDefaults standardUserDefaults] setObject:blogID forKey:@"ExternalBlogID"];
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
-	[SSKeychain setPassword:self.passwordField.stringValue forService:@"ExternalBlog" account:self.usernameField.stringValue];
+	[SAMKeychain setPassword:self.passwordField.stringValue forService:@"ExternalBlog" account:self.usernameField.stringValue];
 	
 	if ([xmlrpcEndpointURL containsString:@"xmlrpc.php"]) {
 		[[NSUserDefaults standardUserDefaults] setObject:@"WordPress" forKey:@"ExternalBlogApp"];

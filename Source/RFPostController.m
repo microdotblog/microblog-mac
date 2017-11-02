@@ -18,7 +18,7 @@
 #import "UUString.h"
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
 #import "NSImage+Extras.h"
 #import <Fabric/Fabric.h>
@@ -565,7 +565,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
-			NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:username];
+			NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
 			
 			NSString* post_text = text;
 			NSString* app_key = @"";
@@ -711,7 +711,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
 			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
 			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
-			NSString* password = [SSKeychain passwordForService:@"ExternalBlog" account:username];
+			NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
 			
 			NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
 			NSString* filename = [[[[NSString uuGenerateUUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByAppendingPathExtension:@"jpg"];
