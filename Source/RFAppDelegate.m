@@ -34,6 +34,8 @@
 		[self.welcomeController showWindow:nil];
 	}
 	
+	[self removeSandboxedContainer];
+	
 	[self setupDefaults];
 	[self setupCrashlytics];
 	[self setupNotifications];
@@ -77,6 +79,24 @@
 
 - (void) applicationWillTerminate:(NSNotification *)notification
 {
+}
+
+- (void) removeSandboxedContainer
+{
+	NSFileManager* fm = [NSFileManager defaultManager];
+	NSError* error = nil;
+	NSURL* library_url = [fm URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&error];
+	if (error == nil) {
+		NSURL* container_url = [library_url URLByAppendingPathComponent:@"Containers" isDirectory:YES];
+		NSURL* microblog_url = [container_url URLByAppendingPathComponent:@"blog.micro.mac" isDirectory:YES];
+		if (microblog_url && [fm fileExistsAtPath:microblog_url.path]) {
+			// sanity check that we've found the right folder
+			NSURL* data_url = [microblog_url URLByAppendingPathComponent:@"Data" isDirectory:YES];
+			if (data_url && [fm fileExistsAtPath:data_url.path]) {
+				[fm trashItemAtURL:microblog_url resultingItemURL:nil error:NULL];
+			}
+		}
+	}
 }
 
 - (void) setupDefaults
