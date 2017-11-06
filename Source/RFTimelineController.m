@@ -112,6 +112,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
+
+	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
 
 - (void) setupTimer
@@ -346,6 +348,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) checkPostsFromTimer:(NSTimer *)timer
 {
 	if (self.selectedTimeline == kSelectionTimeline) {
+//		[self showNotificationWithTitle:@"Some User (@manton)" text:@"@manton Hello hello"];
+
 		NSString* top_post_id = [self topPostID];
 		if (top_post_id.length > 0) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
@@ -533,6 +537,21 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		[self.optionsPopover performClose:nil];
 		self.optionsPopover = nil;
 	}
+}
+
+#pragma mark -
+
+- (void) showNotificationWithTitle:(NSString *)title text:(NSString *)text
+{
+	NSUserNotification* notification = [[NSUserNotification alloc] init];
+	notification.title = title;
+	notification.informativeText = text;
+	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+}
+
+- (void) userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
+{
+	[self showMentions:nil];
 }
 
 #pragma mark -
