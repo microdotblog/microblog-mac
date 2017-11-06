@@ -6,6 +6,24 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.0</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thank you for supporting Micro.blog! This is the final 1.0 release. If you have any suggestions for new features, let us know at help@micro.blog.</p>
+ 			]]></description>
+			<pubDate>Mon, 06 Nov 2017 11:45:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.0.zip" sparkle:shortVersionString="1.0" sparkle:version="22" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0b19</title>
  			<description><![CDATA[
 				<style>
