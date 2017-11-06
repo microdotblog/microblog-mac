@@ -113,7 +113,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 
-	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
+//	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
 
 - (void) setupTimer
