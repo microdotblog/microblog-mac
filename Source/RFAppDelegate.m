@@ -40,6 +40,12 @@
 	[self showMainWindow:nil];
 }
 
+- (BOOL) applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+{
+	[self showMainWindow:nil];
+	return YES;
+}
+
 // 10.13
 // - (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
 
