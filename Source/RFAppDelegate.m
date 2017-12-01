@@ -107,14 +107,11 @@
 		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 		if (token) {
 			show_timeline = YES;
+			[self verifyAppToken:token];
 		}
 	}
 	
-	if (show_timeline) {
-		self.timelineController = [[RFTimelineController alloc] init];
-		[self.timelineController showWindow:nil];
-	}
-	else {
+	if (!show_timeline) {
 		self.welcomeController = [[RFWelcomeController alloc] init];
 		[self.welcomeController showWindow:nil];
 	}
