@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,14 +21,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="250" height="220"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="35P-Jm-jLY">
-                        <rect key="frame" x="0.0" y="-30" width="250" height="250"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="250" id="F3l-iZ-iV3"/>
-                            <constraint firstAttribute="height" constant="250" id="mMN-pM-NQk"/>
-                        </constraints>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WelcomeBackground" id="J5r-Ve-xUl"/>
-                    </imageView>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Ul-1q-KN2">
                         <rect key="frame" x="43" y="15" width="165" height="32"/>
                         <constraints>
@@ -43,11 +35,19 @@
                             <action selector="openSignin:" target="-2" id="hQU-Yn-4mS"/>
                         </connections>
                     </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="saX-Sw-OHI">
+                        <rect key="frame" x="54" y="52" width="142" height="150"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="150" id="Q6J-AB-mFx"/>
+                            <constraint firstAttribute="width" constant="142" id="giT-XX-GVn"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WelcomeIcon" id="ost-Sh-eym"/>
+                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="35P-Jm-jLY" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="RPN-dj-Ofa"/>
                     <constraint firstItem="8Ul-1q-KN2" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="177" id="TMR-ok-Kfa"/>
-                    <constraint firstItem="35P-Jm-jLY" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="a9Y-4f-6oZ"/>
+                    <constraint firstItem="saX-Sw-OHI" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="fA1-om-XFO"/>
+                    <constraint firstItem="saX-Sw-OHI" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="18" id="hhS-qL-yFz"/>
                     <constraint firstItem="8Ul-1q-KN2" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="x91-tY-wHZ"/>
                 </constraints>
             </view>
@@ -55,6 +55,6 @@
         </window>
     </objects>
     <resources>
-        <image name="WelcomeBackground" width="1500" height="1500"/>
+        <image name="WelcomeIcon" width="256" height="256"/>
     </resources>
 </document>
