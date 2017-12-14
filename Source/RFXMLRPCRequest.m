@@ -67,13 +67,13 @@
 - (void) appendParam:(id)param toString:(NSMutableString *)requestString
 {
 	if ([param isKindOfClass:[RFBoolean class]]) {
-		[requestString appendFormat:@"<boolean>%@</boolean>", param];
+		[requestString appendFormat:@"<value><boolean>%@</boolean></value>", param];
 	}
 	else if ([param isKindOfClass:[NSNumber class]]) {
-		[requestString appendFormat:@"<int>%@</int>", param];
+		[requestString appendFormat:@"<value><int>%@</int></value>", param];
 	}
 	else if ([param isKindOfClass:[NSString class]]) {
-		[requestString appendFormat:@"<string>%@</string>", [self escapeParam:param]];
+		[requestString appendFormat:@"<value><string>%@</string></value>", [self escapeParam:param]];
 	}
 	else if ([param isKindOfClass:[NSDictionary class]]) {
 		[requestString appendString:@"<struct>"];
@@ -82,9 +82,7 @@
 			id val = [param objectForKey:k];
 			[requestString appendString:@"<member>"];
 			[requestString appendFormat:@"<name>%@</name>", k];
-			[requestString appendString:@"<value>"];
 			[self appendParam:val toString:requestString];
-			[requestString appendString:@"</value>"];
 			[requestString appendString:@"</member>"];
 		}
 		[requestString appendString:@"</struct>"];
@@ -92,15 +90,13 @@
 	else if ([param isKindOfClass:[NSArray class]]) {
 		[requestString appendString:@"<array><data>"];
 		for (id val in param) {
-			[requestString appendString:@"<value>"];
 			[self appendParam:val toString:requestString];
-			[requestString appendString:@"</value>"];
 		}
 		[requestString appendString:@"</data></array>"];
 	}
 	else if ([param isKindOfClass:[NSData class]]) {
 		NSData* d = param;
-		[requestString appendFormat:@"<base64>%@</base64>", [d base64EncodedStringWithOptions:0]];
+		[requestString appendFormat:@"<value><base64>%@</base64></value>", [d base64EncodedStringWithOptions:0]];
 	}
 }
 
