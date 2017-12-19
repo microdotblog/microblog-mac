@@ -6,6 +6,31 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thank you for supporting Micro.blog! Here is what's new:</p>
+ 				<ul>
+ 					<li>Added new Mac app icon!</li>
+ 					<li>Added a "Show More" button to load more posts in the timeline.</li>
+ 					<li>Fixed opening main window when clicking on Dock icon.</li>
+ 					<li>Fixed not refreshing user information and profile photo on launch.</li>
+ 					<li>Fixed XML-RPC issues with some custom blogging servers.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 19 Dec 2017 10:30:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.1.zip" sparkle:shortVersionString="1.1" sparkle:version="24" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.0</title>
  			<description><![CDATA[
 				<style>
