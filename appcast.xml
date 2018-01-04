@@ -6,6 +6,32 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.1.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Happy New Year! Thank you for supporting Micro.blog. Changes for this update:</p>
+ 				<ul>
+ 					<li>Added support for starting a new post with a URL: microblog://post?text=Hello</li>
+ 					<li>Fixed Markdown highlighting for underscores in usernames or links.</li>
+ 					<li>Fixed photo upload for Movable Type blogs.</li>
+ 					<li>Fixed pasting from some copied Safari links.</li>
+ 					<li>Fixed crash on startup when no internet connection.</li>
+ 					<li>Fixed handling some links to the Micro.blog web site from the timeline.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Thu, 04 Jan 2017 15:45:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.1.1.zip" sparkle:shortVersionString="1.1.1" sparkle:version="26" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.1</title>
  			<description><![CDATA[
 				<style>
