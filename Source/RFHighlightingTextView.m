@@ -26,6 +26,12 @@
 	self.selectedRange = self.restoredSelection;
 }
 
+- (NSPasteboardType) preferredPasteboardTypeFromArray:(NSArray<NSPasteboardType> *)availableTypes
+                          restrictedToTypesFromArray:(NSArray<NSPasteboardType> *)allowedTypes
+{
+	return NSPasteboardTypeString;
+}
+
 #pragma mark -
 
 - (NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
