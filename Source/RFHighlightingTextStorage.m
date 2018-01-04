@@ -81,6 +81,11 @@
 
 #pragma mark -
 
+- (BOOL) isValidUsernameChar:(unichar)c
+{
+	return (isalnum (c) || (c == '_'));
+}
+
 - (void) processBold
 {
 	NSFont* bold_font = [NSFont fontWithName:@"Avenir-Heavy" size:kDefaultFontSize];
@@ -117,18 +122,52 @@
 	NSFont* italic_font = [NSFont fontWithName:@"Avenir-Oblique" size:kDefaultFontSize];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_italic = NO;
+	BOOL is_link = NO;
+	BOOL is_username = NO;
 	
 	for (NSInteger i = 0; i < self.string.length; i++) {
 		unichar c = [self.string characterAtIndex:i];
+		unichar next_c = '\0';
+		if ((i + 1) < self.string.length) {
+			next_c = [self.string characterAtIndex:i + 1];
+		}
+
 		if (c == '_') {
-			if (!is_italic) {
-				is_italic = YES;
-				current_r.location = i;
+			if (!is_link && !is_username) {
+				if (!is_italic) {
+					is_italic = YES;
+					current_r.location = i;
+				}
+				else {
+					is_italic = NO;
+					current_r.length = i - current_r.location + 1;
+					[self safe_addAttribute:NSFontAttributeName value:italic_font range:current_r];
+				}
 			}
-			else {
-				is_italic = NO;
-				current_r.length = i - current_r.location + 1;
-				[self safe_addAttribute:NSFontAttributeName value:italic_font range:current_r];
+		}
+		else if (c == '[') {
+			if (!is_link) {
+				is_link = YES;
+			}
+		}
+		else if (c == ')') {
+			if (is_link) {
+				is_link = NO;
+			}
+		}
+		else if (c == ')') {
+			if (is_link) {
+				is_link = NO;
+			}
+		}
+		else if ((c == '@') && [self isValidUsernameChar:next_c]) {
+			if (!is_username) {
+				is_username = YES;
+			}
+		}
+		else if (![self isValidUsernameChar:c]) {
+			if (is_username) {
+				is_username = NO;
 			}
 		}
 	}
@@ -254,13 +293,13 @@
 			next_c = [self.string characterAtIndex:i + 1];
 		}
 
-		if ((c == '@') && isalpha (next_c)) {
+		if ((c == '@') && [self isValidUsernameChar:next_c]) {
 			if (!is_username) {
 				is_username = YES;
 				current_r.location = i;
 			}
 		}
-		else if (!isalnum (c)) {
+		else if (![self isValidUsernameChar:c]) {
 			if (is_username) {
 				is_username = NO;
 				current_r.length = i - current_r.location;
