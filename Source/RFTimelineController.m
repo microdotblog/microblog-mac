@@ -494,6 +494,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController.view.autoresizingMask = NSViewHeightSizable;
 }
 
+- (void) showTopicsWithSearch:(NSString *)term
+{
+}
+
 - (void) showProfileWithUsername:(NSString *)username
 {
 	[self hideOptionsMenu];
@@ -649,10 +653,23 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* hostname = [url host];
 	NSString* path = [url path];
 	if ([hostname isEqualToString:@"micro.blog"]) {
-		NSString* username = [path stringByReplacingOccurrencesOfString:@"/" withString:@""];
-		if (username.length > 0) {
+		NSArray* pieces = [path componentsSeparatedByString:@"/"];
+		if ((pieces.count == 2) && [[pieces firstObject] isEqualToString:@"discover"]) {
+			// e.g. /discover/books
 			found_microblog_url = YES;
-			[self showProfileWithUsername:username];
+			[self showTopicsWithSearch:[pieces lastObject]];
+		}
+		else if ([[pieces firstObject] isEqualToString:@"about"]) {
+			// e.g. /about/api
+			found_microblog_url = NO;
+		}
+		else {
+			NSString* username = [path stringByReplacingOccurrencesOfString:@"/" withString:@""];
+			if (username.length > 0) {
+				// e.g. /manton
+				found_microblog_url = YES;
+				[self showProfileWithUsername:username];
+			}
 		}
 	}
 	
