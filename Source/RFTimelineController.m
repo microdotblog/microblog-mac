@@ -14,6 +14,7 @@
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFUserController.h"
+#import "RFNewPostAccessoryController.h"
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
 #import "RFConstants.h"
@@ -42,6 +43,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[super windowDidLoad];
 
+//	[self setupTitleButtons];
 	[self setupFullScreen];
 	[self setupTable];
 	[self setupSplitView];
@@ -51,11 +53,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupTimer];
 }
 
-//- (void) setupTextView
-//{
-//	self.textView.font = [NSFont systemFontOfSize:15 weight:NSFontWeightLight];
-//	self.textView.backgroundColor = [NSColor colorWithCalibratedWhite:0.973 alpha:1.000];
-//}
+- (void) setupTitleButtons
+{
+	NSTitlebarAccessoryViewController* newpost_accessory_controller = [[RFNewPostAccessoryController alloc] init];
+	newpost_accessory_controller.layoutAttribute = NSLayoutAttributeRight;
+	[self.window addTitlebarAccessoryViewController:newpost_accessory_controller];
+}
 
 - (void) setupFullScreen
 {
