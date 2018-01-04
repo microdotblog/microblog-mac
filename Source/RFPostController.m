@@ -41,6 +41,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return self;
 }
 
+- (id) initWithText:(NSString *)text
+{
+	self = [self init];
+	if (self) {
+		self.initialText = text;
+	}
+	
+	return self;
+}
+
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username
 {
 	self = [self init];
@@ -83,6 +93,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	if (self.replyUsername) {
 		self.textView.string = [NSString stringWithFormat:@"@%@ ", self.replyUsername];
+	}
+	else if (self.initialText) {
+		self.textView.string = self.initialText;
 	}
 	else {
 		NSString* title = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftTitlePrefKey];

@@ -50,6 +50,7 @@ typedef enum {
 - (IBAction) performClose:(id)sender;
 
 - (void) showProfileWithUsername:(NSString *)username;
+- (void) showPostWithText:(NSString *)text;
 - (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 - (void) hideOptionsMenu;

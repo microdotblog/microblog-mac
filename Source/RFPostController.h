@@ -27,11 +27,13 @@
 @property (assign, nonatomic) BOOL isReply;
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;
+@property (strong, nonatomic) NSString* initialText;
 @property (strong, nonatomic) NSArray* attachedPhotos; // RFPhoto
 @property (strong, nonatomic) NSArray* queuedPhotos; // RFPhoto
 @property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
 
+- (id) initWithText:(NSString *)text;
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;
 

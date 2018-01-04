@@ -74,6 +74,10 @@
 	else if ([url.host isEqualToString:@"micropub"]) {
 		[self showMicropubWithURL:[url absoluteString]];
 	}
+	else if ([url.host isEqualToString:@"post"]) {
+		NSString* text = [[[url absoluteString] uuFindQueryStringArg:@"text"] uuUrlDecoded];
+		[self showNewPostWithText:text];
+	}
 }
 
 - (void) applicationWillTerminate:(NSNotification *)notification
@@ -314,6 +318,11 @@
 			});
 		}];
 	}
+}
+
+- (void) showNewPostWithText:(NSString *)text
+{
+	[self.timelineController showPostWithText:text];
 }
 
 @end

@@ -502,10 +502,20 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self pushViewController:controller];
 }
 
+- (void) showPostWithText:(NSString *)text
+{
+	if (!self.postController) {
+		RFPostController* controller = [[RFPostController alloc] initWithText:text];
+		[self showPostController:controller];
+	}
+}
+
 - (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username
 {
-	RFPostController* controller = [[RFPostController alloc] initWithPostID:postID username:username];
-	[self showPostController:controller];
+	if (!self.postController) {
+		RFPostController* controller = [[RFPostController alloc] initWithPostID:postID username:username];
+		[self showPostController:controller];
+	}
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID
