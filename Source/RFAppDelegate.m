@@ -232,7 +232,11 @@
 	};
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		NSString* error = [response.parsedResponse objectForKey:@"error"];
-		if (error) {
+		if (response.parsedResponse == nil) {
+			RFDispatchMainAsync (^{
+			});
+		}
+		else if (error) {
 			RFDispatchMainAsync ((^{
 //				[Answers logLoginWithMethod:@"Token" success:@NO customAttributes:nil];
 //				[self showMessage:[NSString stringWithFormat:@"Error signing in: %@", error]];
