@@ -69,6 +69,8 @@
 		4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */; };
 		4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B608B3F1FFE7C1900589F77 /* RFNewPostAccessoryController.m */; };
 		4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */; };
+		4B608B452003B7E200589F77 /* RFTopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B608B442003B7E200589F77 /* RFTopicController.m */; };
+		4B608B482003B86400589F77 /* Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B608B462003B86400589F77 /* Topic.xib */; };
 		4B6AE76E1F8AE19F00CB7950 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; };
 		4B6AE76F1F8AE1EF00CB7950 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
@@ -226,6 +228,9 @@
 		4B608B3E1FFE7C1900589F77 /* RFNewPostAccessoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFNewPostAccessoryController.h; path = Source/RFNewPostAccessoryController.h; sourceTree = "<group>"; };
 		4B608B3F1FFE7C1900589F77 /* RFNewPostAccessoryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFNewPostAccessoryController.m; path = Source/RFNewPostAccessoryController.m; sourceTree = "<group>"; };
 		4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NewPostAccessory.xib; path = Resources/NewPostAccessory.xib; sourceTree = "<group>"; };
+		4B608B432003B7E200589F77 /* RFTopicController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFTopicController.h; path = Source/RFTopicController.h; sourceTree = "<group>"; };
+		4B608B442003B7E200589F77 /* RFTopicController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFTopicController.m; path = Source/RFTopicController.m; sourceTree = "<group>"; };
+		4B608B472003B86400589F77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Topic.xib; sourceTree = "<group>"; };
 		4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		4B6AE7701F8B335C00CB7950 /* RFMicropub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMicropub.h; path = Source/RFMicropub.h; sourceTree = "<group>"; };
 		4B6AE7711F8B335C00CB7950 /* RFMicropub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMicropub.m; path = Source/RFMicropub.m; sourceTree = "<group>"; };
@@ -437,6 +442,8 @@
 				4B2CAB2E1F912EAF00D9B10E /* RFConversationController.m */,
 				4B2CAB401F93F00000D9B10E /* RFFriendsController.h */,
 				4B2CAB411F93F00000D9B10E /* RFFriendsController.m */,
+				4B608B432003B7E200589F77 /* RFTopicController.h */,
+				4B608B442003B7E200589F77 /* RFTopicController.m */,
 				4B2CAB351F91C04200D9B10E /* RFUserController.h */,
 				4B2CAB361F91C04200D9B10E /* RFUserController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
@@ -492,6 +499,7 @@
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
 				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
+				4B608B462003B86400589F77 /* Topic.xib */,
 				4B5650641F8562B900B03FFD /* Options.xib */,
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
@@ -636,6 +644,7 @@
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
+				4B608B482003B86400589F77 /* Topic.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
@@ -733,6 +742,7 @@
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
+				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
 				4B2CAB1D1F90667300D9B10E /* parser.c in Sources */,
@@ -837,6 +847,14 @@
 				4B5A250C1F8497B1007C548F /* Base */,
 			);
 			name = MenuCell.xib;
+			sourceTree = "<group>";
+		};
+		4B608B462003B86400589F77 /* Topic.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B608B472003B86400589F77 /* Base */,
+			);
+			name = Topic.xib;
 			sourceTree = "<group>";
 		};
 		4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */ = {

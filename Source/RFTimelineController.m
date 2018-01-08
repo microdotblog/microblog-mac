@@ -13,6 +13,7 @@
 #import "RFPostController.h"
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
+#import "RFTopicController.h"
 #import "RFUserController.h"
 #import "RFNewPostAccessoryController.h"
 #import "RFRoundedImageView.h"
@@ -50,7 +51,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupWebView];
 	[self setupUser];
 	[self setupNotifications];
-	[self setupTimer];
+	[self setupTimer];	
 }
 
 - (void) setupTitleButtons
@@ -419,6 +420,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		RFFriendsController* friends_controller = (RFFriendsController *)controller;
 		return friends_controller.webView;
 	}
+	else if ([controller isKindOfClass:[RFTopicController class]]) {
+		RFTopicController* topic_controller = (RFTopicController *)controller;
+		return topic_controller.webView;
+	}
 	else {
 		return self.webView;
 	}
@@ -496,6 +501,13 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) showTopicsWithSearch:(NSString *)term
 {
+	[self hideOptionsMenu];
+	
+	RFTopicController* controller = [[RFTopicController alloc] initWithTopic:term];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
+
+	[self pushViewController:controller];
 }
 
 - (void) showProfileWithUsername:(NSString *)username
