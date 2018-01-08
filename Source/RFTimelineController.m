@@ -653,7 +653,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	NSString* hostname = [url host];
 	NSString* path = [url path];
 	if ([hostname isEqualToString:@"micro.blog"]) {
-		NSArray* pieces = [path componentsSeparatedByString:@"/"];
+		NSMutableArray* pieces = [[path componentsSeparatedByString:@"/"] mutableCopy];
+		[pieces removeObjectAtIndex:0];
 		if ((pieces.count == 2) && [[pieces firstObject] isEqualToString:@"discover"]) {
 			// e.g. /discover/books
 			found_microblog_url = YES;
