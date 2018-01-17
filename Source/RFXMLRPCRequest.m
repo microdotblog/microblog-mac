@@ -76,7 +76,7 @@
 		[requestString appendFormat:@"<value><string>%@</string></value>", [self escapeParam:param]];
 	}
 	else if ([param isKindOfClass:[NSDictionary class]]) {
-		[requestString appendString:@"<struct>"];
+		[requestString appendString:@"<value><struct>"];
 		NSArray* keys = [param allKeys];
 		for (NSString* k in keys) {
 			id val = [param objectForKey:k];
@@ -85,14 +85,14 @@
 			[self appendParam:val toString:requestString];
 			[requestString appendString:@"</member>"];
 		}
-		[requestString appendString:@"</struct>"];
+		[requestString appendString:@"</struct></value>"];
 	}
 	else if ([param isKindOfClass:[NSArray class]]) {
-		[requestString appendString:@"<array><data>"];
+		[requestString appendString:@"<value><array><data>"];
 		for (id val in param) {
 			[self appendParam:val toString:requestString];
 		}
-		[requestString appendString:@"</data></array>"];
+		[requestString appendString:@"</data></array></value>"];
 	}
 	else if ([param isKindOfClass:[NSData class]]) {
 		NSData* d = param;

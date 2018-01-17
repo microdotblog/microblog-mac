@@ -369,7 +369,10 @@ DQ
                                     <action selector="applyFormatItalic:" target="-1" id="AF9-ja-CLy"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Link" keyEquivalent="k" id="ulH-2Z-zYS">
+                            <menuItem title="Link" id="ulH-2Z-zYS">
+                                <string key="keyEquivalent" base64-UTF8="YES">
+CQ
+</string>
                                 <connections>
                                     <action selector="applyFormatLink:" target="-1" id="zqp-CZ-vH5"/>
                                 </connections>
