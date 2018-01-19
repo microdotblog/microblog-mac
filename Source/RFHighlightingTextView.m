@@ -29,7 +29,12 @@
 - (NSPasteboardType) preferredPasteboardTypeFromArray:(NSArray<NSPasteboardType> *)availableTypes
                           restrictedToTypesFromArray:(NSArray<NSPasteboardType> *)allowedTypes
 {
-	return NSPasteboardTypeString;
+	if ([availableTypes containsObject:NSPasteboardTypeString]) {
+		return NSPasteboardTypeString;
+	}
+	else {
+		return [super preferredPasteboardTypeFromArray:availableTypes restrictedToTypesFromArray:allowedTypes];
+	}
 }
 
 #pragma mark -
