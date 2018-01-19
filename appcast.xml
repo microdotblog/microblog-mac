@@ -6,6 +6,30 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.1.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thanks for supporting Micro.blog! Just a few bug fixes:</p>
+ 				<ul>
+ 					<li>Fixed compatibility with some XML-RPC servers.</li>
+ 					<li>Fixed crash on discover link and when Micro.blog servers are down.</li>
+ 					<li>Fixed crash pasting images into a new post.</li>
+ 					<li>Updated user profile to truncate very long descriptions.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Fri, 19 Jan 2018 16:50:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.1.3.zip" sparkle:shortVersionString="1.1.3" sparkle:version="29" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.1.2</title>
  			<description><![CDATA[
 				<style>
