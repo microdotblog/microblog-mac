@@ -88,7 +88,11 @@
 	self.headerField.stringValue = [author_info objectForKey:@"name"];
 	self.headerField.hidden = NO;
 
-	self.bioField.stringValue = [microblog_info objectForKey:@"bio"];
+	NSString* s = [microblog_info objectForKey:@"bio"];
+	if (s.length > 280) {
+		s = [[s substringToIndex:280] stringByAppendingString:@"..."];
+	}
+	self.bioField.stringValue = s;
 	self.bioField.hidden = NO;
 	self.bioDivider.hidden = NO;
 	
