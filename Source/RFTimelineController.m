@@ -676,6 +676,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 			// e.g. /about/api
 			found_microblog_url = NO;
 		}
+		else if ([[pieces firstObject] isEqualToString:@"discover"]) {
+			// e.g. /discover
+			found_microblog_url = YES;
+			[self showDiscover:nil];
+		}
 		else {
 			NSString* username = [path stringByReplacingOccurrencesOfString:@"/" withString:@""];
 			if (username.length > 0) {
