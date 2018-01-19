@@ -123,6 +123,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) setupTimer
 {
 	self.checkTimer = [NSTimer scheduledTimerWithTimeInterval:self.checkSeconds.floatValue target:self selector:@selector(checkPostsFromTimer:) userInfo:nil repeats:NO];
+	self.checkSeconds = @120; // in case it fails, bump to higher default
 }
 
 #pragma mark -
@@ -359,31 +360,33 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 			RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
 			NSDictionary* args = @{ @"since_id": top_post_id };
 			[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-				NSNumber* count = [response.parsedResponse objectForKey:@"count"];
-				NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
-				if (count.integerValue > 0) {
-					NSString* msg;
-					if (count.integerValue == 1) {
-						msg = @"1 new post";
+				if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+					NSNumber* count = [response.parsedResponse objectForKey:@"count"];
+					NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
+					if (count && count.integerValue > 0) {
+						NSString* msg;
+						if (count.integerValue == 1) {
+							msg = @"1 new post";
+						}
+						else {
+							msg = [NSString stringWithFormat:@"%@ new posts", count];
+						}
+
+						RFDispatchMainAsync (^{
+							self.messageField.stringValue = msg;
+							self.messageTopConstraint.animator.constant = -1;
+						});
 					}
 					else {
-						msg = [NSString stringWithFormat:@"%@ new posts", count];
+						RFDispatchMainAsync (^{
+							self.messageTopConstraint.animator.constant = -35;
+							[self.messageSpinner stopAnimation:nil];
+						});
 					}
 
-					RFDispatchMainAsync (^{
-						self.messageField.stringValue = msg;
-						self.messageTopConstraint.animator.constant = -1;
-					});
-				}
-				else {
-					RFDispatchMainAsync (^{
-						self.messageTopConstraint.animator.constant = -35;
-						[self.messageSpinner stopAnimation:nil];
-					});
-				}
-
-				if (check_seconds.integerValue > 2) { // sanity check value
-					self.checkSeconds = check_seconds;
+					if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
+						self.checkSeconds = check_seconds;
+					}
 				}
 			}];
 		}
