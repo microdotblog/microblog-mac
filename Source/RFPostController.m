@@ -408,6 +408,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (html.length > 0) {
 		// Markdown processor adds a return at the end
 		html = [html substringToIndex:html.length - 1];
+		html = [html stringByReplacingOccurrencesOfString:@"</p>\n<p>" withString:@"</p>\n\n<p>"];
 	}
 	
 	return [html rf_stripHTML];
