@@ -55,6 +55,14 @@
 		4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */; };
 		4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3D1F93EFB400D9B10E /* Friends.xib */; };
 		4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB411F93F00000D9B10E /* RFFriendsController.m */; };
+		4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF3201EC55A00C71AAF /* MMScanner.m */; };
+		4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF7201EC55A00C71AAF /* MMDocument.m */; };
+		4B400D05201EC55B00C71AAF /* MMElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF9201EC55A00C71AAF /* MMElement.m */; };
+		4B400D06201EC55B00C71AAF /* MMMarkdown.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CFB201EC55A00C71AAF /* MMMarkdown.m */; };
+		4B400D07201EC55B00C71AAF /* MMParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CFD201EC55A00C71AAF /* MMParser.m */; };
+		4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CFE201EC55A00C71AAF /* MMGenerator.m */; };
+		4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400D01201EC55A00C71AAF /* MMHTMLParser.m */; };
+		4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400D02201EC55B00C71AAF /* MMSpanParser.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -206,6 +214,23 @@
 		4B2CAB3E1F93EFB400D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Friends.xib; sourceTree = "<group>"; };
 		4B2CAB401F93F00000D9B10E /* RFFriendsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFFriendsController.h; path = Source/RFFriendsController.h; sourceTree = "<group>"; };
 		4B2CAB411F93F00000D9B10E /* RFFriendsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFFriendsController.m; path = Source/RFFriendsController.m; sourceTree = "<group>"; };
+		4B400CF2201EC55A00C71AAF /* MMElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMElement.h; path = Shared/MMMarkdown/Source/MMElement.h; sourceTree = "<group>"; };
+		4B400CF3201EC55A00C71AAF /* MMScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMScanner.m; path = Shared/MMMarkdown/Source/MMScanner.m; sourceTree = "<group>"; };
+		4B400CF4201EC55A00C71AAF /* MMScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMScanner.h; path = Shared/MMMarkdown/Source/MMScanner.h; sourceTree = "<group>"; };
+		4B400CF5201EC55A00C71AAF /* MMGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMGenerator.h; path = Shared/MMMarkdown/Source/MMGenerator.h; sourceTree = "<group>"; };
+		4B400CF6201EC55A00C71AAF /* MMSpanParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMSpanParser.h; path = Shared/MMMarkdown/Source/MMSpanParser.h; sourceTree = "<group>"; };
+		4B400CF7201EC55A00C71AAF /* MMDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMDocument.m; path = Shared/MMMarkdown/Source/MMDocument.m; sourceTree = "<group>"; };
+		4B400CF8201EC55A00C71AAF /* MMDocument_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMDocument_Private.h; path = Shared/MMMarkdown/Source/MMDocument_Private.h; sourceTree = "<group>"; };
+		4B400CF9201EC55A00C71AAF /* MMElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMElement.m; path = Shared/MMMarkdown/Source/MMElement.m; sourceTree = "<group>"; };
+		4B400CFA201EC55A00C71AAF /* MMMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMMarkdown.h; path = Shared/MMMarkdown/Source/MMMarkdown.h; sourceTree = "<group>"; };
+		4B400CFB201EC55A00C71AAF /* MMMarkdown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMMarkdown.m; path = Shared/MMMarkdown/Source/MMMarkdown.m; sourceTree = "<group>"; };
+		4B400CFC201EC55A00C71AAF /* MMParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMParser.h; path = Shared/MMMarkdown/Source/MMParser.h; sourceTree = "<group>"; };
+		4B400CFD201EC55A00C71AAF /* MMParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMParser.m; path = Shared/MMMarkdown/Source/MMParser.m; sourceTree = "<group>"; };
+		4B400CFE201EC55A00C71AAF /* MMGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMGenerator.m; path = Shared/MMMarkdown/Source/MMGenerator.m; sourceTree = "<group>"; };
+		4B400CFF201EC55A00C71AAF /* MMDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMDocument.h; path = Shared/MMMarkdown/Source/MMDocument.h; sourceTree = "<group>"; };
+		4B400D00201EC55A00C71AAF /* MMHTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMHTMLParser.h; path = Shared/MMMarkdown/Source/MMHTMLParser.h; sourceTree = "<group>"; };
+		4B400D01201EC55A00C71AAF /* MMHTMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMHTMLParser.m; path = Shared/MMMarkdown/Source/MMHTMLParser.m; sourceTree = "<group>"; };
+		4B400D02201EC55B00C71AAF /* MMSpanParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMSpanParser.m; path = Shared/MMMarkdown/Source/MMSpanParser.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -394,6 +419,30 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		4B400CF1201EC52500C71AAF /* MMMarkdown */ = {
+			isa = PBXGroup;
+			children = (
+				4B400CF8201EC55A00C71AAF /* MMDocument_Private.h */,
+				4B400CFF201EC55A00C71AAF /* MMDocument.h */,
+				4B400CF7201EC55A00C71AAF /* MMDocument.m */,
+				4B400CF2201EC55A00C71AAF /* MMElement.h */,
+				4B400CF9201EC55A00C71AAF /* MMElement.m */,
+				4B400CF5201EC55A00C71AAF /* MMGenerator.h */,
+				4B400CFE201EC55A00C71AAF /* MMGenerator.m */,
+				4B400D00201EC55A00C71AAF /* MMHTMLParser.h */,
+				4B400D01201EC55A00C71AAF /* MMHTMLParser.m */,
+				4B400CFA201EC55A00C71AAF /* MMMarkdown.h */,
+				4B400CFB201EC55A00C71AAF /* MMMarkdown.m */,
+				4B400CFC201EC55A00C71AAF /* MMParser.h */,
+				4B400CFD201EC55A00C71AAF /* MMParser.m */,
+				4B400CF4201EC55A00C71AAF /* MMScanner.h */,
+				4B400CF3201EC55A00C71AAF /* MMScanner.m */,
+				4B400CF6201EC55A00C71AAF /* MMSpanParser.h */,
+				4B400D02201EC55B00C71AAF /* MMSpanParser.m */,
+			);
+			name = MMMarkdown;
+			sourceTree = "<group>";
+		};
 		4B7F0ACF1BAF4B77004553A6 = {
 			isa = PBXGroup;
 			children = (
@@ -531,6 +580,7 @@
 			children = (
 				4BC826CF1FAB663700A58AD4 /* SAMKeychain */,
 				4B2CAAC71F90655A00D9B10E /* CTidy */,
+				4B400CF1201EC52500C71AAF /* MMMarkdown */,
 				4B8FBDD81F867A2800906C86 /* UUToolbox */,
 			);
 			name = Shared;
@@ -677,7 +727,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B400D06201EC55B00C71AAF /* MMMarkdown.m in Sources */,
 				4B2CAB191F90667300D9B10E /* istack.c in Sources */,
+				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
 				4B2CAB141F90667300D9B10E /* utf8.c in Sources */,
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,
@@ -685,10 +737,12 @@
 				4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */,
 				4B2CAB151F90667300D9B10E /* win32tc.c in Sources */,
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
+				4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */,
 				4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */,
 				4B2CAAC41F90652800D9B10E /* RFXMLRPCRequest.m in Sources */,
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
+				4B400D05201EC55B00C71AAF /* MMElement.m in Sources */,
 				4B2CAAC51F90652800D9B10E /* RFXMLRPCParser.m in Sources */,
 				4B2CAB161F90667300D9B10E /* iconvtc.c in Sources */,
 				4B2CAB071F90667300D9B10E /* pprint.c in Sources */,
@@ -705,15 +759,18 @@
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
+				4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */,
 				4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */,
 				4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */,
 				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
 				4B2CAB121F90667300D9B10E /* lexer.c in Sources */,
+				4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
 				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
+				4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */,
 				4B2CAB0D1F90667300D9B10E /* attrs.c in Sources */,
 				4B2CAB1A1F90667300D9B10E /* config.c in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
@@ -741,6 +798,7 @@
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
+				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,

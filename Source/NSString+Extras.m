@@ -22,4 +22,15 @@
 	return [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
 }
 
+- (NSString *) rf_stripHTML
+{
+	NSRange r;
+	NSString* s = [self copy];
+	while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound) {
+		s = [s stringByReplacingCharactersInRange:r withString:@""];
+	}
+	
+	return s;
+}
+
 @end

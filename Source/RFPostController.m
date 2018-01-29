@@ -21,6 +21,8 @@
 #import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
 #import "NSImage+Extras.h"
+#import "NSString+Extras.h"
+#import "MMMarkdown.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -444,8 +446,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.remainingField.hidden = NO;
 	}
 
+	NSError* error = nil;
+	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] error:&error];
+	if (html.length > 0) {
+		// Markdown processor adds a return at the end
+		html = [html substringToIndex:html.length - 1];
+	}
+
 	NSInteger max_chars = 280;
-	NSInteger num_chars = [self currentText].length;
+//	NSInteger num_chars = [self currentText].length;
+	NSInteger num_chars = [html rf_stripHTML].length;
 	NSInteger num_remaining = max_chars - num_chars;
 
 	NSString* s = [NSString stringWithFormat:@"%ld/%ld", (long)num_chars, (long)max_chars];
