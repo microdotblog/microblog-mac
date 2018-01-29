@@ -690,6 +690,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		}
 		else if (pieces.count == 2) {
 			// e.g. /manton/12345
+			found_microblog_url = YES;
 			[self showConversationWithPostID:[pieces lastObject]];
 		}
 		else {
