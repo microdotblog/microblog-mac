@@ -167,6 +167,27 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
 }
 
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(toggleTitleField:)) {
+		if (self.isReply) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isShowingTitle) {
+			[item setState:NSControlStateValueOn];
+			return YES;
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+			return YES;
+		}
+	}
+	else {
+		return [super validateMenuItem:item];
+	}
+}
+
 - (void) updateTitleHeader
 {
 	[self updateTitleHeaderWithAnimation:YES];
@@ -174,9 +195,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) updateTitleHeaderWithAnimation:(BOOL)animate
 {
-	if (!self.isReply && ([[self currentText] length] > 280)) {
+	if (self.isShowingTitle) {
 		self.titleField.hidden = NO;
-		
+
 		if (animate) {
 			self.titleField.animator.alphaValue = 1.0;
 			self.textTopConstraint.animator.constant = kTextViewTitleShownTop;
@@ -193,12 +214,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				self.textTopConstraint.animator.constant = kTextViewTitleHiddenTop;
 			} completionHandler:^{
 				self.titleField.hidden = YES;
+				self.titleField.stringValue = @"";
 			}];
 		}
 		else {
 			self.titleField.alphaValue = 0.0;
 			self.textTopConstraint.constant = kTextViewTitleHiddenTop;
 			self.titleField.hidden = YES;
+			self.titleField.stringValue = @"";
 		}
 	}
 }
@@ -226,6 +249,19 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[[NSUserDefaults standardUserDefaults] setObject:title forKey:kLatestDraftTitlePrefKey];
 		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftTextPrefKey];
 	}
+}
+
+- (IBAction) toggleTitleField:(id)sender
+{
+	self.isShowingTitle = !self.isShowingTitle;
+	if (self.isShowingTitle) {
+		[self.titleField becomeFirstResponder];
+	}
+	else {
+		[self.textView.window makeFirstResponder:self.textView];
+	}
+	
+	[self updateTitleHeader];
 }
 
 - (IBAction) close:(id)sender
@@ -266,6 +302,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) textDidChange:(NSNotification *)notification
 {
 	[self updateRemainingChars];
+
+	if (!self.isReply && ([self currentProcessedMarkup].length > 280)) {
+		self.isShowingTitle = YES;
+	}
+
 	[self updateTitleHeader];
 }
 
@@ -360,6 +401,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return self.textStorage.string;
 }
 
+- (NSString *) currentProcessedMarkup
+{
+	NSError* error = nil;
+	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] error:&error];
+	if (html.length > 0) {
+		// Markdown processor adds a return at the end
+		html = [html substringToIndex:html.length - 1];
+	}
+	
+	return [html rf_stripHTML];
+}
+
 #pragma mark -
 
 - (IBAction) applyFormatBold:(id)sender
@@ -446,16 +499,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.remainingField.hidden = NO;
 	}
 
-	NSError* error = nil;
-	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] error:&error];
-	if (html.length > 0) {
-		// Markdown processor adds a return at the end
-		html = [html substringToIndex:html.length - 1];
-	}
-
 	NSInteger max_chars = 280;
-//	NSInteger num_chars = [self currentText].length;
-	NSInteger num_chars = [html rf_stripHTML].length;
+	NSInteger num_chars = [self currentProcessedMarkup].length;
 	NSInteger num_remaining = max_chars - num_chars;
 
 	NSString* s = [NSString stringWithFormat:@"%ld/%ld", (long)num_chars, (long)max_chars];

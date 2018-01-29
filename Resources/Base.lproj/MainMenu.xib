@@ -351,6 +351,13 @@ DQ
                                     <action selector="refreshTimeline:" target="-1" id="hUn-P2-s2o"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="EhK-8W-xZb"/>
+                            <menuItem title="Title Field" id="yuR-L8-Vdb">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="toggleTitleField:" target="-1" id="jP8-dU-adg"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="ZZH-sJ-y5R"/>
                         </items>
                     </menu>
