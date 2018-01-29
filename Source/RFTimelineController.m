@@ -160,12 +160,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) showConversationNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
-
-	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:post_id];
-	[controller view];
-	[self setupWebDelegates:controller.webView];
-
-	[self pushViewController:controller];
+	[self showConversationWithPostID:post_id];
 }
 
 - (void) showUserFollowingNotification:(NSNotification *)notification
@@ -513,6 +508,15 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self pushViewController:controller];
 }
 
+- (void) showConversationWithPostID:(NSString *)postID
+{
+	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
+
+	[self pushViewController:controller];
+}
+
 - (void) showProfileWithUsername:(NSString *)username
 {
 	[self hideOptionsMenu];
@@ -683,6 +687,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 			// e.g. /discover
 			found_microblog_url = YES;
 			[self showDiscover:nil];
+		}
+		else if (pieces.count == 2) {
+			// e.g. /manton/12345
+			[self showConversationWithPostID:[pieces lastObject]];
 		}
 		else {
 			NSString* username = [path stringByReplacingOccurrencesOfString:@"/" withString:@""];
