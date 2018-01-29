@@ -184,7 +184,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 	}
 	else {
-		return [super validateMenuItem:item];
+		return YES;
 	}
 }
 
