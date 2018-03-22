@@ -13,6 +13,7 @@
 #import "RFClient.h"
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
+#import "RFBlogsController.h"
 #import "RFMicropub.h"
 #import "RFHighlightingTextStorage.h"
 #import "UUString.h"
@@ -144,6 +145,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
 			self.blognameField.stringValue = endpoint_url.host;
 		}
+
+		NSGestureRecognizer* click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(blogNameClicked:)];
+		[self.blognameField addGestureRecognizer:click];
 	}
 }
 
@@ -165,6 +169,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
+}
+
+- (void) blogNameClicked:(NSGestureRecognizer *)gesture
+{
+	[self showBlogsMenu];
 }
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
@@ -416,6 +425,33 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 #pragma mark -
 
+- (void) showBlogsMenu
+{
+	if (self.blogsMenuPopover) {
+		[self hideBlogsMenu];
+	}
+	else {
+		RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
+		
+		self.blogsMenuPopover = [[NSPopover alloc] init];
+		self.blogsMenuPopover.contentViewController = blogs_controller;
+		self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
+
+		NSRect r = self.blognameField.bounds;
+		[self.blogsMenuPopover showRelativeToRect:r ofView:self.blognameField preferredEdge:NSRectEdgeMaxY];
+	}
+}
+
+- (void) hideBlogsMenu
+{
+	if (self.blogsMenuPopover) {
+		[self.blogsMenuPopover performClose:nil];
+		self.blogsMenuPopover = nil;
+	}
+}
+
+#pragma mark -
+
 - (IBAction) applyFormatBold:(id)sender
 {
 	[self replaceSelectionBySurrounding:@[ @"**", @"**" ]];
@@ -470,6 +506,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	NSString* s = [self currentText];
 	if ((s.length > 0) || (self.attachedPhotos.count > 0)) {
 		if (self.attachedPhotos.count > 0) {
+			if (([s characterAtIndex:0] == '@') && [self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+				NSString* msg = @"When replying to another Micro.blog user, photos are not currently supported. Start the post with different text and @-mention the user elsewhere in the post to make this a microblog post with inline photos on your site.";
+				[NSAlert rf_showOneButtonAlert:@"Replies Can't Use Photos" message:msg button:@"OK" completionHandler:NULL];
+				return;
+			}
+			
 			self.queuedPhotos = [self.attachedPhotos copy];
 			[self uploadNextPhoto];
 		}

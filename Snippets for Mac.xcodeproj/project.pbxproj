@@ -74,6 +74,10 @@
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
 		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
+		4B5EE27720632C4900C87A78 /* RFBlogsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EE27620632C4900C87A78 /* RFBlogsController.m */; };
+		4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5EE27820632C6800C87A78 /* Blogs.xib */; };
+		4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EE27C206330B800C87A78 /* RFBlogCell.m */; };
+		4B5EE280206330D100C87A78 /* BlogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5EE27E206330D100C87A78 /* BlogCell.xib */; };
 		4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */; };
 		4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B608B3F1FFE7C1900589F77 /* RFNewPostAccessoryController.m */; };
 		4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */; };
@@ -248,6 +252,12 @@
 		4B5A250C1F8497B1007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MenuCell.xib; sourceTree = "<group>"; };
 		4B5A250E1F849AF2007C548F /* RFMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMenuCell.h; path = Source/RFMenuCell.h; sourceTree = "<group>"; };
 		4B5A250F1F849AF2007C548F /* RFMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMenuCell.m; path = Source/RFMenuCell.m; sourceTree = "<group>"; };
+		4B5EE27520632C4900C87A78 /* RFBlogsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBlogsController.h; path = Source/RFBlogsController.h; sourceTree = "<group>"; };
+		4B5EE27620632C4900C87A78 /* RFBlogsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBlogsController.m; path = Source/RFBlogsController.m; sourceTree = "<group>"; };
+		4B5EE27920632C6800C87A78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Blogs.xib; sourceTree = "<group>"; };
+		4B5EE27B206330B800C87A78 /* RFBlogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBlogCell.h; path = Source/RFBlogCell.h; sourceTree = "<group>"; };
+		4B5EE27C206330B800C87A78 /* RFBlogCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBlogCell.m; path = Source/RFBlogCell.m; sourceTree = "<group>"; };
+		4B5EE27F206330D100C87A78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BlogCell.xib; sourceTree = "<group>"; };
 		4B5EF5ED1FA6120100CB7A02 /* NSImage+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSImage+Extras.h"; path = "Source/NSImage+Extras.h"; sourceTree = "<group>"; };
 		4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSImage+Extras.m"; path = "Source/NSImage+Extras.m"; sourceTree = "<group>"; };
 		4B608B3E1FFE7C1900589F77 /* RFNewPostAccessoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFNewPostAccessoryController.h; path = Source/RFNewPostAccessoryController.h; sourceTree = "<group>"; };
@@ -497,6 +507,10 @@
 				4B2CAB361F91C04200D9B10E /* RFUserController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
 				4B56505D1F8561A300B03FFD /* RFPostController.m */,
+				4B5EE27520632C4900C87A78 /* RFBlogsController.h */,
+				4B5EE27620632C4900C87A78 /* RFBlogsController.m */,
+				4B5EE27B206330B800C87A78 /* RFBlogCell.h */,
+				4B5EE27C206330B800C87A78 /* RFBlogCell.m */,
 				4BA983641FA21FF000E230CC /* RFPostContainerView.h */,
 				4BA983651FA21FF000E230CC /* RFPostContainerView.m */,
 				4B56505F1F85626200B03FFD /* RFOptionsController.h */,
@@ -559,6 +573,8 @@
 				4B5A250B1F8497B1007C548F /* MenuCell.xib */,
 				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
+				4B5EE27820632C6800C87A78 /* Blogs.xib */,
+				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -687,6 +703,7 @@
 			files = (
 				4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
+				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
@@ -701,6 +718,7 @@
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
+				4B5EE280206330D100C87A78 /* BlogCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -769,6 +787,7 @@
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
+				4B5EE27720632C4900C87A78 /* RFBlogsController.m in Sources */,
 				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
 				4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */,
 				4B2CAB0D1F90667300D9B10E /* attrs.c in Sources */,
@@ -777,6 +796,7 @@
 				4B2CAAC21F90652800D9B10E /* RFXMLRSDParser.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
 				4B2CAAC31F90652800D9B10E /* RFStack.m in Sources */,
+				4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */,
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
@@ -905,6 +925,22 @@
 				4B5A250C1F8497B1007C548F /* Base */,
 			);
 			name = MenuCell.xib;
+			sourceTree = "<group>";
+		};
+		4B5EE27820632C6800C87A78 /* Blogs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B5EE27920632C6800C87A78 /* Base */,
+			);
+			name = Blogs.xib;
+			sourceTree = "<group>";
+		};
+		4B5EE27E206330D100C87A78 /* BlogCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B5EE27F206330D100C87A78 /* Base */,
+			);
+			name = BlogCell.xib;
 			sourceTree = "<group>";
 		};
 		4B608B462003B86400589F77 /* Topic.xib */ = {
