@@ -282,17 +282,17 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="blp-LE-vz2">
+                    <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="blp-LE-vz2">
                         <rect key="frame" x="115" y="276" width="254" height="50"/>
                         <clipView key="contentView" drawsBackground="NO" id="wjv-wO-AkB">
                             <rect key="frame" x="0.0" y="0.0" width="254" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <collectionView id="DGw-lX-VIZ">
+                                <collectionView selectable="YES" id="DGw-lX-VIZ">
                                     <rect key="frame" x="0.0" y="0.0" width="254" height="158"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="BnD-9r-K4E">
-                                        <size key="itemSize" width="50" height="50"/>
+                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="7" minimumLineSpacing="7" scrollDirection="horizontal" id="BnD-9r-K4E">
+                                        <size key="itemSize" width="40" height="50"/>
                                     </collectionViewFlowLayout>
                                     <color key="primaryBackgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </collectionView>

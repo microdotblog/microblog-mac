@@ -66,6 +66,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) setupAccounts
 {
 	self.accounts = [RFSettings accounts];
+	
+	RFAccount* blank_a = [[RFAccount alloc] init];
+	blank_a.username = @"";
+	self.accounts = [self.accounts arrayByAddingObject:blank_a];
 }
 
 - (void) setupFields

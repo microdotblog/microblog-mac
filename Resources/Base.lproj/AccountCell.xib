@@ -11,38 +11,54 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <collectionViewItem id="Zcf-Zm-EqC" customClass="RFAccountCell">
             <connections>
+                <outlet property="arrowImageView" destination="Ht3-bj-yXD" id="WVe-AQ-ldJ"/>
+                <outlet property="plusField" destination="whU-Dw-oIf" id="rBL-c8-qSW"/>
                 <outlet property="profileImageView" destination="FJE-v2-pi7" id="b1k-zY-Kmw"/>
                 <outlet property="view" destination="2pU-is-SHU" id="51R-Qe-at3"/>
             </connections>
         </collectionViewItem>
         <customView id="2pU-is-SHU">
-            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="40" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ht3-bj-yXD">
-                    <rect key="frame" x="1" y="0.0" width="48" height="9"/>
+                <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ht3-bj-yXD">
+                    <rect key="frame" x="8" y="0.0" width="24" height="9"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="9" id="yUy-8C-9ez"/>
+                        <constraint firstAttribute="height" constant="9" id="Rpo-B6-Jto"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyDown" image="account_arrow" id="Dgt-D7-uQg"/>
                 </imageView>
                 <imageView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FJE-v2-pi7" customClass="RFRoundedImageView">
-                    <rect key="frame" x="5" y="10" width="40" height="40"/>
+                    <rect key="frame" x="0.0" y="10" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="40" id="p2W-TI-qcV"/>
-                        <constraint firstAttribute="height" constant="40" id="rxg-F3-zte"/>
+                        <constraint firstAttribute="height" constant="40" id="fJB-ke-VgZ"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="nkV-oF-pbF"/>
                 </imageView>
+                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="whU-Dw-oIf">
+                    <rect key="frame" x="6" y="15" width="28" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="33" id="HM5-IR-ARz"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="+" id="QlT-hv-ijX">
+                        <font key="font" size="20" name="AvenirNext-Regular"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="FJE-v2-pi7" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="5" id="WdM-te-Krr"/>
-                <constraint firstItem="FJE-v2-pi7" firstAttribute="top" secondItem="2pU-is-SHU" secondAttribute="top" id="a1m-iG-G0f"/>
-                <constraint firstAttribute="bottom" secondItem="Ht3-bj-yXD" secondAttribute="bottom" id="nHu-9Z-x7o"/>
-                <constraint firstAttribute="trailing" secondItem="Ht3-bj-yXD" secondAttribute="trailing" constant="1" id="pRG-zn-zk4"/>
-                <constraint firstItem="Ht3-bj-yXD" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="1" id="wtt-js-KQZ"/>
+                <constraint firstItem="Ht3-bj-yXD" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="8" id="AFD-l3-9f1"/>
+                <constraint firstItem="whU-Dw-oIf" firstAttribute="top" secondItem="2pU-is-SHU" secondAttribute="top" constant="2" id="B0E-aW-cb1"/>
+                <constraint firstItem="whU-Dw-oIf" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="8" id="Lxs-Rk-fnW"/>
+                <constraint firstAttribute="trailing" secondItem="FJE-v2-pi7" secondAttribute="trailing" id="Oov-aV-Djc"/>
+                <constraint firstItem="FJE-v2-pi7" firstAttribute="top" secondItem="2pU-is-SHU" secondAttribute="top" id="dVt-ft-DBK"/>
+                <constraint firstAttribute="trailing" secondItem="whU-Dw-oIf" secondAttribute="trailing" constant="8" id="ffm-5u-GLp"/>
+                <constraint firstItem="FJE-v2-pi7" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" id="hOy-gS-0Yd"/>
+                <constraint firstAttribute="bottom" secondItem="Ht3-bj-yXD" secondAttribute="bottom" id="mUN-hb-upX"/>
+                <constraint firstAttribute="trailing" secondItem="Ht3-bj-yXD" secondAttribute="trailing" constant="8" id="yCI-uX-1cg"/>
             </constraints>
-            <point key="canvasLocation" x="-83" y="36"/>
+            <point key="canvasLocation" x="-85.5" y="36"/>
         </customView>
     </objects>
     <resources>

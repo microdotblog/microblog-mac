@@ -20,7 +20,14 @@
 
 - (void) setupWithAccount:(RFAccount *)account
 {
-	[self.profileImageView loadFromURL:account.profileImageURL];
+	NSString* url = account.profileImageURL;
+	if (url) {
+		[self.profileImageView loadFromURL:account.profileImageURL];
+	}
+	else {
+		self.plusField.hidden = NO;
+	}
+	
 	self.arrowImageView.hidden = YES;
 }
 

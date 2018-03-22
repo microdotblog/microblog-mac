@@ -12,7 +12,12 @@
 
 - (NSString *) profileImageURL
 {
-	return [NSString stringWithFormat:@"https://micro.blog/%@/avatar.jpg", self.username];
+	if (self.username.length > 0) {
+		return [NSString stringWithFormat:@"https://micro.blog/%@/avatar.jpg", self.username];
+		}
+	else {
+		return nil;
+	}
 }
 
 @end
