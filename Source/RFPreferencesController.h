@@ -10,7 +10,7 @@
 
 @class RFWordpressController;
 
-@interface RFPreferencesController : NSWindowController <NSTextFieldDelegate>
+@interface RFPreferencesController : NSWindowController <NSTextFieldDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
 @property (strong, nonatomic) IBOutlet NSBox* messageHeader;
@@ -23,10 +23,12 @@
 @property (strong, nonatomic) IBOutlet NSPopUpButton* postFormatPopup;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* categoryPopup;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* textSizePopup;
+@property (strong, nonatomic) IBOutlet NSCollectionView* accountsCollectionView;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasLoadedCategories;
 @property (assign, nonatomic) BOOL isShowingWordPressMenus;
+@property (strong, nonatomic) NSArray* accounts; // RFAccount
 
 - (void) showMessage:(NSString *)message;
 

@@ -9,6 +9,9 @@
 #import "RFPreferencesController.h"
 
 #import "RFConstants.h"
+#import "RFAccount.h"
+#import "RFAccountCell.h"
+#import "RFSettings.h"
 #import "RFMacros.h"
 #import "RFXMLLinkParser.h"
 #import "RFXMLRPCRequest.h"
@@ -21,6 +24,7 @@
 #import "NSAlert+Extras.h"
 
 static CGFloat const kWordPressMenusHeight = 125;
+static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 @implementation RFPreferencesController
 
@@ -37,9 +41,11 @@ static CGFloat const kWordPressMenusHeight = 125;
 {
 	[super windowDidLoad];
 
+	[self setupAccounts];
 	[self setupFields];
 	[self setupTextPopup];
 	[self setupNotifications];
+	[self setupColletionView];
 	
 	[self updateRadioButtons];
 	[self updateMenus];
@@ -55,6 +61,11 @@ static CGFloat const kWordPressMenusHeight = 125;
 		// delay slightly to give message pane time to potentially finish
 		[self showMenusIfWordPress];
 	});
+}
+
+- (void) setupAccounts
+{
+	self.accounts = [RFSettings accounts];
 }
 
 - (void) setupFields
@@ -95,6 +106,16 @@ static CGFloat const kWordPressMenusHeight = 125;
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
+}
+
+- (void) setupColletionView
+{
+	self.accountsCollectionView.delegate = self;
+	self.accountsCollectionView.dataSource = self;
+	
+	[self.accountsCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"AccountCell" bundle:nil] forItemWithIdentifier:kAccountCellIdentifier];
+
+//	self.accountsCollectionView.constant = 0;
 }
 
 - (void) loadCategories
@@ -392,6 +413,28 @@ static CGFloat const kWordPressMenusHeight = 125;
 	}
 	
 	return s;
+}
+
+#pragma mark -
+
+- (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+	return self.accounts.count;
+}
+
+- (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+	RFAccount* a = [self.accounts objectAtIndex:indexPath.item];
+	
+	RFAccountCell* item = (RFAccountCell *)[collectionView makeItemWithIdentifier:kAccountCellIdentifier forIndexPath:indexPath];
+	[item setupWithAccount:a];
+
+	return item;
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+{
+	NSIndexPath* index_path = [indexPaths anyObject];
 }
 
 @end

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <collectionViewItem id="Zcf-Zm-EqC" customClass="RFAccountCell">
+            <connections>
+                <outlet property="profileImageView" destination="FJE-v2-pi7" id="b1k-zY-Kmw"/>
+                <outlet property="view" destination="2pU-is-SHU" id="51R-Qe-at3"/>
+            </connections>
+        </collectionViewItem>
+        <customView id="2pU-is-SHU">
+            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ht3-bj-yXD">
+                    <rect key="frame" x="1" y="0.0" width="48" height="9"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="9" id="yUy-8C-9ez"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyDown" image="account_arrow" id="Dgt-D7-uQg"/>
+                </imageView>
+                <imageView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FJE-v2-pi7" customClass="RFRoundedImageView">
+                    <rect key="frame" x="5" y="10" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="p2W-TI-qcV"/>
+                        <constraint firstAttribute="height" constant="40" id="rxg-F3-zte"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="nkV-oF-pbF"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="FJE-v2-pi7" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="5" id="WdM-te-Krr"/>
+                <constraint firstItem="FJE-v2-pi7" firstAttribute="top" secondItem="2pU-is-SHU" secondAttribute="top" id="a1m-iG-G0f"/>
+                <constraint firstAttribute="bottom" secondItem="Ht3-bj-yXD" secondAttribute="bottom" id="nHu-9Z-x7o"/>
+                <constraint firstAttribute="trailing" secondItem="Ht3-bj-yXD" secondAttribute="trailing" constant="1" id="pRG-zn-zk4"/>
+                <constraint firstItem="Ht3-bj-yXD" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="1" id="wtt-js-KQZ"/>
+            </constraints>
+            <point key="canvasLocation" x="-83" y="36"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="account_arrow" width="20.5" height="9"/>
+    </resources>
+</document>
