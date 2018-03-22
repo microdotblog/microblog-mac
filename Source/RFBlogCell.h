@@ -10,4 +10,6 @@
 
 @interface RFBlogCell : NSTableRowView
 
+@property (strong, nonatomic) IBOutlet NSTextField* nameField;
+
 @end

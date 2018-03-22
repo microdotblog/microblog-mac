@@ -9,6 +9,9 @@
 #import "RFBlogsController.h"
 
 #import "RFBlogCell.h"
+#import "RFClient.h"
+#import "RFMacros.h"
+#import "RFConstants.h"
 
 @implementation RFBlogsController
 
@@ -26,6 +29,7 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
+	[self fetchBlogs];
 }
 
 - (void) setupTable
@@ -33,27 +37,42 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BlogCell" bundle:nil] forIdentifier:@"BlogCell"];
 }
 
+- (void) fetchBlogs
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
+		self.destinations = [response.parsedResponse objectForKey:@"destination"];
+		RFDispatchMainAsync (^{
+			[self.tableView reloadData];
+		});
+	}];
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return 5;
+	return self.destinations.count;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	RFBlogCell* cell = [tableView makeViewWithIdentifier:@"BlogCell" owner:self];
 
-//	cell.titleField.stringValue = @"Timeline";
-//	cell.iconView.image = [NSImage imageNamed:@"kind_timeline"];
+	NSDictionary* destination = [self.destinations objectAtIndex:row];
+	cell.nameField.stringValue = destination[@"name"];
 
 	return cell;
 }
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
-	if (row == 0) {
-	}
+	NSDictionary* destination = [self.destinations objectAtIndex:row];
+
+	[[NSUserDefaults standardUserDefaults] setObject:destination[@"uid"] forKey:@"CurrentDestinationUID"];
+	[[NSUserDefaults standardUserDefaults] setObject:destination[@"name"] forKey:@"CurrentDestinationName"];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdatedBlogNotification object:self];
 
 	return YES;
 }

@@ -10,6 +10,7 @@ static NSString* const kLoadTimelineNotification = @"RFLoadTimeline";
 static NSString* const kOpenPostingNotification = @"RFOpenPosting";
 static NSString* const kClosePostingNotification = @"RFClosePosting";
 static NSString* const kRefreshTimelineNotification = @"RFRefreshTimeline";
+static NSString* const kUpdatedBlogNotification = @"RFUpdatedBlog";
 
 static NSString* const kLatestDraftTitlePrefKey = @"LatestDraftTitle";
 static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";

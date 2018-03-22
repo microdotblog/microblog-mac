@@ -133,7 +133,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
-			self.blognameField.stringValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"AccountDefaultSite"];
+			NSString* s = [[NSUserDefaults standardUserDefaults] stringForKey:@"CurrentDestinationName"];
+			if (s) {
+				self.blognameField.stringValue = s;
+			}
+			else {
+				self.blognameField.stringValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"AccountDefaultSite"];
+			}
 		}
 		else if ([self hasMicropubBlog]) {
 			NSString* endpoint_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMe"];
@@ -169,6 +175,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
+	
 }
 
 - (void) blogNameClicked:(NSGestureRecognizer *)gesture
@@ -353,6 +361,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (too_many_photos) {
 		[NSAlert rf_showOneButtonAlert:@"Only 10 Photos Added" message:@"The first 10 photos were added to your post." button:@"OK" completionHandler:NULL];
 	}
+}
+
+- (void) updatedBlogNotification:(NSNotification *)notification
+{
+	[self setupBlogName];
+	[self hideBlogsMenu];
 }
 
 #pragma mark -
@@ -589,6 +603,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[self showProgressHeader:@"Now publishing to your microblog..."];
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+			NSString* destination_uid = [[NSUserDefaults standardUserDefaults] stringForKey:@"CurrentDestinationUID"];
 			NSDictionary* args;
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];

@@ -12,4 +12,6 @@
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 
+@property (strong, nonatomic) NSArray* destinations; // NSDictionary (uid, name)
+
 @end

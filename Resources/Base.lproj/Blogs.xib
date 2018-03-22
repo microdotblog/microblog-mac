@@ -20,7 +20,7 @@
             <subviews>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="42" horizontalPageScroll="10" verticalLineScroll="42" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NY7-00-QOK">
                     <rect key="frame" x="0.0" y="0.0" width="262" height="299"/>
-                    <clipView key="contentView" id="n8a-jD-saw">
+                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="n8a-jD-saw">
                         <rect key="frame" x="0.0" y="0.0" width="262" height="299"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -57,6 +57,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
+                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="fyM-bG-jrU">
                         <rect key="frame" x="1" y="282" width="260" height="16"/>

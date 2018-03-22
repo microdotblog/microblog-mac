@@ -13,9 +13,11 @@
             <rect key="frame" x="0.0" y="0.0" width="242" height="40"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FWI-2X-nqX">
-                    <rect key="frame" x="12" y="8" width="218" height="24"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FWI-2X-nqX">
+                    <rect key="frame" x="12" y="9" width="218" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="5SK-Km-bK9"/>
+                    </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="manton.micro.blog" drawsBackground="YES" id="a6w-7h-oTN">
                         <font key="font" size="14" name="AvenirNext-Regular"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -23,6 +25,14 @@
                     </textFieldCell>
                 </textField>
             </subviews>
+            <constraints>
+                <constraint firstItem="FWI-2X-nqX" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="8rh-Sh-pBV"/>
+                <constraint firstItem="FWI-2X-nqX" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="7" id="jQN-mN-7Yf"/>
+                <constraint firstAttribute="trailing" secondItem="FWI-2X-nqX" secondAttribute="trailing" constant="12" id="v0a-hH-85G"/>
+            </constraints>
+            <connections>
+                <outlet property="nameField" destination="FWI-2X-nqX" id="3lk-OJ-eaY"/>
+            </connections>
             <point key="canvasLocation" x="107" y="31"/>
         </customView>
     </objects>
