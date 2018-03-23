@@ -119,7 +119,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	
 	[self.accountsCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"AccountCell" bundle:nil] forItemWithIdentifier:kAccountCellIdentifier];
 
-//	self.accountsCollectionView.constant = 0;
+	NSSet* first_item = [NSSet setWithObject:[NSIndexPath indexPathForItem:0 inSection:0]];
+	[self.accountsCollectionView selectItemsAtIndexPaths:first_item scrollPosition:NSCollectionViewScrollPositionNone];
+	RFAccount* a = [self.accounts firstObject];
+	[self showSettingsForAccount:a];
 }
 
 - (void) loadCategories
@@ -166,6 +169,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			});
 		}];
 	}
+}
+
+- (void) showSettingsForAccount:(RFAccount *)account
+{
+}
+
+- (void) promptNewAccount
+{
 }
 
 #pragma mark -
@@ -439,6 +450,13 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
 {
 	NSIndexPath* index_path = [indexPaths anyObject];
+	if ((index_path.item + 1) == self.accounts.count) {
+		[self promptNewAccount];
+	}
+	else {
+		RFAccount* a = [self.accounts objectAtIndex:index_path.item];
+		[self showSettingsForAccount:a];
+	}
 }
 
 @end
