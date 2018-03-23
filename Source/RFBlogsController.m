@@ -12,6 +12,7 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "RFConstants.h"
+#import "RFSettings.h"
 
 @implementation RFBlogsController
 
@@ -69,8 +70,8 @@
 {
 	NSDictionary* destination = [self.destinations objectAtIndex:row];
 
-	[[NSUserDefaults standardUserDefaults] setObject:destination[@"uid"] forKey:@"CurrentDestinationUID"];
-	[[NSUserDefaults standardUserDefaults] setObject:destination[@"name"] forKey:@"CurrentDestinationName"];
+	[RFSettings setString:destination[@"uid"] forKey:kCurrentDestinationUID];
+	[RFSettings setString:destination[@"name"] forKey:kCurrentDestinationName];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdatedBlogNotification object:self];
 

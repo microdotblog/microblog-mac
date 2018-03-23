@@ -139,16 +139,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				self.blognameField.stringValue = s;
 			}
 			else {
-				self.blognameField.stringValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"AccountDefaultSite"];
+				self.blognameField.stringValue = [RFSettings stringForKey:kAccountDefaultSite];
 			}
 		}
 		else if ([self hasMicropubBlog]) {
-			NSString* endpoint_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMe"];
+			NSString* endpoint_s = [RFSettings stringForKey:kExternalMicropubMe];
 			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
 			self.blognameField.stringValue = endpoint_url.host;
 		}
 		else {
-			NSString* endpoint_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+			NSString* endpoint_s = [RFSettings stringForKey:kExternalBlogEndpoint];
 			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
 			self.blognameField.stringValue = endpoint_url.host;
 		}
@@ -397,17 +397,17 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (BOOL) hasSnippetsBlog
 {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:@"HasSnippetsBlog"];
+	return [RFSettings boolForKey:kHasSnippetsBlog];
 }
 
 - (BOOL) hasMicropubBlog
 {
-	return ([[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMe"] != nil);
+	return ([RFSettings stringForKey:kExternalMicropubMe] != nil);
 }
 
 - (BOOL) prefersExternalBlog
 {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:@"ExternalBlogIsPreferred"];
+	return [RFSettings boolForKey:kExternalBlogIsPreferred];
 }
 
 - (NSString *) currentTitle
@@ -604,7 +604,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[self showProgressHeader:@"Now publishing to your microblog..."];
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-			NSString* destination_uid = [[NSUserDefaults standardUserDefaults] stringForKey:@"CurrentDestinationUID"];
+			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 			NSDictionary* args;
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];
@@ -640,7 +640,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}];
 		}
 		else if ([self hasMicropubBlog]) {
-			NSString* micropub_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubPostingEndpoint"];
+			NSString* micropub_endpoint = [RFSettings stringForKey:kExternalMicropubPostingEndpoint];
 			RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
 			NSDictionary* args;
 			if ([self.attachedPhotos count] > 0) {
@@ -689,9 +689,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}];
 		}
 		else {
-			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
-			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
-			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
+			NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint];
+			NSString* blog_s = [RFSettings stringForKey:kExternalBlogID];
+			NSString* username = [RFSettings stringForKey:kExternalBlogUsername];
 			NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
 			
 			NSString* post_text = text;
@@ -699,13 +699,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
 			RFBoolean* publish = [[RFBoolean alloc] initWithBool:YES];
 
-			NSString* post_format = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogFormat"];
-			NSString* post_category = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogCategory"];
+			NSString* post_format = [RFSettings stringForKey:kExternalBlogFormat];
+			NSString* post_category = [RFSettings stringForKey:kExternalBlogCategory];
 
 			NSArray* params;
 			NSString* method_name;
 
-			if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogApp"] isEqualToString:@"WordPress"]) {
+			if ([[RFSettings stringForKey:kExternalBlogApp] isEqualToString:@"WordPress"]) {
 				NSMutableDictionary* content = [NSMutableDictionary dictionary];
 				
 				content[@"post_status"] = @"publish";
@@ -814,7 +814,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}];
 		}
 		else if ([self hasMicropubBlog]) {
-			NSString* micropub_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMediaEndpoint"];
+			NSString* micropub_endpoint = [RFSettings stringForKey:kExternalMicropubMediaEndpoint];
 			RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
 			NSDictionary* args = @{
 			};
@@ -835,9 +835,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}];
 		}
 		else {
-			NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
-			NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
-			NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
+			NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint];
+			NSString* blog_s = [RFSettings stringForKey:kExternalBlogID];
+			NSString* username = [RFSettings stringForKey:kExternalBlogUsername];
 			NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
 			
 			NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
@@ -906,9 +906,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) checkMediaEndpoint
 {
 	if ([self hasMicropubBlog]) {
-		NSString* media_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMediaEndpoint"];
+		NSString* media_endpoint = [RFSettings stringForKey:kExternalMicropubMediaEndpoint];
 		if (media_endpoint.length == 0) {
-			NSString* micropub_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubPostingEndpoint"];
+			NSString* micropub_endpoint = [RFSettings stringForKey:kExternalMicropubPostingEndpoint];
 			RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
 			NSDictionary* args = @{
 				@"q": @"config"
@@ -918,7 +918,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 					NSString* new_endpoint = [response.parsedResponse objectForKey:@"media-endpoint"];
 					if (new_endpoint) {
-						[[NSUserDefaults standardUserDefaults] setObject:new_endpoint forKey:@"ExternalMicropubMediaEndpoint"];
+						[RFSettings setString:new_endpoint forKey:kExternalMicropubMediaEndpoint];
 						found = YES;
 					}
 				}

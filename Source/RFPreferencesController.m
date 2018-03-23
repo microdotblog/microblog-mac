@@ -207,14 +207,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) postFormatChanged:(NSPopUpButton *)sender
 {
 	NSString* s = [[sender selectedItem] title];
-	[[NSUserDefaults standardUserDefaults] setObject:s forKey:@"ExternalBlogFormat"];
+	[RFSettings setString:s forKey:kExternalBlogFormat account:self.selectedAccount];
 }
 
 - (IBAction) categoryChanged:(NSPopUpButton *)sender
 {
 	NSInteger tag = [[sender selectedItem] tag];
 	NSString* s = [NSString stringWithFormat:@"%ld", (long)tag];
-	[[NSUserDefaults standardUserDefaults] setObject:s forKey:@"ExternalBlogCategory"];
+	[RFSettings setString:s forKey:kExternalBlogCategory account:self.selectedAccount];
 }
 
 - (void) controlTextDidChange:(NSNotification *)notification

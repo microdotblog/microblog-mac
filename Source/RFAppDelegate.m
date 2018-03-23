@@ -17,6 +17,7 @@
 #import "SAMKeychain.h"
 #import "RFConstants.h"
 #import "RFSettings.h"
+#import "RFAccount.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
 #import <Fabric/Fabric.h>
@@ -251,6 +252,10 @@
 			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
 			NSNumber* is_fullaccess = [response.parsedResponse objectForKey:@"is_fullaccess"];
 			NSString* default_site = [response.parsedResponse objectForKey:@"default_site"];
+			
+			RFAccount* a = [[RFAccount alloc] init];
+			a.username = username;
+			[RFSettings addAccount:a];
 			
 			[RFSettings setString:full_name forKey:kAccountFullName];
 			[RFSettings setString:username forKey:kAccountUsername];

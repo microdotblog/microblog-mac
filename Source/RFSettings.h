@@ -28,12 +28,16 @@ static NSString* const kExternalBlogApp = @"ExternalBlogApp";
 static NSString* const kExternalBlogURL = @"ExternalBlogURL";
 static NSString* const kExternalMicropubPostingEndpoint = @"ExternalBlogURL";
 static NSString* const kExternalMicropubMediaEndpoint = @"ExternalBlogURL";
+static NSString* const kCurrentDestinationUID = @"CurrentDestinationUID";
 static NSString* const kCurrentDestinationName = @"CurrentDestinationName";
+static NSString* const kExternalBlogFormat = @"ExternalBlogFormat";
+static NSString* const kExternalBlogCategory = @"ExternalBlogCategory";
 
 @interface RFSettings : NSObject
 
 + (NSArray *) accounts; // RFAccount
 + (RFAccount *) defaultAccount;
++ (void) addAccount:(RFAccount *)account;
 + (void) migrateSettings;
 
 + (BOOL) boolForKey:(NSString *)prefKey;

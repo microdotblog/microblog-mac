@@ -44,6 +44,29 @@
 	return [[self accounts] firstObject];
 }
 
++ (void) addAccount:(RFAccount *)account
+{
+	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
+	NSMutableArray* new_usernames;
+	if (usernames.count == 0) {
+		new_usernames = [NSMutableArray arrayWithObject:account.username];
+	}
+	else {
+		BOOL found = NO;
+		for (NSString* username in usernames) {
+			if ([username isEqualToString:account.username]) {
+				found = YES;
+				break;
+			}
+		}
+		if (!found) {
+			new_usernames = [usernames mutableCopy];
+			[new_usernames addObject:account.username];
+		}
+	}
+	[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+}
+
 + (void) migrateSettings
 {
 }
