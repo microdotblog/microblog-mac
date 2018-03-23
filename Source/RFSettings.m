@@ -20,7 +20,11 @@
 	if ((users == nil) || (users.count == 0)) {
 		RFAccount* a = [[RFAccount alloc] init];
 		a.username = @"manton";
-		results = @[ a ];
+		RFAccount* a2 = [[RFAccount alloc] init];
+		a2.username = @"timetable";
+		RFAccount* a3 = [[RFAccount alloc] init];
+		a3.username = @"monday";
+		results = @[ a, a2, a3 ];
 	}
 	else {
 		NSMutableArray* new_accounts = [[NSMutableArray alloc] init];
@@ -33,6 +37,49 @@
 	}
 	
 	return results;
+}
+
++ (RFAccount *) defaultAccount
+{
+	return [[self accounts] firstObject];
+}
+
++ (void) migrateSettings
+{
+}
+
++ (BOOL) boolForKey:(NSString *)prefKey
+{
+	return [self boolForKey:prefKey account:[self defaultAccount]];
+}
+
++ (BOOL) boolForKey:(NSString *)prefKey account:(RFAccount *)account
+{
+	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
+	return [[NSUserDefaults standardUserDefaults] boolForKey:k];
+}
+
++ (void) setBool:(BOOL)value forKey:(NSString *)prefKey account:(RFAccount *)account
+{
+	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
+	[[NSUserDefaults standardUserDefaults] setBool:value forKey:k];
+}
+
++ (NSString *) stringForKey:(NSString *)prefKey
+{
+	return [self stringForKey:prefKey account:[self defaultAccount]];
+}
+
++ (NSString *) stringForKey:(NSString *)prefKey account:(RFAccount *)account
+{
+	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
+	return [[NSUserDefaults standardUserDefaults] stringForKey:k];
+}
+
++ (void) setString:(NSString *)value forKey:(NSString *)prefKey account:(RFAccount *)account
+{
+	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
+	[[NSUserDefaults standardUserDefaults] setObject:value forKey:k];
 }
 
 @end
