@@ -11,6 +11,24 @@
 @class RFAccount;
 
 static NSString* const kExternalBlogIsPreferred = @"ExternalBlogIsPreferred";
+static NSString* const kAccountUsername = @"AccountUsername";
+static NSString* const kAccountFullName = @"AccountFullName";
+static NSString* const kAccountDefaultSite = @"AccountDefaultSite";
+static NSString* const kAccountEmail = @"AccountEmail";
+static NSString* const kAccountGravatarURL = @"AccountGravatarURL";
+static NSString* const kHasSnippetsBlog = @"HasSnippetsBlog";
+static NSString* const kIsFullAccess = @"IsFullAccess";
+static NSString* const kExternalMicropubState = @"ExternalMicropubState";
+static NSString* const kExternalMicropubTokenEndpoint = @"ExternalMicropubTokenEndpoint";
+static NSString* const kExternalMicropubMe = @"ExternalMicropubMe";
+static NSString* const kExternalBlogUsername = @"ExternalBlogUsername";
+static NSString* const kExternalBlogEndpoint = @"ExternalBlogEndpoint";
+static NSString* const kExternalBlogID = @"ExternalBlogID";
+static NSString* const kExternalBlogApp = @"ExternalBlogApp";
+static NSString* const kExternalBlogURL = @"ExternalBlogURL";
+static NSString* const kExternalMicropubPostingEndpoint = @"ExternalBlogURL";
+static NSString* const kExternalMicropubMediaEndpoint = @"ExternalBlogURL";
+static NSString* const kCurrentDestinationName = @"CurrentDestinationName";
 
 @interface RFSettings : NSObject
 
@@ -20,10 +38,15 @@ static NSString* const kExternalBlogIsPreferred = @"ExternalBlogIsPreferred";
 
 + (BOOL) boolForKey:(NSString *)prefKey;
 + (BOOL) boolForKey:(NSString *)prefKey account:(RFAccount *)account;
++ (void) setBool:(BOOL)value forKey:(NSString *)prefKey;
 + (void) setBool:(BOOL)value forKey:(NSString *)prefKey account:(RFAccount *)account;
 
 + (NSString *) stringForKey:(NSString *)prefKey;
 + (NSString *) stringForKey:(NSString *)prefKey account:(RFAccount *)account;
++ (void) setString:(NSString *)value forKey:(NSString *)prefKey;
 + (void) setString:(NSString *)value forKey:(NSString *)prefKey account:(RFAccount *)account;
+
++ (void) removeObjectForKey:(NSString *)prefKey;
++ (void) removeObjectForKey:(NSString *)prefKey account:(RFAccount *)account;
 
 @end

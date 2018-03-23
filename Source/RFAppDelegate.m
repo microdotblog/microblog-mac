@@ -16,6 +16,7 @@
 #import "RFMacros.h"
 #import "SAMKeychain.h"
 #import "RFConstants.h"
+#import "RFSettings.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
 #import <Fabric/Fabric.h>
@@ -106,7 +107,7 @@
 {
 	BOOL show_timeline = NO;
 	
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	if (username) {
 		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 		if (token) {
@@ -211,7 +212,7 @@
 
 - (void) loadTimelineWithToken:(NSString *)token
 {
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	[SAMKeychain setPassword:token forService:@"Micro.blog" account:username];
 	
 	[self.welcomeController close];
@@ -249,15 +250,15 @@
 			NSString* gravatar_url = [response.parsedResponse objectForKey:@"gravatar_url"];
 			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
 			NSNumber* is_fullaccess = [response.parsedResponse objectForKey:@"is_fullaccess"];
-			NSNumber* default_site = [response.parsedResponse objectForKey:@"default_site"];
+			NSString* default_site = [response.parsedResponse objectForKey:@"default_site"];
 			
-			[[NSUserDefaults standardUserDefaults] setObject:full_name forKey:@"AccountFullName"];
-			[[NSUserDefaults standardUserDefaults] setObject:username forKey:@"AccountUsername"];
-			[[NSUserDefaults standardUserDefaults] setObject:default_site forKey:@"AccountDefaultSite"];
-			[[NSUserDefaults standardUserDefaults] setObject:email forKey:@"AccountEmail"];
-			[[NSUserDefaults standardUserDefaults] setObject:gravatar_url forKey:@"AccountGravatarURL"];
-			[[NSUserDefaults standardUserDefaults] setBool:[has_site boolValue] forKey:@"HasSnippetsBlog"];
-			[[NSUserDefaults standardUserDefaults] setBool:[is_fullaccess boolValue] forKey:@"IsFullAccess"];
+			[RFSettings setString:full_name forKey:kAccountFullName];
+			[RFSettings setString:username forKey:kAccountUsername];
+			[RFSettings setString:default_site forKey:kAccountDefaultSite];
+			[RFSettings setString:email forKey:kAccountEmail];
+			[RFSettings setString:gravatar_url forKey:kAccountGravatarURL];
+			[RFSettings setBool:[has_site boolValue] forKey:kHasSnippetsBlog];
+			[RFSettings setBool:[is_fullaccess boolValue] forKey:kIsFullAccess];
 		
 			RFDispatchMainAsync (^{
 //				[Answers logLoginWithMethod:@"Token" success:@YES customAttributes:nil];
@@ -279,8 +280,8 @@
 		return;
 	}
 	
-	NSString* saved_state = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubState"];
-	NSString* saved_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubTokenEndpoint"];
+	NSString* saved_state = [RFSettings stringForKey:kExternalMicropubState];
+	NSString* saved_endpoint = [RFSettings stringForKey:kExternalMicropubTokenEndpoint];
 	
 	if (![state isEqualToString:saved_state]) {
 		[NSAlert rf_showOneButtonAlert:@"Micropub Error" message:@"Authorization state did not match." button:@"OK" completionHandler:NULL];
@@ -312,8 +313,8 @@
 						[NSAlert rf_showOneButtonAlert:@"Micropub Error" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
-						[[NSUserDefaults standardUserDefaults] setObject:me forKey:@"ExternalMicropubMe"];
-						[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
+						[RFSettings setString:me forKey:kExternalMicropubMe];
+						[RFSettings setBool:YES forKey:kExternalBlogIsPreferred];
 						[SAMKeychain setPassword:access_token forService:@"ExternalMicropub" account:@"default"];
 					}
 					

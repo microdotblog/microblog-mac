@@ -173,6 +173,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) showSettingsForAccount:(RFAccount *)account
 {
+	self.selectedAccount = account;
+	
+	// ...
 }
 
 - (void) promptNewAccount
@@ -183,14 +186,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (IBAction) setHostedBlog:(id)sender
 {
-	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ExternalBlogIsPreferred"];
+	[RFSettings setBool:NO forKey:kExternalBlogIsPreferred account:self.selectedAccount];
 	[self updateRadioButtons];
 	[self showMenusIfWordPress];
 }
 
 - (IBAction) setWordPressBlog:(id)sender
 {
-	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
+	[RFSettings setBool:YES forKey:kExternalBlogIsPreferred account:self.selectedAccount];
 	[self updateRadioButtons];
 	[self showMenusIfWordPress];
 }

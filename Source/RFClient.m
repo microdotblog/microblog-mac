@@ -9,6 +9,7 @@
 #import "RFClient.h"
 
 #import "NSString+Extras.h"
+#import "RFSettings.h"
 #import "SAMKeychain.h"
 
 //static NSString* const kServerSchemeAndHostname = @"http://localhost:3000";
@@ -47,7 +48,7 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 		headers = [NSMutableDictionary dictionary];
 	}
 
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 	if (token) {
 		[headers setObject:[NSString stringWithFormat:@"Token %@", token] forKey:@"Authorization"];

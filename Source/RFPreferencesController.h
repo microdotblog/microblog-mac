@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RFAccount;
 @class RFWordpressController;
 
 @interface RFPreferencesController : NSWindowController <NSTextFieldDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
@@ -29,6 +30,7 @@
 @property (assign, nonatomic) BOOL hasLoadedCategories;
 @property (assign, nonatomic) BOOL isShowingWordPressMenus;
 @property (strong, nonatomic) NSArray* accounts; // RFAccount
+@property (strong, nonatomic) RFAccount* selectedAccount;
 
 - (void) showMessage:(NSString *)message;
 

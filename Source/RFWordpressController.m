@@ -11,6 +11,7 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "RFMacros.h"
+#import "RFSettings.h"
 #import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
 
@@ -46,17 +47,17 @@
 
 - (void) saveAccountWithEndpointURL:(NSString *)xmlrpcEndpointURL blogID:(NSString *)blogID
 {
-	[[NSUserDefaults standardUserDefaults] setObject:self.usernameField.stringValue forKey:@"ExternalBlogUsername"];
-	[[NSUserDefaults standardUserDefaults] setObject:xmlrpcEndpointURL forKey:@"ExternalBlogEndpoint"];
-	[[NSUserDefaults standardUserDefaults] setObject:blogID forKey:@"ExternalBlogID"];
-	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ExternalBlogIsPreferred"];
+	[RFSettings setString:self.usernameField.stringValue forKey:kExternalBlogUsername];
+	[RFSettings setString:xmlrpcEndpointURL forKey:kExternalBlogEndpoint];
+	[RFSettings setString:blogID forKey:kExternalBlogID];
+	[RFSettings setBool:YES forKey:kExternalBlogIsPreferred];
 	[SAMKeychain setPassword:self.passwordField.stringValue forService:@"ExternalBlog" account:self.usernameField.stringValue];
 	
 	if ([xmlrpcEndpointURL containsString:@"xmlrpc.php"]) {
-		[[NSUserDefaults standardUserDefaults] setObject:@"WordPress" forKey:@"ExternalBlogApp"];
+		[RFSettings setString:@"WordPress" forKey:kExternalBlogApp];
 	}
 	else {
-		[[NSUserDefaults standardUserDefaults] setObject:@"Other" forKey:@"ExternalBlogApp"];
+		[RFSettings setString:@"Other" forKey:kExternalBlogApp];
 	}
 }
 
@@ -101,7 +102,7 @@
 				[self verifyUsername:self.usernameField.stringValue password:self.passwordField.stringValue forEndpoint:xmlrpcEndpointURL withCompletion:^{
 					[self saveAccountWithEndpointURL:xmlrpcEndpointURL blogID:blogID];
 
-					[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMe"];
+					[RFSettings removeObjectForKey:kExternalMicropubMe];
 
 					[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 				}];

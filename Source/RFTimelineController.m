@@ -19,6 +19,7 @@
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
 #import "RFConstants.h"
+#import "RFSettings.h"
 #import "RFMacros.h"
 #import "RFClient.h"
 #import "RFStack.h"
@@ -97,9 +98,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) setupUser
 {
-	NSString* full_name = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountFullName"];
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	NSString* gravatar_url = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountGravatarURL"];
+	NSString* full_name = [RFSettings stringForKey:kAccountFullName];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
+	NSString* gravatar_url = [RFSettings stringForKey:kAccountGravatarURL];
 	
 	self.fullNameField.stringValue = full_name;
 	self.usernameField.stringValue = [NSString stringWithFormat:@"@%@", username];
@@ -190,9 +191,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	[self hideOptionsMenu];
 
-	BOOL has_hosted = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasSnippetsBlog"];
-	NSString* micropub = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalMicropubMe"];
-	NSString* xmlrpc = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
+	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
+	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
 	if (has_hosted || micropub || xmlrpc) {
 		if (!self.postController) {
 			RFPostController* controller = [[RFPostController alloc] init];
@@ -226,7 +227,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 	[self closeOverlays];
 
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 	
 	CGFloat scroller_width = 0;
@@ -312,33 +313,31 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) signOut:(id)sender
 {
-	NSString* microblog_username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
-	NSString* external_username = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogUsername"];
+	NSString* microblog_username = [RFSettings stringForKey:kAccountUsername];
+	NSString* external_username = [RFSettings stringForKey:kExternalBlogUsername];
 
 	[SAMKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
 	[SAMKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
 	[SAMKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
 
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountUsername"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountGravatarURL"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AccountDefaultSite"];
+	[RFSettings removeObjectForKey:kAccountUsername];
+	[RFSettings removeObjectForKey:kAccountGravatarURL];
+	[RFSettings removeObjectForKey:kAccountDefaultSite];
 
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HasSnippetsBlog"];
+	[RFSettings removeObjectForKey:kHasSnippetsBlog];
 
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogUsername"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogApp"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogEndpoint"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogID"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogIsPreferred"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalBlogURL"];
+	[RFSettings removeObjectForKey:kExternalBlogUsername];
+	[RFSettings removeObjectForKey:kExternalBlogApp];
+	[RFSettings removeObjectForKey:kExternalBlogEndpoint];
+	[RFSettings removeObjectForKey:kExternalBlogID];
+	[RFSettings removeObjectForKey:kExternalBlogIsPreferred];
+	[RFSettings removeObjectForKey:kExternalBlogURL];
 
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMe"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubTokenEndpoint"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubPostingEndpoint"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubMediaEndpoint"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ExternalMicropubState"];
-
-//	[Answers logCustomEventWithName:@"Sign Out" customAttributes:nil];
+	[RFSettings removeObjectForKey:kExternalMicropubMe];
+	[RFSettings removeObjectForKey:kExternalMicropubTokenEndpoint];
+	[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint];
+	[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint];
+	[RFSettings removeObjectForKey:kExternalMicropubState];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }

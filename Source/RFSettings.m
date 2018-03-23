@@ -59,11 +59,18 @@
 	return [[NSUserDefaults standardUserDefaults] boolForKey:k];
 }
 
++ (void) setBool:(BOOL)value forKey:(NSString *)prefKey
+{
+	[self setBool:value forKey:prefKey account:[self defaultAccount]];
+}
+
 + (void) setBool:(BOOL)value forKey:(NSString *)prefKey account:(RFAccount *)account
 {
 	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
 	[[NSUserDefaults standardUserDefaults] setBool:value forKey:k];
 }
+
+#pragma mark -
 
 + (NSString *) stringForKey:(NSString *)prefKey
 {
@@ -76,10 +83,28 @@
 	return [[NSUserDefaults standardUserDefaults] stringForKey:k];
 }
 
++ (void) setString:(NSString *)value forKey:(NSString *)prefKey
+{
+	[self setString:value forKey:prefKey account:[self defaultAccount]];
+}
+
 + (void) setString:(NSString *)value forKey:(NSString *)prefKey account:(RFAccount *)account
 {
 	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
 	[[NSUserDefaults standardUserDefaults] setObject:value forKey:k];
+}
+
+#pragma mark -
+
++ (void) removeObjectForKey:(NSString *)prefKey
+{
+	[self removeObjectForKey:prefKey account:[self defaultAccount]];
+}
+
++ (void) removeObjectForKey:(NSString *)prefKey account:(RFAccount *)account
+{
+	NSString* k = [NSString stringWithFormat:@"%@_%@", account.username, prefKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:k];
 }
 
 @end

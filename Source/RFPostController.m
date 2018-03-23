@@ -15,6 +15,7 @@
 #import "RFPhotoCell.h"
 #import "RFBlogsController.h"
 #import "RFMicropub.h"
+#import "RFSettings.h"
 #import "RFHighlightingTextStorage.h"
 #import "UUString.h"
 #import "RFXMLRPCRequest.h"
@@ -101,8 +102,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.textView.string = self.initialText;
 	}
 	else {
-		NSString* title = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftTitlePrefKey];
-		NSString* draft = [[NSUserDefaults standardUserDefaults] stringForKey:kLatestDraftTextPrefKey];
+		NSString* title = [RFSettings stringForKey:kLatestDraftTitlePrefKey];
+		NSString* draft = [RFSettings stringForKey:kLatestDraftTextPrefKey];
 		if (title) {
 			self.titleField.stringValue = title;
 		}
@@ -133,7 +134,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
-			NSString* s = [[NSUserDefaults standardUserDefaults] stringForKey:@"CurrentDestinationName"];
+			NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
 			if (s) {
 				self.blognameField.stringValue = s;
 			}
