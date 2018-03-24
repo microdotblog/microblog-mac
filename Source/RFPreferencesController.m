@@ -180,6 +180,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) promptNewAccount
 {
+	NSString* url = @"https://micro.blog/account/mac";
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
 }
 
 #pragma mark -
@@ -449,6 +451,17 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 	return item;
 }
+
+//- (NSSet<NSIndexPath *> *) collectionView:(NSCollectionView *)collectionView shouldSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+//{
+//	NSIndexPath* index_path = [indexPaths anyObject];
+//	if ((index_path.item + 1) == self.accounts.count) {
+//		return nil;
+//	}
+//	else {
+//		return indexPaths;
+//	}
+//}
 
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
 {

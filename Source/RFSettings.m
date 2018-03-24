@@ -14,29 +14,15 @@
 
 + (NSArray *) accounts
 {
-	NSArray* results = @[];
-	
+	NSMutableArray* new_accounts = [[NSMutableArray alloc] init];
 	NSArray* users = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
-	if ((users == nil) || (users.count == 0)) {
+	for (NSString* username in users) {
 		RFAccount* a = [[RFAccount alloc] init];
-		a.username = @"manton";
-		RFAccount* a2 = [[RFAccount alloc] init];
-		a2.username = @"timetable";
-		RFAccount* a3 = [[RFAccount alloc] init];
-		a3.username = @"monday";
-		results = @[ a, a2, a3 ];
-	}
-	else {
-		NSMutableArray* new_accounts = [[NSMutableArray alloc] init];
-		for (NSString* username in users) {
-			RFAccount* a = [[RFAccount alloc] init];
-			a.username = username;
-			[new_accounts addObject:a];
-		}
-		results = new_accounts;
+		a.username = username;
+		[new_accounts addObject:a];
 	}
 	
-	return results;
+	return new_accounts;
 }
 
 + (RFAccount *) defaultAccount
