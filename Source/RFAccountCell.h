@@ -17,6 +17,8 @@
 @property (strong, nonatomic) IBOutlet NSImageView* arrowImageView;
 @property (strong, nonatomic) IBOutlet NSTextField* plusField;
 
+@property (strong, nonatomic) RFAccount* account;
+
 - (void) setupWithAccount:(RFAccount *)account;
 
 @end

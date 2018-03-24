@@ -42,11 +42,12 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[super windowDidLoad];
 
 	[self setupAccounts];
-	[self setupFields];
 	[self setupTextPopup];
 	[self setupNotifications];
 	[self setupColletionView];
+	[self selectFirstAccount];
 	
+	[self setupFields];
 	[self updateRadioButtons];
 	[self updateMenus];
 	
@@ -57,6 +58,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
 {
 	[self loadCategories];
+	[self refreshAccounts];
+
 	RFDispatchSeconds (0.5, ^{
 		// delay slightly to give message pane time to potentially finish
 		[self showMenusIfWordPress];
@@ -77,9 +80,12 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.returnButton.alphaValue = 0.0;
 	self.websiteField.delegate = self;
 	
-	NSString* s = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogURL"];
+	NSString* s = [RFSettings stringForKey:kExternalBlogURL account:self.selectedAccount];
 	if (s) {
 		self.websiteField.stringValue = s;
+	}
+	else {
+		self.websiteField.stringValue = @"";
 	}
 }
 
@@ -118,22 +124,17 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.accountsCollectionView.dataSource = self;
 	
 	[self.accountsCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"AccountCell" bundle:nil] forItemWithIdentifier:kAccountCellIdentifier];
-
-	NSSet* first_item = [NSSet setWithObject:[NSIndexPath indexPathForItem:0 inSection:0]];
-	[self.accountsCollectionView selectItemsAtIndexPaths:first_item scrollPosition:NSCollectionViewScrollPositionNone];
-	RFAccount* a = [self.accounts firstObject];
-	[self showSettingsForAccount:a];
 }
 
 - (void) loadCategories
 {
-	NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
+	NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint account:self.selectedAccount];
 	if (xmlrpc_endpoint) {
 		[self.progressSpinner startAnimation:nil];
 
-		NSString* xmlrpc_endpoint = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogEndpoint"];
-		NSString* blog_s = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogID"];
-		NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:@"ExternalBlogUsername"];
+		NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint account:self.selectedAccount];
+		NSString* blog_s = [RFSettings stringForKey:kExternalBlogID account:self.selectedAccount];
+		NSString* username = [RFSettings stringForKey:kExternalBlogUsername account:self.selectedAccount];
 		NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
 		
 		NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
@@ -171,11 +172,30 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	}
 }
 
+- (void) selectFirstAccount
+{
+	NSSet* first_item = [NSSet setWithObject:[NSIndexPath indexPathForItem:0 inSection:0]];
+	[self.accountsCollectionView selectItemsAtIndexPaths:first_item scrollPosition:NSCollectionViewScrollPositionNone];
+	RFAccount* a = [self.accounts firstObject];
+	[self showSettingsForAccount:a];
+}
+
+- (void) refreshAccounts
+{
+	[self setupAccounts];
+	[self.accountsCollectionView reloadData];
+	[self selectFirstAccount];
+}
+
 - (void) showSettingsForAccount:(RFAccount *)account
 {
 	self.selectedAccount = account;
 	
-	// ...
+	[self setupFields];
+	[self updateRadioButtons];
+	[self updateMenus];
+
+	[self showMenusIfWordPress];
 }
 
 - (void) promptNewAccount
@@ -243,7 +263,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	NSInteger tag = [[sender selectedItem] tag];
 	[[NSUserDefaults standardUserDefaults] setInteger:tag forKey:kTextSizePrefKey];
 
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"AccountUsername"];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&fontsize=%ld", token, (long)tag];
@@ -288,8 +308,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSRect win_r = self.window.frame;
 
-	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:@"ExternalBlogIsPreferred"] && [[defaults objectForKey:@"ExternalBlogApp"] isEqualToString:@"WordPress"]) {
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred account:self.selectedAccount] && [[RFSettings stringForKey:kExternalBlogApp account:self.selectedAccount] isEqualToString:@"WordPress"]) {
 		if (!self.isShowingWordPressMenus) {
 			win_r.size.height += kWordPressMenusHeight;
 			win_r.origin.y -= kWordPressMenusHeight;
@@ -318,7 +337,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) updateRadioButtons
 {
-	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"ExternalBlogIsPreferred"]) {
+	if (![RFSettings boolForKey:kExternalBlogIsPreferred account:self.selectedAccount]) {
 		self.publishHostedBlog.state = NSControlStateValueOn;
 		self.publishWordPressBlog.state = NSControlStateValueOff;
 		self.websiteField.enabled = NO;
@@ -332,8 +351,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 -  (void) updateMenus
 {
-	NSString* selected_format = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogFormat"];
-	NSString* selected_category = [[NSUserDefaults standardUserDefaults] stringForKey:@"ExternalBlogCategory"];
+	NSString* selected_format = [RFSettings stringForKey:kExternalBlogFormat account:self.selectedAccount];
+	NSString* selected_category = [RFSettings stringForKey:kExternalBlogCategory account:self.selectedAccount];
 
 	if (self.hasLoadedCategories) {
 		self.postFormatPopup.enabled = YES;
@@ -364,7 +383,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.progressSpinner startAnimation:nil];
 
 	NSString* full_url = [self normalizeURL:self.websiteField.stringValue];
-	[[NSUserDefaults standardUserDefaults] setObject:full_url forKey:@"ExternalBlogURL"];
+	[RFSettings setString:full_url forKey:kExternalBlogURL account:self.selectedAccount];
 
 	UUHttpRequest* request = [UUHttpRequest getRequest:full_url queryArguments:nil];
 	[UUHttpSession executeRequest:request completionHandler:^(UUHttpResponse* response) {
@@ -405,9 +424,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 					[auth_with_params appendString:@"&scope=create"];
 					[auth_with_params appendString:@"&response_type=code"];
 
-					[[NSUserDefaults standardUserDefaults] setObject:micropub_state forKey:@"ExternalMicropubState"];
-					[[NSUserDefaults standardUserDefaults] setObject:token_endpoint forKey:@"ExternalMicropubTokenEndpoint"];
-					[[NSUserDefaults standardUserDefaults] setObject:micropub_endpoint forKey:@"ExternalMicropubPostingEndpoint"];
+					[RFSettings setString:micropub_state forKey:kExternalMicropubState account:self.selectedAccount];
+					[RFSettings setString:token_endpoint forKey:kExternalMicropubTokenEndpoint account:self.selectedAccount];
+					[RFSettings setString:micropub_endpoint forKey:kExternalMicropubPostingEndpoint account:self.selectedAccount];
 
 					RFDispatchMainAsync (^{
 						[self.progressSpinner stopAnimation:nil];

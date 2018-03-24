@@ -16,6 +16,11 @@
 {
 	NSMutableArray* new_accounts = [[NSMutableArray alloc] init];
 	NSArray* users = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
+
+//	users = [users sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+//		return [obj1 compare:obj2];
+//	}];
+	
 	for (NSString* username in users) {
 		RFAccount* a = [[RFAccount alloc] init];
 		a.username = username;
@@ -33,7 +38,7 @@
 + (void) addAccount:(RFAccount *)account
 {
 	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
-	NSMutableArray* new_usernames;
+	NSMutableArray* new_usernames = nil;
 	if (usernames.count == 0) {
 		new_usernames = [NSMutableArray arrayWithObject:account.username];
 	}
@@ -50,7 +55,10 @@
 			[new_usernames addObject:account.username];
 		}
 	}
-	[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+
+	if (new_usernames) {
+		[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+	}
 }
 
 + (void) migrateSettings
