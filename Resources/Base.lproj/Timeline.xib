@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="13196"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="13771"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,7 +34,7 @@
             <value key="maxSize" type="size" width="540" height="2000"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fkA-Zg-Ds4">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
@@ -43,7 +43,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="179" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <box fixedFrame="YES" boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="aQA-f2-uq2">
+                                    <box fixedFrame="YES" boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="aQA-f2-uq2" customClass="RFAccountPopoverBox">
                                         <rect key="frame" x="0.0" y="534" width="181" height="66"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <view key="contentView" ambiguous="YES" id="ppR-hI-pWf">
@@ -63,7 +63,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqw-tG-vVO">
                                         <rect key="frame" x="62" y="564" width="108" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Test User" id="D2q-sQ-CLj">
+                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" sendsActionOnEndEditing="YES" title="Test User" id="D2q-sQ-CLj">
                                             <font key="font" size="13" name="Avenir-Medium"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -72,7 +72,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HD9-1U-V6d">
                                         <rect key="frame" x="62" y="545" width="108" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="@test" id="3ND-A9-PxE">
+                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" sendsActionOnEndEditing="YES" title="@test" id="3ND-A9-PxE">
                                             <font key="font" size="13" name="Avenir-Medium"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -161,17 +161,27 @@
                                         </constraints>
                                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </box>
+                                    <imageView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" alphaValue="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="Kz4-NB-ecZ">
+                                        <rect key="frame" x="161" y="556" width="16" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="19" id="JWa-4M-ozC"/>
+                                            <constraint firstAttribute="width" constant="16" id="q1T-au-JH4"/>
+                                        </constraints>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="down_arrow" id="yNO-Te-Uk5"/>
+                                    </imageView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="yDk-PI-ElO" secondAttribute="bottom" constant="-1" id="6Qk-oA-eTh"/>
                                     <constraint firstAttribute="trailing" secondItem="yDk-PI-ElO" secondAttribute="trailing" constant="-2" id="AtL-dW-vk5"/>
                                     <constraint firstAttribute="trailing" secondItem="AoS-OI-5pj" secondAttribute="trailing" id="EZT-aJ-PIV"/>
+                                    <constraint firstAttribute="trailing" secondItem="Kz4-NB-ecZ" secondAttribute="trailing" constant="2" id="MML-OD-NHy"/>
                                     <constraint firstItem="yDk-PI-ElO" firstAttribute="leading" secondItem="kIC-ao-4PD" secondAttribute="leading" constant="-1" id="Omv-cT-Kmy"/>
                                     <constraint firstItem="AoS-OI-5pj" firstAttribute="leading" secondItem="kIC-ao-4PD" secondAttribute="leading" id="QUx-ck-Ppc"/>
                                     <constraint firstItem="ETu-Lx-u0c" firstAttribute="top" secondItem="kIC-ao-4PD" secondAttribute="top" constant="9" id="R6o-MG-RiI"/>
                                     <constraint firstAttribute="bottom" secondItem="AoS-OI-5pj" secondAttribute="bottom" id="en9-9d-GiT"/>
                                     <constraint firstItem="yDk-PI-ElO" firstAttribute="top" secondItem="ETu-Lx-u0c" secondAttribute="bottom" constant="8" id="iBN-LD-bwr"/>
                                     <constraint firstItem="ETu-Lx-u0c" firstAttribute="leading" secondItem="kIC-ao-4PD" secondAttribute="leading" constant="8" id="jmH-lh-YmY"/>
+                                    <constraint firstItem="Kz4-NB-ecZ" firstAttribute="top" secondItem="kIC-ao-4PD" secondAttribute="top" constant="25" id="wZW-3s-wgN"/>
                                 </constraints>
                             </customView>
                             <customView id="tQN-jO-jUp">
@@ -257,4 +267,7 @@
             <point key="canvasLocation" x="-60" y="239"/>
         </window>
     </objects>
+    <resources>
+        <image name="down_arrow" width="13" height="5"/>
+    </resources>
 </document>
