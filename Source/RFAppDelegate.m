@@ -126,6 +126,7 @@
 - (void) setupDefaults
 {
 	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ kTextSizePrefKey: @(kTextSizeMedium) }];
+	[RFSettings migrateSettings];
 }
 
 - (void) setupCrashlytics
