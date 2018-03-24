@@ -105,6 +105,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.fullNameField.stringValue = full_name;
 	self.usernameField.stringValue = [NSString stringWithFormat:@"@%@", username];
 	[self.profileImageView loadFromURL:gravatar_url];
+
+	self.fullNameField.nextResponder = self.profileBox;
+	self.usernameField.nextResponder = self.profileBox;
 }
 
 - (void) setupNotifications
@@ -117,6 +120,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
 
 //	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
@@ -178,6 +182,15 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) refreshTimelineNotification:(NSNotification *)notification
 {
 	[self refreshTimeline:nil];
+}
+
+- (void) switchAccountNotification:(NSNotification *)notification
+{
+	NSString* username = [notification.userInfo objectForKey:kSwitchAccountUsernameKey];
+	[[NSUserDefaults standardUserDefaults] setObject:username forKey:kCurrentUsername];
+	
+	[self setupUser];
+	[self showTimeline:nil];
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification

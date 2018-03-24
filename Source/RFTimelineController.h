@@ -34,6 +34,7 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* messageTopConstraint;
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* messageSpinner;
+@property (strong, nonatomic) IBOutlet NSBox* profileBox;
 
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;

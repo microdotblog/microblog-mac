@@ -258,13 +258,13 @@
 			a.username = username;
 			[RFSettings addAccount:a];
 			
-			[RFSettings setString:full_name forKey:kAccountFullName];
-			[RFSettings setString:username forKey:kAccountUsername];
-			[RFSettings setString:default_site forKey:kAccountDefaultSite];
-			[RFSettings setString:email forKey:kAccountEmail];
-			[RFSettings setString:gravatar_url forKey:kAccountGravatarURL];
-			[RFSettings setBool:[has_site boolValue] forKey:kHasSnippetsBlog];
-			[RFSettings setBool:[is_fullaccess boolValue] forKey:kIsFullAccess];
+			[RFSettings setString:full_name forKey:kAccountFullName account:a];
+			[RFSettings setString:username forKey:kAccountUsername account:a];
+			[RFSettings setString:default_site forKey:kAccountDefaultSite account:a];
+			[RFSettings setString:email forKey:kAccountEmail account:a];
+			[RFSettings setString:gravatar_url forKey:kAccountGravatarURL account:a];
+			[RFSettings setBool:[has_site boolValue] forKey:kHasSnippetsBlog account:a];
+			[RFSettings setBool:[is_fullaccess boolValue] forKey:kIsFullAccess account:a];
 		
 			RFDispatchMainAsync (^{
 //				[Answers logLoginWithMethod:@"Token" success:@YES customAttributes:nil];

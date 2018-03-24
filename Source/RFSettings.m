@@ -32,7 +32,24 @@
 
 + (RFAccount *) defaultAccount
 {
-	return [[self accounts] firstObject];
+	NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentUsername];
+	NSArray* accounts = [self accounts];
+	RFAccount* found_account = nil;
+	if (username) {
+		for (RFAccount* a in accounts) {
+			if ([a.username isEqualToString:username]) {
+				found_account = a;
+				break;
+			}
+		}
+	}
+	
+	if (found_account) {
+		return found_account;
+	}
+	else {
+		return [accounts firstObject];
+	}
 }
 
 + (void) addAccount:(RFAccount *)account

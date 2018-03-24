@@ -54,7 +54,7 @@
 - (void) switchAccount:(NSMenuItem *)item
 {
 	RFAccount* a = item.representedObject;
-	NSLog (@"switch account: %@", a.username);
+	[[NSNotificationCenter defaultCenter] postNotificationName:kSwitchAccountNotification object:self userInfo:@{ kSwitchAccountUsernameKey: a.username }];
 }
 
 - (void) mouseEntered:(NSEvent *)event

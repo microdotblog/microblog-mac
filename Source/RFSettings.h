@@ -10,6 +10,7 @@
 
 @class RFAccount;
 
+static NSString* const kCurrentUsername = @"CurrentUsername";
 static NSString* const kExternalBlogIsPreferred = @"ExternalBlogIsPreferred";
 static NSString* const kAccountUsername = @"AccountUsername";
 static NSString* const kAccountFullName = @"AccountFullName";
