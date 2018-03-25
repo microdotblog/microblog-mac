@@ -11,5 +11,6 @@
 @interface RFRoundedImageView : NSImageView
 
 - (void) loadFromURL:(NSString *)url;
+- (void) loadFromURL:(NSString *)url completion:(void (^)(void))handler;
 
 @end

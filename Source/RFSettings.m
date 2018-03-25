@@ -83,10 +83,11 @@
 	NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:kAccountUsername];
 	if (username.length > 0) {
 		NSArray* keys = @[ kExternalBlogIsPreferred, kAccountUsername, kAccountFullName, kAccountDefaultSite, kAccountEmail, kAccountGravatarURL, kHasSnippetsBlog, kIsFullAccess, kExternalMicropubState, kExternalMicropubTokenEndpoint, kExternalMicropubMe, kExternalBlogUsername, kExternalBlogEndpoint, kExternalBlogID, kExternalBlogApp, kExternalBlogURL, kExternalMicropubPostingEndpoint, kExternalMicropubMediaEndpoint, kCurrentDestinationUID, kCurrentDestinationName, kExternalBlogFormat, kExternalBlogCategory ];
-		for (NSString* k in keys) {
-			NSString* new_k = [NSString stringWithFormat:@"%@_%@", username, k];
-			id val = [[NSUserDefaults standardUserDefaults] objectForKey:k];
+		for (NSString* old_k in keys) {
+			NSString* new_k = [NSString stringWithFormat:@"%@_%@", username, old_k];
+			id val = [[NSUserDefaults standardUserDefaults] objectForKey:old_k];
 			[[NSUserDefaults standardUserDefaults] setObject:val forKey:new_k];
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:old_k];
 		}
 	}
 }

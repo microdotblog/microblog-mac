@@ -18,16 +18,27 @@
 	[super viewDidLoad];
 }
 
+- (void) prepareForReuse
+{
+	[super prepareForReuse];
+
+	self.account = nil;
+	self.profileImageView.image = nil;
+	self.plusField.hidden = YES;
+	self.arrowImageView.hidden = YES;
+}
+
 - (void) setupWithAccount:(RFAccount *)account
 {
 	self.account = account;
+	self.profileImageView.image = nil;
+		
 	NSString* url = account.profileImageURL;
 	if (url) {
 		[self.profileImageView loadFromURL:account.profileImageURL];
 		self.plusField.hidden = YES;
 	}
 	else {
-		self.profileImageView.image = nil;
 		self.plusField.hidden = NO;
 	}
 	

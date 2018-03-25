@@ -27,6 +27,7 @@
 @property (strong, nonatomic) IBOutlet NSCollectionView* accountsCollectionView;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
+@property (assign, nonatomic) BOOL hasShownWindow;
 @property (assign, nonatomic) BOOL hasLoadedCategories;
 @property (assign, nonatomic) BOOL isShowingWordPressMenus;
 @property (strong, nonatomic) NSArray* accounts; // RFAccount

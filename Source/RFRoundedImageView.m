@@ -42,4 +42,15 @@
 	});
 }
 
+- (void) loadFromURL:(NSString *)url completion:(void (^)(void))handler
+{
+	RFDispatchThread (^{
+		NSImage* img = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+		RFDispatchMainAsync (^{
+			self.image = img;
+			handler();
+		});
+	});
+}
+
 @end

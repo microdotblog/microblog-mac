@@ -288,9 +288,9 @@
                             <rect key="frame" x="0.0" y="0.0" width="254" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <collectionView selectable="YES" id="DGw-lX-VIZ">
+                                <collectionView selectable="YES" allowsEmptySelection="NO" id="DGw-lX-VIZ">
                                     <rect key="frame" x="0.0" y="0.0" width="254" height="158"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="7" minimumLineSpacing="7" scrollDirection="horizontal" id="BnD-9r-K4E">
                                         <size key="itemSize" width="40" height="50"/>
                                     </collectionViewFlowLayout>

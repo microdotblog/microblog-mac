@@ -57,13 +57,18 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
 {
-	[self loadCategories];
-	[self refreshAccounts];
+	if (self.hasShownWindow) {
+		[self loadCategories];
+		[self refreshAccounts];
 
-	RFDispatchSeconds (0.5, ^{
-		// delay slightly to give message pane time to potentially finish
-		[self showMenusIfWordPress];
-	});
+		RFDispatchSeconds (0.5, ^{
+			// delay slightly to give message pane time to potentially finish
+			[self showMenusIfWordPress];
+		});
+	}
+	else {
+		self.hasShownWindow = YES;
+	}
 }
 
 - (void) setupAccounts
@@ -195,7 +200,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self updateRadioButtons];
 	[self updateMenus];
 
-	[self showMenusIfWordPress];
+	RFDispatchSeconds (0.5, ^{
+		// delay slightly to give message pane time to potentially finish
+		[self showMenusIfWordPress];
+	});
 }
 
 - (void) promptNewAccount
@@ -468,18 +476,15 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	RFAccountCell* item = (RFAccountCell *)[collectionView makeItemWithIdentifier:kAccountCellIdentifier forIndexPath:indexPath];
 	[item setupWithAccount:a];
 
+//	NSLog (@"setting up account: %@, self: %@", a.username, [self description]);
+
 	return item;
 }
 
-//- (NSSet<NSIndexPath *> *) collectionView:(NSCollectionView *)collectionView shouldSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+//- (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(RFAccountCell *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 //{
-//	NSIndexPath* index_path = [indexPaths anyObject];
-//	if ((index_path.item + 1) == self.accounts.count) {
-//		return nil;
-//	}
-//	else {
-//		return indexPaths;
-//	}
+//	RFAccount* a = [self.accounts objectAtIndex:indexPath.item];
+//	[item setupWithAccount:a loadProfile:YES];
 //}
 
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
