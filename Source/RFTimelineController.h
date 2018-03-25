@@ -13,6 +13,7 @@
 @class RFRoundedImageView;
 @class RFConversationController;
 @class RFStack;
+@class RFAccount;
 
 typedef enum {
 	kSelectionTimeline = 0,
@@ -37,6 +38,7 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet NSBox* profileBox;
 @property (strong, nonatomic) IBOutlet NSImageView* switchAccountView;
 
+@property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;

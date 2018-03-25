@@ -84,6 +84,7 @@
 	NSMutableArray* new_usernames = [usernames mutableCopy];
 	[new_usernames removeObject:account.username];
 	[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUsername];
 }
 
 + (void) migrateSettings

@@ -99,6 +99,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) setupUser
 {
+	self.selectedAccount = [RFSettings defaultAccount];
+
 	NSString* full_name = [RFSettings stringForKey:kAccountFullName];
 	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* gravatar_url = [RFSettings stringForKey:kAccountGravatarURL];
@@ -124,6 +126,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 
 //	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
@@ -194,6 +197,23 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	
 	[self setupUser];
 	[self showTimeline:nil];
+}
+
+- (void) refreshAccountsNotification:(NSNotification *)notification
+{
+	// see if current account was removed
+	BOOL found = NO;
+	NSArray* accounts = [RFSettings accounts];
+	for (RFAccount* a in accounts) {
+		if (self.selectedAccount && [a.username isEqualToString:self.selectedAccount.username]) {
+			found = YES;
+		}
+	}
+	
+	if (!found) {
+		[self setupUser];
+		[self showTimeline:nil];
+	}
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification

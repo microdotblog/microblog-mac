@@ -16,6 +16,7 @@ static NSString* const kSwitchAccountNotification = @"RFSwitchAccount";
 static NSString* const kSwitchAccountUsernameKey = @"username";
 
 static NSString* const kRemoveAccountNotification = @"RFRemoveAccount";
+static NSString* const kRefreshAccountsNotification = @"RFRefreshAccounts";
 
 static NSString* const kLatestDraftTitlePrefKey = @"LatestDraftTitle";
 static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";

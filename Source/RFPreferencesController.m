@@ -79,6 +79,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		if (returnCode == 1000) {
 			[RFSettings removeAccount:a];
 			[self refreshAccounts];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 		}
 	}];
 }
