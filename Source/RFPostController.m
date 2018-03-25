@@ -446,14 +446,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[self hideBlogsMenu];
 	}
 	else {
-		RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
-		
-		self.blogsMenuPopover = [[NSPopover alloc] init];
-		self.blogsMenuPopover.contentViewController = blogs_controller;
-		self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
+		if (![RFSettings boolForKey:kExternalBlogIsPreferred]) {
+			RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
+			
+			self.blogsMenuPopover = [[NSPopover alloc] init];
+			self.blogsMenuPopover.contentViewController = blogs_controller;
+			self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
 
-		NSRect r = self.blognameField.bounds;
-		[self.blogsMenuPopover showRelativeToRect:r ofView:self.blognameField preferredEdge:NSRectEdgeMaxY];
+			NSRect r = self.blognameField.bounds;
+			[self.blogsMenuPopover showRelativeToRect:r ofView:self.blognameField preferredEdge:NSRectEdgeMaxY];
+		}
 	}
 }
 

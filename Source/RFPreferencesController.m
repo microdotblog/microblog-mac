@@ -60,15 +60,27 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	if (self.hasShownWindow) {
 		[self loadCategories];
 		[self refreshAccounts];
-
-		RFDispatchSeconds (0.5, ^{
-			// delay slightly to give message pane time to potentially finish
-			[self showMenusIfWordPress];
-		});
 	}
 	else {
 		self.hasShownWindow = YES;
 	}
+}
+
+- (void) removeAccountNotification:(NSNotification *)notification
+{
+	RFAccount* a = self.selectedAccount;
+	
+	NSAlert* sheet = [[NSAlert alloc] init];
+	sheet.messageText = [NSString stringWithFormat:@"Remove @%@?", a.username];
+	sheet.informativeText = @"This account will be removed from the application. You can add it back later by clicking \"+\".";
+	[sheet addButtonWithTitle:@"Remove"];
+	[sheet addButtonWithTitle:@"Cancel"];
+	[sheet beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == 1000) {
+			[RFSettings removeAccount:a];
+			[self refreshAccounts];
+		}
+	}];
 }
 
 - (void) setupAccounts
@@ -121,6 +133,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAccountNotification:) name:kRemoveAccountNotification object:self.accountsCollectionView];
 }
 
 - (void) setupColletionView
@@ -190,6 +203,11 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupAccounts];
 	[self.accountsCollectionView reloadData];
 	[self selectFirstAccount];
+
+	RFDispatchSeconds (0.5, ^{
+		// delay slightly to give message pane time to potentially finish
+		[self showMenusIfWordPress];
+	});
 }
 
 - (void) showSettingsForAccount:(RFAccount *)account

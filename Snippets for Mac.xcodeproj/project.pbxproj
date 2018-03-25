@@ -75,6 +75,7 @@
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
 		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
 		4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */; };
+		4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */; };
 		4B5EE27720632C4900C87A78 /* RFBlogsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EE27620632C4900C87A78 /* RFBlogsController.m */; };
 		4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5EE27820632C6800C87A78 /* Blogs.xib */; };
 		4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EE27C206330B800C87A78 /* RFBlogCell.m */; };
@@ -259,6 +260,8 @@
 		4B5A250F1F849AF2007C548F /* RFMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMenuCell.m; path = Source/RFMenuCell.m; sourceTree = "<group>"; };
 		4B5D5D8F2066A160007ED186 /* RFAccountPopoverBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountPopoverBox.h; path = Source/RFAccountPopoverBox.h; sourceTree = "<group>"; };
 		4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountPopoverBox.m; path = Source/RFAccountPopoverBox.m; sourceTree = "<group>"; };
+		4B5D5D9520675EB9007ED186 /* RFAccountsCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountsCollectionView.h; path = Source/RFAccountsCollectionView.h; sourceTree = "<group>"; };
+		4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountsCollectionView.m; path = Source/RFAccountsCollectionView.m; sourceTree = "<group>"; };
 		4B5EE27520632C4900C87A78 /* RFBlogsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBlogsController.h; path = Source/RFBlogsController.h; sourceTree = "<group>"; };
 		4B5EE27620632C4900C87A78 /* RFBlogsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBlogsController.m; path = Source/RFBlogsController.m; sourceTree = "<group>"; };
 		4B5EE27920632C6800C87A78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Blogs.xib; sourceTree = "<group>"; };
@@ -505,6 +508,8 @@
 				4B5EE2882064057F00C87A78 /* RFAccountCell.m */,
 				4B5EE2842063FD9300C87A78 /* RFAccount.h */,
 				4B5EE2852063FD9300C87A78 /* RFAccount.m */,
+				4B5D5D9520675EB9007ED186 /* RFAccountsCollectionView.h */,
+				4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */,
 				4B5EE2812063FC8400C87A78 /* RFSettings.h */,
 				4B5EE2822063FC8400C87A78 /* RFSettings.m */,
 				4B2CAB1E1F907E9B00D9B10E /* RFWordpressController.h */,
@@ -801,6 +806,7 @@
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
+				4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
 				4B5EE2832063FC8400C87A78 /* RFSettings.m in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,

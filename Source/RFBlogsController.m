@@ -53,28 +53,39 @@
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return self.destinations.count;
+	return self.destinations.count + 1;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	RFBlogCell* cell = [tableView makeViewWithIdentifier:@"BlogCell" owner:self];
 
-	NSDictionary* destination = [self.destinations objectAtIndex:row];
-	cell.nameField.stringValue = destination[@"name"];
+	if (row < self.destinations.count) {
+		NSDictionary* destination = [self.destinations objectAtIndex:row];
+		cell.nameField.stringValue = destination[@"name"];
+	}
+	else {
+		cell.nameField.stringValue = @"New Microblog...";
+	}
 
 	return cell;
 }
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
-	NSDictionary* destination = [self.destinations objectAtIndex:row];
+	if (row < self.destinations.count) {
+		NSDictionary* destination = [self.destinations objectAtIndex:row];
 
-	[RFSettings setString:destination[@"uid"] forKey:kCurrentDestinationUID];
-	[RFSettings setString:destination[@"name"] forKey:kCurrentDestinationName];
+		[RFSettings setString:destination[@"uid"] forKey:kCurrentDestinationUID];
+		[RFSettings setString:destination[@"name"] forKey:kCurrentDestinationName];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdatedBlogNotification object:self];
-
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUpdatedBlogNotification object:self];
+	}
+	else {
+		NSURL* url = [NSURL URLWithString:@"https://micro.blog/new/site"];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+	
 	return YES;
 }
 

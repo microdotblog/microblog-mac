@@ -39,6 +39,7 @@ static NSString* const kExternalBlogCategory = @"ExternalBlogCategory";
 + (NSArray *) accounts; // RFAccount
 + (RFAccount *) defaultAccount;
 + (void) addAccount:(RFAccount *)account;
++ (void) removeAccount:(RFAccount *)account;
 + (void) migrateSettings;
 
 + (BOOL) boolForKey:(NSString *)prefKey;

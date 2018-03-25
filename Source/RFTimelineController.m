@@ -108,6 +108,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 	self.fullNameField.nextResponder = self.profileBox;
 	self.usernameField.nextResponder = self.profileBox;
+	
+	self.switchAccountView.hidden = ([RFSettings accounts].count <= 1);
 }
 
 - (void) setupNotifications

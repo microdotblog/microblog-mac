@@ -18,6 +18,7 @@
                 <outlet property="profileBox" destination="aQA-f2-uq2" id="uuc-WA-lFG"/>
                 <outlet property="profileImageView" destination="ETu-Lx-u0c" id="zaO-Pm-113"/>
                 <outlet property="splitView" destination="fkA-Zg-Ds4" id="a8c-6k-c9Q"/>
+                <outlet property="switchAccountView" destination="Kz4-NB-ecZ" id="Imb-Sj-vv7"/>
                 <outlet property="tableView" destination="8Jx-Dq-dhg" id="0q3-12-wI1"/>
                 <outlet property="usernameField" destination="HD9-1U-V6d" id="tn9-my-Ie7"/>
                 <outlet property="webView" destination="PSE-41-OeU" id="nrt-2v-vfP"/>

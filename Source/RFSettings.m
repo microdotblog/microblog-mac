@@ -78,6 +78,14 @@
 	}
 }
 
++ (void) removeAccount:(RFAccount *)account
+{
+	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
+	NSMutableArray* new_usernames = [usernames mutableCopy];
+	[new_usernames removeObject:account.username];
+	[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+}
+
 + (void) migrateSettings
 {
 	NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:kAccountUsername];

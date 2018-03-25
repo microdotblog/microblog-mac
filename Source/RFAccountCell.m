@@ -13,11 +13,6 @@
 
 @implementation RFAccountCell
 
-- (void) viewDidLoad
-{
-	[super viewDidLoad];
-}
-
 - (void) prepareForReuse
 {
 	[super prepareForReuse];

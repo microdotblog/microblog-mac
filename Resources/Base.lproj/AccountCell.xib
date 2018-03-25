@@ -58,7 +58,7 @@
                 <constraint firstAttribute="bottom" secondItem="Ht3-bj-yXD" secondAttribute="bottom" id="mUN-hb-upX"/>
                 <constraint firstAttribute="trailing" secondItem="Ht3-bj-yXD" secondAttribute="trailing" constant="8" id="yCI-uX-1cg"/>
             </constraints>
-            <point key="canvasLocation" x="-85.5" y="36"/>
+            <point key="canvasLocation" x="-86" y="36"/>
         </customView>
     </objects>
     <resources>
