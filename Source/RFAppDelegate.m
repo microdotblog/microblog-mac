@@ -212,10 +212,9 @@
 	[self.timelineController showProfileWithUsername:username];
 }
 
-- (void) loadTimelineWithToken:(NSString *)token
+- (void) loadTimelineWithToken:(NSString *)token account:(RFAccount *)account
 {
-	NSString* username = [RFSettings stringForKey:kAccountUsername];
-	[SAMKeychain setPassword:token forService:@"Micro.blog" account:username];
+	[SAMKeychain setPassword:token forService:@"Micro.blog" account:account.username];
 	
 	[self.welcomeController close];
 	self.welcomeController = nil;
@@ -267,8 +266,8 @@
 			[RFSettings setBool:[is_fullaccess boolValue] forKey:kIsFullAccess account:a];
 		
 			RFDispatchMainAsync (^{
-//				[Answers logLoginWithMethod:@"Token" success:@YES customAttributes:nil];
-				[self loadTimelineWithToken:token];
+				[self loadTimelineWithToken:token account:a];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 			});
 		}
 	}];

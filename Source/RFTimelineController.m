@@ -214,6 +214,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		[self setupUser];
 		[self showTimeline:nil];
 	}
+
+	// add the arrow if we now have multiple accounts
+	self.switchAccountView.hidden = ([RFSettings accounts].count <= 1);
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification

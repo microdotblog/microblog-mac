@@ -78,10 +78,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[sheet beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == 1000) {
 			[RFSettings removeAccount:a];
-			[self refreshAccounts];
 			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 		}
 	}];
+}
+
+- (void) refreshAccountsNotification:(NSNotification *)notification
+{
+	[self refreshAccounts];
 }
 
 - (void) setupAccounts
@@ -135,6 +139,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAccountNotification:) name:kRemoveAccountNotification object:self.accountsCollectionView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 }
 
 - (void) setupColletionView
