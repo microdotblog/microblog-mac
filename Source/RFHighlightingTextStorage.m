@@ -124,19 +124,25 @@
 	BOOL is_italic = NO;
 	BOOL is_link = NO;
 	BOOL is_username = NO;
-	
+
 	for (NSInteger i = 0; i < self.string.length; i++) {
 		unichar c = [self.string characterAtIndex:i];
 		unichar next_c = '\0';
+		unichar prev_c = '\0';
 		if ((i + 1) < self.string.length) {
 			next_c = [self.string characterAtIndex:i + 1];
+		}
+		if ((i - 1) > 0) {
+			prev_c = [self.string characterAtIndex:i - 1];
 		}
 
 		if (c == '_') {
 			if (!is_link && !is_username) {
 				if (!is_italic) {
-					is_italic = YES;
-					current_r.location = i;
+					if ((prev_c == ' ') || (prev_c == '\0')) {
+						is_italic = YES;
+						current_r.location = i;
+					}
 				}
 				else {
 					is_italic = NO;
