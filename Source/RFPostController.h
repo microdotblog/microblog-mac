@@ -10,7 +10,7 @@
 
 @class RFHighlightingTextStorage;
 
-@interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination>
+@interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextView* textView;

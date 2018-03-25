@@ -452,6 +452,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			self.blogsMenuPopover = [[NSPopover alloc] init];
 			self.blogsMenuPopover.contentViewController = blogs_controller;
 			self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
+			self.blogsMenuPopover.delegate = self;
 
 			NSRect r = self.blognameField.bounds;
 			[self.blogsMenuPopover showRelativeToRect:r ofView:self.blognameField preferredEdge:NSRectEdgeMaxY];
@@ -465,6 +466,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[self.blogsMenuPopover performClose:nil];
 		self.blogsMenuPopover = nil;
 	}
+}
+
+- (void) popoverDidClose:(NSNotification *)notification
+{
+	self.blogsMenuPopover = nil;
 }
 
 #pragma mark -
