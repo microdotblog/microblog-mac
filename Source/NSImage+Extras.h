@@ -12,5 +12,6 @@
 
 - (NSImage *) rf_scaleToWidth:(CGFloat)maxWidth;
 - (NSImage *) rf_scaleToSize:(NSSize)newSize;
+- (NSImage *) rf_roundImage;
 
 @end

@@ -20,6 +20,7 @@
 #import "SAMKeychain.h"
 #import "RFConstants.h"
 #import "RFSettings.h"
+#import "RFAccount.h"
 #import "RFMacros.h"
 #import "RFClient.h"
 #import "RFStack.h"
@@ -353,6 +354,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint];
 	[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint];
 	[RFSettings removeObjectForKey:kExternalMicropubState];
+
+	[RFAccount clearCache];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }

@@ -11,6 +11,7 @@
 #import "RFSettings.h"
 #import "RFAccount.h"
 #import "RFConstants.h"
+#import "NSImage+Extras.h"
 
 @implementation RFAccountPopoverBox
 
@@ -43,7 +44,19 @@
 		for (RFAccount* a in accounts) {
 			NSString* s = [NSString stringWithFormat:@"@%@", a.username];
 			NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:s action:@selector(switchAccount:) keyEquivalent:@""];
+
+			NSImage* img = [[a cachedProfileImage] rf_roundImage];
+			img.size = CGSizeMake (20, 20);
+			item.image = img;
 			item.representedObject = a;
+			
+			if ([a.username isEqualToString:[RFSettings defaultAccount].username]) {
+				item.state = NSControlStateValueOn;
+			}
+			else {
+				item.state = NSControlStateValueOff;
+			}
+
 			[menu addItem:item];
 		}
 

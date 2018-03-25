@@ -53,4 +53,27 @@
     return newImage;
 }
 
+- (NSImage *) rf_roundImage
+{
+	NSImage *existingImage = self;
+	NSSize existingSize = [existingImage size];
+	NSSize newSize = NSMakeSize(existingSize.width, existingSize.height);
+	NSImage *composedImage = [[NSImage alloc] initWithSize:newSize];
+
+	[composedImage lockFocus];
+	[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+
+	NSRect imageFrame = NSRectFromCGRect(CGRectMake(0, 0, existingSize.width, existingSize.height));
+	CGFloat radius = existingSize.width / 2.0;
+	NSBezierPath *clipPath = [NSBezierPath bezierPathWithRoundedRect:imageFrame xRadius:radius yRadius:radius];
+	[clipPath setWindingRule:NSEvenOddWindingRule];
+	[clipPath addClip];
+
+	[self drawAtPoint:NSZeroPoint fromRect:NSMakeRect(0, 0, newSize.width, newSize.height) operation:NSCompositingOperationSourceOver fraction:1.0];
+
+	[composedImage unlockFocus];
+
+	return composedImage;
+}
+
 @end

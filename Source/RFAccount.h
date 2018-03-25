@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 @interface RFAccount : NSObject
 
 @property (strong) NSString* username;
 
 - (NSString *) profileImageURL;
+- (NSImage *) cachedProfileImage;
+- (void) saveProfileImage:(NSImage *)image;
++ (void) clearCache;
 
 @end

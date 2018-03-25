@@ -30,7 +30,9 @@
 		
 	NSString* url = account.profileImageURL;
 	if (url) {
-		[self.profileImageView loadFromURL:account.profileImageURL];
+		[self.profileImageView loadFromURL:account.profileImageURL completion:^{
+			[account saveProfileImage:self.profileImageView.image];
+		}];
 		self.plusField.hidden = YES;
 	}
 	else {
