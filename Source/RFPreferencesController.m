@@ -57,8 +57,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
 {
+	[self loadCategories];
 	if (self.hasShownWindow) {
-		[self loadCategories];
 		[self refreshAccounts];
 	}
 	else {

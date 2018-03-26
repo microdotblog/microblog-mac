@@ -15,7 +15,7 @@
 + (NSArray *) accounts
 {
 	NSMutableArray* new_accounts = [[NSMutableArray alloc] init];
-	NSArray* users = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
+	NSArray* users = [[NSUserDefaults standardUserDefaults] arrayForKey:kAccountUsernames];
 
 //	users = [users sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
 //		return [obj1 compare:obj2];
@@ -54,7 +54,7 @@
 
 + (void) addAccount:(RFAccount *)account
 {
-	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
+	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:kAccountUsernames];
 	NSMutableArray* new_usernames = nil;
 	if (usernames.count == 0) {
 		new_usernames = [NSMutableArray arrayWithObject:account.username];
@@ -74,16 +74,16 @@
 	}
 
 	if (new_usernames) {
-		[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+		[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:kAccountUsernames];
 	}
 }
 
 + (void) removeAccount:(RFAccount *)account
 {
-	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:@"AccountUsernames"];
+	NSArray* usernames = [[NSUserDefaults standardUserDefaults] arrayForKey:kAccountUsernames];
 	NSMutableArray* new_usernames = [usernames mutableCopy];
 	[new_usernames removeObject:account.username];
-	[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:@"AccountUsernames"];
+	[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:kAccountUsernames];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUsername];
 }
 
@@ -98,6 +98,10 @@
 			[[NSUserDefaults standardUserDefaults] setObject:val forKey:new_k];
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:old_k];
 		}
+		
+		NSArray* new_usernames = [NSArray arrayWithObject:username];
+		[[NSUserDefaults standardUserDefaults] setObject:new_usernames forKey:kAccountUsernames];
+		[[NSUserDefaults standardUserDefaults] setObject:username forKey:kCurrentUsername];
 	}
 }
 
