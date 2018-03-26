@@ -6,6 +6,30 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thanks for supporting Micro.blog! Changes for this version:</p>
+ 				<ul>
+ 					<li>Added multiple account support. You can add a new account in the preferences window.</li>
+ 					<li>Added switching between multiple Micro.blog-hosted blogs when you have more than one on the same account. Click the hostname at the bottom of the posting view.</li>
+ 					<li>Fixed underscores in URLs showing italics in Markdown.</li>
+ 					<li>Fixed using font size preference in Discover.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 25 Mar 2018 09:00:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.2.zip" sparkle:shortVersionString="1.2" sparkle:version="34" length="2573998" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.1.4</title>
  			<description><![CDATA[
 				<style>
