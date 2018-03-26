@@ -603,7 +603,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		};
 		[client postWithParams:args completion:^(UUHttpResponse* response) {
 			RFDispatchMainAsync (^{
-//				[Answers logCustomEventWithName:@"Sent Reply" customAttributes:nil];
 				[self closeWithoutSaving];
 			});
 		}];
@@ -613,6 +612,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+			if (destination_uid == nil) {
+				destination_uid = @"";
+			}
 			NSDictionary* args;
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];
@@ -623,13 +625,15 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				args = @{
 					@"name": [self currentTitle],
 					@"content": text,
-					@"photo[]": photo_urls
+					@"photo[]": photo_urls,
+					@"mp-destination": destination_uid
 				};
 			}
 			else {
 				args = @{
 					@"name": [self currentTitle],
-					@"content": text
+					@"content": text,
+					@"mp-destination": destination_uid
 				};
 			}
 
@@ -641,7 +645,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
-//						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
 						[self closeWithoutSaving];
 					}
 				});
@@ -790,7 +793,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 }
 
-- (void) uploadPhoto:(RFPhoto *)photo completion:(void (^)())handler
+- (void) uploadPhoto:(RFPhoto *)photo completion:(void (^)(void))handler
 {
 	if (self.attachedPhotos.count > 0) {
 		[self showProgressHeader:@"Uploading photos..."];
@@ -803,7 +806,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (d) {
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+			if (destination_uid == nil) {
+				destination_uid = @"";
+			}
 			NSDictionary* args = @{
+				@"mp-destination": destination_uid
 			};
 			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
@@ -815,7 +823,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					}
 					else {
 						photo.publishedURL = image_url;
-//						[Answers logCustomEventWithName:@"Uploaded Photo" customAttributes:nil];
 						handler();
 					}
 				});
