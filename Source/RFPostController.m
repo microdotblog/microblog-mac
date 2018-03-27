@@ -102,8 +102,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.textView.string = self.initialText;
 	}
 	else {
-		NSString* title = [RFSettings stringForKey:kLatestDraftTitlePrefKey];
-		NSString* draft = [RFSettings stringForKey:kLatestDraftTextPrefKey];
+		NSString* title = [[NSUserDefaults standardUserDefaults] objectForKey:kLatestDraftTitlePrefKey];
+		NSString* draft = [[NSUserDefaults standardUserDefaults] objectForKey:kLatestDraftTextPrefKey];
 		if (title) {
 			self.titleField.stringValue = title;
 		}
