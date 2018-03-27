@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.2.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thanks for supporting Micro.blog! Just a couple bug fixes:</p>
+ 				<ul>
+ 					<li>Fixed clearing out all account settings when choosing File → Sign Out.</li>
+ 					<li>Fixed saving the current text as a draft.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 27 Mar 2018 12:20:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.2.1.zip" sparkle:shortVersionString="1.2.1" sparkle:version="37" length="2999128" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.2</title>
  			<description><![CDATA[
 				<style>
@@ -24,7 +46,7 @@
  					<li>Fixed using font size preference in Discover.</li>
  				</ul>
  			]]></description>
-			<pubDate>Mon, 25 Mar 2018 09:45:00 +0000</pubDate>
+			<pubDate>Mon, 26 Mar 2018 09:45:00 +0000</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.2.zip" sparkle:shortVersionString="1.2" sparkle:version="36" length="2999128" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
 		</item>		
