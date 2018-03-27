@@ -352,32 +352,36 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) signOut:(id)sender
 {
-	NSString* microblog_username = [RFSettings stringForKey:kAccountUsername];
-	NSString* external_username = [RFSettings stringForKey:kExternalBlogUsername];
+	for (RFAccount* a in [RFSettings accounts]) {
+		NSString* microblog_username = [RFSettings stringForKey:kAccountUsername account:a];
+		NSString* external_username = [RFSettings stringForKey:kExternalBlogUsername account:a];
 
-	[SAMKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
-	[SAMKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
-	[SAMKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
+		[SAMKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
+		[SAMKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
+		[SAMKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
 
-	[RFSettings removeObjectForKey:kAccountUsername];
-	[RFSettings removeObjectForKey:kAccountGravatarURL];
-	[RFSettings removeObjectForKey:kAccountDefaultSite];
+		[RFSettings removeObjectForKey:kAccountUsername account:a];
+		[RFSettings removeObjectForKey:kAccountGravatarURL account:a];
+		[RFSettings removeObjectForKey:kAccountDefaultSite account:a];
 
-	[RFSettings removeObjectForKey:kHasSnippetsBlog];
+		[RFSettings removeObjectForKey:kHasSnippetsBlog account:a];
 
-	[RFSettings removeObjectForKey:kExternalBlogUsername];
-	[RFSettings removeObjectForKey:kExternalBlogApp];
-	[RFSettings removeObjectForKey:kExternalBlogEndpoint];
-	[RFSettings removeObjectForKey:kExternalBlogID];
-	[RFSettings removeObjectForKey:kExternalBlogIsPreferred];
-	[RFSettings removeObjectForKey:kExternalBlogURL];
+		[RFSettings removeObjectForKey:kExternalBlogUsername account:a];
+		[RFSettings removeObjectForKey:kExternalBlogApp account:a];
+		[RFSettings removeObjectForKey:kExternalBlogEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalBlogID account:a];
+		[RFSettings removeObjectForKey:kExternalBlogIsPreferred account:a];
+		[RFSettings removeObjectForKey:kExternalBlogURL account:a];
 
-	[RFSettings removeObjectForKey:kExternalMicropubMe];
-	[RFSettings removeObjectForKey:kExternalMicropubTokenEndpoint];
-	[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint];
-	[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint];
-	[RFSettings removeObjectForKey:kExternalMicropubState];
-
+		[RFSettings removeObjectForKey:kExternalMicropubMe account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubTokenEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubState account:a];
+	}
+	
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUsername];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kAccountUsernames];
 	[RFAccount clearCache];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
