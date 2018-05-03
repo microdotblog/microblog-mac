@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="collectionView" destination="9So-nF-Mo0" id="COL-iZ-sis"/>
                 <outlet property="hostnameField" destination="pQj-vl-1Yq" id="quA-VQ-178"/>
+                <outlet property="importButton" destination="Ho5-MZ-KqJ" id="kzR-hA-SKv"/>
                 <outlet property="progressBar" destination="hXQ-UY-1tX" id="3zl-co-9DM"/>
                 <outlet property="summaryField" destination="Bde-0L-EKe" id="7xH-jH-BDM"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="8BU-fR-cnh"/>
@@ -20,21 +21,21 @@
         <window title="Import from Instagram" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="88" y="427" width="480" height="270"/>
+            <rect key="contentRect" x="88" y="427" width="480" height="427"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="480" height="270"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="427"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RZe-Ww-Jhj">
-                        <rect key="frame" x="-1" y="-1" width="482" height="210"/>
+                        <rect key="frame" x="-1" y="-1" width="482" height="367"/>
                         <clipView key="contentView" drawsBackground="NO" id="cKu-s6-6zW">
-                            <rect key="frame" x="0.0" y="0.0" width="482" height="210"/>
+                            <rect key="frame" x="0.0" y="0.0" width="482" height="367"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <collectionView id="9So-nF-Mo0">
-                                    <rect key="frame" x="0.0" y="0.0" width="482" height="158"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="482" height="367"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="wKM-05-7OO">
                                         <size key="itemSize" width="80" height="80"/>
@@ -55,7 +56,7 @@
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ho5-MZ-KqJ">
-                        <rect key="frame" x="386" y="222" width="80" height="32"/>
+                        <rect key="frame" x="386" y="379" width="80" height="32"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Tnk-9r-cif"/>
                             <constraint firstAttribute="width" constant="68" id="cbz-gE-XZM"/>
@@ -69,7 +70,7 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bde-0L-EKe">
-                        <rect key="frame" x="18" y="231" width="140" height="17"/>
+                        <rect key="frame" x="18" y="388" width="140" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="50Y-jA-hVp"/>
                             <constraint firstAttribute="width" constant="136" id="axc-MG-ZHh"/>
@@ -81,7 +82,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pQj-vl-1Yq">
-                        <rect key="frame" x="208" y="231" width="171" height="17"/>
+                        <rect key="frame" x="208" y="388" width="171" height="17"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="167" id="I1a-gw-Hmp"/>
                             <constraint firstAttribute="height" constant="17" id="Yv2-46-mf3"/>
@@ -92,8 +93,8 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="hXQ-UY-1tX">
-                        <rect key="frame" x="20" y="230" width="182" height="20"/>
+                    <progressIndicator wantsLayer="YES" maxValue="1" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="hXQ-UY-1tX">
+                        <rect key="frame" x="20" y="385" width="182" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="4Hb-jU-mLA"/>
                             <constraint firstAttribute="width" constant="182" id="Bfe-HV-sg0"/>
@@ -112,9 +113,10 @@
                     <constraint firstItem="Ho5-MZ-KqJ" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="gmb-oV-yTL"/>
                     <constraint firstItem="Ho5-MZ-KqJ" firstAttribute="leading" secondItem="pQj-vl-1Yq" secondAttribute="trailing" constant="15" id="lge-oe-yKy"/>
                     <constraint firstItem="hXQ-UY-1tX" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="nzT-AF-9ip"/>
-                    <constraint firstItem="hXQ-UY-1tX" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="21" id="wxk-Q0-8Cx"/>
+                    <constraint firstItem="hXQ-UY-1tX" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="23" id="wxk-Q0-8Cx"/>
                 </constraints>
             </view>
+            <point key="canvasLocation" x="77" y="97.5"/>
         </window>
     </objects>
 </document>

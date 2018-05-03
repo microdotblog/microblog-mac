@@ -14,10 +14,14 @@
 @property (strong, nonatomic) IBOutlet NSTextField* hostnameField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressBar;
 @property (strong, nonatomic) IBOutlet NSCollectionView* collectionView;
+@property (strong, nonatomic) IBOutlet NSButton* importButton;
 
 @property (strong, nonatomic) NSString* path;
 @property (strong, nonatomic) NSString* folder;
 @property (strong, nonatomic) NSArray* photos; // NSDictionary
+@property (strong, nonatomic) NSMutableArray* queued; // NSDictionary
+@property (assign, nonatomic) BOOL isImporting;
+@property (assign, nonatomic) BOOL isStopping;
 
 - (instancetype) initWithFile:(NSString *)path;
 
