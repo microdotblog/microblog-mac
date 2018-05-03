@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSMutableArray* queued; // NSDictionary
 @property (assign, nonatomic) BOOL isImporting;
 @property (assign, nonatomic) BOOL isStopping;
+@property (assign, nonatomic) NSInteger batchTotal; // number that were queued
 
 - (instancetype) initWithFile:(NSString *)path;
 

@@ -137,8 +137,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) queueSelected
 {
 	self.queued = [NSMutableArray array];
-	
+
 	NSArray* selected_indexes = [self.collectionView.selectionIndexPaths allObjects];
+
+	self.batchTotal = selected_indexes.count;
+	self.progressBar.doubleValue = 0.0;
+	
 	for (NSIndexPath* index_path in selected_indexes) {
 		NSDictionary* photo = [self.photos objectAtIndex:index_path.item];
 		[self.queued addObject:photo];
@@ -224,7 +228,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		return;
 	}
 
-	NSInteger total = self.photos.count;
+	NSInteger total = self.batchTotal;
 	NSInteger remaining = self.queued.count;
 	NSInteger progress = total - remaining;
 
