@@ -181,6 +181,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		[self uploadPhoto:photo completion:^{
 			NSString* s = caption;
 			
+			if ((s.length > 0) && ([s characterAtIndex:0] == '@')) {
+				// chop off the first "@" to avoid @-mentions
+				s = [s substringFromIndex:1];
+			}
+			
 			if ([self prefersExternalBlog] && ![self hasMicropubBlog]) {
 				if (s.length > 0) {
 					s = [s stringByAppendingString:@"\n\n"];
