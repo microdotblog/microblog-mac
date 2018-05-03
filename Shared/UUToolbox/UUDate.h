@@ -69,6 +69,8 @@
 // Returns an ISO 8601 Formatted time, ie - "HH:mm:ss"
 - (NSString*) uuIso8601TimeString;
 
+- (NSString*) uuStringFromDate:(NSString*)formatter timeZone:(NSTimeZone*)timeZone;
+
 // Returns a string day of week, ie - 'Monday' thru 'Sunday'
 - (NSString*) uuDayOfWeek;
 

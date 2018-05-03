@@ -9,6 +9,7 @@
 #import "RFXMLRPCRequest.h"
 
 #import "RFXMLRSDParser.h"
+#import "UUDate.h"
 
 @implementation RFBoolean
 
@@ -71,6 +72,11 @@
 	}
 	else if ([param isKindOfClass:[NSNumber class]]) {
 		[requestString appendFormat:@"<value><int>%@</int></value>", param];
+	}
+	else if ([param isKindOfClass:[NSDate class]]) {
+		NSTimeZone* utcTimeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+		NSString* iso8601 = [param uuStringFromDate:@"yyyyMMdd'T'HH:mm:ssZ" timeZone:utcTimeZone];
+		[requestString appendFormat:@"<value><dateTime.iso8601>%@</dateTime.iso8601></value>", iso8601];
 	}
 	else if ([param isKindOfClass:[NSString class]]) {
 		[requestString appendFormat:@"<value><string>%@</string></value>", [self escapeParam:param]];
