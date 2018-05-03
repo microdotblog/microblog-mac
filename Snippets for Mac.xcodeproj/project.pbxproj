@@ -115,6 +115,8 @@
 		4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF31F86820500906C86 /* NSString+Extras.m */; };
 		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
+		4BB69068209A113500CD5E1E /* Instagram.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB69066209A113500CD5E1E /* Instagram.xib */; };
+		4BB6906B209A123300CD5E1E /* RFInstagramController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB6906A209A123300CD5E1E /* RFInstagramController.m */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 /* End PBXBuildFile section */
@@ -329,6 +331,9 @@
 		4B8FBDFF1F86F5F700906C86 /* RFConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConstants.h; path = Source/RFConstants.h; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
+		4BB69067209A113500CD5E1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Instagram.xib; sourceTree = "<group>"; };
+		4BB69069209A123300CD5E1E /* RFInstagramController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFInstagramController.h; path = Source/RFInstagramController.h; sourceTree = "<group>"; };
+		4BB6906A209A123300CD5E1E /* RFInstagramController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFInstagramController.m; path = Source/RFInstagramController.m; sourceTree = "<group>"; };
 		4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -504,6 +509,8 @@
 				4B2CAAB61F90002500D9B10E /* RFMacApplication.m */,
 				4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */,
 				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
+				4BB69069209A123300CD5E1E /* RFInstagramController.h */,
+				4BB6906A209A123300CD5E1E /* RFInstagramController.m */,
 				4B5EE2872064057F00C87A78 /* RFAccountCell.h */,
 				4B5EE2882064057F00C87A78 /* RFAccountCell.m */,
 				4B5EE2842063FD9300C87A78 /* RFAccount.h */,
@@ -593,6 +600,7 @@
 				4B5650641F8562B900B03FFD /* Options.xib */,
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
+				4BB69066209A113500CD5E1E /* Instagram.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */,
 				4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */,
@@ -741,6 +749,7 @@
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
 				4B608B482003B86400589F77 /* Topic.xib in Resources */,
+				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
@@ -822,6 +831,7 @@
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
 				4B5EE27720632C4900C87A78 /* RFBlogsController.m in Sources */,
 				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
+				4BB6906B209A123300CD5E1E /* RFInstagramController.m in Sources */,
 				4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */,
 				4B2CAB0D1F90667300D9B10E /* attrs.c in Sources */,
 				4B2CAB1A1F90667300D9B10E /* config.c in Sources */,
@@ -999,6 +1009,14 @@
 				4B7F0AF61BAF4C37004553A6 /* Base */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		4BB69066209A113500CD5E1E /* Instagram.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BB69067209A113500CD5E1E /* Base */,
+			);
+			name = Instagram.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

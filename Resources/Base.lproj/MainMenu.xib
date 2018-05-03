@@ -93,6 +93,13 @@ DQ
                                     <action selector="performClose:" target="-1" id="HmO-Ls-i7Q"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="yxj-eZ-T3c"/>
+                            <menuItem title="Import..." id="9X4-OW-ag9">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="importInstagram:" target="Voe-Tx-rLC" id="gJ9-cS-oKI"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="dOw-pu-zNE"/>
                             <menuItem title="Sign Out" id="tFo-tJ-1IJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>

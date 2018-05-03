@@ -11,12 +11,14 @@
 @class RFTimelineController;
 @class RFWelcomeController;
 @class RFPreferencesController;
+@class RFInstagramController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (strong, nonatomic) RFTimelineController* timelineController;
 @property (strong, nonatomic) RFWelcomeController* welcomeController;
 @property (strong, nonatomic) RFPreferencesController* prefsController;
+@property (strong, nonatomic) RFInstagramController* instagramController;
 
 @end
 

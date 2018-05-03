@@ -11,6 +11,7 @@
 #import "RFTimelineController.h"
 #import "RFWelcomeController.h"
 #import "RFPreferencesController.h"
+#import "RFInstagramController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -163,6 +164,24 @@
 	}
 
 	[self.prefsController showWindow:nil];
+}
+
+- (IBAction) importInstagram:(id)sender
+{
+	if (self.instagramController) {
+		[self.instagramController close];
+		self.instagramController = nil;
+	}
+
+	NSOpenPanel* panel = [NSOpenPanel openPanel];
+	panel.message = @"Unzip your Instagram archive download and select the media.json file.";
+	panel.allowedFileTypes = @[ @"json" ];
+	NSModalResponse response = [panel runModal];
+	if (response == NSModalResponseOK) {
+		NSURL* url = panel.URL;
+		self.instagramController = [[RFInstagramController alloc] initWithFile:url.path];
+		[self.instagramController showWindow:nil];
+	}
 }
 
 #pragma mark -
