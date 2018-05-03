@@ -11,5 +11,6 @@
 @interface RFPhotoCell : NSCollectionViewItem
 
 @property (strong, nonatomic) IBOutlet NSImageView* thumbnailImageView;
+@property (strong, nonatomic) IBOutlet NSView* selectionOverlayView;
 
 @end

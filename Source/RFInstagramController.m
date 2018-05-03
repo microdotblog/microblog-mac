@@ -81,11 +81,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupSummary
 {
+	NSInteger num_selected = [self.collectionView selectionIndexPaths].count;
+	
 	if (self.photos.count == 1) {
-		self.summaryField.stringValue = @"1 photo";
+		self.summaryField.stringValue = [NSString stringWithFormat:@"1 photo (%lu selected)", (unsigned long)num_selected];
 	}
 	else {
-		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu photos", (unsigned long)self.photos.count];
+		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu photos (%lu selected)", (unsigned long)self.photos.count, (unsigned long)num_selected];
+	}
+	
+	if (num_selected > 0) {
+		self.importButton.enabled = YES;
+	}
+	else {
+		self.importButton.enabled = NO;
 	}
 }
 
@@ -119,13 +128,24 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	self.isStopping = YES;
 }
 
+- (void) queueSelected
+{
+	self.queued = [NSMutableArray array];
+	
+	NSArray* selected_indexes = [self.collectionView.selectionIndexPaths allObjects];
+	for (NSIndexPath* index_path in selected_indexes) {
+		NSDictionary* photo = [self.photos objectAtIndex:index_path.item];
+		[self.queued addObject:photo];
+	}
+}
+
 - (IBAction) import:(id)sender
 {
 	if (self.isImporting) {
 		[self stopProgress];
 	}
 	else {
-		self.queued = [self.photos mutableCopy];
+		[self queueSelected];
 		[self startProgress];
 		[self importNextPhoto];
 	}
@@ -423,6 +443,36 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
+	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	item.thumbnailImageView.image = nil;
+	
+	return item;
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+{
+	for (NSIndexPath* index_path in indexPaths) {
+		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+		item.selectionOverlayView.layer.opacity = 0.4;
+		item.selectionOverlayView.layer.backgroundColor = [NSColor blackColor].CGColor;
+	}
+
+	[self setupSummary];
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didDeselectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+{
+	for (NSIndexPath* index_path in indexPaths) {
+		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+		item.selectionOverlayView.layer.opacity = 0.0;
+		item.selectionOverlayView.layer.backgroundColor = nil;
+	}
+
+	[self setupSummary];
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(NSCollectionViewItem *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
 	NSDictionary* photo = [self.photos objectAtIndex:indexPath.item];
 
 //      "caption": "More basketball on TV today",
@@ -439,10 +489,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	NSImage* img = [[NSImage alloc] initWithContentsOfFile:current_file];
 
-	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
-	item.thumbnailImageView.image = img;
-	
-	return item;
+	RFPhotoCell* photo_item = (RFPhotoCell *)item;
+	if (photo_item.thumbnailImageView.image == nil) {
+		photo_item.thumbnailImageView.image = img;
+	}
 }
 
 @end

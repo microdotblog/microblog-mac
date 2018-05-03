@@ -34,7 +34,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="482" height="367"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <collectionView id="9So-nF-Mo0">
+                                <collectionView selectable="YES" allowsMultipleSelection="YES" id="9So-nF-Mo0">
                                     <rect key="frame" x="0.0" y="0.0" width="482" height="367"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="wKM-05-7OO">
@@ -70,10 +70,10 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bde-0L-EKe">
-                        <rect key="frame" x="18" y="388" width="140" height="17"/>
+                        <rect key="frame" x="18" y="388" width="204" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="50Y-jA-hVp"/>
-                            <constraint firstAttribute="width" constant="136" id="axc-MG-ZHh"/>
+                            <constraint firstAttribute="width" constant="200" id="axc-MG-ZHh"/>
                         </constraints>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="25 photos" id="PoD-Gj-PDz">
                             <font key="font" metaFont="system"/>
