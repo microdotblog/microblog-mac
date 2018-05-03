@@ -58,24 +58,30 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupHostname
 {
-	if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
-		NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
-		if (s) {
-			self.hostnameField.stringValue = s;
+	if ([self hasAnyBlog]) {
+		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+			NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
+			if (s) {
+				self.hostnameField.stringValue = s;
+			}
+			else {
+				self.hostnameField.stringValue = [RFSettings stringForKey:kAccountDefaultSite];
+			}
+		}
+		else if ([self hasMicropubBlog]) {
+			NSString* endpoint_s = [RFSettings stringForKey:kExternalMicropubMe];
+			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
+			self.hostnameField.stringValue = endpoint_url.host;
 		}
 		else {
-			self.hostnameField.stringValue = [RFSettings stringForKey:kAccountDefaultSite];
+			NSString* endpoint_s = [RFSettings stringForKey:kExternalBlogEndpoint];
+			NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
+			self.hostnameField.stringValue = endpoint_url.host;
 		}
 	}
-	else if ([self hasMicropubBlog]) {
-		NSString* endpoint_s = [RFSettings stringForKey:kExternalMicropubMe];
-		NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
-		self.hostnameField.stringValue = endpoint_url.host;
-	}
 	else {
-		NSString* endpoint_s = [RFSettings stringForKey:kExternalBlogEndpoint];
-		NSURL* endpoint_url = [NSURL URLWithString:endpoint_s];
-		self.hostnameField.stringValue = endpoint_url.host;
+		self.hostnameField.stringValue = @"No blog configured.";
+		self.importButton.enabled = NO;
 	}
 }
 
@@ -90,7 +96,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu photos (%lu selected)", (unsigned long)self.photos.count, (unsigned long)num_selected];
 	}
 	
-	if (num_selected > 0) {
+	if ((num_selected > 0) && [self hasAnyBlog]) {
 		self.importButton.enabled = YES;
 	}
 	else {
@@ -175,8 +181,31 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				if (s.length > 0) {
 					s = [s stringByAppendingString:@"\n\n"];
 				}
-				
-				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" />", photo.publishedURL, 600.0, 600.0];
+
+				CGSize original_size = photo.thumbnailImage.size;
+				CGFloat width = 0;
+				CGFloat height = 0;
+
+				if (original_size.width > original_size.height) {
+					if (original_size.width > 600.0) {
+						width = 600.0;
+					}
+					else {
+						width = original_size.width;
+					}
+					height = width / original_size.width * original_size.height;
+				}
+				else {
+					if (original_size.height > 600.0) {
+						height = 600.0;
+					}
+					else {
+						height = original_size.height;
+					}
+					width = height / original_size.height * original_size.width;
+				}
+
+				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" />", photo.publishedURL, width, height];
 			}
 
 			[self uploadText:s date:d forPhoto:photo completion:^{
@@ -215,6 +244,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 }
 
 #pragma mark -
+
+- (BOOL) hasAnyBlog
+{
+	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
+	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
+	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
+	return (has_hosted || micropub || xmlrpc);
+}
 
 - (BOOL) hasSnippetsBlog
 {
