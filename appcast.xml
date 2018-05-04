@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.3.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thanks for supporting Micro.blog! Changes in this version:</p>
+ 				<ul>
+ 					<li>Fixed creating replies from Instagram import. Micro.blog now removes the "@" if an Instagram caption begins with an Instagram username.</li>
+ 					<li>Plus the new Instagram import from version 1.3, available under the File menu.
+ 				</ul>
+ 			]]></description>
+			<pubDate>Fri, 04 May 2018 15:20:00 +0000</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.3.1.zip" sparkle:shortVersionString="1.3.1" sparkle:version="40" length="2999128" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.3</title>
  			<description><![CDATA[
 				<style>
