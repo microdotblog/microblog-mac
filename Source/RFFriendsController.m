@@ -26,7 +26,7 @@
 {
 	[super viewDidLoad];
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/following/%@", self.username];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/users/discover/%@", self.username];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 }

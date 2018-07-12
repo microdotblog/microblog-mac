@@ -98,10 +98,21 @@
 	
 	if (self.bioField.stringValue.length == 0) {
 		// effectively hide the unused space for the bio field
-		self.bioSpacingConstraint.constant = 10;
+		self.bioSpacingConstraint.constant = 0;
 	}
 
-	self.followingUsersButton.title = [NSString stringWithFormat:@"Following %@", [microblog_info objectForKey:@"following_count"]];;
+	NSInteger following_count = [[microblog_info objectForKey:@"discover_count"] intValue];
+	if (following_count == 0) {
+		self.followingUsersButton.title = @"";
+		self.followingHeightConstraint.constant = 0;
+	}
+	else if (following_count == 1) {
+		self.followingUsersButton.title = @"Following 1 user you aren't following";
+	}
+	else {
+		self.followingUsersButton.title = [NSString stringWithFormat:@"Following %ld users you aren't following", (long)following_count];
+	}
+	
 	self.followingUsersButton.hidden = NO;
 
 //	self.blogAddressLabel.text = [authorInfo objectForKey:@"url"];
