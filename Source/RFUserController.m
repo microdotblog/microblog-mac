@@ -47,9 +47,11 @@
 			RFDispatchMain (^{
 				if (is_you) {
 					self.followButton.hidden = YES;
+					self.optionsButton.hidden = YES;
 				}
 				else {
 					self.followButton.hidden = NO;
+					self.optionsButton.hidden = NO;
 					[self setupFollowing:is_following];
 				}
 			});
@@ -175,6 +177,62 @@
 - (IBAction) back:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
+}
+
+- (IBAction) showOptions:(id)sender
+{
+	NSMenu* menu = [[NSMenu alloc] initWithTitle:@"Options"];
+
+	NSString* s;
+	NSMenuItem* item;
+	
+	s = [NSString stringWithFormat:@"Mute @%@", self.username];
+	item = [[NSMenuItem alloc] initWithTitle:s action:@selector(muteUser:) keyEquivalent:@""];
+	item.target = self;
+	[menu addItem:item];
+
+	s = [NSString stringWithFormat:@"Report @%@", self.username];
+	item = [[NSMenuItem alloc] initWithTitle:s action:@selector(reportUser:) keyEquivalent:@""];
+	item.target = self;
+	[menu addItem:item];
+
+	[menu popUpMenuPositioningItem:nil atLocation:[NSEvent mouseLocation] inView:nil];
+}
+
+- (void) muteUser:(id)sender
+{
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/account/muting?username=%@", self.username];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+}
+
+- (void) reportUser:(id)sender
+{
+	NSAlert* sheet = [[NSAlert alloc] init];
+
+	sheet.messageText = [NSString stringWithFormat:@"Report @%@ to Micro.blog for review? ", self.username];
+	sheet.informativeText = @"We'll look at this user's posts to see if they violate our community guidelines.";
+
+	[sheet addButtonWithTitle:@"Report"];
+	[sheet addButtonWithTitle:@"Cancel"];
+	[sheet addButtonWithTitle:@"Community Guidelines"];
+	[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == 1000) {
+			[self reportUserWithUsername:self.username];
+		}
+		else if (returnCode == 1002) {
+			[self openCommunityGuidelines];
+		}
+	}];
+}
+
+- (void) reportUserWithUsername:(NSString *)username
+{
+}
+
+- (void) openCommunityGuidelines
+{
+	NSString* url = @"https://help.micro.blog/2017/community-guidelines/";
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
 }
 
 @end

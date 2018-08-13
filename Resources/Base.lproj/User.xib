@@ -16,6 +16,7 @@
                 <outlet property="followingHeightConstraint" destination="2Dr-DD-2k7" id="Bdy-yP-Dzj"/>
                 <outlet property="followingUsersButton" destination="kzQ-oe-lTh" id="wgL-3o-H2G"/>
                 <outlet property="headerField" destination="WFZ-4E-LSZ" id="uVK-RZ-Dfh"/>
+                <outlet property="optionsButton" destination="eb7-qH-QCf" id="mpX-uD-Rah"/>
                 <outlet property="progressSpinner" destination="7T1-Rs-eHs" id="7nw-3i-CYC"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mt4-Ha-Cj8"/>
                 <outlet property="webView" destination="7LD-DW-RCG" id="usv-AY-zgp"/>
@@ -85,7 +86,7 @@
                                     <action selector="showFollowing:" target="-2" id="id5-4z-InE"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eb7-qH-QCf">
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eb7-qH-QCf">
                                 <rect key="frame" x="230" y="89" width="24" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="9kN-wZ-AnH"/>
@@ -95,6 +96,9 @@
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="showOptions:" target="-2" id="orI-PD-T14"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>
