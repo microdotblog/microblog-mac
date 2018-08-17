@@ -210,7 +210,7 @@
 	NSAlert* sheet = [[NSAlert alloc] init];
 
 	sheet.messageText = [NSString stringWithFormat:@"Report @%@ to Micro.blog for review? ", self.username];
-	sheet.informativeText = @"We'll look at this user's posts to see if they violate our community guidelines.";
+	sheet.informativeText = @"We'll look at this user's posts to determine if they violate our community guidelines.";
 
 	[sheet addButtonWithTitle:@"Report"];
 	[sheet addButtonWithTitle:@"Cancel"];
@@ -227,6 +227,12 @@
 
 - (void) reportUserWithUsername:(NSString *)username
 {
+	RFClient* client = [[RFClient alloc] initWithPath:@"/users/report"];
+	NSDictionary* args = @{
+		@"username": username
+	};
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+	}];
 }
 
 - (void) openCommunityGuidelines
