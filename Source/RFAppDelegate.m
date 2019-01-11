@@ -12,6 +12,7 @@
 #import "RFWelcomeController.h"
 #import "RFPreferencesController.h"
 #import "RFInstagramController.h"
+#import "RFPhotoZoomController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -64,6 +65,10 @@
 	NSString* param = [url.path stringByReplacingOccurrencesOfString:@"/" withString:@""];
 	if ([url.host isEqualToString:@"open"]) {
 		[self showOptionsMenuWithPostID:param];
+	}
+	else if ([url.host isEqualToString:@"photo"]) {
+		NSString* photo_url = [url.path substringFromIndex:1];
+		[self showPhotoWithURL:photo_url];
 	}
 	else if ([url.host isEqualToString:@"user"]) {
 		[self showProfileWithUsername:param];
@@ -200,6 +205,13 @@
 //	[self.timelineController setSelected:NO withPostID:post_id];
 	
 	[self showOptionsMenuWithPostID:nil];
+}
+
+- (void) showPhotoWithURL:(NSString *)photoURL
+{
+	NSLog (@"photo clicked: %@", photoURL);
+	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL];
+	[controller showWindow:nil];
 }
 
 - (void) showReplyPostNotification:(NSNotification *)notification

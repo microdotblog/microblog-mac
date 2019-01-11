@@ -117,6 +117,8 @@
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BB69068209A113500CD5E1E /* Instagram.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB69066209A113500CD5E1E /* Instagram.xib */; };
 		4BB6906B209A123300CD5E1E /* RFInstagramController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB6906A209A123300CD5E1E /* RFInstagramController.m */; };
+		4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB7448D21E84A4400371388 /* PhotoZoom.xib */; };
+		4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7449121E84AC500371388 /* RFPhotoZoomController.m */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 /* End PBXBuildFile section */
@@ -334,6 +336,9 @@
 		4BB69067209A113500CD5E1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Instagram.xib; sourceTree = "<group>"; };
 		4BB69069209A123300CD5E1E /* RFInstagramController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFInstagramController.h; path = Source/RFInstagramController.h; sourceTree = "<group>"; };
 		4BB6906A209A123300CD5E1E /* RFInstagramController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFInstagramController.m; path = Source/RFInstagramController.m; sourceTree = "<group>"; };
+		4BB7448E21E84A4400371388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoZoom.xib; sourceTree = "<group>"; };
+		4BB7449021E84AC500371388 /* RFPhotoZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoZoomController.h; path = Source/RFPhotoZoomController.h; sourceTree = "<group>"; };
+		4BB7449121E84AC500371388 /* RFPhotoZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoZoomController.m; path = Source/RFPhotoZoomController.m; sourceTree = "<group>"; };
 		4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -527,6 +532,8 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4BB7449021E84AC500371388 /* RFPhotoZoomController.h */,
+				4BB7449121E84AC500371388 /* RFPhotoZoomController.m */,
 				4B608B3E1FFE7C1900589F77 /* RFNewPostAccessoryController.h */,
 				4B608B3F1FFE7C1900589F77 /* RFNewPostAccessoryController.m */,
 				4B2CAB2D1F912EAF00D9B10E /* RFConversationController.h */,
@@ -611,6 +618,7 @@
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 				4B5EE27820632C6800C87A78 /* Blogs.xib */,
 				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
+				4BB7448D21E84A4400371388 /* PhotoZoom.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -743,6 +751,7 @@
 				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */,
+				4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
@@ -810,6 +819,7 @@
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
+				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
@@ -1017,6 +1027,14 @@
 				4BB69067209A113500CD5E1E /* Base */,
 			);
 			name = Instagram.xib;
+			sourceTree = "<group>";
+		};
+		4BB7448D21E84A4400371388 /* PhotoZoom.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BB7448E21E84A4400371388 /* Base */,
+			);
+			name = PhotoZoom.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
