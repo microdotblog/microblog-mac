@@ -16,6 +16,8 @@
 {
 	self.restoredSelection = NSMakeRange (affectedCharRange.location + replacementString.length, 0);
 
+//	NSLog (@"replacement = %@", replacementString);
+
 	return [super shouldChangeTextInRange:affectedCharRange replacementString:replacementString];
 }
 
