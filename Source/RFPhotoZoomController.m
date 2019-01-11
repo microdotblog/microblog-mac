@@ -38,9 +38,33 @@
 		NSData* d = response.rawResponse;
 		RFDispatchMain (^{
 			NSImage* img = [[NSImage alloc] initWithData:d];
-			self.imageView.image = img;
+			[self updateWithImage:img];
 			[self hideProgress];
 		});
+	}];
+}
+
+- (void) updateWithImage:(NSImage *)image
+{
+	self.imageView.alphaValue = 0.0;
+	self.imageView.image = image;
+	self.window.contentAspectRatio = image.size;
+	
+	CGSize content_size;
+	content_size.width = 480;
+	content_size.height = content_size.width / image.size.width * image.size.height;
+	
+	CGRect content_r = [self.window contentRectForFrameRect:self.window.frame];
+	CGRect window_r = self.window.frame;
+	CGFloat titlebar_height = window_r.size.height - content_r.size.height;
+
+	CGRect r = self.window.frame;
+	r.origin.y = r.origin.y + (r.size.height - content_size.height) - titlebar_height;
+	r.size = CGSizeMake (content_size.width, content_size.height + titlebar_height);
+	[self.window setFrame:r display:YES animate:YES];
+	
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+		[[self.imageView animator] setAlphaValue: 1.0];
 	}];
 }
 
