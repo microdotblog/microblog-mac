@@ -15,7 +15,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Photo" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="PhotoZoomWindow" animationBehavior="default" id="QvC-M9-y7g">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="PhotoZoomWindow" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="62" y="248" width="480" height="480"/>
@@ -25,6 +25,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <box boxType="custom" borderType="none" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="Wbp-Wf-xcE">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                        <view key="contentView" id="c9K-yE-PTc">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </view>
+                        <color key="fillColor" white="0.79968961784885495" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </box>
                     <imageView wantsLayer="YES" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="i4s-Y0-uFb">
                         <rect key="frame" x="-1" y="-1" width="482" height="482"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="LTy-wV-c0E"/>
@@ -39,10 +47,14 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="i4s-Y0-uFb" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="4dv-YW-1Ma"/>
+                    <constraint firstAttribute="bottom" secondItem="Wbp-Wf-xcE" secondAttribute="bottom" id="5dD-l2-vme"/>
                     <constraint firstItem="i4s-Y0-uFb" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="5ns-kv-H9E"/>
                     <constraint firstItem="QXG-Ec-083" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="RD3-b2-8fz"/>
+                    <constraint firstItem="Wbp-Wf-xcE" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="XwC-wE-6kl"/>
                     <constraint firstAttribute="bottom" secondItem="i4s-Y0-uFb" secondAttribute="bottom" constant="-1" id="Yg2-7P-co5"/>
+                    <constraint firstAttribute="trailing" secondItem="Wbp-Wf-xcE" secondAttribute="trailing" id="sib-xM-2L6"/>
                     <constraint firstItem="QXG-Ec-083" firstAttribute="centerY" secondItem="EiT-Mj-1SZ" secondAttribute="centerY" id="tfx-Ag-kRt"/>
+                    <constraint firstItem="Wbp-Wf-xcE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="vim-CJ-ep1"/>
                     <constraint firstAttribute="trailing" secondItem="i4s-Y0-uFb" secondAttribute="trailing" constant="-1" id="z6G-hg-0JC"/>
                 </constraints>
             </view>

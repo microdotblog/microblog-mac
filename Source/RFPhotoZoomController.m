@@ -26,7 +26,8 @@
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-	
+
+	[self updateTitle];
 	[self downloadPhoto];
 }
 
@@ -44,14 +45,22 @@
 	}];
 }
 
+- (void) updateTitle
+{
+	NSURL* url = [NSURL URLWithString:self.photoURL];
+	if (url) {
+		self.window.title = url.host;
+	}
+}
+
 - (void) updateWithImage:(NSImage *)image
 {
-	self.imageView.alphaValue = 0.0;
+	self.imageView.hidden = YES;
 	self.imageView.image = image;
 	self.window.contentAspectRatio = image.size;
 	
 	CGSize content_size;
-	content_size.width = 480;
+	content_size.width = 600;
 	content_size.height = content_size.width / image.size.width * image.size.height;
 	
 	CGRect content_r = [self.window contentRectForFrameRect:self.window.frame];
@@ -64,7 +73,8 @@
 	[self.window setFrame:r display:YES animate:YES];
 	
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
-		[[self.imageView animator] setAlphaValue: 1.0];
+		context.duration = 0.3;
+		[self.imageView animator].hidden = NO;
 	}];
 }
 
