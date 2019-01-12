@@ -11,6 +11,8 @@ static NSString* const kOpenPostingNotification = @"RFOpenPosting";
 static NSString* const kClosePostingNotification = @"RFClosePosting";
 static NSString* const kRefreshTimelineNotification = @"RFRefreshTimeline";
 static NSString* const kUpdatedBlogNotification = @"RFUpdatedBlog";
+static NSString* const kRemoveAttachedPhotoNotification = @"RFRemoveAttachedPhoto";
+static NSString* const kRemoveAttachedPhotoIndexPath = @"index_path";
 
 static NSString* const kSwitchAccountNotification = @"RFSwitchAccount";
 static NSString* const kSwitchAccountUsernameKey = @"username";

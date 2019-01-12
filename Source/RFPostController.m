@@ -178,7 +178,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
-	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
 }
 
 - (void) blogNameClicked:(NSGestureRecognizer *)gesture
@@ -371,6 +371,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self hideBlogsMenu];
 }
 
+- (void) removeAttachedPhotoNotification:(NSNotification *)notification
+{
+	NSIndexPath* index_path = [notification.userInfo objectForKey:kRemoveAttachedPhotoIndexPath];
+	[self removePhotoAtIndex:index_path];
+}
+
 #pragma mark -
 
 - (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -392,6 +398,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	NSIndexPath* index_path = [indexPaths anyObject];
 	[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
+	[collectionView deselectAll:nil];
 }
 
 #pragma mark -
@@ -933,7 +940,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) clickedPhotoAtIndex:(NSIndexPath *)indexPath
 {
 	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
-	self.altController = [[RFPhotoAltController alloc] initWithPhoto:photo];
+	self.altController = [[RFPhotoAltController alloc] initWithPhoto:photo atIndex:indexPath];
 	[self.view.window beginSheet:self.altController.window completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == NSModalResponseOK) {
 		}

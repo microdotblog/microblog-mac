@@ -12,15 +12,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class RFPhoto;
 
-@interface RFPhotoAltController : NSWindowController
+@interface RFPhotoAltController : NSWindowController <NSTextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet NSImageView* imageView;
 @property (strong, nonatomic) IBOutlet NSTextView* descriptionField;
 @property (strong, nonatomic) IBOutlet NSButton* okButton;
 
 @property (strong, nonatomic) RFPhoto* photo;
+@property (strong, nonatomic) NSIndexPath* indexPath;
 
-- (id) initWithPhoto:(RFPhoto *)photo;
+- (id) initWithPhoto:(RFPhoto *)photo atIndex:(NSIndexPath *)indexPath;
 
 @end
 

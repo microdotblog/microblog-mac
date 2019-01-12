@@ -73,28 +73,6 @@ Gw
                             <action selector="removePressed:" target="-2" id="KyX-l8-8q6"/>
                         </connections>
                     </button>
-                    <scrollView borderType="line" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8HY-aX-APc">
-                        <rect key="frame" x="161" y="61" width="299" height="126"/>
-                        <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="8Sl-x8-lT8">
-                            <rect key="frame" x="1" y="1" width="297" height="124"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Y45-Ub-jSl">
-                                    <rect key="frame" x="0.0" y="0.0" width="297" height="124"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="297" height="124"/>
-                                    <size key="maxSize" width="365" height="10000000"/>
-                                    <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                </textView>
-                            </subviews>
-                        </clipView>
-                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="4HW-9D-A4g">
-                            <rect key="frame" x="-100" y="-100" width="16" height="126"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                    </scrollView>
                     <imageView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3YG-dT-prc">
                         <rect key="frame" x="20" y="61" width="126" height="126"/>
                         <constraints>
@@ -103,19 +81,72 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="N5E-LG-mlL"/>
                     </imageView>
+                    <box autoresizesSubviews="NO" boxType="custom" borderType="line" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Pv2-j9-Zj6">
+                        <rect key="frame" x="166" y="61" width="294" height="99"/>
+                        <view key="contentView" id="xuF-pk-R8z">
+                            <rect key="frame" x="1" y="1" width="292" height="97"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8HY-aX-APc">
+                                    <rect key="frame" x="4" y="0.0" width="284" height="91"/>
+                                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="8Sl-x8-lT8">
+                                        <rect key="frame" x="0.0" y="0.0" width="284" height="91"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Y45-Ub-jSl">
+                                                <rect key="frame" x="0.0" y="0.0" width="284" height="91"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <size key="minSize" width="284" height="91"/>
+                                                <size key="maxSize" width="365" height="10000000"/>
+                                                <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            </textView>
+                                        </subviews>
+                                    </clipView>
+                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="4HW-9D-A4g">
+                                        <rect key="frame" x="-100" y="-100" width="16" height="126"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </scroller>
+                                </scrollView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="8HY-aX-APc" firstAttribute="top" secondItem="xuF-pk-R8z" secondAttribute="top" constant="6" id="5kr-n6-9gt"/>
+                                <constraint firstAttribute="bottom" secondItem="8HY-aX-APc" secondAttribute="bottom" id="HpF-Na-Srz"/>
+                                <constraint firstAttribute="trailing" secondItem="8HY-aX-APc" secondAttribute="trailing" constant="4" id="aeO-FS-TPU"/>
+                                <constraint firstItem="8HY-aX-APc" firstAttribute="leading" secondItem="xuF-pk-R8z" secondAttribute="leading" constant="4" id="cJ1-d9-awP"/>
+                            </constraints>
+                        </view>
+                        <color key="borderColor" red="0.0" green="0.0" blue="0.0" alpha="0.20343043706032035" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </box>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QKV-1r-1Q7">
+                        <rect key="frame" x="166" y="170" width="296" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="8oa-qR-2mv"/>
+                        </constraints>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Accessibility Description:" id="h1b-k4-oEI">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="HpB-K0-AMa" firstAttribute="top" secondItem="8HY-aX-APc" secondAttribute="bottom" constant="20" id="3dW-C0-8JL"/>
+                    <constraint firstItem="QKV-1r-1Q7" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="0Wd-Tn-gZs"/>
                     <constraint firstAttribute="bottom" secondItem="HpB-K0-AMa" secondAttribute="bottom" constant="20" id="E6g-Dw-ZKA"/>
                     <constraint firstAttribute="trailing" secondItem="HpB-K0-AMa" secondAttribute="trailing" constant="20" id="EQt-n8-1oi"/>
+                    <constraint firstItem="Pv2-j9-Zj6" firstAttribute="top" secondItem="QKV-1r-1Q7" secondAttribute="bottom" constant="10" id="HKn-wz-XyJ"/>
                     <constraint firstItem="HpB-K0-AMa" firstAttribute="leading" secondItem="ST3-k2-G6A" secondAttribute="trailing" constant="12" id="M1v-Xw-Abb"/>
-                    <constraint firstAttribute="trailing" secondItem="8HY-aX-APc" secondAttribute="trailing" constant="20" id="M7F-iq-CEb"/>
                     <constraint firstItem="3YG-dT-prc" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="Msk-X9-yjD"/>
-                    <constraint firstItem="8HY-aX-APc" firstAttribute="leading" secondItem="3YG-dT-prc" secondAttribute="trailing" constant="15" id="enY-61-szl"/>
+                    <constraint firstItem="Pv2-j9-Zj6" firstAttribute="leading" secondItem="3YG-dT-prc" secondAttribute="trailing" constant="20" id="PhO-cD-tNL"/>
+                    <constraint firstItem="QKV-1r-1Q7" firstAttribute="leading" secondItem="3YG-dT-prc" secondAttribute="trailing" constant="22" id="YUL-kA-job"/>
+                    <constraint firstAttribute="trailing" secondItem="Pv2-j9-Zj6" secondAttribute="trailing" constant="20" id="brY-Yl-wUO"/>
+                    <constraint firstItem="HpB-K0-AMa" firstAttribute="top" secondItem="Pv2-j9-Zj6" secondAttribute="bottom" constant="20" id="h71-cx-qRh"/>
                     <constraint firstAttribute="bottom" secondItem="ST3-k2-G6A" secondAttribute="bottom" constant="20" id="jAQ-rk-oS1"/>
+                    <constraint firstAttribute="trailing" secondItem="QKV-1r-1Q7" secondAttribute="trailing" constant="20" id="kUa-E1-2zy"/>
                     <constraint firstItem="3YG-dT-prc" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="oCt-kB-kST"/>
                     <constraint firstItem="ZzI-NT-hrj" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="pnA-LS-MVW"/>
-                    <constraint firstItem="8HY-aX-APc" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="tVx-kX-4NG"/>
                     <constraint firstAttribute="bottom" secondItem="ZzI-NT-hrj" secondAttribute="bottom" constant="20" id="wJU-ws-GKN"/>
                 </constraints>
             </view>
