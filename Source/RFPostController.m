@@ -14,6 +14,7 @@
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
 #import "RFBlogsController.h"
+#import "RFPhotoAltController.h"
 #import "RFMicropub.h"
 #import "RFSettings.h"
 #import "RFHighlightingTextStorage.h"
@@ -390,7 +391,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
 {
 	NSIndexPath* index_path = [indexPaths anyObject];
-	[self performSelector:@selector(removePhotoAtIndex:) withObject:index_path afterDelay:0.1];
+	[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
 }
 
 #pragma mark -
@@ -927,6 +928,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}];
 		}
 	}
+}
+
+- (void) clickedPhotoAtIndex:(NSIndexPath *)indexPath
+{
+	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
+	self.altController = [[RFPhotoAltController alloc] initWithPhoto:photo];
+	[self.view.window beginSheet:self.altController.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSModalResponseOK) {
+		}
+	}];
 }
 
 - (void) removePhotoAtIndex:(NSIndexPath *)indexPath

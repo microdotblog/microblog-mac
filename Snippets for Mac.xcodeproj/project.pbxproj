@@ -119,6 +119,8 @@
 		4BB6906B209A123300CD5E1E /* RFInstagramController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB6906A209A123300CD5E1E /* RFInstagramController.m */; };
 		4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB7448D21E84A4400371388 /* PhotoZoom.xib */; };
 		4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7449121E84AC500371388 /* RFPhotoZoomController.m */; };
+		4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB744A121EA4E1800371388 /* RFPhotoAltController.m */; };
+		4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB744A321EA4E3800371388 /* PhotoAlt.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 /* End PBXBuildFile section */
@@ -339,6 +341,9 @@
 		4BB7448E21E84A4400371388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoZoom.xib; sourceTree = "<group>"; };
 		4BB7449021E84AC500371388 /* RFPhotoZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoZoomController.h; path = Source/RFPhotoZoomController.h; sourceTree = "<group>"; };
 		4BB7449121E84AC500371388 /* RFPhotoZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoZoomController.m; path = Source/RFPhotoZoomController.m; sourceTree = "<group>"; };
+		4BB744A021EA4E1800371388 /* RFPhotoAltController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoAltController.h; path = Source/RFPhotoAltController.h; sourceTree = "<group>"; };
+		4BB744A121EA4E1800371388 /* RFPhotoAltController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoAltController.m; path = Source/RFPhotoAltController.m; sourceTree = "<group>"; };
+		4BB744A421EA4E3800371388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoAlt.xib; sourceTree = "<group>"; };
 		4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -534,6 +539,8 @@
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 				4BB7449021E84AC500371388 /* RFPhotoZoomController.h */,
 				4BB7449121E84AC500371388 /* RFPhotoZoomController.m */,
+				4BB744A021EA4E1800371388 /* RFPhotoAltController.h */,
+				4BB744A121EA4E1800371388 /* RFPhotoAltController.m */,
 				4B608B3E1FFE7C1900589F77 /* RFNewPostAccessoryController.h */,
 				4B608B3F1FFE7C1900589F77 /* RFNewPostAccessoryController.m */,
 				4B2CAB2D1F912EAF00D9B10E /* RFConversationController.h */,
@@ -619,6 +626,7 @@
 				4B5EE27820632C6800C87A78 /* Blogs.xib */,
 				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
 				4BB7448D21E84A4400371388 /* PhotoZoom.xib */,
+				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -763,6 +771,7 @@
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
+				4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */,
 				4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
 				4B5EE280206330D100C87A78 /* BlogCell.xib in Resources */,
@@ -864,6 +873,7 @@
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
 				4B2CAB181F90667300D9B10E /* alloc.c in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
+				4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */,
 				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
 				4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
@@ -1035,6 +1045,14 @@
 				4BB7448E21E84A4400371388 /* Base */,
 			);
 			name = PhotoZoom.xib;
+			sourceTree = "<group>";
+		};
+		4BB744A321EA4E3800371388 /* PhotoAlt.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BB744A421EA4E3800371388 /* Base */,
+			);
+			name = PhotoAlt.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

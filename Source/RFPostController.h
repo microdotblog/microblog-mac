@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class RFHighlightingTextStorage;
+@class RFPhotoAltController;
 
 @interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
 
@@ -34,6 +35,7 @@
 @property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
+@property (strong, nonatomic) RFPhotoAltController* altController;
 
 - (id) initWithText:(NSString *)text;
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
