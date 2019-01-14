@@ -31,6 +31,7 @@
 	
 	[self setupPhotoThumbnail];
 	[self setupText];
+	[self setupDefaultButton];
 }
 
 - (void) setupPhotoThumbnail
@@ -40,10 +41,20 @@
 
 - (void) setupText
 {
-//	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
 	NSFont* system_font = [NSFont systemFontOfSize:14];
 	self.descriptionField.font = system_font;
 	self.descriptionField.delegate = self;
+
+	if (self.photo.altText.length > 0) {
+		self.descriptionField.string = self.photo.altText;
+	}
+}
+
+- (void) setupDefaultButton
+{
+	if (self.photo.altText.length > 0) {
+		self.okButton.title = @"Update";
+	}
 }
 
 - (IBAction) okPressed:(id)sender
