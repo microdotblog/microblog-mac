@@ -73,7 +73,7 @@
 - (void) mouseEntered:(NSEvent *)event
 {
 	if ([self hasMultipleAccounts]) {
-		self.fillColor = [NSColor colorWithWhite:0.7 alpha:0.5];
+		self.fillColor = [NSColor colorWithWhite:0.82 alpha:1.0];
 	}
 }
 

@@ -492,34 +492,20 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.navigationRightConstraint.constant = 0;
 	}
 
-	NSView* last_webview = [self currentContainerView];
-
+	NSView* last_view = [self currentContainerView];
 	[self.navigationStack push:controller];
-
-	NSRect pushed_final_r = self.containerView.bounds;
-	pushed_final_r.origin.x = kDefaultSplitViewPosition + 1;
-
-	NSRect pushed_start_r = self.containerView.bounds;
-	pushed_start_r.origin.x = kDefaultSplitViewPosition + 1 + self.containerView.bounds.size.width;
-
-	NSRect top_r = self.containerView.frame;
-	top_r.origin.x = top_r.origin.x - self.containerView.bounds.size.width - 1;
-
-//	controller.view.frame = pushed_start_r;
-//	controller.view.autoresizingMask = NSViewHeightSizable;
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.window.contentView addSubview:controller.view positioned:NSWindowBelow relativeTo:self.webView];
 
-	[self.window.contentView addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
-
-	NSLayoutConstraint* left_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:last_webview attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
+	NSLayoutConstraint* left_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
 	left_constraint.priority = NSLayoutPriorityDefaultHigh;
 	left_constraint.active = YES;
 
-	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:last_webview attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
 	top_constraint.active = YES;
 
-	NSLayoutConstraint* bottom_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:last_webview attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+	NSLayoutConstraint* bottom_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
 	bottom_constraint.priority = NSLayoutPriorityDefaultHigh;
 	bottom_constraint.active = YES;
 
@@ -530,14 +516,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[controller.view setNeedsLayout:YES];
 	
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-		context.duration = 2.3;
+		context.duration = 0.3;
 		context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-//		controller.view.animator.frame = pushed_final_r;
-//		self.webView.animator.frame = top_r;
 		self.navigationLeftConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
 		self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
 	} completionHandler:^{
-		self.webView.hidden = YES;
 	}];
 }
 
@@ -545,23 +528,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSViewController* controller = [self.navigationStack pop];
 	if (controller) {
-		NSRect back_final_r = controller.view.frame;
-//		back_final_r.origin.x = -50;
-//		controller.view.frame = back_final_r;
-
-		NSRect pushed_final_r = controller.view.frame;
-		pushed_final_r.origin.x = kDefaultSplitViewPosition + 1 + self.webView.bounds.size.width;
-
-		NSRect back_start_r = back_final_r;
-		back_start_r.origin.x = -100;
-//		self.webView.frame = back_start_r;
-		self.webView.hidden = NO;
-
 		[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-			context.duration = 2.3;
+			context.duration = 0.3;
 			context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-//			controller.view.animator.frame = pushed_final_r;
-//			self.webView.animator.frame = back_final_r;
 			self.navigationLeftConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
 			self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
 		} completionHandler:^{

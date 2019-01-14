@@ -53,7 +53,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="181" height="66"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
-                                        <color key="fillColor" white="0.81739783653846154" alpha="0.49734613549618323" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="fillColor" white="0.87044530791250729" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </box>
                                     <imageView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ETu-Lx-u0c" customClass="RFRoundedImageView">
                                         <rect key="frame" x="8" y="543" width="48" height="48"/>
