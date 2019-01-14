@@ -147,6 +147,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showReplyPostNotification:) name:kShowReplyPostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
 }
 
 - (void) setupURLs
@@ -231,6 +232,12 @@
 {
 	NSURL* url = [notification.userInfo objectForKey:kOpenMicroblogURLKey];
 	[self handleURLs:@[ url ]];
+}
+
+- (void) openPhotoURLNotification:(NSNotification *)notification
+{
+	NSURL* url = [notification.userInfo objectForKey:kOpenPhotoURLKey];
+	[self showPhotoWithURL:url.absoluteString];
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID

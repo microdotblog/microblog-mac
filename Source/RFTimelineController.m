@@ -770,7 +770,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 	
 	if (!found_microblog_url) {
-		[[NSWorkspace sharedWorkspace] openURL:url];
+		if ([url.pathExtension isEqualToString:@"jpg"] || [url.pathExtension isEqualToString:@"png"]) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPhotoURLNotification object:self userInfo:@{ kOpenPhotoURLKey: url }];
+		}
+		else {
+			[[NSWorkspace sharedWorkspace] openURL:url];
+		}
 	}
 }
 

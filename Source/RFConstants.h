@@ -31,7 +31,10 @@ static NSInteger const kTextSizeLarge = 17;
 static NSInteger const kTextSizeHuge = 19;
 
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
-#define kOpenMicroblogURLKey @"url"
+#define kOpenMicroblogURLKey @"url" // NSURL
+
+#define kOpenPhotoURLNotification @"RFOpenPhotoURL"
+#define kOpenPhotoURLKey @"url" // NSURL
 
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
