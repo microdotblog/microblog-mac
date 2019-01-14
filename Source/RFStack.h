@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSMutableArray* stackArray;
 
+- (NSInteger) count;
 - (void) push:(id)obj;
 - (id) pop;
 - (id) peek;

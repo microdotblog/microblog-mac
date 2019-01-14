@@ -20,6 +20,11 @@
 	return self;
 }
 
+- (NSInteger) count
+{
+	return [self.stackArray count];
+}
+
 - (void) push:(id)obj
 {
 	[self.stackArray addObject:obj];

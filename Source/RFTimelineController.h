@@ -37,12 +37,16 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* messageSpinner;
 @property (strong, nonatomic) IBOutlet NSBox* profileBox;
 @property (strong, nonatomic) IBOutlet NSImageView* switchAccountView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* timelineLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* timelineRightConstraint;
 
 @property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
 @property (strong, nonatomic) RFStack* navigationStack;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* navigationLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* navigationRightConstraint;
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
 
