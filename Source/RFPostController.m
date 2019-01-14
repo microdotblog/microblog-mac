@@ -626,14 +626,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSDictionary* args;
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];
+				NSMutableArray* photo_alts = [NSMutableArray array];
+
 				for (RFPhoto* photo in self.attachedPhotos) {
 					[photo_urls addObject:photo.publishedURL];
+					[photo_alts addObject:photo.altText];
 				}
 				
 				args = @{
 					@"name": [self currentTitle],
 					@"content": text,
 					@"photo[]": photo_urls,
+					@"mp-photo-alt[]": photo_alts,
 					@"mp-destination": destination_uid
 				};
 			}
@@ -664,8 +668,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSDictionary* args;
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];
+				NSMutableArray* photo_alts = [NSMutableArray array];
+
 				for (RFPhoto* photo in self.attachedPhotos) {
 					[photo_urls addObject:photo.publishedURL];
+					[photo_alts addObject:photo.altText];
 				}
 
 				if (photo_urls.count == 1) {
@@ -673,7 +680,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						@"h": @"entry",
 						@"name": [self currentTitle],
 						@"content": text,
-						@"photo": [photo_urls firstObject]
+						@"photo": [photo_urls firstObject],
+						@"mp-photo-alt": [photo_alts firstObject]
 					};
 				}
 				else {
@@ -681,7 +689,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						@"h": @"entry",
 						@"name": [self currentTitle],
 						@"content": text,
-						@"photo[]": photo_urls
+						@"photo[]": photo_urls,
+						@"mp-photo-alt[]": photo_alts
 					};
 				}
 			}
@@ -701,7 +710,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
-//						[Answers logCustomEventWithName:@"Sent Post" customAttributes:nil];
 						[self closeWithoutSaving];
 					}
 				});
@@ -763,7 +771,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						self.photoButton.hidden = NO;
 					}
 					else {
-//						[Answers logCustomEventWithName:@"Sent External" customAttributes:nil];
 						[self closeWithoutSaving];
 					}
 				}));
@@ -816,7 +823,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}
 
 			for (RFPhoto* photo in self.attachedPhotos) {
-				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" />", photo.publishedURL, width, height];
+				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
 			}
 		}
 
@@ -874,7 +881,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					}
 					else {
 						photo.publishedURL = image_url;
-//						[Answers logCustomEventWithName:@"Uploaded Micropub" customAttributes:nil];
 						handler();
 					}
 				});
@@ -926,8 +932,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						}
 						else {
 							photo.publishedURL = image_url;
-
-//							[Answers logCustomEventWithName:@"Uploaded External" customAttributes:nil];
 							handler();
 						}
 					}
