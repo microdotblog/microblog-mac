@@ -58,10 +58,19 @@
 	self.imageView.hidden = YES;
 	self.imageView.image = image;
 	self.window.contentAspectRatio = image.size;
-	
+
+	NSRect screen_r = [NSScreen mainScreen].visibleFrame;
+
 	CGSize content_size;
 	content_size.width = 600;
 	content_size.height = content_size.width / image.size.width * image.size.height;
+	
+	if (content_size.height > screen_r.size.height) {
+		// don't let the window be bigger than the screen
+		const CGFloat kExtraPadding = 50;
+		content_size.height = screen_r.size.height - kExtraPadding;
+		content_size.width = content_size.height / image.size.height * image.size.width;
+	}
 	
 	CGRect content_r = [self.window contentRectForFrameRect:self.window.frame];
 	CGRect window_r = self.window.frame;
