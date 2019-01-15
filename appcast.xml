@@ -23,7 +23,7 @@
  					<li>Improved how the navigation animates when opening a conversation or user profile.</li>
  				</ul>
  			]]></description>
-			<pubDate>Tue, 14 Jan 2019 09:00:00 +0000</pubDate>
+			<pubDate>Tue, 14 Jan 2019 08:20:00 -0600</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.4.zip" sparkle:shortVersionString="1.4" sparkle:version="48" length="3050046" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
 		</item>		
