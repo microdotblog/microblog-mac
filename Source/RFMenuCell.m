@@ -12,7 +12,16 @@
 
 - (void) drawSelectionInRect:(NSRect)dirtyRect
 {
-	[[NSColor colorWithWhite:0.95 alpha:1.0] set];
+	NSAppearance* mode = [NSAppearance currentAppearance];
+	BOOL is_dark = [[mode bestMatchFromAppearancesWithNames:@[ NSAppearanceNameDarkAqua, NSAppearanceNameAqua ]] isEqualToString:NSAppearanceNameDarkAqua];
+
+	if (is_dark) {
+		[[NSColor colorWithWhite:0.0 alpha:1.0] set];
+	}
+	else {
+		[[NSColor colorWithWhite:0.95 alpha:1.0] set];
+	}
+
 	NSRectFill (self.bounds);
 }
 
