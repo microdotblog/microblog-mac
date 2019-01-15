@@ -8,14 +8,13 @@
 
 #import "RFMenuCell.h"
 
+#import "NSAppearance+Extras.h"
+
 @implementation RFMenuCell
 
 - (void) drawSelectionInRect:(NSRect)dirtyRect
 {
-	NSAppearance* mode = [NSAppearance currentAppearance];
-	BOOL is_dark = [[mode bestMatchFromAppearancesWithNames:@[ NSAppearanceNameDarkAqua, NSAppearanceNameAqua ]] isEqualToString:NSAppearanceNameDarkAqua];
-
-	if (is_dark) {
+	if ([NSAppearance rf_isDarkMode]) {
 		[[NSColor colorWithWhite:0.0 alpha:1.0] set];
 	}
 	else {

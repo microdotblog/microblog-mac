@@ -12,11 +12,16 @@
 #import "RFAccount.h"
 #import "RFConstants.h"
 #import "NSImage+Extras.h"
+#import "NSAppearance+Extras.h"
 
 @implementation RFAccountPopoverBox
 
 - (void) awakeFromNib
 {
+	if ([NSAppearance rf_isDarkMode]) {
+		self.fillColor = NSColor.textBackgroundColor;
+	}
+
 	self.savedFillColor = self.fillColor;
 }
 
@@ -73,7 +78,12 @@
 - (void) mouseEntered:(NSEvent *)event
 {
 	if ([self hasMultipleAccounts]) {
-		self.fillColor = [NSColor colorWithWhite:0.82 alpha:1.0];
+		if ([NSAppearance rf_isDarkMode]) {
+			self.fillColor = [NSColor colorWithWhite:0.1 alpha:1.0];
+		}
+		else {
+			self.fillColor = [NSColor colorWithWhite:0.82 alpha:1.0];
+		}
 	}
 }
 

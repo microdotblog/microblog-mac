@@ -62,6 +62,8 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>RFMacApplication</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<true/>
 	<key>SUFeedURL</key>
 	<string>https://s3.amazonaws.com/micro.blog/mac/appcast.xml</string>
 </dict>

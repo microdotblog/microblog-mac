@@ -8,16 +8,12 @@
 
 #import "RFButton.h"
 
+#import "NSAppearance+Extras.h"
+
 @implementation RFButton
 
 - (void) awakeFromNib
 {
-//	NSMutableAttributedString* attr_s = [[NSMutableAttributedString alloc] initWithString:self.title];
-//	NSUInteger len = [attr_s length];
-//	NSRange range = NSMakeRange (0, len);
-//	[attr_s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:range];
-//	[attr_s fixAttributesInRange:range];
-//	[self setAttributedTitle:attr_s];
 }
 
 @end
@@ -27,11 +23,14 @@
 - (NSRect) drawTitle:(NSAttributedString *)title withFrame:(NSRect)frame inView:(NSView *)controlView
 {
 	NSMutableAttributedString* attr_s = [[NSMutableAttributedString alloc] initWithAttributedString:title];
-	NSUInteger len = [attr_s length];
-	NSRange range = NSMakeRange (0, len);
-	[attr_s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:range];
-	[attr_s fixAttributesInRange:range];
-
+	
+	if ([NSAppearance rf_isDarkMode]) {
+		NSUInteger len = [attr_s length];
+		NSRange range = NSMakeRange (0, len);
+		[attr_s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:range];
+		[attr_s fixAttributesInRange:range];
+	}
+	
 	return [super drawTitle:attr_s withFrame:frame inView:controlView];
 }
 
