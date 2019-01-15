@@ -18,13 +18,13 @@
 				</style>
  				<p>New in this version:</p>
  				<ul>
- 					<li>Added clicking on a photo in the timeline to open it in a new window. If a photo was already set to link to a URL, it will open it in a web browser instead.</li>
+ 					<li>Added clicking on a photo in the timeline to open it in a new window.</li>
  					<li>Added setting alt text on photos for accessibility. Click the photo thumbnail before posting to your blog.</li>
  					<li>Improved how the navigation animates when opening a conversation or user profile.</li>
  				</ul>
  			]]></description>
 			<pubDate>Tue, 14 Jan 2019 09:00:00 +0000</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.4.zip" sparkle:shortVersionString="1.4" sparkle:version="44" length="2999128" type="application/octet-stream" />
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.4.zip" sparkle:shortVersionString="1.4" sparkle:version="48" length="3050046" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
 		</item>		
 
