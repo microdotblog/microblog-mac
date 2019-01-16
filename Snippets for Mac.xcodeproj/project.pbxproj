@@ -125,6 +125,7 @@
 		4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB744A321EA4E3800371388 /* PhotoAlt.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
+		4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFA48421EFE799006B1691 /* RFHeaderBox.m */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 /* End PBXBuildFile section */
@@ -356,6 +357,8 @@
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		4BEFA48321EFE799006B1691 /* RFHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHeaderBox.h; path = Source/RFHeaderBox.h; sourceTree = "<group>"; };
+		4BEFA48421EFE799006B1691 /* RFHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBox.m; path = Source/RFHeaderBox.m; sourceTree = "<group>"; };
 		C549E91F21EEB6D600730675 /* RFUserCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserCache.h; path = Source/RFUserCache.h; sourceTree = "<group>"; };
 		C549E92021EEB6D600730675 /* RFUserCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserCache.m; path = Source/RFUserCache.m; sourceTree = "<group>"; };
 		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
@@ -594,6 +597,8 @@
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4BB5B50321EE4F3C0095F903 /* RFButton.h */,
 				4BB5B50421EE4F3C0095F903 /* RFButton.m */,
+				4BEFA48321EFE799006B1691 /* RFHeaderBox.h */,
+				4BEFA48421EFE799006B1691 /* RFHeaderBox.m */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
 				4B5EF5ED1FA6120100CB7A02 /* NSImage+Extras.h */,
 				4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */,
@@ -887,6 +892,7 @@
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
+				4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */,
 				4B2CAB051F90667300D9B10E /* streamio.c in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
 				4B5EE2862063FD9300C87A78 /* RFAccount.m in Sources */,
