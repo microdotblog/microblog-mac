@@ -453,7 +453,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					[userDictionary setObject:image forKey:@"avatar"];
 											
 					dispatch_async(dispatch_get_main_queue(), ^{
-						//[self.autoCompleteCollectionView reloadData];
+						[self.textView complete:self];
 					});
 				}];
 							   
@@ -466,9 +466,26 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				[self.autoCompleteData addObject:userDictionary];
 			}
 		}
-					   
-		//[self.autoCompleteCollectionView reloadData];
+		
+		[self.textView complete:self];
 	});
+}
+
+- (NSArray<NSString *> *)textView:(NSTextView *)textView completions:(NSArray<NSString *> *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(nullable NSInteger *)index
+{
+	if (self.autoCompleteData.count)
+	{
+		NSMutableArray* array = [NSMutableArray array];
+		for (NSDictionary* dictionary in self.autoCompleteData)
+		{
+			NSString* username = dictionary[@"username"];
+			[array addObject:username];
+		}
+		
+		return array;
+	}
+	
+	return nil;
 }
 
 #pragma mark -
