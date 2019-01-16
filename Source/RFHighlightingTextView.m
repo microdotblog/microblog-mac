@@ -7,7 +7,7 @@
 //
 
 #import "RFHighlightingTextView.h"
-
+#import "RFAutoCompleteCache.h"
 #import "RFConstants.h"
 
 @implementation RFHighlightingTextView
@@ -15,9 +15,13 @@
 - (BOOL) shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(nullable NSString *)replacementString
 {
 	self.restoredSelection = NSMakeRange (affectedCharRange.location + replacementString.length, 0);
+	
+	if (replacementString.length == 1)
+	{
+		[self findAutocomplete:affectedCharRange newString:replacementString];
+	}
 
-//	NSLog (@"replacement = %@", replacementString);
-
+	//	NSLog (@"replacement = %@", replacementString);
 	return [super shouldChangeTextInRange:affectedCharRange replacementString:replacementString];
 }
 
@@ -80,6 +84,52 @@
 	else {
 		return [super performDragOperation:sender];
 	}
+}
+
+- (void) findAutocomplete:(NSRange)range newString:(NSString*)incomingString{
+	NSMutableString* username = [NSMutableString string];
+	
+	// work backwards from current point
+	BOOL is_found = NO;
+	NSString* s = self.string;
+	for (NSInteger i = range.location; i >= 0; i--) {
+		if (s.length > i) {
+			unichar c = [s characterAtIndex:i];
+			NSString* new_s = [NSString stringWithFormat:@"%C", c];
+			[username insertString:new_s atIndex:0];
+			
+			if (c == ' ') {
+				break;
+			}
+			else if (c == '@') {
+				is_found = YES;
+				break;
+			}
+		}
+	}
+	
+	if (is_found && (username.length > 0)) {
+		[username appendString:incomingString];
+		
+		[RFAutoCompleteCache findAutoCompleteFor:username completion:^(NSArray * _Nonnull results)
+		 {
+			 dispatch_async(dispatch_get_main_queue(), ^
+							{
+								NSDictionary* dictionary = @{ @"string" : username, @"array" : results };
+								[[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+							});
+			 
+		 }];
+	}
+	else
+	{
+		dispatch_async(dispatch_get_main_queue(), ^
+					   {
+						   NSDictionary* dictionary = @{ @"string" : @"", @"array" : @[] };
+						   [[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+					   });
+	}
+
 }
 
 @end

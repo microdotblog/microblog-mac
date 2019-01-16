@@ -23,6 +23,8 @@ static NSString* const kRefreshAccountsNotification = @"RFRefreshAccounts";
 static NSString* const kLatestDraftTitlePrefKey = @"LatestDraftTitle";
 static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";
 
+static NSString* const kRFFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
+
 static NSString* const kTextSizePrefKey = @"TextSize";
 static NSInteger const kTextSizeTiny = 12;
 static NSInteger const kTextSizeSmall = 13;

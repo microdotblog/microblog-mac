@@ -125,6 +125,8 @@
 		4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB744A321EA4E3800371388 /* PhotoAlt.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
+		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
+		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -354,6 +356,10 @@
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		C549E91F21EEB6D600730675 /* RFUserCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserCache.h; path = Source/RFUserCache.h; sourceTree = "<group>"; };
+		C549E92021EEB6D600730675 /* RFUserCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserCache.m; path = Source/RFUserCache.m; sourceTree = "<group>"; };
+		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
+		C549E92321EEB75600730675 /* RFAutoCompleteCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAutoCompleteCache.m; path = Source/RFAutoCompleteCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -607,6 +613,10 @@
 				4B2CAABC1F90652700D9B10E /* RFXMLRPCRequest.m */,
 				4B2CAABD1F90652700D9B10E /* RFXMLRSDParser.h */,
 				4B2CAAB81F90652600D9B10E /* RFXMLRSDParser.m */,
+				C549E91F21EEB6D600730675 /* RFUserCache.h */,
+				C549E92021EEB6D600730675 /* RFUserCache.m */,
+				C549E92221EEB75600730675 /* RFAutoCompleteCache.h */,
+				C549E92321EEB75600730675 /* RFAutoCompleteCache.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -821,6 +831,7 @@
 				4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */,
 				4B2CAB151F90667300D9B10E /* win32tc.c in Sources */,
 				4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */,
+				C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */,
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */,
 				4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */,
@@ -844,6 +855,7 @@
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
+				C549E92121EEB6D600730675 /* RFUserCache.m in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,

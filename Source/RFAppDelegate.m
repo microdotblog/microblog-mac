@@ -22,6 +22,8 @@
 #import "RFAccount.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
+#import "RFAutoCompleteCache.h"
+#import "RFUserCache.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -35,7 +37,7 @@
 	[self setupCrashlytics];
 	[self setupNotifications];
 	[self setupURLs];
-
+	[self setupFollowerAutoComplete];
 	[self showTimelineOrWelcome];
 }
 
@@ -154,6 +156,41 @@
 {
 	NSAppleEventManager* manager = [NSAppleEventManager sharedAppleEventManager];
 	[manager setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+}
+
+- (void) setupFollowerAutoComplete
+{
+	RFAccount* account = [RFSettings defaultAccount];
+	NSString* username = [account username];
+
+	if (username == nil) {
+		return;
+	}
+	username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+	
+	NSString* path = [NSString stringWithFormat:@"/users/following/%@", username];
+	RFClient* client = [[RFClient alloc] initWithPath:path];
+	[client getWithQueryArguments:nil completion:^(UUHttpResponse *response)
+	 {
+		 // We didn't get a valid response...
+		 if (response.httpResponse.statusCode < 200 || response.httpResponse.statusCode > 299)
+		 {
+			 return;
+		 }
+		 
+		 NSArray* array = response.parsedResponse;
+		 if (array && [array isKindOfClass:[NSArray class]])
+		 {
+			 for (NSDictionary* dictionary in array)
+			 {
+				 NSString* username = dictionary[@"username"];
+				 if (username)
+				 {
+					 [RFAutoCompleteCache addAutoCompleteString:username];
+				 }
+			 }
+		 }
+	 }];
 }
 
 #pragma mark -

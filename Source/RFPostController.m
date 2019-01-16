@@ -26,12 +26,19 @@
 #import "NSImage+Extras.h"
 #import "NSString+Extras.h"
 #import "MMMarkdown.h"
+#import "RFAutoCompleteCache.h"
+#import "RFUserCache.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static CGFloat const kTextViewTitleHiddenTop = 10;
 static CGFloat const kTextViewTitleShownTop = 54;
+
+@interface RFPostController()
+	@property (nonatomic, strong) NSString* activeReplacementString;
+	@property (atomic, strong) NSMutableArray* autoCompleteData;
+@end
 
 @implementation RFPostController
 
@@ -179,6 +186,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kRFFoundUserAutoCompleteNotification object:nil];
 }
 
 - (void) blogNameClicked:(NSGestureRecognizer *)gesture
@@ -375,6 +383,92 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	NSIndexPath* index_path = [notification.userInfo objectForKey:kRemoveAttachedPhotoIndexPath];
 	[self removePhotoAtIndex:index_path];
+}
+
+- (void) handleAutoCompleteNotification:(NSNotification *)notification
+{
+	NSDictionary* dictionary = notification.object;
+	NSArray* array = dictionary[@"array"];
+	self.activeReplacementString = dictionary[@"string"];
+	
+	dispatch_async(dispatch_get_main_queue(), ^ {
+		//[self.autoCompleteCollectionView setContentOffset:CGPointZero animated:FALSE];
+					   
+		CGFloat size = 36.0;
+		if (!array.count)
+		{
+			size = 0.0;
+						   
+			if (self.activeReplacementString.length > 3)
+			{
+				NSString* cleanUserName = self.activeReplacementString;
+				if ([cleanUserName uuStartsWithSubstring:@"@"])
+				{
+					cleanUserName = [cleanUserName substringFromIndex:1];
+				}
+							   
+				NSString* path = [NSString stringWithFormat:@"/users/search?q=%@", cleanUserName];  //https://micro.blog/users/search?q=jon]
+				RFClient* client = [[RFClient alloc] initWithPath:path];
+				[client getWithQueryArguments:nil completion:^(UUHttpResponse *response)
+				{
+					if (response.parsedResponse)
+					{
+						NSMutableArray* matchingUsernames = [NSMutableArray array];
+						NSArray* array = response.parsedResponse;
+						for (NSDictionary* userDictionary in array)
+						{
+							NSString* userName = userDictionary[@"username"];
+							[matchingUsernames addObject:userName];
+						}
+										
+						NSDictionary* dictionary = @{ @"string" : self.activeReplacementString, @"array" : matchingUsernames };
+						[[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+					}
+				}];
+			}
+		}
+
+		//[UIView animateWithDuration:0.25 animations:^{
+		//	self.autoCompleteHeightConstraint.constant = size;
+		//	[self.view layoutIfNeeded];
+		//}];
+					   
+		@synchronized(self.autoCompleteData)
+		{
+			[self.autoCompleteData removeAllObjects];
+			self.autoCompleteData = [NSMutableArray array];
+						   
+			NSUInteger count = array.count;
+						   
+			for (NSUInteger i = 0; i < count; i++)
+			{
+				NSString* username = [array objectAtIndex:i];
+				NSMutableDictionary* userDictionary = [NSMutableDictionary dictionaryWithDictionary:@{ 	@"username" : username } ];
+							   
+				NSString* profile_s = [NSString stringWithFormat:@"https://micro.blog/%@/avatar.jpg", username];
+							   
+				//Check the cache for the avatar...
+				NSImage* image = [RFUserCache avatar:[NSURL URLWithString:profile_s] completionHandler:^(NSImage * _Nonnull image)
+				{
+					[userDictionary setObject:image forKey:@"avatar"];
+											
+					dispatch_async(dispatch_get_main_queue(), ^{
+						//[self.autoCompleteCollectionView reloadData];
+					});
+				}];
+							   
+				if (image)
+				{
+					[userDictionary setObject:image forKey:@"avatar"];
+				}
+							   
+							   
+				[self.autoCompleteData addObject:userDictionary];
+			}
+		}
+					   
+		//[self.autoCompleteCollectionView reloadData];
+	});
 }
 
 #pragma mark -
