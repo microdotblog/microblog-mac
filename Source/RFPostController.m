@@ -390,85 +390,60 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	NSDictionary* dictionary = notification.object;
 	NSArray* array = dictionary[@"array"];
 	self.activeReplacementString = dictionary[@"string"];
-	
-	dispatch_async(dispatch_get_main_queue(), ^ {
-		//[self.autoCompleteCollectionView setContentOffset:CGPointZero animated:FALSE];
-					   
-		CGFloat size = 36.0;
-		if (!array.count)
-		{
-			size = 0.0;
-						   
-			if (self.activeReplacementString.length > 3)
-			{
-				NSString* cleanUserName = self.activeReplacementString;
-				if ([cleanUserName uuStartsWithSubstring:@"@"])
-				{
-					cleanUserName = [cleanUserName substringFromIndex:1];
-				}
-							   
-				NSString* path = [NSString stringWithFormat:@"/users/search?q=%@", cleanUserName];  //https://micro.blog/users/search?q=jon]
-				RFClient* client = [[RFClient alloc] initWithPath:path];
-				[client getWithQueryArguments:nil completion:^(UUHttpResponse *response)
-				{
-					if (response.parsedResponse)
-					{
-						NSMutableArray* matchingUsernames = [NSMutableArray array];
-						NSArray* array = response.parsedResponse;
-						for (NSDictionary* userDictionary in array)
-						{
-							NSString* userName = userDictionary[@"username"];
-							[matchingUsernames addObject:userName];
-						}
-										
-						NSDictionary* dictionary = @{ @"string" : self.activeReplacementString, @"array" : matchingUsernames };
-						[[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
-					}
-				}];
-			}
-		}
 
-		//[UIView animateWithDuration:0.25 animations:^{
-		//	self.autoCompleteHeightConstraint.constant = size;
-		//	[self.view layoutIfNeeded];
-		//}];
-					   
-		@synchronized(self.autoCompleteData)
+	CGFloat size = 36.0;
+	if (!array.count)
+	{
+		size = 0.0;
+						   
+		if (self.activeReplacementString.length > 3)
 		{
-			[self.autoCompleteData removeAllObjects];
-			self.autoCompleteData = [NSMutableArray array];
-						   
-			NSUInteger count = array.count;
-						   
-			for (NSUInteger i = 0; i < count; i++)
+			NSString* cleanUserName = self.activeReplacementString;
+			if ([cleanUserName uuStartsWithSubstring:@"@"])
 			{
-				NSString* username = [array objectAtIndex:i];
-				NSMutableDictionary* userDictionary = [NSMutableDictionary dictionaryWithDictionary:@{ 	@"username" : username } ];
-							   
-				NSString* profile_s = [NSString stringWithFormat:@"https://micro.blog/%@/avatar.jpg", username];
-							   
-				//Check the cache for the avatar...
-				NSImage* image = [RFUserCache avatar:[NSURL URLWithString:profile_s] completionHandler:^(NSImage * _Nonnull image)
-				{
-					[userDictionary setObject:image forKey:@"avatar"];
-											
-					dispatch_async(dispatch_get_main_queue(), ^{
-						[self.textView complete:self];
-					});
-				}];
-							   
-				if (image)
-				{
-					[userDictionary setObject:image forKey:@"avatar"];
-				}
-							   
-							   
-				[self.autoCompleteData addObject:userDictionary];
+				cleanUserName = [cleanUserName substringFromIndex:1];
 			}
+							   
+			NSString* path = [NSString stringWithFormat:@"/users/search?q=%@", cleanUserName];  //https://micro.blog/users/search?q=jon]
+			RFClient* client = [[RFClient alloc] initWithPath:path];
+			[client getWithQueryArguments:nil completion:^(UUHttpResponse *response)
+			{
+				if (response.parsedResponse)
+				{
+					NSMutableArray* matchingUsernames = [NSMutableArray array];
+					NSArray* array = response.parsedResponse;
+					for (NSDictionary* userDictionary in array)
+					{
+						NSString* userName = userDictionary[@"username"];
+						[matchingUsernames addObject:userName];
+					}
+										
+					NSDictionary* dictionary = @{ @"string" : self.activeReplacementString, @"array" : matchingUsernames };
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+					});
+				}
+			}];
 		}
-		
-		[self.textView complete:self];
-	});
+	}
+
+	@synchronized(self.autoCompleteData)
+	{
+		[self.autoCompleteData removeAllObjects];
+		self.autoCompleteData = [NSMutableArray array];
+						   
+		NSUInteger count = array.count;
+						   
+		for (NSUInteger i = 0; i < count; i++)
+		{
+			NSString* username = [array objectAtIndex:i];
+			NSMutableDictionary* userDictionary = [NSMutableDictionary dictionaryWithDictionary:@{ 	@"username" : username } ];
+				
+			[self.autoCompleteData addObject:userDictionary];
+		}
+	}
+	
+	[self.textView complete:self];
 }
 
 - (NSArray<NSString *> *)textView:(NSTextView *)textView completions:(NSArray<NSString *> *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(nullable NSInteger *)index
@@ -478,7 +453,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		NSMutableArray* array = [NSMutableArray array];
 		for (NSDictionary* dictionary in self.autoCompleteData)
 		{
-			NSString* username = dictionary[@"username"];
+			NSString* username = [dictionary[@"username"] stringByAppendingString:@" "];
 			[array addObject:username];
 		}
 		

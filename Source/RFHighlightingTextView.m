@@ -18,7 +18,9 @@
 	
 	if (replacementString.length == 1)
 	{
-		[self findAutocomplete:affectedCharRange newString:replacementString];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self findAutocomplete:affectedCharRange newString:replacementString];
+		});
 	}
 
 	//	NSLog (@"replacement = %@", replacementString);
