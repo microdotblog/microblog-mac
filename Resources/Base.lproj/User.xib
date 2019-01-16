@@ -55,7 +55,7 @@
                                 <rect key="frame" x="12" y="45" width="319" height="23"/>
                                 <textFieldCell key="cell" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Bio" id="aHX-Rd-m2M">
                                     <font key="font" size="13" name="Avenir-Book"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -77,7 +77,7 @@
                                     <constraint firstAttribute="height" constant="32" id="2Dr-DD-2k7"/>
                                     <constraint firstAttribute="width" constant="316" id="dxu-m4-uN5"/>
                                 </constraints>
-                                <buttonCell key="cell" type="bevel" title="Following 123" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="oFS-4s-Kog" customClass="RFButtonCell">
+                                <buttonCell key="cell" type="bevel" title="Following 123" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="oFS-4s-Kog">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" size="13" name="Avenir-Medium"/>
                                 </buttonCell>
@@ -121,7 +121,6 @@
                             <constraint firstAttribute="bottom" secondItem="GcO-9J-7o0" secondAttribute="bottom" id="y9m-Y8-PWv"/>
                         </constraints>
                     </view>
-                    <color key="fillColor" white="1" alpha="1" colorSpace="deviceWhite"/>
                 </box>
                 <webView translatesAutoresizingMaskIntoConstraints="NO" id="7LD-DW-RCG">
                     <rect key="frame" x="0.0" y="0.0" width="340" height="328"/>
@@ -150,7 +149,7 @@
                     </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Full Name" id="P3V-g9-LlR">
                         <font key="font" size="13" name="Avenir-Medium"/>
-                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>

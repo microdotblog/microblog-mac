@@ -30,7 +30,6 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="pjy-Ug-95j"/>
                     </constraints>
-                    <color key="fillColor" white="1" alpha="1" colorSpace="deviceWhite"/>
                 </box>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Kvs-M2-DAj">
                     <rect key="frame" x="12" y="402" width="316" height="5"/>
@@ -66,7 +65,7 @@
                     </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="books" id="P3V-g9-LlR">
                         <font key="font" size="13" name="Avenir-Medium"/>
-                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
