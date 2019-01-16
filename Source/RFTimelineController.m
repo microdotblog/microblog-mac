@@ -58,6 +58,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupTimer];	
 }
 
+- (void) windowDidEndLiveResize:(NSNotification *)notification
+{
+	[self refreshTimeline:nil];
+}
+
 - (void) setupTitleButtons
 {
 	NSTitlebarAccessoryViewController* newpost_accessory_controller = [[RFNewPostAccessoryController alloc] init];

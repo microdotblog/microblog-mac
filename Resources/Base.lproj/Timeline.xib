@@ -33,8 +33,8 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="343" y="100" width="540" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
-            <value key="minSize" type="size" width="540" height="300"/>
-            <value key="maxSize" type="size" width="540" height="2000"/>
+            <value key="minSize" type="size" width="500" height="300"/>
+            <value key="maxSize" type="size" width="1000" height="2000"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -48,7 +48,7 @@
                                 <subviews>
                                     <box fixedFrame="YES" boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="aQA-f2-uq2" customClass="RFAccountPopoverBox">
                                         <rect key="frame" x="0.0" y="534" width="181" height="66"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <view key="contentView" ambiguous="YES" id="ppR-hI-pWf">
                                             <rect key="frame" x="0.0" y="0.0" width="181" height="66"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -65,7 +65,7 @@
                                     </imageView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqw-tG-vVO">
                                         <rect key="frame" x="62" y="564" width="108" height="23"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" sendsActionOnEndEditing="YES" title="Test User" id="D2q-sQ-CLj">
                                             <font key="font" size="13" name="Avenir-Medium"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -74,7 +74,7 @@
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HD9-1U-V6d">
                                         <rect key="frame" x="62" y="545" width="108" height="23"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" sendsActionOnEndEditing="YES" title="@test" id="3ND-A9-PxE">
                                             <font key="font" size="13" name="Avenir-Medium"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -267,6 +267,9 @@
                     <constraint firstAttribute="trailing" secondItem="fkA-Zg-Ds4" secondAttribute="trailing" id="vd4-yA-p5a"/>
                 </constraints>
             </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="BKP-i2-lYz"/>
+            </connections>
             <point key="canvasLocation" x="-60" y="239"/>
         </window>
     </objects>
