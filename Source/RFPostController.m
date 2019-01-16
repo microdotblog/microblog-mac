@@ -453,7 +453,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		NSMutableArray* array = [NSMutableArray array];
 		for (NSDictionary* dictionary in self.autoCompleteData)
 		{
-			NSString* username = [dictionary[@"username"] stringByAppendingString:@" "];
+			NSString* username = dictionary[@"username"];
 			[array addObject:username];
 		}
 		

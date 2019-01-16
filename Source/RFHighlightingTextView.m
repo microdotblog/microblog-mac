@@ -34,6 +34,14 @@
 	self.selectedRange = self.restoredSelection;
 }
 
+- (void) insertCompletion:(NSString *)word forPartialWordRange:(NSRange)charRange movement:(NSInteger)movement isFinal:(BOOL)flag
+{
+	if (flag) {
+		NSString* s = [NSString stringWithFormat:@"%@ ", word];
+		[super insertCompletion:s forPartialWordRange:charRange movement:movement isFinal:flag];
+	}
+}
+
 - (NSPasteboardType) preferredPasteboardTypeFromArray:(NSArray<NSPasteboardType> *)availableTypes
                           restrictedToTypesFromArray:(NSArray<NSPasteboardType> *)allowedTypes
 {
