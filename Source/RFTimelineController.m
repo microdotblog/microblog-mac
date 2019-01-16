@@ -24,6 +24,7 @@
 #import "RFMacros.h"
 #import "RFClient.h"
 #import "RFStack.h"
+#import "NSAppearance+Extras.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import <QuartzCore/QuartzCore.h>
@@ -282,7 +283,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		text_size = kTextSizeMedium;
 	}
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld", token, pane_width - scroller_width, timezone_minutes, (long)text_size];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld", token, pane_width - scroller_width, timezone_minutes, (long)text_size, (long)[NSAppearance rf_isDarkMode]];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 	
