@@ -98,10 +98,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self.textStorage addLayoutManager:self.textView.layoutManager];
 
 	self.textUndoManager = [[NSUndoManager alloc] init];
-
-	self.view.layer.masksToBounds = YES;
-	self.view.layer.cornerRadius = 10.0;
-	self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
 	
 	if (self.replyUsername) {
 		self.textView.string = [NSString stringWithFormat:@"@%@ ", self.replyUsername];
@@ -119,7 +115,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			self.textView.string = draft;
 		}
 	}
-	
+
 	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
 	self.textView.typingAttributes = @{
 		NSFontAttributeName: normal_font

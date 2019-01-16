@@ -368,8 +368,11 @@
 	// clear fonts and colors
 	NSRange paragraph_r = NSMakeRange (0, self.string.length);
 	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
+	NSColor* normal_color = [NSColor textColor];
+	
 	[self safe_removeAttribute:NSForegroundColorAttributeName range:paragraph_r];
 	[self safe_removeAttribute:NSFontAttributeName range:paragraph_r];
+	[self safe_addAttribute:NSForegroundColorAttributeName value:normal_color range:paragraph_r];
 	[self safe_addAttribute:NSFontAttributeName value:normal_font range:paragraph_r];
 
 	// update style ranges

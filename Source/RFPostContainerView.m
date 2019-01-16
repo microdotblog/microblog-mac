@@ -8,7 +8,22 @@
 
 #import "RFPostContainerView.h"
 
+#import "NSAppearance+Extras.h"
+
 @implementation RFPostContainerView
+
+- (void) awakeFromNib
+{
+//	self.view.layer.masksToBounds = YES;
+//	self.view.layer.cornerRadius = 10.0;
+
+	if ([NSAppearance rf_isDarkMode]) {
+		self.layer.backgroundColor = [NSColor textBackgroundColor].CGColor;
+	}
+	else {
+		self.layer.backgroundColor = [NSColor whiteColor].CGColor;
+	}
+}
 
 - (void) mouseDown:(NSEvent *)event
 {

@@ -15,7 +15,12 @@
 - (void) drawSelectionInRect:(NSRect)dirtyRect
 {
 	if ([NSAppearance rf_isDarkMode]) {
-		[[NSColor colorWithWhite:0.0 alpha:1.0] set];
+		if (@available(macOS 10.14, *)) {
+			[[NSColor selectedContentBackgroundColor] set];
+		}
+		else {
+			[[NSColor colorWithWhite:0.0 alpha:1.0] set];
+		}
 	}
 	else {
 		[[NSColor colorWithWhite:0.95 alpha:1.0] set];
