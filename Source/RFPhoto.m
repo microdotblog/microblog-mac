@@ -17,6 +17,7 @@
 	self = [super init];
 	if (self) {
 		self.asset = asset;
+		self.altText = @"";
 	}
 	
 	return self;
@@ -29,6 +30,7 @@
 	self = [super init];
 	if (self) {
 		self.thumbnailImage = image;
+		self.altText = @"";
 	}
 	
 	return self;
