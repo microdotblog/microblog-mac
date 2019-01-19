@@ -39,7 +39,9 @@
 		NSData* d = response.rawResponse;
 		RFDispatchMain (^{
 			NSImage* img = [[NSImage alloc] initWithData:d];
-			[self updateWithImage:img];
+			if (img) {
+				[self updateWithImage:img];
+			}
 			[self hideProgress];
 		});
 	}];
