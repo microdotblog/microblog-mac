@@ -6,6 +6,31 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added support for Dark Mode on macOS Mojave.</li>
+					<li>Added username auto-complete when composing a new post.</li>
+					<li>Fixed crash when posting photos without accessibility text.</li>
+					<li>Fixed crash if a photo could not be opened in a new window.</li>
+					<li>Fixed incorrect width/height when posting photos to an external blog.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 21 Jan 2019 09:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.5.zip" sparkle:shortVersionString="1.5" sparkle:version="51" length="3050046" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.4.1</title>
  			<description><![CDATA[
 				<style>
