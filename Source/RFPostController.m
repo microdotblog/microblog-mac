@@ -881,30 +881,30 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				s = [s stringByAppendingString:@"\n\n"];
 			}
 
-			CGSize original_size = photo.thumbnailImage.size;
-			CGFloat width = 0;
-			CGFloat height = 0;
-
-			if (original_size.width > original_size.height) {
-				if (original_size.width > 600.0) {
-					width = 600.0;
-				}
-				else {
-					width = original_size.width;
-				}
-				height = width / original_size.width * original_size.height;
-			}
-			else {
-				if (original_size.height > 600.0) {
-					height = 600.0;
-				}
-				else {
-					height = original_size.height;
-				}
-				width = height / original_size.height * original_size.width;
-			}
-
 			for (RFPhoto* photo in self.attachedPhotos) {
+				CGSize original_size = photo.thumbnailImage.size;
+				CGFloat width = 0;
+				CGFloat height = 0;
+
+				if (original_size.width > original_size.height) {
+					if (original_size.width > 600.0) {
+						width = 600.0;
+					}
+					else {
+						width = original_size.width;
+					}
+					height = width / original_size.width * original_size.height;
+				}
+				else {
+					if (original_size.height > 600.0) {
+						height = 600.0;
+					}
+					else {
+						height = original_size.height;
+					}
+					width = height / original_size.height * original_size.width;
+				}
+
 				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
 			}
 		}
