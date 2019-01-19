@@ -34,11 +34,11 @@
 	self.selectedRange = self.restoredSelection;
 }
 
-- (void) insertCompletion:(NSString *)word forPartialWordRange:(NSRange)charRange movement:(NSInteger)movement isFinal:(BOOL)flag
+- (void) insertCompletion:(NSString *)word forPartialWordRange:(NSRange)charRange movement:(NSInteger)movement isFinal:(BOOL)isFinal
 {
-	if (flag) {
+	if (isFinal && (movement == NSTextMovementReturn)) {
 		NSString* s = [NSString stringWithFormat:@"%@ ", word];
-		[super insertCompletion:s forPartialWordRange:charRange movement:movement isFinal:flag];
+		[super insertCompletion:s forPartialWordRange:charRange movement:movement isFinal:isFinal];
 	}
 }
 
@@ -105,6 +105,11 @@
 	for (NSInteger i = range.location; i >= 0; i--) {
 		if (s.length > i) {
 			unichar c = [s characterAtIndex:i];
+			unichar prev_c = '\0';
+			if (i > 0) {
+				prev_c = [s characterAtIndex:i - 1];
+			}
+			
 			NSString* new_s = [NSString stringWithFormat:@"%C", c];
 			[username insertString:new_s atIndex:0];
 			
@@ -112,8 +117,10 @@
 				break;
 			}
 			else if (c == '@') {
-				is_found = YES;
-				break;
+				if (!isalnum (prev_c)) { // make sure we're not in an email address
+					is_found = YES;
+					break;
+				}
 			}
 		}
 	}
