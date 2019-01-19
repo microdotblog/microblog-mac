@@ -9,6 +9,7 @@
 #import "RFFriendsController.h"
 
 #import "RFConstants.h"
+#import "NSAppearance+Extras.h"
 
 @implementation RFFriendsController
 
@@ -25,6 +26,10 @@
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
+
+	if ([NSAppearance rf_isDarkMode]) {
+		[self.webView setDrawsBackground:NO];
+	}
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/users/discover/%@", self.username];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];

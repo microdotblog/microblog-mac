@@ -11,6 +11,7 @@
 #import "RFConstants.h"
 #import "RFMacros.h"
 #import "RFClient.h"
+#import "NSAppearance+Extras.h"
 
 @implementation RFUserController
 
@@ -27,6 +28,10 @@
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
+
+	if ([NSAppearance rf_isDarkMode]) {
+		[self.webView setDrawsBackground:NO];
+	}
 
 	[self checkFollowing];
 	[self fetchUserInfo];

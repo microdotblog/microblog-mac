@@ -93,6 +93,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.messageTopConstraint.constant = -35;
 	
 	[self setupWebDelegates:self.webView];
+	if ([NSAppearance rf_isDarkMode]) {
+		[self.webView setDrawsBackground:NO];
+	}
 	[self showTimeline:nil];
 }
 
@@ -119,6 +122,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.fullNameField.nextResponder = self.profileBox;
 	self.usernameField.nextResponder = self.profileBox;
 	
+	if ([NSAppearance rf_isDarkMode]) {
+		self.switchAccountView.image = [NSImage imageNamed:@"down_arrow_darkmode"];
+	}
 	self.switchAccountView.hidden = ([RFSettings accounts].count <= 1);
 }
 
@@ -287,8 +293,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	if (text_size == 0) {
 		text_size = kTextSizeMedium;
 	}
+	
+	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld", token, pane_width - scroller_width, timezone_minutes, (long)text_size, (long)[NSAppearance rf_isDarkMode]];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 	

@@ -9,6 +9,7 @@
 #import "RFTopicController.h"
 
 #import "RFConstants.h"
+#import "NSAppearance+Extras.h"
 
 @implementation RFTopicController
 
@@ -27,6 +28,10 @@
 	[super viewDidLoad];
 
 	self.topicField.stringValue = self.topic;
+
+	if ([NSAppearance rf_isDarkMode]) {
+		[self.webView setDrawsBackground:NO];
+	}
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover/%@", self.topic];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];

@@ -9,6 +9,7 @@
 #import "RFConversationController.h"
 
 #import "RFConstants.h"
+#import "NSAppearance+Extras.h"
 
 @implementation RFConversationController
 
@@ -25,6 +26,10 @@
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
+
+	if ([NSAppearance rf_isDarkMode]) {
+		[self.webView setDrawsBackground:NO];
+	}
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/conversation/%@", self.postID];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
