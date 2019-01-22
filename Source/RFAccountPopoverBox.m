@@ -11,6 +11,7 @@
 #import "RFSettings.h"
 #import "RFAccount.h"
 #import "RFConstants.h"
+#import "RFMacros.h"
 #import "NSImage+Extras.h"
 #import "NSAppearance+Extras.h"
 
@@ -18,8 +19,17 @@
 
 - (void) awakeFromNib
 {
-	if ([NSAppearance rf_isDarkMode]) {
+	self.originalLightColor = self.fillColor;
+	[self updateBackground];
+}
+
+- (void) updateBackground
+{
+	if ([self.effectiveAppearance rf_isDarkMode]) {
 		self.fillColor = NSColor.textBackgroundColor;
+	}
+	else {
+		self.fillColor = self.originalLightColor;
 	}
 
 	self.savedFillColor = self.fillColor;
@@ -90,6 +100,12 @@
 - (void) mouseExited:(NSEvent *)event
 {
 	self.fillColor = self.savedFillColor;
+}
+
+- (void) viewDidChangeEffectiveAppearance
+{
+	[self updateBackground];
+	[self setNeedsDisplay:YES];
 }
 
 @end

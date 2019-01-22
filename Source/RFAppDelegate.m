@@ -36,6 +36,7 @@
 	[self setupDefaults];
 	[self setupCrashlytics];
 	[self setupNotifications];
+	[self setupAppearance];
 	[self setupURLs];
 	[self setupFollowerAutoComplete];
 	[self showTimelineOrWelcome];
@@ -152,6 +153,11 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
 }
 
+- (void) setupAppearance
+{
+	[[NSApplication sharedApplication] addObserver:self forKeyPath:@"effectiveAppearance" options:0 context:NULL];
+}
+
 - (void) setupURLs
 {
 	NSAppleEventManager* manager = [NSAppleEventManager sharedAppleEventManager];
@@ -191,6 +197,11 @@
 			 }
 		 }
 	 }];
+}
+
+- (void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kDarkModeAppearanceDidChangeNotification object:self];
 }
 
 #pragma mark -

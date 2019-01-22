@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSAppearance (Extras)
 
 + (BOOL) rf_isDarkMode;
+- (BOOL) rf_isDarkMode;
 
 @end
 

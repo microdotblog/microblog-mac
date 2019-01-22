@@ -75,4 +75,6 @@ static NSString* const kResetDetailControllerKey = @"controller";
 
 static NSString* const kShortcutActionNewPost = @"com.riverfold.snippets.shortcut.post";
 
+static NSString* const kDarkModeAppearanceDidChangeNotification = @"DarkModeAppearanceDidChange";
+
 #define APPSTORE 1
