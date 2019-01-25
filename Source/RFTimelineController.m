@@ -93,9 +93,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.messageTopConstraint.constant = -35;
 	
 	[self setupWebDelegates:self.webView];
-	if ([NSAppearance rf_isDarkMode]) {
-		[self.webView setDrawsBackground:NO];
-	}
+	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self showTimeline:nil];
 }
 
@@ -236,6 +234,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
 {
 	[self setupUser];
+	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
+	[self showTimeline:nil];
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification
