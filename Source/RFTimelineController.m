@@ -140,6 +140,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
 
 //	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
@@ -230,6 +231,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 	// add the arrow if we now have multiple accounts
 	self.switchAccountView.hidden = ([RFSettings accounts].count <= 1);
+}
+
+- (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
+{
+	[self setupUser];
 }
 
 - (void) popNavigationNotification:(NSNotification *)notification

@@ -15,7 +15,8 @@
 	BOOL is_dark = NO;
 	
 	if (@available(macOS 10.14, *)) {
-		NSAppearance* mode = [NSAppearance currentAppearance];
+//		NSAppearance* mode = [NSAppearance currentAppearance];
+		NSAppearance* mode = [[NSApplication sharedApplication] effectiveAppearance];
 		is_dark = [mode rf_isDarkMode];
 	}
 	

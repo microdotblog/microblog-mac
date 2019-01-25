@@ -22,6 +22,7 @@
 #import "RFAccount.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
+#import "NSAppearance+Extras.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
 #import <Fabric/Fabric.h>
