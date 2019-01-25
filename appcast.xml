@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.5.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Thanks for supporting Micro.blog! Just a couple improvements to Dark Mode in this version:</p>
+ 				<ul>
+ 					<li>Fixed adapting to system appearance changes so that Micro.blog doesn't need to be restarted after changing to Dark Mode.</li>
+ 					<li>Fixed background color in photo window for Dark Mode.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Fri, 25 Jan 2019 09:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.5.1.zip" sparkle:shortVersionString="1.5.1" sparkle:version="52" length="3050046" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.5</title>
  			<description><![CDATA[
 				<style>
