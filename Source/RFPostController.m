@@ -584,6 +584,27 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return [html rf_stripHTML];
 }
 
+- (NSArray *) currentSelectedCategories
+{
+	NSMutableArray* categories = [NSMutableArray array];
+	
+	if (self.isShowingCategories) {
+		NSUInteger num = [self.categoriesCollectionView numberOfItemsInSection:0];
+		for (NSUInteger i = 0; i < num; i++) {
+			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
+    		NSCollectionViewItem* item = [self.categoriesCollectionView itemAtIndexPath:index_path];
+    		if ([item isKindOfClass:[RFCategoryCell class]]) {
+				RFCategoryCell* cell = (RFCategoryCell *)item;
+				if (cell.categoryCheckbox.state == NSControlStateValueOn) {
+					[categories addObject:cell.categoryCheckbox.title];
+				}
+    		}
+		}
+	}
+	
+	return categories;
+}
+
 #pragma mark -
 
 - (void) showBlogsMenu
@@ -762,6 +783,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				destination_uid = @"";
 			}
 			NSDictionary* args;
+			NSArray* category_names = [self currentSelectedCategories];
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];
 				NSMutableArray* photo_alts = [NSMutableArray array];
@@ -776,14 +798,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"content": text,
 					@"photo[]": photo_urls,
 					@"mp-photo-alt[]": photo_alts,
-					@"mp-destination": destination_uid
+					@"mp-destination": destination_uid,
+					@"category[]": category_names
 				};
 			}
 			else {
 				args = @{
 					@"name": [self currentTitle],
 					@"content": text,
-					@"mp-destination": destination_uid
+					@"mp-destination": destination_uid,
+					@"category[]": category_names
 				};
 			}
 
