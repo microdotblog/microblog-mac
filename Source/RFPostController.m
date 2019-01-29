@@ -13,6 +13,7 @@
 #import "RFClient.h"
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
+#import "RFCategoryCell.h"
 #import "RFBlogsController.h"
 #import "RFPhotoAltController.h"
 #import "RFMicropub.h"
@@ -32,6 +33,7 @@
 #import <Crashlytics/Crashlytics.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
+static NSString* const kCategoryCellIdentifier = @"CategoryCell";
 static CGFloat const kTextViewTitleHiddenTop = 10;
 static CGFloat const kTextViewTitleShownTop = 54;
 
@@ -48,6 +50,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (self) {
 		self.attachedPhotos = @[];
 		self.queuedPhotos = @[];
+		self.categories = @[];
 	}
 	
 	return self;
@@ -85,6 +88,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupNotifications];
 	
 	[self updateTitleHeaderWithAnimation:NO];
+	[self downloadCategories];
 }
 
 - (void) viewDidAppear
@@ -170,6 +174,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
 
 	self.photosHeightConstraint.constant = 0;
+
+	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CategoryCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
+	self.categoriesHeightConstraint.constant = 0;
 }
 
 - (void) setupDragging
@@ -198,6 +205,20 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			return NO;
 		}
 		else if (self.isShowingTitle) {
+			[item setState:NSControlStateValueOn];
+			return YES;
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+			return YES;
+		}
+	}
+	else if (item.action == @selector(toggleCategories:)) {
+		if (self.isReply) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isShowingCategories) {
 			[item setState:NSControlStateValueOn];
 			return YES;
 		}
@@ -249,6 +270,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 }
 
+- (void) updateCategoriesPane
+{
+	if (self.isShowingCategories) {
+		// 3 items per row
+		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
+		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
+	}
+	else {
+		self.categoriesHeightConstraint.animator.constant = 0;
+	}
+}
+
 #pragma mark -
 
 - (NSUndoManager *) undoManagerForTextView:(NSTextView *)textView
@@ -285,6 +318,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	
 	[self updateTitleHeader];
+}
+
+- (IBAction) toggleCategories:(id)sender
+{
+	self.isShowingCategories = !self.isShowingCategories;
+	[self updateCategoriesPane];
 }
 
 - (IBAction) close:(id)sender
@@ -463,24 +502,41 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-	return self.attachedPhotos.count;
+	if (collectionView == self.photosCollectionView) {
+		return self.attachedPhotos.count;
+	}
+	else {
+		return self.categories.count;
+	}
 }
 
 - (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
-	
-	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
-	item.thumbnailImageView.image = photo.thumbnailImage;
-	
-	return item;
+	if (collectionView == self.photosCollectionView) {
+		RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
+		
+		RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+		item.thumbnailImageView.image = photo.thumbnailImage;
+		
+		return item;
+	}
+	else {
+		NSString* category_name = [self.categories objectAtIndex:indexPath.item];
+
+		RFCategoryCell* item = (RFCategoryCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+		item.categoryCheckbox.title = category_name;
+		
+		return item;
+	}
 }
 
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
 {
-	NSIndexPath* index_path = [indexPaths anyObject];
-	[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
-	[collectionView deselectAll:nil];
+	if (collectionView == self.photosCollectionView) {
+		NSIndexPath* index_path = [indexPaths anyObject];
+		[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
+		[collectionView deselectAll:nil];
+	}
 }
 
 #pragma mark -
@@ -1072,6 +1128,34 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				}
 			}];
 		}
+	}
+}
+
+- (void) downloadCategories
+{
+	if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+		RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+		NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+		if (destination_uid == nil) {
+			destination_uid = @"";
+		}
+
+		NSDictionary* args = @{
+			@"q": @"category",
+			@"mp-destination": destination_uid
+		};
+		
+		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+				NSArray* categories = [response.parsedResponse objectForKey:@"categories"];
+				if (categories) {
+					self.categories = categories;
+					RFDispatchMain (^{
+						[self.categoriesCollectionView reloadData];
+					});
+				}
+			}
+		}];
 	}
 }
 

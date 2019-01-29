@@ -126,6 +126,8 @@
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFA48421EFE799006B1691 /* RFHeaderBox.m */; };
+		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
+		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 /* End PBXBuildFile section */
@@ -359,6 +361,9 @@
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		4BEFA48321EFE799006B1691 /* RFHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHeaderBox.h; path = Source/RFHeaderBox.h; sourceTree = "<group>"; };
 		4BEFA48421EFE799006B1691 /* RFHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBox.m; path = Source/RFHeaderBox.m; sourceTree = "<group>"; };
+		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
+		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
+		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
 		C549E91F21EEB6D600730675 /* RFUserCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserCache.h; path = Source/RFUserCache.h; sourceTree = "<group>"; };
 		C549E92021EEB6D600730675 /* RFUserCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserCache.m; path = Source/RFUserCache.m; sourceTree = "<group>"; };
 		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
@@ -584,6 +589,8 @@
 				4B5A250F1F849AF2007C548F /* RFMenuCell.m */,
 				4B2CAAAC1F8FCBC800D9B10E /* RFPhotoCell.h */,
 				4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */,
+				4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */,
+				4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
 				4B5650671F8585C900B03FFD /* RFRoundedImageView.h */,
@@ -646,6 +653,7 @@
 				4B2CAB241F90818B00D9B10E /* Wordpress.xib */,
 				4B5A250B1F8497B1007C548F /* MenuCell.xib */,
 				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
+				4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */,
 				4B5EE28A206405AC00C87A78 /* AccountCell.xib */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 				4B5EE27820632C6800C87A78 /* Blogs.xib */,
@@ -792,6 +800,7 @@
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
 				4B608B482003B86400589F77 /* Topic.xib in Resources */,
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
+				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
@@ -857,6 +866,7 @@
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
+				4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
@@ -1083,6 +1093,14 @@
 				4BB744A421EA4E3800371388 /* Base */,
 			);
 			name = PhotoAlt.xib;
+			sourceTree = "<group>";
+		};
+		4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BFFD3DD22001FCC00372D03 /* Base */,
+			);
+			name = CategoryCell.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
