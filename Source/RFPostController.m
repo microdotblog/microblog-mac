@@ -753,7 +753,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.remainingField.attributedStringValue = attr;
 	}
 	else {
-		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:NSMakeRange (0, num_len)];
+		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor textColor] range:NSMakeRange (0, num_len)];
 	}
 
 	self.remainingField.attributedStringValue = attr;
