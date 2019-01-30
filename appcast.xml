@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.6</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+ 					<li>Added setting categories on new posts. Create categories in Micro.blog on the web (Posts → Categories) and then show the categories pane on macOS (View menu → Categories).</li>
+ 					<li>Fixed remaining characters counter in Dark Mode.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Wed, 30 Jan 2019 10:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.6.zip" sparkle:shortVersionString="1.6" sparkle:version="54" length="3050046" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.5.1</title>
  			<description><![CDATA[
 				<style>
