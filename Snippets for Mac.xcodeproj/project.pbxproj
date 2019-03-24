@@ -130,6 +130,7 @@
 		4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF537292247345F00CF9D66 /* AllPosts.xib */; };
 		4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */; };
 		4BF537312247BDCD00CF9D66 /* PostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF5372F2247BDCD00CF9D66 /* PostCell.xib */; };
+		4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537332247CD1D00CF9D66 /* RFPost.m */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -371,6 +372,8 @@
 		4BF5372C2247BD8D00CF9D66 /* RFPostCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostCell.h; path = Source/RFPostCell.h; sourceTree = "<group>"; };
 		4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostCell.m; path = Source/RFPostCell.m; sourceTree = "<group>"; };
 		4BF537302247BDCD00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PostCell.xib; sourceTree = "<group>"; };
+		4BF537322247CD1D00CF9D66 /* RFPost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPost.h; path = Source/RFPost.h; sourceTree = "<group>"; };
+		4BF537332247CD1D00CF9D66 /* RFPost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPost.m; path = Source/RFPost.m; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -591,6 +594,8 @@
 				4B5EE27C206330B800C87A78 /* RFBlogCell.m */,
 				4BF5372C2247BD8D00CF9D66 /* RFPostCell.h */,
 				4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */,
+				4BF537322247CD1D00CF9D66 /* RFPost.h */,
+				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BA983641FA21FF000E230CC /* RFPostContainerView.h */,
 				4BA983651FA21FF000E230CC /* RFPostContainerView.m */,
 				4B56505F1F85626200B03FFD /* RFOptionsController.h */,
@@ -947,6 +952,7 @@
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
+				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
 				4B2CAB1D1F90667300D9B10E /* parser.c in Sources */,
 				4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */,
 			);
