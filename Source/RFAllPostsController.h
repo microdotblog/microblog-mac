@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFAllPostsController : NSViewController
+@interface RFAllPostsController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+
+@property (strong, nonatomic) IBOutlet NSTableView* tableView;
+
+@property (strong, nonatomic) NSArray* posts;
 
 @end
 

@@ -478,6 +478,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.messageTopConstraint.animator.constant = -35;
 	[self.messageSpinner stopAnimation:nil];
 
+	if (self.allPostsController) {
+		[self.allPostsController.view removeFromSuperview];
+		self.allPostsController = nil;
+	}
+
 	[self performClose:nil];
 }
 
