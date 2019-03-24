@@ -11,6 +11,7 @@
 #import "RFMenuCell.h"
 #import "RFOptionsController.h"
 #import "RFPostController.h"
+#import "RFAllPostsController.h"
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
@@ -348,6 +349,18 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:3] byExtendingSelection:NO];
 }
 
+- (IBAction) showPosts:(id)sender
+{
+	self.selectedTimeline = kSelectionPosts;
+
+	[self closeOverlays];
+
+	RFAllPostsController* controller = [[RFAllPostsController alloc] init];
+	[self showAllPostsController:controller];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:4] byExtendingSelection:NO];
+}
+
 - (IBAction) refreshTimeline:(id)sender
 {
 	[self.messageSpinner startAnimation:nil];
@@ -581,6 +594,23 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self.window makeFirstResponder:self.postController.textView];
 	self.postController.nextResponder = self;
 	self.postController.view.autoresizingMask = NSViewHeightSizable;
+}
+
+- (void) showAllPostsController:(RFAllPostsController *)controller
+{
+	self.allPostsController = controller;
+
+	NSRect r = self.webView.bounds;
+	r.origin.x = kDefaultSplitViewPosition + 1;
+	self.allPostsController.view.frame = r;
+	self.allPostsController.view.alphaValue = 0.0;
+	
+	[self.window.contentView addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
+
+	self.allPostsController.view.animator.alphaValue = 1.0;
+//	[self.window makeFirstResponder:self.allPostsController.textView];
+	self.allPostsController.nextResponder = self;
+	self.allPostsController.view.autoresizingMask = NSViewHeightSizable;
 }
 
 - (void) showTopicsWithSearch:(NSString *)term
@@ -880,7 +910,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return 4;
+	return 5;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
@@ -904,8 +934,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		cell.iconView.image = [NSImage imageNamed:@"kind_discover"];
 	}
 	else if (row == 4) {
-		cell.titleField.stringValue = @"Drafts";
-		cell.iconView.image = nil;
+		cell.titleField.stringValue = @"Posts";
+		cell.iconView.image = [NSImage imageNamed:@"kind_list"];
 	}
 
 	return cell;
@@ -924,6 +954,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 	else if (row == 3) {
 		[self showDiscover:nil];
+	}
+	else if (row == 4) {
+		[self showPosts:nil];
 	}
 
 	return YES;

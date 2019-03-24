@@ -126,6 +126,8 @@
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFA48421EFE799006B1691 /* RFHeaderBox.m */; };
+		4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537272247341800CF9D66 /* RFAllPostsController.m */; };
+		4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF537292247345F00CF9D66 /* AllPosts.xib */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -361,6 +363,9 @@
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		4BEFA48321EFE799006B1691 /* RFHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHeaderBox.h; path = Source/RFHeaderBox.h; sourceTree = "<group>"; };
 		4BEFA48421EFE799006B1691 /* RFHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBox.m; path = Source/RFHeaderBox.m; sourceTree = "<group>"; };
+		4BF537262247341800CF9D66 /* RFAllPostsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllPostsController.h; path = Source/RFAllPostsController.h; sourceTree = "<group>"; };
+		4BF537272247341800CF9D66 /* RFAllPostsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllPostsController.m; path = Source/RFAllPostsController.m; sourceTree = "<group>"; };
+		4BF5372A2247345F00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllPosts.xib; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -557,6 +562,8 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
+				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4BB7449021E84AC500371388 /* RFPhotoZoomController.h */,
 				4BB7449121E84AC500371388 /* RFPhotoZoomController.m */,
 				4BB744A021EA4E1800371388 /* RFPhotoAltController.h */,
@@ -647,6 +654,7 @@
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
 				4BB69066209A113500CD5E1E /* Instagram.xib */,
+				4BF537292247345F00CF9D66 /* AllPosts.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */,
 				4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */,
@@ -801,6 +809,7 @@
 				4B608B482003B86400589F77 /* Topic.xib in Resources */,
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
+				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
@@ -852,6 +861,7 @@
 				4B2CAAC41F90652800D9B10E /* RFXMLRPCRequest.m in Sources */,
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
+				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
 				4B400D05201EC55B00C71AAF /* MMElement.m in Sources */,
 				4B2CAAC51F90652800D9B10E /* RFXMLRPCParser.m in Sources */,
 				4B2CAB161F90667300D9B10E /* iconvtc.c in Sources */,
@@ -1093,6 +1103,14 @@
 				4BB744A421EA4E3800371388 /* Base */,
 			);
 			name = PhotoAlt.xib;
+			sourceTree = "<group>";
+		};
+		4BF537292247345F00CF9D66 /* AllPosts.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BF5372A2247345F00CF9D66 /* Base */,
+			);
+			name = AllPosts.xib;
 			sourceTree = "<group>";
 		};
 		4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */ = {

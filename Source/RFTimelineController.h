@@ -10,6 +10,7 @@
 #import <WebKit/WebKit.h>
 
 @class RFPostController;
+@class RFAllPostsController;
 @class RFRoundedImageView;
 @class RFConversationController;
 @class RFStack;
@@ -20,7 +21,7 @@ typedef enum {
 	kSelectionMentions = 1,
 	kSelectionFavorites = 2,
 	kSelectionDiscover = 3,
-	kSelectionDrafts = 4
+	kSelectionPosts = 4
 } RFSelectedTimelineType;
 
 @interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource, WebFrameLoadDelegate, WebPolicyDelegate, WebResourceLoadDelegate, WebUIDelegate, NSUserNotificationCenterDelegate>
@@ -43,6 +44,7 @@ typedef enum {
 @property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
+@property (strong, nonatomic) RFAllPostsController* allPostsController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
 @property (strong, nonatomic) RFStack* navigationStack;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* navigationLeftConstraint;
