@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 
-@property (strong, nonatomic) NSArray* posts; // RFPost
+@property (strong, nonatomic) NSArray* allPosts; // RFPost
+@property (strong, nonatomic) NSArray* currentPosts; // RFPost
 
 @end
 

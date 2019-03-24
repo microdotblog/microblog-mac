@@ -42,7 +42,8 @@
 
 - (void) fetchPosts
 {
-	self.posts = @[];
+	self.allPosts = @[];
+	self.currentPosts = @[];
 	self.blogNameButton.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 
@@ -67,7 +68,8 @@
 		}
 		
 		RFDispatchMainAsync (^{
-			self.posts = new_posts;
+			self.allPosts = new_posts;
+			self.currentPosts = new_posts;
 			[self.tableView reloadData];
 			[self.progressSpinner stopAnimation:nil];
 			[self setupBlogName];
@@ -87,6 +89,26 @@
 	}
 }
 
+- (IBAction) search:(id)sender
+{
+	NSString* q = [[sender stringValue] lowercaseString];
+	if (q.length == 0) {
+		self.currentPosts = self.allPosts;
+	}
+	else {
+		NSMutableArray* filtered_posts = [NSMutableArray array];
+		for (RFPost* post in self.allPosts) {
+			if ([[post.title lowercaseString] containsString:q] || [[post.text lowercaseString] containsString:q]) {
+				[filtered_posts addObject:post];
+			}
+		}
+		
+		self.currentPosts = filtered_posts;
+	}
+	
+	[self.tableView reloadData];
+}
+
 - (IBAction) blogNameClicked:(id)sender
 {
 	[self showBlogsMenu];
@@ -104,14 +126,14 @@
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return self.posts.count;
+	return self.currentPosts.count;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
 
-	RFPost* post = [self.posts objectAtIndex:row];
+	RFPost* post = [self.currentPosts objectAtIndex:row];
 
 	cell.titleField.stringValue = post.title;
 	cell.textField.stringValue = post.text;
