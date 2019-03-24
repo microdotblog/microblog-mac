@@ -12,6 +12,7 @@
 #import "RFPost.h"
 #import "RFClient.h"
 #import "RFSettings.h"
+#import "RFConstants.h"
 #import "RFMacros.h"
 #import "UUDate.h"
 #import "NSString+Extras.h"
@@ -39,6 +40,8 @@
 - (void) setupTable
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
+	[self.tableView setTarget:self];
+	[self.tableView setDoubleAction:@selector(openRow:)];
 }
 
 - (void) fetchPosts
@@ -95,6 +98,18 @@
 	else {
 		self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
 	}
+}
+
+- (void) openRow:(id)sender
+{
+	NSInteger row = [self.tableView clickedRow];
+	RFPost* post = [self.currentPosts objectAtIndex:row];
+	[self openPost:post];
+}
+
+- (void) openPost:(RFPost *)post
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
 }
 
 - (IBAction) search:(id)sender
