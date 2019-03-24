@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* textField;
 @property (strong, nonatomic) IBOutlet NSTextField* dateField;
 @property (strong, nonatomic) IBOutlet NSTextField* draftField;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
 
 @end
 

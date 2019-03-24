@@ -14,6 +14,7 @@
 #import "RFSettings.h"
 #import "RFMacros.h"
 #import "UUDate.h"
+#import "NSString+Extras.h"
 
 @implementation RFAllPostsController
 
@@ -56,7 +57,14 @@
 			RFPost* post = [[RFPost alloc] init];
 			NSDictionary* props = [item objectForKey:@"properties"];
 			post.title = [[props objectForKey:@"name"] firstObject];
-			post.text = [[props objectForKey:@"content"] firstObject];
+
+			NSString* content = [[props objectForKey:@"content"] firstObject];
+			NSString* s = [content rf_stripHTML];
+			if (s.length > 300) {
+				s = [s substringToIndex:300];
+				s = [s stringByAppendingString:@"..."];
+			}
+			post.text = s;
 
 			NSString* date_s = [[props objectForKey:@"published"] firstObject];
 			post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
@@ -139,6 +147,13 @@
 	cell.textField.stringValue = post.text;
 	cell.dateField.stringValue = [post.postedAt description];
 	cell.draftField.hidden = !post.isDraft;
+	
+	if (post.title.length == 0) {
+		cell.textTopConstraint.constant = 10;
+	}
+	else {
+		cell.textTopConstraint.constant = 35;
+	}
 
 	return cell;
 }
