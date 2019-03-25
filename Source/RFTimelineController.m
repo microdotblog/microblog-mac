@@ -361,6 +361,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	else if (self.selectedTimeline == kSelectionDiscover) {
 		[self showDiscover:nil];
 	}
+	else if (self.selectedTimeline == kSelectionPosts) {
+		[self.allPostsController fetchPosts];
+	}
 
 	RFDispatchSeconds (1.5, ^{
 		self.messageTopConstraint.animator.constant = -35;

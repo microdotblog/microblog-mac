@@ -10,6 +10,7 @@
 
 #import "RFPostCell.h"
 #import "RFPost.h"
+#import "RFBlogsController.h"
 #import "RFClient.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
@@ -34,6 +35,8 @@
 	
 	[self setupTable];
 	[self setupBlogName];
+	[self setupNotifications];
+	
 	[self fetchPosts];
 }
 
@@ -45,6 +48,23 @@
 	self.tableView.alphaValue = 0.0;
 }
 
+- (void) setupBlogName
+{
+	NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
+	if (s) {
+		self.blogNameButton.title = s;
+	}
+	else {
+		self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+}
+
 - (void) fetchPosts
 {
 	self.allPosts = @[];
@@ -52,8 +72,18 @@
 	self.blogNameButton.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid
+	};
+
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-	[client getWithQueryArguments:@{ @"q": @"source" } completion:^(UUHttpResponse* response) {
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		NSMutableArray* new_posts = [NSMutableArray array];
 		
 		NSArray* items = [response.parsedResponse objectForKey:@"items"];
@@ -82,17 +112,6 @@
 			self.tableView.animator.alphaValue = 1.0;
 		});
 	}];
-}
-
-- (void) setupBlogName
-{
-	NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
-	if (s) {
-		self.blogNameButton.title = s;
-	}
-	else {
-		self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
-	}
 }
 
 - (void) openRow:(id)sender
@@ -134,10 +153,47 @@
 
 - (void) showBlogsMenu
 {
+	if (self.blogsMenuPopover) {
+		[self hideBlogsMenu];
+	}
+	else {
+		if (![RFSettings boolForKey:kExternalBlogIsPreferred]) {
+			RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
+			
+			self.blogsMenuPopover = [[NSPopover alloc] init];
+			self.blogsMenuPopover.contentViewController = blogs_controller;
+			self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
+			self.blogsMenuPopover.delegate = self;
+
+			NSRect r = self.blogNameButton.bounds;
+			[self.blogsMenuPopover showRelativeToRect:r ofView:self.blogNameButton preferredEdge:NSRectEdgeMaxY];
+		}
+	}
 }
 
 - (void) hideBlogsMenu
 {
+	if (self.blogsMenuPopover) {
+		[self.blogsMenuPopover performClose:nil];
+		self.blogsMenuPopover = nil;
+	}
+}
+
+- (void) popoverDidClose:(NSNotification *)notification
+{
+	self.blogsMenuPopover = nil;
+}
+
+- (void) updatedBlogNotification:(NSNotification *)notification
+{
+	[self setupBlogName];
+	[self hideBlogsMenu];
+	[self fetchPosts];
+}
+
+- (void) closePostingNotification:(NSNotification *)notification
+{
+	[self fetchPosts];
 }
 
 #pragma mark -

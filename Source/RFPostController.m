@@ -320,7 +320,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) finishClose
 {
-	if (!self.isReply && !self.isSent) {
+	if (!self.isReply && !self.isSent && !self.editingPost) {
 		NSString* title = [self currentTitle];
 		NSString* draft = [self currentText];
 		[[NSUserDefaults standardUserDefaults] setObject:title forKey:kLatestDraftTitlePrefKey];

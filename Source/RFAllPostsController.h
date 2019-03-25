@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFAllPostsController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+@interface RFAllPostsController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSPopoverDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSArray* allPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
+@property (strong, nonatomic) NSPopover* blogsMenuPopover;
+
+- (void) fetchPosts;
 
 @end
 
