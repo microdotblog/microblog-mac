@@ -605,6 +605,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return [html rf_stripHTML];
 }
 
+- (NSString *) currentStatus
+{
+	if (self.isDraft) {
+		return @"draft";
+	}
+	else {
+		return @"published";
+	}
+}
+
 - (NSArray *) currentSelectedCategories
 {
 	NSMutableArray* categories = [NSMutableArray array];
@@ -732,6 +742,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 }
 
+- (IBAction) save:(id)sender
+{
+	self.isDraft = YES;
+	[self sendPost:sender];
+}
+
 - (void) showProgressHeader:(NSString *)statusText
 {
 	self.postButton.enabled = NO;
@@ -820,7 +836,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"photo[]": photo_urls,
 					@"mp-photo-alt[]": photo_alts,
 					@"mp-destination": destination_uid,
-					@"category[]": category_names
+					@"category[]": category_names,
+					@"post-status": [self currentStatus]
 				};
 			}
 			else {
@@ -828,7 +845,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"name": [self currentTitle],
 					@"content": text,
 					@"mp-destination": destination_uid,
-					@"category[]": category_names
+					@"category[]": category_names,
+					@"post-status": [self currentStatus]
 				};
 			}
 
@@ -864,7 +882,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						@"name": [self currentTitle],
 						@"content": text,
 						@"photo": [photo_urls firstObject],
-						@"mp-photo-alt": [photo_alts firstObject]
+						@"mp-photo-alt": [photo_alts firstObject],
+						@"post-status": [self currentStatus]
 					};
 				}
 				else {
@@ -873,7 +892,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						@"name": [self currentTitle],
 						@"content": text,
 						@"photo[]": photo_urls,
-						@"mp-photo-alt[]": photo_alts
+						@"mp-photo-alt[]": photo_alts,
+						@"post-status": [self currentStatus]
 					};
 				}
 			}
@@ -881,7 +901,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				args = @{
 					@"h": @"entry",
 					@"name": [self currentTitle],
-					@"content": text
+					@"content": text,
+					@"post-status": [self currentStatus]
 				};
 			}
 			

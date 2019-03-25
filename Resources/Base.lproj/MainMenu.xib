@@ -87,6 +87,11 @@ DQ
                                     <action selector="sendPost:" target="-1" id="jqT-AB-2ts"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Save Draft" keyEquivalent="s" id="gN7-ft-ZET">
+                                <connections>
+                                    <action selector="save:" target="-1" id="7lS-vQ-JSr"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="EWd-1i-I6l"/>
                             <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                 <connections>

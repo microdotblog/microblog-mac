@@ -29,6 +29,7 @@
 
 @property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;
+@property (assign, nonatomic) BOOL isDraft;
 @property (assign, nonatomic) BOOL isShowingTitle;
 @property (assign, nonatomic) BOOL isShowingCategories;
 @property (strong, nonatomic) RFPost* editingPost;
