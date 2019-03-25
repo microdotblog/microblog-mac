@@ -42,6 +42,7 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
+	self.tableView.alphaValue = 0.0;
 }
 
 - (void) fetchPosts
@@ -78,6 +79,7 @@
 			[self.progressSpinner stopAnimation:nil];
 			[self setupBlogName];
 			self.blogNameButton.hidden = NO;
+			self.tableView.animator.alphaValue = 1.0;
 		});
 	}];
 }
