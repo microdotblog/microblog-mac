@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate* postedAt;
 @property (assign) BOOL isDraft;
 
+- (NSString *) summary;
+
 @end
 
 NS_ASSUME_NONNULL_END

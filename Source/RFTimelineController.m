@@ -24,6 +24,7 @@
 #import "RFAccount.h"
 #import "RFMacros.h"
 #import "RFClient.h"
+#import "RFPost.h"
 #import "RFStack.h"
 #import "NSAppearance+Extras.h"
 #import <Fabric/Fabric.h>
@@ -164,7 +165,8 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) openPostingNotification:(NSNotification *)notification
 {
-	[self newDocument:nil];
+	RFPost* post = [notification.userInfo objectForKey:kOpenPostingPostKey];
+	[self showEditPost:post];
 }
 
 - (void) postWasFavoritedNotification:(NSNotification *)notification
@@ -248,25 +250,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (IBAction) newDocument:(id)sender
 {
-	[self hideOptionsMenu];
-
-	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
-	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
-	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
-	if (has_hosted || micropub || xmlrpc) {
-		if (!self.postController) {
-			RFPostController* controller = [[RFPostController alloc] init];
-			[self showPostController:controller];
-		}
-	}
-	else {
-		NSAlert* alert = [[NSAlert alloc] init];
-		[alert addButtonWithTitle:@"OK"];
-		[alert setMessageText:@"No hosted or external blog configured."];
-		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
-		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-		}];
-	}
+	[self showEditPost:nil];
 }
 
 - (IBAction) performClose:(id)sender
@@ -693,6 +677,35 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		
 		[self.optionsPopover performClose:nil];
 		self.optionsPopover = nil;
+	}
+}
+
+- (void) showEditPost:(RFPost *)post
+{
+	[self hideOptionsMenu];
+
+	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
+	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
+	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
+	if (has_hosted || micropub || xmlrpc) {
+		if (!self.postController) {
+			RFPostController* controller;
+			if (post) {
+				controller = [[RFPostController alloc] initWithPost:post];
+			}
+			else {
+				controller = [[RFPostController alloc] init];
+			}
+			[self showPostController:controller];
+		}
+	}
+	else {
+		NSAlert* alert = [[NSAlert alloc] init];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"No hosted or external blog configured."];
+		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+		}];
 	}
 }
 

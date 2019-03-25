@@ -10,6 +10,7 @@
 
 @class RFHighlightingTextStorage;
 @class RFPhotoAltController;
+@class RFPost;
 
 @interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
 
@@ -30,6 +31,7 @@
 @property (assign, nonatomic) BOOL isReply;
 @property (assign, nonatomic) BOOL isShowingTitle;
 @property (assign, nonatomic) BOOL isShowingCategories;
+@property (strong, nonatomic) RFPost* editingPost;
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;
 @property (strong, nonatomic) NSString* initialText;
@@ -41,6 +43,7 @@
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic) RFPhotoAltController* altController;
 
+- (id) initWithPost:(RFPost *)post;
 - (id) initWithText:(NSString *)text;
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;

@@ -60,14 +60,7 @@
 			RFPost* post = [[RFPost alloc] init];
 			NSDictionary* props = [item objectForKey:@"properties"];
 			post.title = [[props objectForKey:@"name"] firstObject];
-
-			NSString* content = [[props objectForKey:@"content"] firstObject];
-			NSString* s = [content rf_stripHTML];
-			if (s.length > 300) {
-				s = [s substringToIndex:300];
-				s = [s stringByAppendingString:@"..."];
-			}
-			post.text = s;
+			post.text = [[props objectForKey:@"content"] firstObject];
 
 			NSString* date_s = [[props objectForKey:@"published"] firstObject];
 			post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
@@ -159,7 +152,7 @@
 	RFPost* post = [self.currentPosts objectAtIndex:row];
 
 	cell.titleField.stringValue = post.title;
-	cell.textField.stringValue = post.text;
+	cell.textField.stringValue = [post summary];
 	cell.dateField.stringValue = [post.postedAt description];
 	cell.draftField.hidden = !post.isDraft;
 	

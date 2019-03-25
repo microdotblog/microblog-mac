@@ -17,6 +17,7 @@
 #import "RFBlogsController.h"
 #import "RFPhotoAltController.h"
 #import "RFMicropub.h"
+#import "RFPost.h"
 #import "RFSettings.h"
 #import "RFHighlightingTextStorage.h"
 #import "UUString.h"
@@ -56,6 +57,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return self;
 }
 
+- (id) initWithPost:(RFPost *)post
+{
+	self = [self init];
+	if (self) {
+		self.editingPost = post;
+		self.initialText = post.text;
+		self.isShowingTitle = YES;
+	}
+	
+	return self;
+}
+
 - (id) initWithText:(NSString *)text
 {
 	self = [self init];
@@ -82,6 +95,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	[super viewDidLoad];
 
+	[self setupTitle];
 	[self setupText];
 	[self setupColletionView];
 	[self setupBlogName];
@@ -94,6 +108,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) viewDidAppear
 {
 	[super viewDidAppear];
+}
+
+- (void) setupTitle
+{
+	if (self.editingPost) {
+		self.titleField.stringValue = self.editingPost.title;
+	}
 }
 
 - (void) setupText

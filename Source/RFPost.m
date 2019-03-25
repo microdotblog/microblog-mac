@@ -8,6 +8,20 @@
 
 #import "RFPost.h"
 
+#import "NSString+Extras.h"
+
 @implementation RFPost
+
+- (NSString *) summary
+{
+	NSString* s = [self.text rf_stripHTML];
+
+	if (s.length > 300) {
+		s = [s substringToIndex:300];
+		s = [s stringByAppendingString:@"..."];
+	}
+	
+	return s;
+}
 
 @end
