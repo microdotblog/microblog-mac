@@ -84,33 +84,35 @@
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		NSMutableArray* new_posts = [NSMutableArray array];
-		
-		NSArray* items = [response.parsedResponse objectForKey:@"items"];
-		for (NSDictionary* item in items) {
-			RFPost* post = [[RFPost alloc] init];
-			NSDictionary* props = [item objectForKey:@"properties"];
-			post.title = [[props objectForKey:@"name"] firstObject];
-			post.text = [[props objectForKey:@"content"] firstObject];
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_posts = [NSMutableArray array];
 
-			NSString* date_s = [[props objectForKey:@"published"] firstObject];
-			post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				RFPost* post = [[RFPost alloc] init];
+				NSDictionary* props = [item objectForKey:@"properties"];
+				post.title = [[props objectForKey:@"name"] firstObject];
+				post.text = [[props objectForKey:@"content"] firstObject];
 
-			NSString* status = [[props objectForKey:@"post-status"] firstObject];
-			post.isDraft = [status isEqualToString:@"draft"];
+				NSString* date_s = [[props objectForKey:@"published"] firstObject];
+				post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
 
-			[new_posts addObject:post];
+				NSString* status = [[props objectForKey:@"post-status"] firstObject];
+				post.isDraft = [status isEqualToString:@"draft"];
+
+				[new_posts addObject:post];
+			}
+			
+			RFDispatchMainAsync (^{
+				self.allPosts = new_posts;
+				self.currentPosts = new_posts;
+				[self.tableView reloadData];
+				[self.progressSpinner stopAnimation:nil];
+				[self setupBlogName];
+				self.blogNameButton.hidden = NO;
+				self.tableView.animator.alphaValue = 1.0;
+			});
 		}
-		
-		RFDispatchMainAsync (^{
-			self.allPosts = new_posts;
-			self.currentPosts = new_posts;
-			[self.tableView reloadData];
-			[self.progressSpinner stopAnimation:nil];
-			[self setupBlogName];
-			self.blogNameButton.hidden = NO;
-			self.tableView.animator.alphaValue = 1.0;
-		});
 	}];
 }
 
