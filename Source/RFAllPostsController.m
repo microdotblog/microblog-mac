@@ -246,7 +246,7 @@
 
 	cell.titleField.stringValue = post.title;
 	cell.textField.stringValue = [post summary];
-	cell.dateField.stringValue = [post.postedAt description];
+	cell.dateField.stringValue = [post.postedAt uuIso8601DateString];
 	cell.draftField.hidden = !post.isDraft;
 	
 	if (post.title.length == 0) {
