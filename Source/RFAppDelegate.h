@@ -15,6 +15,8 @@
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
+@property (strong, nonatomic) IBOutlet NSMenuItem* allPostMenuItem;
+
 @property (strong, nonatomic) RFTimelineController* timelineController;
 @property (strong, nonatomic) RFWelcomeController* welcomeController;
 @property (strong, nonatomic) RFPreferencesController* prefsController;

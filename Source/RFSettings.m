@@ -105,6 +105,25 @@
 	}
 }
 
+#pragma mark -
+
++ (BOOL) hasSnippetsBlog
+{
+	return [self boolForKey:kHasSnippetsBlog];
+}
+
++ (BOOL) hasMicropubBlog
+{
+	return ([self stringForKey:kExternalMicropubMe] != nil);
+}
+
++ (BOOL) prefersExternalBlog
+{
+	return [self boolForKey:kExternalBlogIsPreferred];
+}
+
+#pragma mark -
+
 + (BOOL) boolForKey:(NSString *)prefKey
 {
 	return [self boolForKey:prefKey account:[self defaultAccount]];

@@ -819,18 +819,43 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			if (destination_uid == nil) {
 				destination_uid = @"";
 			}
-			NSDictionary* args;
 			NSArray* category_names = [self currentSelectedCategories];
-			if ([self.attachedPhotos count] > 0) {
-				NSMutableArray* photo_urls = [NSMutableArray array];
-				NSMutableArray* photo_alts = [NSMutableArray array];
+			NSMutableArray* photo_urls = [NSMutableArray array];
+			NSMutableArray* photo_alts = [NSMutableArray array];
 
-				for (RFPhoto* photo in self.attachedPhotos) {
-					[photo_urls addObject:photo.publishedURL];
-					[photo_alts addObject:photo.altText];
-				}
-				
-				args = @{
+			for (RFPhoto* photo in self.attachedPhotos) {
+				[photo_urls addObject:photo.publishedURL];
+				[photo_alts addObject:photo.altText];
+			}
+
+			if (self.editingPost) {
+				NSDictionary* info = @{
+					@"action": @"update",
+					@"url": self.editingPost.url,
+					@"mp-destination": destination_uid,
+					@"replace": @{
+						@"name": [self currentTitle],
+						@"content": text,
+						@"category[]": category_names,
+						@"post-status": [self currentStatus]
+					}
+				};
+
+				[client postWithObject:info completion:^(UUHttpResponse* response) {
+					RFDispatchMainAsync (^{
+						if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+							[self hideProgressHeader];
+							NSString* msg = response.parsedResponse[@"error_description"];
+							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+						}
+						else {
+							[self closeWithoutSaving];
+						}
+					});
+				}];
+			}
+			else {
+				NSDictionary* args = @{
 					@"name": [self currentTitle],
 					@"content": text,
 					@"photo[]": photo_urls,
@@ -839,29 +864,20 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"category[]": category_names,
 					@"post-status": [self currentStatus]
 				};
-			}
-			else {
-				args = @{
-					@"name": [self currentTitle],
-					@"content": text,
-					@"mp-destination": destination_uid,
-					@"category[]": category_names,
-					@"post-status": [self currentStatus]
-				};
-			}
 
-			[client postWithParams:args completion:^(UUHttpResponse* response) {
-				RFDispatchMainAsync (^{
-					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
-						[self hideProgressHeader];
-						NSString* msg = response.parsedResponse[@"error_description"];
-						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
-					}
-					else {
-						[self closeWithoutSaving];
-					}
-				});
-			}];
+				[client postWithParams:args completion:^(UUHttpResponse* response) {
+					RFDispatchMainAsync (^{
+						if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+							[self hideProgressHeader];
+							NSString* msg = response.parsedResponse[@"error_description"];
+							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+						}
+						else {
+							[self closeWithoutSaving];
+						}
+					});
+				}];
+			}
 		}
 		else if ([self hasMicropubBlog]) {
 			NSString* micropub_endpoint = [RFSettings stringForKey:kExternalMicropubPostingEndpoint];

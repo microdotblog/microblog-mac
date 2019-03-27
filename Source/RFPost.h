@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSNumber* postID;
 @property (strong) NSString* title;
 @property (strong) NSString* text;
+@property (strong) NSString* url;
 @property (strong) NSDate* postedAt;
 @property (assign) BOOL isDraft;
 

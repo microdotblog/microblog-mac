@@ -931,7 +931,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return 5;
+	if ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]) {
+		return 5;
+	}
+	else {
+		return 4;
+	}
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row

@@ -40,6 +40,8 @@
 	[self setupAppearance];
 	[self setupURLs];
 	[self setupFollowerAutoComplete];
+	[self setupMenus];
+	
 	[self showTimelineOrWelcome];
 }
 
@@ -198,6 +200,13 @@
 			 }
 		 }
 	 }];
+}
+
+- (void) setupMenus
+{
+	if (![RFSettings hasSnippetsBlog] || [RFSettings prefersExternalBlog]) {
+		[self.allPostMenuItem.menu removeItem:self.allPostMenuItem];
+	}
 }
 
 - (void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context

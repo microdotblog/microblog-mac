@@ -93,6 +93,7 @@
 				NSDictionary* props = [item objectForKey:@"properties"];
 				post.title = [[props objectForKey:@"name"] firstObject];
 				post.text = [[props objectForKey:@"content"] firstObject];
+				post.url = [[props objectForKey:@"url"] firstObject];
 
 				NSString* date_s = [[props objectForKey:@"published"] firstObject];
 				post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
