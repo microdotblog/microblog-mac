@@ -129,6 +129,11 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
 }
 
+- (void) focusSearch
+{
+	[self.searchField becomeFirstResponder];
+}
+
 - (IBAction) search:(id)sender
 {
 	NSString* q = [[sender stringValue] lowercaseString];

@@ -408,6 +408,28 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"RFSignOut" object:self];
 }
 
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(performFindPanelAction:)) {
+		if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPosts)) {
+			return YES;
+		}
+		else {
+			return NO;
+		}
+	}
+	else {
+		return YES;
+	}
+}
+
+- (void) performFindPanelAction:(id)sender
+{
+	if (self.selectedTimeline == kSelectionPosts) {
+		[self.allPostsController focusSearch];
+	}
+}
+
 #pragma mark -
 
 - (void) checkPostsFromTimer:(NSTimer *)timer

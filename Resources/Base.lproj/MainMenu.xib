@@ -454,6 +454,7 @@ DQ
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="184" y="26"/>
         </menu>
         <customObject id="CPI-xk-PdH" customClass="SUUpdater"/>
     </objects>

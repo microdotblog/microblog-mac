@@ -15,12 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
+@property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
 @property (strong, nonatomic) NSArray* allPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 
 - (void) fetchPosts;
+- (void) focusSearch;
 
 @end
 
