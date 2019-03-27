@@ -248,6 +248,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			return YES;
 		}
 	}
+	else if (item.action == @selector(save:)) {
+		return ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]);
+	}
 	else {
 		return YES;
 	}
