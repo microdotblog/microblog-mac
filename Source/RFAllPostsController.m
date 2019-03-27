@@ -17,6 +17,7 @@
 #import "RFMacros.h"
 #import "UUDate.h"
 #import "NSString+Extras.h"
+#import "NSAlert+Extras.h"
 
 @implementation RFAllPostsController
 
@@ -155,10 +156,40 @@
 		[sheet addButtonWithTitle:@"Cancel"];
 		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
-				// ...
+				[self deletePost:post];
 			}
 		}];
 	}
+}
+
+- (void) deletePost:(RFPost *)post
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"action": @"delete",
+		@"mp-destination": destination_uid,
+		@"url": post.url,
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+				[self.progressSpinner stopAnimation:nil];
+				NSString* msg = response.parsedResponse[@"error_description"];
+				[NSAlert rf_showOneButtonAlert:@"Error Deleting Post" message:msg button:@"OK" completionHandler:NULL];
+			}
+			else {
+				[self fetchPosts];
+			}
+		});
+	}];
 }
 
 - (IBAction) search:(id)sender
