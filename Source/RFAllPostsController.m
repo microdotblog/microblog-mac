@@ -134,6 +134,33 @@
 	[self.searchField becomeFirstResponder];
 }
 
+- (void) delete:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		RFPost* post = [self.currentPosts objectAtIndex:row];
+		NSString* s = post.title;
+		if (s.length == 0) {
+			s = [post summary];
+			if (s.length > 20) {
+				s = [s substringToIndex:20];
+				s = [s stringByAppendingString:@"..."];
+			}
+		}
+		
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.informativeText = @"This post will be removed from your blog and the Micro.blog timeline.";
+		[sheet addButtonWithTitle:@"Delete"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				// ...
+			}
+		}];
+	}
+}
+
 - (IBAction) search:(id)sender
 {
 	NSString* q = [[sender stringValue] lowercaseString];
