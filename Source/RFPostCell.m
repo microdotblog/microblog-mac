@@ -58,6 +58,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	else {
 		self.dateTopConstraint.constant = 90;
 	}
+	
+	[self.photosCollectionView reloadData];
 }
 
 #pragma mark -
@@ -69,11 +71,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-	RFPhoto* photo = [self.photos objectAtIndex:indexPath.item];
-	
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 	
-	item.thumbnailImageView.image = photo.thumbnailImage;
+	if (indexPath.item < self.photos.count) {
+		RFPhoto* photo = [self.photos objectAtIndex:indexPath.item];
+		item.thumbnailImageView.image = photo.thumbnailImage;
+	}
 	
 	return item;
 }
@@ -83,17 +86,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFPhoto* photo = [self.photos objectAtIndex:indexPath.item];
 	RFPhotoCell* photo_item = (RFPhotoCell *)item;
 
-	NSString* url = [NSString stringWithFormat:@"https://photos.micro.blog/200/%@", photo.publishedURL];
+	if (photo.thumbnailImage == nil) {
+		NSString* url = [NSString stringWithFormat:@"https://photos.micro.blog/200/%@", photo.publishedURL];
 
-	[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
-			NSImage* img = response.parsedResponse;
-			RFDispatchMain(^{
-				photo.thumbnailImage = img;
-				photo_item.thumbnailImageView.image = img;
-			});
-		}
-	}];
+		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+				NSImage* img = response.parsedResponse;
+				RFDispatchMain(^{
+					photo.thumbnailImage = img;
+					[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
+	//				photo_item.thumbnailImageView.image = img;
+				});
+			}
+		}];
+	}
 }
 
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths

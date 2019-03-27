@@ -71,7 +71,8 @@
 	self.allPosts = @[];
 	self.currentPosts = @[];
 	self.blogNameButton.hidden = YES;
-	[self.progressSpinner startAnimation:nil];
+	[self.progressSpinner startAnimation:nil];	
+	self.tableView.animator.alphaValue = 0.0;
 
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
@@ -273,8 +274,10 @@
 {
 	RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
 
-	RFPost* post = [self.currentPosts objectAtIndex:row];
-	[cell setupWithPost:post];
+	if (row < self.currentPosts.count) {
+		RFPost* post = [self.currentPosts objectAtIndex:row];
+		[cell setupWithPost:post];
+	}
 
 	return cell;
 }
