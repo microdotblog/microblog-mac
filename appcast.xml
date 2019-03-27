@@ -6,6 +6,29 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.7</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>New features for Micro.blog-hosted blogs:</p>
+ 				<ul>
+ 					<li>Added support for saving a post as a draft to publish later (File menu → Save Draft).</li>
+ 					<li>Added a new "Posts" section to search and edit your recent posts.</li>
+ 				</ul>
+ 				<p>For a quick demo of these new features, see the video on <a href="https://www.manton.org/2019/03/27/new-features-saved.html">Manton's blog post here</a>.</p>
+ 			]]></description>
+			<pubDate>Wed, 27 Mar 2019 14:50:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.7.zip" sparkle:shortVersionString="1.7" sparkle:version="57" length="3050046" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.6</title>
  			<description><![CDATA[
 				<style>
