@@ -274,18 +274,7 @@
 	RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
 
 	RFPost* post = [self.currentPosts objectAtIndex:row];
-
-	cell.titleField.stringValue = post.title;
-	cell.textField.stringValue = [post summary];
-	cell.dateField.stringValue = [post.postedAt uuIso8601DateString];
-	cell.draftField.hidden = !post.isDraft;
-	
-	if (post.title.length == 0) {
-		cell.textTopConstraint.constant = 10;
-	}
-	else {
-		cell.textTopConstraint.constant = 35;
-	}
+	[cell setupWithPost:post];
 
 	return cell;
 }

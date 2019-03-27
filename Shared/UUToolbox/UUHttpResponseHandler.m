@@ -8,6 +8,8 @@
 
 #import "UUHttpResponseHandler.h"
 
+#import <AppKit/AppKit.h>
+
 //If you want to provide your own logging mechanism, define UUDebugLog in your .pch
 #ifndef UUDebugLog
 #ifdef DEBUG
@@ -131,9 +133,7 @@ NSString * const kUUHttpMethodHead       = @"HEAD";
 
 - (id) parseResponse:(NSData*)rxBuffer response:(NSHTTPURLResponse*)response forRequest:(NSURLRequest*)request
 {
-	// FIXME
-	return nil;
-//    return [NSImage imageWithData:rxBuffer];
+	return [[NSImage alloc] initWithData:rxBuffer];
 }
 
 @end

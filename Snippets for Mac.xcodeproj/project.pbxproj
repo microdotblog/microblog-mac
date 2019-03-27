@@ -70,6 +70,9 @@
 		4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650601F85626200B03FFD /* RFOptionsController.m */; };
 		4B5650661F8564AE00B03FFD /* Options.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650641F8562B900B03FFD /* Options.xib */; };
 		4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650681F8585C900B03FFD /* RFRoundedImageView.m */; };
+		4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5714CA224BD01C001F8E4F /* HTMLParser.m */; };
+		4B5714CF224BD01D001F8E4F /* HTMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5714CB224BD01D001F8E4F /* HTMLNode.m */; };
+		4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B5714D0224BD048001F8E4F /* libxml2.tbd */; };
 		4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A25061F83FE37007C548F /* RFWelcomeController.m */; };
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
@@ -270,6 +273,11 @@
 		4B5650651F8562B900B03FFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Options.xib; sourceTree = "<group>"; };
 		4B5650671F8585C900B03FFD /* RFRoundedImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFRoundedImageView.h; path = Source/RFRoundedImageView.h; sourceTree = "<group>"; };
 		4B5650681F8585C900B03FFD /* RFRoundedImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFRoundedImageView.m; path = Source/RFRoundedImageView.m; sourceTree = "<group>"; };
+		4B5714CA224BD01C001F8E4F /* HTMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTMLParser.m; path = Shared/HTMLParser/HTMLParser.m; sourceTree = "<group>"; };
+		4B5714CB224BD01D001F8E4F /* HTMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTMLNode.m; path = Shared/HTMLParser/HTMLNode.m; sourceTree = "<group>"; };
+		4B5714CC224BD01D001F8E4F /* HTMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTMLNode.h; path = Shared/HTMLParser/HTMLNode.h; sourceTree = "<group>"; };
+		4B5714CD224BD01D001F8E4F /* HTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTMLParser.h; path = Shared/HTMLParser/HTMLParser.h; sourceTree = "<group>"; };
+		4B5714D0224BD048001F8E4F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		4B5A25051F83FE37007C548F /* RFWelcomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFWelcomeController.h; path = Source/RFWelcomeController.h; sourceTree = "<group>"; };
 		4B5A25061F83FE37007C548F /* RFWelcomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWelcomeController.m; path = Source/RFWelcomeController.m; sourceTree = "<group>"; };
 		4B5A25091F83FE4D007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Welcome.xib; sourceTree = "<group>"; };
@@ -388,6 +396,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */,
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 				4B6AE76E1F8AE19F00CB7950 /* Sparkle.framework in Frameworks */,
@@ -516,6 +525,17 @@
 				4B400D02201EC55B00C71AAF /* MMSpanParser.m */,
 			);
 			name = MMMarkdown;
+			sourceTree = "<group>";
+		};
+		4B5714C9224BD00B001F8E4F /* HTMLParser */ = {
+			isa = PBXGroup;
+			children = (
+				4B5714CC224BD01D001F8E4F /* HTMLNode.h */,
+				4B5714CB224BD01D001F8E4F /* HTMLNode.m */,
+				4B5714CD224BD01D001F8E4F /* HTMLParser.h */,
+				4B5714CA224BD01C001F8E4F /* HTMLParser.m */,
+			);
+			name = HTMLParser;
 			sourceTree = "<group>";
 		};
 		4B7F0ACF1BAF4B77004553A6 = {
@@ -688,6 +708,7 @@
 		4B7F0B031BAF4F7D004553A6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4B5714D0224BD048001F8E4F /* libxml2.tbd */,
 				4B6AE7831F8B386100CB7950 /* Fabric.framework */,
 				4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */,
 				4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */,
@@ -702,6 +723,7 @@
 			children = (
 				4BC826CF1FAB663700A58AD4 /* SAMKeychain */,
 				4B2CAAC71F90655A00D9B10E /* CTidy */,
+				4B5714C9224BD00B001F8E4F /* HTMLParser */,
 				4B400CF1201EC52500C71AAF /* MMMarkdown */,
 				4B8FBDD81F867A2800906C86 /* UUToolbox */,
 			);
@@ -863,6 +885,7 @@
 				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
 				4B2CAB141F90667300D9B10E /* utf8.c in Sources */,
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
+				4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */,
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,
 				4B2CAB061F90667300D9B10E /* entities.c in Sources */,
 				4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */,
@@ -916,6 +939,7 @@
 				4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */,
 				4BB6906B209A123300CD5E1E /* RFInstagramController.m in Sources */,
 				4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */,
+				4B5714CF224BD01D001F8E4F /* HTMLNode.m in Sources */,
 				4B2CAB0D1F90667300D9B10E /* attrs.c in Sources */,
 				4B2CAB1A1F90667300D9B10E /* config.c in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
@@ -1256,6 +1280,7 @@
 					"$(PROJECT_DIR)/Shared",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
@@ -1279,6 +1304,7 @@
 					"$(PROJECT_DIR)/Shared",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;

@@ -21,6 +21,8 @@
 		s = [s stringByAppendingString:@"..."];
 	}
 	
+	s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+	
 	return s;
 }
 
