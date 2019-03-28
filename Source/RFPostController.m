@@ -30,6 +30,7 @@
 #import "MMMarkdown.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
+#import <AVFoundation/AVFoundation.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -358,7 +359,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (IBAction) choosePhoto:(id)sender
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
-	panel.allowedFileTypes = @[ @"public.image" ];
+	panel.allowedFileTypes = @[ @"public.image", @"public.movie" ];
 	panel.allowsMultipleSelection = YES;
 	
 	[panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
@@ -367,10 +368,24 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
 			
 			for (NSURL* file_url in urls) {
-				NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
-				NSImage* scaled_img = [img rf_scaleToWidth:1200];
-				RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
-				[new_photos addObject:photo];
+				NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
+				if ([video_extensions containsObject:[file_url pathExtension]]) {
+					NSError* error = nil;
+					AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
+					AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+					CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
+					NSImage* img = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+					photo.videoAsset = asset;
+					photo.isVideo = YES;
+					[new_photos addObject:photo];
+				}
+				else {
+					NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
+					NSImage* scaled_img = [img rf_scaleToWidth:1200]; // ?
+					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
+					[new_photos addObject:photo];
+				}
 			}
 
 			self.attachedPhotos = new_photos;
@@ -825,10 +840,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSArray* category_names = [self currentSelectedCategories];
 			NSMutableArray* photo_urls = [NSMutableArray array];
 			NSMutableArray* photo_alts = [NSMutableArray array];
+			NSMutableArray* video_urls = [NSMutableArray array];
+			NSMutableArray* video_alts = [NSMutableArray array];
 
 			for (RFPhoto* photo in self.attachedPhotos) {
-				[photo_urls addObject:photo.publishedURL];
-				[photo_alts addObject:photo.altText];
+				if (photo.isVideo) {
+					[video_urls addObject:photo.publishedURL];
+					[video_alts addObject:photo.altText];
+				}
+				else {
+					[photo_urls addObject:photo.publishedURL];
+					[photo_alts addObject:photo.altText];
+				}
 			}
 
 			if (self.editingPost) {
@@ -863,6 +886,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"content": text,
 					@"photo[]": photo_urls,
 					@"mp-photo-alt[]": photo_alts,
+					@"video[]": video_urls,
+					@"mp-video-alt[]": video_alts,
 					@"mp-destination": destination_uid,
 					@"category[]": category_names,
 					@"post-status": [self currentStatus]
@@ -889,32 +914,30 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			if ([self.attachedPhotos count] > 0) {
 				NSMutableArray* photo_urls = [NSMutableArray array];
 				NSMutableArray* photo_alts = [NSMutableArray array];
+				NSMutableArray* video_urls = [NSMutableArray array];
+				NSMutableArray* video_alts = [NSMutableArray array];
 
 				for (RFPhoto* photo in self.attachedPhotos) {
-					[photo_urls addObject:photo.publishedURL];
-					[photo_alts addObject:photo.altText];
+					if (photo.isVideo) {
+						[video_urls addObject:photo.publishedURL];
+						[video_alts addObject:photo.altText];
+					}
+					else {
+						[photo_urls addObject:photo.publishedURL];
+						[photo_alts addObject:photo.altText];
+					}
 				}
 
-				if (photo_urls.count == 1) {
-					args = @{
-						@"h": @"entry",
-						@"name": [self currentTitle],
-						@"content": text,
-						@"photo": [photo_urls firstObject],
-						@"mp-photo-alt": [photo_alts firstObject],
-						@"post-status": [self currentStatus]
-					};
-				}
-				else {
-					args = @{
-						@"h": @"entry",
-						@"name": [self currentTitle],
-						@"content": text,
-						@"photo[]": photo_urls,
-						@"mp-photo-alt[]": photo_alts,
-						@"post-status": [self currentStatus]
-					};
-				}
+				args = @{
+					@"h": @"entry",
+					@"name": [self currentTitle],
+					@"content": text,
+					@"photo[]": photo_urls,
+					@"mp-photo-alt[]": photo_alts,
+					@"video[]": video_urls,
+					@"mp-video-alt[]": video_alts,
+					@"post-status": [self currentStatus]
+				};
 			}
 			else {
 				args = @{
@@ -1046,7 +1069,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					width = height / original_size.height * original_size.width;
 				}
 
-				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
+				if (photo.isVideo) {
+					s = [s stringByAppendingFormat:@"<video controls=\"controls\" src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
+				}
+				else {
+					s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
+				}
 			}
 		}
 
@@ -1059,11 +1087,22 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (self.attachedPhotos.count > 0) {
 		[self showProgressHeader:@"Uploading photos..."];
 	}
+	else if (photo.isVideo) {
+		[self showProgressHeader:@"Uploading video..."];
+	}
 	else {
 		[self showProgressHeader:@"Uploading photo..."];
 	}
 	
-	NSData* d = [photo jpegData];
+	NSData* d;
+	
+	if (photo.isVideo) {
+		d = [NSData dataWithContentsOfURL:photo.videoAsset.URL];
+	}
+	else {
+		d = [photo jpegData];
+	}
+	
 	if (d) {
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
@@ -1074,7 +1113,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSDictionary* args = @{
 				@"mp-destination": destination_uid
 			};
-			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
+			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{
@@ -1094,7 +1133,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
 			NSDictionary* args = @{
 			};
-			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
+			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{

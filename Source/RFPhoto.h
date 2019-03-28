@@ -9,6 +9,7 @@
 #import <AppKit/AppKit.h>
 #import <Photos/Photos.h>
 #import <PhotosUI/PhotosUI.h>
+#import <AVFoundation/AVFoundation.h>
 
 static NSString* const kAttachPhotoNotification = @"RFAttachPhotoNotification";
 static NSString* const kAttachPhotoKey = @"photo";
@@ -19,6 +20,8 @@ static NSString* const kAttachPhotoKey = @"photo";
 @property (strong) NSImage* thumbnailImage;
 @property (strong) NSString* publishedURL;
 @property (strong) NSString* altText;
+@property (strong) AVURLAsset* videoAsset;
+@property (assign) BOOL isVideo;
 
 //- (id) initWithAsset:(PHAsset *)asset;
 - (id) initWithThumbnail:(NSImage *)image;
