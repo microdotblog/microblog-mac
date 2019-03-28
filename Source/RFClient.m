@@ -160,7 +160,7 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 			filename = @"video.mov";
 		}
 		else {
-			filename = @"image.mov";
+			filename = @"image.jpg";
 		}
 
 		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
