@@ -10,7 +10,9 @@
 
 @interface NSImage (Extras)
 
+- (NSImage *) rf_scaleToSmallestDimension:(CGFloat)max;
 - (NSImage *) rf_scaleToWidth:(CGFloat)maxWidth;
+- (NSImage *) rf_scaleToHeight:(CGFloat)maxHeight;
 - (NSImage *) rf_scaleToSize:(NSSize)newSize;
 - (NSImage *) rf_roundImage;
 

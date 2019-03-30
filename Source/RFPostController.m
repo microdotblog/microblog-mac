@@ -382,7 +382,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				}
 				else {
 					NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
-					NSImage* scaled_img = [img rf_scaleToWidth:1200]; // ?
+					NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800]; 
 					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 					[new_photos addObject:photo];
 				}
@@ -426,7 +426,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	for (NSString* filepath in paths) {
 		if (new_photos.count < 10) {
 			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
-			NSImage* scaled_img = [img rf_scaleToWidth:1200];
+			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 			[new_photos addObject:photo];
 		}

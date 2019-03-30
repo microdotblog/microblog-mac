@@ -10,6 +10,36 @@
 
 @implementation NSImage (Extras)
 
+- (NSImage *) rf_scaleToSmallestDimension:(CGFloat)max
+{
+	if (self.size.width < max && self.size.width < max) {
+		return self;
+	}
+	
+	if (self.size.width > self.size.height)
+	{
+		return [self rf_scaleToWidth:max];
+	}
+	else {
+		return [self rf_scaleToHeight:max];
+	}
+}
+
+- (NSImage *) rf_scaleToHeight:(CGFloat)maxHeight
+{
+	NSSize old_size = self.size;
+	if (maxHeight >= old_size.height) {
+		return self;
+	}
+	
+	NSSize new_size;
+	new_size.height = maxHeight;
+	new_size.width = maxHeight / old_size.height * old_size.width;
+	
+	return [self rf_scaleToSize:new_size];
+
+}
+
 - (NSImage *) rf_scaleToWidth:(CGFloat)maxWidth
 {
 	NSSize old_size = self.size;
