@@ -101,9 +101,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupColletionView];
 	[self setupBlogName];
 	[self setupNotifications];
-	
+
 	[self updateTitleHeaderWithAnimation:NO];
 	[self downloadCategories];
+	[self downloadBlogs];
 }
 
 - (void) viewDidAppear
@@ -370,13 +371,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			for (NSURL* file_url in urls) {
 				NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
 				if ([video_extensions containsObject:[file_url pathExtension]]) {
-					NSDictionary* file_info = [[NSFileManager defaultManager] attributesOfItemAtPath:file_url.path error:NULL];
-					NSNumber* file_size = [file_info objectForKey:NSFileSize];
-					if ([file_size integerValue] > 45000000) { // 45 MB
-						NSString* msg = @"Micro.blog is designed for short videos. File uploads should be 45 MB or less. (Usually about 2 minutes of video.)";
-						[NSAlert rf_showOneButtonAlert:@"Video Can't Be Uploaded" message:msg button:@"OK" completionHandler:NULL];
-					}
-					else {
+					if ([self checkVideoFile:file_url]) {
 						NSError* error = nil;
 						AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
 						AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
@@ -663,6 +658,31 @@ static CGFloat const kTextViewTitleShownTop = 54;
 }
 
 #pragma mark -
+
+- (BOOL) checkVideoFile:(NSURL *)fileURL
+{
+	BOOL is_ok = YES;
+
+	if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+		for (NSDictionary* info in self.destinations) {
+			NSString* hostname = [RFSettings stringForKey:kCurrentDestinationName];
+			if (hostname && [hostname isEqualToString:[info objectForKey:@"name"]]) {
+				is_ok = [[info objectForKey:@"microblog-audio"] boolValue];
+				break;
+			}
+		}
+	}
+	
+	NSDictionary* file_info = [[NSFileManager defaultManager] attributesOfItemAtPath:fileURL.path error:NULL];
+	NSNumber* file_size = [file_info objectForKey:NSFileSize];
+	if ([file_size integerValue] > 45000000) { // 45 MB
+		NSString* msg = @"Micro.blog is designed for short videos. File uploads should be 45 MB or less. (Usually about 2 minutes of video.)";
+		[NSAlert rf_showOneButtonAlert:@"Video Can't Be Uploaded" message:msg button:@"OK" completionHandler:NULL];
+		is_ok = NO;
+	}
+
+	return is_ok;
+}
 
 - (void) showBlogsMenu
 {
@@ -1289,6 +1309,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}
 		}];
 	}
+}
+
+- (void) downloadBlogs
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
+		self.destinations = [response.parsedResponse objectForKey:@"destination"];
+	}];
 }
 
 @end

@@ -43,6 +43,7 @@
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic) RFPhotoAltController* altController;
+@property (strong, nonatomic) NSArray* destinations; // NSDictionary
 
 - (id) initWithPost:(RFPost *)post;
 - (id) initWithText:(NSString *)text;
