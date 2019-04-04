@@ -370,15 +370,23 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			for (NSURL* file_url in urls) {
 				NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
 				if ([video_extensions containsObject:[file_url pathExtension]]) {
-					NSError* error = nil;
-					AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
-					AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-					CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
-					NSImage* img = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
-					photo.videoAsset = asset;
-					photo.isVideo = YES;
-					[new_photos addObject:photo];
+					NSDictionary* file_info = [[NSFileManager defaultManager] attributesOfItemAtPath:file_url.path error:NULL];
+					NSNumber* file_size = [file_info objectForKey:NSFileSize];
+					if ([file_size integerValue] > 45000000) { // 45 MB
+						NSString* msg = @"Micro.blog is designed for short videos. File uploads should be 45 MB or less. (Usually about 2 minutes of video.)";
+						[NSAlert rf_showOneButtonAlert:@"Video Can't Be Uploaded" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else {
+						NSError* error = nil;
+						AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
+						AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+						CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
+						NSImage* img = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+						RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+						photo.videoAsset = asset;
+						photo.isVideo = YES;
+						[new_photos addObject:photo];
+					}
 				}
 				else {
 					NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
@@ -422,7 +430,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
 	BOOL too_many_photos = NO;
-	
+
 	for (NSString* filepath in paths) {
 		if (new_photos.count < 10) {
 			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
