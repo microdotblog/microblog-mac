@@ -30,6 +30,7 @@
 #import "MMMarkdown.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
+#import "SDAVAssetExportSession.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -371,17 +372,25 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			for (NSURL* file_url in urls) {
 				NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
 				if ([video_extensions containsObject:[file_url pathExtension]]) {
-					if ([self checkVideoFile:file_url]) {
-						NSError* error = nil;
-						AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
-						AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-						CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
-						NSImage* img = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-						RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
-						photo.videoAsset = asset;
-						photo.isVideo = YES;
-						[new_photos addObject:photo];
-					}
+					AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
+					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:nil];
+					photo.videoAsset = asset;
+					photo.isVideo = YES;
+
+					[photo transcodeVideo:^(NSURL* new_url) {
+						if ([self checkVideoFile:new_url]) {
+							AVURLAsset* new_asset = [AVURLAsset assetWithURL:file_url];
+							NSError* error = nil;
+							AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
+							CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
+							photo.videoAsset = new_asset;
+							photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+							[new_photos addObject:photo];
+						}
+						else {
+							[photo removeTemporaryVideo];
+						}
+					}];
 				}
 				else {
 					NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
@@ -1135,6 +1144,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	if (photo.isVideo) {
 		d = [NSData dataWithContentsOfURL:photo.videoAsset.URL];
+		[photo removeTemporaryVideo];
 	}
 	else {
 		d = [photo jpegData];
@@ -1252,6 +1262,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) removePhotoAtIndex:(NSIndexPath *)indexPath
 {
+	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
+	[photo removeTemporaryVideo];
+
 	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
 	[new_photos removeObjectAtIndex:indexPath.item];
 	self.attachedPhotos = new_photos;

@@ -22,10 +22,15 @@ static NSString* const kAttachPhotoKey = @"photo";
 @property (strong) NSString* altText;
 @property (strong) AVURLAsset* videoAsset;
 @property (assign) BOOL isVideo;
+@property (strong) NSString* tempVideoPath;
 
 //- (id) initWithAsset:(PHAsset *)asset;
 - (id) initWithThumbnail:(NSImage *)image;
 
 - (NSData *) jpegData;
+- (void) transcodeVideo:(void(^)(NSURL* url))completionBlock;
+- (NSDictionary *) videoSettingsForSize:(CGSize)size;
+- (NSDictionary *) audioSettings;
+- (void) removeTemporaryVideo;
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B2A47C222579C58003AF2EC /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2A47C022579C58003AF2EC /* SDAVAssetExportSession.m */; };
 		4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */; };
 		4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */; };
 		4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAF1F8FE99900D9B10E /* Preferences.xib */; };
@@ -154,6 +155,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B2A47C022579C58003AF2EC /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDAVAssetExportSession.m; path = Shared/SDAVAssetExport/SDAVAssetExportSession.m; sourceTree = "<group>"; };
+		4B2A47C122579C58003AF2EC /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDAVAssetExportSession.h; path = Shared/SDAVAssetExport/SDAVAssetExportSession.h; sourceTree = "<group>"; };
 		4B2CAAAA1F8FCB7100D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoCell.xib; sourceTree = "<group>"; };
 		4B2CAAAC1F8FCBC800D9B10E /* RFPhotoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoCell.h; path = Source/RFPhotoCell.h; sourceTree = "<group>"; };
 		4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoCell.m; path = Source/RFPhotoCell.m; sourceTree = "<group>"; };
@@ -408,6 +411,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B2A47BF22579C46003AF2EC /* SDAVAssetExport */ = {
+			isa = PBXGroup;
+			children = (
+				4B2A47C122579C58003AF2EC /* SDAVAssetExportSession.h */,
+				4B2A47C022579C58003AF2EC /* SDAVAssetExportSession.m */,
+			);
+			name = SDAVAssetExport;
+			sourceTree = "<group>";
+		};
 		4B2CAAC71F90655A00D9B10E /* CTidy */ = {
 			isa = PBXGroup;
 			children = (
@@ -721,6 +733,7 @@
 		4B8FBDD71F867A1D00906C86 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4B2A47BF22579C46003AF2EC /* SDAVAssetExport */,
 				4BC826CF1FAB663700A58AD4 /* SAMKeychain */,
 				4B2CAAC71F90655A00D9B10E /* CTidy */,
 				4B5714C9224BD00B001F8E4F /* HTMLParser */,
@@ -895,6 +908,7 @@
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */,
 				4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */,
+				4B2A47C222579C58003AF2EC /* SDAVAssetExportSession.m in Sources */,
 				4B2CAAC41F90652800D9B10E /* RFXMLRPCRequest.m in Sources */,
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
