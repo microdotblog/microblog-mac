@@ -27,4 +27,20 @@
 	});
 }
 
++ (void) rf_showTwoButtonAlert:(NSString *)title message:(NSString *)message okButton:(NSString *)okButton cancelButton:(NSString *)cancelButton completionHandler:(void (^)(NSModalResponse returnCode))handler
+{
+	NSAlert* alert = [[NSAlert alloc] init];
+	[alert addButtonWithTitle:okButton];
+	[alert addButtonWithTitle:cancelButton];
+	[alert setMessageText:title];
+	[alert setInformativeText:message];
+	
+	RFDispatchMainAsync (^{
+		NSModalResponse response = [alert runModal];
+		if (handler) {
+			handler (response);
+		}
+	});
+}
+
 @end

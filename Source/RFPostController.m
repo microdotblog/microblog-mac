@@ -668,6 +668,15 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSString* hostname = [RFSettings stringForKey:kCurrentDestinationName];
 			if (hostname && [hostname isEqualToString:[info objectForKey:@"name"]]) {
 				is_ok = [[info objectForKey:@"microblog-audio"] boolValue];
+				if (!is_ok) {
+					NSString* msg = @"Video upload requires the $10/month hosting plan. Upgrade your hosting to support podcasting and video hosting.";
+					[NSAlert rf_showTwoButtonAlert:@"Upgrade Subscription" message:msg okButton:@"Learn More" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+						if (returnCode == 1000) {
+							[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://micro.blog/new/audio"]];
+						}
+					}];
+				}
+				
 				break;
 			}
 		}
