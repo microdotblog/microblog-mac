@@ -23,8 +23,8 @@
  				</ul>
  				<p>Plus recent improvements in version 1.7 for saving draft posts on Micro.blog-hosted blogs, which you can see in the video on <a href="https://www.manton.org/2019/03/27/new-features-saved.html">Manton's blog post here</a>.</p>
  			]]></description>
-			<pubDate>Fri, 05 Apr 2019 09:10:00 -0600</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.8.zip" sparkle:shortVersionString="1.8" sparkle:version="59" length="3050046" type="application/octet-stream" />
+			<pubDate>Fri, 05 Apr 2019 10:20:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.8.zip" sparkle:shortVersionString="1.8" sparkle:version="60" length="3050046" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
 		</item>		
 
