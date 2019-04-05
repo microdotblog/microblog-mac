@@ -48,7 +48,7 @@
 - (void) transcodeVideo:(void(^)(NSURL* url))completionBlock
 {
 	NSString* destination = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSUUID UUID] UUIDString]];
-	destination = [destination stringByAppendingPathExtension:@".mov"];
+	destination = [destination stringByAppendingPathExtension:@"mov"];
 	AVAsset* asset = self.videoAsset;
 	
 	NSArray* videoTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
