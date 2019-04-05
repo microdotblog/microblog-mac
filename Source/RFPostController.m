@@ -93,6 +93,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return self;
 }
 
+- (void) dealloc
+{
+	for (RFPhoto* photo in self.attachedPhotos) {
+		[photo removeTemporaryVideo];
+	}
+}
+
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
@@ -362,7 +369,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
 	panel.allowedFileTypes = @[ @"public.image", @"public.movie" ];
-	panel.allowsMultipleSelection = YES;
+	panel.allowsMultipleSelection = NO;
 	
 	[panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
 		if (result == NSModalResponseOK) {
@@ -386,6 +393,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							photo.videoAsset = new_asset;
 							photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
 							[new_photos addObject:photo];
+
+							self.attachedPhotos = new_photos;
+							[self.photosCollectionView reloadData];
 						}
 						else {
 							[photo removeTemporaryVideo];
