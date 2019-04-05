@@ -384,6 +384,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					photo.videoAsset = asset;
 					photo.isVideo = YES;
 
+					[self.progressSpinner startAnimation:nil];
 					[photo transcodeVideo:^(NSURL* new_url) {
 						if ([self checkVideoFile:new_url]) {
 							AVURLAsset* new_asset = [AVURLAsset assetWithURL:file_url];
@@ -394,11 +395,17 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
 							[new_photos addObject:photo];
 
-							self.attachedPhotos = new_photos;
-							[self.photosCollectionView reloadData];
+							RFDispatchMain (^{
+								self.attachedPhotos = new_photos;
+								[self.progressSpinner stopAnimation:nil];
+								[self.photosCollectionView reloadData];
+							});
 						}
 						else {
-							[photo removeTemporaryVideo];
+							RFDispatchMain (^{
+								[self.progressSpinner stopAnimation:nil];
+								[photo removeTemporaryVideo];
+							});
 						}
 					}];
 				}
