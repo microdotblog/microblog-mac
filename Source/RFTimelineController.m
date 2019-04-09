@@ -974,7 +974,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		cell.iconView.image = [NSImage imageNamed:@"kind_mentions"];
 	}
 	else if (row == 2) {
-		cell.titleField.stringValue = @"Favorites";
+		cell.titleField.stringValue = @"Bookmarks";
 		cell.iconView.image = [NSImage imageNamed:@"kind_favorites"];
 	}
 	else if (row == 3) {
