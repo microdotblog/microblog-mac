@@ -84,19 +84,25 @@
 		if (size.width > size.height) {
 			new_width = 640;
 			new_height = size.height * (new_width / size.width);
+			if ((new_height % 2) != 0) {
+				new_height = new_height + 1;
+			}
 		}
 		else {
 			new_height = 640;
 			new_width = size.width * (new_height / size.height);
+			if ((new_width % 2) != 0) {
+				new_width = new_width + 1;
+			}
 		}
 	}
 	else {
 		new_width = size.width;
 		new_height = size.height;
 	}
-	
+
 	return @{
-			 AVVideoCodecKey: AVVideoCodecH264,
+			 AVVideoCodecKey: AVVideoCodecTypeH264,
 			 AVVideoWidthKey: @(new_width),
 			 AVVideoHeightKey: @(new_height),
 			 AVVideoCompressionPropertiesKey: @{
