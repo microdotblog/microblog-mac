@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.8.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+ 					<li>Fixed uploading videos in some formats.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 16 Apr 2019 14:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.8.1.zip" sparkle:shortVersionString="1.8.1" sparkle:version="61" length="3050046" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.8</title>
  			<description><![CDATA[
 				<style>
