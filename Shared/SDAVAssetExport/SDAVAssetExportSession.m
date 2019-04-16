@@ -325,6 +325,11 @@
 		naturalSize.height = width;
 	}
 
+	// hack for time-lapse videos?
+	if (transform.c < 0) {
+		transform.tx = naturalSize.width;
+	}
+
 	// hack to try to fix transform when 2 resolutions
 	if (transform.tx > naturalSize.width) {
 		transform.tx = naturalSize.width;
