@@ -20,6 +20,7 @@
  				<ul>
  					<li>Fixed uploading videos in some formats.</li>
  				</ul>
+ 				<p>If you have any questions about upgrading your blog to support video hosting, let us know at <a href="mailto:help@micro.blog">help@micro.blog</a>. Thanks!</p>
  			]]></description>
 			<pubDate>Tue, 16 Apr 2019 14:00:00 -0600</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.8.1.zip" sparkle:shortVersionString="1.8.1" sparkle:version="61" length="3050046" type="application/octet-stream" />
