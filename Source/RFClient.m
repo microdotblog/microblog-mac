@@ -75,23 +75,28 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	NSArray* all_keys = [params allKeys];
 	for (int i = 0; i < [all_keys count]; i++) {
 		NSString* key = [all_keys objectAtIndex:i];
+		BOOL added_param = NO;
 		
 		if ([params[key] isKindOfClass:[NSString class]]) {
 			NSString* val = params[key];
 			NSString* val_encoded = [val rf_urlEncoded];
 			[body_s appendFormat:@"%@=%@", key, val_encoded];
+			added_param = YES;
 		}
 		else if ([params[key] isKindOfClass:[NSArray class]]) {
-			for (NSString* val in params[key]) {
+			NSArray* array_values = params[key];
+			for (int array_i = 0; array_i < [array_values count]; array_i++) {
+				NSString* val = [array_values objectAtIndex:array_i];
 				NSString* val_encoded = [val rf_urlEncoded];
 				[body_s appendFormat:@"%@=%@", key, val_encoded];
-				if ([params[key] lastObject] != val) {
+				if (array_i != ([array_values count] - 1)) {
 					[body_s appendString:@"&"];
 				}
+				added_param = YES;
 			}
 		}
 
-		if (i != ([all_keys count] - 1)) {
+		if (added_param && (i != ([all_keys count] - 1))) {
 			[body_s appendString:@"&"];
 		}
 	}
