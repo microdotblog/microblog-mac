@@ -48,7 +48,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			photo.publishedURL = [img_tag getAttributeNamed:@"src"];
 			[new_photos addObject:photo];
 		}
-		
+
+		NSArray* video_tags = [body findChildTags:@"video"];
+		for (HTMLNode* video_tag in video_tags) {
+			NSString* poster_url = [video_tag getAttributeNamed:@"poster"];
+			if ([poster_url length] > 0) {
+				RFPhoto* photo = [[RFPhoto alloc] init];
+				photo.publishedURL = poster_url;
+				[new_photos addObject:photo];
+			}
+		}
+
 		self.photos = new_photos;
 	}
 
