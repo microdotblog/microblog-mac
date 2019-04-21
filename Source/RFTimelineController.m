@@ -1022,6 +1022,26 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	return kDefaultSplitViewPosition;
 }
 
+- (CGFloat) splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+	if (dividerIndex == 0) {
+		return kDefaultSplitViewPosition;
+	}
+	else {
+		return proposedPosition;
+	}
+}
+
+- (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
+{
+	if (view == self.containerView) {
+		return YES;
+	}
+	else {
+		return NO;
+	}
+}
+
 - (NSRect) splitView:(NSSplitView *)splitView effectiveRect:(NSRect)proposedEffectiveRect forDrawnRect:(NSRect)drawnRect ofDividerAtIndex:(NSInteger)dividerIndex
 {
 	return NSZeroRect;
