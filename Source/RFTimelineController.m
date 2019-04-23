@@ -62,7 +62,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) windowDidEndLiveResize:(NSNotification *)notification
 {
-	[self refreshTimeline:nil];
+//	[self refreshTimeline:nil];
 }
 
 - (void) setupTitleButtons
@@ -539,27 +539,11 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.navigationRightConstraint.constant = 0;
 	}
 
-	NSView* last_view = [self currentContainerView];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.window.contentView addSubview:controller.view positioned:NSWindowBelow relativeTo:self.webView];
 
-	NSLayoutConstraint* left_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
-	left_constraint.priority = NSLayoutPriorityDefaultHigh;
-	left_constraint.active = YES;
-
-	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-	top_constraint.priority = NSLayoutPriorityDefaultHigh;
-	top_constraint.active = YES;
-
-	NSLayoutConstraint* bottom_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
-	bottom_constraint.priority = NSLayoutPriorityDefaultHigh;
-	bottom_constraint.active = YES;
-
-	NSLayoutConstraint* width_constraint = [NSLayoutConstraint constraintWithItem:controller.view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.containerView.bounds.size.width];
-	width_constraint.priority = NSLayoutPriorityDefaultHigh;
-	width_constraint.active = YES;
-	
+	[self addResizeConstraintsToView:controller.view];
 	[controller.view setNeedsLayout:YES];
 	
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
@@ -593,6 +577,27 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 }
 
+- (void) addResizeConstraintsToView:(NSView *)addingView
+{
+	NSView* last_view = [self currentContainerView];
+
+	NSLayoutConstraint* left_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
+	left_constraint.priority = NSLayoutPriorityDefaultHigh;
+	left_constraint.active = YES;
+
+	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+	top_constraint.priority = NSLayoutPriorityDefaultHigh;
+	top_constraint.active = YES;
+
+	NSLayoutConstraint* bottom_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:last_view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+	bottom_constraint.priority = NSLayoutPriorityDefaultHigh;
+	bottom_constraint.active = YES;
+
+	NSLayoutConstraint* width_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.containerView.bounds.size.width];
+	width_constraint.priority = NSLayoutPriorityDefaultHigh;
+	width_constraint.active = YES;
+}
+
 - (void) showPostController:(RFPostController *)controller
 {
 	self.postController = controller;
@@ -607,7 +612,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController.view.animator.alphaValue = 1.0;
 	[self.window makeFirstResponder:self.postController.textView];
 	self.postController.nextResponder = self;
-	self.postController.view.autoresizingMask = NSViewHeightSizable;
+	[self addResizeConstraintsToView:self.postController.view];
+	[self.postController.view setNeedsLayout:YES];
+//	self.postController.view.autoresizingMask = NSViewHeightSizable;
 }
 
 - (void) showAllPostsController:(RFAllPostsController *)controller
@@ -624,7 +631,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.allPostsController.view.animator.alphaValue = 1.0;
 //	[self.window makeFirstResponder:self.allPostsController.textView];
 	self.allPostsController.nextResponder = self;
-	self.allPostsController.view.autoresizingMask = NSViewHeightSizable;
+	[self addResizeConstraintsToView:self.allPostsController.view];
+	[self.allPostsController.view setNeedsLayout:YES];
+//	self.allPostsController.view.autoresizingMask = NSViewHeightSizable;
 }
 
 - (void) showTopicsWithSearch:(NSString *)term
