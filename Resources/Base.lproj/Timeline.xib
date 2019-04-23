@@ -34,7 +34,7 @@
             <rect key="contentRect" x="343" y="100" width="540" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="500" height="300"/>
-            <value key="maxSize" type="size" width="800" height="2000"/>
+            <value key="maxSize" type="size" width="1000" height="2000"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
