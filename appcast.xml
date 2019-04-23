@@ -6,6 +6,29 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.8.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+ 					<li>Added window width resizing. Finally!</li>
+ 					<li>Added video thumbnail previews in Posts list.</li>
+ 					<li>Fixed setting alt text on multiple photos.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 23 Apr 2019 10:20:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.8.2.zip" sparkle:shortVersionString="1.8.2" sparkle:version="62" length="3050046" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.8.1</title>
  			<description><![CDATA[
 				<style>
