@@ -539,12 +539,20 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.navigationRightConstraint.constant = 0;
 	}
 
+	// restore fixed constraint
+	if (self.navigationRightConstraint) {
+		self.navigationRightConstraint.active = YES;
+	}
+	if (self.navigationPinnedConstraint) {
+		self.navigationPinnedConstraint.active = NO;
+	}
+
 	NSView* last_view = [self currentContainerView];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.window.contentView addSubview:controller.view positioned:NSWindowBelow relativeTo:self.webView];
 
-	[self addResizeConstraintsToView:controller.view containerView:last_view];
+	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
 	
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
@@ -553,6 +561,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 		self.navigationLeftConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
 		self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
 	} completionHandler:^{
+		// after animating, temporary pin to right
+		self.navigationRightConstraint.active = NO;
+		self.navigationPinnedConstraint.active = YES;
 	}];
 }
 
@@ -560,6 +571,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSViewController* controller = [self.navigationStack pop];
 	if (controller) {
+		// restore fixed constraint
+		self.navigationRightConstraint.active = YES;
+		self.navigationPinnedConstraint.active = NO;
+
 		[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
 			context.duration = 0.3;
 			context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
@@ -578,15 +593,16 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 }
 
-- (void) addResizeConstraintsToView:(NSView *)addingView containerView:(NSView *)lastView
+- (void) addFixedConstraintsToView:(NSView *)addingView containerView:(NSView *)lastView
 {
 	NSLayoutConstraint* left_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
 	left_constraint.priority = NSLayoutPriorityDefaultHigh;
 	left_constraint.active = YES;
 
-//	NSLayoutConstraint* right_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0.0];
-//	right_constraint.priority = NSLayoutPriorityDefaultHigh;
-//	right_constraint.active = YES;
+	NSLayoutConstraint* right_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0.0];
+	right_constraint.priority = NSLayoutPriorityDefaultHigh;
+	right_constraint.active = NO;
+	self.navigationPinnedConstraint = right_constraint;
 
 	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
@@ -596,9 +612,13 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	bottom_constraint.priority = NSLayoutPriorityDefaultHigh;
 	bottom_constraint.active = YES;
 
-	NSLayoutConstraint* width_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.containerView.bounds.size.width];
+	NSLayoutConstraint* width_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
 	width_constraint.priority = NSLayoutPriorityDefaultHigh;
 	width_constraint.active = YES;
+
+//	NSLayoutConstraint* width_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.containerView.bounds.size.width];
+//	width_constraint.priority = NSLayoutPriorityDefaultHigh;
+//	width_constraint.active = YES;
 }
 
 - (void) addResizeConstraintsToOverlay:(NSView *)addingView containerView:(NSView *)lastView

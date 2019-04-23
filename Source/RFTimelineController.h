@@ -47,8 +47,9 @@ typedef enum {
 @property (strong, nonatomic) RFAllPostsController* allPostsController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
 @property (strong, nonatomic) RFStack* navigationStack;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint* navigationLeftConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint* navigationRightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* navigationLeftConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* navigationRightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* navigationPinnedConstraint;
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
 
