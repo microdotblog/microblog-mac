@@ -963,6 +963,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							NSString* msg = response.parsedResponse[@"error_description"];
 							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 						}
+						else if (response.httpError) {
+							[self hideProgressHeader];
+							NSString* msg = [response.httpError localizedDescription];
+							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+						}
 						else {
 							[self closeWithoutSaving];
 						}
@@ -1016,6 +1021,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 						[self hideProgressHeader];
 						NSString* msg = response.parsedResponse[@"error_description"];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else if (response.httpError) {
+						[self hideProgressHeader];
+						NSString* msg = [response.httpError localizedDescription];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
