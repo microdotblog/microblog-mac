@@ -952,7 +952,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
 	NSInteger status_code = [url_response statusCode];
-	if (status_code == 500) {
+	if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
 		[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
 	
 		NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
