@@ -19,6 +19,7 @@
  				<p>Changes in this version:</p>
  				<ul>
  					<li>Added new Open option when clicking a post to open it in your web browser. Useful for copying the link or viewing the post on the author's blog.</li>
+ 					<li>Added icons for Reply, Favorite, and Conversation.</li>
  					<li>Fixed error reporting when posting fails and during timeline loading.</li>
  					<li>Fixed photo compression to be more consistent across Micro.blog platform.</li>
  				</ul>
