@@ -42,6 +42,9 @@ static NSInteger const kTextSizeHuge = 19;
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
 
+#define kSharePostNotification @"RFSharePostNotification"
+#define kSharePostIDKey @"post_id"
+
 #define kAttachFilesNotification @"RFAttachFilesNotification"
 #define kAttachFilesPathsKey @"paths"
 

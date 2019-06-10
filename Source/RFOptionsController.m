@@ -41,6 +41,8 @@
 
 - (void) setupButtons
 {
+//	NSImage* img = [[NSWorkspace sharedWorkspace] iconForFile:@"/Applications/Safari.app"];
+//	[self.browserButton setImage:img];
 }
 
 #pragma mark -
@@ -84,7 +86,11 @@
 }
 
 // deletePost
-// share
+
+- (IBAction) share:(id)sender
+{	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kSharePostNotification object:self userInfo:@{ kSharePostIDKey: self.postID}];
+}
 
 - (void) sendReplyNotification
 {

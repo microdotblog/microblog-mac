@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,13 +17,13 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView wantsLayer="YES" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="273" height="38"/>
+            <rect key="frame" x="0.0" y="0.0" width="404" height="38"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j4E-VA-qdu">
-                    <rect key="frame" x="19" y="3" width="51" height="32"/>
+                    <rect key="frame" x="19" y="3" width="61" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Reply" bezelStyle="regularSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="hOz-Sz-cTZ">
+                    <buttonCell key="cell" type="bevel" title="Reply" bezelStyle="regularSquare" image="options_reply" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="hOz-Sz-cTZ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" size="14" name="Avenir-Book"/>
                     </buttonCell>
@@ -31,21 +31,10 @@
                         <action selector="reply:" target="-2" id="dyY-GW-Ded"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPW-aZ-zko">
-                    <rect key="frame" x="166" y="3" width="90" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Conversation" bezelStyle="regularSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="L4Q-5A-Zv8">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" size="14" name="Avenir-Book"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="conversation:" target="-2" id="BCH-2B-YKC"/>
-                    </connections>
-                </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTK-M1-RPy">
-                    <rect key="frame" x="87" y="3" width="62" height="32"/>
+                    <rect key="frame" x="102" y="3" width="76" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Favorite" bezelStyle="regularSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
+                    <buttonCell key="cell" type="bevel" title="Favorite" bezelStyle="regularSquare" image="options_favorite" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" size="14" name="Avenir-Book"/>
                     </buttonCell>
@@ -53,8 +42,36 @@
                         <action selector="favorite:" target="-2" id="FGH-iF-xFF"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPW-aZ-zko">
+                    <rect key="frame" x="199" y="3" width="109" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Conversation" bezelStyle="regularSquare" image="options_conversation" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="L4Q-5A-Zv8">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" size="14" name="Avenir-Book"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="conversation:" target="-2" id="BCH-2B-YKC"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dA7-1M-rsO">
+                    <rect key="frame" x="328" y="3" width="57" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Open" bezelStyle="rounded" image="options_safari" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="LV0-CJ-SfT">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="share:" target="-2" id="KDQ-iM-AxI"/>
+                    </connections>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="35.5" y="52"/>
+            <point key="canvasLocation" x="101" y="52"/>
         </customView>
     </objects>
+    <resources>
+        <image name="options_conversation" width="15" height="15"/>
+        <image name="options_favorite" width="15" height="15"/>
+        <image name="options_reply" width="15" height="15"/>
+        <image name="options_safari" width="15" height="15"/>
+    </resources>
 </document>

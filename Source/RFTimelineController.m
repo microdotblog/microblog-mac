@@ -135,6 +135,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasFavoritedNotification:) name:kPostWasFavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sharePostNotification:) name:kSharePostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
@@ -187,6 +188,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 	[self showConversationWithPostID:post_id];
+}
+
+- (void) sharePostNotification:(NSNotification *)notification
+{
+	NSString* post_id = [notification.userInfo objectForKey:kSharePostIDKey];
+	[self showShareWithPostID:post_id];
 }
 
 - (void) showUserFollowingNotification:(NSNotification *)notification
@@ -699,6 +706,23 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self pushViewController:controller];
 }
 
+- (void) showShareWithPostID:(NSString *)postID
+{
+	[self hideOptionsMenu];
+
+	NSString* link = [self linkOfPostID:postID];
+	NSURL* url = [NSURL URLWithString:link];
+	
+	[[NSWorkspace sharedWorkspace] openURL:url];	
+
+//	NSArray* items = @[ [NSURL URLWithString:@"https://manton.org/"] ];
+//	NSSharingServicePicker* picker = [[NSSharingServicePicker alloc] initWithItems:items];
+//	picker.delegate = self;
+//
+//	NSRect r = [self rectOfPostID:postID];
+//	[picker showRelativeToRect:r ofView:[self currentWebView] preferredEdge:NSRectEdgeMinY];
+}
+
 - (void) showProfileWithUsername:(NSString *)username
 {
 	[self hideOptionsMenu];
@@ -799,6 +823,21 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
 	[self showMentions:nil];
+}
+
+- (NSArray<NSSharingService *> *)sharingServicePicker:(NSSharingServicePicker *)sharingServicePicker sharingServicesForItems:(NSArray *)items proposedSharingServices:(NSArray<NSSharingService *> *)proposedServices
+{
+	NSURL* item = [items objectAtIndex:0];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:item];
+	NSImage* browser_img = [[NSWorkspace sharedWorkspace] iconForFile:app_url.path];
+
+	NSMutableArray* services = [proposedServices mutableCopy];
+	NSSharingService* browser_service = [[NSSharingService alloc] initWithTitle:@"Open in Browser" image:browser_img alternateImage:nil handler:^{
+		[[NSWorkspace sharedWorkspace] openURL:item];
+	}];
+	[services insertObject:browser_service atIndex:0];
+	
+	return services;
 }
 
 #pragma mark -
