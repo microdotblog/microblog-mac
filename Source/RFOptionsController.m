@@ -11,6 +11,7 @@
 #import "RFConstants.h"
 #import "RFMacros.h"
 #import "RFClient.h"
+#import "NSAppearance+Extras.h"
 
 @implementation RFOptionsController
 
@@ -41,17 +42,31 @@
 
 - (void) setupButtons
 {
+	NSString* reply_s = @"options_reply";
+	NSString* favorite_s = @"options_favorite";
+	NSString* conversation_s = @"options_conversation";
+	NSString* browser_s = @"options_safari";
+
 	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
 	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
 	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
-		self.browserButton.image = [NSImage imageNamed:@"options_chrome"];
+		browser_s = @"options_chrome";
 	}
 	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
-		self.browserButton.image = [NSImage imageNamed:@"options_firefox"];
+		browser_s = @"options_firefox";
 	}
-
-//	NSImage* img = [[NSWorkspace sharedWorkspace] iconForFile:@"/Applications/Safari.app"];
-//	[self.browserButton setImage:img];
+	
+	if ([NSAppearance rf_isDarkMode]) {
+		reply_s = [reply_s stringByAppendingString:@"_darkmode"];
+		favorite_s = [favorite_s stringByAppendingString:@"_darkmode"];
+		conversation_s = [conversation_s stringByAppendingString:@"_darkmode"];
+		browser_s = [browser_s stringByAppendingString:@"_darkmode"];
+	}
+	
+	self.replyButton.image = [NSImage imageNamed:reply_s];
+	self.favoriteButton.image = [NSImage imageNamed:favorite_s];
+	self.conversationButton.image = [NSImage imageNamed:conversation_s];
+	self.browserButton.image = [NSImage imageNamed:browser_s];
 }
 
 #pragma mark -
