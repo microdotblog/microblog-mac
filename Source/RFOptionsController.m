@@ -41,6 +41,15 @@
 
 - (void) setupButtons
 {
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		self.browserButton.image = [NSImage imageNamed:@"options_chrome"];
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		self.browserButton.image = [NSImage imageNamed:@"options_firefox"];
+	}
+
 //	NSImage* img = [[NSWorkspace sharedWorkspace] iconForFile:@"/Applications/Safari.app"];
 //	[self.browserButton setImage:img];
 }

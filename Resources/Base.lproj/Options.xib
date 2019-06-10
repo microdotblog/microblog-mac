@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFOptionsController">
             <connections>
+                <outlet property="browserButton" destination="dA7-1M-rsO" id="6hx-f3-1LM"/>
                 <outlet property="conversationButton" destination="qPW-aZ-zko" id="yKf-6E-ZCb"/>
                 <outlet property="favoriteButton" destination="mTK-M1-RPy" id="IKV-dD-nIT"/>
                 <outlet property="replyButton" destination="j4E-VA-qdu" id="Tx0-m4-uOa"/>
@@ -21,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j4E-VA-qdu">
-                    <rect key="frame" x="19" y="3" width="61" height="32"/>
+                    <rect key="frame" x="23" y="3" width="61" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Reply" bezelStyle="regularSquare" image="options_reply" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="hOz-Sz-cTZ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -32,7 +33,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTK-M1-RPy">
-                    <rect key="frame" x="102" y="3" width="76" height="32"/>
+                    <rect key="frame" x="104" y="3" width="76" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Favorite" bezelStyle="regularSquare" image="options_favorite" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -54,7 +55,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dA7-1M-rsO">
-                    <rect key="frame" x="328" y="3" width="57" height="32"/>
+                    <rect key="frame" x="325" y="3" width="57" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Open" bezelStyle="rounded" image="options_safari" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="LV0-CJ-SfT">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

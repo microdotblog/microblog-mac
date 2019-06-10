@@ -19,6 +19,7 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet NSButton* replyButton;
 @property (strong, nonatomic) IBOutlet NSButton* favoriteButton;
 @property (strong, nonatomic) IBOutlet NSButton* conversationButton;
+@property (strong, nonatomic) IBOutlet NSButton* browserButton;
 
 @property (strong, nonatomic) NSString* postID;
 @property (strong, nonatomic) NSString* username;
