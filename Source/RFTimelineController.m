@@ -866,12 +866,12 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 {
 	NSString* top_js = [NSString stringWithFormat:@"$('#post_%@').position().top;", postID];
 	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
-	NSString* scroll_js = [NSString stringWithFormat:@"$('body').scrollTop();"];
+	NSString* scroll_js = [NSString stringWithFormat:@"window.pageYOffset;"];
 
 	NSString* top_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:top_js];
 	NSString* height_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:height_js];
 	NSString* scroll_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:scroll_js];
-
+    
 	CGFloat top_f = [self currentWebView].bounds.size.height - [top_s floatValue] - [height_s floatValue];
 	top_f += [scroll_s floatValue];
 	
