@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.9.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Ready for macOS 10.15 Catalina! Changes:</p>
+ 				<ul>
+					<li>Fixed post selection options popover on macOS Catalina.</li>
+					<li>Updated for "notarization" to avoid launch warnings.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 10 Jun 2019 08:30:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.9.1.zip" sparkle:shortVersionString="1.9.1" sparkle:version="67" length="3133390" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.9</title>
  			<description><![CDATA[
 				<style>
