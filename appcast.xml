@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.9.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Just one change:</p>
+ 				<ul>
+					<li>Switched to using the macOS system font.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Sat, 28 Mar 2020 08:50:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.9.2.zip" sparkle:shortVersionString="1.9.2" sparkle:version="70" length="3150268" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.9.1</title>
  			<description><![CDATA[
 				<style>

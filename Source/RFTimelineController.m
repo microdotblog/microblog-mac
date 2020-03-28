@@ -57,7 +57,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupWebView];
 	[self setupUser];
 	[self setupNotifications];
-	[self setupTimer];	
+	[self setupTimer];
 }
 
 - (void) windowDidEndLiveResize:(NSNotification *)notification

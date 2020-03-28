@@ -36,10 +36,7 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="nkV-oF-pbF"/>
                 </imageView>
                 <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="whU-Dw-oIf">
-                    <rect key="frame" x="6" y="15" width="28" height="33"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="33" id="HM5-IR-ARz"/>
-                    </constraints>
+                    <rect key="frame" x="6" y="19" width="28" height="23"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="+" id="QlT-hv-ijX">
                         <font key="font" metaFont="system" size="20"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -49,13 +46,13 @@
             </subviews>
             <constraints>
                 <constraint firstItem="Ht3-bj-yXD" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="8" id="AFD-l3-9f1"/>
-                <constraint firstItem="whU-Dw-oIf" firstAttribute="top" secondItem="2pU-is-SHU" secondAttribute="top" constant="2" id="B0E-aW-cb1"/>
                 <constraint firstItem="whU-Dw-oIf" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" constant="8" id="Lxs-Rk-fnW"/>
                 <constraint firstAttribute="trailing" secondItem="FJE-v2-pi7" secondAttribute="trailing" id="Oov-aV-Djc"/>
                 <constraint firstItem="FJE-v2-pi7" firstAttribute="top" secondItem="2pU-is-SHU" secondAttribute="top" id="dVt-ft-DBK"/>
                 <constraint firstAttribute="trailing" secondItem="whU-Dw-oIf" secondAttribute="trailing" constant="8" id="ffm-5u-GLp"/>
                 <constraint firstItem="FJE-v2-pi7" firstAttribute="leading" secondItem="2pU-is-SHU" secondAttribute="leading" id="hOy-gS-0Yd"/>
                 <constraint firstAttribute="bottom" secondItem="Ht3-bj-yXD" secondAttribute="bottom" id="mUN-hb-upX"/>
+                <constraint firstItem="whU-Dw-oIf" firstAttribute="centerY" secondItem="FJE-v2-pi7" secondAttribute="centerY" id="ooq-c2-v8x"/>
                 <constraint firstAttribute="trailing" secondItem="Ht3-bj-yXD" secondAttribute="trailing" constant="8" id="yCI-uX-1cg"/>
             </constraints>
             <point key="canvasLocation" x="-86" y="36"/>

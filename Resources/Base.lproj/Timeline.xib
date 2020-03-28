@@ -204,7 +204,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
-                                                    <rect key="frame" x="7" y="4" width="320" height="23"/>
+                                                    <rect key="frame" x="7" y="2" width="320" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1 new post" id="NQ2-w9-WtX">
                                                         <font key="font" metaFont="systemMedium" size="13"/>
