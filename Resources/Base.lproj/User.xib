@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,13 +28,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box boxType="custom" borderType="none" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
-                    <rect key="frame" x="0.0" y="328" width="340" height="120"/>
+                    <rect key="frame" x="0.0" y="335" width="340" height="113"/>
                     <view key="contentView" id="MnU-VL-RXJ">
-                        <rect key="frame" x="0.0" y="0.0" width="340" height="120"/>
+                        <rect key="frame" x="0.0" y="0.0" width="340" height="113"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pcd-J8-4cb">
-                                <rect key="frame" x="254" y="82" width="81" height="32"/>
+                                <rect key="frame" x="254" y="75" width="81" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="69" id="Lzk-zP-61N"/>
                                     <constraint firstAttribute="height" constant="21" id="but-vi-0kU"/>
@@ -45,22 +45,22 @@
                                 </buttonCell>
                             </button>
                             <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="7T1-Rs-eHs">
-                                <rect key="frame" x="210" y="92" width="16" height="16"/>
+                                <rect key="frame" x="210" y="85" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="MrT-U1-mCC"/>
                                     <constraint firstAttribute="height" constant="16" id="mWe-0o-va3"/>
                                 </constraints>
                             </progressIndicator>
                             <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gXv-am-2Se">
-                                <rect key="frame" x="12" y="45" width="319" height="23"/>
+                                <rect key="frame" x="12" y="45" width="319" height="16"/>
                                 <textFieldCell key="cell" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Bio" id="aHX-Rd-m2M">
-                                    <font key="font" size="13" name="Avenir-Book"/>
+                                    <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Kvs-M2-DAj">
-                                <rect key="frame" x="12" y="74" width="316" height="5"/>
+                                <rect key="frame" x="12" y="67" width="316" height="5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="dfd-Gk-x9j"/>
                                 </constraints>
@@ -79,14 +79,14 @@
                                 </constraints>
                                 <buttonCell key="cell" type="bevel" title="Following 123" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="oFS-4s-Kog">
                                     <behavior key="behavior" lightByContents="YES"/>
-                                    <font key="font" size="13" name="Avenir-Medium"/>
+                                    <font key="font" metaFont="systemMedium" size="13"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="showFollowing:" target="-2" id="id5-4z-InE"/>
                                 </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eb7-qH-QCf">
-                                <rect key="frame" x="230" y="89" width="24" height="21"/>
+                                <rect key="frame" x="230" y="82" width="24" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="9kN-wZ-AnH"/>
                                     <constraint firstAttribute="height" constant="21" id="x0o-19-fLI"/>
@@ -123,7 +123,7 @@
                     </view>
                 </box>
                 <webView translatesAutoresizingMaskIntoConstraints="NO" id="7LD-DW-RCG">
-                    <rect key="frame" x="0.0" y="0.0" width="340" height="328"/>
+                    <rect key="frame" x="0.0" y="0.0" width="340" height="335"/>
                     <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
                         <nil key="identifier"/>
                     </webPreferences>
@@ -143,12 +143,9 @@
                     </connections>
                 </button>
                 <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WFZ-4E-LSZ">
-                    <rect key="frame" x="89" y="419" width="110" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="21" id="tH0-gh-Lly"/>
-                    </constraints>
+                    <rect key="frame" x="89" y="419" width="110" height="16"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Full Name" id="P3V-g9-LlR">
-                        <font key="font" size="13" name="Avenir-Medium"/>
+                        <font key="font" metaFont="systemMedium" size="13"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -165,8 +162,8 @@
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="top" secondItem="3gz-se-iln" secondAttribute="bottom" id="SND-Kv-Zxc"/>
                 <constraint firstAttribute="bottom" secondItem="7LD-DW-RCG" secondAttribute="bottom" id="c0C-Wq-qbl"/>
                 <constraint firstAttribute="trailing" secondItem="WFZ-4E-LSZ" secondAttribute="trailing" constant="143" id="nzg-zo-bjE"/>
-                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="8" id="vBb-IM-Inh"/>
                 <constraint firstAttribute="trailing" secondItem="3gz-se-iln" secondAttribute="trailing" id="wPH-kf-xR2"/>
+                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="centerY" secondItem="Y2P-ns-QQm" secondAttribute="centerY" id="xP5-aV-3Ma"/>
             </constraints>
             <point key="canvasLocation" x="68" y="168"/>
         </customView>

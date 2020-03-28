@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -57,13 +57,12 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WFZ-4E-LSZ">
-                    <rect key="frame" x="161" y="419" width="167" height="21"/>
+                    <rect key="frame" x="161" y="419" width="167" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="163" id="Ucf-wN-nae"/>
-                        <constraint firstAttribute="height" constant="21" id="cgX-4o-b9t"/>
                     </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Conversation" id="P3V-g9-LlR">
-                        <font key="font" size="13" name="Avenir-Medium"/>
+                        <font key="font" metaFont="systemMedium" size="13"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -79,11 +78,11 @@
                 <constraint firstItem="3gz-se-iln" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="UXv-sc-b6z"/>
                 <constraint firstAttribute="trailing" secondItem="Kvs-M2-DAj" secondAttribute="trailing" constant="12" id="WxB-WW-cvj"/>
                 <constraint firstItem="Kvs-M2-DAj" firstAttribute="top" secondItem="Y2P-ns-QQm" secondAttribute="bottom" constant="8" id="a43-Ya-MNO"/>
-                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="8" id="o48-dy-OER"/>
                 <constraint firstAttribute="trailing" secondItem="3gz-se-iln" secondAttribute="trailing" id="pBi-1t-l3B"/>
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="pUd-pf-egI"/>
                 <constraint firstItem="Y2P-ns-QQm" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="9" id="qWg-dc-BhA"/>
                 <constraint firstAttribute="trailing" secondItem="WFZ-4E-LSZ" secondAttribute="trailing" constant="14" id="qw6-yS-Y2Z"/>
+                <constraint firstItem="WFZ-4E-LSZ" firstAttribute="centerY" secondItem="Y2P-ns-QQm" secondAttribute="centerY" id="t3b-hr-Hv0"/>
             </constraints>
             <point key="canvasLocation" x="68" y="168"/>
         </customView>

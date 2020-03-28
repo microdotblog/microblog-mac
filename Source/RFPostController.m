@@ -151,7 +151,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 	}
 
-	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
+	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
 	self.textView.typingAttributes = @{
 		NSFontAttributeName: normal_font
 	};

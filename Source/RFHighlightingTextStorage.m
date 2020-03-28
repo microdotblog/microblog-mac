@@ -88,7 +88,7 @@
 
 - (void) processBold
 {
-	NSFont* bold_font = [NSFont fontWithName:@"Avenir-Heavy" size:kDefaultFontSize];
+	NSFont* bold_font = [NSFont boldSystemFontOfSize:kDefaultFontSize];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_bold = NO;
 	for (NSInteger i = 0; i < self.string.length; i++) {
@@ -119,7 +119,8 @@
 
 - (void) processItalic
 {
-	NSFont* italic_font = [NSFont fontWithName:@"Avenir-Oblique" size:kDefaultFontSize];
+	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
+	NSFont* italic_font = [[NSFontManager sharedFontManager] convertFont:normal_font toHaveTrait:NSFontItalicTrait];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_italic = NO;
 	BOOL is_link = NO;
@@ -322,7 +323,7 @@
 
 - (void) processHeaders
 {
-	NSFont* header_font = [NSFont fontWithName:@"Avenir-Heavy" size:kDefaultFontSize];
+	NSFont* header_font = [NSFont boldSystemFontOfSize:kDefaultFontSize];
 	NSColor* header_c = [NSColor blueColor];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_header = NO;
@@ -367,7 +368,7 @@
 {
 	// clear fonts and colors
 	NSRange paragraph_r = NSMakeRange (0, self.string.length);
-	NSFont* normal_font = [NSFont fontWithName:@"Avenir-Book" size:kDefaultFontSize];
+	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
 	NSColor* normal_color = [NSColor textColor];
 	
 	[self safe_removeAttribute:NSForegroundColorAttributeName range:paragraph_r];

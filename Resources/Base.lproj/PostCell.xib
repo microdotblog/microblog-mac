@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="c6c-8Z-vh5" customClass="RFPostCell">
-            <rect key="frame" x="0.0" y="0.0" width="265" height="183"/>
+        <customView misplaced="YES" id="c6c-8Z-vh5" customClass="RFPostCell">
+            <rect key="frame" x="0.0" y="0.0" width="265" height="167"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SHu-UC-LXk">
-                    <rect key="frame" x="8" y="148" width="214" height="25"/>
+                    <rect key="frame" x="8" y="138" width="214" height="19"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Title" id="fuH-m6-LAJ">
-                        <font key="font" size="15" name="AvenirNext-Medium"/>
+                        <font key="font" metaFont="systemMedium" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="cqh-qn-4tc">
-                    <rect key="frame" x="8" y="123" width="239" height="25"/>
+                    <rect key="frame" x="8" y="116" width="239" height="19"/>
                     <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="JGb-iT-Ibo">
-                        <font key="font" size="15" name="AvenirNext-Regular"/>
+                        <font key="font" metaFont="system" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3L-Cl-lup">
-                    <rect key="frame" x="226" y="155" width="32" height="23"/>
+                    <rect key="frame" x="226" y="146" width="32" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="28" id="JsT-fG-NIx"/>
                     </constraints>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="draft" id="6hW-L3-xmh">
-                        <font key="font" size="13" name="AvenirNext-Regular"/>
+                        <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qsJ-3v-yGf">
-                    <rect key="frame" x="8" y="10" width="73" height="23"/>
+                    <rect key="frame" x="8" y="10" width="75" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="2018-01-01" id="hMh-k9-AAe">
-                        <font key="font" size="13" name="AvenirNext-Regular"/>
+                        <font key="font" metaFont="system"/>
                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNp-zY-KaG">
-                    <rect key="frame" x="8" y="38" width="248" height="80"/>
+                    <rect key="frame" x="8" y="31" width="248" height="80"/>
                     <clipView key="contentView" drawsBackground="NO" id="Ohc-Wa-tH7">
                         <rect key="frame" x="0.0" y="0.0" width="248" height="80"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView id="pRF-IQ-J13">
                                 <rect key="frame" x="0.0" y="0.0" width="248" height="158"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" scrollDirection="horizontal" id="3Am-oc-SXG">
                                     <size key="itemSize" width="80" height="80"/>
                                 </collectionViewFlowLayout>
@@ -94,7 +94,7 @@
                 <constraint firstItem="XNp-zY-KaG" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="8" id="eas-Nn-sbQ"/>
                 <constraint firstAttribute="trailing" secondItem="cqh-qn-4tc" secondAttribute="trailing" constant="20" id="fWe-xJ-v5o"/>
                 <constraint firstItem="qsJ-3v-yGf" firstAttribute="top" secondItem="cqh-qn-4tc" secondAttribute="bottom" constant="90" id="he9-DX-5VJ"/>
-                <constraint firstItem="cqh-qn-4tc" firstAttribute="top" secondItem="c6c-8Z-vh5" secondAttribute="top" constant="35" id="jBB-a0-1XQ"/>
+                <constraint firstItem="cqh-qn-4tc" firstAttribute="top" secondItem="c6c-8Z-vh5" secondAttribute="top" constant="32" id="jBB-a0-1XQ"/>
                 <constraint firstItem="b3L-Cl-lup" firstAttribute="leading" secondItem="SHu-UC-LXk" secondAttribute="trailing" constant="8" id="qHT-Bg-I5m"/>
                 <constraint firstItem="b3L-Cl-lup" firstAttribute="top" secondItem="c6c-8Z-vh5" secondAttribute="top" constant="5" id="x0h-4E-ckE"/>
             </constraints>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -26,7 +26,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Reply" bezelStyle="regularSquare" image="options_reply" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="CId-kN-Ic0">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" size="14" name="Avenir-Book"/>
+                        <font key="font" metaFont="system" size="14"/>
                     </buttonCell>
                     <connections>
                         <action selector="reply:" target="-2" id="HIX-gn-obz"/>
@@ -37,7 +37,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Unfavorite" bezelStyle="regularSquare" image="options_favorite" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="kaF-fd-Qdl">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" size="14" name="Avenir-Book"/>
+                        <font key="font" metaFont="system" size="14"/>
                     </buttonCell>
                     <connections>
                         <action selector="unfavorite:" target="-2" id="r4E-9m-Pjw"/>
@@ -48,7 +48,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Conversation" bezelStyle="regularSquare" image="options_conversation" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="73Q-wg-wGD">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" size="14" name="Avenir-Book"/>
+                        <font key="font" metaFont="system" size="14"/>
                     </buttonCell>
                     <connections>
                         <action selector="conversation:" target="-2" id="0cr-tv-S47"/>
@@ -59,7 +59,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Open" bezelStyle="rounded" image="options_safari" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="YK5-Cd-ree">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="system" size="14"/>
                     </buttonCell>
                     <connections>
                         <action selector="share:" target="-2" id="S3s-ay-nLf"/>
