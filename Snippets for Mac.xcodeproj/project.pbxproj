@@ -97,8 +97,6 @@
 		4B6AE76F1F8AE1EF00CB7950 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
 		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
-		4B6AE77E1F8B37D900CB7950 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */; };
-		4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6AE7831F8B386100CB7950 /* Fabric.framework */; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
 		4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
@@ -317,8 +315,6 @@
 		4B6AE7711F8B335C00CB7950 /* RFMicropub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMicropub.m; path = Source/RFMicropub.m; sourceTree = "<group>"; };
 		4B6AE7731F8B336600CB7950 /* RFPhoto.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhoto.m; path = Source/RFPhoto.m; sourceTree = "<group>"; };
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
-		4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Shared/Crashlytics.framework; sourceTree = "<group>"; };
-		4B6AE7831F8B386100CB7950 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Shared/Fabric.framework; sourceTree = "<group>"; };
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -403,8 +399,6 @@
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 				4B6AE76E1F8AE19F00CB7950 /* Sparkle.framework in Frameworks */,
-				4B6AE7861F8B387500CB7950 /* Fabric.framework in Frameworks */,
-				4B6AE77E1F8B37D900CB7950 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,8 +715,6 @@
 			isa = PBXGroup;
 			children = (
 				4B5714D0224BD048001F8E4F /* libxml2.tbd */,
-				4B6AE7831F8B386100CB7950 /* Fabric.framework */,
-				4B6AE77D1F8B35C300CB7950 /* Crashlytics.framework */,
 				4B6AE76D1F8ADFBF00CB7950 /* Sparkle.framework */,
 				4B8FBDFB1F86827800906C86 /* Security.framework */,
 				4B7F0B011BAF4F73004553A6 /* WebKit.framework */,
@@ -1307,7 +1299,7 @@
 				CODE_SIGN_ENTITLEMENTS = Micro.blog.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 71;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1320,7 +1312,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 1.9.2;
+				MARKETING_VERSION = 1.9.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -1335,7 +1327,7 @@
 				CODE_SIGN_ENTITLEMENTS = Micro.blog.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 71;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1348,7 +1340,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 1.9.2;
+				MARKETING_VERSION = 1.9.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
