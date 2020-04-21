@@ -9,7 +9,6 @@
 #import "RFAppDelegate.h"
 
 #import "RFTimelineController.h"
-#import "RFPostWindowController.h"
 #import "RFWelcomeController.h"
 #import "RFPreferencesController.h"
 #import "RFInstagramController.h"
@@ -120,7 +119,7 @@
 - (void) showTimelineOrWelcome
 {
 	BOOL show_timeline = NO;
-
+	
 	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	if (username) {
 		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
@@ -134,15 +133,6 @@
 		self.welcomeController = [[RFWelcomeController alloc] init];
 		[self.welcomeController showWindow:nil];
 	}
-	
-	// test
-	[self showNewPostWindow];
-}
-
-- (void) showNewPostWindow
-{
-	RFPostWindowController* post_controller = [[RFPostWindowController alloc] init];
-	[post_controller showWindow:nil];
 }
 
 - (void) setupDefaults

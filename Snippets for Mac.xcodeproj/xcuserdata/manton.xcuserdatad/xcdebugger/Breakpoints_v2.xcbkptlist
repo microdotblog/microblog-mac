@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "DEFA3400-68A9-4610-A3AC-22090A8390C4"
    type = "1"
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
-            uuid = "26CCD862-85A3-42AE-AE68-E3A57CC45CEB"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
