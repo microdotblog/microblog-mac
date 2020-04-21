@@ -34,7 +34,6 @@
             <rect key="contentRect" x="343" y="100" width="540" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="500" height="300"/>
-            <value key="maxSize" type="size" width="1000" height="2000"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -177,16 +176,15 @@
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
                                                     <rect key="frame" x="7" y="2" width="320" height="23"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1 new post" id="NQ2-w9-WtX">
                                                         <font key="font" metaFont="systemMedium" size="13"/>
                                                         <color key="textColor" red="0.20392156862745098" green="0.4392156862745098" blue="0.55686274509803924" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWu-A3-x42">
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HWu-A3-x42">
                                                     <rect key="frame" x="0.0" y="0.0" width="360" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" transparent="YES" imageScaling="proportionallyDown" inset="2" id="71i-AI-mSN">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -204,8 +202,12 @@
                                                 </progressIndicator>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="HWu-A3-x42" secondAttribute="trailing" id="8nT-JX-e8l"/>
+                                                <constraint firstAttribute="bottom" secondItem="HWu-A3-x42" secondAttribute="bottom" id="E7e-Qn-aDZ"/>
                                                 <constraint firstItem="lWZ-mP-RW1" firstAttribute="top" secondItem="gUd-Pe-vB8" secondAttribute="top" constant="8" id="I6E-yf-mze"/>
+                                                <constraint firstItem="HWu-A3-x42" firstAttribute="top" secondItem="gUd-Pe-vB8" secondAttribute="top" id="LWg-5c-ZsZ"/>
                                                 <constraint firstAttribute="trailing" secondItem="lWZ-mP-RW1" secondAttribute="trailing" constant="8" id="Mh2-b8-Gea"/>
+                                                <constraint firstItem="HWu-A3-x42" firstAttribute="leading" secondItem="gUd-Pe-vB8" secondAttribute="leading" id="NQP-yx-9C8"/>
                                             </constraints>
                                         </view>
                                         <constraints>
