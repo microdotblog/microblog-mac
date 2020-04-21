@@ -25,8 +25,6 @@
 #import "NSAppearance+Extras.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 
 @implementation RFAppDelegate
 
@@ -35,7 +33,6 @@
 	[self removeSandboxedContainer];
 	
 	[self setupDefaults];
-	[self setupCrashlytics];
 	[self setupNotifications];
 	[self setupAppearance];
 	[self setupURLs];
@@ -139,11 +136,6 @@
 {
 	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ kTextSizePrefKey: @(kTextSizeMedium) }];
 	[RFSettings migrateSettings];
-}
-
-- (void) setupCrashlytics
-{
-	[Fabric with:@[ CrashlyticsKit ]];
 }
 
 - (void) setupNotifications

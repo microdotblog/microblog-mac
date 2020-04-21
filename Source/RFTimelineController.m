@@ -49,7 +49,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-
+	
 //	[self setupTitleButtons];
 	[self setupFullScreen];
 	[self setupTable];
@@ -58,11 +58,6 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupUser];
 	[self setupNotifications];
 	[self setupTimer];
-}
-
-- (void) windowDidEndLiveResize:(NSNotification *)notification
-{
-//	[self refreshTimeline:nil];
 }
 
 - (void) setupTitleButtons
@@ -86,8 +81,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) setupSplitView
 {
-	[self.splitView setPosition:kDefaultSplitViewPosition ofDividerAtIndex:0];
+	[self.splitView setAutosaveName:@"TimelineSplitView"];
 	self.splitView.delegate = self;
+//	[self.splitView setPosition:kDefaultSplitViewPosition ofDividerAtIndex:0];
+	[self.splitView setHoldingPriority:NSLayoutPriorityRequired forSubviewAtIndex:0];
 }
 
 - (void) setupWebView
@@ -656,7 +653,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController = controller;
 
 	NSRect r = self.webView.bounds;
-	r.origin.x = kDefaultSplitViewPosition + 1;
+//	r.origin.x = kDefaultSplitViewPosition + 1;
 	self.postController.view.frame = r;
 	self.postController.view.alphaValue = 0.0;
 	
@@ -674,7 +671,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.allPostsController = controller;
 
 	NSRect r = self.webView.bounds;
-	r.origin.x = kDefaultSplitViewPosition + 1;
+//	r.origin.x = kDefaultSplitViewPosition + 1;
 	self.allPostsController.view.frame = r;
 	self.allPostsController.view.alphaValue = 0.0;
 	
@@ -989,19 +986,21 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) webView:(WebView *)sender resource:(id)identifier didReceiveResponse:(NSURLResponse *)response fromDataSource:(WebDataSource *)dataSource
 {
-	NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
-	NSInteger status_code = [url_response statusCode];
-	if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
-		[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
-	
-		NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
-	
-		NSAlert* alert = [[NSAlert alloc] init];
-		[alert addButtonWithTitle:@"OK"];
-		[alert setMessageText:@"Error loading Micro.blog timeline"];
-		[alert setInformativeText:msg];
-		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-		}];
+	if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+		NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
+		NSInteger status_code = [url_response statusCode];
+		if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
+			[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
+		
+			NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
+		
+			NSAlert* alert = [[NSAlert alloc] init];
+			[alert addButtonWithTitle:@"OK"];
+			[alert setMessageText:@"Error loading Micro.blog timeline"];
+			[alert setInformativeText:msg];
+			[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+			}];
+		}
 	}
 }
 
@@ -1105,23 +1104,25 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
-	return kDefaultSplitViewPosition;
+	return 150;
+//	return kDefaultSplitViewPosition;
 }
 
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
-	return kDefaultSplitViewPosition;
+	return 300;
+//	return kDefaultSplitViewPosition;
 }
 
-- (CGFloat) splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex
-{
-	if (dividerIndex == 0) {
-		return kDefaultSplitViewPosition;
-	}
-	else {
-		return proposedPosition;
-	}
-}
+//- (CGFloat) splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex
+//{
+//	if (dividerIndex == 0) {
+//		return kDefaultSplitViewPosition;
+//	}
+//	else {
+//		return proposedPosition;
+//	}
+//}
 
 - (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
 {
@@ -1133,9 +1134,9 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	}
 }
 
-- (NSRect) splitView:(NSSplitView *)splitView effectiveRect:(NSRect)proposedEffectiveRect forDrawnRect:(NSRect)drawnRect ofDividerAtIndex:(NSInteger)dividerIndex
-{
-	return NSZeroRect;
-}
+//- (NSRect) splitView:(NSSplitView *)splitView effectiveRect:(NSRect)proposedEffectiveRect forDrawnRect:(NSRect)drawnRect ofDividerAtIndex:(NSInteger)dividerIndex
+//{
+//	return NSZeroRect;
+//}
 
 @end

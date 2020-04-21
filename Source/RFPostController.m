@@ -888,7 +888,19 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		};
 		[client postWithParams:args completion:^(UUHttpResponse* response) {
 			RFDispatchMainAsync (^{
-				[self closeWithoutSaving];
+				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+					[self hideProgressHeader];
+					NSString* msg = response.parsedResponse[@"error_description"];
+					[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
+				}
+				else if (response.httpError) {
+					[self hideProgressHeader];
+					NSString* msg = [response.httpError localizedDescription];
+					[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+				}
+				else {
+					[self closeWithoutSaving];
+				}
 			});
 		}];
 	}
@@ -935,6 +947,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 							[self hideProgressHeader];
 							NSString* msg = response.parsedResponse[@"error_description"];
+							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+						}
+						else if (response.httpError) {
+							[self hideProgressHeader];
+							NSString* msg = [response.httpError localizedDescription];
 							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 						}
 						else {
@@ -1088,6 +1105,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:s button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 						self.photoButton.hidden = NO;
+					}
+					else if (response.httpError) {
+						[self hideProgressHeader];
+						NSString* msg = [response.httpError localizedDescription];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
 						[self closeWithoutSaving];
