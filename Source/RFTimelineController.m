@@ -60,10 +60,10 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	[self setupTimer];
 }
 
-- (void) windowDidEndLiveResize:(NSNotification *)notification
-{
-//	[self refreshTimeline:nil];
-}
+//- (void) windowDidEndLiveResize:(NSNotification *)notification
+//{
+////	[self refreshTimeline:nil];
+//}
 
 - (void) setupTitleButtons
 {
@@ -989,19 +989,21 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 - (void) webView:(WebView *)sender resource:(id)identifier didReceiveResponse:(NSURLResponse *)response fromDataSource:(WebDataSource *)dataSource
 {
-	NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
-	NSInteger status_code = [url_response statusCode];
-	if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
-		[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
-	
-		NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
-	
-		NSAlert* alert = [[NSAlert alloc] init];
-		[alert addButtonWithTitle:@"OK"];
-		[alert setMessageText:@"Error loading Micro.blog timeline"];
-		[alert setInformativeText:msg];
-		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-		}];
+	if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+		NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
+		NSInteger status_code = [url_response statusCode];
+		if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
+			[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
+		
+			NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
+		
+			NSAlert* alert = [[NSAlert alloc] init];
+			[alert addButtonWithTitle:@"OK"];
+			[alert setMessageText:@"Error loading Micro.blog timeline"];
+			[alert setInformativeText:msg];
+			[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+			}];
+		}
 	}
 }
 
