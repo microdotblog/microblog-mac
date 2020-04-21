@@ -175,7 +175,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	NSImage* img = [[NSImage alloc] initWithContentsOfFile:current_file];
 	if (img) {
-		NSDate* d = [NSDate uuDateFromString:taken_at withFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+		NSDate* d = [NSDate uuDateFromRfc3339String:taken_at];
+		if (d == nil) {
+			d = [NSDate uuDateFromString:taken_at withFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+		}
 		
 		RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
 		[self uploadPhoto:photo completion:^{
