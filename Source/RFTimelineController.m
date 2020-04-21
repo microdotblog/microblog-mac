@@ -653,7 +653,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.postController = controller;
 
 	NSRect r = self.webView.bounds;
-	r.origin.x = kDefaultSplitViewPosition + 1;
+//	r.origin.x = kDefaultSplitViewPosition + 1;
 	self.postController.view.frame = r;
 	self.postController.view.alphaValue = 0.0;
 	
@@ -671,7 +671,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	self.allPostsController = controller;
 
 	NSRect r = self.webView.bounds;
-	r.origin.x = kDefaultSplitViewPosition + 1;
+//	r.origin.x = kDefaultSplitViewPosition + 1;
 	self.allPostsController.view.frame = r;
 	self.allPostsController.view.alphaValue = 0.0;
 	
