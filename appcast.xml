@@ -6,6 +6,29 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 1.9.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>A few bug fixes for this update:</p>
+ 				<ul>
+					<li>Fixed crash importing photos from Instagram archive.</li>
+					<li>Fixed not showing error message when posting fails.</li>
+					<li>Fixed window and split view divider resizing.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Wed, 22 Apr 2020 09:35:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.9.3.zip" sparkle:shortVersionString="1.9.3" sparkle:version="71" length="2930705" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 1.9.2</title>
  			<description><![CDATA[
 				<style>
