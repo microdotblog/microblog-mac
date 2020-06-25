@@ -244,9 +244,9 @@
             <toolbar key="toolbar" implicitIdentifier="0A2D5D61-39C2-46F0-A276-3CC9769FF064" autosavesConfiguration="NO" displayMode="iconOnly" sizeMode="regular" id="DQA-jN-6m2">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="cEQ-x9-ECG"/>
-                    <toolbarItem implicitItemIdentifier="C00E410D-E0B2-46BE-9222-99826B4439F5" label="New Post" paletteLabel="New Post" tag="-1" image="plus.square" catalog="system" id="7kC-so-e2u">
-                        <size key="minSize" width="32" height="36"/>
-                        <size key="maxSize" width="32" height="36"/>
+                    <toolbarItem implicitItemIdentifier="C00E410D-E0B2-46BE-9222-99826B4439F5" label="New Post" paletteLabel="New Post" tag="-1" image="square.and.pencil" catalog="system" id="7kC-so-e2u">
+                        <size key="minSize" width="32" height="38"/>
+                        <size key="maxSize" width="32" height="38"/>
                         <connections>
                             <action selector="newDocument:" target="-2" id="Jaa-Lc-ENk"/>
                         </connections>
@@ -265,6 +265,6 @@
     </objects>
     <resources>
         <image name="down_arrow" width="13" height="5"/>
-        <image name="plus.square" catalog="system" width="16" height="12"/>
+        <image name="square.and.pencil" catalog="system" width="16" height="13"/>
     </resources>
 </document>
