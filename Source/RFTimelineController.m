@@ -31,7 +31,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import <QuartzCore/QuartzCore.h>
 
-static CGFloat const kDefaultSplitViewPosition = 170.0;
+//static CGFloat const kDefaultSplitViewPosition = 170.0;
 
 @implementation RFTimelineController
 
@@ -1044,7 +1044,7 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]) {
-		return 5;
+		return 7;
 	}
 	else {
 		return 4;
@@ -1057,24 +1057,37 @@ static CGFloat const kDefaultSplitViewPosition = 170.0;
 	
 	if (row == 0) {
 		cell.titleField.stringValue = @"Timeline";
-		cell.iconView.image = [NSImage imageNamed:@"kind_timeline"];
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
+//		cell.iconView.image = [NSImage imageNamed:@"kind_timeline"];
 	}
 	else if (row == 1) {
 		cell.titleField.stringValue = @"Mentions";
-		cell.iconView.image = [NSImage imageNamed:@"kind_mentions"];
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"quote.bubble" accessibilityDescription:@"Mentions"];
+//		cell.iconView.image = [NSImage imageNamed:@"kind_mentions"];
 	}
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Favorites";
-		cell.iconView.image = [NSImage imageNamed:@"kind_favorites"];
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"Favorites"];
+//		cell.iconView.image = [NSImage imageNamed:@"kind_favorites"];
 	}
 	else if (row == 3) {
 		cell.titleField.stringValue = @"Discover";
-		cell.iconView.image = [NSImage imageNamed:@"kind_discover"];
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
+//		cell.iconView.image = [NSImage imageNamed:@"kind_discover"];
 	}
-	else if (row == 4) {
-		cell.titleField.stringValue = @"Posts";
-		cell.iconView.image = [NSImage imageNamed:@"kind_list"];
-	}
+    else if (row == 4) {
+        cell.titleField.stringValue = @"Posts";
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
+//        cell.iconView.image = [NSImage imageNamed:@"kind_list"];
+    }
+    else if (row == 5) {
+        cell.titleField.stringValue = @"Pages";
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
+    }
+    else if (row == 6) {
+        cell.titleField.stringValue = @"Uploads";
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
+    }
 
 	return cell;
 }

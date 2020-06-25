@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17132" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17132"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="17132"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,7 +32,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="343" y="100" width="540" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="500" height="300"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
@@ -52,7 +52,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="181" height="66"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
-                                        <color key="fillColor" white="0.87044530791250729" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="fillColor" red="0.94805185418379934" green="0.94805185418379934" blue="0.94805185418379934" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </box>
                                     <imageView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ETu-Lx-u0c" customClass="RFRoundedImageView">
                                         <rect key="frame" x="8" y="543" width="48" height="48"/>
@@ -93,7 +93,7 @@
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn width="166.5" minWidth="40" maxWidth="1000" id="23c-Hc-B3x">
+                                                        <tableColumn width="168" minWidth="40" maxWidth="1000" id="23c-Hc-B3x">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -106,11 +106,11 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView id="6p0-Ow-fZw">
-                                                                    <rect key="frame" x="1" y="1" width="167" height="20"/>
+                                                                    <rect key="frame" x="1" y="1" width="177" height="20"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-Wk-RTO">
-                                                                            <rect key="frame" x="0.0" y="3" width="167" height="17"/>
+                                                                            <rect key="frame" x="0.0" y="3" width="177" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="oKH-vH-pea">
                                                                                 <font key="font" metaFont="system"/>
@@ -130,7 +130,7 @@
                                             </subviews>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="CwN-PH-Vd1">
-                                            <rect key="frame" x="1" y="-15" width="0.0" height="16"/>
+                                            <rect key="frame" x="1" y="519" width="180" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="fDm-fn-tx5">
@@ -241,13 +241,30 @@
                     <constraint firstAttribute="trailing" secondItem="fkA-Zg-Ds4" secondAttribute="trailing" id="vd4-yA-p5a"/>
                 </constraints>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="0A2D5D61-39C2-46F0-A276-3CC9769FF064" autosavesConfiguration="NO" displayMode="iconOnly" sizeMode="regular" id="DQA-jN-6m2">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="cEQ-x9-ECG"/>
+                    <toolbarItem implicitItemIdentifier="C00E410D-E0B2-46BE-9222-99826B4439F5" label="New Post" paletteLabel="New Post" tag="-1" image="plus.square" catalog="system" id="7kC-so-e2u">
+                        <size key="minSize" width="32" height="36"/>
+                        <size key="maxSize" width="32" height="36"/>
+                        <connections>
+                            <action selector="newDocument:" target="-2" id="Jaa-Lc-ENk"/>
+                        </connections>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="cEQ-x9-ECG"/>
+                    <toolbarItem reference="7kC-so-e2u"/>
+                </defaultToolbarItems>
+            </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="BKP-i2-lYz"/>
             </connections>
-            <point key="canvasLocation" x="-60" y="239"/>
+            <point key="canvasLocation" x="-104" y="225"/>
         </window>
     </objects>
     <resources>
         <image name="down_arrow" width="13" height="5"/>
+        <image name="plus.square" catalog="system" width="16" height="12"/>
     </resources>
 </document>
