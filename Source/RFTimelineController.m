@@ -77,6 +77,8 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"MenuCell" bundle:nil] forIdentifier:@"MenuCell"];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
+    self.tableView.enclosingScrollView.automaticallyAdjustsContentInsets = NO;
+    self.tableView.enclosingScrollView.contentInsets = NSEdgeInsetsMake (5, 0, 0, 0);
 }
 
 - (void) setupSplitView
@@ -1058,27 +1060,22 @@
 	if (row == 0) {
 		cell.titleField.stringValue = @"Timeline";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
-//		cell.iconView.image = [NSImage imageNamed:@"kind_timeline"];
 	}
 	else if (row == 1) {
 		cell.titleField.stringValue = @"Mentions";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"quote.bubble" accessibilityDescription:@"Mentions"];
-//		cell.iconView.image = [NSImage imageNamed:@"kind_mentions"];
 	}
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Favorites";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"Favorites"];
-//		cell.iconView.image = [NSImage imageNamed:@"kind_favorites"];
 	}
 	else if (row == 3) {
 		cell.titleField.stringValue = @"Discover";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
-//		cell.iconView.image = [NSImage imageNamed:@"kind_discover"];
 	}
     else if (row == 4) {
         cell.titleField.stringValue = @"Posts";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
-//        cell.iconView.image = [NSImage imageNamed:@"kind_list"];
     }
     else if (row == 5) {
         cell.titleField.stringValue = @"Pages";

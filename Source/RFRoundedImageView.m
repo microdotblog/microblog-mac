@@ -23,7 +23,7 @@
 	
 	if (self.image == nil) {
 		CGRect r = NSRectToCGRect (self.bounds);
-		CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+        CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
 		
 		CGPathRef path = CGPathCreateWithRoundedRect(r, r.size.width / 2.0, r.size.height / 2.0, NULL);
 		CGContextAddPath (context, path);
@@ -38,6 +38,7 @@
 		NSImage* img = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
 		RFDispatchMainAsync (^{
 			self.image = img;
+            self.layer.cornerRadius = self.bounds.size.width / 2.0;
 		});
 	});
 }
@@ -48,6 +49,7 @@
 		NSImage* img = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
 		RFDispatchMainAsync (^{
 			self.image = img;
+            self.layer.cornerRadius = self.bounds.size.width / 2.0;
 			handler();
 		});
 	});
