@@ -9,6 +9,7 @@
 #import "RFTimelineController.h"
 
 #import "RFMenuCell.h"
+#import "RFSeparatorCell.h"
 #import "RFOptionsController.h"
 #import "RFPostController.h"
 #import "RFAllPostsController.h"
@@ -16,7 +17,6 @@
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
 #import "RFUserController.h"
-#import "RFNewPostAccessoryController.h"
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
 #import "RFConstants.h"
@@ -50,7 +50,7 @@
 {
 	[super windowDidLoad];
 	
-//	[self setupTitleButtons];
+	[self setupToolbar];
 	[self setupFullScreen];
 	[self setupTable];
 	[self setupSplitView];
@@ -60,11 +60,16 @@
 	[self setupTimer];
 }
 
-- (void) setupTitleButtons
+- (void) setupToolbar
 {
-	NSTitlebarAccessoryViewController* newpost_accessory_controller = [[RFNewPostAccessoryController alloc] init];
-	newpost_accessory_controller.layoutAttribute = NSLayoutAttributeRight;
-	[self.window addTitlebarAccessoryViewController:newpost_accessory_controller];
+    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"TimelineToolbar"];
+
+    [toolbar setAllowsUserCustomization:NO];
+    [toolbar setAutosavesConfiguration:NO];
+    [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
+    [toolbar setDelegate:self];
+    
+    [self.window setToolbar:toolbar];
 }
 
 - (void) setupFullScreen
@@ -1046,7 +1051,7 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]) {
-		return 7;
+		return 8;
 	}
 	else {
 		return 4;
@@ -1055,7 +1060,12 @@
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
-	RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
+    if (row == 4) {
+        RFSeparatorCell* separator = [tableView makeViewWithIdentifier:@"SeparatorCell" owner:self];
+        return separator;
+    }
+
+    RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
 	
 	if (row == 0) {
 		cell.titleField.stringValue = @"Timeline";
@@ -1073,15 +1083,15 @@
 		cell.titleField.stringValue = @"Discover";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
 	}
-    else if (row == 4) {
+    else if (row == 5) {
         cell.titleField.stringValue = @"Posts";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
     }
-    else if (row == 5) {
+    else if (row == 6) {
         cell.titleField.stringValue = @"Pages";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
     }
-    else if (row == 6) {
+    else if (row == 7) {
         cell.titleField.stringValue = @"Uploads";
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
     }
@@ -1103,11 +1113,25 @@
 	else if (row == 3) {
 		[self showDiscover:nil];
 	}
-	else if (row == 4) {
+    else if (row == 4) {
+        // separator
+        return NO;
+    }
+	else if (row == 5) {
 		[self showPosts:nil];
 	}
 
 	return YES;
+}
+
+- (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+    if (row == 4) {
+        return 10;
+    }
+    else {
+        return tableView.rowHeight;
+    }
 }
 
 #pragma mark -
@@ -1148,5 +1172,40 @@
 //{
 //	return NSZeroRect;
 //}
+
+#pragma mark -
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
+{
+    return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+}
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
+{
+    return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+}
+
+- ( NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
+{
+    if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
+        NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+        item.view = self.profileBox;
+        return item;
+    }
+    else if ([itemIdentifier isEqualToString:@"Separator"]) {
+        NSToolbarItem* separator = [NSTrackingSeparatorToolbarItem trackingSeparatorToolbarItemWithIdentifier:itemIdentifier splitView:self.splitView dividerIndex:0];
+        return separator;
+    }
+    else if ([itemIdentifier isEqualToString:@"NewPost"]) {
+        NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+        item.image = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
+        item.target = self;
+        item.action = @selector(newDocument:);
+        return item;
+    }
+    else {
+        return nil;
+    }
+}
 
 @end
