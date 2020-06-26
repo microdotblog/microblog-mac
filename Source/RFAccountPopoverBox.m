@@ -83,6 +83,7 @@
 {
 	RFAccount* a = item.representedObject;
 	[[NSNotificationCenter defaultCenter] postNotificationName:kSwitchAccountNotification object:self userInfo:@{ kSwitchAccountUsernameKey: a.username }];
+    self.fillColor = self.savedFillColor;
 }
 
 - (void) mouseEntered:(NSEvent *)event
@@ -92,7 +93,7 @@
 			self.fillColor = [NSColor colorWithWhite:0.1 alpha:1.0];
 		}
 		else {
-			self.fillColor = [NSColor colorWithWhite:0.82 alpha:1.0];
+			self.fillColor = [NSColor colorWithWhite:0.9 alpha:1.0];
 		}
 	}
 }
