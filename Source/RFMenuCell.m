@@ -23,7 +23,7 @@
 		}
 	}
 	else {
-		[[NSColor colorWithWhite:0.95 alpha:1.0] set];
+		[[NSColor colorWithWhite:0.9 alpha:1.0] set];
 	}
 
 //	NSRectFill (self.bounds);

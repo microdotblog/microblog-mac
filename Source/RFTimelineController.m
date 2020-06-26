@@ -82,6 +82,7 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"MenuCell" bundle:nil] forIdentifier:@"MenuCell"];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
+    self.tableView.refusesFirstResponder = YES;
     self.tableView.enclosingScrollView.automaticallyAdjustsContentInsets = NO;
     self.tableView.enclosingScrollView.contentInsets = NSEdgeInsetsMake (5, 0, 0, 0);
 }
