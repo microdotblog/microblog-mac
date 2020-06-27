@@ -213,16 +213,15 @@
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dzD-B1-h1U" customClass="RFRoundedImageView">
-                        <rect key="frame" x="8" y="5" width="30" height="30"/>
+                        <rect key="frame" x="8" y="7" width="26" height="26"/>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="L5d-67-MKW"/>
-                            <constraint firstAttribute="height" constant="30" id="jb2-S9-Fdg"/>
-                            <constraint firstAttribute="width" constant="30" id="ovd-h8-79L"/>
+                            <constraint firstAttribute="height" constant="26" id="jb2-S9-Fdg"/>
+                            <constraint firstAttribute="width" constant="26" id="ovd-h8-79L"/>
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="g0z-Ci-b4e"/>
                     </imageView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WA0-ys-uhG">
-                        <rect key="frame" x="41" y="12" width="40" height="16"/>
+                        <rect key="frame" x="37" y="12" width="44" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="@test" id="6S3-kn-cpb">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
