@@ -303,6 +303,7 @@
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+	self.webView.hidden = NO;
 	
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
 }
@@ -316,6 +317,7 @@
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/mentions"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+	self.webView.hidden = NO;
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
@@ -329,6 +331,7 @@
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+	self.webView.hidden = NO;
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
 }
@@ -342,6 +345,7 @@
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+	self.webView.hidden = NO;
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:3] byExtendingSelection:NO];
 }
@@ -516,6 +520,7 @@
 
 - (void) closeOverlays
 {
+	self.webView.hidden = YES;
 	[self popToRootViewController];
 	
 	[self.optionsPopover performClose:nil];

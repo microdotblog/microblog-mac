@@ -11,6 +11,10 @@
 #import "RFConstants.h"
 #import "RFSettings.h"
 #import "RFBlogsController.h"
+#import "RFClient.h"
+#import "RFUpload.h"
+#import "UUDate.h"
+#import "RFMacros.h"
 
 @implementation RFAllUploadsController
 
@@ -57,6 +61,50 @@
 
 - (void) fetchPosts
 {
+	self.allPosts = @[];
+	self.blogNameButton.hidden = YES;
+	[self.progressSpinner startAnimation:nil];
+	self.collectionView.animator.alphaValue = 0.0;
+
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_posts = [NSMutableArray array];
+
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				RFUpload* upload = [[RFUpload alloc] init];
+				upload.url = [item objectForKey:@"url"];
+
+				upload.width = [[item objectForKey:@"width"] integerValue];
+				upload.height = [[item objectForKey:@"height"] integerValue];
+
+				NSString* date_s = [item objectForKey:@"published"];
+				upload.createdAt = [NSDate uuDateFromRfc3339String:date_s];
+
+				[new_posts addObject:upload];
+			}
+			
+			RFDispatchMainAsync (^{
+				self.allPosts = new_posts;
+				[self.collectionView reloadData];
+				[self.progressSpinner stopAnimation:nil];
+				[self setupBlogName];
+				self.blogNameButton.hidden = NO;
+				self.collectionView.animator.alphaValue = 1.0;
+			});
+		}
+	}];
 }
 
 - (IBAction) blogNameClicked:(id)sender
@@ -102,6 +150,11 @@
     [self setupBlogName];
     [self hideBlogsMenu];
     [self fetchPosts];
+}
+
+- (void) closePostingNotification:(NSNotification *)notification
+{
+	[self fetchPosts];
 }
 
 @end

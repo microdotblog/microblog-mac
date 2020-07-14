@@ -43,14 +43,14 @@
                                     <action selector="blogNameClicked:" target="-2" id="7do-uH-82s"/>
                                 </connections>
                             </button>
-                            <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkD-bK-PmJ">
+                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkD-bK-PmJ">
                                 <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
                                 <clipView key="contentView" id="MJ6-q7-Hbi">
-                                    <rect key="frame" x="1" y="1" width="396" height="415"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <collectionView id="WeF-Cq-XQj">
-                                            <rect key="frame" x="0.0" y="0.0" width="396" height="158"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="398" height="158"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="Uxg-or-afM">
                                                 <size key="itemSize" width="50" height="50"/>
