@@ -21,10 +21,11 @@
 
 @implementation RFAllPostsController
 
-- (id) init
+- (id) initShowingPages:(BOOL)isShowingPages
 {
 	self = [super initWithNibName:@"AllPosts" bundle:nil];
 	if (self) {
+		self.isShowingPages = isShowingPages;
 	}
 	
 	return self;
@@ -79,10 +80,21 @@
 		destination_uid = @"";
 	}
 
-	NSDictionary* args = @{
-		@"q": @"source",
-		@"mp-destination": destination_uid
-	};
+    NSDictionary* args;
+    
+    if (self.isShowingPages) {
+        args = @{
+            @"q": @"source",
+            @"mp-destination": destination_uid,
+            @"post-type": @"x-page"
+        };
+    }
+    else {
+        args = @{
+            @"q": @"source",
+            @"mp-destination": destination_uid
+        };
+    }
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {

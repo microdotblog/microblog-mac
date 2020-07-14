@@ -13,6 +13,7 @@
 #import "RFOptionsController.h"
 #import "RFPostController.h"
 #import "RFAllPostsController.h"
+#import "RFAllUploadsController.h"
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
@@ -351,10 +352,34 @@
 
 	[self closeOverlays];
 
-	RFAllPostsController* controller = [[RFAllPostsController alloc] init];
+	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:NO];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:4] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:5] byExtendingSelection:NO];
+}
+
+- (IBAction) showPages:(id)sender
+{
+	self.selectedTimeline = kSelectionPosts;
+
+	[self closeOverlays];
+
+	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:YES];
+	[self showAllPostsController:controller];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:6] byExtendingSelection:NO];
+}
+
+- (IBAction) showUploads:(id)sender
+{
+	self.selectedTimeline = kSelectionPosts;
+
+	[self closeOverlays];
+
+	RFAllUploadsController* controller = [[RFAllUploadsController alloc] init];
+	[self showAllPostsController:controller];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:7] byExtendingSelection:NO];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -1120,6 +1145,12 @@
     }
 	else if (row == 5) {
 		[self showPosts:nil];
+	}
+	else if (row == 6) {
+		[self showPages:nil];
+	}
+	else if (row == 7) {
+		[self showUploads:nil];
 	}
 
 	return YES;

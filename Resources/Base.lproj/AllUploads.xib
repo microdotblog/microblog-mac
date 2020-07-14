@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17132" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17132"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="RFAllUploadsController">
+            <connections>
+                <outlet property="blogNameButton" destination="i0M-mM-qt9" id="eQh-2F-yOD"/>
+                <outlet property="progressSpinner" destination="0aW-jy-83j" id="m1G-nE-u0I"/>
+                <outlet property="view" destination="c22-O7-iKe" id="mh3-Lr-7UY"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="398" height="462"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <box autoresizesSubviews="NO" boxType="custom" borderType="line" borderWidth="0.0" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="BLz-wz-LJA">
+                    <rect key="frame" x="0.0" y="0.0" width="398" height="462"/>
+                    <view key="contentView" id="3gb-cJ-31J">
+                        <rect key="frame" x="0.0" y="0.0" width="398" height="462"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="0aW-jy-83j">
+                                <rect key="frame" x="12" y="431" width="16" height="16"/>
+                            </progressIndicator>
+                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="HkM-wg-aGS">
+                                <rect key="frame" x="12" y="415" width="374" height="5"/>
+                            </box>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9">
+                                <rect key="frame" x="11" y="425" width="132" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Pai-Fy-zI5"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" title="username.micro.blog" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="blogNameClicked:" target="-2" id="7do-uH-82s"/>
+                                </connections>
+                            </button>
+                            <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkD-bK-PmJ">
+                                <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
+                                <clipView key="contentView" id="MJ6-q7-Hbi">
+                                    <rect key="frame" x="1" y="1" width="396" height="415"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView id="WeF-Cq-XQj">
+                                            <rect key="frame" x="0.0" y="0.0" width="396" height="158"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="Uxg-or-afM">
+                                                <size key="itemSize" width="50" height="50"/>
+                                            </collectionViewFlowLayout>
+                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </collectionView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="1eq-lB-dYY">
+                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="NDc-fr-w1u">
+                                    <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="IkD-bK-PmJ" secondAttribute="trailing" id="7LG-5d-PXb"/>
+                            <constraint firstItem="IkD-bK-PmJ" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" id="8vk-47-vPT"/>
+                            <constraint firstItem="0aW-jy-83j" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="MXO-1Z-t2n"/>
+                            <constraint firstItem="IkD-bK-PmJ" firstAttribute="top" secondItem="HkM-wg-aGS" secondAttribute="bottom" id="N1w-e9-WDz"/>
+                            <constraint firstAttribute="bottom" secondItem="IkD-bK-PmJ" secondAttribute="bottom" id="V2b-lg-ni0"/>
+                            <constraint firstItem="i0M-mM-qt9" firstAttribute="top" secondItem="3gb-cJ-31J" secondAttribute="top" constant="5" id="axK-4G-ejt"/>
+                            <constraint firstAttribute="trailing" secondItem="HkM-wg-aGS" secondAttribute="trailing" constant="12" id="eIl-Ym-2aZ"/>
+                            <constraint firstItem="HkM-wg-aGS" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="tfQ-kU-0Rb"/>
+                            <constraint firstItem="0aW-jy-83j" firstAttribute="top" secondItem="3gb-cJ-31J" secondAttribute="top" constant="15" id="tuK-xR-xbS"/>
+                            <constraint firstItem="i0M-mM-qt9" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="11" id="uK1-2e-ZsW"/>
+                            <constraint firstItem="HkM-wg-aGS" firstAttribute="top" secondItem="i0M-mM-qt9" secondAttribute="bottom" constant="7" id="zRj-Sb-Pon"/>
+                        </constraints>
+                    </view>
+                    <color key="borderColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="fillColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                </box>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="BLz-wz-LJA" secondAttribute="bottom" id="2nm-Un-SGk"/>
+                <constraint firstItem="BLz-wz-LJA" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="JhG-Ld-ApI"/>
+                <constraint firstItem="BLz-wz-LJA" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="Xbg-ou-zmM"/>
+                <constraint firstAttribute="trailing" secondItem="BLz-wz-LJA" secondAttribute="trailing" id="Yq5-Xt-amV"/>
+            </constraints>
+            <point key="canvasLocation" x="-41" y="41"/>
+        </customView>
+    </objects>
+</document>

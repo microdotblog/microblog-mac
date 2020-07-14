@@ -17,10 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
+@property (assign, nonatomic) BOOL isShowingPages;
 @property (strong, nonatomic) NSArray* allPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 
+- (id) initShowingPages:(BOOL)isShowingPages;
 - (void) fetchPosts;
 - (void) focusSearch;
 
