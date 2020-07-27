@@ -1111,8 +1111,8 @@
         cell.iconView.image = [NSImage imageWithSystemSymbolName:@"quote.bubble" accessibilityDescription:@"Mentions"];
 	}
 	else if (row == 2) {
-		cell.titleField.stringValue = @"Favorites";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"Favorites"];
+		cell.titleField.stringValue = @"Bookmarks";
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
 	}
 	else if (row == 3) {
 		cell.titleField.stringValue = @"Discover";
