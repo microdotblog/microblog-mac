@@ -86,7 +86,7 @@
         args = @{
             @"q": @"source",
             @"mp-destination": destination_uid,
-            @"post-type": @"page"
+            @"mp-channel": @"pages"
         };
     }
     else {
