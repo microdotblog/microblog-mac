@@ -44,6 +44,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupCollectionView
 {
+	[self.collectionView registerForDraggedTypes:@[ NSPasteboardTypeString ]];
+	[self.collectionView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
 }
 
 - (void) setupBlogName
@@ -222,6 +224,22 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		item.selectionOverlayView.layer.opacity = 0.0;
 		item.selectionOverlayView.layer.backgroundColor = nil;
 	}
+}
+
+#pragma mark -
+
+- (id<NSPasteboardWriting>) collectionView:(NSCollectionView *)collectionView pasteboardWriterForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
+
+	NSString* s = [NSString stringWithFormat:@"<img src=\"%@\" />", up.url];
+	
+	return s;
+}
+
+- (BOOL) collectionView:(NSCollectionView *)collectionView canDragItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event
+{
+	return YES;
 }
 
 @end
