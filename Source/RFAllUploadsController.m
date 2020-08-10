@@ -13,8 +13,12 @@
 #import "RFBlogsController.h"
 #import "RFClient.h"
 #import "RFUpload.h"
+#import "RFPhotoCell.h"
+#import "RFPhotoZoomController.h"
 #import "UUDate.h"
 #import "RFMacros.h"
+
+static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 @implementation RFAllUploadsController
 
@@ -155,6 +159,69 @@
 - (void) closePostingNotification:(NSNotification *)notification
 {
 	[self fetchPosts];
+}
+
+- (void) openSelectedItem
+{
+	NSSet* index_paths = [self.collectionView selectionIndexPaths];
+	NSIndexPath* index_path = [index_paths anyObject];
+	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
+
+	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:up.url];
+	[controller showWindow:nil];
+}
+
+#pragma mark -
+
+- (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+	return self.allPosts.count;
+}
+
+- (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
+	
+	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	item.thumbnailImageView.image = up.cachedImage;
+
+	return item;
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(RFPhotoCell *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
+	if (up.cachedImage == nil) {
+		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.url];
+
+		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+				NSImage* img = response.parsedResponse;
+				RFDispatchMain(^{
+					up.cachedImage = img;
+					[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
+				});
+			}
+		}];
+	}
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+{
+	for (NSIndexPath* index_path in indexPaths) {
+		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+		item.selectionOverlayView.layer.opacity = 0.4;
+		item.selectionOverlayView.layer.backgroundColor = [NSColor blackColor].CGColor;
+	}
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didDeselectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
+{
+	for (NSIndexPath* index_path in indexPaths) {
+		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+		item.selectionOverlayView.layer.opacity = 0.0;
+		item.selectionOverlayView.layer.backgroundColor = nil;
+	}
 }
 
 @end

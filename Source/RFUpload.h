@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RFUpload : NSObject
 
+@property (strong) NSImage* cachedImage;
 @property (strong) NSString* url;
 @property (assign) NSInteger width;
 @property (assign) NSInteger height;

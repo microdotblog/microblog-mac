@@ -10,13 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFAllUploadsController : NSViewController <NSPopoverDelegate>
+@interface RFAllUploadsController : NSViewController <NSPopoverDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSCollectionView* collectionView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 
-@property (strong, nonatomic) NSArray* allPosts; // RFUpload?
+@property (strong, nonatomic) NSArray* allPosts; // RFUpload
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 
 @end

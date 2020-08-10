@@ -270,7 +270,6 @@
 
 - (void) showPhotoWithURL:(NSString *)photoURL
 {
-	NSLog (@"photo clicked: %@", photoURL);
 	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL];
 	[controller showWindow:nil];
 }
