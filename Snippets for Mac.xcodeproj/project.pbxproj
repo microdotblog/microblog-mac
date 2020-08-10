@@ -64,6 +64,8 @@
 		4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CFE201EC55A00C71AAF /* MMGenerator.m */; };
 		4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400D01201EC55A00C71AAF /* MMHTMLParser.m */; };
 		4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400D02201EC55B00C71AAF /* MMSpanParser.m */; };
+		4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */; };
+		4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
@@ -268,6 +270,9 @@
 		4B400D00201EC55A00C71AAF /* MMHTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMHTMLParser.h; path = Shared/MMMarkdown/Source/MMHTMLParser.h; sourceTree = "<group>"; };
 		4B400D01201EC55A00C71AAF /* MMHTMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMHTMLParser.m; path = Shared/MMMarkdown/Source/MMHTMLParser.m; sourceTree = "<group>"; };
 		4B400D02201EC55B00C71AAF /* MMSpanParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMSpanParser.m; path = Shared/MMMarkdown/Source/MMSpanParser.m; sourceTree = "<group>"; };
+		4B4C7DBF24E1BC03000004E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookmark.xib; sourceTree = "<group>"; };
+		4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookmarkController.h; path = Source/RFBookmarkController.h; sourceTree = "<group>"; };
+		4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookmarkController.m; path = Source/RFBookmarkController.m; sourceTree = "<group>"; };
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
@@ -591,6 +596,8 @@
 				4B2CAAB61F90002500D9B10E /* RFMacApplication.m */,
 				4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */,
 				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
+				4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */,
+				4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */,
 				4BB69069209A123300CD5E1E /* RFInstagramController.h */,
 				4BB6906A209A123300CD5E1E /* RFInstagramController.m */,
 				4B5EE2872064057F00C87A78 /* RFAccountCell.h */,
@@ -702,9 +709,11 @@
 			children = (
 				4B7F0AFB1BAF4C67004553A6 /* Info.plist */,
 				4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */,
+				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
+				4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */,
 				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
 				4B608B462003B86400589F77 /* Topic.xib */,
 				4B5650641F8562B900B03FFD /* Options.xib */,
@@ -722,7 +731,6 @@
 				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
 				4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */,
 				4B5EE28A206405AC00C87A78 /* AccountCell.xib */,
-				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 				4B5EE27820632C6800C87A78 /* Blogs.xib */,
 				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
 				4BF5372F2247BDCD00CF9D66 /* PostCell.xib */,
@@ -872,6 +880,7 @@
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
 				4B608B482003B86400589F77 /* Topic.xib in Resources */,
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
+				4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */,
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
@@ -994,6 +1003,7 @@
 				4B2CAB0D1F90667300D9B10E /* attrs.c in Sources */,
 				4B2CAB1A1F90667300D9B10E /* config.c in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
+				4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */,
 				4B2CAAC21F90652800D9B10E /* RFXMLRSDParser.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
 				4B2CAAC31F90652800D9B10E /* RFStack.m in Sources */,
@@ -1090,6 +1100,14 @@
 				4B2CAB3E1F93EFB400D9B10E /* Base */,
 			);
 			name = Friends.xib;
+			sourceTree = "<group>";
+		};
+		4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B4C7DBF24E1BC03000004E7 /* Base */,
+			);
+			name = Bookmark.xib;
 			sourceTree = "<group>";
 		};
 		4B4DC44D1BB04B970095CCBB /* Timeline.xib */ = {

@@ -13,6 +13,7 @@
 #import "RFPreferencesController.h"
 #import "RFInstagramController.h"
 #import "RFPhotoZoomController.h"
+#import "RFBookmarkController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -220,6 +221,15 @@
 	}
 
 	[self.prefsController showWindow:nil];
+}
+
+- (IBAction) newBookmark:(id)sender
+{
+	if (!self.bookmarkController) {
+		self.bookmarkController = [[RFBookmarkController alloc] init];
+	}
+	
+	[self.bookmarkController showWindow:nil];
 }
 
 - (IBAction) importInstagram:(id)sender
