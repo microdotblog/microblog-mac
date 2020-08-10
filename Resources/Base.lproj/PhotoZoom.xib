@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17140" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17140"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFPhotoZoomController">
             <connections>
+                <outlet property="htmlCopyButton" destination="W4t-I4-aLm" id="AhS-IU-ozF"/>
                 <outlet property="imageView" destination="i4s-Y0-uFb" id="2Th-ef-6Qc"/>
                 <outlet property="spinner" destination="QXG-Ec-083" id="jbX-tJ-1sM"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="cgb-y9-LJY"/>
@@ -19,7 +19,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="62" y="248" width="480" height="480"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="200" height="200"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
@@ -44,14 +44,29 @@
                             <constraint firstAttribute="width" constant="16" id="amn-f5-g44"/>
                         </constraints>
                     </progressIndicator>
+                    <button wantsLayer="YES" verticalHuggingPriority="750" alphaValue="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="W4t-I4-aLm">
+                        <rect key="frame" x="349" y="13" width="118" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="104" id="8P2-Qt-QO3"/>
+                        </constraints>
+                        <buttonCell key="cell" type="push" title="Copy HTML" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="akb-9l-yVV">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="copyHTML:" target="-2" id="PQy-n9-yNB"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="i4s-Y0-uFb" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="4dv-YW-1Ma"/>
                     <constraint firstAttribute="bottom" secondItem="Wbp-Wf-xcE" secondAttribute="bottom" id="5dD-l2-vme"/>
                     <constraint firstItem="i4s-Y0-uFb" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="5ns-kv-H9E"/>
+                    <constraint firstAttribute="bottom" secondItem="W4t-I4-aLm" secondAttribute="bottom" constant="20" symbolic="YES" id="DLq-Ac-qEM"/>
                     <constraint firstItem="QXG-Ec-083" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="RD3-b2-8fz"/>
                     <constraint firstItem="Wbp-Wf-xcE" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="XwC-wE-6kl"/>
                     <constraint firstAttribute="bottom" secondItem="i4s-Y0-uFb" secondAttribute="bottom" constant="-1" id="Yg2-7P-co5"/>
+                    <constraint firstAttribute="trailing" secondItem="W4t-I4-aLm" secondAttribute="trailing" constant="20" symbolic="YES" id="hlf-eU-UPQ"/>
                     <constraint firstAttribute="trailing" secondItem="Wbp-Wf-xcE" secondAttribute="trailing" id="sib-xM-2L6"/>
                     <constraint firstItem="QXG-Ec-083" firstAttribute="centerY" secondItem="EiT-Mj-1SZ" secondAttribute="centerY" id="tfx-Ag-kRt"/>
                     <constraint firstItem="Wbp-Wf-xcE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="vim-CJ-ep1"/>

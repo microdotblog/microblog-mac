@@ -169,7 +169,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSIndexPath* index_path = [index_paths anyObject];
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
 
-	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:up.url];
+	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:up.url allowCopy:YES];
 	[controller showWindow:nil];
 }
 

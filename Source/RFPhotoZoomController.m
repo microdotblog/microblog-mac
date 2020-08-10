@@ -13,11 +13,12 @@
 
 @implementation RFPhotoZoomController
 
-- (id) initWithURL:(NSString *)photoURL
+- (id) initWithURL:(NSString *)photoURL allowCopy:(BOOL)allowCopy
 {
 	self = [super initWithWindowNibName:@"PhotoZoom"];
 	if (self) {
 		self.photoURL = photoURL;
+		self.isAllowCopy = allowCopy;
 	}
 	
 	return self;
@@ -29,6 +30,9 @@
 
 	[self updateTitle];
 	[self downloadPhoto];
+	
+	self.htmlCopyButton.hidden = !self.isAllowCopy;
+	self.htmlCopyButton.layer.opacity = 0.0;
 }
 
 - (void) downloadPhoto
@@ -86,6 +90,7 @@
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		context.duration = 0.3;
 		[self.imageView animator].hidden = NO;
+		self.htmlCopyButton.layer.opacity = 0.7;
 	}];
 }
 
@@ -97,6 +102,17 @@
 - (void) hideProgress
 {
 	[self.spinner stopAnimation:nil];
+}
+
+- (IBAction) copyHTML:(id)sender
+{
+	NSString* s = [NSString stringWithFormat:@"<img src=\"%@\" />", self.photoURL];
+
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:s forType:NSPasteboardTypeString];
+	
+	[self.htmlCopyButton setTitle:@"Copied"];
 }
 
 @end

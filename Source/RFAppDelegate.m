@@ -270,7 +270,7 @@
 
 - (void) showPhotoWithURL:(NSString *)photoURL
 {
-	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL];
+	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL allowCopy:NO];
 	[controller showWindow:nil];
 }
 

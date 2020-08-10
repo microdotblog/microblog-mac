@@ -14,10 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSImageView* imageView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* spinner;
+@property (strong, nonatomic) IBOutlet NSButton* htmlCopyButton;
 
 @property (strong, nonatomic) NSString* photoURL;
+@property (assign, nonatomic) BOOL isAllowCopy;
 
-- (id) initWithURL:(NSString *)photoURL;
+- (id) initWithURL:(NSString *)photoURL allowCopy:(BOOL)allowCopy;
 
 @end
 
