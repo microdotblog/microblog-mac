@@ -368,9 +368,22 @@ CA
                                     <action selector="showDiscover:" target="-1" id="ixf-UX-iOF"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="RMq-Xx-Wvr"/>
                             <menuItem title="Posts" keyEquivalent="5" id="1BF-Eo-YWn">
                                 <connections>
                                     <action selector="showPosts:" target="-1" id="WD8-Mf-KuA"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Pages" id="diU-58-gcw">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showPages:" target="-1" id="r3t-Zv-9hj"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Uploads" id="KfJ-ma-HfZ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showUploads:" target="-1" id="6rH-yU-e5s"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="SvD-l1-Axj"/>
