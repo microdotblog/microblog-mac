@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFBookmarkController">
             <connections>
+                <outlet property="progressSpinner" destination="DcQ-Og-JIF" id="59P-TZ-b9z"/>
                 <outlet property="urlField" destination="xBU-vt-QFG" id="nMM-0G-Y3g"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="pX3-td-S5A"/>
             </connections>
