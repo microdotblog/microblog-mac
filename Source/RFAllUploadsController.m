@@ -179,6 +179,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSMutableArray* new_photos = [NSMutableArray array];
 
 	if ([paths count] > 1) {
+		[self.uploadProgressBar setIndeterminate:NO];
 		[self.uploadProgressBar setMinValue:1];
 		[self.uploadProgressBar setMaxValue:[paths count]];
 	}
@@ -212,6 +213,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		}];
 	}
 	else {
+		[self hideUploadProgress];
 		[self fetchPosts];
 	}
 }
@@ -247,11 +249,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) showUploadProgress
 {
 	[self.uploadProgressBar startAnimation:nil];
+	self.uploadProgressBar.hidden = NO;
 }
 
 - (void) hideUploadProgress
 {
 	[self.uploadProgressBar stopAnimation:nil];
+	self.uploadProgressBar.hidden = YES;
 }
 
 - (void) openSelectedItem

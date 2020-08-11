@@ -75,7 +75,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <progressIndicator maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="S2y-XV-0rI">
+                            <progressIndicator hidden="YES" maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="S2y-XV-0rI">
                                 <rect key="frame" x="269" y="431" width="117" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="117" id="7vr-XY-aVw"/>

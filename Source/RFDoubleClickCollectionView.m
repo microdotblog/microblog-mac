@@ -66,7 +66,7 @@
 	NSPasteboard* pb = [sender draggingPasteboard];
 	if ([pb.types containsObject:NSFilenamesPboardType]) {
 		NSArray* paths = [pb propertyListForType:NSFilenamesPboardType];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
 
 		return YES;
 	}
