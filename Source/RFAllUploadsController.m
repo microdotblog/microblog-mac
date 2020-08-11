@@ -13,10 +13,13 @@
 #import "RFBlogsController.h"
 #import "RFClient.h"
 #import "RFUpload.h"
+#import "RFPhoto.h"
 #import "RFPhotoCell.h"
 #import "RFPhotoZoomController.h"
 #import "UUDate.h"
 #import "RFMacros.h"
+#import "NSImage+Extras.h"
+#import "NSAlert+Extras.h"
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
@@ -44,7 +47,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupCollectionView
 {
-	[self.collectionView registerForDraggedTypes:@[ NSPasteboardTypeString ]];
+	[self.collectionView registerForDraggedTypes:@[ NSPasteboardTypeFileURL ]];
 	[self.collectionView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
 }
 
@@ -63,6 +66,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesNotification:) name:kUploadFilesNotification object:nil];
 }
 
 - (void) fetchPosts
@@ -163,6 +167,93 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self fetchPosts];
 }
 
+- (void) uploadFilesNotification:(NSNotification *)notification
+{
+	NSArray* paths = [notification.userInfo objectForKey:kUploadFilesPathsKey];
+
+	if ([paths count] > 10) {
+		[NSAlert rf_showOneButtonAlert:@"Could Not Upload Files" message:@"Only 10 files can be uploaded at once." button:@"OK" completionHandler:NULL];
+		return;
+	}
+
+	NSMutableArray* new_photos = [NSMutableArray array];
+
+	if ([paths count] > 1) {
+		[self.uploadProgressBar setMinValue:1];
+		[self.uploadProgressBar setMaxValue:[paths count]];
+	}
+	else {
+		[self.uploadProgressBar setIndeterminate:YES];
+	}
+	
+	for (NSString* filepath in paths) {
+		NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
+		NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
+		RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
+		[new_photos addObject:photo];
+	}
+
+	[self uploadNextPhoto:new_photos];
+	[self showUploadProgress];
+}
+
+- (void) uploadNextPhoto:(NSMutableArray *)photos
+{
+	RFPhoto* photo = [photos lastObject];
+	if (photo) {
+		[photos removeLastObject];
+		
+		if (!self.uploadProgressBar.isIndeterminate) {
+			[self.uploadProgressBar setDoubleValue:(self.uploadProgressBar.maxValue - [photos count])];
+		}
+		
+		[self uploadPhoto:photo completion:^{
+			[self uploadNextPhoto:photos];
+		}];
+	}
+	else {
+		[self fetchPosts];
+	}
+}
+
+- (void) uploadPhoto:(RFPhoto *)photo completion:(void (^)(void))handler
+{
+	NSData* d = [photo jpegData];
+	BOOL is_video = NO;
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSDictionary* args = @{
+		@"mp-destination": destination_uid
+	};
+	[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:is_video completion:^(UUHttpResponse* response) {
+		NSDictionary* headers = response.httpResponse.allHeaderFields;
+		NSString* image_url = headers[@"Location"];
+		RFDispatchMainAsync (^{
+			if (image_url == nil) {
+				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+				[self hideUploadProgress];
+			}
+			else {
+				handler();
+			}
+		});
+	}];
+}
+
+- (void) showUploadProgress
+{
+	[self.uploadProgressBar startAnimation:nil];
+}
+
+- (void) hideUploadProgress
+{
+	[self.uploadProgressBar stopAnimation:nil];
+}
+
 - (void) openSelectedItem
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
@@ -186,7 +277,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 	item.thumbnailImageView.image = up.cachedImage;
-
+	
 	return item;
 }
 
@@ -241,5 +332,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	return YES;
 }
+
+//- (NSDragOperation) collectionView:(NSCollectionView *)collectionView validateDrop:(id <NSDraggingInfo>)draggingInfo proposedIndexPath:(NSIndexPath * _Nonnull * _Nonnull)proposedDropIndexPath dropOperation:(NSCollectionViewDropOperation *)proposedDropOperation
+//{
+//	return NSDragOperationCopy;
+//}
+//
+//- (BOOL) collectionView:(NSCollectionView *)collectionView acceptDrop:(id <NSDraggingInfo>)draggingInfo indexPath:(NSIndexPath *)indexPath dropOperation:(NSCollectionViewDropOperation)dropOperation
+//{
+//	return NO;
+//}
 
 @end

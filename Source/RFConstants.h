@@ -48,6 +48,9 @@ static NSInteger const kTextSizeHuge = 19;
 #define kAttachFilesNotification @"RFAttachFilesNotification"
 #define kAttachFilesPathsKey @"paths"
 
+#define kUploadFilesNotification @"RFUploadFilesNotification"
+#define kUploadFilesPathsKey @"paths"
+
 #define kPopNavigationNotification @"RFPopNavigationNotification"
 
 #define kShowUserFollowingNotification @"RFShowUserFollowingNotification"

@@ -83,6 +83,8 @@
 		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
 		4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */; };
 		4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */; };
+		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
+		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5EE27720632C4900C87A78 /* RFBlogsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EE27620632C4900C87A78 /* RFBlogsController.m */; };
 		4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5EE27820632C6800C87A78 /* Blogs.xib */; };
 		4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5EE27C206330B800C87A78 /* RFBlogCell.m */; };
@@ -302,6 +304,10 @@
 		4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountPopoverBox.m; path = Source/RFAccountPopoverBox.m; sourceTree = "<group>"; };
 		4B5D5D9520675EB9007ED186 /* RFAccountsCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountsCollectionView.h; path = Source/RFAccountsCollectionView.h; sourceTree = "<group>"; };
 		4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountsCollectionView.m; path = Source/RFAccountsCollectionView.m; sourceTree = "<group>"; };
+		4B5DDAAE24E2ECD6007674FF /* RFUploadsScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUploadsScrollView.h; path = Source/RFUploadsScrollView.h; sourceTree = "<group>"; };
+		4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUploadsScrollView.m; path = Source/RFUploadsScrollView.m; sourceTree = "<group>"; };
+		4B5DDAB124E2F03D007674FF /* RFPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoImageView.h; path = Source/RFPhotoImageView.h; sourceTree = "<group>"; };
+		4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoImageView.m; path = Source/RFPhotoImageView.m; sourceTree = "<group>"; };
 		4B5EE27520632C4900C87A78 /* RFBlogsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBlogsController.h; path = Source/RFBlogsController.h; sourceTree = "<group>"; };
 		4B5EE27620632C4900C87A78 /* RFBlogsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBlogsController.m; path = Source/RFBlogsController.m; sourceTree = "<group>"; };
 		4B5EE27920632C6800C87A78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Blogs.xib; sourceTree = "<group>"; };
@@ -625,6 +631,8 @@
 				4BED646224BD59ED0018644C /* RFAllUploadsController.m */,
 				4B4C7DC424E1D42D000004E7 /* RFDoubleClickCollectionView.h */,
 				4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */,
+				4B5DDAAE24E2ECD6007674FF /* RFUploadsScrollView.h */,
+				4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */,
 				4BB7449021E84AC500371388 /* RFPhotoZoomController.h */,
 				4BB7449121E84AC500371388 /* RFPhotoZoomController.m */,
 				4BB744A021EA4E1800371388 /* RFPhotoAltController.h */,
@@ -665,6 +673,8 @@
 				4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */,
 				4B2CAAAC1F8FCBC800D9B10E /* RFPhotoCell.h */,
 				4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */,
+				4B5DDAB124E2F03D007674FF /* RFPhotoImageView.h */,
+				4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */,
 				4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */,
 				4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
@@ -990,6 +1000,7 @@
 				4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */,
 				4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */,
 				4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */,
+				4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */,
 				4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */,
 				4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */,
 				4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */,
@@ -1035,6 +1046,7 @@
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
 				4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */,
+				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,

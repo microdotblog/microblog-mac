@@ -10,6 +10,7 @@
                 <outlet property="blogNameButton" destination="i0M-mM-qt9" id="eQh-2F-yOD"/>
                 <outlet property="collectionView" destination="WeF-Cq-XQj" id="X7u-Xt-YQl"/>
                 <outlet property="progressSpinner" destination="0aW-jy-83j" id="m1G-nE-u0I"/>
+                <outlet property="uploadProgressBar" destination="S2y-XV-0rI" id="Tii-kB-Jsr"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mh3-Lr-7UY"/>
             </connections>
         </customObject>
@@ -44,7 +45,7 @@
                                     <action selector="blogNameClicked:" target="-2" id="7do-uH-82s"/>
                                 </connections>
                             </button>
-                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkD-bK-PmJ">
+                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkD-bK-PmJ" customClass="RFUploadsScrollView">
                                 <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
                                 <clipView key="contentView" id="MJ6-q7-Hbi">
                                     <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
@@ -74,6 +75,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <progressIndicator maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="S2y-XV-0rI">
+                                <rect key="frame" x="269" y="431" width="117" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="117" id="7vr-XY-aVw"/>
+                                </constraints>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="IkD-bK-PmJ" secondAttribute="trailing" id="7LG-5d-PXb"/>
@@ -81,6 +88,8 @@
                             <constraint firstItem="0aW-jy-83j" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="MXO-1Z-t2n"/>
                             <constraint firstItem="IkD-bK-PmJ" firstAttribute="top" secondItem="HkM-wg-aGS" secondAttribute="bottom" id="N1w-e9-WDz"/>
                             <constraint firstAttribute="bottom" secondItem="IkD-bK-PmJ" secondAttribute="bottom" id="V2b-lg-ni0"/>
+                            <constraint firstAttribute="trailing" secondItem="S2y-XV-0rI" secondAttribute="trailing" constant="12" id="ZvY-Fp-CeU"/>
+                            <constraint firstItem="S2y-XV-0rI" firstAttribute="centerY" secondItem="i0M-mM-qt9" secondAttribute="centerY" id="ald-B6-4Bh"/>
                             <constraint firstItem="i0M-mM-qt9" firstAttribute="top" secondItem="3gb-cJ-31J" secondAttribute="top" constant="5" id="axK-4G-ejt"/>
                             <constraint firstAttribute="trailing" secondItem="HkM-wg-aGS" secondAttribute="trailing" constant="12" id="eIl-Ym-2aZ"/>
                             <constraint firstItem="HkM-wg-aGS" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="tfQ-kU-0Rb"/>
