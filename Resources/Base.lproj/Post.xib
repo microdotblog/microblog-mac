@@ -68,7 +68,7 @@
                         <action selector="sendPost:" target="-2" id="csi-P1-zTN"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gdA-dC-fjJ">
+                <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gdA-dC-fjJ">
                     <rect key="frame" x="7" y="457" width="23" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="23" id="Wwn-7v-m5f"/>
