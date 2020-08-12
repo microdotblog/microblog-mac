@@ -908,6 +908,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (!self.isReply && [self currentTitle].length > 0) {
 		self.remainingField.hidden = YES;
 	}
+	else if ([self isPage]) {
+		self.remainingField.hidden = YES;
+	}
 	else {
 		self.remainingField.hidden = NO;
 	}
