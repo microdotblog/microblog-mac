@@ -267,6 +267,29 @@
 	[self showEditPost:nil];
 }
 
+- (IBAction) newPage:(id)sender
+{
+	[self hideOptionsMenu];
+
+	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
+	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
+	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
+	if (has_hosted || micropub || xmlrpc) {
+		if (!self.postController) {
+			RFPostController* controller = [[RFPostController alloc] initWithChannel:@"pages"];
+			[self showPostController:controller];
+		}
+	}
+	else {
+		NSAlert* alert = [[NSAlert alloc] init];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"No hosted or external blog configured."];
+		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+		}];
+	}
+}
+
 - (IBAction) performClose:(id)sender
 {
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {

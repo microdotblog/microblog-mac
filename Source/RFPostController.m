@@ -54,6 +54,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.attachedPhotos = @[];
 		self.queuedPhotos = @[];
 		self.categories = @[];
+		self.channel = @"default";
 	}
 	
 	return self;
@@ -65,6 +66,17 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (self) {
 		self.editingPost = post;
 		self.initialText = post.text;
+		self.isShowingTitle = YES;
+	}
+	
+	return self;
+}
+
+- (id) initWithChannel:(NSString *)channel
+{
+	self = [self init];
+	if (self) {
+		self.channel = channel;
 		self.isShowingTitle = YES;
 	}
 	
@@ -108,6 +120,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupText];
 	[self setupColletionView];
 	[self setupBlogName];
+	[self setupPostButton];
 	[self setupNotifications];
 
 	[self updateTitleHeaderWithAnimation:NO];
@@ -183,7 +196,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	[self updateRemainingChars];
 	
-	if (self.isReply || self.editingPost) {
+	if (self.isReply || self.editingPost || [self isPage]) {
 		self.photoButton.hidden = YES;
 	}
 }
@@ -219,6 +232,19 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 }
 
+- (void) setupPostButton
+{
+	if (self.editingPost) {
+		[self.postButton setTitle:@"Update"];
+	}
+	else if ([self.channel isEqualToString:@"pages"]) {
+		[self.postButton setTitle:@"Add Page"];
+	}
+	else {
+		[self.postButton setTitle:@"Post"];
+	}
+}
+
 - (void) setupColletionView
 {
 	self.photosCollectionView.delegate = self;
@@ -243,6 +269,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kRFFoundUserAutoCompleteNotification object:nil];
+}
+
+#pragma mark -
+
+- (BOOL) isPage
+{
+	return [self.channel isEqualToString:@"pages"];
 }
 
 - (void) blogNameClicked:(NSGestureRecognizer *)gesture
@@ -998,6 +1031,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"video[]": video_urls,
 					@"mp-video-alt[]": video_alts,
 					@"mp-destination": destination_uid,
+					@"mp-channel": self.channel,
 					@"category[]": category_names,
 					@"post-status": [self currentStatus]
 				};

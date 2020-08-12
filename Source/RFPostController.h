@@ -36,6 +36,7 @@
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;
 @property (strong, nonatomic) NSString* initialText;
+@property (strong, nonatomic) NSString* channel;
 @property (strong, nonatomic) NSArray* attachedPhotos; // RFPhoto
 @property (strong, nonatomic) NSArray* queuedPhotos; // RFPhoto
 @property (strong, nonatomic) NSArray* categories; // NSString
@@ -46,6 +47,7 @@
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary
 
 - (id) initWithPost:(RFPost *)post;
+- (id) initWithChannel:(NSString *)channel;
 - (id) initWithText:(NSString *)text;
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;

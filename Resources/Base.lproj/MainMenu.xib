@@ -82,6 +82,11 @@
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="New Page" keyEquivalent="N" id="YGy-f8-9ba">
+                                <connections>
+                                    <action selector="newPage:" target="-1" id="cFO-oo-bGp"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="New Bookmark" id="ILN-3z-6jt">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
