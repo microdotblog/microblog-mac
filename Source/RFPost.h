@@ -18,8 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* url;
 @property (strong) NSDate* postedAt;
 @property (assign) BOOL isDraft;
+@property (strong) NSString* channel;
 
 - (NSString *) summary;
+- (BOOL) isPage;
 
 @end
 

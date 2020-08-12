@@ -32,4 +32,9 @@
 	return s;
 }
 
+- (BOOL) isPage
+{
+	return [self.channel isEqualToString:@"pages"];
+}
+
 @end

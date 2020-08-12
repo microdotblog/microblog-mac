@@ -81,20 +81,20 @@
 	}
 
     NSDictionary* args;
+	NSString* channel;
+	
+	if (self.isShowingPages) {
+		channel = @"pages";
+	}
+	else {
+		channel = @"default";
+	}
     
-    if (self.isShowingPages) {
-        args = @{
-            @"q": @"source",
-            @"mp-destination": destination_uid,
-            @"mp-channel": @"pages"
-        };
-    }
-    else {
-        args = @{
-            @"q": @"source",
-            @"mp-destination": destination_uid
-        };
-    }
+	args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid,
+		@"mp-channel": channel
+	};
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
@@ -114,6 +114,7 @@
 
 				NSString* status = [[props objectForKey:@"post-status"] firstObject];
 				post.isDraft = [status isEqualToString:@"draft"];
+				post.channel = channel;
 
 				[new_posts addObject:post];
 			}
