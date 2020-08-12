@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) NSInteger height;
 @property (strong) NSDate* createdAt;
 
+- (NSString *) filename;
+
 @end
 
 NS_ASSUME_NONNULL_END

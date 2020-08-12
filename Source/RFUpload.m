@@ -10,4 +10,9 @@
 
 @implementation RFUpload
 
+- (NSString *) filename
+{
+	return [self.url lastPathComponent];
+}
+
 @end

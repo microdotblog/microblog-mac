@@ -268,6 +268,57 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[controller showWindow:nil];
 }
 
+- (void) delete:(id)sender
+{
+	NSSet* index_paths = [self.collectionView selectionIndexPaths];
+	NSIndexPath* index_path = [index_paths anyObject];
+	if (index_path) {
+		RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
+		NSString* s = [up filename];
+		
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.informativeText = @"This upload will be removed from your blog.";
+		[sheet addButtonWithTitle:@"Delete"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				[self deleteUpload:up];
+			}
+		}];
+	}
+}
+
+- (void) deleteUpload:(RFUpload *)upload
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"action": @"delete",
+		@"mp-destination": destination_uid,
+		@"url": upload.url,
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+				[self.progressSpinner stopAnimation:nil];
+				NSString* msg = response.parsedResponse[@"error_description"];
+				[NSAlert rf_showOneButtonAlert:@"Error Deleting Upload" message:msg button:@"OK" completionHandler:NULL];
+			}
+			else {
+				[self fetchPosts];
+			}
+		});
+	}];
+}
+
 #pragma mark -
 
 - (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
