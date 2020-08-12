@@ -53,7 +53,19 @@
 
 - (void) updateTitle
 {
-	NSURL* url = [NSURL URLWithString:self.photoURL];
+	NSString* photo_url = self.photoURL;
+	
+	if ([photo_url containsString:@"https://micro.blog/photos/"]) {
+		NSString* partial_url = [photo_url stringByReplacingOccurrencesOfString:@"https://micro.blog/photos/" withString:@""];
+		NSArray* pieces = [partial_url componentsSeparatedByString:@"/"];
+		if ([pieces count] > 1) {
+			NSString* size_component = [pieces firstObject];
+			NSString* size_path = [NSString stringWithFormat:@"%@/", size_component];
+			photo_url = [partial_url stringByReplacingOccurrencesOfString:size_path withString:@""];
+		}
+	}
+	
+	NSURL* url = [NSURL URLWithString:photo_url];
 	if (url) {
 		self.window.title = url.host;
 	}
