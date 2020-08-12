@@ -351,6 +351,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTitlePrefKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTextPrefKey];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
+	
+	[self closeWindow];
 }
 
 - (void) finishClose
@@ -361,6 +363,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[[NSUserDefaults standardUserDefaults] setObject:title forKey:kLatestDraftTitlePrefKey];
 		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftTextPrefKey];
 	}
+}
+
+- (void) closeWindow
+{
+	[self.view.window performClose:nil];
 }
 
 - (IBAction) toggleTitleField:(id)sender
@@ -382,10 +389,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self updateCategoriesPane];
 }
 
-- (IBAction) close:(id)sender
-{
-	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
-}
+//- (IBAction) close:(id)sender
+//{
+//	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
+//}
 
 - (IBAction) choosePhoto:(id)sender
 {
