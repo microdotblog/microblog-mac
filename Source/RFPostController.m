@@ -161,7 +161,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	[self updateRemainingChars];
 	
-	if (self.isReply || [self.editingPost isPage]) {
+	if (self.isReply || self.editingPost) {
 		self.photoButton.hidden = YES;
 	}
 }
