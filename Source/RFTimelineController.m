@@ -12,6 +12,7 @@
 #import "RFSeparatorCell.h"
 #import "RFOptionsController.h"
 #import "RFPostController.h"
+#import "RFPostWindowController.h"
 #import "RFAllPostsController.h"
 #import "RFAllUploadsController.h"
 #import "RFConversationController.h"
@@ -688,20 +689,26 @@
 
 - (void) showPostController:(RFPostController *)controller
 {
-	self.postController = controller;
+	if (YES) {
+		RFPostWindowController* window_controller = [[RFPostWindowController alloc] initWithPostController:controller];
+		[window_controller showWindow:nil];
+	}
+	else {
+		self.postController = controller;
 
-	NSRect r = self.webView.bounds;
-//	r.origin.x = kDefaultSplitViewPosition + 1;
-	self.postController.view.frame = r;
-	self.postController.view.alphaValue = 0.0;
-	
-	self.postController.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
+		NSRect r = self.webView.bounds;
+	//	r.origin.x = kDefaultSplitViewPosition + 1;
+		self.postController.view.frame = r;
+		self.postController.view.alphaValue = 0.0;
+		
+		self.postController.view.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.window.contentView addSubview:self.postController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
 
-	self.postController.view.animator.alphaValue = 1.0;
-	[self.window makeFirstResponder:self.postController.textView];
-	self.postController.nextResponder = self;
-	[self addResizeConstraintsToOverlay:self.postController.view containerView:self.containerView];
+		self.postController.view.animator.alphaValue = 1.0;
+		[self.window makeFirstResponder:self.postController.textView];
+		self.postController.nextResponder = self;
+		[self addResizeConstraintsToOverlay:self.postController.view containerView:self.containerView];
+	}
 }
 
 - (void) showAllPostsController:(RFAllPostsController *)controller
