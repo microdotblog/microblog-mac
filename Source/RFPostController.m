@@ -120,6 +120,28 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[super viewDidAppear];
 }
 
+- (void) viewDidLayout
+{
+	[super viewDidLayout];
+	
+	[self setupButtons];
+}
+
+- (void) setupButtons
+{
+	NSButton* b;
+	NSWindow* win = self.view.window;
+	
+	b = [win standardWindowButton:NSWindowCloseButton];
+	[b setFrameOrigin:NSMakePoint(10, -2)];
+
+	b = [win standardWindowButton:NSWindowMiniaturizeButton];
+	[b setFrameOrigin:NSMakePoint(30, -2)];
+
+	b = [win standardWindowButton:NSWindowZoomButton];
+	[b setFrameOrigin:NSMakePoint(50, -2)];
+}
+
 - (void) setupTitle
 {
 	if (self.editingPost) {

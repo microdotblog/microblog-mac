@@ -27,7 +27,6 @@
 	[super windowDidLoad];
 
 	[self setupView];
-	[self setupButtons];
 }
 
 - (void) setupView
@@ -39,20 +38,8 @@
 	
 	[self.window.contentView addSubview:v];
 	[self.window.contentViewController addChildViewController:self.postController];
-}
 
-- (void) setupButtons
-{
-	NSButton* b;
-	
-	b = [self.window standardWindowButton:NSWindowCloseButton];
-	[b setFrameOrigin:NSMakePoint(10, -2)];
-
-	b = [self.window standardWindowButton:NSWindowMiniaturizeButton];
-	[b setFrameOrigin:NSMakePoint(30, -2)];
-
-	b = [self.window standardWindowButton:NSWindowZoomButton];
-	[b setFrameOrigin:NSMakePoint(50, -2)];
+	v.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 }
 
 @end
