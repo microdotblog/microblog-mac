@@ -989,7 +989,11 @@
 	if ([hostname isEqualToString:@"micro.blog"]) {
 		NSMutableArray* pieces = [[path componentsSeparatedByString:@"/"] mutableCopy];
 		[pieces removeObjectAtIndex:0];
-		if ((pieces.count == 2) && [[pieces firstObject] isEqualToString:@"discover"]) {
+		if ([path containsString:@"/account/"]) {
+			// e.g. /account/logs
+			found_microblog_url = NO;
+		}
+		else if ((pieces.count == 2) && [[pieces firstObject] isEqualToString:@"discover"]) {
 			// e.g. /discover/books
 			found_microblog_url = YES;
 			[self showTopicsWithSearch:[pieces lastObject]];
@@ -1000,6 +1004,10 @@
 		}
 		else if ([[pieces firstObject] isEqualToString:@"books"]) {
 			// e.g. /books/12345
+			found_microblog_url = NO;
+		}
+		else if ([[pieces firstObject] isEqualToString:@"bookmarks"]) {
+			// e.g. /bookmarks/12345
 			found_microblog_url = NO;
 		}
 		else if ([[pieces firstObject] isEqualToString:@"discover"]) {
