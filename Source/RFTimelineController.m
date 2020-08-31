@@ -1146,7 +1146,7 @@
 	}
 	else if (row == 1) {
 		cell.titleField.stringValue = @"Mentions";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"quote.bubble" accessibilityDescription:@"Mentions"];
+        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
 	}
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Bookmarks";
