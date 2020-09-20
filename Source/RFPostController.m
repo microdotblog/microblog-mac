@@ -978,7 +978,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		[self showProgressHeader:@"Now publishing to your microblog..."];
-		return;
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];

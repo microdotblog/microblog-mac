@@ -52,6 +52,7 @@ typedef enum {
 @property (strong, nonatomic) NSLayoutConstraint* navigationPinnedConstraint;
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
+@property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)

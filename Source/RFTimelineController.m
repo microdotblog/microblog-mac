@@ -44,6 +44,7 @@
 	if (self) {
 		self.navigationStack = [[RFStack alloc] init];
 		self.checkSeconds = @5;
+		self.postWindows = [NSMutableArray array];
 	}
 	
 	return self;
@@ -716,6 +717,7 @@
 	if (YES) {
 		RFPostWindowController* window_controller = [[RFPostWindowController alloc] initWithPostController:controller];
 		[window_controller showWindow:nil];
+		[self.postWindows addObject:window_controller];
 	}
 	else {
 		self.postController = controller;

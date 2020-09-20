@@ -30,6 +30,8 @@
 	[self setupView];
 	[self setupToolbar];
 	[self setupNotifications];
+	
+	self.window.delegate = self;
 }
 
 - (void) setupView
@@ -59,8 +61,19 @@
 
 - (void) setupNotifications
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStartProgressNotification:) name:kPostStartProgressNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStopProgressNotification:) name:kPostStopProgressNotification object:nil];
+}
+
+- (BOOL) windowShouldClose:(NSWindow *)sender
+{
+	return YES;
+}
+
+- (void) windowDidBecomeKeyNotification:(NSNotification *)notification
+{
+	[self.postController becomeFirstResponder];
 }
 
 #pragma mark -
