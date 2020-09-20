@@ -37,7 +37,7 @@
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static NSString* const kCategoryCellIdentifier = @"CategoryCell";
-static CGFloat const kTextViewTitleHiddenTop = 10;
+static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
 
 @interface RFPostController()
@@ -120,7 +120,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupText];
 	[self setupColletionView];
 	[self setupBlogName];
-	[self setupPostButton];
 	[self setupNotifications];
 
 	[self updateTitleHeaderWithAnimation:NO];
@@ -142,17 +141,17 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) setupButtons
 {
-	NSButton* b;
-	NSWindow* win = self.view.window;
-	
-	b = [win standardWindowButton:NSWindowCloseButton];
-	[b setFrameOrigin:NSMakePoint(10, -2)];
-
-	b = [win standardWindowButton:NSWindowMiniaturizeButton];
-	[b setFrameOrigin:NSMakePoint(30, -2)];
-
-	b = [win standardWindowButton:NSWindowZoomButton];
-	[b setFrameOrigin:NSMakePoint(50, -2)];
+//	NSButton* b;
+//	NSWindow* win = self.view.window;
+//
+//	b = [win standardWindowButton:NSWindowCloseButton];
+//	[b setFrameOrigin:NSMakePoint(10, -2)];
+//
+//	b = [win standardWindowButton:NSWindowMiniaturizeButton];
+//	[b setFrameOrigin:NSMakePoint(30, -2)];
+//
+//	b = [win standardWindowButton:NSWindowZoomButton];
+//	[b setFrameOrigin:NSMakePoint(50, -2)];
 }
 
 - (void) setupTitle
@@ -229,19 +228,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 		NSGestureRecognizer* click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(blogNameClicked:)];
 		[self.blognameField addGestureRecognizer:click];
-	}
-}
-
-- (void) setupPostButton
-{
-	if (self.editingPost) {
-		[self.postButton setTitle:@"Update"];
-	}
-	else if ([self.channel isEqualToString:@"pages"]) {
-		[self.postButton setTitle:@"Add Page"];
-	}
-	else {
-		[self.postButton setTitle:@"Post"];
 	}
 }
 
@@ -371,6 +357,19 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 }
 
+- (NSString *) postButtonTitle
+{
+	if (self.editingPost) {
+		return @"Update";
+	}
+	else if ([self.channel isEqualToString:@"pages"]) {
+		return @"Add Page";
+	}
+	else {
+		return @"Post";
+	}
+}
+
 #pragma mark -
 
 - (NSUndoManager *) undoManagerForTextView:(NSTextView *)textView
@@ -446,7 +445,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					photo.videoAsset = asset;
 					photo.isVideo = YES;
 
-					[self.progressSpinner startAnimation:nil];
+					[self startProgressAnimation];
 					[photo transcodeVideo:^(NSURL* new_url) {
 						if ([self checkVideoFile:new_url]) {
 							AVURLAsset* new_asset = [AVURLAsset assetWithURL:new_url];
@@ -459,13 +458,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 							RFDispatchMain (^{
 								self.attachedPhotos = new_photos;
-								[self.progressSpinner stopAnimation:nil];
+								[self stopProgressAnimation];
 								[self.photosCollectionView reloadData];
 							});
 						}
 						else {
 							RFDispatchMain (^{
-								[self.progressSpinner stopAnimation:nil];
+								[self stopProgressAnimation];
 								[photo removeTemporaryVideo];
 							});
 						}
@@ -893,14 +892,22 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) showProgressHeader:(NSString *)statusText
 {
-	self.postButton.enabled = NO;
-	[self.progressSpinner startAnimation:nil];
+	[self startProgressAnimation];
 }
 
 - (void) hideProgressHeader
 {
-	self.postButton.enabled = YES;
-	[self.progressSpinner stopAnimation:nil];
+	[self stopProgressAnimation];
+}
+
+- (void) startProgressAnimation
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostStartProgressNotification object:self];
+}
+
+- (void) stopProgressAnimation
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostStopProgressNotification object:self];
 }
 
 - (void) updateRemainingChars
@@ -971,6 +978,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		[self showProgressHeader:@"Now publishing to your microblog..."];
+		return;
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];

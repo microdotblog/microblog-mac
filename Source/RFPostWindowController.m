@@ -9,6 +9,7 @@
 #import "RFPostWindowController.h"
 
 #import "RFPostController.h"
+#import "RFConstants.h"
 
 @implementation RFPostWindowController
 
@@ -27,6 +28,8 @@
 	[super windowDidLoad];
 
 	[self setupView];
+	[self setupToolbar];
+	[self setupNotifications];
 }
 
 - (void) setupView
@@ -40,6 +43,77 @@
 	[self.window.contentViewController addChildViewController:self.postController];
 
 	v.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+}
+
+- (void) setupToolbar
+{
+	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"PostToolbar"];
+
+	[toolbar setAllowsUserCustomization:NO];
+	[toolbar setAutosavesConfiguration:NO];
+	[toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
+	[toolbar setDelegate:self];
+	
+	[self.window setToolbar:toolbar];
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStartProgressNotification:) name:kPostStartProgressNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStopProgressNotification:) name:kPostStopProgressNotification object:nil];
+}
+
+#pragma mark -
+
+- (void) postStartProgressNotification:(NSNotification *)notification
+{
+	[self.progressSpinner startAnimation:nil];
+	self.progressSpinner.hidden = NO;
+}
+
+- (void) postStopProgressNotification:(NSNotification *)notification
+{
+	[self.progressSpinner stopAnimation:nil];
+	self.progressSpinner.hidden = YES;
+}
+
+#pragma mark -
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
+{
+	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"SendPost" ];
+}
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
+{
+	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"SendPost" ];
+}
+
+- ( NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
+{
+	if ([itemIdentifier isEqualToString:@"Progress"]) {
+		NSRect r = NSMakeRect (0, 0, 30, 30);
+
+		self.progressSpinner = [[NSProgressIndicator alloc] initWithFrame:r];
+		self.progressSpinner.indeterminate = YES;
+		self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
+		self.progressSpinner.controlSize = NSControlSizeSmall;
+		self.progressSpinner.hidden = YES;
+		
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.view = self.progressSpinner;
+		return item;
+	}
+	else if ([itemIdentifier isEqualToString:@"SendPost"]) {
+		NSString* title = [self.postController postButtonTitle];
+		NSButton* b = [NSButton buttonWithTitle:title target:self.postController action:@selector(sendPost:)];
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.view = b;
+		return item;
+	}
+	else {
+		return nil;
+	}
 }
 
 @end

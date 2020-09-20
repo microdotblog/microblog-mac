@@ -16,8 +16,6 @@
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextView* textView;
-@property (strong, nonatomic) IBOutlet NSButton* postButton;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSTextField* remainingField;
 @property (strong, nonatomic) IBOutlet NSTextField* blognameField;
 @property (strong, nonatomic) IBOutlet NSButton* photoButton;
@@ -51,5 +49,7 @@
 - (id) initWithText:(NSString *)text;
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;
+- (IBAction) sendPost:(id)sender;
+- (NSString *) postButtonTitle;
 
 @end

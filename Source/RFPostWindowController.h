@@ -12,9 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class RFPostController;
 
-@interface RFPostWindowController : NSWindowController
+@interface RFPostWindowController : NSWindowController <NSToolbarDelegate>
 
 @property (strong, nonatomic) RFPostController* postController;
+@property (strong, nonatomic) NSProgressIndicator* progressSpinner;
 
 - (instancetype) initWithPostController:(RFPostController *)postController;
 
