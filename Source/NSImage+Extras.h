@@ -15,5 +15,6 @@
 - (NSImage *) rf_scaleToHeight:(CGFloat)maxHeight;
 - (NSImage *) rf_scaleToSize:(NSSize)newSize;
 - (NSImage *) rf_roundImage;
++ (NSImage *) rf_imageWithSystemSymbolName:(NSString *)name accessibilityDescription:(NSString *)description;
 
 @end

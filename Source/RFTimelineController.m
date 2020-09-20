@@ -28,6 +28,7 @@
 #import "RFClient.h"
 #import "RFPost.h"
 #import "RFStack.h"
+#import "NSImage+Extras.h"
 #import "NSAppearance+Extras.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -1142,31 +1143,31 @@
 	
 	if (row == 0) {
 		cell.titleField.stringValue = @"Timeline";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
 	}
 	else if (row == 1) {
 		cell.titleField.stringValue = @"Mentions";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
 	}
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Bookmarks";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
 	}
 	else if (row == 3) {
 		cell.titleField.stringValue = @"Discover";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
 	}
     else if (row == 5) {
         cell.titleField.stringValue = @"Posts";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
     }
     else if (row == 6) {
         cell.titleField.stringValue = @"Pages";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
     }
     else if (row == 7) {
         cell.titleField.stringValue = @"Uploads";
-        cell.iconView.image = [NSImage imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
+        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
     }
 
 	return cell;
@@ -1271,13 +1272,13 @@
         item.view = self.profileBox;
         return item;
     }
-    else if ([itemIdentifier isEqualToString:@"Separator"]) {
-        NSToolbarItem* separator = [NSTrackingSeparatorToolbarItem trackingSeparatorToolbarItemWithIdentifier:itemIdentifier splitView:self.splitView dividerIndex:0];
-        return separator;
-    }
+//    else if ([itemIdentifier isEqualToString:@"Separator"]) {
+//        NSToolbarItem* separator = [NSTrackingSeparatorToolbarItem trackingSeparatorToolbarItemWithIdentifier:itemIdentifier splitView:self.splitView dividerIndex:0];
+//        return separator;
+//    }
     else if ([itemIdentifier isEqualToString:@"NewPost"]) {
         NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-        item.image = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
+        item.image = [NSImage rf_imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
         item.target = self;
         item.action = @selector(newDocument:);
         return item;

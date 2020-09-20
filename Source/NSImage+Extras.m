@@ -106,4 +106,15 @@
 	return composedImage;
 }
 
++ (NSImage *) rf_imageWithSystemSymbolName:(NSString *)name accessibilityDescription:(NSString *)description;
+{
+	if (@available(macOS 11.0, *)) {
+		return [self performSelector:@selector(imageWithSystemSymbolName:accessibilityDescription:) withObject:name withObject:description];
+		return nil;
+	}
+	else {
+		return nil;
+	}
+}
+
 @end
