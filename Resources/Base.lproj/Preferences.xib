@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,6 +21,7 @@
                 <outlet property="textSizePopup" destination="iVr-XZ-NWu" id="Sk4-Pd-Oiw"/>
                 <outlet property="websiteField" destination="1e3-uC-J1t" id="MVu-b2-eYH"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="hRW-hv-vMb"/>
+                <outlet property="wordPressSeparatorLine" destination="GX3-D2-htv" id="p1R-v1-Bdj"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -29,7 +30,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="61" y="510" width="408" height="424"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="408" height="424"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -46,7 +47,7 @@
                         </textFieldCell>
                     </textField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="8Eh-Mk-bT3">
-                        <rect key="frame" x="41" y="204" width="352" height="26"/>
+                        <rect key="frame" x="40" y="204" width="351" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="chk-Qv-wXe"/>
                         </constraints>
@@ -59,7 +60,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="T0C-fL-nk1">
-                        <rect key="frame" x="41" y="174" width="352" height="26"/>
+                        <rect key="frame" x="40" y="174" width="351" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="El6-Vj-NCv"/>
                         </constraints>
@@ -123,7 +124,7 @@
                         </constraints>
                         <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6bT-Ee-HgD" id="jTm-Ct-P56">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" id="xKd-JL-BMJ">
                                 <items>
                                     <menuItem title="Standard" state="on" id="6bT-Ee-HgD">
@@ -211,7 +212,7 @@
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="7uV-iY-iTk" id="MSl-r7-qIT">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" id="9bm-zD-mG7">
                                 <items>
                                     <menuItem state="on" id="7uV-iY-iTk">
@@ -243,7 +244,7 @@
                         </constraints>
                         <popUpButtonCell key="cell" type="push" title="Tiny" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="3ND-Lo-yJQ" id="PCb-dV-Frb">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" id="FAN-PX-6I5">
                                 <items>
                                     <menuItem title="Tiny" state="on" id="3ND-Lo-yJQ">

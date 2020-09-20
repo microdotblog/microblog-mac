@@ -25,6 +25,7 @@
 @property (strong, nonatomic) IBOutlet NSPopUpButton* categoryPopup;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* textSizePopup;
 @property (strong, nonatomic) IBOutlet NSCollectionView* accountsCollectionView;
+@property (strong, nonatomic) IBOutlet NSBox* wordPressSeparatorLine;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;
