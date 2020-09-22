@@ -133,7 +133,7 @@
 			 dispatch_async(dispatch_get_main_queue(), ^
 							{
 								NSDictionary* dictionary = @{ @"string" : username, @"array" : results };
-								[[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+				 [[NSNotificationCenter defaultCenter] postNotificationName:kFoundUserAutoCompleteNotification object:self userInfo:@{ kFoundUserAutoCompleteInfoKey: dictionary }];
 							});
 			 
 		 }];
@@ -143,7 +143,7 @@
 		dispatch_async(dispatch_get_main_queue(), ^
 					   {
 						   NSDictionary* dictionary = @{ @"string" : @"", @"array" : @[] };
-						   [[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kFoundUserAutoCompleteNotification object:self userInfo:@{ kFoundUserAutoCompleteInfoKey: dictionary }];
 					   });
 	}
 

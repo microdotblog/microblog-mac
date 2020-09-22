@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate* createdAt;
 
 - (NSString *) filename;
+- (BOOL) isPhoto;
+- (BOOL) isVideo;
+- (BOOL) isAudio;
 
 @end
 

@@ -331,7 +331,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
-	item.thumbnailImageView.image = up.cachedImage;
+	if ([up isPhoto]) {
+		item.thumbnailImageView.image = up.cachedImage;
+	}
+	else if (@available(macOS 11.0, *)) {
+		if ([up isVideo]) {
+		}
+		else if ([up isAudio]) {
+		}
+		else {
+		}
+	}
+	else {
+		item.thumbnailImageView.image = nil;
+	}
 	
 	return item;
 }
@@ -339,18 +352,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(RFPhotoCell *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
-	if (up.cachedImage == nil) {
-		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.url];
+	if ([up isPhoto]) {
+		if (up.cachedImage == nil) {
+			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.url];
 
-		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
-			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
-				NSImage* img = response.parsedResponse;
-				RFDispatchMain(^{
-					up.cachedImage = img;
-					[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
-				});
-			}
-		}];
+			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+					NSImage* img = response.parsedResponse;
+					RFDispatchMain(^{
+						up.cachedImage = img;
+						[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
+					});
+				}
+			}];
+		}
 	}
 }
 

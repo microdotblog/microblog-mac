@@ -27,7 +27,8 @@ static NSString* const kPostStopProgressNotification = @"RFPostStopProgress";
 static NSString* const kLatestDraftTitlePrefKey = @"LatestDraftTitle";
 static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";
 
-static NSString* const kRFFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
+static NSString* const kFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
+static NSString* const kFoundUserAutoCompleteInfoKey = @"RFFoundUserAutoCompleteInfokey";
 
 static NSString* const kTextSizePrefKey = @"TextSize";
 static NSInteger const kTextSizeTiny = 12;

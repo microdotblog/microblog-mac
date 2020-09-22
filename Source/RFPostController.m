@@ -254,7 +254,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kRFFoundUserAutoCompleteNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kFoundUserAutoCompleteNotification object:self.textView];
 }
 
 #pragma mark -
@@ -551,7 +551,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) handleAutoCompleteNotification:(NSNotification *)notification
 {
-	NSDictionary* dictionary = notification.object;
+	NSDictionary* dictionary = [notification.userInfo objectForKey:kFoundUserAutoCompleteInfoKey];
 	NSArray* array = dictionary[@"array"];
 	self.activeReplacementString = dictionary[@"string"];
 
@@ -584,7 +584,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 										
 					NSDictionary* dictionary = @{ @"string" : self.activeReplacementString, @"array" : matchingUsernames };
 					dispatch_async(dispatch_get_main_queue(), ^{
-						[[NSNotificationCenter defaultCenter] postNotificationName:kRFFoundUserAutoCompleteNotification object:dictionary];
+						[[NSNotificationCenter defaultCenter] postNotificationName:kFoundUserAutoCompleteNotification object:self.textView userInfo:@{ kFoundUserAutoCompleteInfoKey: dictionary }];
 					});
 				}
 			}];
