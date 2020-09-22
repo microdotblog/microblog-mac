@@ -90,6 +90,10 @@
 		NSString* text = [[[url absoluteString] uuFindQueryStringArg:@"text"] uuUrlDecoded];
 		[self showNewPostWithText:text];
 	}
+	else if ([url.host isEqualToString:@"bookmark"]) {
+		NSString* bookmark_url = [[[url absoluteString] uuFindQueryStringArg:@"url"] uuUrlDecoded];
+		[self showNewBookmarkWithURL:bookmark_url];
+	}
 }
 
 - (void) applicationWillTerminate:(NSNotification *)notification
@@ -430,6 +434,15 @@
 - (void) showNewPostWithText:(NSString *)text
 {
 	[self.timelineController showPostWithText:text];
+}
+
+- (void) showNewBookmarkWithURL:(NSString *)url
+{
+	if (!self.bookmarkController) {
+		self.bookmarkController = [[RFBookmarkController alloc] initWithURL:url];
+	}
+	
+	[self.bookmarkController showWindow:nil];
 }
 
 @end

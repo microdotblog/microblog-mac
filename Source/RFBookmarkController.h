@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* urlField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
+@property (strong, nonatomic) NSString* initialURL;
+
+- (instancetype) initWithURL:(NSString *)url;
+
 @end
 
 NS_ASSUME_NONNULL_END

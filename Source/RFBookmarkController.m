@@ -23,11 +23,26 @@
 	return self;
 }
 
+- (instancetype) initWithURL:(NSString *)url
+{
+	self = [self init];
+	if (self) {
+		self.initialURL = url;
+	}
+	
+	return self;
+}
+
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
 	
-	[self setupClipboard];
+	if (self.initialURL) {
+		self.urlField.stringValue = self.initialURL;
+	}
+	else {
+		[self setupClipboard];
+	}
 }
 
 - (void) setupClipboard
