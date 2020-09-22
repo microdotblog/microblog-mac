@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17140" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17140"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -93,6 +94,7 @@
                                     <action selector="newBookmark:" target="Voe-Tx-rLC" id="GIh-25-pmA"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="GPE-K0-Iig"/>
                             <menuItem title="Send Post" id="Ajj-u2-KN0">
                                 <string key="keyEquivalent" base64-UTF8="YES">
 DQ
@@ -379,14 +381,12 @@ CA
                                     <action selector="showPosts:" target="-1" id="WD8-Mf-KuA"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Pages" id="diU-58-gcw">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Pages" keyEquivalent="6" id="diU-58-gcw">
                                 <connections>
                                     <action selector="showPages:" target="-1" id="r3t-Zv-9hj"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Uploads" id="KfJ-ma-HfZ">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Uploads" keyEquivalent="7" id="KfJ-ma-HfZ">
                                 <connections>
                                     <action selector="showUploads:" target="-1" id="6rH-yU-e5s"/>
                                 </connections>
