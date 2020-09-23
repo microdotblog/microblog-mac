@@ -22,10 +22,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-Eo-t8j">
-                    <rect key="frame" x="35" y="35" width="30" height="30"/>
+                    <rect key="frame" x="30" y="30" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="30" id="jF6-8l-g5U"/>
-                        <constraint firstAttribute="height" constant="30" id="qNA-sc-2NV"/>
+                        <constraint firstAttribute="width" constant="40" id="jF6-8l-g5U"/>
+                        <constraint firstAttribute="height" constant="40" id="qNA-sc-2NV"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="NNs-RX-BR7"/>
                 </imageView>

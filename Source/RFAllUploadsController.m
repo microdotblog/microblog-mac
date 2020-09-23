@@ -188,29 +188,38 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	
 	for (NSString* filepath in paths) {
-		NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
-		NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
-		RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
-		[new_photos addObject:photo];
+		[new_photos addObject:filepath];
 	}
 
 	[self uploadNextPhoto:new_photos];
 	[self showUploadProgress];
 }
 
-- (void) uploadNextPhoto:(NSMutableArray *)photos
+- (void) uploadNextPhoto:(NSMutableArray *)paths
 {
-	RFPhoto* photo = [photos lastObject];
-	if (photo) {
-		[photos removeLastObject];
-		
+	NSString* filepath = [paths lastObject];
+	if (filepath) {
+		[paths removeLastObject];
+
 		if (!self.uploadProgressBar.isIndeterminate) {
-			[self.uploadProgressBar setDoubleValue:(self.uploadProgressBar.maxValue - [photos count])];
+			[self.uploadProgressBar setDoubleValue:(self.uploadProgressBar.maxValue - [paths count])];
 		}
-		
-		[self uploadPhoto:photo completion:^{
-			[self uploadNextPhoto:photos];
-		}];
+
+		NSString* e = [[filepath pathExtension] lowercaseString];
+		if ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"]) {
+			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
+			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
+
+			[self uploadPhoto:photo completion:^{
+				[self uploadNextPhoto:paths];
+			}];
+		}
+		else {
+			[self uploadFile:filepath completion:^{
+				[self uploadNextPhoto:paths];
+			}];
+		}
 	}
 	else {
 		[self hideUploadProgress];
@@ -237,6 +246,38 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		RFDispatchMainAsync (^{
 			if (image_url == nil) {
 				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+				[self hideUploadProgress];
+			}
+			else {
+				handler();
+			}
+		});
+	}];
+}
+
+- (void) uploadFile:(NSString *)path completion:(void (^)(void))handler
+{
+	NSData* d = [NSData dataWithContentsOfFile:path];
+	
+	NSString* filename = [path lastPathComponent];
+	NSString* e = [filename pathExtension];
+	NSString* uti = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)e, NULL);
+	NSString* content_type = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)uti, kUTTagClassMIMEType);
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSDictionary* args = @{
+		@"mp-destination": destination_uid
+	};
+	[client uploadFileData:d named:@"file" filename:filename contentType:content_type httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
+		NSDictionary* headers = response.httpResponse.allHeaderFields;
+		NSString* image_url = headers[@"Location"];
+		RFDispatchMainAsync (^{
+			if (image_url == nil) {
+				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
 				[self hideUploadProgress];
 			}
 			else {
@@ -400,10 +441,22 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (id<NSPasteboardWriting>) collectionView:(NSCollectionView *)collectionView pasteboardWriterForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
+	RFUpload* upload = [self.allPosts objectAtIndex:indexPath.item];
 
-	NSString* s = [NSString stringWithFormat:@"<img src=\"%@\" />", up.url];
-	
+	NSString* s;
+	if ([upload isPhoto]) {
+		s = [NSString stringWithFormat:@"<img src=\"%@\" />", upload.url];
+	}
+	else if ([upload isVideo]) {
+		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
+	}
+	else if ([upload isAudio]) {
+		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\" />", upload.url];
+	}
+	else {
+		s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];
+	}
+
 	return s;
 }
 
