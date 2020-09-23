@@ -14,6 +14,8 @@
 #import "RFInstagramController.h"
 #import "RFPhotoZoomController.h"
 #import "RFBookmarkController.h"
+#import "RFPostWindowController.h"
+#import "RFPostController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -39,7 +41,9 @@
 	[self setupURLs];
 	[self setupFollowerAutoComplete];
 	[self setupMenus];
-	
+
+	self.postWindows = [NSMutableArray array];
+
 	[self showTimelineOrWelcome];
 }
 
@@ -145,12 +149,13 @@
 
 - (void) setupNotifications
 {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signOutNotification:) name:@"RFSignOut" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signOutNotification:) name:kSignOutNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnselectedNotification:) name:kPostWasUnselectedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showReplyPostNotification:) name:kShowReplyPostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 }
 
 - (void) setupAppearance
@@ -213,6 +218,57 @@
 
 #pragma mark -
 
+- (IBAction) newDocument:(id)sender
+{
+	[self showEditPost:nil];
+}
+
+- (IBAction) newPage:(id)sender
+{
+	[self.timelineController hideOptionsMenu];
+
+	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
+	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
+	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
+	if (has_hosted || micropub || xmlrpc) {
+		RFPostController* controller = [[RFPostController alloc] initWithChannel:@"pages"];
+		[self showPostController:controller];
+	}
+	else {
+		NSAlert* alert = [[NSAlert alloc] init];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"No hosted or external blog configured."];
+		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
+		[alert runModal];
+	}
+}
+
+- (void) showEditPost:(RFPost *)post
+{
+	[self.timelineController hideOptionsMenu];
+
+	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
+	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
+	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
+	if (has_hosted || micropub || xmlrpc) {
+		RFPostController* controller;
+		if (post) {
+			controller = [[RFPostController alloc] initWithPost:post];
+		}
+		else {
+			controller = [[RFPostController alloc] init];
+		}
+		[self showPostController:controller];
+	}
+	else {
+		NSAlert* alert = [[NSAlert alloc] init];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"No hosted or external blog configured."];
+		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
+		[alert runModal];
+	}
+}
+
 - (IBAction) showMainWindow:(id)sender
 {
 	[self.timelineController showWindow:nil];
@@ -254,6 +310,43 @@
 	}
 }
 
+- (IBAction) signOut:(id)sender
+{
+	for (RFAccount* a in [RFSettings accounts]) {
+		NSString* microblog_username = [RFSettings stringForKey:kAccountUsername account:a];
+		NSString* external_username = [RFSettings stringForKey:kExternalBlogUsername account:a];
+
+		[SAMKeychain deletePasswordForService:@"Micro.blog" account:microblog_username];
+		[SAMKeychain deletePasswordForService:@"ExternalBlog" account:external_username];
+		[SAMKeychain deletePasswordForService:@"MicropubBlog" account:@"default"];
+
+		[RFSettings removeObjectForKey:kAccountUsername account:a];
+		[RFSettings removeObjectForKey:kAccountGravatarURL account:a];
+		[RFSettings removeObjectForKey:kAccountDefaultSite account:a];
+
+		[RFSettings removeObjectForKey:kHasSnippetsBlog account:a];
+
+		[RFSettings removeObjectForKey:kExternalBlogUsername account:a];
+		[RFSettings removeObjectForKey:kExternalBlogApp account:a];
+		[RFSettings removeObjectForKey:kExternalBlogEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalBlogID account:a];
+		[RFSettings removeObjectForKey:kExternalBlogIsPreferred account:a];
+		[RFSettings removeObjectForKey:kExternalBlogURL account:a];
+
+		[RFSettings removeObjectForKey:kExternalMicropubMe account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubTokenEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint account:a];
+		[RFSettings removeObjectForKey:kExternalMicropubState account:a];
+	}
+	
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUsername];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kAccountUsernames];
+	[RFAccount clearCache];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kSignOutNotification object:self];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -262,6 +355,12 @@
 	
 	self.welcomeController = [[RFWelcomeController alloc] init];
 	[self.welcomeController showWindow:nil];
+}
+
+- (void) openPostingNotification:(NSNotification *)notification
+{
+	RFPost* post = [notification.userInfo objectForKey:kOpenPostingPostKey];
+	[self showEditPost:post];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification
@@ -283,7 +382,7 @@
 	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
 	NSString* username = [notification.userInfo objectForKey:kShowReplyPostUsernameKey];
 
-	[self.timelineController showReplyWithPostID:post_id username:username];
+	[self showReplyWithPostID:post_id username:username];
 }
 
 - (void) closePostingNotification:(NSNotification *)notification
@@ -433,7 +532,7 @@
 
 - (void) showNewPostWithText:(NSString *)text
 {
-	[self.timelineController showPostWithText:text];
+	[self showPostWithText:text];
 }
 
 - (void) showNewBookmarkWithURL:(NSString *)url
@@ -443,6 +542,25 @@
 	}
 	
 	[self.bookmarkController showWindow:nil];
+}
+
+- (void) showPostController:(RFPostController *)controller
+{
+	RFPostWindowController* window_controller = [[RFPostWindowController alloc] initWithPostController:controller];
+	[window_controller showWindow:nil];
+	[self.postWindows addObject:window_controller];
+}
+
+- (void) showPostWithText:(NSString *)text
+{
+	RFPostController* controller = [[RFPostController alloc] initWithText:text];
+	[self showPostController:controller];
+}
+
+- (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username
+{
+	RFPostController* controller = [[RFPostController alloc] initWithPostID:postID username:username];
+	[self showPostController:controller];
 }
 
 @end

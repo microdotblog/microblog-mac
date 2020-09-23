@@ -12,7 +12,7 @@
 
 - (void) showHelp:(id)sender
 {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://help.micro.blog/"]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://help.micro.blog/"]];
 }
 
 @end

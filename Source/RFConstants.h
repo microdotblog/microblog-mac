@@ -81,6 +81,8 @@ static NSInteger const kTextSizeHuge = 19;
 #define kOpenURLNotification @"RFOpenURLNotification"
 #define kOpenURLKey @"url"
 
+static NSString* const kSignOutNotification = @"RFSignOut";
+
 static NSString* const kResetDetailNotification = @"RFResetDetail";
 static NSString* const kResetDetailControllerKey = @"controller";
 

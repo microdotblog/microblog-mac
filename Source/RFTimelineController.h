@@ -52,7 +52,6 @@ typedef enum {
 @property (strong, nonatomic) NSLayoutConstraint* navigationPinnedConstraint;
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
-@property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)
@@ -62,8 +61,6 @@ typedef enum {
 - (IBAction) performClose:(id)sender;
 
 - (void) showProfileWithUsername:(NSString *)username;
-- (void) showPostWithText:(NSString *)text;
-- (void) showReplyWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 - (void) hideOptionsMenu;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;

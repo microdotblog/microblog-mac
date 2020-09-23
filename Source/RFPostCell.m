@@ -94,7 +94,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(NSCollectionViewItem *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
 	RFPhoto* photo = [self.photos objectAtIndex:indexPath.item];
-	RFPhotoCell* photo_item = (RFPhotoCell *)item;
+//	RFPhotoCell* photo_item = (RFPhotoCell *)item;
 
 	if (photo.thumbnailImage == nil) {
 		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", photo.publishedURL];

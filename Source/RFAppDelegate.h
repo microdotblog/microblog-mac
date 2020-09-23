@@ -23,6 +23,7 @@
 @property (strong, nonatomic) RFPreferencesController* prefsController;
 @property (strong, nonatomic) RFInstagramController* instagramController;
 @property (strong, nonatomic) RFBookmarkController* bookmarkController;
+@property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 
 @end
 
