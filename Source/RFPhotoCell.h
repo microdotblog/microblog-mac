@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) IBOutlet NSImageView* thumbnailImageView;
 @property (strong, nonatomic) IBOutlet NSView* selectionOverlayView;
+@property (strong, nonatomic) IBOutlet NSImageView* iconView;
 
 @end

@@ -264,8 +264,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSIndexPath* index_path = [index_paths anyObject];
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
 
-	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:up.url allowCopy:YES];
-	[controller showWindow:nil];
+	if ([up isPhoto]) {
+		RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:up.url allowCopy:YES];
+		[controller showWindow:nil];
+	}
+	else {
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:up.url]];
+	}
 }
 
 - (void) delete:(id)sender
@@ -335,11 +340,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		item.thumbnailImageView.image = up.cachedImage;
 	}
 	else if (@available(macOS 11.0, *)) {
+		item.thumbnailImageView.image = nil;
 		if ([up isVideo]) {
+			item.iconView.image = [NSImage imageWithSystemSymbolName:@"film" accessibilityDescription:@""];
 		}
 		else if ([up isAudio]) {
+			item.iconView.image = [NSImage imageWithSystemSymbolName:@"waveform" accessibilityDescription:@""];
 		}
 		else {
+			item.iconView.image = [NSImage imageWithSystemSymbolName:@"doc" accessibilityDescription:@""];
 		}
 	}
 	else {
