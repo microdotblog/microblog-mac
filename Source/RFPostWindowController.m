@@ -57,6 +57,8 @@
 	[toolbar setDelegate:self];
 	
 	[self.window setToolbar:toolbar];
+	
+	self.window.titleVisibility = NSWindowTitleHidden;
 }
 
 - (void) setupNotifications

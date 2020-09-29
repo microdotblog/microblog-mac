@@ -1002,31 +1002,66 @@
 	
 	if (row == 0) {
 		cell.titleField.stringValue = @"Timeline";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_timeline"];
+		}
 	}
 	else if (row == 1) {
 		cell.titleField.stringValue = @"Mentions";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_mentions"];
+		}
 	}
 	else if (row == 2) {
 		cell.titleField.stringValue = @"Bookmarks";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_bookmarks"];
+		}
 	}
 	else if (row == 3) {
 		cell.titleField.stringValue = @"Discover";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_discover"];
+		}
 	}
     else if (row == 5) {
         cell.titleField.stringValue = @"Posts";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_posts"];
+		}
     }
     else if (row == 6) {
         cell.titleField.stringValue = @"Pages";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+		}
     }
     else if (row == 7) {
         cell.titleField.stringValue = @"Uploads";
-        cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_uploads"];
+		}
     }
 
 	return cell;
@@ -1137,9 +1172,16 @@
 //    }
     else if ([itemIdentifier isEqualToString:@"NewPost"]) {
         NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-        item.image = [NSImage rf_imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
-        item.target = self;
-        item.action = @selector(newDocument:);
+		if (@available(macOS 11.0, *)) {
+			item.image = [NSImage rf_imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
+			item.target = nil;
+			item.action = @selector(newDocument:);
+		}
+		else {
+			NSButton* b = [NSButton buttonWithTitle:@"+" target:nil action:@selector(newDocument:)];
+			b.bordered = NO;
+			item.view = b;
+		}
         return item;
     }
     else {
