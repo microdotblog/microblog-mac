@@ -104,6 +104,8 @@
 		[self.imageView animator].hidden = NO;
 		self.htmlCopyButton.layer.opacity = 0.7;
 	}];
+	
+	[self.window saveFrameUsingName:self.window.frameAutosaveName];
 }
 
 - (void) startProgress
