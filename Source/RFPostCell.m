@@ -104,8 +104,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSImage* img = response.parsedResponse;
 				RFDispatchMain(^{
 					photo.thumbnailImage = img;
-					[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
-	//				photo_item.thumbnailImageView.image = img;
+					@try {
+						[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
+					}
+					@catch (NSException* e) {
+					}
 				});
 			}
 		}];

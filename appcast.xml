@@ -7,6 +7,8 @@
 
 		* Fixed allowing tab bar in new post windows.
 		* Fixed background in new post window if Dark Mode changes while app is running.
+		* Fixed copyright year in about box.
+		* Fixed potential crash when clearing posts search.
 
 		<item>
 			<title>Version 2.0.1</title>
