@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,9 +33,9 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTK-M1-RPy">
-                    <rect key="frame" x="104" y="3" width="76" height="32"/>
+                    <rect key="frame" x="98" y="3" width="88" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Favorite" bezelStyle="regularSquare" image="options_favorite" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
+                    <buttonCell key="cell" type="bevel" title="Bookmark" bezelStyle="regularSquare" image="options_favorite" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="edp-GX-mHE">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system" size="14"/>
                     </buttonCell>
@@ -44,7 +44,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPW-aZ-zko">
-                    <rect key="frame" x="199" y="3" width="109" height="32"/>
+                    <rect key="frame" x="201" y="3" width="109" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Conversation" bezelStyle="regularSquare" image="options_conversation" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="L4Q-5A-Zv8">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

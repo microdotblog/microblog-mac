@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="898-eO-CMa">
-                    <rect key="frame" x="25" y="3" width="61" height="32"/>
+                    <rect key="frame" x="24" y="3" width="61" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Reply" bezelStyle="regularSquare" image="options_reply" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="CId-kN-Ic0">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -33,9 +33,9 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uho-KB-Ckx">
-                    <rect key="frame" x="104" y="3" width="90" height="32"/>
+                    <rect key="frame" x="96" y="3" width="100" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Unfavorite" bezelStyle="regularSquare" image="options_favorite" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="kaF-fd-Qdl">
+                    <buttonCell key="cell" type="bevel" title="Unbookmark" bezelStyle="regularSquare" image="options_favorite" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="kaF-fd-Qdl">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system" size="14"/>
                     </buttonCell>
@@ -44,7 +44,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d7i-gv-Pr1">
-                    <rect key="frame" x="212" y="3" width="109" height="32"/>
+                    <rect key="frame" x="214" y="3" width="109" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Conversation" bezelStyle="regularSquare" image="options_conversation" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="73Q-wg-wGD">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
