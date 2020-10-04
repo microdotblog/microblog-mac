@@ -9,20 +9,34 @@
 #import "RFPostContainerView.h"
 
 #import "NSAppearance+Extras.h"
+#import "RFConstants.h"
 
 @implementation RFPostContainerView
 
 - (void) awakeFromNib
 {
-//	self.view.layer.masksToBounds = YES;
-//	self.view.layer.cornerRadius = 10.0;
+	[self setupBackground];
+	[self setupNotifications];
+}
 
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
+}
+
+- (void) setupBackground
+{
 	if ([NSAppearance rf_isDarkMode]) {
-		self.layer.backgroundColor = [NSColor textBackgroundColor].CGColor;
+		self.layer.backgroundColor = [NSColor colorNamed:@"color_post_background_darkmode"].CGColor;
 	}
 	else {
 		self.layer.backgroundColor = [NSColor whiteColor].CGColor;
 	}
+}
+
+- (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
+{
+	[self setupBackground];
 }
 
 - (void) mouseDown:(NSEvent *)event

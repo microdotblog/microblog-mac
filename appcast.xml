@@ -5,6 +5,9 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 
+		* Fixed allowing tab bar in new post windows.
+		* Fixed background in new post window if Dark Mode changes while app is running.
+
 		<item>
 			<title>Version 2.0.1</title>
  			<description><![CDATA[
