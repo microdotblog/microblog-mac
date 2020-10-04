@@ -70,6 +70,7 @@
 
 - (BOOL) windowShouldClose:(NSWindow *)sender
 {
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
 	return YES;
 }
 

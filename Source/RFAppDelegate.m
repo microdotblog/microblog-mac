@@ -156,6 +156,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
 }
 
 - (void) setupAppearance
@@ -361,6 +362,12 @@
 {
 	RFPost* post = [notification.userInfo objectForKey:kOpenPostingPostKey];
 	[self showEditPost:post];
+}
+
+- (void) postWindowDidCloseNotification:(NSNotification *)notification
+{
+	RFPostWindowController* controller = notification.object;
+	[self.postWindows removeObject:controller];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification
