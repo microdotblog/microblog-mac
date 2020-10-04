@@ -7,9 +7,12 @@
 
 		* Fixed allowing tab bar in new post windows.
 		* Fixed background in new post window if Dark Mode changes while app is running.
+		* Fixed remembering new post window position.
 		* Fixed potential crash when clearing posts search.
+		* Fixed error when opening prefs window for some settings.
 		* Fixed photo window default size resetting.
 		* Fixed copyright year in about box.
+		* Updated camera icon on macOS 11 Big Sur.
 
 		<item>
 			<title>Version 2.0.1</title>

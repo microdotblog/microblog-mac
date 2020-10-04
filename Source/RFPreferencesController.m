@@ -156,10 +156,13 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	if (xmlrpc_endpoint) {
 		[self.progressSpinner startAnimation:nil];
 
-		NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint account:self.selectedAccount];
 		NSString* blog_s = [RFSettings stringForKey:kExternalBlogID account:self.selectedAccount];
 		NSString* username = [RFSettings stringForKey:kExternalBlogUsername account:self.selectedAccount];
 		NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
+		
+		if (!blog_s || !username || !password) {
+			return;
+		}
 		
 		NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
 		NSString* taxonomy = @"category";

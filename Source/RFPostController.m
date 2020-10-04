@@ -120,6 +120,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupText];
 	[self setupColletionView];
 	[self setupBlogName];
+	[self setupButtons];
 	[self setupNotifications];
 
 	[self updateTitleHeaderWithAnimation:NO];
@@ -135,23 +136,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) viewDidLayout
 {
 	[super viewDidLayout];
-	
-	[self setupButtons];
-}
-
-- (void) setupButtons
-{
-//	NSButton* b;
-//	NSWindow* win = self.view.window;
-//
-//	b = [win standardWindowButton:NSWindowCloseButton];
-//	[b setFrameOrigin:NSMakePoint(10, -2)];
-//
-//	b = [win standardWindowButton:NSWindowMiniaturizeButton];
-//	[b setFrameOrigin:NSMakePoint(30, -2)];
-//
-//	b = [win standardWindowButton:NSWindowZoomButton];
-//	[b setFrameOrigin:NSMakePoint(50, -2)];
 }
 
 - (void) setupTitle
@@ -228,6 +212,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 		NSGestureRecognizer* click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(blogNameClicked:)];
 		[self.blognameField addGestureRecognizer:click];
+	}
+}
+
+- (void) setupButtons
+{
+	if (@available(macOS 11.0, *)) {
+		NSImage* img = [NSImage rf_imageWithSystemSymbolName:@"camera" accessibilityDescription:@"camera"];
+		self.photoButton.image = img;
 	}
 }
 

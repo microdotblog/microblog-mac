@@ -110,7 +110,6 @@
 {
 	if (@available(macOS 11.0, *)) {
 		return [self performSelector:@selector(imageWithSystemSymbolName:accessibilityDescription:) withObject:name withObject:description];
-		return nil;
 	}
 	else {
 		return nil;
