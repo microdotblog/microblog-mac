@@ -18,7 +18,7 @@
 				</style>
  				<p>Changes in this version:</p>
  				<ul>
-					<li>Fixed allowing tab bar in new post windows.</li>
+					<li>Fixed accidentally showing tab bar in new post windows.</li>
 					<li>Fixed background in new post window if Dark Mode changes while app is running.</li>
 					<li>Fixed remembering new post window position.</li>
 					<li>Fixed potential crash when clearing posts search.</li>
