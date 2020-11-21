@@ -272,7 +272,9 @@
 
 - (IBAction) showMainWindow:(id)sender
 {
-	[self.timelineController showWindow:nil];
+	if (![self.timelineController.window isVisible]) {
+		[self.timelineController showWindow:nil];
+	}
 }
 
 - (IBAction) showPreferences:(id)sender
