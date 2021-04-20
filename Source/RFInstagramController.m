@@ -30,8 +30,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	self = [super initWithWindowNibName:@"Instagram"];
 	if (self) {
+		// content/posts_1.json
 		self.path = path;
-		self.folder = [path stringByDeletingLastPathComponent];
+		self.folder = [[path stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
 		
 		[self setupPhotos];
 	}
@@ -53,7 +54,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSData* d = [NSData dataWithContentsOfFile:self.path];
 	NSError* e = nil;
 	NSDictionary* obj = [NSJSONSerialization JSONObjectWithData:d options:0 error:&e];
-	self.photos = [obj objectForKey:@"photos"];
+	self.photos = obj; // [obj objectForKey:@"photos"];
 }
 
 - (void) setupHostname
@@ -163,70 +164,75 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) importPhoto:(NSDictionary *)info
 {
-	NSString* caption = [info objectForKey:@"caption"];
-	NSString* relative_path = [info objectForKey:@"path"];
-	NSString* taken_at = [info objectForKey:@"taken_at"];
+	NSArray* media = [info objectForKey:@"media"];
+	for (NSDictionary* photo in media) {
+		NSString* caption = [photo objectForKey:@"title"];
+		NSString* relative_path = [photo objectForKey:@"uri"];
+		NSNumber* taken_at = [photo objectForKey:@"creation_timestamp"];
 
-	NSString* current_file = self.folder;
-	NSArray* components = [relative_path componentsSeparatedByString:@"/"];
-	for (NSString* filename in components) {
-		current_file = [current_file stringByAppendingPathComponent:filename];
-	}
-
-	NSImage* img = [[NSImage alloc] initWithContentsOfFile:current_file];
-	if (img) {
-		NSDate* d = [NSDate uuDateFromRfc3339String:taken_at];
-		if (d == nil) {
-			d = [NSDate uuDateFromString:taken_at withFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+		NSString* current_file = self.folder;
+		NSArray* components = [relative_path componentsSeparatedByString:@"/"];
+		for (NSString* filename in components) {
+			current_file = [current_file stringByAppendingPathComponent:filename];
 		}
-		
-		RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
-		[self uploadPhoto:photo completion:^{
-			NSString* s = caption;
+
+		NSImage* img = [[NSImage alloc] initWithContentsOfFile:current_file];
+		if (img) {
+			NSDate* d = [NSDate dateWithTimeIntervalSince1970:[taken_at unsignedLongValue]];
 			
-			if ((s.length > 0) && ([s characterAtIndex:0] == '@')) {
-				// chop off the first "@" to avoid @-mentions
-				s = [s substringFromIndex:1];
-			}
+	//		NSDate* d = [NSDate uuDateFromRfc3339String:taken_at];
+	//		if (d == nil) {
+	//			d = [NSDate uuDateFromString:taken_at withFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+	//		}
 			
-			if ([self prefersExternalBlog] && ![self hasMicropubBlog]) {
-				if (s.length > 0) {
-					s = [s stringByAppendingString:@"\n\n"];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+			[self uploadPhoto:photo completion:^{
+				NSString* s = caption;
+				
+				if ((s.length > 0) && ([s characterAtIndex:0] == '@')) {
+					// chop off the first "@" to avoid @-mentions
+					s = [s substringFromIndex:1];
 				}
+				
+				if ([self prefersExternalBlog] && ![self hasMicropubBlog]) {
+					if (s.length > 0) {
+						s = [s stringByAppendingString:@"\n\n"];
+					}
 
-				CGSize original_size = photo.thumbnailImage.size;
-				CGFloat width = 0;
-				CGFloat height = 0;
+					CGSize original_size = photo.thumbnailImage.size;
+					CGFloat width = 0;
+					CGFloat height = 0;
 
-				if (original_size.width > original_size.height) {
-					if (original_size.width > 600.0) {
-						width = 600.0;
+					if (original_size.width > original_size.height) {
+						if (original_size.width > 600.0) {
+							width = 600.0;
+						}
+						else {
+							width = original_size.width;
+						}
+						height = width / original_size.width * original_size.height;
 					}
 					else {
-						width = original_size.width;
+						if (original_size.height > 600.0) {
+							height = 600.0;
+						}
+						else {
+							height = original_size.height;
+						}
+						width = height / original_size.height * original_size.width;
 					}
-					height = width / original_size.width * original_size.height;
-				}
-				else {
-					if (original_size.height > 600.0) {
-						height = 600.0;
-					}
-					else {
-						height = original_size.height;
-					}
-					width = height / original_size.height * original_size.width;
+
+					s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" />", photo.publishedURL, width, height];
 				}
 
-				s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" />", photo.publishedURL, width, height];
-			}
-
-			[self uploadText:s date:d forPhoto:photo completion:^{
-				[self importNextPhoto];
+				[self uploadText:s date:d forPhoto:photo completion:^{
+					[self importNextPhoto];
+				}];
 			}];
-		}];
-	}
-	else {
-		[self importNextPhoto];
+		}
+		else {
+			[self importNextPhoto];
+		}
 	}
 }
 
@@ -522,13 +528,19 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(NSCollectionViewItem *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSDictionary* photo = [self.photos objectAtIndex:indexPath.item];
-
-//      "caption": "More basketball on TV today",
-//      "path": "photos/201704/8674986dfc70767c44dc92d50e81b897.jpg",
-//      "taken_at": "2017-04-16T12:08:35"
-
-	NSString* relative_path = [photo objectForKey:@"path"];
+	NSDictionary* info = [self.photos objectAtIndex:indexPath.item];
+	NSArray* media = [info objectForKey:@"media"];
+	
+//	"media": [
+//	  {
+//		"uri": "media/posts/201210/11202472_417504411766906_988056863_n_17842263256015623.jpg",
+//		"creation_timestamp": 1350766513,
+//		"title": "Pumpkins"
+//	  }
+//	]
+	
+	NSDictionary* photo = [media firstObject];
+	NSString* relative_path = [photo objectForKey:@"uri"];
 
 	NSString* current_file = self.folder;
 	NSArray* components = [relative_path componentsSeparatedByString:@"/"];
@@ -536,7 +548,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		current_file = [current_file stringByAppendingPathComponent:filename];
 	}
 
-	NSImage* img = [[NSImage alloc] initWithContentsOfFile:current_file];
+	NSImage* img;
+
+	NSString* e = [[current_file pathExtension] lowercaseString];
+	if ([e isEqualToString:@"mov"] || [e isEqualToString:@"m4v"] || [e isEqualToString:@"mp4"]) {
+		if (@available(macOS 11.0, *)) {
+			img = [NSImage imageWithSystemSymbolName:@"film" accessibilityDescription:@""];
+		}
+	}
+	else {
+		img = [[NSImage alloc] initWithContentsOfFile:current_file];
+	}
 
 	RFPhotoCell* photo_item = (RFPhotoCell *)item;
 	if (photo_item.thumbnailImageView.image == nil) {
