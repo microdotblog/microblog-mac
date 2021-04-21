@@ -53,8 +53,16 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSData* d = [NSData dataWithContentsOfFile:self.path];
 	NSError* e = nil;
-	NSDictionary* obj = [NSJSONSerialization JSONObjectWithData:d options:0 error:&e];
-	self.photos = obj; // [obj objectForKey:@"photos"];
+	NSArray* photos = [NSJSONSerialization JSONObjectWithData:d options:0 error:&e];
+	self.photos = [photos sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* info1, NSDictionary* info2) {
+		NSArray* media1 = [info1 objectForKey:@"media"];
+		NSArray* media2 = [info2 objectForKey:@"media"];
+		NSDictionary* photo1 = [media1 firstObject];
+		NSDictionary* photo2 = [media2 firstObject];
+		NSNumber* num1 = [photo1 objectForKey:@"creation_timestamp"];
+		NSNumber* num2 = [photo2 objectForKey:@"creation_timestamp"];
+		return [num1 compare:num2];
+	}];
 }
 
 - (void) setupHostname
