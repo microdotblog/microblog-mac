@@ -439,27 +439,25 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 					[self startProgressAnimation];
 					[photo transcodeVideo:^(NSURL* new_url) {
-						if ([self checkVideoFile:new_url]) {
-							AVURLAsset* new_asset = [AVURLAsset assetWithURL:new_url];
-							NSError* error = nil;
-							AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
-							CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
-							photo.videoAsset = new_asset;
-							photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-							[new_photos addObject:photo];
+						RFDispatchMain (^{
+							if ([self checkVideoFile:new_url]) {
+								AVURLAsset* new_asset = [AVURLAsset assetWithURL:new_url];
+								NSError* error = nil;
+								AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
+								CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
+								photo.videoAsset = new_asset;
+								photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+								[new_photos addObject:photo];
 
-							RFDispatchMain (^{
 								self.attachedPhotos = new_photos;
 								[self stopProgressAnimation];
 								[self.photosCollectionView reloadData];
-							});
-						}
-						else {
-							RFDispatchMain (^{
+							}
+							else {
 								[self stopProgressAnimation];
 								[photo removeTemporaryVideo];
-							});
-						}
+							}
+						});
 					}];
 				}
 				else {
