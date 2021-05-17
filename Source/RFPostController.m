@@ -418,6 +418,70 @@ static CGFloat const kTextViewTitleShownTop = 54;
 //	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 //}
 
+- (void) attachPhotos:(NSArray<NSURL*>*)photoURLs
+{
+	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
+	BOOL too_many_photos = NO;
+
+	for (NSURL* file_url in photoURLs) {
+		// Bail out if we've exceeded the 10-item limit per post
+		if (new_photos.count >= 10) {
+			too_many_photos = YES;
+			break;
+		}
+
+		NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
+		if ([video_extensions containsObject:[file_url pathExtension]]) {
+			AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:nil];
+			photo.videoAsset = asset;
+			photo.isVideo = YES;
+
+			[self startProgressAnimation];
+			[photo transcodeVideo:^(NSURL* new_url) {
+				if ([self checkVideoFile:new_url]) {
+					AVURLAsset* new_asset = [AVURLAsset assetWithURL:new_url];
+					NSError* error = nil;
+					AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
+					CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
+					photo.videoAsset = new_asset;
+					photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+					[new_photos addObject:photo];
+
+					RFDispatchMain (^{
+						self.attachedPhotos = new_photos;
+						[self stopProgressAnimation];
+						[self.photosCollectionView reloadData];
+					});
+				}
+				else {
+					RFDispatchMain (^{
+						[self stopProgressAnimation];
+						[photo removeTemporaryVideo];
+					});
+				}
+			}];
+		}
+		else {
+			NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
+			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
+			[new_photos addObject:photo];
+		}
+	}
+
+	self.attachedPhotos = new_photos;
+	[self.photosCollectionView reloadData];
+
+	self.photosHeightConstraint.animator.constant = 100;
+
+	[self checkMediaEndpoint];
+
+	if (too_many_photos) {
+		[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+	}
+}
+
 - (IBAction) choosePhoto:(id)sender
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
@@ -427,55 +491,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
 		if (result == NSModalResponseOK) {
 			NSArray* urls = panel.URLs;
-			NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
-			
-			for (NSURL* file_url in urls) {
-				NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
-				if ([video_extensions containsObject:[file_url pathExtension]]) {
-					AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
-					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:nil];
-					photo.videoAsset = asset;
-					photo.isVideo = YES;
-
-					[self startProgressAnimation];
-					[photo transcodeVideo:^(NSURL* new_url) {
-						if ([self checkVideoFile:new_url]) {
-							AVURLAsset* new_asset = [AVURLAsset assetWithURL:new_url];
-							NSError* error = nil;
-							AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
-							CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
-							photo.videoAsset = new_asset;
-							photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-							[new_photos addObject:photo];
-
-							RFDispatchMain (^{
-								self.attachedPhotos = new_photos;
-								[self stopProgressAnimation];
-								[self.photosCollectionView reloadData];
-							});
-						}
-						else {
-							RFDispatchMain (^{
-								[self stopProgressAnimation];
-								[photo removeTemporaryVideo];
-							});
-						}
-					}];
-				}
-				else {
-					NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
-					NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800]; 
-					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
-					[new_photos addObject:photo];
-				}
-			}
-
-			self.attachedPhotos = new_photos;
-			[self.photosCollectionView reloadData];
-
-			self.photosHeightConstraint.animator.constant = 100;
-			
-			[self checkMediaEndpoint];
+			[self attachPhotos:urls];
 		}
 		
 		[self becomeFirstResponder];
@@ -501,31 +517,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) attachFilesNotification:(NSNotification *)notification
 {
 	NSArray* paths = [notification.userInfo objectForKey:kAttachFilesPathsKey];
-
-	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
-	BOOL too_many_photos = NO;
-
+	NSMutableArray* urls = [NSMutableArray array];
 	for (NSString* filepath in paths) {
-		if (new_photos.count < 10) {
-			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
-			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
-			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
-			[new_photos addObject:photo];
-		}
-		else {
-			too_many_photos = YES;
+		NSURL* url = [NSURL fileURLWithPath:filepath];
+		if (url != nil) {
+			[urls addObject:url];
 		}
 	}
 
-	self.attachedPhotos = new_photos;
-	[self.photosCollectionView reloadData];
-
-	self.photosHeightConstraint.animator.constant = 100;
-
-	[self checkMediaEndpoint];
-
-	if (too_many_photos) {
-		[NSAlert rf_showOneButtonAlert:@"Only 10 Photos Added" message:@"The first 10 photos were added to your post." button:@"OK" completionHandler:NULL];
+	if ([urls count] > 0) {
+		[self attachPhotos:urls];
 	}
 }
 
@@ -1361,6 +1362,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				}));
 			}];
 		}
+	}
+	else {
+		[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Could not load photo data." button:@"OK" completionHandler:NULL];
+		[self hideProgressHeader];
 	}
 }
 
