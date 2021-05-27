@@ -32,8 +32,6 @@
 #import "RFUserCache.h"
 #import "SDAVAssetExportSession.h"
 #import <AVFoundation/AVFoundation.h>
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static NSString* const kCategoryCellIdentifier = @"CategoryCell";

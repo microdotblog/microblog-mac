@@ -30,8 +30,6 @@
 #import "RFStack.h"
 #import "NSImage+Extras.h"
 #import "NSAppearance+Extras.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 #import <QuartzCore/QuartzCore.h>
 
 //static CGFloat const kDefaultSplitViewPosition = 170.0;
