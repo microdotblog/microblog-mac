@@ -6,6 +6,32 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.0.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Updated photos import to support new export file format from Instagram.</li>
+					<li>Updated categories pane to automatically show when categories are set.</li>
+					<li>Fixed editing categories on existing posts.</li>
+					<li>Fixed crash when uploading video for non-Premium subscribers.</li>
+					<li>Fixed photo upload to be more consistent from the open dialog or dragged files.</li>
+ 				</ul>
+ 				<p>Special thanks to Daniel Jalkut for contributing some of these bug fixes!</p>
+ 			]]></description>
+			<pubDate>Thu, 27 May 2021 11:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.0.4.zip" sparkle:shortVersionString="2.0.4" sparkle:version="83" length="3472511" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 2.0.3</title>
  			<description><![CDATA[
 				<style>
