@@ -646,6 +646,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		RFCategoryCell* item = (RFCategoryCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 		item.categoryCheckbox.title = category_name;
 		
+		if (self.editingPost) {
+			if ([self.editingPost.categories containsObject:category_name]) {
+				item.categoryCheckbox.state = NSControlStateValueOn;
+			}
+		}
+		
 		return item;
 	}
 }
@@ -1000,7 +1006,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"replace": @{
 						@"name": [self currentTitle],
 						@"content": text,
-						@"category[]": category_names,
+						@"category": category_names,
 						@"post-status": [self currentStatus]
 					}
 				};
@@ -1442,6 +1448,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				if (categories) {
 					self.categories = categories;
 					RFDispatchMain (^{
+						if (self.editingPost && ([self.editingPost.categories count] > 0)) {
+							self.isShowingCategories = YES;
+							[self updateCategoriesPane];
+						}
 						[self.categoriesCollectionView reloadData];
 					});
 				}

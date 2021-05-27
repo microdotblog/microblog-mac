@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate* postedAt;
 @property (assign) BOOL isDraft;
 @property (strong) NSString* channel;
+@property (strong) NSArray* categories;
 
 - (NSString *) summary;
 - (BOOL) isPage;

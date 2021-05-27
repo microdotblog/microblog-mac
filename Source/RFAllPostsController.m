@@ -115,6 +115,11 @@
 				NSString* status = [[props objectForKey:@"post-status"] firstObject];
 				post.isDraft = [status isEqualToString:@"draft"];
 				post.channel = channel;
+				
+				post.categories = @[];
+				if ([[props objectForKey:@"category"] count] > 0) {
+					post.categories = [props objectForKey:@"category"];
+				}
 
 				[new_posts addObject:post];
 			}
