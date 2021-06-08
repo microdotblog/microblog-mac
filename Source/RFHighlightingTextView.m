@@ -97,6 +97,11 @@
 }
 
 - (void) findAutocomplete:(NSRange)range newString:(NSString*)incomingString{
+	// if we are in the midst of an edit that involves "marked" text, don't do anything. This
+	// avoids interfering with the state of the text and causing multi-keystroke edits such
+	// as accent-modified character input to fail.
+	if (self.markedRange.length > 0) { return; }
+
 	NSMutableString* username = [NSMutableString string];
 	
 	// work backwards from current point
