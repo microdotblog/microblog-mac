@@ -823,9 +823,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4B7F0AD71BAF4B77004553A6 /* Snippets */ = {
+		4B7F0AD71BAF4B77004553A6 /* Micro.blog */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B7F0AE91BAF4B78004553A6 /* Build configuration list for PBXNativeTarget "Snippets" */;
+			buildConfigurationList = 4B7F0AE91BAF4B78004553A6 /* Build configuration list for PBXNativeTarget "Micro.blog" */;
 			buildPhases = (
 				4B7F0AD41BAF4B77004553A6 /* Sources */,
 				4B7F0AD51BAF4B77004553A6 /* Frameworks */,
@@ -838,7 +838,7 @@
 			);
 			dependencies = (
 			);
-			name = Snippets;
+			name = Micro.blog;
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
 			productType = "com.apple.product-type.application";
@@ -864,7 +864,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Snippets for Mac" */;
+			buildConfigurationList = 4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Micro.blog for Mac" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -877,7 +877,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4B7F0AD71BAF4B77004553A6 /* Snippets */,
+				4B7F0AD71BAF4B77004553A6 /* Micro.blog */,
 			);
 		};
 /* End PBXProject section */
@@ -1456,7 +1456,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Snippets for Mac" */ = {
+		4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Micro.blog for Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B7F0AE71BAF4B78004553A6 /* Debug */,
@@ -1465,7 +1465,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4B7F0AE91BAF4B78004553A6 /* Build configuration list for PBXNativeTarget "Snippets" */ = {
+		4B7F0AE91BAF4B78004553A6 /* Build configuration list for PBXNativeTarget "Micro.blog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B7F0AEA1BAF4B78004553A6 /* Debug */,

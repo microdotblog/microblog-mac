@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Snippets for Mac.xcodeproj">
+      location = "self:/Users/manton/Source/Manton/microblog-mac/Micro.blog for Mac.xcodeproj">
    </FileRef>
 </Workspace>
