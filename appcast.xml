@@ -6,6 +6,32 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.0.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Improved post search to use server to include all matching posts (for search terms over 3 characters).</li>
+	 				<li>Added web site URL to user profile screens.</li>
+	 				<li>Updated sidebar icons to be lighter when window isn't frontmost.</li>
+	 				<li>Fixed disabling categories menu item for pages.</li>
+	 				<li>Fixed text-substitution problems when writing a new post.</li>
+					<li>Fixed potential crash when loading posts without a date.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 28 Jun 2021 12:45:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.0.5.zip" sparkle:shortVersionString="2.0.5" sparkle:version="85" length="3475130" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 2.0.4</title>
  			<description><![CDATA[
 				<style>
