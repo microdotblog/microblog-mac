@@ -65,6 +65,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.editingPost = post;
 		self.initialText = post.text;
 		self.isShowingTitle = YES;
+		self.channel = self.editingPost.channel;
 	}
 	
 	return self;
@@ -276,7 +277,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 	}
 	else if (item.action == @selector(toggleCategories:)) {
-		if (self.isReply) {
+		if ([self isPage]) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isReply) {
 			[item setState:NSControlStateValueOff];
 			return NO;
 		}
