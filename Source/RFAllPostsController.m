@@ -69,7 +69,11 @@
 
 - (void) fetchPosts
 {
-	self.allPosts = @[];
+	[self fetchPostsForSearch:@""];
+}
+
+- (void) fetchPostsForSearch:(NSString *)search
+{
 	self.currentPosts = @[];
 	self.blogNameButton.hidden = YES;
 	[self.progressSpinner startAnimation:nil];	
@@ -93,7 +97,8 @@
 	args = @{
 		@"q": @"source",
 		@"mp-destination": destination_uid,
-		@"mp-channel": channel
+		@"mp-channel": channel,
+		@"filter": search
 	};
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
@@ -125,7 +130,9 @@
 			}
 			
 			RFDispatchMainAsync (^{
-				self.allPosts = new_posts;
+				if (search.length == 0) {
+					self.allPosts = new_posts;
+				}
 				self.currentPosts = new_posts;
 				[self.tableView reloadData];
 				[self.progressSpinner stopAnimation:nil];
@@ -213,22 +220,33 @@
 
 - (IBAction) search:(id)sender
 {
-	NSString* q = [[sender stringValue] lowercaseString];
-	if (q.length == 0) {
+	NSString* s = [sender stringValue];
+	if (s.length == 0) {
 		self.currentPosts = self.allPosts;
+		[self.tableView reloadData];
+	}
+	else if (s.length < 4) {
+		// for short queries, just filter local recent posts
+		NSString* q = [[sender stringValue] lowercaseString];
+		if (q.length == 0) {
+			self.currentPosts = self.allPosts;
+		}
+		else {
+			NSMutableArray* filtered_posts = [NSMutableArray array];
+			for (RFPost* post in self.allPosts) {
+				if ([[post.title lowercaseString] containsString:q] || [[post.text lowercaseString] containsString:q]) {
+					[filtered_posts addObject:post];
+				}
+			}
+	
+			self.currentPosts = filtered_posts;
+		}
+	
+		[self.tableView reloadData];
 	}
 	else {
-		NSMutableArray* filtered_posts = [NSMutableArray array];
-		for (RFPost* post in self.allPosts) {
-			if ([[post.title lowercaseString] containsString:q] || [[post.text lowercaseString] containsString:q]) {
-				[filtered_posts addObject:post];
-			}
-		}
-		
-		self.currentPosts = filtered_posts;
+		[self fetchPostsForSearch:[sender stringValue]];
 	}
-	
-	[self.tableView reloadData];
 }
 
 - (IBAction) blogNameClicked:(id)sender
