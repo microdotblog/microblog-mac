@@ -121,9 +121,14 @@
 	}
 	
 	self.followingUsersButton.hidden = NO;
-
-//	self.blogAddressLabel.text = [authorInfo objectForKey:@"url"];
-//	self.pathToBlog = [authorInfo objectForKey:@"url"];
+	
+	NSString* url = [author_info objectForKey:@"url"];
+	if (url.length == 0) {
+		url = [NSString stringWithFormat:@"https://micro.blog/%@", self.username];
+	}
+	[self.websiteButton setTitle:url];
+	[self.websiteButton setHidden:NO];
+	self.siteURL = url;
 }
 
 - (void) setupFollowing:(BOOL)isFollowing
@@ -202,6 +207,11 @@
 	[menu addItem:item];
 
 	[menu popUpMenuPositioningItem:nil atLocation:[NSEvent mouseLocation] inView:nil];
+}
+
+- (IBAction) openSite:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:self.siteURL]];
 }
 
 - (void) muteUser:(id)sender

@@ -21,8 +21,10 @@
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSButton* followingUsersButton;
 @property (strong, nonatomic) IBOutlet NSButton* optionsButton;
+@property (strong, nonatomic) IBOutlet NSButton* websiteButton;
 
 @property (strong, nonatomic) NSString* username;
+@property (strong, nonatomic) NSString* siteURL;
 
 - (instancetype) initWithUsername:(NSString *)username;
 
