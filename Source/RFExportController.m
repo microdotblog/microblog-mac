@@ -37,7 +37,7 @@
 
 - (void) setupWindow
 {
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationName];
 	if (destination_uid != nil) {
 		NSString* s = [NSString stringWithFormat:@"Export for %@", destination_uid];
 		[self.window setTitle:s];
@@ -91,6 +91,7 @@
 			for (NSDictionary* item in items) {
 				RFPost* post = [[RFPost alloc] init];
 				NSDictionary* props = [item objectForKey:@"properties"];
+				post.postID = [[props objectForKey:@"uid"] firstObject];
 				post.title = [[props objectForKey:@"name"] firstObject];
 				post.text = [[props objectForKey:@"content"] firstObject];
 				post.url = [[props objectForKey:@"url"] firstObject];
@@ -108,6 +109,8 @@
 				}
 
 				[new_posts addObject:post];
+				
+				[self writePost:post includeFrontmatter:NO];
 			}
 			
 			// wait a second so we don't hit the server too much
@@ -115,7 +118,10 @@
 			
 			RFDispatchMainAsync (^{
 				if (new_posts.count == 0) {
-					NSLog (@"Downloading posts... done.");
+					[self.progressBar stopAnimation:nil];
+					[self.statusField setStringValue:@"Finished export."];
+					[self.cancelButton setTitle:@"Reveal Folder"];
+					[self.cancelButton setAction:@selector(revealFolder:)];
 				}
 				else {
 					NSInteger new_offset = [offset integerValue] + limit;
@@ -126,9 +132,48 @@
 	}];
 }
 
+- (void) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter
+{
+	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSDownloadsDirectory, NSUserDomainMask, YES);
+	NSString* downloads_folder = [paths firstObject];
+
+	NSString* folder_name = @"Micro.blog export";
+	NSString* destination_name = [RFSettings stringForKey:kCurrentDestinationName];
+	if (destination_name != nil) {
+		folder_name = [NSString stringWithFormat:@"Micro.blog export (%@)", destination_name];
+	}
+	
+	NSError* error = nil;
+
+	NSString* export_folder = [downloads_folder stringByAppendingPathComponent:folder_name];
+	[[NSFileManager defaultManager] createDirectoryAtPath:export_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	self.exportFolder = export_folder;
+	
+	NSDateComponents* components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:post.postedAt];
+
+	NSString* date_name = [NSString stringWithFormat:@"%ld", (long)components.year];
+	NSString* date_folder = [export_folder stringByAppendingPathComponent:date_name];
+	[[NSFileManager defaultManager] createDirectoryAtPath:date_folder withIntermediateDirectories:YES attributes:nil error:&error];
+	
+	NSString* file_content = post.text;
+	
+	if (includeFrontmatter) {
+	}
+	
+	NSString* filename = [NSString stringWithFormat:@"%@.md", post.postID];
+	NSString* markdown_path = [date_folder stringByAppendingPathComponent:filename];
+	[file_content writeToFile:markdown_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+}
+
 - (IBAction) cancel:(id)sender
 {
 	[self.window performClose:nil];
+}
+
+- (IBAction) revealFolder:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openFile:self.exportFolder withApplication:@"Finder"];
 }
 
 @end

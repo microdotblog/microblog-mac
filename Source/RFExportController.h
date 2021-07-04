@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTextField* statusField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressBar;
+@property (strong, nonatomic) IBOutlet NSButton* cancelButton;
+
+@property (strong) NSString* exportFolder;
 
 @end
 

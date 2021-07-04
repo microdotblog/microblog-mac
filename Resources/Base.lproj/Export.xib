@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFExportController">
             <connections>
+                <outlet property="cancelButton" destination="UIB-wc-xvm" id="7Qs-2f-2yP"/>
                 <outlet property="progressBar" destination="r1B-YQ-aVi" id="Srb-75-aDW"/>
                 <outlet property="statusField" destination="cPL-bo-NFM" id="ASH-qU-UyR"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="K3B-0C-Ybq"/>
