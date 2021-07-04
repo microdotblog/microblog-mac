@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="RFExportController">
+            <connections>
+                <outlet property="progressBar" destination="r1B-YQ-aVi" id="Srb-75-aDW"/>
+                <outlet property="statusField" destination="cPL-bo-NFM" id="ASH-qU-UyR"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="K3B-0C-Ybq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Export" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="135"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="135"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <progressIndicator maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="r1B-YQ-aVi">
+                        <rect key="frame" x="20" y="60" width="440" height="20"/>
+                    </progressIndicator>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UIB-wc-xvm">
+                        <rect key="frame" x="391" y="13" width="76" height="32"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="M8K-3i-oXQ">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancel:" target="-2" id="U0O-6h-19p"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cPL-bo-NFM">
+                        <rect key="frame" x="18" y="97" width="444" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Downloading posts..." id="ow1-a9-EM9">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="r1B-YQ-aVi" firstAttribute="top" secondItem="cPL-bo-NFM" secondAttribute="bottom" constant="18" id="7EJ-I7-fIB"/>
+                    <constraint firstAttribute="trailing" secondItem="UIB-wc-xvm" secondAttribute="trailing" constant="20" symbolic="YES" id="7o4-F5-naJ"/>
+                    <constraint firstAttribute="bottom" secondItem="UIB-wc-xvm" secondAttribute="bottom" constant="20" symbolic="YES" id="FKu-63-Oyi"/>
+                    <constraint firstItem="cPL-bo-NFM" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="22" id="Mk7-2w-VFh"/>
+                    <constraint firstItem="r1B-YQ-aVi" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Q1w-bL-ePG"/>
+                    <constraint firstAttribute="trailing" secondItem="cPL-bo-NFM" secondAttribute="trailing" constant="20" symbolic="YES" id="hG3-tV-IiJ"/>
+                    <constraint firstItem="UIB-wc-xvm" firstAttribute="top" secondItem="r1B-YQ-aVi" secondAttribute="bottom" constant="21" id="vyg-pI-KKp"/>
+                    <constraint firstItem="cPL-bo-NFM" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="xIa-4R-1aA"/>
+                    <constraint firstAttribute="trailing" secondItem="r1B-YQ-aVi" secondAttribute="trailing" constant="20" symbolic="YES" id="z3I-Ob-eJY"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="41" y="76.5"/>
+        </window>
+    </objects>
+</document>

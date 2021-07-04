@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -120,6 +120,25 @@ DQ
                                 <connections>
                                     <action selector="importInstagram:" target="Voe-Tx-rLC" id="gJ9-cS-oKI"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem title="Export" id="4T0-Tb-Bdg">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Export" id="JU1-kz-tou">
+                                    <items>
+                                        <menuItem title="Markdown..." id="pe8-eP-uUD">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportMarkdown:" target="-1" id="Qjj-NS-qd5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Day One..." id="Rht-jV-tqb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportDayOne:" target="-1" id="Bvm-zL-5FP"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="dOw-pu-zNE"/>
                             <menuItem title="Sign Out" id="tFo-tJ-1IJ">

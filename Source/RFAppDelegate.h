@@ -12,6 +12,7 @@
 @class RFWelcomeController;
 @class RFPreferencesController;
 @class RFInstagramController;
+@class RFExportController;
 @class RFBookmarkController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
@@ -22,6 +23,7 @@
 @property (strong, nonatomic) RFWelcomeController* welcomeController;
 @property (strong, nonatomic) RFPreferencesController* prefsController;
 @property (strong, nonatomic) RFInstagramController* instagramController;
+@property (strong, nonatomic) RFExportController* exportController;
 @property (strong, nonatomic) RFBookmarkController* bookmarkController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 

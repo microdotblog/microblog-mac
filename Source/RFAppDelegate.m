@@ -12,6 +12,9 @@
 #import "RFWelcomeController.h"
 #import "RFPreferencesController.h"
 #import "RFInstagramController.h"
+#import "RFExportController.h"
+#import "RFMarkdownExportController.h"
+#import "RFDayOneExportController.h"
 #import "RFPhotoZoomController.h"
 #import "RFBookmarkController.h"
 #import "RFPostWindowController.h"
@@ -311,6 +314,18 @@
 		self.instagramController = [[RFInstagramController alloc] initWithFile:url.path];
 		[self.instagramController showWindow:nil];
 	}
+}
+
+- (IBAction) exportMarkdown:(id)sender
+{
+	self.exportController = [[RFMarkdownExportController alloc] init];
+	[self.exportController showWindow:nil];
+}
+
+- (IBAction) exportDayOne:(id)sender
+{
+	self.exportController = [[RFExportController alloc] init];
+	[self.exportController showWindow:nil];
 }
 
 - (IBAction) signOut:(id)sender
