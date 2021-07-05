@@ -155,14 +155,18 @@
 	NSString* date_name = [NSString stringWithFormat:@"%ld", (long)components.year];
 	NSString* date_folder = [export_folder stringByAppendingPathComponent:date_name];
 	[[NSFileManager defaultManager] createDirectoryAtPath:date_folder withIntermediateDirectories:YES attributes:nil error:&error];
-	
+
+	NSString* month_name = [NSString stringWithFormat:@"%02ld", (long)components.month];
+	NSString* month_folder = [date_folder stringByAppendingPathComponent:month_name];
+	[[NSFileManager defaultManager] createDirectoryAtPath:month_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
 	NSString* file_content = post.text;
 	
 	if (includeFrontmatter) {
 	}
 	
 	NSString* filename = [NSString stringWithFormat:@"%@.md", post.postID];
-	NSString* markdown_path = [date_folder stringByAppendingPathComponent:filename];
+	NSString* markdown_path = [month_folder stringByAppendingPathComponent:filename];
 	[file_content writeToFile:markdown_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
 }
 
