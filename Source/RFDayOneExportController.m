@@ -30,4 +30,9 @@
 	// dayone2 -j "Test" -d "2021-05-01 14:00:00" -- new
 }
 
+- (void) writePost:(RFPost *)post
+{
+	[self writePost:post includeFrontmatter:NO];
+}
+
 @end

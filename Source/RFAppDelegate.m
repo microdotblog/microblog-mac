@@ -324,7 +324,7 @@
 
 - (IBAction) exportDayOne:(id)sender
 {
-	self.exportController = [[RFExportController alloc] init];
+	self.exportController = [[RFDayOneExportController alloc] init];
 	[self.exportController showWindow:nil];
 }
 

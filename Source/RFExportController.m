@@ -14,6 +14,7 @@
 #import "RFSettings.h"
 #import "RFPost.h"
 #import "UUDate.h"
+#import "NSString+Extras.h"
 
 @implementation RFExportController
 
@@ -110,7 +111,7 @@
 
 				[new_posts addObject:post];
 				
-				[self writePost:post includeFrontmatter:NO];
+				[self writePost:post];
 			}
 			
 			// wait a second so we don't hit the server too much
@@ -130,6 +131,11 @@
 			});
 		}
 	}];
+}
+
+- (void) writePost:(RFPost *)post
+{
+	[self writePost:post includeFrontmatter:YES];
 }
 
 - (void) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter
@@ -163,6 +169,21 @@
 	NSString* file_content = post.text;
 	
 	if (includeFrontmatter) {
+		NSMutableString* with_frontmatter = [NSMutableString string];
+		[with_frontmatter appendString:@"---\n"];
+		[with_frontmatter appendFormat:@"title: \"%@\"\n", [post.title rf_stringEscapingQuotes]];
+		[with_frontmatter appendFormat:@"date: %@\n", post.postedAt];
+		
+		if (post.categories.count > 0) {
+			[with_frontmatter appendString:@"categories:\n"];
+			for (NSString* c in post.categories) {
+				[with_frontmatter appendFormat:@"- \"%@\"\n", [c rf_stringEscapingQuotes]];
+			}
+		}
+		
+		[with_frontmatter appendString:@"---\n"];
+		[with_frontmatter appendString:file_content];
+		file_content = with_frontmatter;
 	}
 	
 	NSString* filename = [NSString stringWithFormat:@"%@.md", post.postID];

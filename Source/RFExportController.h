@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RFPost;
+
 @interface RFExportController : NSWindowController
 
 @property (strong, nonatomic) IBOutlet NSTextField* statusField;
@@ -17,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* cancelButton;
 
 @property (strong) NSString* exportFolder;
+
+- (void) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 
 @end
 

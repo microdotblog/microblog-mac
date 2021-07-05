@@ -13,5 +13,6 @@
 - (NSNumber *) rf_numberValue;
 - (NSString *) rf_urlEncoded;
 - (NSString *) rf_stripHTML;
+- (NSString *) rf_stringEscapingQuotes;
 
 @end

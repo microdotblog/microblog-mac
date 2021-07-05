@@ -33,4 +33,9 @@
 	return s;
 }
 
+- (NSString *) rf_stringEscapingQuotes
+{
+	return [self stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+}
+
 @end
