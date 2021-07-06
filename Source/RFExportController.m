@@ -92,14 +92,16 @@
 			return;
 		}
 
+		NSString* s = @"Downloading posts...";
 		if ([offset integerValue] > 0) {
-			NSString* s = [NSString stringWithFormat:@"Downloading posts (%@)...", offset];
-			RFDispatchMainAsync (^{
-				[self.statusField setStringValue:s];
-				[self.progressBar setIndeterminate:NO];
-			});
+			s = [NSString stringWithFormat:@"Downloading posts (%@)...", offset];
 		}
-		
+
+		RFDispatchMainAsync (^{
+			[self.statusField setStringValue:s];
+			[self.progressBar setIndeterminate:NO];
+		});
+
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_posts = [NSMutableArray array];
 			
