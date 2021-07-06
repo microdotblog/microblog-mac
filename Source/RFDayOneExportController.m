@@ -79,43 +79,10 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 {
 	NSString* s = text;
 	
-	NSError* error = nil;
-	HTMLParser* p = [[HTMLParser alloc] initWithString:text error:&error];
-	if (error == nil) {
-		HTMLNode* body = [p body];
-
-		NSArray* img_tags = [body findChildTags:@"img"];
-		for (HTMLNode* img_tag in img_tags) {
-			NSString* url = [img_tag getAttributeNamed:@"src"];
-			if ([url isEqualToString:findURL]) {
-				xmlUnlinkNode (img_tag->_node);
-			}
-		}
-
-		NSArray* video_tags = [body findChildTags:@"video"];
-		for (HTMLNode* video_tag in video_tags) {
-			NSString* url = [video_tag getAttributeNamed:@"src"];
-			if ([url isEqualToString:findURL]) {
-				xmlUnlinkNode (video_tag->_node);
-			}
-		}
-
-		NSArray* audio_tags = [body findChildTags:@"audio"];
-		for (HTMLNode* audio_tag in audio_tags) {
-			NSString* url = [audio_tag getAttributeNamed:@"src"];
-			if ([url isEqualToString:findURL]) {
-				xmlUnlinkNode (audio_tag->_node);
-//				xmlNode* new_node = NULL;
-//				xmlReplaceNode (audio_tag->_node, new_node);
-			}
-		}
-		
-		s = [body rawContents];
-		
-		// convert back to Markdown?
-		// ...
-	}
-
+	NSString* tag = [NSString stringWithFormat:@"<(.*) src=\"%@\"(.*)>", findURL];
+	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:tag options:NSRegularExpressionCaseInsensitive error:NULL];
+	s = [regex stringByReplacingMatchesInString:s options:0 range:NSMakeRange (0, text.length) withTemplate:@"[{attachment}]"];
+	
 	return s;
 }
 
@@ -123,13 +90,7 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 {
 	// NSTask with standard input of Markdown text
 	// dayone2 -j "Test" -d "2021-05-01 14:00:00" -a "/path/to/upload.jpg" -- new
-	
-	NSFileHandle* f = [NSFileHandle fileHandleForReadingAtPath:path];
-	NSString* d = [post.postedAt description];
-	
-	// TODO: rewrite img tag to use [{attachment}] instead?
-	// ...
-	
+		
 	NSError* error = nil;
 
 	NSString* uploads_folder = [self.exportFolder stringByAppendingPathComponent:@"uploads"];
@@ -154,7 +115,10 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 		
 		[new_text writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 	}
-	
+
+	NSFileHandle* f = [NSFileHandle fileHandleForReadingAtPath:path];
+	NSString* d = [post.postedAt description];
+
 	[args addObjectsFromArray:@[ @"-d", d, @"--", @"new"]];
 	
 	NSTask* t = [[NSTask alloc] init];

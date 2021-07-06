@@ -99,7 +99,8 @@
 
 		RFDispatchMainAsync (^{
 			[self.statusField setStringValue:s];
-			[self.progressBar setIndeterminate:NO];
+			[self.progressBar setIndeterminate:YES];
+			[self.progressBar startAnimation:nil];
 		});
 
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
