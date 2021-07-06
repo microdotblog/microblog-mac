@@ -325,8 +325,12 @@
 - (IBAction) exportDayOne:(id)sender
 {
 	if ([RFDayOneExportController checkForDayOne]) {
-		self.exportController = [[RFDayOneExportController alloc] init];
-		[self.exportController showWindow:nil];
+		[NSAlert rf_showTwoButtonAlert:@"Day One Default Journal" message:@"Micro.blog will download your posts and add them to the default journal in Day One. To test the import first, create a new Day One journal and move it to the top of your list in Day One's preferences." okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				self.exportController = [[RFDayOneExportController alloc] init];
+				[self.exportController showWindow:nil];
+			}
+		}];
 	}
 }
 

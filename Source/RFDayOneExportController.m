@@ -46,14 +46,14 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 - (void) runDayOneForPost:(RFPost *)post withPath:(NSString *)path
 {
 	// NSTask with standard input of Markdown text
-	// dayone2 -j "Test" -d "2021-05-01 14:00:00" -- new
+	// dayone2 -j "Test" -d "2021-05-01 14:00:00" -a "/path/to/upload.jpg" -- new
 	
 	NSFileHandle* f = [NSFileHandle fileHandleForReadingAtPath:path];
 	NSString* d = [post.postedAt description];
 	
 	NSTask* t = [[NSTask alloc] init];
 	t.launchPath = kDayOneCommandLinePath;
-	t.arguments = @[ @"-j", @"Test", @"-d", d, @"--", @"new"];
+	t.arguments = @[ @"-d", d, @"--", @"new"];
 	t.standardInput = f;
 	
 	[t launch];
