@@ -324,8 +324,10 @@
 
 - (IBAction) exportDayOne:(id)sender
 {
-	self.exportController = [[RFDayOneExportController alloc] init];
-	[self.exportController showWindow:nil];
+	if ([RFDayOneExportController checkForDayOne]) {
+		self.exportController = [[RFDayOneExportController alloc] init];
+		[self.exportController showWindow:nil];
+	}
 }
 
 - (IBAction) signOut:(id)sender

@@ -277,12 +277,12 @@
 	return export_folder;
 }
 
-- (void) writePost:(RFPost *)post
+- (NSString *) writePost:(RFPost *)post
 {
-	[self writePost:post includeFrontmatter:YES];
+	return [self writePost:post includeFrontmatter:YES];
 }
 
-- (void) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter
+- (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter
 {
 	self.exportFolder = [self prepareExportFolder];
 
@@ -324,6 +324,8 @@
 	NSString* filename = [NSString stringWithFormat:@"%@.md", post.postID];
 	NSString* markdown_path = [month_folder stringByAppendingPathComponent:filename];
 	[file_content writeToFile:markdown_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	
+	return markdown_path;
 }
 
 - (IBAction) cancel:(id)sender

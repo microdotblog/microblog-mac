@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RFDayOneExportController : RFExportController
 
++ (BOOL) checkForDayOne;
+
 @end
 
 NS_ASSUME_NONNULL_END

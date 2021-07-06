@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSMutableArray* queuedUploads;
 @property (assign) NSInteger totalUploads;
 
-- (void) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
+- (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 
 @end
 
