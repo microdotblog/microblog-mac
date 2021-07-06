@@ -18,9 +18,9 @@
 #import "NSString+Extras.h"
 
 // How the export works:
-// * Page through all the posts. As we download them, we write out the Markdown to ~/Downloads.
 // * Page through all the uploads. We store the URLs in self.queuedUploads.
 // * Download all the photos and other uploads.
+// * Page through all the posts. As we download them, we write out the Markdown to ~/Downloads.
 // Subclasses like RFDayOneExportController can take further action on the downloaded files.
 
 @implementation RFExportController
@@ -41,7 +41,8 @@
 	
 	[self setupWindow];
 	[self setupProgress];
-	[self downloadPostsInBackgroundWithOffset:0];
+
+	[self downloadUploadsInBackgroundWithOffset:0];
 }
 
 - (void) setupWindow
@@ -90,6 +91,7 @@
 			NSString* s = [NSString stringWithFormat:@"Downloading posts (%@)...", offset];
 			RFDispatchMainAsync (^{
 				[self.statusField setStringValue:s];
+				[self.progressBar setIndeterminate:NO];
 			});
 		}
 		
@@ -127,8 +129,14 @@
 			
 			RFDispatchMainAsync (^{
 				if (new_posts.count == 0) {
-					[self.statusField setStringValue:@"Downloading uploaded files..."];
-					[self downloadUploadsInBackgroundWithOffset:0];
+					// enable close button
+					self.window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
+					
+					// finish progress and set reveal button
+					[self.progressBar stopAnimation:nil];
+					[self.statusField setStringValue:@"Finished export."];
+					[self.cancelButton setTitle:@"Reveal Folder"];
+					[self.cancelButton setAction:@selector(revealFolder:)];
 				}
 				else {
 					NSInteger new_offset = [offset integerValue] + limit;
@@ -182,6 +190,11 @@
 			// wait a second so we don't hit the server too much
 			[NSThread sleepForTimeInterval:1];
 
+			NSString* s = @"Downloading uploaded files...";
+			if (offset > 0) {
+				s = [NSString stringWithFormat:@"Downloading uploaded files (%@)...", offset];
+			}
+
 			RFDispatchMainAsync (^{
 				if (new_posts.count == 0) {
 					self.totalUploads = self.queuedUploads.count;
@@ -192,6 +205,8 @@
 					[self downloadNextUploadInBackground];
 				}
 				else {
+					[self.statusField setStringValue:s];
+
 					[self.queuedUploads addObjectsFromArray:new_posts];
 					NSInteger new_offset = [offset integerValue] + limit;
 					[self downloadUploadsInBackgroundWithOffset:new_offset];
@@ -224,21 +239,14 @@
 		}];
 	}
 	else {
-		RFDispatchMainAsync (^{
-			// enable close button
-			self.window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
-			
-			// finish progress and set reveal button
-			[self.progressBar stopAnimation:nil];
-			[self.statusField setStringValue:@"Finished export."];
-			[self.cancelButton setTitle:@"Reveal Folder"];
-			[self.cancelButton setAction:@selector(revealFolder:)];
-		});
+		[self downloadPostsInBackgroundWithOffset:0];
 	}
 }
 
 - (void) downloadURL:(NSString *)url withCompletion:(void (^)(void))handler
 {
+	self.exportFolder = [self prepareExportFolder];
+
 	NSError* error = nil;
 
 	NSString* uploads_folder = [self.exportFolder stringByAppendingPathComponent:@"uploads"];

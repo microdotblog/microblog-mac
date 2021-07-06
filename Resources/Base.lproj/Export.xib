@@ -42,7 +42,7 @@ Gw
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cPL-bo-NFM">
                         <rect key="frame" x="18" y="97" width="444" height="16"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="Downloading posts..." id="ow1-a9-EM9">
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Exporting..." id="ow1-a9-EM9">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
