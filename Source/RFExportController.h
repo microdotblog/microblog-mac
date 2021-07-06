@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* cancelButton;
 
 @property (strong) NSString* exportFolder;
+@property (strong) NSMutableArray* queuedUploads;
+@property (assign) NSInteger totalUploads;
 
 - (void) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 
