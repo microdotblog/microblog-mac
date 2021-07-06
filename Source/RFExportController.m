@@ -173,6 +173,9 @@
 		[with_frontmatter appendString:@"---\n"];
 		[with_frontmatter appendFormat:@"title: \"%@\"\n", [post.title rf_stringEscapingQuotes]];
 		[with_frontmatter appendFormat:@"date: %@\n", post.postedAt];
+
+		NSURL* url = [NSURL URLWithString:post.url];
+		[with_frontmatter appendFormat:@"url: %@\n", url.path];
 		
 		if (post.categories.count > 0) {
 			[with_frontmatter appendString:@"categories:\n"];
