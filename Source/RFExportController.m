@@ -87,6 +87,11 @@
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (self.isCancelled) {
+			[self finishCancel];
+			return;
+		}
+
 		if ([offset integerValue] > 0) {
 			NSString* s = [NSString stringWithFormat:@"Downloading posts (%@)...", offset];
 			RFDispatchMainAsync (^{
@@ -170,6 +175,11 @@
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (self.isCancelled) {
+			[self finishCancel];
+			return;
+		}
+
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_posts = [NSMutableArray array];
 
@@ -191,7 +201,7 @@
 			[NSThread sleepForTimeInterval:1];
 
 			NSString* s = @"Downloading uploaded files...";
-			if (offset > 0) {
+			if (offset.integerValue > 0) {
 				s = [NSString stringWithFormat:@"Downloading uploaded files (%@)...", offset];
 			}
 
@@ -223,6 +233,11 @@
 
 - (void) downloadNextUpload
 {
+	if (self.isCancelled) {
+		[self finishCancel];
+		return;
+	}
+	
 	RFUpload* up = [self.queuedUploads firstObject];
 	if (up) {
 		NSURL* url = [NSURL URLWithString:up.url];
@@ -336,9 +351,17 @@
 	return markdown_path;
 }
 
+- (void) finishCancel
+{
+	RFDispatchMainAsync (^{
+		[self.window close];
+	});
+}
+
 - (IBAction) cancel:(id)sender
 {
-	[self.window performClose:nil];
+	self.isCancelled = YES;
+	self.cancelButton.enabled = NO;
 }
 
 - (IBAction) revealFolder:(id)sender

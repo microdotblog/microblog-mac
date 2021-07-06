@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* exportFolder;
 @property (strong) NSMutableArray* queuedUploads;
 @property (assign) NSInteger totalUploads;
+@property (assign) BOOL isCancelled;
 
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 
