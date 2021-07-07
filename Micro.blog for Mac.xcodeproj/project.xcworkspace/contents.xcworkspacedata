@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/manton/Source/Manton/microblog-mac/Micro.blog for Mac.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

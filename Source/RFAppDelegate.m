@@ -14,6 +14,7 @@
 #import "RFInstagramController.h"
 #import "RFExportController.h"
 #import "RFWordPressExportController.h"
+#import "RFBarExportController.h"
 #import "RFMarkdownExportController.h"
 #import "RFDayOneExportController.h"
 #import "RFPhotoZoomController.h"
@@ -220,6 +221,11 @@
 			return NO;
 		}
 	}
+	else if (item.action == @selector(exportBlogArchive:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
+	}
 	else if (item.action == @selector(exportMarkdown:)) {
 		if (![RFSettings isUsingMicroblog]) {
 			return NO;
@@ -333,6 +339,12 @@
 - (IBAction) exportWordPress:(id)sender
 {
 	self.exportController = [[RFWordPressExportController alloc] init];
+	[self.exportController showWindow:nil];
+}
+
+- (IBAction) exportBlogArchive:(id)sender
+{
+	self.exportController = [[RFBarExportController alloc] init];
 	[self.exportController showWindow:nil];
 }
 

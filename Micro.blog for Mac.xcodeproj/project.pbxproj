@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -63,6 +63,8 @@
 		4B3840D12692038B00AD3781 /* RFMarkdownExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */; };
 		4B3840D4269203B400AD3781 /* RFDayOneExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D3269203B400AD3781 /* RFDayOneExportController.m */; };
 		4B3840D72696223E00AD3781 /* RFWordPressExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D62696223E00AD3781 /* RFWordPressExportController.m */; };
+		4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D9269645E000AD3781 /* RFBarExportController.m */; };
+		4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 4B3840DC26964F3B00AD3781 /* ZipArchive */; };
 		4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF3201EC55A00C71AAF /* MMScanner.m */; };
 		4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF7201EC55A00C71AAF /* MMDocument.m */; };
 		4B400D05201EC55B00C71AAF /* MMElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF9201EC55A00C71AAF /* MMElement.m */; };
@@ -273,6 +275,8 @@
 		4B3840D3269203B400AD3781 /* RFDayOneExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFDayOneExportController.m; path = Source/RFDayOneExportController.m; sourceTree = "<group>"; };
 		4B3840D52696223E00AD3781 /* RFWordPressExportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFWordPressExportController.h; path = Source/RFWordPressExportController.h; sourceTree = "<group>"; };
 		4B3840D62696223E00AD3781 /* RFWordPressExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWordPressExportController.m; path = Source/RFWordPressExportController.m; sourceTree = "<group>"; };
+		4B3840D8269645E000AD3781 /* RFBarExportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBarExportController.h; path = Source/RFBarExportController.h; sourceTree = "<group>"; };
+		4B3840D9269645E000AD3781 /* RFBarExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBarExportController.m; path = Source/RFBarExportController.m; sourceTree = "<group>"; };
 		4B400CF2201EC55A00C71AAF /* MMElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMElement.h; path = Shared/MMMarkdown/Source/MMElement.h; sourceTree = "<group>"; };
 		4B400CF3201EC55A00C71AAF /* MMScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMScanner.m; path = Shared/MMMarkdown/Source/MMScanner.m; sourceTree = "<group>"; };
 		4B400CF4201EC55A00C71AAF /* MMScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMScanner.h; path = Shared/MMMarkdown/Source/MMScanner.h; sourceTree = "<group>"; };
@@ -441,6 +445,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */,
 				4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */,
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
@@ -632,6 +637,8 @@
 				4B3840CA2692014000AD3781 /* RFExportController.m */,
 				4B3840D52696223E00AD3781 /* RFWordPressExportController.h */,
 				4B3840D62696223E00AD3781 /* RFWordPressExportController.m */,
+				4B3840D8269645E000AD3781 /* RFBarExportController.h */,
+				4B3840D9269645E000AD3781 /* RFBarExportController.m */,
 				4B3840CF2692038B00AD3781 /* RFMarkdownExportController.h */,
 				4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */,
 				4B3840D2269203B400AD3781 /* RFDayOneExportController.h */,
@@ -862,6 +869,9 @@
 			dependencies = (
 			);
 			name = Micro.blog;
+			packageProductDependencies = (
+				4B3840DC26964F3B00AD3781 /* ZipArchive */,
+			);
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
 			productType = "com.apple.product-type.application";
@@ -896,6 +906,9 @@
 				Base,
 			);
 			mainGroup = 4B7F0ACF1BAF4B77004553A6;
+			packageReferences = (
+				4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */,
+			);
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1086,6 +1099,7 @@
 				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
+				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
@@ -1452,7 +1466,10 @@
 				);
 				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MARKETING_VERSION = 2.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
@@ -1480,7 +1497,10 @@
 				);
 				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MARKETING_VERSION = 2.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
@@ -1511,6 +1531,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZipArchive/ZipArchive.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4B3840DC26964F3B00AD3781 /* ZipArchive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */;
+			productName = ZipArchive;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4B7F0AD01BAF4B77004553A6 /* Project object */;
 }

@@ -127,6 +127,12 @@ DQ
                                                 <action selector="exportWordPress:" target="-1" id="XMU-hG-g2Y"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Blog Archive..." id="58V-Fr-J9s">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportBlogArchive:" target="-1" id="e8i-pf-KSc"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Markdown..." id="pe8-eP-uUD">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
