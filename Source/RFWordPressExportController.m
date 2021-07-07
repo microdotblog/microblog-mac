@@ -29,7 +29,7 @@
 
 - (NSXMLDocument *) makeWordPressXML
 {
-	NSXMLElement* root = (NSXMLElement *)[NSXMLNode elementWithName:@"rss"];
+	NSXMLElement* root = [NSXMLNode elementWithName:@"rss"];
 	NSXMLDocument* doc = [[NSXMLDocument alloc] initWithRootElement:root];
 	[doc setVersion:@"1.0"];
 	[doc setCharacterEncoding:@"UTF-8"];
@@ -80,7 +80,10 @@
 		NSXMLElement* guid = [NSXMLNode elementWithName:@"guid" stringValue:post.url];
 		[item addChild:guid];
 
-		NSXMLElement* pub_date = [NSXMLNode elementWithName:@"pubDate" stringValue:[post.postedAt uuRfc3339StringForUTCTimeZone]];
+		NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+		formatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z"; // RFC 2822
+		
+		NSXMLElement* pub_date = [NSXMLNode elementWithName:@"pubDate" stringValue:[formatter stringFromDate:post.postedAt]];
 		[item addChild:pub_date];
 
 		for (NSString* c in post.categories) {
@@ -88,13 +91,13 @@
 			[item addChild:category];
 
 			NSXMLNode* category_domain = [NSXMLNode attributeWithName:@"domain" stringValue:@"category"];
-			[root addAttribute:category_domain];
+			[category addAttribute:category_domain];
 
 			NSString* s = [c lowercaseString];
 			s = [s stringByReplacingOccurrencesOfString:@" " withString:@"-"];
 			
 			NSXMLNode* category_nicename = [NSXMLNode attributeWithName:@"nicename" stringValue:s];
-			[root addAttribute:category_nicename];
+			[category addAttribute:category_nicename];
 		}
 	}
 	
