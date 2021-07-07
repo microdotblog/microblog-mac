@@ -122,6 +122,11 @@
 	return [self boolForKey:kExternalBlogIsPreferred];
 }
 
++ (BOOL) isUsingMicroblog
+{
+	return [self hasSnippetsBlog] && ![self prefersExternalBlog];
+}
+
 #pragma mark -
 
 + (BOOL) boolForKey:(NSString *)prefKey

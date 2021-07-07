@@ -47,6 +47,7 @@ static NSString* const kExternalBlogCategory = @"ExternalBlogCategory";
 + (BOOL) hasSnippetsBlog;
 + (BOOL) hasMicropubBlog;
 + (BOOL) prefersExternalBlog;
++ (BOOL) isUsingMicroblog;
 
 + (BOOL) boolForKey:(NSString *)prefKey;
 + (BOOL) boolForKey:(NSString *)prefKey account:(RFAccount *)account;

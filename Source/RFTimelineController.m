@@ -425,9 +425,23 @@
 			return NO;
 		}
 	}
-	else {
-		return YES;
+	else if (item.action == @selector(showPosts:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
 	}
+	else if (item.action == @selector(showPages:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
+	}
+	else if (item.action == @selector(showUploads:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
+	}
+
+	return YES;
 }
 
 - (void) performFindPanelAction:(id)sender

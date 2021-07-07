@@ -43,7 +43,6 @@
 	[self setupAppearance];
 	[self setupURLs];
 	[self setupFollowerAutoComplete];
-	[self setupMenus];
 
 	self.postWindows = [NSMutableArray array];
 
@@ -208,16 +207,25 @@
 	 }];
 }
 
-- (void) setupMenus
-{
-	if (![RFSettings hasSnippetsBlog] || [RFSettings prefersExternalBlog]) {
-		[self.allPostMenuItem.menu removeItem:self.allPostMenuItem];
-	}
-}
-
 - (void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDarkModeAppearanceDidChangeNotification object:self];
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(exportMarkdown:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
+	}
+	else if (item.action == @selector(exportDayOne:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
+	}
+
+	return YES;
 }
 
 #pragma mark -
