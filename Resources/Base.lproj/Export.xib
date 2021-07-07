@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="cancelButton" destination="UIB-wc-xvm" id="7Qs-2f-2yP"/>
                 <outlet property="progressBar" destination="r1B-YQ-aVi" id="Srb-75-aDW"/>
+                <outlet property="secondaryField" destination="hg9-3p-76R" id="gWy-UC-Sw6"/>
                 <outlet property="statusField" destination="cPL-bo-NFM" id="ASH-qU-UyR"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="K3B-0C-Ybq"/>
             </connections>
@@ -48,16 +49,27 @@ Gw
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hg9-3p-76R">
+                        <rect key="frame" x="18" y="62" width="449" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="The exported files have been saved to your Downloads folder." id="una-HY-4Ut">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="r1B-YQ-aVi" firstAttribute="top" secondItem="cPL-bo-NFM" secondAttribute="bottom" constant="18" id="7EJ-I7-fIB"/>
                     <constraint firstAttribute="trailing" secondItem="UIB-wc-xvm" secondAttribute="trailing" constant="20" symbolic="YES" id="7o4-F5-naJ"/>
                     <constraint firstAttribute="bottom" secondItem="UIB-wc-xvm" secondAttribute="bottom" constant="20" symbolic="YES" id="FKu-63-Oyi"/>
+                    <constraint firstItem="hg9-3p-76R" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Hs7-jo-6RX"/>
                     <constraint firstItem="cPL-bo-NFM" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="22" id="Mk7-2w-VFh"/>
                     <constraint firstItem="r1B-YQ-aVi" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Q1w-bL-ePG"/>
                     <constraint firstAttribute="trailing" secondItem="cPL-bo-NFM" secondAttribute="trailing" constant="20" symbolic="YES" id="hG3-tV-IiJ"/>
+                    <constraint firstItem="hg9-3p-76R" firstAttribute="top" secondItem="cPL-bo-NFM" secondAttribute="bottom" constant="19" id="uxP-4a-jlC"/>
                     <constraint firstItem="UIB-wc-xvm" firstAttribute="top" secondItem="r1B-YQ-aVi" secondAttribute="bottom" constant="21" id="vyg-pI-KKp"/>
                     <constraint firstItem="cPL-bo-NFM" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="xIa-4R-1aA"/>
+                    <constraint firstAttribute="trailing" secondItem="hg9-3p-76R" secondAttribute="trailing" constant="15" id="yXu-X8-JYv"/>
                     <constraint firstAttribute="trailing" secondItem="r1B-YQ-aVi" secondAttribute="trailing" constant="20" symbolic="YES" id="z3I-Ob-eJY"/>
                 </constraints>
             </view>

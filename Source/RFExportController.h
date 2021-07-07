@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RFExportController : NSWindowController
 
 @property (strong, nonatomic) IBOutlet NSTextField* statusField;
+@property (strong, nonatomic) IBOutlet NSTextField* secondaryField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressBar;
 @property (strong, nonatomic) IBOutlet NSButton* cancelButton;
 
@@ -23,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) NSInteger totalUploads;
 @property (assign) BOOL isCancelled;
 
+- (NSString *) writePost:(RFPost *)post;
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
+- (void) finishExport;
 
 @end
 

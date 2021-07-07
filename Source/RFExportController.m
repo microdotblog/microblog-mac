@@ -143,8 +143,11 @@
 					// finish progress and set reveal button
 					[self.progressBar stopAnimation:nil];
 					[self.statusField setStringValue:@"Finished export."];
+					[self.secondaryField setHidden:NO];
 					[self.cancelButton setTitle:@"Reveal Folder"];
 					[self.cancelButton setAction:@selector(revealFolder:)];
+					
+					[self finishExport];
 				}
 				else {
 					NSInteger new_offset = [offset integerValue] + limit;
@@ -359,6 +362,10 @@
 	RFDispatchMainAsync (^{
 		[self.window close];
 	});
+}
+
+- (void) finishExport
+{
 }
 
 - (IBAction) cancel:(id)sender

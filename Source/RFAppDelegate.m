@@ -13,6 +13,7 @@
 #import "RFPreferencesController.h"
 #import "RFInstagramController.h"
 #import "RFExportController.h"
+#import "RFWordPressExportController.h"
 #import "RFMarkdownExportController.h"
 #import "RFDayOneExportController.h"
 #import "RFPhotoZoomController.h"
@@ -214,7 +215,12 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if (item.action == @selector(exportMarkdown:)) {
+	if (item.action == @selector(exportWordPress:)) {
+		if (![RFSettings isUsingMicroblog]) {
+			return NO;
+		}
+	}
+	else if (item.action == @selector(exportMarkdown:)) {
 		if (![RFSettings isUsingMicroblog]) {
 			return NO;
 		}
@@ -322,6 +328,12 @@
 		self.instagramController = [[RFInstagramController alloc] initWithFile:url.path];
 		[self.instagramController showWindow:nil];
 	}
+}
+
+- (IBAction) exportWordPress:(id)sender
+{
+	self.exportController = [[RFWordPressExportController alloc] init];
+	[self.exportController showWindow:nil];
 }
 
 - (IBAction) exportMarkdown:(id)sender

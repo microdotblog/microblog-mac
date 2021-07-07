@@ -121,6 +121,12 @@ DQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export" id="JU1-kz-tou">
                                     <items>
+                                        <menuItem title="WordPress..." id="2sx-hv-5Dw">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportWordPress:" target="-1" id="XMU-hG-g2Y"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Markdown..." id="pe8-eP-uUD">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
