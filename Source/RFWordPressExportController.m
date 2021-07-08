@@ -114,6 +114,13 @@
 	NSString* filename = @"Micro.blog.xml";
 	NSString* wxr_path = [self.exportFolder stringByAppendingPathComponent:filename];
 	[s writeToFile:wxr_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+
+	NSString* new_path = [self promptSave:@"Micro.blog.xml"];
+	if (new_path) {
+		[[NSFileManager defaultManager] copyItemAtPath:wxr_path toPath:new_path error:&error];
+	}
+
+	[self cleanupExport];
 }
 
 @end

@@ -289,8 +289,10 @@
 
 - (NSString *) prepareExportFolder
 {
-	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSDownloadsDirectory, NSUserDomainMask, YES);
-	NSString* downloads_folder = [paths firstObject];
+	NSError* error = nil;
+
+	NSString* temp_filename = [NSString stringWithFormat:@"Micro.blog-%@", [[NSUUID UUID] UUIDString]];
+	NSString* temp_folder = [NSTemporaryDirectory() stringByAppendingPathComponent:temp_filename];
 
 	NSString* folder_name = @"Micro.blog export";
 	NSString* destination_name = [RFSettings stringForKey:kCurrentDestinationName];
@@ -298,9 +300,7 @@
 		folder_name = [NSString stringWithFormat:@"Micro.blog export (%@)", destination_name];
 	}
 	
-	NSError* error = nil;
-
-	NSString* export_folder = [downloads_folder stringByAppendingPathComponent:folder_name];
+	NSString* export_folder = [temp_folder stringByAppendingPathComponent:folder_name];
 	[[NSFileManager defaultManager] createDirectoryAtPath:export_folder withIntermediateDirectories:YES attributes:nil error:&error];
 	
 	return export_folder;
@@ -357,15 +357,41 @@
 	return markdown_path;
 }
 
+- (NSString *) promptSave:(NSString *)defaultName
+{
+	NSSavePanel* panel = [NSSavePanel savePanel];
+	panel.nameFieldStringValue = defaultName;
+	NSModalResponse response = [panel runModal];
+	if (response == NSModalResponseOK) {
+		return [panel.URL path];
+	}
+	else {
+		return nil;
+	}
+}
+
 - (void) finishCancel
 {
 	RFDispatchMainAsync (^{
+		[self cleanupExport];
 		[self.window close];
 	});
 }
 
 - (void) finishExport
 {
+	[self promptSave:@""];
+	[self cleanupExport];
+}
+
+- (void) cleanupExport
+{
+	// sanity check on the path
+	NSString* temp_folder = NSTemporaryDirectory();
+	if ((self.exportFolder.length > 0) && [self.exportFolder containsString:temp_folder] && [self.exportFolder containsString:@"Micro.blog"]) {
+		NSError* error = nil;
+		[[NSFileManager defaultManager] removeItemAtPath:self.exportFolder error:&error];
+	}
 }
 
 - (IBAction) cancel:(id)sender

@@ -26,7 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *) writePost:(RFPost *)post;
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
+- (NSString *) promptSave:(NSString *)defaultName;
 - (void) finishExport;
+- (void) cleanupExport;
 
 @end
 
