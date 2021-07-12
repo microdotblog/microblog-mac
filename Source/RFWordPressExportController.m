@@ -167,7 +167,7 @@
 
 	NSString* new_path = [self promptSave:@"Micro.blog.xml"];
 	if (new_path) {
-		[[NSFileManager defaultManager] copyItemAtPath:wxr_path toPath:new_path error:&error];
+		[self copyItemAtPath:wxr_path toPath:new_path];
 	}
 
 	[self cleanupExport];

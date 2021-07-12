@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) promptSave:(NSString *)defaultName;
 - (void) finishExport;
 - (void) cleanupExport;
+- (void) copyItemAtPath:(NSString *)sourcePath toPath:(NSString *)destPath;
 
 @end
 

@@ -16,6 +16,7 @@
 #import "RFUpload.h"
 #import "UUDate.h"
 #import "NSString+Extras.h"
+#import "NSAlert+Extras.h"
 
 // How the export works:
 // * Page through all the uploads. We store the URLs in self.queuedUploads.
@@ -389,6 +390,25 @@
 	if ((self.exportFolder.length > 0) && [self.exportFolder containsString:temp_folder] && [self.exportFolder containsString:@"Micro.blog"]) {
 		NSError* error = nil;
 		[[NSFileManager defaultManager] removeItemAtPath:self.exportFolder error:&error];
+	}
+}
+
+- (void) copyItemAtPath:(NSString *)sourcePath toPath:(NSString *)destPath
+{
+	NSError* error = nil;
+	BOOL is_folder = NO;
+	if ([[NSFileManager defaultManager] fileExistsAtPath:destPath isDirectory:&is_folder]) {
+		if (is_folder) {
+			[NSAlert rf_showOneButtonAlert:@"Error Saving File" message:@"Cannot replace a folder. Please save the export with a new name." button:@"OK" completionHandler:NULL];
+		}
+		else {
+			NSURL* source_url = [NSURL fileURLWithPath:sourcePath];
+			NSURL* dest_url = [NSURL fileURLWithPath:destPath];
+			[[NSFileManager defaultManager] replaceItemAtURL:dest_url withItemAtURL:source_url backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:NULL error:NULL];
+		}
+	}
+	else {
+		[[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destPath error:&error];
 	}
 }
 

@@ -17,11 +17,9 @@
 
 - (void) finishExport
 {
-	NSError* error = nil;
-	
 	NSString* new_path = [self promptSave:@"Micro.blog export"];
 	if (new_path) {
-		[[NSFileManager defaultManager] copyItemAtPath:self.exportFolder toPath:new_path error:&error];
+		[self copyItemAtPath:self.exportFolder toPath:new_path];
 	}
 
 	[self cleanupExport];

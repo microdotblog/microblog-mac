@@ -153,7 +153,7 @@
 	
 	NSString* new_path = [self promptSave:@"Micro.blog.bar"];
 	if (new_path) {
-		[[NSFileManager defaultManager] copyItemAtPath:zip_path toPath:new_path error:&error];
+		[self copyItemAtPath:zip_path toPath:new_path];
 	}
 
 	[self cleanupExport];
