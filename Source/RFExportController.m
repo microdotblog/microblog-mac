@@ -399,7 +399,7 @@
 	BOOL is_folder = NO;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:destPath isDirectory:&is_folder]) {
 		if (is_folder) {
-			[NSAlert rf_showOneButtonAlert:@"Error Saving File" message:@"Cannot replace a folder. Please save the export with a new name." button:@"OK" completionHandler:NULL];
+			[NSAlert rf_showOneButtonAlert:@"Error Saving Export" message:@"Cannot replace a folder. Please save the export with a new name." button:@"OK" completionHandler:NULL];
 		}
 		else {
 			NSURL* source_url = [NSURL fileURLWithPath:sourcePath];
