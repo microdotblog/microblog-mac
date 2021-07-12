@@ -138,17 +138,18 @@
 			
 			RFDispatchMainAsync (^{
 				if (new_posts.count == 0) {
-					// enable close button
-					self.window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
-					
-					// finish progress and set reveal button
-					[self.progressBar stopAnimation:nil];
-					[self.statusField setStringValue:@"Finished export."];
-					[self.secondaryField setHidden:NO];
-					[self.cancelButton setTitle:@"Reveal Folder"];
-					[self.cancelButton setAction:@selector(revealFolder:)];
+//					// enable close button
+//					self.window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
+//
+//					// finish progress and set reveal button
+//					[self.progressBar stopAnimation:nil];
+//					[self.statusField setStringValue:@"Finished export."];
+//					[self.secondaryField setHidden:NO];
+//					[self.cancelButton setTitle:@"Reveal Folder"];
+//					[self.cancelButton setAction:@selector(revealFolder:)];
 					
 					[self finishExport];
+					[self.window close];
 				}
 				else {
 					NSInteger new_offset = [offset integerValue] + limit;
