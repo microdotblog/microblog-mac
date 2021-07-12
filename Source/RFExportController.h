@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class RFPost;
+@class RFUpload;
 
 @interface RFExportController : NSWindowController
 
@@ -26,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *) writePost:(RFPost *)post;
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
+- (void) downloadURL:(NSString *)url forUpload:(RFUpload *)upload withCompletion:(void (^)(void))handler;
 - (NSString *) promptSave:(NSString *)defaultName;
 - (void) finishExport;
 - (void) cleanupExport;

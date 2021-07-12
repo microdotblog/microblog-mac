@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RFWordPressExportController : RFExportController
 
 @property (strong) NSMutableArray* posts;
+@property (strong) NSMutableArray* uploads;
 
 @end
 

@@ -9,6 +9,7 @@
 #import "RFWordPressExportController.h"
 
 #import "RFPost.h"
+#import "RFUpload.h"
 #import "UUDate.h"
 
 @implementation RFWordPressExportController
@@ -18,6 +19,7 @@
 	[super windowDidLoad];
 	
 	self.posts = [NSMutableArray array];
+	self.uploads = [NSMutableArray array];
 }
 
 - (NSString *) writePost:(RFPost *)post
@@ -25,6 +27,14 @@
 	[self.posts addObject:post];
 	
 	return post.text;
+}
+
+- (void) downloadURL:(NSString *)url forUpload:(RFUpload *)upload withCompletion:(void (^)(void))handler
+{
+	[self.uploads addObject:upload];
+
+	// we don't really need to download URLs for WordPress
+	handler();
 }
 
 - (NSXMLDocument *) makeWordPressXML
@@ -99,6 +109,46 @@
 			NSXMLNode* category_nicename = [NSXMLNode attributeWithName:@"nicename" stringValue:s];
 			[category addAttribute:category_nicename];
 		}
+	}
+
+	for (RFUpload* up in self.uploads) {
+		NSXMLElement* item = [NSXMLNode elementWithName:@"item"];
+		[channel addChild:item];
+		
+		NSString* filename = [up.url lastPathComponent];
+		
+		NSXMLElement* title = [NSXMLNode elementWithName:@"title" stringValue:filename];
+		[item addChild:title];
+		
+		NSXMLElement* content = [NSXMLNode elementWithName:@"content:encoded" stringValue:@""];
+		[item addChild:content];
+
+		NSXMLElement* status = [NSXMLNode elementWithName:@"wp:status" stringValue:@"inherit"];
+		[item addChild:status];
+
+		NSXMLElement* post_type = [NSXMLNode elementWithName:@"wp:post_type" stringValue:@"attachment"];
+		[item addChild:post_type];
+
+		NSXMLElement* post_date = [NSXMLNode elementWithName:@"wp:post_date" stringValue:[up.createdAt uuRfc3339String]];
+		[item addChild:post_date];
+
+		NSXMLElement* post_date_gmt = [NSXMLNode elementWithName:@"wp:post_date_gmt" stringValue:[up.createdAt uuRfc3339StringForUTCTimeZone]];
+		[item addChild:post_date_gmt];
+
+		NSXMLElement* attachment_url = [NSXMLNode elementWithName:@"wp:attachment_url" stringValue:up.url];
+		[item addChild:attachment_url];
+
+		NSXMLElement* link = [NSXMLNode elementWithName:@"link" stringValue:up.url];
+		[item addChild:link];
+
+		NSXMLElement* guid = [NSXMLNode elementWithName:@"guid" stringValue:up.url];
+		[item addChild:guid];
+
+		NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+		formatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z"; // RFC 2822
+		
+		NSXMLElement* pub_date = [NSXMLNode elementWithName:@"pubDate" stringValue:[formatter stringFromDate:up.createdAt]];
+		[item addChild:pub_date];
 	}
 	
 	return doc;

@@ -30,6 +30,7 @@
 	self = [super initWithWindowNibName:@"Export"];
 	if (self) {
 		self.queuedUploads = [NSMutableArray array];
+		self.exportFolder = [self prepareExportFolder];
 	}
 	
 	return self;
@@ -254,7 +255,7 @@
 			[self.progressBar setDoubleValue:self.totalUploads - self.queuedUploads.count];
 		});
 		
-		[self downloadURL:up.url withCompletion:^{
+		[self downloadURL:up.url forUpload:up withCompletion:^{
 			[self.queuedUploads removeObject:up];
 			[self downloadNextUpload];
 		}];
@@ -264,10 +265,8 @@
 	}
 }
 
-- (void) downloadURL:(NSString *)url withCompletion:(void (^)(void))handler
+- (void) downloadURL:(NSString *)url forUpload:(RFUpload *)upload withCompletion:(void (^)(void))handler
 {
-	self.exportFolder = [self prepareExportFolder];
-
 	NSError* error = nil;
 
 	NSString* uploads_folder = [self.exportFolder stringByAppendingPathComponent:@"uploads"];
@@ -313,8 +312,6 @@
 
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter
 {
-	self.exportFolder = [self prepareExportFolder];
-
 	NSError* error = nil;
 
 	NSDateComponents* components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:post.postedAt];
