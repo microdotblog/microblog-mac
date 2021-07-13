@@ -33,8 +33,6 @@
 #import "NSAppearance+Extras.h"
 #import <QuartzCore/QuartzCore.h>
 
-//static CGFloat const kDefaultSplitViewPosition = 170.0;
-
 @implementation RFTimelineController
 
 - (instancetype) init
@@ -93,7 +91,6 @@
 {
 	[self.splitView setAutosaveName:@"TimelineSplitView"];
 	self.splitView.delegate = self;
-//	[self.splitView setPosition:kDefaultSplitViewPosition ofDividerAtIndex:0];
 	[self.splitView setHoldingPriority:NSLayoutPriorityRequired forSubviewAtIndex:0];
 }
 
@@ -353,12 +350,9 @@
 
 	[self closeOverlays];
 
-//	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover"];
-//	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-//	[[self.webView mainFrame] loadRequest:request];
-//	self.webView.hidden = NO;
-
 	RFDiscoverController* controller = [[RFDiscoverController alloc] init];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
 	[self showAllPostsController:controller];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:3] byExtendingSelection:NO];
@@ -378,7 +372,7 @@
 
 - (IBAction) showPages:(id)sender
 {
-	self.selectedTimeline = kSelectionPosts;
+	self.selectedTimeline = kSelectionPages;
 
 	[self closeOverlays];
 
@@ -390,7 +384,7 @@
 
 - (IBAction) showUploads:(id)sender
 {
-	self.selectedTimeline = kSelectionPosts;
+	self.selectedTimeline = kSelectionUploads;
 
 	[self closeOverlays];
 
@@ -421,6 +415,16 @@
 			[(RFAllPostsController *)self.allPostsController fetchPosts];
 		}
 	}
+	else if (self.selectedTimeline == kSelectionPages) {
+		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.allPostsController fetchPosts];
+		}
+	}
+	else if (self.selectedTimeline == kSelectionUploads) {
+		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.allPostsController fetchPosts];
+		}
+	}
 
 	RFDispatchSeconds (1.5, ^{
 		self.messageTopConstraint.animator.constant = -35;
@@ -432,6 +436,9 @@
 {
 	if (item.action == @selector(performFindPanelAction:)) {
 		if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPosts)) {
+			return YES;
+		}
+		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPages)) {
 			return YES;
 		}
 		else {
@@ -460,6 +467,11 @@
 - (void) performFindPanelAction:(id)sender
 {
 	if (self.selectedTimeline == kSelectionPosts) {
+		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.allPostsController focusSearch];
+		}
+	}
+	else if (self.selectedTimeline == kSelectionPages) {
 		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
 			[(RFAllPostsController *)self.allPostsController focusSearch];
 		}
@@ -690,7 +702,6 @@
 	self.allPostsController = controller;
 
 	NSRect r = self.webView.bounds;
-//	r.origin.x = kDefaultSplitViewPosition + 1;
 	self.allPostsController.view.frame = r;
 	self.allPostsController.view.alphaValue = 0.0;
 	
@@ -705,7 +716,6 @@
 - (void) showTopicsWithSearch:(NSString *)term
 {
 	[self hideOptionsMenu];
-//	[self closeOverlays];
 	
 	RFTopicController* controller = [[RFTopicController alloc] initWithTopic:term];
 	[controller view];
@@ -1202,24 +1212,12 @@
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
 	return 150;
-//	return kDefaultSplitViewPosition;
 }
 
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
 	return 300;
-//	return kDefaultSplitViewPosition;
 }
-
-//- (CGFloat) splitView:(NSSplitView *)splitView constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)dividerIndex
-//{
-//	if (dividerIndex == 0) {
-//		return kDefaultSplitViewPosition;
-//	}
-//	else {
-//		return proposedPosition;
-//	}
-//}
 
 - (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
 {
@@ -1230,11 +1228,6 @@
 		return NO;
 	}
 }
-
-//- (NSRect) splitView:(NSSplitView *)splitView effectiveRect:(NSRect)proposedEffectiveRect forDrawnRect:(NSRect)drawnRect ofDividerAtIndex:(NSInteger)dividerIndex
-//{
-//	return NSZeroRect;
-//}
 
 #pragma mark -
 
