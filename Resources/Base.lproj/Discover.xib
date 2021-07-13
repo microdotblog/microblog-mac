@@ -10,6 +10,8 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RFDiscoverController">
             <connections>
                 <outlet property="popupButton" destination="jF2-Gm-goX" id="lA2-pG-w2F"/>
+                <outlet property="spinner" destination="YZZ-qi-jtu" id="e5B-BJ-Fo8"/>
+                <outlet property="statusField" destination="9TN-w4-kgu" id="Lp9-La-uhj"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mt4-Ha-Cj8"/>
                 <outlet property="webView" destination="7LD-DW-RCG" id="usv-AY-zgp"/>
             </connections>
@@ -47,19 +49,27 @@
                                 </connections>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9TN-w4-kgu">
-                                <rect key="frame" x="10" y="14" width="321" height="16"/>
+                                <rect key="frame" x="10" y="14" width="293" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Some recent posts from the community." id="jK5-Il-Bsv">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="YZZ-qi-jtu">
+                                <rect key="frame" x="309" y="14" width="20" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="vc1-i2-9pZ"/>
+                                </constraints>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstItem="jF2-Gm-goX" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="12" id="1wK-99-73L"/>
                             <constraint firstAttribute="bottom" secondItem="jF2-Gm-goX" secondAttribute="bottom" constant="12" id="7iP-70-NXu"/>
-                            <constraint firstItem="jF2-Gm-goX" firstAttribute="leading" secondItem="9TN-w4-kgu" secondAttribute="trailing" constant="8" symbolic="YES" id="FGb-pd-Bp7"/>
+                            <constraint firstItem="YZZ-qi-jtu" firstAttribute="leading" secondItem="9TN-w4-kgu" secondAttribute="trailing" constant="8" symbolic="YES" id="DDJ-p3-nNh"/>
                             <constraint firstAttribute="trailing" secondItem="jF2-Gm-goX" secondAttribute="trailing" constant="20" symbolic="YES" id="OGb-Ov-D9J"/>
+                            <constraint firstItem="YZZ-qi-jtu" firstAttribute="centerY" secondItem="jF2-Gm-goX" secondAttribute="centerY" id="io8-b8-dWX"/>
+                            <constraint firstItem="jF2-Gm-goX" firstAttribute="leading" secondItem="YZZ-qi-jtu" secondAttribute="trailing" constant="8" symbolic="YES" id="jWj-tx-Njc"/>
                             <constraint firstItem="9TN-w4-kgu" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="14" id="wls-Q4-qrC"/>
                             <constraint firstItem="9TN-w4-kgu" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="12" id="xU1-A5-rU1"/>
                         </constraints>
@@ -93,7 +103,7 @@
                 <constraint firstAttribute="trailing" secondItem="3gz-se-iln" secondAttribute="trailing" id="pBi-1t-l3B"/>
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="pUd-pf-egI"/>
             </constraints>
-            <point key="canvasLocation" x="68" y="168"/>
+            <point key="canvasLocation" x="67.5" y="168"/>
         </customView>
     </objects>
 </document>

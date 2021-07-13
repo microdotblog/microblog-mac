@@ -50,6 +50,8 @@
 	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
+	
+	[self.spinner startAnimation:nil];
 }
 
 - (void) setupTagmoji
@@ -114,13 +116,17 @@
 {
 	NSMenuItem* item = [self.popupButton selectedItem];
 	NSString* name = item.representedObject;
+	NSString* title = item.title;
+	
 	if ([name isEqualToString:@"more"]) {
 		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://help.micro.blog/t/emoji-in-discover/34"]];
 	}
 	else {
 		self.selectedTopic = name;
 		[self setupWebView];
-//		[[NSNotificationCenter defaultCenter] postNotificationName:kShowDiscoverTopicNotification object:self userInfo:@{ kShowDiscoverTopicNameKey: name}];
+		
+		NSString* s = [NSString stringWithFormat:@"Some recent posts for %@.", title];
+		[self.statusField setStringValue:s];
 	}
 }
 
