@@ -13,6 +13,7 @@
 @class RFAllPostsController;
 @class RFRoundedImageView;
 @class RFConversationController;
+@class RFDiscoverController;
 @class RFStack;
 @class RFAccount;
 
@@ -44,7 +45,8 @@ typedef enum {
 @property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
-@property (strong, nonatomic) RFAllPostsController* allPostsController;
+@property (strong, nonatomic) NSViewController* allPostsController;
+@property (strong, nonatomic) RFDiscoverController* discoverController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
 @property (strong, nonatomic) RFStack* navigationStack;
 @property (strong, nonatomic) NSLayoutConstraint* navigationLeftConstraint;

@@ -18,6 +18,7 @@
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
+#import "RFDiscoverController.h"
 #import "RFUserController.h"
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
@@ -345,10 +346,13 @@
 
 	[self closeOverlays];
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover"];
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-	self.webView.hidden = NO;
+//	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover"];
+//	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+//	[[self.webView mainFrame] loadRequest:request];
+//	self.webView.hidden = NO;
+
+	RFDiscoverController* controller = [[RFDiscoverController alloc] init];
+	[self showAllPostsController:controller];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:3] byExtendingSelection:NO];
 }
@@ -406,7 +410,9 @@
 		[self showDiscover:nil];
 	}
 	else if (self.selectedTimeline == kSelectionPosts) {
-		[self.allPostsController fetchPosts];
+		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.allPostsController fetchPosts];
+		}
 	}
 
 	RFDispatchSeconds (1.5, ^{
@@ -447,7 +453,9 @@
 - (void) performFindPanelAction:(id)sender
 {
 	if (self.selectedTimeline == kSelectionPosts) {
-		[self.allPostsController focusSearch];
+		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.allPostsController focusSearch];
+		}
 	}
 }
 
@@ -535,6 +543,10 @@
 	else if ([controller isKindOfClass:[RFTopicController class]]) {
 		RFTopicController* topic_controller = (RFTopicController *)controller;
 		return topic_controller.webView;
+	}
+	else if ([controller isKindOfClass:[RFDiscoverController class]]) {
+		RFDiscoverController* discover_controller = (RFDiscoverController *)controller;
+		return discover_controller.webView;
 	}
 	else {
 		return self.webView;
@@ -666,7 +678,7 @@
 //	width_constraint.active = YES;
 }
 
-- (void) showAllPostsController:(RFAllPostsController *)controller
+- (void) showAllPostsController:(NSViewController *)controller
 {
 	self.allPostsController = controller;
 

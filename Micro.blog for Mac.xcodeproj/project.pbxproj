@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; };
 		4B00B686255D842200CBE873 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
+		4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1FA569269E0491006E0451 /* RFDiscoverController.m */; };
 		4B2A47C222579C58003AF2EC /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2A47C022579C58003AF2EC /* SDAVAssetExportSession.m */; };
 		4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */; };
 		4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAAAD1F8FCBC800D9B10E /* RFPhotoCell.m */; };
@@ -173,6 +175,9 @@
 
 /* Begin PBXFileReference section */
 		4B00B678255D827800CBE873 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
+		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
+		4B1FA568269E0491006E0451 /* RFDiscoverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFDiscoverController.h; path = Source/RFDiscoverController.h; sourceTree = "<group>"; };
+		4B1FA569269E0491006E0451 /* RFDiscoverController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFDiscoverController.m; path = Source/RFDiscoverController.m; sourceTree = "<group>"; };
 		4B2A47C022579C58003AF2EC /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDAVAssetExportSession.m; path = Shared/SDAVAssetExport/SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		4B2A47C122579C58003AF2EC /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDAVAssetExportSession.h; path = Shared/SDAVAssetExport/SDAVAssetExportSession.h; sourceTree = "<group>"; };
 		4B2CAAAA1F8FCB7100D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoCell.xib; sourceTree = "<group>"; };
@@ -681,6 +686,8 @@
 				4B2CAB411F93F00000D9B10E /* RFFriendsController.m */,
 				4B608B432003B7E200589F77 /* RFTopicController.h */,
 				4B608B442003B7E200589F77 /* RFTopicController.m */,
+				4B1FA568269E0491006E0451 /* RFDiscoverController.h */,
+				4B1FA569269E0491006E0451 /* RFDiscoverController.m */,
 				4B2CAB351F91C04200D9B10E /* RFUserController.h */,
 				4B2CAB361F91C04200D9B10E /* RFUserController.m */,
 				4B56505C1F8561A300B03FFD /* RFPostController.h */,
@@ -766,6 +773,7 @@
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
 				4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */,
 				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
+				4B1FA565269E0434006E0451 /* Discover.xib */,
 				4B608B462003B86400589F77 /* Topic.xib */,
 				4B5650641F8562B900B03FFD /* Options.xib */,
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
@@ -941,6 +949,7 @@
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
 				4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */,
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
+				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4BF537312247BDCD00CF9D66 /* PostCell.xib in Resources */,
@@ -1056,6 +1065,7 @@
 				4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
+				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
 				4B3840D4269203B400AD3781 /* RFDayOneExportController.m in Sources */,
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
@@ -1115,6 +1125,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4B1FA565269E0434006E0451 /* Discover.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B1FA566269E0434006E0451 /* Base */,
+			);
+			name = Discover.xib;
+			sourceTree = "<group>";
+		};
 		4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
