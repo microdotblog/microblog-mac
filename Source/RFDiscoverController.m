@@ -52,6 +52,9 @@
 	[[self.webView mainFrame] loadRequest:request];
 	
 	[self.spinner startAnimation:nil];
+	RFDispatchSeconds (2.0, ^{
+		[self.spinner stopAnimation:nil];
+	});
 }
 
 - (void) setupTagmoji
