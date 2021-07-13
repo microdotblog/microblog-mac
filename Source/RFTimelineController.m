@@ -570,6 +570,10 @@
 		RFDiscoverController* discover_controller = (RFDiscoverController *)controller;
 		return discover_controller.webView;
 	}
+	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
+		RFDiscoverController* discover_controller = (RFDiscoverController *)self.allPostsController;
+		return discover_controller.webView;
+	}
 	else {
 		return self.webView;
 	}
