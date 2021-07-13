@@ -10,6 +10,7 @@
 
 #import "RFClient.h"
 #import "RFMacros.h"
+#import "RFConstants.h"
 #import "NSAppearance+Extras.h"
 
 @implementation RFDiscoverController
@@ -18,6 +19,7 @@
 {
 	self = [super initWithNibName:@"Discover" bundle:nil];
 	if (self) {
+		self.selectedTopic = @"";
 	}
 	
 	return self;
@@ -42,6 +44,10 @@
 	}
 
 	NSString* url = @"https://micro.blog/hybrid/discover";
+	if (self.selectedTopic.length > 0) {
+		url = [url stringByAppendingFormat:@"/%@", self.selectedTopic];
+	}
+	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 }
@@ -77,8 +83,18 @@
 			
 			NSString* s = [NSString stringWithFormat:@"%@ %@", emoji, title];
 			[self.popupButton addItemWithTitle:s];
+			
+			NSMenuItem* item = [self.popupButton lastItem];
+			[item setRepresentedObject:name];
 		}
 	}
+	
+	NSMenu* menu = self.popupButton.menu;
+	[menu addItem:[NSMenuItem separatorItem]];
+	
+	[self.popupButton addItemWithTitle:@"Show More"];
+	NSMenuItem* item = [self.popupButton lastItem];
+	[item setRepresentedObject:@"more"];
 }
 
 - (void) fetchTagmoji
@@ -92,6 +108,20 @@
 			});
 		}
 	}];
+}
+
+- (IBAction) selectTagmoji:(id)sender
+{
+	NSMenuItem* item = [self.popupButton selectedItem];
+	NSString* name = item.representedObject;
+	if ([name isEqualToString:@"more"]) {
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://help.micro.blog/t/emoji-in-discover/34"]];
+	}
+	else {
+		self.selectedTopic = name;
+		[self setupWebView];
+//		[[NSNotificationCenter defaultCenter] postNotificationName:kShowDiscoverTopicNotification object:self userInfo:@{ kShowDiscoverTopicNameKey: name}];
+	}
 }
 
 @end

@@ -42,6 +42,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="selectTagmoji:" target="-2" id="SKi-sv-Mve"/>
+                                </connections>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9TN-w4-kgu">
                                 <rect key="frame" x="10" y="14" width="321" height="16"/>

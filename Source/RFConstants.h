@@ -65,6 +65,9 @@ static NSInteger const kTextSizeHuge = 19;
 #define kShowUserProfileNotification @"RFShowUserProfileNotification"
 #define kShowUserProfileUsernameKey @"username"
 
+#define kShowDiscoverTopicNotification @"RFShowDiscoverTopicNotification"
+#define kShowDiscoverTopicNameKey @"name"
+
 #define kShowReplyPostNotification @"RFShowReplyPostNotification"
 #define kShowReplyPostIDKey @"post_id"
 #define kShowReplyPostUsernameKey @"username"

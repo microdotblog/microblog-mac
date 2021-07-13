@@ -144,6 +144,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sharePostNotification:) name:kSharePostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showDiscoverTopicNotification:) name:kShowDiscoverTopicNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
@@ -220,6 +221,12 @@
 	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
+}
+
+- (void) showDiscoverTopicNotification:(NSNotification *)notification
+{
+	NSString* topic = [notification.userInfo objectForKey:kShowDiscoverTopicNameKey];
+	[self showTopicsWithSearch:topic];
 }
 
 - (void) refreshTimelineNotification:(NSNotification *)notification
@@ -698,6 +705,7 @@
 - (void) showTopicsWithSearch:(NSString *)term
 {
 	[self hideOptionsMenu];
+//	[self closeOverlays];
 	
 	RFTopicController* controller = [[RFTopicController alloc] initWithTopic:term];
 	[controller view];

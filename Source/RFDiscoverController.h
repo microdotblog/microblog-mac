@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* popupButton;
 
+@property (strong) NSString* selectedTopic;
 @property (strong) NSMutableArray* tagmoji;
 
 @end
