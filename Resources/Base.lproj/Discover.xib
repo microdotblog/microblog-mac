@@ -27,9 +27,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jF2-Gm-goX">
-                                <rect key="frame" x="260" y="8" width="171" height="25"/>
+                                <rect key="frame" x="334" y="8" width="97" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="164" id="WyE-a4-cSr"/>
+                                    <constraint firstAttribute="width" constant="90" id="WyE-a4-cSr"/>
                                 </constraints>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="CAz-kQ-HDx" id="StW-Zo-t5F">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -44,8 +44,8 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9TN-w4-kgu">
-                                <rect key="frame" x="10" y="14" width="247" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Some recent posts." id="jK5-Il-Bsv">
+                                <rect key="frame" x="10" y="14" width="321" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Some recent posts from the community." id="jK5-Il-Bsv">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
