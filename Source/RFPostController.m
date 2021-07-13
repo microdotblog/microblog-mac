@@ -175,6 +175,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	self.textView.delegate = self;
 	self.textView.textStorage.delegate = self;
+	self.textView.automaticQuoteSubstitutionEnabled = NO;
+	self.textView.automaticDashSubstitutionEnabled = NO;
 	
 	[self updateRemainingChars];
 	
