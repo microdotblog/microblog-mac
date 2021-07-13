@@ -54,6 +54,8 @@ typedef enum {
 @property (strong, nonatomic) NSLayoutConstraint* navigationLeftConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* navigationRightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* navigationPinnedConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* overlayLeftConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* overlayRightConstraint;
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
 

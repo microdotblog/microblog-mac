@@ -540,6 +540,9 @@
 		[self.allPostsController.view removeFromSuperview];
 		self.allPostsController = nil;
 	}
+	
+	self.overlayLeftConstraint = nil;
+	self.overlayRightConstraint = nil;
 
 	[self performClose:nil];
 }
@@ -578,6 +581,9 @@
 		NSViewController* controller = [self.navigationStack peek];
 		return controller.view;
 	}
+	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
+		return ((RFDiscoverController *)self.allPostsController).webView;
+	}
 	else {
 		return self.webView;
 	}
@@ -586,8 +592,14 @@
 - (void) pushViewController:(NSViewController *)controller
 {
 	if ([self.navigationStack count] == 0) {
-		self.navigationLeftConstraint = self.timelineLeftConstraint;
-		self.navigationRightConstraint = self.timelineRightConstraint;
+		if (self.overlayLeftConstraint) {
+			self.navigationLeftConstraint = self.overlayLeftConstraint;
+			self.navigationRightConstraint = self.overlayRightConstraint;
+		}
+		else {
+			self.navigationLeftConstraint = self.timelineLeftConstraint;
+			self.navigationRightConstraint = self.timelineRightConstraint;
+		}
 		self.navigationLeftConstraint.constant = 0;
 		self.navigationRightConstraint.constant = 0;
 	}
@@ -612,7 +624,13 @@
 		context.duration = 0.3;
 		context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 		self.navigationLeftConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
-		self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
+		if (self.overlayLeftConstraint) {
+			// constant is reversed here
+			self.navigationRightConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
+		}
+		else {
+			self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
+		}
 	} completionHandler:^{
 		// after animating, temporary pin to right
 		self.navigationRightConstraint.active = NO;
@@ -680,9 +698,13 @@
 	left_constraint.priority = NSLayoutPriorityDefaultHigh;
 	left_constraint.active = YES;
 
+	self.overlayLeftConstraint = left_constraint;
+	
 	NSLayoutConstraint* right_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
 	right_constraint.priority = NSLayoutPriorityDefaultHigh;
 	right_constraint.active = YES;
+	
+	self.overlayRightConstraint = right_constraint;
 
 	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
@@ -706,7 +728,8 @@
 	self.allPostsController.view.alphaValue = 0.0;
 	
 	self.allPostsController.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.window.contentView addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
+//	[self.window.contentView addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
+	[[self.webView superview] addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.allPostsController.view.animator.alphaValue = 1.0;
 	self.allPostsController.nextResponder = self;
