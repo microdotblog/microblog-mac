@@ -582,7 +582,7 @@
 		return controller.view;
 	}
 	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
-		return ((RFDiscoverController *)self.allPostsController).webView;
+		return ((RFDiscoverController *)self.allPostsController).view;
 	}
 	else {
 		return self.webView;
