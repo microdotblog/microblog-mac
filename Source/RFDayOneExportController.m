@@ -137,4 +137,9 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 	return path;
 }
 
+- (void) finishExport
+{
+	[self cleanupExport];
+}
+
 @end
