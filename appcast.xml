@@ -23,8 +23,8 @@
 	 				<li>Fixed posting window to disable smart quotes.</li>
  				</ul>
  			]]></description>
-			<pubDate>Wed, 14 Jul 2021 12:00:00 -0600</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.1.zip" sparkle:shortVersionString="2.1" sparkle:version="89" length="3475130" type="application/octet-stream" />
+			<pubDate>Wed, 14 Jul 2021 10:15:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.1.zip" sparkle:shortVersionString="2.1" sparkle:version="90" length="3617640" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
 		</item>		
 
