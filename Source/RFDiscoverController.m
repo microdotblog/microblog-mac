@@ -13,6 +13,8 @@
 #import "RFConstants.h"
 #import "NSAppearance+Extras.h"
 
+static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
+
 @implementation RFDiscoverController
 
 - (instancetype) init
@@ -34,6 +36,40 @@
 	
 	if (self.tagmoji.count == 0) {
 		[self fetchTagmoji];
+	}
+}
+
+- (void) setupFeatured
+{
+	NSString* s = [[NSUserDefaults standardUserDefaults] stringForKey:kDiscoverFeaturedEmojiPrefKey];
+	if (s.length == 0) {
+		// first time, we won't have a random string saved, just use this
+		s = @"📷📚☕️";
+	}
+
+	[self.popupButton addItemWithTitle:s];
+
+	NSMutableArray* featured_emoji = [NSMutableArray array];
+	for (NSDictionary* info in self.tagmoji) {
+		if ([[info objectForKey:@"is_featured"] boolValue]) {
+			NSString* emoji = [info objectForKey:@"emoji"];
+			[featured_emoji addObject:emoji];
+		}
+	}
+	
+	NSString* popup_title = @"";
+	for (int i = 0; i < 3; i++) {
+		NSUInteger index = arc4random_uniform((int)featured_emoji.count);
+		if (featured_emoji.count > index) {
+			NSString* emoji = [featured_emoji objectAtIndex:index];
+			popup_title = [popup_title stringByAppendingString:emoji];
+			[featured_emoji removeObject:emoji];
+		}
+	}
+	
+	// save this featured emoji string for next time
+	if (popup_title.length > 0) {
+		[[NSUserDefaults standardUserDefaults] setObject:popup_title forKey:kDiscoverFeaturedEmojiPrefKey];
 	}
 }
 
@@ -60,26 +96,8 @@
 - (void) setupTagmoji
 {
 	[self.popupButton removeAllItems];
-	
-	NSMutableArray* featured_emoji = [NSMutableArray array];
-	for (NSDictionary* info in self.tagmoji) {
-		if ([[info objectForKey:@"is_featured"] boolValue]) {
-			NSString* emoji = [info objectForKey:@"emoji"];
-			[featured_emoji addObject:emoji];
-		}
-	}
-	
-	NSString* popup_title = @"";
-	for (int i = 0; i < 3; i++) {
-		NSUInteger index = arc4random_uniform((int)featured_emoji.count);
-		if (featured_emoji.count > index) {
-			NSString* emoji = [featured_emoji objectAtIndex:index];
-			popup_title = [popup_title stringByAppendingString:emoji];
-			[featured_emoji removeObject:emoji];
-		}
-	}
-	[self.popupButton addItemWithTitle:popup_title];
-	
+	[self setupFeatured];
+
 	for (NSDictionary* info in self.tagmoji) {
 		if ([[info objectForKey:@"is_featured"] boolValue]) {
 			NSString* name = [info objectForKey:@"name"];
