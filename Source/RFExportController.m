@@ -393,6 +393,12 @@
 	if ((self.exportFolder.length > 0) && [self.exportFolder containsString:temp_folder] && [self.exportFolder containsString:@"Micro.blog"]) {
 		NSError* error = nil;
 		[[NSFileManager defaultManager] removeItemAtPath:self.exportFolder error:&error];
+		
+		// also containing folder
+		NSString* parent_folder = [self.exportFolder stringByDeletingLastPathComponent];
+		if ((parent_folder.length > 0) && [parent_folder containsString:temp_folder] && [parent_folder containsString:@"Micro.blog"]) {
+			[[NSFileManager defaultManager] removeItemAtPath:parent_folder error:&error];
+		}
 	}
 }
 
