@@ -285,7 +285,10 @@
 	// wait a second so we don't hit the server too much
 	[NSThread sleepForTimeInterval:1];
 
-	handler();
+	// call async to avoid recursive calls and leaking NSData
+	RFDispatchMainAsync (^{
+		handler();
+	});
 }
 
 - (NSString *) prepareExportFolder
