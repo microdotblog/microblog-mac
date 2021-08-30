@@ -436,7 +436,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 
 		NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
-		if ([video_extensions containsObject:[file_url pathExtension]]) {
+		if ([video_extensions containsObject:[[file_url pathExtension] lowercaseString]]) {
 			AVURLAsset* asset = [AVURLAsset assetWithURL:file_url];
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:nil];
 			photo.videoAsset = asset;
@@ -466,6 +466,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					});
 				}
 			}];
+		}
+		else if ([[[file_url pathExtension] lowercaseString] isEqualToString:@"gif"]) {
+			NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+			photo.isGIF = YES;
+			photo.fileURL = file_url;
+			[new_photos addObject:photo];
 		}
 		else {
 			NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
@@ -1272,6 +1279,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		d = [NSData dataWithContentsOfURL:photo.videoAsset.URL];
 		[photo removeTemporaryVideo];
 	}
+	else if (photo.isGIF) {
+		d = [NSData dataWithContentsOfURL:photo.fileURL];
+	}
 	else {
 		d = [photo jpegData];
 	}
@@ -1286,7 +1296,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSDictionary* args = @{
 				@"mp-destination": destination_uid
 			};
-			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo completion:^(UUHttpResponse* response) {
+			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{

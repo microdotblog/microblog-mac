@@ -20,8 +20,10 @@ static NSString* const kAttachPhotoKey = @"photo";
 @property (strong) NSImage* thumbnailImage;
 @property (strong) NSString* publishedURL;
 @property (strong) NSString* altText;
+@property (strong) NSURL* fileURL;
 @property (strong) AVURLAsset* videoAsset;
 @property (assign) BOOL isVideo;
+@property (assign) BOOL isGIF;
 @property (strong) NSString* tempVideoPath;
 
 //- (id) initWithAsset:(PHAsset *)asset;

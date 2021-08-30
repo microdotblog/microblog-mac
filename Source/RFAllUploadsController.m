@@ -231,6 +231,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSData* d = [photo jpegData];
 	BOOL is_video = NO;
+	BOOL is_gif = NO;
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
@@ -240,7 +241,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSDictionary* args = @{
 		@"mp-destination": destination_uid
 	};
-	[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:is_video completion:^(UUHttpResponse* response) {
+	[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:is_video isGIF:is_gif completion:^(UUHttpResponse* response) {
 		NSDictionary* headers = response.httpResponse.allHeaderFields;
 		NSString* image_url = headers[@"Location"];
 		RFDispatchMainAsync (^{

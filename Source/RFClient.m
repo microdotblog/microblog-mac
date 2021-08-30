@@ -147,7 +147,7 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	return [UUHttpSession executeRequest:request completionHandler:handler];
 }
 
-- (UUHttpRequest *) uploadImageData:(NSData *)imageData named:(NSString *)imageName httpMethod:(NSString *)method queryArguments:(NSDictionary *)args isVideo:(BOOL)isVideo completion:(void (^)(UUHttpResponse* response))handler
+- (UUHttpRequest *) uploadImageData:(NSData *)imageData named:(NSString *)imageName httpMethod:(NSString *)method queryArguments:(NSDictionary *)args isVideo:(BOOL)isVideo isGIF:(BOOL)isGIF completion:(void (^)(UUHttpResponse* response))handler
 {
 	NSString* boundary = [[NSProcessInfo processInfo] globallyUniqueString];
 	NSMutableData* d = [NSMutableData data];
@@ -163,6 +163,9 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 		NSString* filename;
 		if (isVideo) {
 			filename = @"video.mov";
+		}
+		else if (isGIF) {
+			filename = @"image.gif";
 		}
 		else {
 			filename = @"image.jpg";
