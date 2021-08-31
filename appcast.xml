@@ -6,6 +6,29 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.1.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Fixed file export issue that would cause blog export with many photos to get increasingly slower, sometimes crashing.</li>
+	 				<li>Fixed notification bar color for new messages to better fit in Dark Mode.</li>
+	 				<li>Fixed uploading animated GIFs in new posts.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 31 Aug 2021 12:30:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.1.1.zip" sparkle:shortVersionString="2.1.1" sparkle:version="94" length="3619823" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 2.1</title>
  			<description><![CDATA[
 				<style>
