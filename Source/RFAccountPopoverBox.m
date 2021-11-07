@@ -26,7 +26,7 @@
 - (void) updateBackground
 {
 	if ([self.effectiveAppearance rf_isDarkMode]) {
-		self.fillColor = NSColor.textBackgroundColor;
+		self.fillColor = NSColor.clearColor;
 	}
 	else {
 		self.fillColor = self.originalLightColor;
