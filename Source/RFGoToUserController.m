@@ -31,8 +31,9 @@
 - (IBAction) go:(id)sender
 {
 	NSString* username = self.usernameField.stringValue;
-	if ([username containsString:@"@"]) {
-		username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+	if ((username.length > 1) && [[username substringToIndex:1] isEqualToString:@"@"]) {
+		// if starts with @, trim it
+		username = [username substringFromIndex:1];
 	}
 
 	if (username.length > 0) {
