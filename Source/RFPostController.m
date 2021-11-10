@@ -379,8 +379,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.isSent = YES;
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTitlePrefKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTextPrefKey];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kCheckTimelineNotification object:self];
+
 	[self closeWindow];
 }
 

@@ -145,6 +145,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserProfileNotification:) name:kShowUserProfileNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showDiscoverTopicNotification:) name:kShowDiscoverTopicNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkTimelineNotification:) name:kCheckTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
@@ -154,6 +155,7 @@
 
 - (void) setupTimer
 {
+	[self.checkTimer invalidate];
 	self.checkTimer = [NSTimer scheduledTimerWithTimeInterval:self.checkSeconds.floatValue target:self selector:@selector(checkPostsFromTimer:) userInfo:nil repeats:NO];
 	self.checkSeconds = @120; // in case it fails, bump to higher default
 }
@@ -237,6 +239,12 @@
 - (void) refreshTimelineNotification:(NSNotification *)notification
 {
 	[self refreshTimeline:nil];
+}
+
+- (void) checkTimelineNotification:(NSNotification *)notification
+{
+	self.checkSeconds = @2;
+	[self setupTimer];
 }
 
 - (void) switchAccountNotification:(NSNotification *)notification
@@ -541,6 +549,10 @@
 					if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
 						self.checkSeconds = check_seconds;
 					}
+
+					RFDispatchMainAsync (^{
+						[self setupTimer];
+					});
 				}
 			}];
 		}
