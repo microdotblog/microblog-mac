@@ -75,6 +75,29 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self.photosCollectionView reloadData];
 }
 
+- (void) drawBackgroundInRect:(NSRect)dirtyRect
+{
+	CGRect r = self.bounds;
+	[self.backgroundColor set];
+	NSRectFill (r);
+}
+
+- (void) drawSelectionInRect:(NSRect)dirtyRect
+{
+	CGRect r = self.bounds;
+	if ([self.superview isKindOfClass:[NSTableView class]]) {
+		NSTableView* table = (NSTableView *)self.superview;
+		if (table.window.firstResponder == table) {
+			[[NSColor selectedContentBackgroundColor] set];
+		}
+		else {
+			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
+		}
+	}
+	
+	NSRectFill (r);
+}
+
 #pragma mark -
 
 - (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section

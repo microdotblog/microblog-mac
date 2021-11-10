@@ -147,6 +147,7 @@
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
 		4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BD8339E273C3FF0007350F2 /* GoToUser.xib */; };
+		4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD833A2273C60A5007350F2 /* RFPostTableView.m */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
 		4BED646624BD5AB80018644C /* AllUploads.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BED646424BD5AB80018644C /* AllUploads.xib */; };
 		4BED646924BDF29A0018644C /* RFUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646824BDF29A0018644C /* RFUpload.m */; };
@@ -426,6 +427,8 @@
 		4BD83398273C3DF3007350F2 /* RFGoToUserController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFGoToUserController.h; path = Source/RFGoToUserController.h; sourceTree = "<group>"; };
 		4BD83399273C3DF3007350F2 /* RFGoToUserController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFGoToUserController.m; path = Source/RFGoToUserController.m; sourceTree = "<group>"; };
 		4BD8339F273C3FF0007350F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/GoToUser.xib; sourceTree = "<group>"; };
+		4BD833A1273C60A5007350F2 /* RFPostTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostTableView.h; path = Source/RFPostTableView.h; sourceTree = "<group>"; };
+		4BD833A2273C60A5007350F2 /* RFPostTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostTableView.m; path = Source/RFPostTableView.m; sourceTree = "<group>"; };
 		4BED646124BD59ED0018644C /* RFAllUploadsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllUploadsController.h; path = Source/RFAllUploadsController.h; sourceTree = "<group>"; };
 		4BED646224BD59ED0018644C /* RFAllUploadsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllUploadsController.m; path = Source/RFAllUploadsController.m; sourceTree = "<group>"; };
 		4BED646524BD5AB80018644C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllUploads.xib; sourceTree = "<group>"; };
@@ -705,6 +708,8 @@
 				4B5EE27C206330B800C87A78 /* RFBlogCell.m */,
 				4BF5372C2247BD8D00CF9D66 /* RFPostCell.h */,
 				4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */,
+				4BD833A1273C60A5007350F2 /* RFPostTableView.h */,
+				4BD833A2273C60A5007350F2 /* RFPostTableView.m */,
 				4BF537322247CD1D00CF9D66 /* RFPost.h */,
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
@@ -1107,6 +1112,7 @@
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
+				4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */,
 				4B2CAB181F90667300D9B10E /* alloc.c in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */,
@@ -1491,7 +1497,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 95;
+				CURRENT_PROJECT_VERSION = 96;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1522,7 +1528,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 95;
+				CURRENT_PROJECT_VERSION = 96;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
