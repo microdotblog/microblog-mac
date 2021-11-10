@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -199,6 +199,7 @@ DQ
                                 </connections>
                             </menuItem>
                             <menuItem title="Paste and Match Style" keyEquivalent="v" id="WeT-3V-zwk">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                 <connections>
                                     <action selector="pasteAsPlainText:" target="-1" id="cEh-KX-wJQ"/>
                                 </connections>
@@ -432,6 +433,11 @@ CA
                             <menuItem title="Refresh" keyEquivalent="R" id="x5U-wS-VS9">
                                 <connections>
                                     <action selector="refreshTimeline:" target="-1" id="hUn-P2-s2o"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Go to User..." keyEquivalent="u" id="Iab-UM-rn0">
+                                <connections>
+                                    <action selector="goToUser:" target="-1" id="Zc3-JZ-2CZ"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EhK-8W-xZb"/>

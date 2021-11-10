@@ -145,6 +145,8 @@
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
+		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
+		4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BD8339E273C3FF0007350F2 /* GoToUser.xib */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
 		4BED646624BD5AB80018644C /* AllUploads.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BED646424BD5AB80018644C /* AllUploads.xib */; };
 		4BED646924BDF29A0018644C /* RFUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646824BDF29A0018644C /* RFUpload.m */; };
@@ -421,6 +423,9 @@
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		4BD83398273C3DF3007350F2 /* RFGoToUserController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFGoToUserController.h; path = Source/RFGoToUserController.h; sourceTree = "<group>"; };
+		4BD83399273C3DF3007350F2 /* RFGoToUserController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFGoToUserController.m; path = Source/RFGoToUserController.m; sourceTree = "<group>"; };
+		4BD8339F273C3FF0007350F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/GoToUser.xib; sourceTree = "<group>"; };
 		4BED646124BD59ED0018644C /* RFAllUploadsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllUploadsController.h; path = Source/RFAllUploadsController.h; sourceTree = "<group>"; };
 		4BED646224BD59ED0018644C /* RFAllUploadsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllUploadsController.m; path = Source/RFAllUploadsController.m; sourceTree = "<group>"; };
 		4BED646524BD5AB80018644C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllUploads.xib; sourceTree = "<group>"; };
@@ -636,6 +641,8 @@
 				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
 				4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */,
 				4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */,
+				4BD83398273C3DF3007350F2 /* RFGoToUserController.h */,
+				4BD83399273C3DF3007350F2 /* RFGoToUserController.m */,
 				4BB69069209A123300CD5E1E /* RFInstagramController.h */,
 				4BB6906A209A123300CD5E1E /* RFInstagramController.m */,
 				4B3840C92692014000AD3781 /* RFExportController.h */,
@@ -772,6 +779,7 @@
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
 				4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */,
+				4BD8339E273C3FF0007350F2 /* GoToUser.xib */,
 				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
 				4B1FA565269E0434006E0451 /* Discover.xib */,
 				4B608B462003B86400589F77 /* Topic.xib */,
@@ -952,6 +960,7 @@
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
+				4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */,
 				4BF537312247BDCD00CF9D66 /* PostCell.xib in Resources */,
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
@@ -1112,6 +1121,7 @@
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
+				4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
@@ -1323,6 +1333,14 @@
 				4BBD6DD124A59D800018C337 /* Base */,
 			);
 			name = SeparatorCell.xib;
+			sourceTree = "<group>";
+		};
+		4BD8339E273C3FF0007350F2 /* GoToUser.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BD8339F273C3FF0007350F2 /* Base */,
+			);
+			name = GoToUser.xib;
 			sourceTree = "<group>";
 		};
 		4BED646424BD5AB80018644C /* AllUploads.xib */ = {

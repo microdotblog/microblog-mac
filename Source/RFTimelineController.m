@@ -30,6 +30,7 @@
 #import "RFPost.h"
 #import "RFStack.h"
 #import "NSImage+Extras.h"
+#import "RFGoToUserController.h"
 #import "NSAppearance+Extras.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -141,6 +142,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sharePostNotification:) name:kSharePostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserProfileNotification:) name:kShowUserProfileNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showDiscoverTopicNotification:) name:kShowDiscoverTopicNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
@@ -219,6 +221,13 @@
 
 	[self pushViewController:controller];
 }
+
+- (void) showUserProfileNotification:(NSNotification *)notification
+{
+	NSString* username = [notification.userInfo objectForKey:kShowUserProfileUsernameKey];
+	[self showProfileWithUsername:username];
+}
+
 
 - (void) showDiscoverTopicNotification:(NSNotification *)notification
 {
@@ -432,6 +441,13 @@
 	});
 }
 
+- (IBAction) goToUser:(id)sender
+{
+	self.goToUserController = [[RFGoToUserController alloc] init];
+	[self.window beginSheet:self.goToUserController.window completionHandler:^(NSModalResponse returnCode) {
+	}];
+}
+
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
 	if (item.action == @selector(performFindPanelAction:)) {
@@ -493,7 +509,16 @@
 				if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 					NSNumber* count = [response.parsedResponse objectForKey:@"count"];
 					NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
-					if (count && count.integerValue > 0) {
+					NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
+					if (is_publishing && [is_publishing boolValue]) {
+						NSString* msg = @"Publishing latest changes to your blog...";
+
+						RFDispatchMainAsync (^{
+							self.messageField.stringValue = msg;
+							self.messageTopConstraint.animator.constant = -1;
+						});
+					}
+					else if (count && count.integerValue > 0) {
 						NSString* msg;
 						if (count.integerValue == 1) {
 							msg = @"1 new post";

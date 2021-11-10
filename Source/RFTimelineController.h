@@ -16,6 +16,7 @@
 @class RFDiscoverController;
 @class RFStack;
 @class RFAccount;
+@class RFGoToUserController;
 
 typedef enum {
 	kSelectionTimeline = 0,
@@ -58,6 +59,7 @@ typedef enum {
 @property (strong, nonatomic) NSLayoutConstraint* overlayRightConstraint;
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
+@property (strong, nonatomic) RFGoToUserController* goToUserController;
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)
