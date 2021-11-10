@@ -228,7 +228,6 @@
 	[self showProfileWithUsername:username];
 }
 
-
 - (void) showDiscoverTopicNotification:(NSNotification *)notification
 {
 	NSString* topic = [notification.userInfo objectForKey:kShowDiscoverTopicNameKey];
@@ -805,6 +804,10 @@
 - (void) showProfileWithUsername:(NSString *)username
 {
 	[self hideOptionsMenu];
+	
+	if (self.selectedTimeline >= kSelectionPosts) {
+		[self showTimeline:nil];
+	}
 	
 	RFUserController* controller = [[RFUserController alloc] initWithUsername:username];
 	[controller view];
