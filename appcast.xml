@@ -6,6 +6,30 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.1.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added View menu -> "Go to User" menu command to quickly open someone's profile by username.</li>
+	 				<li>Added publishing progress pane to top of Timeline after posting.</li>
+	 				<li>Updated row selection in Posts and Pages to be full-width to better match Timeline selection.</li>
+	 				<li>Fixed account toolbar item background color in Dark Mode. Thanks @vincode!</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Thu, 11 Nov 2021 08:30:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.1.2.zip" sparkle:shortVersionString="2.1.2" sparkle:version="96" length="3540078" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+
+		<item>
 			<title>Version 2.1.1</title>
  			<description><![CDATA[
 				<style>
