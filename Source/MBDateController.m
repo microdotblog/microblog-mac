@@ -24,7 +24,15 @@
 
 - (void) windowDidLoad
 {
+	[self setupDefault];
+	
 	[super windowDidLoad];
+}
+
+- (void) setupDefault
+{
+	self.datePicker.dateValue = [NSDate date];
+	self.timePicker.dateValue = [NSDate date];
 }
 
 - (IBAction) okPressed:(id)sender
