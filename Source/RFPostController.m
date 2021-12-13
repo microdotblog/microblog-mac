@@ -30,6 +30,7 @@
 #import "MMMarkdown.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
+#import "MBDateController.h"
 #import "SDAVAssetExportSession.h"
 #import <AVFoundation/AVFoundation.h>
 
@@ -905,6 +906,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) schedulePost:(id)sender
 {
+	MBDateController* date_controller = [[MBDateController alloc] init];
+	[self.view.window beginSheet:date_controller.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSModalResponseOK) {
+			self.postedAt = date_controller.date;
+		}
+	}];
 }
 
 - (void) showProgressHeader:(NSString *)statusText

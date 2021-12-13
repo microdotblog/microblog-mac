@@ -11,6 +11,7 @@
 @class RFHighlightingTextStorage;
 @class RFPhotoAltController;
 @class RFPost;
+@class MBDateController;
 
 @interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
 
@@ -43,6 +44,7 @@
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic) RFPhotoAltController* altController;
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary
+@property (strong, nonatomic) NSDate* postedAt;
 
 - (id) initWithPost:(RFPost *)post;
 - (id) initWithChannel:(NSString *)channel;

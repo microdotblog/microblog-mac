@@ -132,6 +132,8 @@
 		4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDEE1F8681D000906C86 /* RFClient.m */; };
 		4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDF31F86820500906C86 /* NSString+Extras.m */; };
 		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
+		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
+		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
 		4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50721EE52140095F903 /* NSAppearance+Extras.m */; };
@@ -402,6 +404,9 @@
 		4B8FBDF31F86820500906C86 /* NSString+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extras.m"; path = "Source/NSString+Extras.m"; sourceTree = "<group>"; };
 		4B8FBDFB1F86827800906C86 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4B8FBDFF1F86F5F700906C86 /* RFConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFConstants.h; path = Source/RFConstants.h; sourceTree = "<group>"; };
+		4B9F063F2767BC400007F21D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Date.xib; sourceTree = "<group>"; };
+		4B9F06412767BCE60007F21D /* MBDateController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDateController.h; path = Source/MBDateController.h; sourceTree = "<group>"; };
+		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BB5B50321EE4F3C0095F903 /* RFButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFButton.h; path = Source/RFButton.h; sourceTree = "<group>"; };
@@ -770,6 +775,8 @@
 				C549E92021EEB6D600730675 /* RFUserCache.m */,
 				C549E92221EEB75600730675 /* RFAutoCompleteCache.h */,
 				C549E92321EEB75600730675 /* RFAutoCompleteCache.m */,
+				4B9F06412767BCE60007F21D /* MBDateController.h */,
+				4B9F06422767BCE60007F21D /* MBDateController.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -809,6 +816,7 @@
 				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
 				4BF5372F2247BDCD00CF9D66 /* PostCell.xib */,
 				4BB7448D21E84A4400371388 /* PhotoZoom.xib */,
+				4B9F063E2767BC400007F21D /* Date.xib */,
 				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
 			);
 			name = Resources;
@@ -957,6 +965,7 @@
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
+				4B9F06402767BC400007F21D /* Date.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
 				4B608B482003B86400589F77 /* Topic.xib in Resources */,
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
@@ -1124,6 +1133,7 @@
 				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
+				4B9F06432767BCE60007F21D /* MBDateController.m in Sources */,
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
@@ -1307,6 +1317,14 @@
 				4B7F0AF61BAF4C37004553A6 /* Base */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		4B9F063E2767BC400007F21D /* Date.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B9F063F2767BC400007F21D /* Base */,
+			);
+			name = Date.xib;
 			sourceTree = "<group>";
 		};
 		4BB69066209A113500CD5E1E /* Instagram.xib */ = {
