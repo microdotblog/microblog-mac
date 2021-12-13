@@ -21,6 +21,7 @@
 #import "RFSettings.h"
 #import "RFHighlightingTextStorage.h"
 #import "UUString.h"
+#import "UUDate.h"
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "SAMKeychain.h"
@@ -299,6 +300,23 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else if (item.action == @selector(save:)) {
 		return ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]);
+	}
+	else if (item.action == @selector(schedulePost:)) {
+		if (![RFSettings hasSnippetsBlog] || [RFSettings prefersExternalBlog]) {
+			return NO;
+		}
+		else if ([self isPage]) {
+			return NO;
+		}
+		else if ([self isReply]) {
+			return NO;
+		}
+		else if (self.editingPost && !self.editingPost.isDraft) {
+			return NO;
+		}
+		else {
+			return YES;
+		}
 	}
 	else {
 		return YES;
@@ -910,6 +928,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self.view.window beginSheet:date_controller.window completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == NSModalResponseOK) {
 			self.postedAt = date_controller.date;
+			self.isDraft = NO;
+			[self sendPost:nil];
 		}
 	}];
 }
@@ -1038,6 +1058,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					}
 				};
 
+				if (self.postedAt) {
+					NSMutableDictionary* new_info = [info mutableCopy];
+					NSMutableDictionary* new_replace = [[info objectForKey:@"replace"] mutableCopy];
+					[new_replace setObject:[self.postedAt uuRfc3339StringForUTCTimeZone] forKey:@"published"];
+					[new_info setObject:new_replace forKey:@"replace"];
+					info = new_info;
+				}
+				
 				[client postWithObject:info completion:^(UUHttpResponse* response) {
 					RFDispatchMainAsync (^{
 						if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
@@ -1072,6 +1100,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"category[]": category_names,
 					@"post-status": [self currentStatus]
 				};
+
+				if (self.postedAt) {
+					NSMutableDictionary* new_args = [args mutableCopy];
+					[new_args setObject:[self.postedAt uuRfc3339StringForUTCTimeZone] forKey:@"published"];
+					args = new_args;
+				}
 
 				[client postWithParams:args completion:^(UUHttpResponse* response) {
 					RFDispatchMainAsync (^{
