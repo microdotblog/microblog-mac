@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -102,6 +102,12 @@ DQ
                             <menuItem title="Save Draft" keyEquivalent="s" id="gN7-ft-ZET">
                                 <connections>
                                     <action selector="save:" target="-1" id="7lS-vQ-JSr"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Schedule Post..." id="wey-Rc-jPd">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="schedulePost:" target="-1" id="sqT-tY-uB1"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EWd-1i-I6l"/>

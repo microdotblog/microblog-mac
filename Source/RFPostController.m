@@ -903,6 +903,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self sendPost:sender];
 }
 
+- (IBAction) schedulePost:(id)sender
+{
+}
+
 - (void) showProgressHeader:(NSString *)statusText
 {
 	[self startProgressAnimation];
@@ -1039,8 +1043,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							NSString* msg = [response.httpError localizedDescription];
 							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 						}
-						else {
+						else if (!self.isDraft) {
 							[self closeWithoutSaving];
+						}
+						else {
+							[self stopProgressAnimation];
 						}
 					});
 				}];
@@ -1071,8 +1078,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							NSString* msg = [response.httpError localizedDescription];
 							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 						}
-						else {
+						else if (!self.isDraft) {
 							[self closeWithoutSaving];
+						}
+						else {
+							[self stopProgressAnimation];
 						}
 					});
 				}];
@@ -1131,8 +1141,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						NSString* msg = [response.httpError localizedDescription];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
-					else {
+					else if (!self.isDraft) {
 						[self closeWithoutSaving];
+					}
+					else {
+						[self stopProgressAnimation];
 					}
 				});
 			}];
@@ -1197,8 +1210,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						NSString* msg = [response.httpError localizedDescription];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
-					else {
+					else if (!self.isDraft) {
 						[self closeWithoutSaving];
+					}
+					else {
+						[self stopProgressAnimation];
 					}
 				}));
 			}];
