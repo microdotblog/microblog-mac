@@ -147,8 +147,14 @@
 - (void) openRow:(id)sender
 {
 	NSInteger row = [self.tableView clickedRow];
-	RFPost* post = [self.currentPosts objectAtIndex:row];
-	[self openPost:post];
+	if (row < 0) {
+		row = [self.tableView selectedRow];
+	}
+		
+	if (row >= 0) {
+		RFPost* post = [self.currentPosts objectAtIndex:row];
+		[self openPost:post];
+	}
 }
 
 - (void) openPost:(RFPost *)post

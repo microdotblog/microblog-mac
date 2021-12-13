@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (id) initShowingPages:(BOOL)isShowingPages;
 - (void) fetchPosts;
 - (void) focusSearch;
+- (void) openRow:(id)sender;
 
 @end
 
