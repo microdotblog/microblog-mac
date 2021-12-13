@@ -3,6 +3,8 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,8 +26,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="357" height="287"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <box fixedFrame="YES" boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="mxc-uL-jrD">
+                        <rect key="frame" x="-5" y="57" width="366" height="233"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="g63-lJ-zWu">
+                            <rect key="frame" x="1" y="1" width="364" height="231"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </view>
+                        <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                        <color key="fillColor" name="color_datepicker_background"/>
+                    </box>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1B4-HI-Jj4">
-                        <rect key="frame" x="253" y="13" width="91" height="32"/>
+                        <rect key="frame" x="253" y="12" width="91" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Schedule" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d57-Ia-noG">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -39,7 +51,7 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ztb-5V-3PI">
-                        <rect key="frame" x="164" y="13" width="91" height="32"/>
+                        <rect key="frame" x="164" y="12" width="91" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rz5-7V-saZ">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -53,24 +65,24 @@ Gw
                         </connections>
                     </button>
                     <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NZ8-lO-bjK">
-                        <rect key="frame" x="109" y="108" width="139" height="148"/>
+                        <rect key="frame" x="109" y="114" width="139" height="148"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <datePickerCell key="cell" borderStyle="bezel" alignment="left" datePickerStyle="clockAndCalendar" useCurrentDate="YES" id="tgK-q7-8aF">
                             <font key="font" metaFont="system"/>
-                            <date key="date" timeIntervalSinceReferenceDate="661109891.794505">
-                                <!--2021-12-13 17:38:11 +0000-->
+                            <date key="date" timeIntervalSinceReferenceDate="661117942.08349097">
+                                <!--2021-12-13 19:52:22 +0000-->
                             </date>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         </datePickerCell>
                     </datePicker>
                     <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d8A-CG-VvT">
-                        <rect key="frame" x="109" y="75" width="142" height="28"/>
+                        <rect key="frame" x="109" y="81" width="142" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <datePickerCell key="cell" borderStyle="bezel" alignment="left" useCurrentDate="YES" id="r1P-iS-OCB">
                             <font key="font" metaFont="system"/>
-                            <date key="date" timeIntervalSinceReferenceDate="661110503.63279104">
-                                <!--2021-12-13 17:48:23 +0000-->
+                            <date key="date" timeIntervalSinceReferenceDate="661117942.087659">
+                                <!--2021-12-13 19:52:22 +0000-->
                             </date>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -82,4 +94,9 @@ Gw
             <point key="canvasLocation" x="77.5" y="152.5"/>
         </window>
     </objects>
+    <resources>
+        <namedColor name="color_datepicker_background">
+            <color white="0.94999998807907104" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
+    </resources>
 </document>
