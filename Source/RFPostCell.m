@@ -87,7 +87,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	CGRect r = self.bounds;
 	if ([self.superview isKindOfClass:[NSTableView class]]) {
 		NSTableView* table = (NSTableView *)self.superview;
-		if (table.window.firstResponder == table) {
+		if (![table.window isKeyWindow]) {
+			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
+		}
+		else if (table.window.firstResponder == table) {
 			[[NSColor selectedContentBackgroundColor] set];
 		}
 		else {
