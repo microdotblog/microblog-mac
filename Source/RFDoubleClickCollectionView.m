@@ -8,6 +8,7 @@
 
 #import "RFDoubleClickCollectionView.h"
 
+#import "RFAllUploadsController.h"
 #import "RFConstants.h"
 
 @implementation RFDoubleClickCollectionView
@@ -21,6 +22,18 @@
 		if (d && [d respondsToSelector:@selector(openSelectedItem)]) {
 			[d performSelector:@selector(openSelectedItem)];
 		}
+	}
+}
+
+- (void) keyDown:(NSEvent *)event
+{
+	if ([[event characters] isEqualToString:@"\r"]) {
+		if ([self.delegate respondsToSelector:@selector(openSelectedItem)]) {
+			[self.delegate performSelector:@selector(openSelectedItem)];			
+		}
+	}
+	else {
+		[super keyDown:event];
 	}
 }
 

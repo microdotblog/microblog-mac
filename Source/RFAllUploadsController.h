@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* allPosts; // RFUpload
 @property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
 
+- (void) openSelectedItem;
+
 @end
 
 NS_ASSUME_NONNULL_END
