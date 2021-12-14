@@ -1123,6 +1123,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							[self closeWithoutSaving];
 						}
 						else {
+							self.editingPost = [[RFPost alloc] init];
+							self.editingPost.url = response.parsedResponse[@"url"];
+							self.editingPost.isDraft = YES;
 							[self stopProgressAnimation];
 						}
 					});
