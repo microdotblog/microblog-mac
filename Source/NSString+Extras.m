@@ -38,4 +38,13 @@
 	return [self stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 }
 
+- (NSString *) mb_contentType
+{
+	NSString* filename = [self lastPathComponent];
+	NSString* e = [filename pathExtension];
+	NSString* uti = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)e, NULL);
+	NSString* content_type = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)uti, kUTTagClassMIMEType);
+	return content_type;
+}
+
 @end

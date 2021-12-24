@@ -18,6 +18,7 @@
 #import "UUDate.h"
 #import "RFMacros.h"
 #import "NSAlert+Extras.h"
+#import "NSString+Extras.h"
 #import "SAMKeychain.h"
 #import <ZipArchive.h>
 
@@ -369,13 +370,45 @@
 
 - (void) uploadFile:(NSString *)path completion:(void (^)(void))handler
 {
-	handler();
+	if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+		RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+		NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+		if (destination_uid == nil) {
+			destination_uid = @"";
+		}
+		NSDictionary* args = @{
+			@"mp-destination": destination_uid
+		};
+
+		NSData* d = [NSData dataWithContentsOfFile:path];
+		NSString* filename = [path lastPathComponent];
+		NSString* content_type = [path mb_contentType];
+		
+		[client uploadFileData:d named:@"file" filename:filename contentType:content_type httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse *response) {
+			NSDictionary* headers = response.httpResponse.allHeaderFields;
+			NSString* image_url = headers[@"Location"];
+			RFDispatchMainAsync (^{
+				if (image_url == nil) {
+					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
+				}
+				else {
+					handler();
+				}
+			});
+		}];
+	}
+	else {
+		// Micropub and WordPress
+		// ...
+	}
 }
 
 - (void) updateProgress
 {
-	NSUInteger remaining = (self.posts.count - self.queuedPosts.count) + (self.files.count - self.queuedFiles.count);
-	[self.progressBar setDoubleValue:remaining];
+	NSUInteger remaining_posts = self.posts.count - self.queuedPosts.count;
+	NSUInteger remaining_files = self.files.count - self.queuedFiles.count;
+	NSUInteger remaining_all = remaining_posts + remaining_files;
+	[self.progressBar setDoubleValue:remaining_all];
 }
 
 - (void) finishedImport

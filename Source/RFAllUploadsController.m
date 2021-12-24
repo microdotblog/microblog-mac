@@ -20,6 +20,7 @@
 #import "RFMacros.h"
 #import "NSImage+Extras.h"
 #import "NSAlert+Extras.h"
+#import "NSString+Extras.h"
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
@@ -261,9 +262,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSData* d = [NSData dataWithContentsOfFile:path];
 	
 	NSString* filename = [path lastPathComponent];
-	NSString* e = [filename pathExtension];
-	NSString* uti = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)e, NULL);
-	NSString* content_type = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)uti, kUTTagClassMIMEType);
+	NSString* content_type = [path mb_contentType];
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];

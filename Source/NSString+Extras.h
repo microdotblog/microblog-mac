@@ -15,4 +15,6 @@
 - (NSString *) rf_stripHTML;
 - (NSString *) rf_stringEscapingQuotes;
 
+- (NSString *) mb_contentType;
+
 @end
