@@ -118,32 +118,79 @@
 			
 			self.posts = new_posts;
 			[self.tableView reloadData];
-			
-			if (self.posts.count == 1) {
-				self.summaryField.stringValue = @"1 post";
-			}
-			else {
-				self.summaryField.stringValue = [NSString stringWithFormat:@"%lu posts", (unsigned long)self.posts.count];
-			}
+
+			[self setupSummary];
 		}
+		else {
+			self.summaryField.stringValue = @"Could not process JSON Feed.";
+		}
+		
+		[self gatherUploads:self.unzippedPath];
 	}
 	else {
 		self.summaryField.stringValue = @"Could not uncompress the archive file.";
 	}
 }
 
+- (void) setupSummary
+{
+	if (self.posts.count == 1) {
+		self.summaryField.stringValue = @"1 post";
+	}
+	else {
+		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu posts", (unsigned long)self.posts.count];
+	}
+}
+
+- (void) gatherUploads:(NSString *)path
+{
+	NSMutableArray* new_paths = [NSMutableArray array];
+
+	NSURL* folder_url = [NSURL fileURLWithPath:path];
+	NSArray* keys = @[ NSURLIsDirectoryKey, NSURLIsPackageKey, NSURLLocalizedNameKey ];
+
+	NSDirectoryEnumerator* enumerator = [[NSFileManager defaultManager] enumeratorAtURL:folder_url includingPropertiesForKeys:keys options:(NSDirectoryEnumerationSkipsPackageDescendants | NSDirectoryEnumerationSkipsHiddenFiles) errorHandler:^(NSURL *url, NSError *error) {
+		// continue after errors
+		return YES;
+	}];
+
+	for (NSURL* url in enumerator) {
+		NSNumber* is_dir = nil;
+		[url getResourceValue:&is_dir forKey:NSURLIsDirectoryKey error:NULL];
+		if (![is_dir boolValue]) {
+			NSString* filename = [url lastPathComponent];
+			if (![filename isEqualToString:@"feed.json"] && ![filename isEqualToString:@"index.html"]) {
+				// we want a list of all the files except the special feed.json and index.html
+				[new_paths addObject:[url path]];
+			}
+		}
+	}
+	
+	self.files = new_paths;
+}
+
 - (IBAction) runImport:(id)sender
 {
-	self.importButton.enabled = NO;
-	self.progressBar.hidden = NO;
-	self.summaryField.hidden = YES;
-	[self.progressBar startAnimation:nil];
-	
-	self.queuedPosts = [self.posts mutableCopy];
-	[self.progressBar setMaxValue:self.posts.count];
-	[self.progressBar setDoubleValue:1];
+	if (self.isRunning) {
+		self.importButton.enabled = NO;
+		self.isStopping = YES;
+	}
+	else {
+		self.isRunning = YES;
+		self.isStopping = NO;
+		
+		self.progressBar.hidden = NO;
+		self.summaryField.hidden = YES;
+		[self.progressBar startAnimation:nil];
+		[self.importButton setTitle:@"Stop"];
+		
+		self.queuedPosts = [self.posts mutableCopy];
+		self.queuedFiles = [self.files mutableCopy];
+		[self.progressBar setMaxValue:self.posts.count + self.files.count];
+		[self.progressBar setDoubleValue:1];
 
-	[self uploadNextPostInBackground];
+		[self uploadNextFileInBackground];
+	}
 }
 
 #pragma mark -
@@ -155,14 +202,30 @@
 
 - (void) uploadNextPost
 {
+	if (self.isStopping) {
+		[self performSelectorOnMainThread:@selector(finishedImport) withObject:nil waitUntilDone:NO];
+		return;
+	}
+
 	if (self.queuedPosts.count > 0) {
 		RFPost* post = [self.queuedPosts firstObject];
 		[self.queuedPosts removeObject:post];
 
-		[self uploadPost:post completion:^{
-			[self uploadNextPostInBackground];
-		}];
-	
+		NSArray* files = [self uploadedFilesInPost:post];
+		if (files.count > 0) {
+			// update HTML?
+			// ...
+			
+			[self uploadPost:post completion:^{
+				[self uploadNextPostInBackground];
+			}];
+		}
+		else {
+			[self uploadPost:post completion:^{
+				[self uploadNextPostInBackground];
+			}];
+		}
+		
 		[self performSelectorOnMainThread:@selector(updateProgress) withObject:nil waitUntilDone:NO];
 	}
 	else {
@@ -276,19 +339,81 @@
 	}
 }
 
+- (void) uploadNextFileInBackground
+{
+	[self performSelectorInBackground:@selector(uploadNextFile) withObject:nil];
+}
+
+- (void) uploadNextFile
+{
+	if (self.isStopping) {
+		[self performSelectorOnMainThread:@selector(finishedImport) withObject:nil waitUntilDone:NO];
+		return;
+	}
+	
+	if (self.queuedFiles.count > 0) {
+		NSString* path = [self.queuedFiles firstObject];
+		[self.queuedFiles removeObject:path];
+
+		[self uploadFile:path completion:^{
+			[self uploadNextFileInBackground];
+		}];
+		
+		[self performSelectorOnMainThread:@selector(updateProgress) withObject:nil waitUntilDone:NO];
+	}
+	else {
+		// move on to uploading posts
+		[self uploadNextPostInBackground];
+	}
+}
+
+- (void) uploadFile:(NSString *)path completion:(void (^)(void))handler
+{
+	handler();
+}
+
 - (void) updateProgress
 {
-	NSUInteger remaining = self.posts.count - self.queuedPosts.count;
-	self.progressBar.doubleValue = remaining;
+	NSUInteger remaining = (self.posts.count - self.queuedPosts.count) + (self.files.count - self.queuedFiles.count);
+	[self.progressBar setDoubleValue:remaining];
 }
 
 - (void) finishedImport
 {
 	self.importButton.enabled = YES;
+	[self.importButton setTitle:@"Import"];
 	self.progressBar.hidden = YES;
-	self.summaryField.stringValue = @"Import finished.";
+
+	if (self.isStopping) {
+		[self setupSummary];
+	}
+	else {
+		self.summaryField.stringValue = @"Import finished.";
+	}
+	
 	self.summaryField.hidden = NO;
 	[self.progressBar stopAnimation:nil];
+	
+	self.isStopping = NO;
+	self.isRunning = NO;
+}
+
+- (NSArray *) uploadedFilesInPost:(RFPost *)post
+{
+	NSMutableArray* paths = [NSMutableArray array];
+	
+	for (NSString* file in self.files) {
+		NSString* filename = [file lastPathComponent];
+		NSString* parent = [[file stringByDeletingLastPathComponent] lastPathComponent];
+		NSString* relative_path = [NSString stringWithFormat:@"%@/%@", parent, filename];
+		
+		// check if the post contains a reference to this file, e.g. "2021/file.jpg"
+		if ([post.text containsString:relative_path]) {
+			[paths addObject:file];
+		}
+	}
+	
+	return paths;
 }
 
 #pragma mark -
