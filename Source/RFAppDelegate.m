@@ -21,6 +21,7 @@
 #import "RFBookmarkController.h"
 #import "RFPostWindowController.h"
 #import "RFPostController.h"
+#import "MBBlogImportController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -316,6 +317,23 @@
 	}
 	
 	[self.bookmarkController showWindow:nil];
+}
+
+- (IBAction) importBlogArchive:(id)sender
+{
+	if (self.blogImportController) {
+		[self.blogImportController close];
+		self.blogImportController = nil;
+	}
+
+	NSOpenPanel* panel = [NSOpenPanel openPanel];
+	panel.allowedFileTypes = @[ @"bar", @"zip" ];
+	NSModalResponse response = [panel runModal];
+	if (response == NSModalResponseOK) {
+		NSURL* url = panel.URL;
+		self.blogImportController = [[MBBlogImportController alloc] initWithFile:url.path];
+		[self.blogImportController showWindow:nil];
+	}
 }
 
 - (IBAction) importInstagram:(id)sender

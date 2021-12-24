@@ -150,6 +150,8 @@
 		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
 		4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BD8339E273C3FF0007350F2 /* GoToUser.xib */; };
 		4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD833A2273C60A5007350F2 /* RFPostTableView.m */; };
+		4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB783B2774E89400D7783C /* MBBlogImportController.m */; };
+		4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB783D2774E8F100D7783C /* BlogImport.xib */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
 		4BED646624BD5AB80018644C /* AllUploads.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BED646424BD5AB80018644C /* AllUploads.xib */; };
 		4BED646924BDF29A0018644C /* RFUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646824BDF29A0018644C /* RFUpload.m */; };
@@ -434,6 +436,9 @@
 		4BD8339F273C3FF0007350F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/GoToUser.xib; sourceTree = "<group>"; };
 		4BD833A1273C60A5007350F2 /* RFPostTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostTableView.h; path = Source/RFPostTableView.h; sourceTree = "<group>"; };
 		4BD833A2273C60A5007350F2 /* RFPostTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostTableView.m; path = Source/RFPostTableView.m; sourceTree = "<group>"; };
+		4BDB783A2774E89400D7783C /* MBBlogImportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBlogImportController.h; path = Source/MBBlogImportController.h; sourceTree = "<group>"; };
+		4BDB783B2774E89400D7783C /* MBBlogImportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBlogImportController.m; path = Source/MBBlogImportController.m; sourceTree = "<group>"; };
+		4BDB783E2774E8F100D7783C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BlogImport.xib; sourceTree = "<group>"; };
 		4BED646124BD59ED0018644C /* RFAllUploadsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllUploadsController.h; path = Source/RFAllUploadsController.h; sourceTree = "<group>"; };
 		4BED646224BD59ED0018644C /* RFAllUploadsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllUploadsController.m; path = Source/RFAllUploadsController.m; sourceTree = "<group>"; };
 		4BED646524BD5AB80018644C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllUploads.xib; sourceTree = "<group>"; };
@@ -653,6 +658,8 @@
 				4BD83399273C3DF3007350F2 /* RFGoToUserController.m */,
 				4BB69069209A123300CD5E1E /* RFInstagramController.h */,
 				4BB6906A209A123300CD5E1E /* RFInstagramController.m */,
+				4BDB783A2774E89400D7783C /* MBBlogImportController.h */,
+				4BDB783B2774E89400D7783C /* MBBlogImportController.m */,
 				4B3840C92692014000AD3781 /* RFExportController.h */,
 				4B3840CA2692014000AD3781 /* RFExportController.m */,
 				4B3840D52696223E00AD3781 /* RFWordPressExportController.h */,
@@ -799,6 +806,7 @@
 				4B2CAB271F91201F00D9B10E /* OptionsWithUnfavorite.xib */,
 				4B5A25081F83FE4D007C548F /* Welcome.xib */,
 				4BB69066209A113500CD5E1E /* Instagram.xib */,
+				4BDB783D2774E8F100D7783C /* BlogImport.xib */,
 				4B3840CC2692019B00AD3781 /* Export.xib */,
 				4BF537292247345F00CF9D66 /* AllPosts.xib */,
 				4BED646424BD5AB80018644C /* AllUploads.xib */,
@@ -964,6 +972,7 @@
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
+				4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */,
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B9F06402767BC400007F21D /* Date.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
@@ -1137,6 +1146,7 @@
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
+				4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */,
 				4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
@@ -1367,6 +1377,14 @@
 			name = GoToUser.xib;
 			sourceTree = "<group>";
 		};
+		4BDB783D2774E8F100D7783C /* BlogImport.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BDB783E2774E8F100D7783C /* Base */,
+			);
+			name = BlogImport.xib;
+			sourceTree = "<group>";
+		};
 		4BED646424BD5AB80018644C /* AllUploads.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1515,7 +1533,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 97;
+				CURRENT_PROJECT_VERSION = 98;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1530,7 +1548,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -1546,7 +1564,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 97;
+				CURRENT_PROJECT_VERSION = 98;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1561,7 +1579,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;

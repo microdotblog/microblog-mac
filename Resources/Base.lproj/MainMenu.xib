@@ -121,6 +121,12 @@ DQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Import" id="SdT-p0-nsB">
                                     <items>
+                                        <menuItem title="Blog Archive..." id="eae-Xp-YDH">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="importBlogArchive:" target="-1" id="HlM-6c-ICH"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Instagram..." id="wxV-lT-Fd2">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
