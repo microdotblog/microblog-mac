@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString* path;
 @property (strong, nonatomic) NSArray* posts; // RFPost
+@property (strong, nonatomic) NSMutableArray* queuedPosts; // RFPost
 @property (strong, nonatomic) NSString* unzippedPath;
 
 - (instancetype) initWithFile:(NSString *)path;
