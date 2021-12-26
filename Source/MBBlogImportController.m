@@ -97,36 +97,41 @@
 		NSString* feed_path = [dest_path stringByAppendingPathComponent:@"feed.json"];
 		
 		NSData* d = [NSData dataWithContentsOfFile:feed_path];
-		NSError* error = nil;
-		id obj = [NSJSONSerialization JSONObjectWithData:d options:0 error:&error];
-		if ([obj isKindOfClass:[NSDictionary class]]) {
-			NSMutableArray* new_posts = [NSMutableArray array];
-			
-			NSArray* items = [obj objectForKey:@"items"];
-			for (NSDictionary* info in items) {
-				RFPost* new_post = [[RFPost alloc] init];
+		if (d) {
+			NSError* error = nil;
+			id obj = [NSJSONSerialization JSONObjectWithData:d options:0 error:&error];
+			if ([obj isKindOfClass:[NSDictionary class]]) {
+				NSMutableArray* new_posts = [NSMutableArray array];
 				
-				// first try content_text, which we assume is original Markdown
-				new_post.text = [info objectForKey:@"content_text"];
-				if (new_post.text == nil) {
-					new_post.text = [info objectForKey:@"content_html"];
+				NSArray* items = [obj objectForKey:@"items"];
+				for (NSDictionary* info in items) {
+					RFPost* new_post = [[RFPost alloc] init];
+					
+					// first try content_text, which we assume is original Markdown
+					new_post.text = [info objectForKey:@"content_text"];
+					if (new_post.text == nil) {
+						new_post.text = [info objectForKey:@"content_html"];
+					}
+					
+					NSString* date_s = [info objectForKey:@"date_published"];
+					new_post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
+					new_post.title = [info objectForKey:@"title"];
+					
+					[new_posts addObject:new_post];
 				}
 				
-				NSString* date_s = [info objectForKey:@"date_published"];
-				new_post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
-				new_post.title = [info objectForKey:@"title"];
-				
-				[new_posts addObject:new_post];
-			}
-			
-			self.posts = new_posts;
-			[self.tableView reloadData];
+				self.posts = new_posts;
+				[self.tableView reloadData];
 
-			[self gatherUploads:self.unzippedPath];
-			[self setupSummary];
+				[self gatherUploads:self.unzippedPath];
+				[self setupSummary];
+			}
+			else {
+				self.summaryField.stringValue = @"Could not process JSON Feed.";
+			}
 		}
 		else {
-			self.summaryField.stringValue = @"Could not process JSON Feed.";
+			self.summaryField.stringValue = @"Could not find JSON Feed in archive file.";
 		}
 	}
 	else {
