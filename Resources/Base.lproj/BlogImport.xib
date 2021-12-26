@@ -20,15 +20,15 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Blog Archive" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="196" y="240" width="505" height="387"/>
+            <rect key="contentRect" x="196" y="240" width="550" height="450"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="400" height="300"/>
-            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="505" height="387"/>
+            <view key="contentView" wantsLayer="YES" misplaced="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="550" height="533"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1n5-wO-Zim">
-                        <rect key="frame" x="418" y="340" width="74" height="32"/>
+                        <rect key="frame" x="463" y="486" width="74" height="32"/>
                         <buttonCell key="cell" type="push" title="Import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bJq-1f-IWq">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -38,7 +38,7 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="C4x-Y2-eoj">
-                        <rect key="frame" x="316" y="349" width="94" height="16"/>
+                        <rect key="frame" x="361" y="495" width="94" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="you.micro.blog" id="Rf0-6U-HKM">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -46,18 +46,18 @@
                         </textFieldCell>
                     </textField>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3e6-Bp-HeG">
-                        <rect key="frame" x="-1" y="-1" width="507" height="328"/>
+                        <rect key="frame" x="-1" y="-1" width="552" height="474"/>
                         <clipView key="contentView" id="rJe-t7-w8I">
-                            <rect key="frame" x="0.0" y="0.0" width="507" height="328"/>
+                            <rect key="frame" x="0.0" y="0.0" width="552" height="474"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" usesAutomaticRowHeights="YES" viewBased="YES" floatsGroupRows="NO" id="fXn-2I-WbB">
-                                    <rect key="frame" x="0.0" y="0.0" width="508" height="328"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="552" height="474"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="text" editable="NO" width="475.5" minWidth="40" maxWidth="1000" id="5TE-OC-5jJ">
+                                        <tableColumn identifier="text" editable="NO" width="520" minWidth="40" maxWidth="1000" id="5TE-OC-5jJ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Text">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -70,7 +70,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="KP8-RL-CuS">
-                                                    <rect key="frame" x="10" y="0.0" width="470" height="17"/>
+                                                    <rect key="frame" x="10" y="0.0" width="532" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </tableCellView>
                                             </prototypeCellViews>
@@ -93,14 +93,14 @@
                         </scroller>
                     </scrollView>
                     <progressIndicator hidden="YES" maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="BtC-cj-N3b">
-                        <rect key="frame" x="15" y="347" width="165" height="20"/>
+                        <rect key="frame" x="15" y="493" width="165" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="22j-Wl-Jwu"/>
                             <constraint firstAttribute="width" constant="165" id="CpP-11-cqn"/>
                         </constraints>
                     </progressIndicator>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bLA-be-TQo">
-                        <rect key="frame" x="13" y="349" width="50" height="16"/>
+                        <rect key="frame" x="13" y="495" width="50" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="0 posts" id="P3J-kb-efz">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
