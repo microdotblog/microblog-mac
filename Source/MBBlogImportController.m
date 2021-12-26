@@ -16,6 +16,7 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "UUDate.h"
+#import "UUString.h"
 #import "RFMacros.h"
 #import "NSAlert+Extras.h"
 #import "NSString+Extras.h"
@@ -187,6 +188,7 @@
 		
 		self.queuedPosts = [self.posts mutableCopy];
 		self.queuedFiles = [self.files mutableCopy];
+		self.filesToURLs = [NSMutableDictionary dictionary];
 		[self.progressBar setMaxValue:self.posts.count + self.files.count];
 		[self.progressBar setDoubleValue:1];
 
@@ -392,14 +394,86 @@
 					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
 				}
 				else {
+					// keep track of new uploaded URL so we can update HTML
+					[self.filesToURLs setObject:image_url forKey:path];
+					handler();
+				}
+			});
+		}];
+	}
+	else if ([self hasMicropubBlog]) {
+		NSString* micropub_endpoint = [RFSettings stringForKey:kExternalMicropubMediaEndpoint];
+		RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
+		NSDictionary* args = @{
+		};
+
+		NSData* d = [NSData dataWithContentsOfFile:path];
+		NSString* filename = [path lastPathComponent];
+		NSString* content_type = [path mb_contentType];
+
+		[client uploadFileData:d named:@"file" filename:filename contentType:content_type httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse *response) {
+			NSDictionary* headers = response.httpResponse.allHeaderFields;
+			NSString* image_url = headers[@"Location"];
+			RFDispatchMainAsync (^{
+				if (image_url == nil) {
+					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
+				}
+				else {
+					// keep track of new uploaded URL so we can update HTML
+					[self.filesToURLs setObject:image_url forKey:path];
 					handler();
 				}
 			});
 		}];
 	}
 	else {
-		// Micropub and WordPress
-		// ...
+		NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint];
+		NSString* blog_s = [RFSettings stringForKey:kExternalBlogID];
+		NSString* username = [RFSettings stringForKey:kExternalBlogUsername];
+		NSString* password = [SAMKeychain passwordForService:@"ExternalBlog" account:username];
+		
+		NSData* d = [NSData dataWithContentsOfFile:path];
+		NSNumber* blog_id = [NSNumber numberWithInteger:[blog_s integerValue]];
+		NSString* filename = [[[[NSString uuGenerateUUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByAppendingPathExtension:@"jpg"];
+		NSString* content_type = [path mb_contentType];
+
+		if (!blog_id || !username || !password) {
+			[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Your blog settings were not saved correctly. Try signing out and trying again." button:@"OK" completionHandler:NULL];
+			return;
+		}
+		
+		NSArray* params = @[ blog_id, username, password, @{
+			@"name": filename,
+			@"type": content_type,
+			@"bits": d
+		}];
+		NSString* method_name = @"metaWeblog.newMediaObject";
+
+		RFXMLRPCRequest* request = [[RFXMLRPCRequest alloc] initWithURL:xmlrpc_endpoint];
+		[request sendMethod:method_name params:params completion:^(UUHttpResponse* response) {
+			RFXMLRPCParser* xmlrpc = [RFXMLRPCParser parsedResponseFromData:response.rawResponse];
+			RFDispatchMainAsync ((^{
+				if (xmlrpc.responseFault) {
+					NSString* s = [NSString stringWithFormat:@"%@ (error: %@)", xmlrpc.responseFault[@"faultString"], xmlrpc.responseFault[@"faultCode"]];
+					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:s button:@"OK" completionHandler:NULL];
+				}
+				else {
+					NSString* image_url = [[xmlrpc.responseParams firstObject] objectForKey:@"url"];
+					if (image_url == nil) {
+						image_url = [[xmlrpc.responseParams firstObject] objectForKey:@"link"];
+					}
+					
+					if (image_url == nil) {
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
+					}
+					else {
+						// keep track of new uploaded URL so we can update HTML
+						[self.filesToURLs setObject:image_url forKey:path];
+						handler();
+					}
+				}
+			}));
+		}];
 	}
 }
 

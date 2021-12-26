@@ -114,6 +114,46 @@
 
 #pragma mark -
 
+- (UUHttpRequest *) uploadFileData:(NSData *)imageData named:(NSString *)imageName filename:(NSString *)filename contentType:(NSString *)contentType httpMethod:(NSString *)method queryArguments:(NSDictionary *)args completion:(void (^)(UUHttpResponse* response))handler
+{
+	NSString* boundary = [[NSProcessInfo processInfo] globallyUniqueString];
+	NSMutableData* d = [NSMutableData data];
+
+	for (NSString* k in [args allKeys]) {
+		NSString* val = [args objectForKey:k];
+		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", k] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"%@\r\n", val] dataUsingEncoding:NSUTF8StringEncoding]];
+	}
+
+	if (imageData) {
+		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, filename] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:imageData];
+		[d appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+	}
+
+	[d appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	
+	UUHttpRequest* request;
+	
+	if ([[method uppercaseString] isEqualToString:@"PUT"]) {
+		request = [UUHttpRequest putRequest:self.url queryArguments:nil body:d contentType:@"application/json"];
+	}
+	else {
+		request = [UUHttpRequest postRequest:self.url queryArguments:nil body:d contentType:@"application/json"];
+	}
+	[self setupRequest:request];
+	
+	NSString* content_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+	NSMutableDictionary* headers = [request.headerFields mutableCopy];
+	[headers setObject:content_type forKey:@"Content-Type"];
+	request.headerFields = headers;
+
+	return [UUHttpSession executeRequest:request completionHandler:handler];
+}
+
 - (UUHttpRequest *) uploadImageData:(NSData *)imageData named:(NSString *)imageName httpMethod:(NSString *)method queryArguments:(NSDictionary *)args isVideo:(BOOL)isVideo completion:(void (^)(UUHttpResponse* response))handler
 {
 	NSString* boundary = [[NSProcessInfo processInfo] globallyUniqueString];
@@ -132,7 +172,7 @@
 			filename = @"video.mov";
 		}
 		else {
-			filename = @"image.mov";
+			filename = @"image.jpg";
 		}
 
 		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];

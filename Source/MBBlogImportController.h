@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString* unzippedPath;
 @property (strong, nonatomic) NSArray* files; // file paths
 @property (strong, nonatomic) NSMutableArray* queuedFiles; // file paths
+@property (strong, nonatomic) NSMutableDictionary* filesToURLs; // path -> uploaded URL mapping
 @property (assign) BOOL isRunning;
 @property (assign) BOOL isStopping;
 
