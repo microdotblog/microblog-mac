@@ -272,11 +272,15 @@
 	NSError* error = nil;
 
 	NSString* uploads_folder = [self.exportFolder stringByAppendingPathComponent:@"uploads"];
-	[[NSFileManager defaultManager] createDirectoryAtPath:uploads_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	NSDateComponents* components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:upload.createdAt];
+	NSString* date_name = [NSString stringWithFormat:@"%ld", (long)components.year];
+	NSString* date_folder = [uploads_folder stringByAppendingPathComponent:date_name];
+	[[NSFileManager defaultManager] createDirectoryAtPath:date_folder withIntermediateDirectories:YES attributes:nil error:&error];
 
 	NSURL* download_url = [NSURL URLWithString:url];
 	NSString* filename = [download_url.pathComponents lastObject];
-	NSString* download_path = [uploads_folder stringByAppendingPathComponent:filename];
+	NSString* download_path = [date_folder stringByAppendingPathComponent:filename];
 	
 	// this is called from a thread so we'll keep it simple
 	NSData* d = [NSData dataWithContentsOfURL:download_url];
