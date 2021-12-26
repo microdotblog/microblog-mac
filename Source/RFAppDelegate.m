@@ -105,6 +105,19 @@
 	}
 }
 
+- (BOOL) application:(NSApplication *)sender openFile:(NSString *)path
+{
+	if (self.blogImportController) {
+		[self.blogImportController close];
+		self.blogImportController = nil;
+	}
+
+	self.blogImportController = [[MBBlogImportController alloc] initWithFile:path];
+	[self.blogImportController showWindow:nil];
+
+	return YES;
+}
+
 - (void) applicationWillTerminate:(NSNotification *)notification
 {
 }
