@@ -21,6 +21,7 @@
 #import "NSAlert+Extras.h"
 #import "NSString+Extras.h"
 #import "SAMKeychain.h"
+#import "HTMLParser.h"
 #import <ZipArchive.h>
 
 @implementation MBBlogImportController
@@ -121,13 +122,12 @@
 			self.posts = new_posts;
 			[self.tableView reloadData];
 
+			[self gatherUploads:self.unzippedPath];
 			[self setupSummary];
 		}
 		else {
 			self.summaryField.stringValue = @"Could not process JSON Feed.";
 		}
-		
-		[self gatherUploads:self.unzippedPath];
 	}
 	else {
 		self.summaryField.stringValue = @"Could not uncompress the archive file.";
@@ -136,12 +136,24 @@
 
 - (void) setupSummary
 {
+	NSString* posts_summary;
+	NSString* files_summary;
+	
 	if (self.posts.count == 1) {
-		self.summaryField.stringValue = @"1 post";
+		posts_summary = @"1 post";
 	}
 	else {
-		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu posts", (unsigned long)self.posts.count];
+		posts_summary = [NSString stringWithFormat:@"%lu posts", (unsigned long)self.posts.count];
 	}
+	
+	if (self.files.count == 1) {
+		files_summary = @"1 upload";
+	}
+	else {
+		files_summary = [NSString stringWithFormat:@"%lu uploads", (unsigned long)self.files.count];
+	}
+
+	self.summaryField.stringValue = [NSString stringWithFormat:@"%@ (%@)", posts_summary, files_summary];
 }
 
 - (void) gatherUploads:(NSString *)path
@@ -216,9 +228,7 @@
 
 		NSArray* files = [self uploadedFilesInPost:post];
 		if (files.count > 0) {
-			// update HTML?
-			// ...
-			
+			[self rewritePost:post forUploadedFiles:files];
 			[self uploadPost:post completion:^{
 				[self uploadNextPostInBackground];
 			}];
@@ -521,6 +531,37 @@
 	}
 	
 	return paths;
+}
+
+- (void) rewritePost:(RFPost *)post forUploadedFiles:(NSArray *)paths
+{
+	NSString* s = post.text;
+	
+	NSError* error = nil;
+	HTMLParser* p = [[HTMLParser alloc] initWithString:s error:&error];
+	if (error == nil) {
+		HTMLNode* body = [p body];
+		
+		for (NSString* file in paths) {
+			NSString* filename = [file lastPathComponent];
+			NSString* parent = [[file stringByDeletingLastPathComponent] lastPathComponent];
+			NSString* relative_path = [NSString stringWithFormat:@"%@/%@", parent, filename];
+			
+			NSString* new_url = [self.filesToURLs objectForKey:file];
+			if (new_url) {
+				NSArray* img_tags = [body findChildTags:@"img"];
+				for (HTMLNode* img_tag in img_tags) {
+					NSString* old_url = [img_tag getAttributeNamed:@"src"];
+					if ([old_url containsString:relative_path]) {
+						setAttributeNamed(img_tag->_node, "src", [new_url cStringUsingEncoding:NSUTF8StringEncoding]);
+					}
+				}
+			}
+		}
+
+		s = [body contents];
+		post.text = s;
+	}
 }
 
 #pragma mark -
