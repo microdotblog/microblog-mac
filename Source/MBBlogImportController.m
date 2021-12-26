@@ -51,7 +51,7 @@
 	
 	[self setupTable];
 	[self setupHostname];
-	[self setupPosts];
+	[self setupPostsInBackground];
 }
 
 - (void) setupTable
@@ -88,6 +88,17 @@
 	}
 }
 
+- (void) setupPostsInBackground
+{
+	self.progressBar.hidden = NO;
+	self.summaryField.hidden = YES;
+	self.importButton.enabled = NO;
+	[self.progressBar setIndeterminate:YES];
+	[self.progressBar startAnimation:nil];
+
+	[self performSelectorInBackground:@selector(setupPosts) withObject:nil];
+}
+
 - (void) setupPosts
 {
 	NSString* temp_filename = [NSString stringWithFormat:@"Micro.blog-%@", [[NSUUID UUID] UUIDString]];
@@ -121,22 +132,43 @@
 				}
 				
 				self.posts = new_posts;
-				[self.tableView reloadData];
+				RFDispatchMain (^{
+					[self.tableView reloadData];
 
-				[self gatherUploads:self.unzippedPath];
-				[self setupSummary];
+					[self gatherUploads:self.unzippedPath];
+					[self setupSummary];
+					[self resetOpeningProgress];
+				});
 			}
 			else {
-				self.summaryField.stringValue = @"Could not process JSON Feed.";
+				RFDispatchMain (^{
+					self.summaryField.stringValue = @"Could not process JSON Feed.";
+					[self resetOpeningProgress];
+				});
 			}
 		}
 		else {
-			self.summaryField.stringValue = @"Could not find JSON Feed in archive file.";
+			RFDispatchMain (^{
+				self.summaryField.stringValue = @"Could not find JSON Feed in archive file.";
+				[self resetOpeningProgress];
+			});
 		}
 	}
 	else {
-		self.summaryField.stringValue = @"Could not uncompress the archive file.";
+		RFDispatchMain (^{
+			self.summaryField.stringValue = @"Could not uncompress the archive file.";
+			[self resetOpeningProgress];
+		});
 	}
+}
+
+- (void) resetOpeningProgress
+{
+	self.progressBar.hidden = YES;
+	self.summaryField.hidden = NO;
+	self.importButton.enabled = YES;
+	[self.progressBar setIndeterminate:NO];
+	[self.progressBar startAnimation:nil];
 }
 
 - (void) setupSummary
