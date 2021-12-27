@@ -111,7 +111,7 @@
 		
 		NSError* error = nil;
 		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text error:&error];
-		[info setValue:post.text forKey:@"content_html"];
+		[info setValue:post_html forKey:@"content_html"];
 
 		[info setValue:post.url forKey:@"url"];
 		[info setValue:[post.postedAt uuRfc3339String] forKey:@"date_published"];
