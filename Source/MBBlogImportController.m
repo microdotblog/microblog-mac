@@ -664,7 +664,7 @@
 
 	if (row < self.posts.count) {
 		RFPost* post = [self.posts objectAtIndex:row];
-		[cell setupWithPost:post];
+		[cell setupWithPost:post skipPhotos:YES];
 	}
 
 	return cell;

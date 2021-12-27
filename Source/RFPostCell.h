@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* photos; // RFPhoto
 
 - (void) setupWithPost:(RFPost *)post;
+- (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos;
 
 @end
 

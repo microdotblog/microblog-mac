@@ -24,6 +24,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupWithPost:(RFPost *)post
 {
+	[self setupWithPost:post skipPhotos:NO];
+}
+
+- (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos
+{
 	self.titleField.stringValue = post.title;
 	self.textField.stringValue = [post summary];
 	NSString* date_s = [post.postedAt uuIso8601DateString];
@@ -39,32 +44,34 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.textTopConstraint.constant = 35;
 	}
 	
-	NSError* error = nil;
-	HTMLParser* p = [[HTMLParser alloc] initWithString:post.text error:&error];
-	if (error == nil) {
-		NSMutableArray* new_photos = [NSMutableArray array];
-		
-		HTMLNode* body = [p body];
-		NSArray* img_tags = [body findChildTags:@"img"];
-		for (HTMLNode* img_tag in img_tags) {
-			RFPhoto* photo = [[RFPhoto alloc] init];
-			photo.publishedURL = [img_tag getAttributeNamed:@"src"];
-			[new_photos addObject:photo];
-		}
-
-		NSArray* video_tags = [body findChildTags:@"video"];
-		for (HTMLNode* video_tag in video_tags) {
-			NSString* poster_url = [video_tag getAttributeNamed:@"poster"];
-			if ([poster_url length] > 0) {
+	if (!skipPhotos) {
+		NSError* error = nil;
+		HTMLParser* p = [[HTMLParser alloc] initWithString:post.text error:&error];
+		if (error == nil) {
+			NSMutableArray* new_photos = [NSMutableArray array];
+			
+			HTMLNode* body = [p body];
+			NSArray* img_tags = [body findChildTags:@"img"];
+			for (HTMLNode* img_tag in img_tags) {
 				RFPhoto* photo = [[RFPhoto alloc] init];
-				photo.publishedURL = poster_url;
+				photo.publishedURL = [img_tag getAttributeNamed:@"src"];
 				[new_photos addObject:photo];
 			}
+
+			NSArray* video_tags = [body findChildTags:@"video"];
+			for (HTMLNode* video_tag in video_tags) {
+				NSString* poster_url = [video_tag getAttributeNamed:@"poster"];
+				if ([poster_url length] > 0) {
+					RFPhoto* photo = [[RFPhoto alloc] init];
+					photo.publishedURL = poster_url;
+					[new_photos addObject:photo];
+				}
+			}
+
+			self.photos = new_photos;
 		}
-
-		self.photos = new_photos;
 	}
-
+	
 	if (self.photos.count == 0) {
 		self.dateTopConstraint.constant = 5;
 	}
