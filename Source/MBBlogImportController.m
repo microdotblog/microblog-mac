@@ -465,6 +465,7 @@
 			RFDispatchMainAsync (^{
 				if (image_url == nil) {
 					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
+					handler();
 				}
 				else {
 					// keep track of new uploaded URL so we can update HTML
@@ -490,6 +491,7 @@
 			RFDispatchMainAsync (^{
 				if (image_url == nil) {
 					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
+					handler();
 				}
 				else {
 					// keep track of new uploaded URL so we can update HTML
@@ -512,6 +514,7 @@
 
 		if (!blog_id || !username || !password) {
 			[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Your blog settings were not saved correctly. Try signing out and trying again." button:@"OK" completionHandler:NULL];
+			handler();
 			return;
 		}
 		
