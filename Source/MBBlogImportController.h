@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBBlogImportController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate>
+@interface MBBlogImportController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTextField* summaryField;
 @property (strong, nonatomic) IBOutlet NSTextField* hostnameField;

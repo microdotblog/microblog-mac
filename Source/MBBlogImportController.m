@@ -36,22 +36,45 @@
 	return self;
 }
 
-- (void) dealloc
-{
-	if ([self.unzippedPath containsString:@"Micro.blog"]) { // sanity check
-		[[NSFileManager defaultManager] removeItemAtPath:self.unzippedPath error:NULL];
-	}
-}
-
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
 	
 	[self.window setTitle:[self.path lastPathComponent]];
+	self.window.delegate = self;
 	
 	[self setupTable];
 	[self setupHostname];
 	[self setupPostsInBackground];
+}
+
+- (BOOL) windowShouldClose:(NSWindow *)sender
+{
+	if (self.isRunning) {
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"The file %@ is currently being imported.", [self.path lastPathComponent]];
+		sheet.informativeText = @"To close this window, first stop the import.";
+		[sheet addButtonWithTitle:@"Stop Import"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				self.importButton.enabled = NO;
+				self.isStopping = YES;
+			}
+		}];
+
+		return NO;
+	}
+	else {
+		return YES;
+	}
+}
+
+- (void) windowWillClose:(NSNotification *)notification
+{
+	if ([self.unzippedPath containsString:@"Micro.blog"]) { // sanity check
+		[[NSFileManager defaultManager] removeItemAtPath:self.unzippedPath error:NULL];
+	}
 }
 
 - (void) setupTable
