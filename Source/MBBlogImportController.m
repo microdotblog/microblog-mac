@@ -616,13 +616,12 @@
 				for (HTMLNode* img_tag in img_tags) {
 					NSString* old_url = [img_tag getAttributeNamed:@"src"];
 					if ([old_url containsString:relative_path]) {
-						setAttributeNamed(img_tag->_node, "src", [new_url cStringUsingEncoding:NSUTF8StringEncoding]);
+						s = [s stringByReplacingOccurrencesOfString:old_url withString:new_url];
 					}
 				}
 			}
 		}
 
-		s = [body contents];
 		post.text = s;
 	}
 }
