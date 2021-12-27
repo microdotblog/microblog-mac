@@ -127,6 +127,9 @@
 					NSString* date_s = [info objectForKey:@"date_published"];
 					new_post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
 					new_post.title = [info objectForKey:@"title"];
+					if (new_post.title == nil) {
+						new_post.title = @"";
+					}
 					
 					[new_posts addObject:new_post];
 				}
