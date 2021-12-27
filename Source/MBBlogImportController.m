@@ -58,8 +58,7 @@
 		[sheet addButtonWithTitle:@"Cancel"];
 		[sheet beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
-				self.importButton.enabled = NO;
-				self.isStopping = YES;
+				[self cancel];
 			}
 		}];
 
@@ -249,8 +248,7 @@
 - (IBAction) runImport:(id)sender
 {
 	if (self.isRunning) {
-		self.importButton.enabled = NO;
-		self.isStopping = YES;
+		[self cancel];
 	}
 	else {
 		self.isRunning = YES;
@@ -269,6 +267,12 @@
 
 		[self uploadNextFileInBackground];
 	}
+}
+
+- (void) cancel
+{
+	self.importButton.enabled = NO;
+	self.isStopping = YES;
 }
 
 #pragma mark -
@@ -329,6 +333,7 @@
 				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 					NSString* msg = response.parsedResponse[@"error_description"];
 					[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+					[self cancel];
 				}
 				else {
 					handler();
@@ -351,6 +356,7 @@
 				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 					NSString* msg = response.parsedResponse[@"error_description"];
 					[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
+					[self cancel];
 				}
 				else {
 					handler();
@@ -406,6 +412,7 @@
 				if (xmlrpc.responseFault) {
 					NSString* s = [NSString stringWithFormat:@"%@ (error: %@)", xmlrpc.responseFault[@"faultString"], xmlrpc.responseFault[@"faultCode"]];
 					[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:s button:@"OK" completionHandler:NULL];
+					[self cancel];
 				}
 				else {
 					handler();
