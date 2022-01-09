@@ -375,7 +375,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (NSString *) postButtonTitle
 {
-	if (self.editingPost) {
+	if (self.editingPost && self.editingPost.isDraft) {
+		return @"Post";
+	}
+	else if (self.editingPost) {
 		return @"Update";
 	}
 	else if ([self.channel isEqualToString:@"pages"]) {
