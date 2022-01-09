@@ -49,22 +49,24 @@
 
 - (void) editorWindowTextDidChangeNotification:(NSNotification *)notification
 {
-	NSString* title = [notification.userInfo objectForKey:kEditorWindowTextTitleKey];
-	NSString* markdown = [notification.userInfo objectForKey:kEditorWindowTextMarkdownKey];
-	
-	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
-	NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
-	
-	NSError* error = nil;
-	NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown error:&error];
-	if (error == nil) {
-		NSString* html = template_html;
-		html = [html stringByReplacingOccurrencesOfString:@"[TITLE]" withString:title];
-		html = [html stringByReplacingOccurrencesOfString:@"[CONTENT]" withString:content_html];
+	if ([self.window isVisible]) {
+		NSString* title = [notification.userInfo objectForKey:kEditorWindowTextTitleKey];
+		NSString* markdown = [notification.userInfo objectForKey:kEditorWindowTextMarkdownKey];
 		
-		if (![html isEqualToString:self.html]) {
-			self.html = html;
-			[self.webview loadHTMLString:html baseURL:nil];
+		NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
+		NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+		
+		NSError* error = nil;
+		NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown error:&error];
+		if (error == nil) {
+			NSString* html = template_html;
+			html = [html stringByReplacingOccurrencesOfString:@"[TITLE]" withString:title];
+			html = [html stringByReplacingOccurrencesOfString:@"[CONTENT]" withString:content_html];
+			
+			if (![html isEqualToString:self.html]) {
+				self.html = html;
+				[self.webview loadHTMLString:html baseURL:nil];
+			}
 		}
 	}
 }
