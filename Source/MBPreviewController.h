@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBPreviewController : NSWindowController
+@interface MBPreviewController : NSWindowController <WKNavigationDelegate>
 
 @property (strong, nonatomic) IBOutlet WKWebView* webview;
 

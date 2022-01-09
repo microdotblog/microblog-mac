@@ -26,7 +26,15 @@
 {
 	[super windowDidLoad];
 	
+	[self setupWebView];
 	[self setupNotifications];
+}
+
+- (void) setupWebView
+{
+	[self.window setBackgroundColor:[NSColor colorWithCalibratedWhite:0.96 alpha:1.0]];
+	self.webview.alphaValue = 0.0;
+	self.webview.navigationDelegate = self;
 }
 
 - (void) setupNotifications
@@ -53,6 +61,24 @@
 			self.html = html;
 			[self.webview loadHTMLString:html baseURL:nil];
 		}
+	}
+}
+
+- (void) webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
+{
+	if (self.webview.alphaValue == 0.0) {
+		self.webview.animator.alphaValue = 1.0;
+	}
+}
+
+- (void) webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+	if (navigationAction.navigationType == WKNavigationTypeLinkActivated) {
+		decisionHandler(WKNavigationActionPolicyCancel);
+		[[NSWorkspace sharedWorkspace] openURL:navigationAction.request.URL];
+	}
+	else {
+		decisionHandler(WKNavigationActionPolicyAllow);
 	}
 }
 
