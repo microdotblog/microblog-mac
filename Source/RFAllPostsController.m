@@ -65,6 +65,7 @@
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:nil];
 }
 
 - (void) fetchPosts
@@ -301,6 +302,11 @@
 }
 
 - (void) closePostingNotification:(NSNotification *)notification
+{
+	[self fetchPosts];
+}
+
+- (void) draftDidUpdateNotification:(NSNotification *)notification
 {
 	[self fetchPosts];
 }

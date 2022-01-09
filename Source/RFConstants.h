@@ -10,6 +10,7 @@ static NSString* const kLoadTimelineNotification = @"RFLoadTimeline";
 static NSString* const kOpenPostingNotification = @"RFOpenPosting";
 static NSString* const kOpenPostingPostKey = @"post";
 static NSString* const kClosePostingNotification = @"RFClosePosting";
+static NSString* const kDraftDidUpdateNotification = @"MBDraftDidUpdate";
 static NSString* const kRefreshTimelineNotification = @"RFRefreshTimeline";
 static NSString* const kCheckTimelineNotification = @"RFCheckTimeline";
 static NSString* const kUpdatedBlogNotification = @"RFUpdatedBlog";

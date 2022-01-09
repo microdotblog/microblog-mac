@@ -901,6 +901,33 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) sendPost:(id)sender
 {
+	// post button always publishes
+	self.isDraft = NO;
+	[self uploadPost];
+}
+
+- (IBAction) save:(id)sender
+{
+	// cmd-S saves to server
+	self.isDraft = YES;
+	[self uploadPost];
+}
+
+- (IBAction) schedulePost:(id)sender
+{
+	MBDateController* date_controller = [[MBDateController alloc] init];
+	[self.view.window beginSheet:date_controller.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSModalResponseOK) {
+			self.postedAt = date_controller.date;
+			self.isDraft = NO;
+			[self uploadPost];
+		}
+	}];
+}
+
+- (void) uploadPost
+{
+	// upload photos and then text
 	NSString* s = [self currentText];
 	if ((s.length > 0) || (self.attachedPhotos.count > 0)) {
 		if (self.attachedPhotos.count > 0) {
@@ -917,24 +944,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			[self uploadText:s];
 		}
 	}
-}
-
-- (IBAction) save:(id)sender
-{
-	self.isDraft = YES;
-	[self sendPost:sender];
-}
-
-- (IBAction) schedulePost:(id)sender
-{
-	MBDateController* date_controller = [[MBDateController alloc] init];
-	[self.view.window beginSheet:date_controller.window completionHandler:^(NSModalResponse returnCode) {
-		if (returnCode == NSModalResponseOK) {
-			self.postedAt = date_controller.date;
-			self.isDraft = NO;
-			[self sendPost:nil];
-		}
-	}];
 }
 
 - (void) showProgressHeader:(NSString *)statusText
@@ -955,6 +964,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) stopProgressAnimation
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPostStopProgressNotification object:self];
+}
+
+- (void) sendUpdatedDraftNotification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kDraftDidUpdateNotification object:self];
 }
 
 - (void) updateRemainingChars
@@ -1086,6 +1100,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						}
 						else {
 							[self stopProgressAnimation];
+							[self sendUpdatedDraftNotification];
 						}
 					});
 				}];
@@ -1130,6 +1145,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 							self.editingPost.url = response.parsedResponse[@"url"];
 							self.editingPost.isDraft = YES;
 							[self stopProgressAnimation];
+							[self sendUpdatedDraftNotification];
 						}
 					});
 				}];
