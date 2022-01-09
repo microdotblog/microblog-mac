@@ -251,6 +251,14 @@
 			return NO;
 		}
 	}
+	else if (item.action == @selector(showPreview:)) {
+		if ([self.previewController.window isVisible]) {
+			[item setState:NSControlStateValueOn];
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+		}
+	}
 
 	return YES;
 }
@@ -439,9 +447,16 @@
 {
 	if (self.previewController == nil) {
 		self.previewController = [[MBPreviewController alloc] init];
+		[self.previewController showWindow:nil];
 	}
-	
-	[self.previewController showWindow:nil];
+	else {
+		if ([self.previewController.window isVisible]) {
+			[self.previewController.window orderOut:nil];
+		}
+		else {
+			[self.previewController showWindow:nil];
+		}
+	}
 }
 
 #pragma mark -

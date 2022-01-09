@@ -26,13 +26,18 @@
 {
 	[super windowDidLoad];
 	
+	[self setupWindow];
 	[self setupWebView];
 	[self setupNotifications];
 }
 
-- (void) setupWebView
+- (void) setupWindow
 {
 	[self.window setBackgroundColor:[NSColor colorWithCalibratedWhite:0.96 alpha:1.0]];
+}
+
+- (void) setupWebView
+{
 	self.webview.alphaValue = 0.0;
 	self.webview.navigationDelegate = self;
 }
