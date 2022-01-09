@@ -299,7 +299,15 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 	}
 	else if (item.action == @selector(save:)) {
-		return ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]);
+		if ([self isPage]) {
+			return NO;
+		}
+		else if ([self isReply]) {
+			return NO;
+		}
+		else {
+			return ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]);
+		}
 	}
 	else if (item.action == @selector(schedulePost:)) {
 		if (![RFSettings hasSnippetsBlog] || [RFSettings prefersExternalBlog]) {
