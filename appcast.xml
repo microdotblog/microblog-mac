@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added View menu → Preview when writing a blog post. The preview floats over other windows and will show you what the current Markdown or HTML will look like..</li>
+	 				<li>Fixed posts list not updating when saving a new draft.</li>
+	 				<li>Fixed post button for drafts to show that the draft will be published. Use File → Save to keep saving as a draft on Micro.blog.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 10 Jan 2021 09:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.zip" sparkle:shortVersionString="2.4" sparkle:version="100" length="3618703" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.3</title>
  			<description><![CDATA[
 				<style>
@@ -20,7 +42,7 @@
  				<ul>
 	 				<li>Added File → Import → Blog Archive to preview and import .bar files.</li>
 	 				<li>Added double-clicking on .bar files in Finder to open them for importing.</li>
-	 				<li>Improved .bar export to more closely match format from Micro.blog</li>
+	 				<li>Improved .bar export to more closely match format from Micro.blog.</li>
  				</ul>
  			]]></description>
 			<pubDate>Mon, 26 Dec 2021 12:22:00 -0600</pubDate>
