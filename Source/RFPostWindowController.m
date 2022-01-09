@@ -108,9 +108,37 @@
 
 - (BOOL) windowShouldClose:(NSWindow *)sender
 {
-	[self.previewTimer invalidate];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
-	return YES;
+	if (false) {
+		NSAlert* alert = [[NSAlert alloc] init];
+		alert.messageText = @"Save changes to blog post before closing?";
+		alert.informativeText = @"Saving will store the draft on Micro.blog.";
+		[alert addButtonWithTitle:@"Save"];
+		[alert addButtonWithTitle:@"Cancel"];
+		[alert addButtonWithTitle:@"Don't Save"];
+
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				// save or publish
+				// ...
+			}
+			else if (returnCode == 1002) {
+				// don't save
+				[self.previewTimer invalidate];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
+				[self close];
+			}
+		}];
+	
+		return NO;
+	}
+	else {
+		// close because we can't save this as a draft
+		[self.previewTimer invalidate];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
+		[self close];
+		
+		return YES;
+	}
 }
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
