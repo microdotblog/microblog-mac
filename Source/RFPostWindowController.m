@@ -9,6 +9,7 @@
 #import "RFPostWindowController.h"
 
 #import "RFPostController.h"
+#import "MBPostWindow.h"
 #import "RFConstants.h"
 
 @implementation RFPostWindowController
@@ -72,13 +73,37 @@
 - (void) setupTimerPreview
 {
 	self.previewTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer) {
-		NSString* title = [self.postController currentTitle];
-		NSString* markdown = [self.postController currentText];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kEditorWindowTextDidChangeNotification object:self userInfo:@{
-			kEditorWindowTextTitleKey: title,
-			kEditorWindowTextMarkdownKey: markdown
-		}];
+		if ([self isFrontPostWindow]) {
+			NSString* title = [self.postController currentTitle];
+			NSString* markdown = [self.postController currentText];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kEditorWindowTextDidChangeNotification object:self userInfo:@{
+				kEditorWindowTextTitleKey: title,
+				kEditorWindowTextMarkdownKey: markdown
+			}];
+		}
 	}];
+}
+
+- (BOOL) isFrontPostWindow
+{
+	BOOL is_frontmost = YES;
+	
+	// get windows above this window, check if any are post windows
+	// return YES if no post windows are above us
+	
+	CGWindowID this_window_id = (CGWindowID)[self.window windowNumber];
+	NSArray* windows = CFBridgingRelease (CGWindowListCopyWindowInfo (kCGWindowListOptionOnScreenAboveWindow, this_window_id));
+	for (NSDictionary* info in windows) {
+		NSNumber* num = [info objectForKey:(NSString *)kCGWindowNumber];
+		NSWindow* win = [[NSApplication sharedApplication] windowWithWindowNumber:num.integerValue];
+		if (win) {
+			if ([win isKindOfClass:[MBPostWindow class]]) {
+				is_frontmost = NO;
+			}
+		}
+	}
+	
+	return is_frontmost;
 }
 
 - (BOOL) windowShouldClose:(NSWindow *)sender

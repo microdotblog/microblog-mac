@@ -153,6 +153,7 @@
 		4BDB3825278A838A00BD457C /* Preview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB3823278A838A00BD457C /* Preview.xib */; };
 		4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB3827278A83A300BD457C /* MBPreviewController.m */; };
 		4BDB382A278A8FE200BD457C /* Preview.html in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB3829278A8FE200BD457C /* Preview.html */; };
+		4BDB382D278B79EC00BD457C /* MBPostWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB382C278B79EC00BD457C /* MBPostWindow.m */; };
 		4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB783B2774E89400D7783C /* MBBlogImportController.m */; };
 		4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB783D2774E8F100D7783C /* BlogImport.xib */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
@@ -443,6 +444,8 @@
 		4BDB3826278A83A300BD457C /* MBPreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPreviewController.h; path = Source/MBPreviewController.h; sourceTree = "<group>"; };
 		4BDB3827278A83A300BD457C /* MBPreviewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPreviewController.m; path = Source/MBPreviewController.m; sourceTree = "<group>"; };
 		4BDB3829278A8FE200BD457C /* Preview.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Preview.html; path = Resources/Preview.html; sourceTree = "<group>"; };
+		4BDB382B278B79EC00BD457C /* MBPostWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPostWindow.h; path = Source/MBPostWindow.h; sourceTree = "<group>"; };
+		4BDB382C278B79EC00BD457C /* MBPostWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPostWindow.m; path = Source/MBPostWindow.m; sourceTree = "<group>"; };
 		4BDB783A2774E89400D7783C /* MBBlogImportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBlogImportController.h; path = Source/MBBlogImportController.h; sourceTree = "<group>"; };
 		4BDB783B2774E89400D7783C /* MBBlogImportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBlogImportController.m; path = Source/MBBlogImportController.m; sourceTree = "<group>"; };
 		4BDB783E2774E8F100D7783C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BlogImport.xib; sourceTree = "<group>"; };
@@ -697,6 +700,8 @@
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4B5DDAB724E44892007674FF /* RFPostWindowController.h */,
 				4B5DDAB824E44892007674FF /* RFPostWindowController.m */,
+				4BDB382B278B79EC00BD457C /* MBPostWindow.h */,
+				4BDB382C278B79EC00BD457C /* MBPostWindow.m */,
 				4BED646124BD59ED0018644C /* RFAllUploadsController.h */,
 				4BED646224BD59ED0018644C /* RFAllUploadsController.m */,
 				4B4C7DC424E1D42D000004E7 /* RFDoubleClickCollectionView.h */,
@@ -1096,6 +1101,7 @@
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
+				4BDB382D278B79EC00BD457C /* MBPostWindow.m in Sources */,
 				4B5EE2832063FC8400C87A78 /* RFSettings.m in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
 				4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */,
