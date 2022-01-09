@@ -33,7 +33,7 @@
 
 - (void) setupWindow
 {
-	[self.window setBackgroundColor:[NSColor colorWithCalibratedWhite:0.96 alpha:1.0]];
+	[self.window setBackgroundColor:[NSColor colorNamed:@"color_preview_background"]];
 }
 
 - (void) setupWebView
