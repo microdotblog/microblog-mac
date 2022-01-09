@@ -96,4 +96,8 @@ static NSString* const kShortcutActionNewPost = @"com.riverfold.snippets.shortcu
 
 static NSString* const kDarkModeAppearanceDidChangeNotification = @"DarkModeAppearanceDidChange";
 
+static NSString* const kEditorWindowTextDidChangeNotification = @"EditorWindowTextDidChange";
+static NSString* const kEditorWindowTextTitleKey = @"title";
+static NSString* const kEditorWindowTextMarkdownKey = @"markdown";
+
 #define APPSTORE 1

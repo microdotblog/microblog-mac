@@ -54,4 +54,7 @@
 - (IBAction) sendPost:(id)sender;
 - (NSString *) postButtonTitle;
 
+- (NSString *) currentTitle;
+- (NSString *) currentText;
+
 @end

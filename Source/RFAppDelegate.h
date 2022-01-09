@@ -15,6 +15,7 @@
 @class MBBlogImportController;
 @class RFExportController;
 @class RFBookmarkController;
+@class MBPreviewController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -25,6 +26,7 @@
 @property (strong, nonatomic) MBBlogImportController* blogImportController;
 @property (strong, nonatomic) RFExportController* exportController;
 @property (strong, nonatomic) RFBookmarkController* bookmarkController;
+@property (strong, nonatomic) MBPreviewController* previewController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 
 @end

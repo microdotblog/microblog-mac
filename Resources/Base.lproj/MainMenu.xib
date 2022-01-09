@@ -211,7 +211,6 @@ DQ
                                 </connections>
                             </menuItem>
                             <menuItem title="Paste and Match Style" keyEquivalent="v" id="WeT-3V-zwk">
-                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                 <connections>
                                     <action selector="pasteAsPlainText:" target="-1" id="cEh-KX-wJQ"/>
                                 </connections>
@@ -463,6 +462,12 @@ CA
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="toggleCategories:" target="-1" id="2c7-Og-LoF"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Preview" id="eML-Gc-0b7">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showPreview:" target="-1" id="cYQ-Db-Ce2"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ZZH-sJ-y5R"/>

@@ -22,6 +22,7 @@
 #import "RFPostWindowController.h"
 #import "RFPostController.h"
 #import "MBBlogImportController.h"
+#import "MBPreviewController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -432,6 +433,15 @@
 	[RFAccount clearCache];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:kSignOutNotification object:self];
+}
+
+- (IBAction) showPreview:(id)sender
+{
+	if (self.previewController == nil) {
+		self.previewController = [[MBPreviewController alloc] init];
+	}
+	
+	[self.previewController showWindow:nil];
 }
 
 #pragma mark -

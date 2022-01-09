@@ -150,6 +150,8 @@
 		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
 		4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BD8339E273C3FF0007350F2 /* GoToUser.xib */; };
 		4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD833A2273C60A5007350F2 /* RFPostTableView.m */; };
+		4BDB3825278A838A00BD457C /* Preview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB3823278A838A00BD457C /* Preview.xib */; };
+		4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB3827278A83A300BD457C /* MBPreviewController.m */; };
 		4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB783B2774E89400D7783C /* MBBlogImportController.m */; };
 		4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB783D2774E8F100D7783C /* BlogImport.xib */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
@@ -436,6 +438,9 @@
 		4BD8339F273C3FF0007350F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/GoToUser.xib; sourceTree = "<group>"; };
 		4BD833A1273C60A5007350F2 /* RFPostTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostTableView.h; path = Source/RFPostTableView.h; sourceTree = "<group>"; };
 		4BD833A2273C60A5007350F2 /* RFPostTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostTableView.m; path = Source/RFPostTableView.m; sourceTree = "<group>"; };
+		4BDB3824278A838A00BD457C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Preview.xib; sourceTree = "<group>"; };
+		4BDB3826278A83A300BD457C /* MBPreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPreviewController.h; path = Source/MBPreviewController.h; sourceTree = "<group>"; };
+		4BDB3827278A83A300BD457C /* MBPreviewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPreviewController.m; path = Source/MBPreviewController.m; sourceTree = "<group>"; };
 		4BDB783A2774E89400D7783C /* MBBlogImportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBlogImportController.h; path = Source/MBBlogImportController.h; sourceTree = "<group>"; };
 		4BDB783B2774E89400D7783C /* MBBlogImportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBlogImportController.m; path = Source/MBBlogImportController.m; sourceTree = "<group>"; };
 		4BDB783E2774E8F100D7783C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BlogImport.xib; sourceTree = "<group>"; };
@@ -746,6 +751,8 @@
 				4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
+				4BDB3826278A83A300BD457C /* MBPreviewController.h */,
+				4BDB3827278A83A300BD457C /* MBPreviewController.m */,
 				4B5650671F8585C900B03FFD /* RFRoundedImageView.h */,
 				4B5650681F8585C900B03FFD /* RFRoundedImageView.m */,
 				4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */,
@@ -826,6 +833,7 @@
 				4BB7448D21E84A4400371388 /* PhotoZoom.xib */,
 				4B9F063E2767BC400007F21D /* Date.xib */,
 				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
+				4BDB3823278A838A00BD457C /* Preview.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -973,6 +981,7 @@
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */,
+				4BDB3825278A838A00BD457C /* Preview.xib in Resources */,
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B9F06402767BC400007F21D /* Date.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
@@ -1153,6 +1162,7 @@
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
 				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
+				4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */,
 				4B2CAB1D1F90667300D9B10E /* parser.c in Sources */,
 				4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */,
 			);
@@ -1377,6 +1387,14 @@
 			name = GoToUser.xib;
 			sourceTree = "<group>";
 		};
+		4BDB3823278A838A00BD457C /* Preview.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BDB3824278A838A00BD457C /* Base */,
+			);
+			name = Preview.xib;
+			sourceTree = "<group>";
+		};
 		4BDB783D2774E8F100D7783C /* BlogImport.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1533,7 +1551,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 98;
+				CURRENT_PROJECT_VERSION = 99;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1548,7 +1566,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 2.4;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -1564,7 +1582,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 98;
+				CURRENT_PROJECT_VERSION = 99;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1579,7 +1597,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 2.4;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;

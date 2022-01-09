@@ -30,6 +30,7 @@
 	[self setupView];
 	[self setupToolbar];
 	[self setupNotifications];
+	[self setupTimerPreview];
 	
 	self.window.delegate = self;
 }
@@ -68,8 +69,21 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStopProgressNotification:) name:kPostStopProgressNotification object:self.postController];
 }
 
+- (void) setupTimerPreview
+{
+	self.previewTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer) {
+		NSString* title = [self.postController currentTitle];
+		NSString* markdown = [self.postController currentText];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kEditorWindowTextDidChangeNotification object:self userInfo:@{
+			kEditorWindowTextTitleKey: title,
+			kEditorWindowTextMarkdownKey: markdown
+		}];
+	}];
+}
+
 - (BOOL) windowShouldClose:(NSWindow *)sender
 {
+	[self.previewTimer invalidate];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
 	return YES;
 }
