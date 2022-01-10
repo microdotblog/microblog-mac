@@ -154,6 +154,7 @@
 		4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB3827278A83A300BD457C /* MBPreviewController.m */; };
 		4BDB382A278A8FE200BD457C /* Preview.html in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB3829278A8FE200BD457C /* Preview.html */; };
 		4BDB382D278B79EC00BD457C /* MBPostWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB382C278B79EC00BD457C /* MBPostWindow.m */; };
+		4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB382F278CDC2B00BD457C /* MBRestoreCursorView.m */; };
 		4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB783B2774E89400D7783C /* MBBlogImportController.m */; };
 		4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB783D2774E8F100D7783C /* BlogImport.xib */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
@@ -446,6 +447,8 @@
 		4BDB3829278A8FE200BD457C /* Preview.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Preview.html; path = Resources/Preview.html; sourceTree = "<group>"; };
 		4BDB382B278B79EC00BD457C /* MBPostWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPostWindow.h; path = Source/MBPostWindow.h; sourceTree = "<group>"; };
 		4BDB382C278B79EC00BD457C /* MBPostWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPostWindow.m; path = Source/MBPostWindow.m; sourceTree = "<group>"; };
+		4BDB382E278CDC2B00BD457C /* MBRestoreCursorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRestoreCursorView.h; path = Source/MBRestoreCursorView.h; sourceTree = "<group>"; };
+		4BDB382F278CDC2B00BD457C /* MBRestoreCursorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRestoreCursorView.m; path = Source/MBRestoreCursorView.m; sourceTree = "<group>"; };
 		4BDB783A2774E89400D7783C /* MBBlogImportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBlogImportController.h; path = Source/MBBlogImportController.h; sourceTree = "<group>"; };
 		4BDB783B2774E89400D7783C /* MBBlogImportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBlogImportController.m; path = Source/MBBlogImportController.m; sourceTree = "<group>"; };
 		4BDB783E2774E8F100D7783C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BlogImport.xib; sourceTree = "<group>"; };
@@ -798,6 +801,8 @@
 				C549E92321EEB75600730675 /* RFAutoCompleteCache.m */,
 				4B9F06412767BCE60007F21D /* MBDateController.h */,
 				4B9F06422767BCE60007F21D /* MBDateController.m */,
+				4BDB382E278CDC2B00BD457C /* MBRestoreCursorView.h */,
+				4BDB382F278CDC2B00BD457C /* MBRestoreCursorView.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -1117,6 +1122,7 @@
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
+				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
 				4B3840D4269203B400AD3781 /* RFDayOneExportController.m in Sources */,
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
