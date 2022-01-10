@@ -435,7 +435,16 @@
 			tag_start = i;
 		}
 		else if (c == '>') {
-			if (is_tag) {
+			if (is_value) {
+				is_tag = NO;
+				is_attr = YES;
+				is_value = NO;
+				current_r.location = value_start;
+				current_r.length = i - value_start;
+				attr_start = i + 1;
+				[self safe_addAttribute:NSForegroundColorAttributeName value:value_c range:current_r];
+			}
+			else if (is_tag) {
 				is_tag = NO;
 				current_r.location = tag_start;
 				current_r.length = i - tag_start + 1;
