@@ -18,7 +18,7 @@
 				</style>
  				<p>Changes in this version:</p>
  				<ul>
-	 				<li>Added View menu → Preview when writing a blog post. The preview floats over other windows and will show you what the current Markdown or HTML will look like..</li>
+	 				<li>Added View menu → Preview when writing a blog post. The preview floats over other windows and will show you what the current Markdown or HTML will look like.</li>
 	 				<li>Fixed posts list not updating when saving a new draft.</li>
 	 				<li>Fixed post button for drafts to show that the draft will be published. Use File → Save to keep saving as a draft on Micro.blog.</li>
  				</ul>
