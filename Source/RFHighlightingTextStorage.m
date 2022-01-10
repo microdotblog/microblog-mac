@@ -364,6 +364,92 @@
 	}
 }
 
+- (void) processTags
+{
+	NSColor* tag_c = [NSColor colorWithRed:0.59 green:0.15 blue:0.54 alpha:1.0];
+	NSColor* attr_c = [NSColor colorWithWhite:0.502 alpha:1.0];
+	NSColor* value_c = [NSColor colorWithRed:0.2 green:0.478 blue:0.718 alpha:1.0];
+	NSRange current_r = NSMakeRange (0, 0);
+	BOOL is_tag = NO;
+	BOOL is_attr = NO;
+	BOOL is_value = NO;
+	BOOL is_quote = NO;
+	NSInteger tag_start = 0;
+	NSInteger attr_start = 0;
+	NSInteger value_start = 0;
+	
+	for (NSInteger i = 0; i < self.string.length; i++) {
+		unichar c = [self.string characterAtIndex:i];
+		unichar next_c = '\0';
+		if ((i + 1) < self.string.length) {
+			next_c = [self.string characterAtIndex:i + 1];
+		}
+
+		if (c == '<') {
+			if (!is_tag) {
+				is_tag = YES;
+				is_attr = NO;
+				is_value = NO;
+				attr_start = 0;
+				value_start = 0;
+				tag_start = i;
+				current_r.location = i;
+			}
+		}
+		else if (c == '"') {
+			is_quote = !is_quote;
+		}
+		else if ((c == ' ') && !is_quote) {
+			if (is_tag) {
+				is_tag = NO;
+				is_attr = YES;
+				is_value = NO;
+				current_r.length = i - current_r.location;
+				attr_start = i + 1;
+				[self safe_addAttribute:NSForegroundColorAttributeName value:tag_c range:current_r];
+			}
+			else if (is_value) {
+				is_tag = NO;
+				is_attr = YES;
+				is_value = NO;
+				current_r.location = value_start;
+				current_r.length = i - value_start;
+				attr_start = i + 1;
+				[self safe_addAttribute:NSForegroundColorAttributeName value:value_c range:current_r];
+			}
+		}
+		else if (c == '=') {
+			if (is_attr) {
+				is_attr = NO;
+				is_value = YES;
+				current_r.location = attr_start;
+				current_r.length = i - attr_start;
+				value_start = i + 1;
+				[self safe_addAttribute:NSForegroundColorAttributeName value:attr_c range:current_r];
+			}
+		}
+		else if ((c == '/') && (next_c == '>')) {
+			is_tag = YES;
+			is_attr = NO;
+			is_value = NO;
+			tag_start = i;
+		}
+		else if (c == '>') {
+			if (is_tag) {
+				is_tag = NO;
+				current_r.location = tag_start;
+				current_r.length = i - tag_start + 1;
+				[self safe_addAttribute:NSForegroundColorAttributeName value:tag_c range:current_r];
+			}
+		}
+	}
+	
+	if (is_tag) {
+		current_r.length = self.string.length - current_r.location;
+		[self safe_addAttribute:NSForegroundColorAttributeName value:tag_c range:current_r];
+	}
+}
+
 - (void) processEditing
 {
 	// clear fonts and colors
@@ -383,6 +469,7 @@
 	[self processLinks];
 	[self processUsernames];
 	[self processHeaders];
+	[self processTags];
 
 	[super processEditing];
 }
