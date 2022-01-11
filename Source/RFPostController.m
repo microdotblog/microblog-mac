@@ -666,7 +666,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (NSArray<NSTextCheckingResult *> *) textView:(NSTextView *)view didCheckTextInRange:(NSRange)range types:(NSTextCheckingTypes)checkingTypes options:(NSDictionary<NSTextCheckingOptionKey, id> *)options results:(NSArray<NSTextCheckingResult *> *)results orthography:(NSOrthography *)orthography wordCount:(NSInteger)wordCount
 {
-	NSArray* okay_words = @[ @"img" ];
+	NSArray* okay_words = @[ @"img", @"blockquote", @"quoteback" ];
 	
 	NSMutableArray* new_results = [results mutableCopy];
 	for (NSTextCheckingResult* result in results) {
