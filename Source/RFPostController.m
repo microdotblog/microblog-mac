@@ -664,6 +664,23 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return nil;
 }
 
+- (NSArray<NSTextCheckingResult *> *) textView:(NSTextView *)view didCheckTextInRange:(NSRange)range types:(NSTextCheckingTypes)checkingTypes options:(NSDictionary<NSTextCheckingOptionKey, id> *)options results:(NSArray<NSTextCheckingResult *> *)results orthography:(NSOrthography *)orthography wordCount:(NSInteger)wordCount
+{
+	NSArray* okay_words = @[ @"img" ];
+	
+	NSMutableArray* new_results = [results mutableCopy];
+	for (NSTextCheckingResult* result in results) {
+		if (result.resultType == NSTextCheckingTypeSpelling) {
+			NSString* misspelled_word = [[self currentText] substringWithRange:result.range];
+			if ([okay_words containsObject:misspelled_word]) {
+				[new_results removeObject:result];
+			}
+		}
+	}
+	
+	return new_results;
+}
+
 #pragma mark -
 
 - (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
