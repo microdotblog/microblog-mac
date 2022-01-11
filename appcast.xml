@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.4.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added HTML syntax highlighting along with Markdown.</li>
+	 				<li>Fixed photo scaling in preview window.</li>
+	 				<li>Fixed cursor not changing back to an arrow over posts list.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 11 Jan 2021 09:10:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.1.zip" sparkle:shortVersionString="2.4.1" sparkle:version="101" length="3607306" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.4</title>
  			<description><![CDATA[
 				<style>
