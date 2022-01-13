@@ -82,6 +82,18 @@
 	self.imageView.image = image;
 	self.window.contentAspectRatio = image.size;
 	
+	// sometimes NSImage.size is too small, check representations
+	NSArray* reps = image.representations;
+	for (NSImageRep* rep in reps) {
+		if ((rep.pixelsWide > image.size.width) && (rep.pixelsHigh > image.size.height)) {
+			NSSize full_size;
+			full_size.width = rep.pixelsWide;
+			full_size.height = rep.pixelsHigh;
+			image.size = full_size;
+			break;
+		}
+	}
+	
 	NSRect screen_r = [NSScreen mainScreen].visibleFrame;
 
 	CGSize content_size;
