@@ -17,7 +17,7 @@
 {
 	self = [super initWithWindowNibName:@"PhotoZoom"];
 	if (self) {
-		self.photoURL = photoURL;
+		self.photoURL = [self extractPhotoURL:photoURL];
 		self.isAllowCopy = allowCopy;
 	}
 	
@@ -35,10 +35,27 @@
 	self.htmlCopyButton.layer.opacity = 0.0;
 }
 
+- (NSString *) extractPhotoURL:(NSString *)url
+{
+	NSString* photo_url = url;
+	
+	if ([photo_url containsString:@"https://micro.blog/photos/"]) {
+		NSString* partial_url = [photo_url stringByReplacingOccurrencesOfString:@"https://micro.blog/photos/" withString:@""];
+		NSArray* pieces = [partial_url componentsSeparatedByString:@"/"];
+		if ([pieces count] > 1) {
+			NSString* size_component = [pieces firstObject];
+			NSString* size_path = [NSString stringWithFormat:@"%@/", size_component];
+			photo_url = [partial_url stringByReplacingOccurrencesOfString:size_path withString:@""];
+		}
+	}
+
+	return photo_url;
+}
+
 - (void) downloadPhoto
 {
 	[self startProgress];
-	
+
 	[UUHttpSession get:self.photoURL queryArguments:nil completionHandler:^(UUHttpResponse* response) {
 		NSData* d = response.rawResponse;
 		RFDispatchMain (^{
@@ -53,19 +70,7 @@
 
 - (void) updateTitle
 {
-	NSString* photo_url = self.photoURL;
-	
-	if ([photo_url containsString:@"https://micro.blog/photos/"]) {
-		NSString* partial_url = [photo_url stringByReplacingOccurrencesOfString:@"https://micro.blog/photos/" withString:@""];
-		NSArray* pieces = [partial_url componentsSeparatedByString:@"/"];
-		if ([pieces count] > 1) {
-			NSString* size_component = [pieces firstObject];
-			NSString* size_path = [NSString stringWithFormat:@"%@/", size_component];
-			photo_url = [partial_url stringByReplacingOccurrencesOfString:size_path withString:@""];
-		}
-	}
-	
-	NSURL* url = [NSURL URLWithString:photo_url];
+	NSURL* url = [NSURL URLWithString:self.photoURL];
 	if (url) {
 		self.window.title = url.host;
 	}
@@ -76,7 +81,7 @@
 	self.imageView.hidden = YES;
 	self.imageView.image = image;
 	self.window.contentAspectRatio = image.size;
-
+	
 	NSRect screen_r = [NSScreen mainScreen].visibleFrame;
 
 	CGSize content_size;
