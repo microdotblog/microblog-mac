@@ -1,0 +1,10 @@
+{
+    "extension_name": {
+        "message": "Micro.blog",
+        "description": "The display name for the extension."
+    },
+    "extension_description": {
+        "message": "Bookmark web pages in Micro.blog.",
+        "description": "Description of what the extension does."
+    }
+}

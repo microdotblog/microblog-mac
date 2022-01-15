@@ -134,6 +134,16 @@
 		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
 		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
+		4BA5912C2793567E0096864B /* SafariWebExtensionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA5912B2793567E0096864B /* SafariWebExtensionHandler.m */; };
+		4BA5912F2793567E0096864B /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 4BA5912E2793567E0096864B /* _locales */; };
+		4BA591312793567E0096864B /* images in Resources */ = {isa = PBXBuildFile; fileRef = 4BA591302793567E0096864B /* images */; };
+		4BA591332793567E0096864B /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 4BA591322793567E0096864B /* manifest.json */; };
+		4BA591352793567E0096864B /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 4BA591342793567E0096864B /* background.js */; };
+		4BA591372793567E0096864B /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 4BA591362793567E0096864B /* content.js */; };
+		4BA591392793567E0096864B /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 4BA591382793567E0096864B /* popup.html */; };
+		4BA5913B2793567E0096864B /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 4BA5913A2793567E0096864B /* popup.css */; };
+		4BA5913D2793567E0096864B /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 4BA5913C2793567E0096864B /* popup.js */; };
+		4BA591422793567E0096864B /* Bookmark.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4BA591282793567E0096864B /* Bookmark.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
 		4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50721EE52140095F903 /* NSAppearance+Extras.m */; };
@@ -172,7 +182,28 @@
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4BA591402793567E0096864B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B7F0AD01BAF4B77004553A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BA591272793567E0096864B;
+			remoteInfo = Bookmark;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		4BA591432793567E0096864B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4BA591422793567E0096864B /* Bookmark.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BE541211BDEA34800E1868B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -414,6 +445,19 @@
 		4B9F063F2767BC400007F21D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Date.xib; sourceTree = "<group>"; };
 		4B9F06412767BCE60007F21D /* MBDateController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDateController.h; path = Source/MBDateController.h; sourceTree = "<group>"; };
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
+		4BA591282793567E0096864B /* Bookmark.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Bookmark.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BA5912A2793567E0096864B /* SafariWebExtensionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SafariWebExtensionHandler.h; sourceTree = "<group>"; };
+		4BA5912B2793567E0096864B /* SafariWebExtensionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SafariWebExtensionHandler.m; sourceTree = "<group>"; };
+		4BA5912E2793567E0096864B /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
+		4BA591302793567E0096864B /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		4BA591322793567E0096864B /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		4BA591342793567E0096864B /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		4BA591362793567E0096864B /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		4BA591382793567E0096864B /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		4BA5913A2793567E0096864B /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		4BA5913C2793567E0096864B /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		4BA5913E2793567E0096864B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4BA5913F2793567E0096864B /* Bookmark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmark.entitlements; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BB5B50321EE4F3C0095F903 /* RFButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFButton.h; path = Source/RFButton.h; sourceTree = "<group>"; };
@@ -486,6 +530,13 @@
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 				4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA591252793567E0096864B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +689,7 @@
 				4B7F0AEC1BAF4C16004553A6 /* Source */,
 				4B8FBDD71F867A1D00906C86 /* Shared */,
 				4B7F0AED1BAF4C1A004553A6 /* Resources */,
+				4BA591292793567E0096864B /* Bookmark */,
 				4B7F0B031BAF4F7D004553A6 /* Frameworks */,
 				4B7F0AD91BAF4B78004553A6 /* Products */,
 			);
@@ -647,6 +699,7 @@
 			isa = PBXGroup;
 			children = (
 				4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */,
+				4BA591282793567E0096864B /* Bookmark.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -896,6 +949,33 @@
 			name = UUToolbox;
 			sourceTree = "<group>";
 		};
+		4BA591292793567E0096864B /* Bookmark */ = {
+			isa = PBXGroup;
+			children = (
+				4BA5912A2793567E0096864B /* SafariWebExtensionHandler.h */,
+				4BA5912B2793567E0096864B /* SafariWebExtensionHandler.m */,
+				4BA5913E2793567E0096864B /* Info.plist */,
+				4BA5913F2793567E0096864B /* Bookmark.entitlements */,
+				4BA5912D2793567E0096864B /* Resources */,
+			);
+			path = Bookmark;
+			sourceTree = "<group>";
+		};
+		4BA5912D2793567E0096864B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4BA5912E2793567E0096864B /* _locales */,
+				4BA591302793567E0096864B /* images */,
+				4BA591322793567E0096864B /* manifest.json */,
+				4BA591342793567E0096864B /* background.js */,
+				4BA591362793567E0096864B /* content.js */,
+				4BA591382793567E0096864B /* popup.html */,
+				4BA5913A2793567E0096864B /* popup.css */,
+				4BA5913C2793567E0096864B /* popup.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		4BC826CF1FAB663700A58AD4 /* SAMKeychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -921,10 +1001,12 @@
 				4BE541211BDEA34800E1868B /* CopyFiles */,
 				4B6AE7761F8B345500CB7950 /* ShellScript */,
 				4BA2FD0C234D4E4100D5F93C /* ShellScript */,
+				4BA591432793567E0096864B /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4BA591412793567E0096864B /* PBXTargetDependency */,
 			);
 			name = Micro.blog;
 			packageProductDependencies = (
@@ -933,6 +1015,23 @@
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
 			productType = "com.apple.product-type.application";
+		};
+		4BA591272793567E0096864B /* Bookmark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BA591462793567E0096864B /* Build configuration list for PBXNativeTarget "Bookmark" */;
+			buildPhases = (
+				4BA591242793567E0096864B /* Sources */,
+				4BA591252793567E0096864B /* Frameworks */,
+				4BA591262793567E0096864B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bookmark;
+			productName = Bookmark;
+			productReference = 4BA591282793567E0096864B /* Bookmark.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -953,6 +1052,9 @@
 							};
 						};
 					};
+					4BA591272793567E0096864B = {
+						CreatedOnToolsVersion = 13.2;
+					};
 				};
 			};
 			buildConfigurationList = 4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Micro.blog for Mac" */;
@@ -972,6 +1074,7 @@
 			projectRoot = "";
 			targets = (
 				4B7F0AD71BAF4B77004553A6 /* Micro.blog */,
+				4BA591272793567E0096864B /* Bookmark */,
 			);
 		};
 /* End PBXProject section */
@@ -1017,6 +1120,21 @@
 				4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
 				4B5EE280206330D100C87A78 /* BlogCell.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA591262793567E0096864B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BA591352793567E0096864B /* background.js in Resources */,
+				4BA5913B2793567E0096864B /* popup.css in Resources */,
+				4BA591392793567E0096864B /* popup.html in Resources */,
+				4BA591312793567E0096864B /* images in Resources */,
+				4BA591332793567E0096864B /* manifest.json in Resources */,
+				4BA5912F2793567E0096864B /* _locales in Resources */,
+				4BA591372793567E0096864B /* content.js in Resources */,
+				4BA5913D2793567E0096864B /* popup.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1184,7 +1302,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4BA591242793567E0096864B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BA5912C2793567E0096864B /* SafariWebExtensionHandler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4BA591412793567E0096864B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BA591272793567E0096864B /* Bookmark */;
+			targetProxy = 4BA591402793567E0096864B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4B1FA565269E0434006E0451 /* Discover.xib */ = {
@@ -1621,6 +1755,86 @@
 			};
 			name = Release;
 		};
+		4BA591442793567E0096864B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Bookmark/Bookmark.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Bookmark/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Micro.blog;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Micro.blog. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac.safari;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4BA591452793567E0096864B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Bookmark/Bookmark.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Bookmark/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Micro.blog;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Micro.blog. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac.safari;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1638,6 +1852,15 @@
 			buildConfigurations = (
 				4B7F0AEA1BAF4B78004553A6 /* Debug */,
 				4B7F0AEB1BAF4B78004553A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4BA591462793567E0096864B /* Build configuration list for PBXNativeTarget "Bookmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BA591442793567E0096864B /* Debug */,
+				4BA591452793567E0096864B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
