@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.4.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added right-click context menu for Posts and Pages with options to open post in browser or copy link.</li>
+	 				<li>Fixed opening some photos at full size from timeline.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 17 Jan 2021 09:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.2.zip" sparkle:shortVersionString="2.4.2" sparkle:version="103" length="3610442" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.4.1</title>
  			<description><![CDATA[
 				<style>
