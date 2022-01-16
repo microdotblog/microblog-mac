@@ -29,4 +29,13 @@
 	}
 }
 
+- (void) willOpenMenu:(NSMenu *)menu withEvent:(NSEvent *)event
+{
+	NSInteger row = [self clickedRow];
+	if (row >= 0) {
+		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
+		[self selectRowIndexes:index_set byExtendingSelection:NO];
+	}
+}
+
 @end

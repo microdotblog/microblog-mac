@@ -145,7 +145,9 @@
 	}];
 }
 
-- (void) openRow:(id)sender
+#pragma mark -
+
+- (IBAction) openRow:(id)sender
 {
 	NSInteger row = [self.tableView clickedRow];
 	if (row < 0) {
@@ -155,6 +157,27 @@
 	if (row >= 0) {
 		RFPost* post = [self.currentPosts objectAtIndex:row];
 		[self openPost:post];
+	}
+}
+
+- (IBAction) openInBrowser:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		RFPost* post = [self.currentPosts objectAtIndex:row];
+		NSURL* url = [NSURL URLWithString:post.url];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		RFPost* post = [self.currentPosts objectAtIndex:row];
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:post.url forType:NSPasteboardTypeString];
 	}
 }
 
