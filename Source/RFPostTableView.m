@@ -17,6 +17,11 @@
 	// override the alternating rows NSTableView draws outside actual rows
 }
 
+- (void) drawContextMenuHighlightForRow:(NSInteger)row
+{
+	// override to avoid the focus highlight rectangle
+}
+	
 - (void) keyDown:(NSEvent *)event
 {
 	if ([[event characters] isEqualToString:@"\r"]) {
