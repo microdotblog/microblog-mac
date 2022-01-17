@@ -22,7 +22,7 @@
 	 				<li>Fixed opening some photos at full size from timeline.</li>
  				</ul>
  			]]></description>
-			<pubDate>Mon, 17 Jan 2021 10:00:00 -0600</pubDate>
+			<pubDate>Mon, 17 Jan 2022 10:00:00 -0600</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.2.zip" sparkle:shortVersionString="2.4.2" sparkle:version="104" length="3611053" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
 		</item>		
@@ -44,7 +44,7 @@
 	 				<li>Fixed cursor not changing back to an arrow over posts list.</li>
  				</ul>
  			]]></description>
-			<pubDate>Tue, 11 Jan 2021 09:10:00 -0600</pubDate>
+			<pubDate>Tue, 11 Jan 2022 09:10:00 -0600</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.1.zip" sparkle:shortVersionString="2.4.1" sparkle:version="101" length="3607306" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
 		</item>		
@@ -66,7 +66,7 @@
 	 				<li>Fixed post button for drafts to show that the draft will be published. Use File → Save to keep saving as a draft on Micro.blog.</li>
  				</ul>
  			]]></description>
-			<pubDate>Mon, 10 Jan 2021 09:00:00 -0600</pubDate>
+			<pubDate>Mon, 10 Jan 2022 09:00:00 -0600</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.zip" sparkle:shortVersionString="2.4" sparkle:version="100" length="3618703" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
 		</item>		
