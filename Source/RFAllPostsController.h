@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
+@property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 
 @property (assign, nonatomic) BOOL isShowingPages;
 @property (strong, nonatomic) NSArray* allPosts; // RFPost

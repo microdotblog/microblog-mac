@@ -38,6 +38,7 @@
 	[self setupTable];
 	[self setupBlogName];
 	[self setupNotifications];
+	[self setupBrowser];
 	
 	[self fetchPosts];
 }
@@ -66,6 +67,25 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:nil];
+}
+
+- (void) setupBrowser
+{
+	NSString* browser_s = @"Open in Browser";
+	
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		browser_s = @"Open in Chrome";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		browser_s = @"Open in Firefox";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
+		browser_s = @"Open in Safari";
+	}
+
+	self.browserMenuItem.title = browser_s;
 }
 
 - (void) fetchPosts

@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RFAllPostsController">
             <connections>
                 <outlet property="blogNameButton" destination="i0M-mM-qt9" id="eQh-2F-yOD"/>
+                <outlet property="browserMenuItem" destination="ttN-BC-piQ" id="Iga-IO-QSf"/>
                 <outlet property="progressSpinner" destination="0aW-jy-83j" id="m1G-nE-u0I"/>
                 <outlet property="searchField" destination="IrF-A6-KAh" id="kJG-Al-g8S"/>
                 <outlet property="tableView" destination="bsE-aL-qyD" id="dKi-tp-6rf"/>
@@ -153,7 +154,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="jGG-Zb-2rI"/>
-                <menuItem title="Open on Web" id="ttN-BC-piQ">
+                <menuItem title="Open in Browser" id="ttN-BC-piQ">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="-1" id="dj9-N5-7N3"/>
