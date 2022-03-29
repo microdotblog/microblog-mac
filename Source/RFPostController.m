@@ -485,17 +485,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
 					[new_photos addObject:photo];
 
-					RFDispatchMain (^{
-						self.attachedPhotos = new_photos;
-						[self stopProgressAnimation];
-						[self.photosCollectionView reloadData];
-					});
+					self.attachedPhotos = new_photos;
+					[self stopProgressAnimation];
+					[self.photosCollectionView reloadData];
 				}
 				else {
-					RFDispatchMain (^{
-						[self stopProgressAnimation];
-						[photo removeTemporaryVideo];
-					});
+					[self stopProgressAnimation];
+					[photo removeTemporaryVideo];
 				}
 			}];
 		}

@@ -64,12 +64,12 @@
 	exportSession.videoSettings = [self videoSettingsForSize:size];
 	exportSession.audioSettings = [self audioSettings];
 	
-	[exportSession exportAsynchronouslyWithCompletionHandler:^
-	 {
-		 self.tempVideoPath = destination;
-		 completionBlock(exportSession.outputURL);
-	 }];
-
+	[exportSession exportAsynchronouslyWithCompletionHandler:^{
+		self.tempVideoPath = destination;
+		dispatch_sync (dispatch_get_main_queue(), ^{
+			completionBlock(exportSession.outputURL);
+		});
+	}];
 }
 
 - (NSDictionary *) videoSettingsForSize:(CGSize)size
