@@ -14,4 +14,6 @@
 @property (strong, nonatomic) IBOutlet NSView* selectionOverlayView;
 @property (strong, nonatomic) IBOutlet NSImageView* iconView;
 
+@property (strong, nonatomic) NSString* url;
+
 @end

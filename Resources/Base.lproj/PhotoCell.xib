@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -36,6 +36,9 @@
                 <customView wantsLayer="YES" fixedFrame="YES" alphaValue="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="8e5-OI-o8O">
                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <connections>
+                        <outlet property="menu" destination="ILg-2w-hks" id="1pY-KG-f5A"/>
+                    </connections>
                 </customView>
             </subviews>
             <constraints>
@@ -48,5 +51,22 @@
             </constraints>
             <point key="canvasLocation" x="-303" y="-314"/>
         </customView>
+        <menu id="ILg-2w-hks">
+            <items>
+                <menuItem title="Open in Browser" id="2cQ-VA-lrc">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openInBrowser:" target="na8-0v-oNY" id="7Ry-WW-OFL"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Link" id="ckz-tY-GYg">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyLink:" target="na8-0v-oNY" id="wZX-0v-2m4"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="-94" y="-412"/>
+        </menu>
     </objects>
 </document>

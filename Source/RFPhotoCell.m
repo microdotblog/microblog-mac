@@ -10,4 +10,17 @@
 
 @implementation RFPhotoCell
 
+- (IBAction) openInBrowser:(id)sender
+{
+	NSURL* url = [NSURL URLWithString:self.url];
+	[[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:self.url forType:NSPasteboardTypeString];
+}
+
 @end

@@ -396,6 +396,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		item.thumbnailImageView.image = nil;
 	}
 	
+	item.url = up.url;
+	
 	return item;
 }
 
