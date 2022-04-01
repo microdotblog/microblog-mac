@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.4.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added right-click menu to Uploads screen for copying link or opening image.</li>
+	 				<li>Fixed opening photo windows from the timeline.</li>
+	 				<li>Fixed crash when uploading videos without a Micro.blog Premium subscription.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Fri, 1 Apr 2022 09:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.4.3.zip" sparkle:shortVersionString="2.4.3" sparkle:version="106" length="3612824" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.4.2</title>
  			<description><![CDATA[
 				<style>
