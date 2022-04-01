@@ -9,6 +9,7 @@
 #import "RFPhotoZoomController.h"
 
 #import "UUHttpSession.h"
+#import "UUString.h"
 #import "RFMacros.h"
 
 @implementation RFPhotoZoomController
@@ -46,6 +47,7 @@
 			NSString* size_component = [pieces firstObject];
 			NSString* size_path = [NSString stringWithFormat:@"%@/", size_component];
 			photo_url = [partial_url stringByReplacingOccurrencesOfString:size_path withString:@""];
+			photo_url = [photo_url uuUrlDecoded];
 		}
 	}
 
