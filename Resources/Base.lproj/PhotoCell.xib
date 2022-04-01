@@ -11,6 +11,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <viewController id="na8-0v-oNY" customClass="RFPhotoCell">
             <connections>
+                <outlet property="browserMenuItem" destination="2cQ-VA-lrc" id="up2-5X-URU"/>
                 <outlet property="iconView" destination="Hng-Eo-t8j" id="dUL-Jq-J64"/>
                 <outlet property="selectionOverlayView" destination="8e5-OI-o8O" id="QZr-21-MsR"/>
                 <outlet property="thumbnailImageView" destination="NIg-26-JBO" id="Q6i-Sv-jTx"/>
