@@ -105,17 +105,17 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 		[args addObject:@"-a"];
 		for (NSString* url in photo_urls) {
 			NSURL* download_url = [NSURL URLWithString:url];
-            NSString* year = [[download_url URLByDeletingLastPathComponent] lastPathComponent];
-            NSString* year_folder = [uploads_folder stringByAppendingPathComponent:year];
-            NSString* filename = [download_url lastPathComponent];
-            NSString* file_path = [year_folder stringByAppendingPathComponent:filename];
-
+			NSString* year = [[download_url URLByDeletingLastPathComponent] lastPathComponent];
+			NSString* year_folder = [uploads_folder stringByAppendingPathComponent:year];
+			NSString* filename = [download_url lastPathComponent];
+			NSString* file_path = [year_folder stringByAppendingPathComponent:filename];
+			
 			if ([[NSFileManager defaultManager] fileExistsAtPath:file_path]) {
 				new_text = [self rewriteText:new_text replacingAttachmentURL:url];
 				[args addObject:file_path];
 			}
 		}
-
+		
 		[new_text writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 	}
 
