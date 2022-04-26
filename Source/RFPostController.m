@@ -502,6 +502,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			photo.fileURL = file_url;
 			[new_photos addObject:photo];
 		}
+		else if ([[[file_url pathExtension] lowercaseString] isEqualToString:@"png"]) {
+			NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
+			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:img];
+			photo.isPNG = YES;
+			photo.fileURL = file_url;
+			[new_photos addObject:photo];
+		}
 		else {
 			NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
 			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
@@ -1384,6 +1391,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	else if (photo.isGIF) {
 		d = [NSData dataWithContentsOfURL:photo.fileURL];
 	}
+	else if (photo.isPNG) {
+		d = [NSData dataWithContentsOfURL:photo.fileURL];
+	}
 	else {
 		d = [photo jpegData];
 	}
@@ -1398,7 +1408,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSDictionary* args = @{
 				@"mp-destination": destination_uid
 			};
-			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF completion:^(UUHttpResponse* response) {
+			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF isPNG:photo.isPNG completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{

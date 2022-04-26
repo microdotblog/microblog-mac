@@ -24,6 +24,7 @@ static NSString* const kAttachPhotoKey = @"photo";
 @property (strong) AVURLAsset* videoAsset;
 @property (assign) BOOL isVideo;
 @property (assign) BOOL isGIF;
+@property (assign) BOOL isPNG;
 @property (strong) NSString* tempVideoPath;
 
 //- (id) initWithAsset:(PHAsset *)asset;
