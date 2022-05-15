@@ -128,7 +128,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 	[self setupTitle];
 	[self setupText];
-	[self setupColletionView];
+	[self setupCollectionView];
 	[self setupBlogName];
 	[self setupButtons];
 	[self setupNotifications];
@@ -225,7 +225,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 }
 
-- (void) setupColletionView
+- (void) setupCollectionView
 {
 	self.photosCollectionView.delegate = self;
 	self.photosCollectionView.dataSource = self;

@@ -44,7 +44,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupAccounts];
 	[self setupTextPopup];
 	[self setupNotifications];
-	[self setupColletionView];
+	[self setupCollectionView];
 	[self selectFirstAccount];
 	
 	[self setupFields];
@@ -142,7 +142,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 }
 
-- (void) setupColletionView
+- (void) setupCollectionView
 {
 	self.accountsCollectionView.delegate = self;
 	self.accountsCollectionView.dataSource = self;
