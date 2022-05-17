@@ -15,6 +15,7 @@
 #import "RFPostWindowController.h"
 #import "RFAllPostsController.h"
 #import "RFAllUploadsController.h"
+#import "RFRepliesController.h"
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
@@ -34,6 +35,17 @@
 #import "NSAppearance+Extras.h"
 #import <QuartzCore/QuartzCore.h>
 
+static NSInteger const kSelectionTimeline = 0;
+static NSInteger const kSelectionMentions = 1;
+static NSInteger const kSelectionFavorites = 2;
+static NSInteger const kSelectionDiscover = 3;
+static NSInteger const kSelectionDivider1 = 4;
+static NSInteger const kSelectionPosts = 5;
+static NSInteger const kSelectionPages = 6;
+static NSInteger const kSelectionUploads = 7;
+static NSInteger const kSelectionDivider2 = 8;
+static NSInteger const kSelectionReplies = 9;
+
 @implementation RFTimelineController
 
 - (instancetype) init
@@ -51,6 +63,7 @@
 {
 	[super windowDidLoad];
 	
+	[self setupSidebar];
 	[self setupToolbar];
 	[self setupFullScreen];
 	[self setupTable];
@@ -158,6 +171,22 @@
 	[self.checkTimer invalidate];
 	self.checkTimer = [NSTimer scheduledTimerWithTimeInterval:self.checkSeconds.floatValue target:self selector:@selector(checkPostsFromTimer:) userInfo:nil repeats:NO];
 	self.checkSeconds = @120; // in case it fails, bump to higher default
+}
+
+- (void) setupSidebar
+{
+	self.sidebarItems = [NSMutableArray array];
+	
+	[self.sidebarItems addObject:@(kSelectionTimeline)];
+	[self.sidebarItems addObject:@(kSelectionMentions)];
+	[self.sidebarItems addObject:@(kSelectionFavorites)];
+	[self.sidebarItems addObject:@(kSelectionDiscover)];
+	[self.sidebarItems addObject:@(kSelectionDivider1)];
+	[self.sidebarItems addObject:@(kSelectionPosts)];
+	[self.sidebarItems addObject:@(kSelectionPages)];
+	[self.sidebarItems addObject:@(kSelectionUploads)];
+	[self.sidebarItems addObject:@(kSelectionDivider2)];
+	[self.sidebarItems addObject:@(kSelectionReplies)];
 }
 
 #pragma mark -
@@ -408,6 +437,18 @@
 	[self showAllPostsController:controller];
 
 	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:7] byExtendingSelection:NO];
+}
+
+- (IBAction) showReplies:(id)sender
+{
+	self.selectedTimeline = kSelectionReplies;
+
+	[self closeOverlays];
+
+	RFRepliesController* controller = [[RFRepliesController alloc] init];
+	[self showAllPostsController:controller];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:9] byExtendingSelection:NO];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -1108,7 +1149,7 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]) {
-		return 8;
+		return [self.sidebarItems count];
 	}
 	else {
 		return 4;
@@ -1117,14 +1158,14 @@
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
-    if (row == 4) {
+    if ((row == kSelectionDivider1) || (row == kSelectionDivider2)) {
         RFSeparatorCell* separator = [tableView makeViewWithIdentifier:@"SeparatorCell" owner:self];
         return separator;
     }
 
     RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
 	
-	if (row == 0) {
+	if (row == kSelectionTimeline) {
 		cell.titleField.stringValue = @"Timeline";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
@@ -1139,7 +1180,7 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_timeline"];
 		}
 	}
-	else if (row == 1) {
+	else if (row == kSelectionMentions) {
 		cell.titleField.stringValue = @"Mentions";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
@@ -1154,7 +1195,7 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_mentions"];
 		}
 	}
-	else if (row == 2) {
+	else if (row == kSelectionFavorites) {
 		cell.titleField.stringValue = @"Bookmarks";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
@@ -1169,7 +1210,7 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_bookmarks"];
 		}
 	}
-	else if (row == 3) {
+	else if (row == kSelectionDiscover) {
 		cell.titleField.stringValue = @"Discover";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
@@ -1184,7 +1225,7 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_discover"];
 		}
 	}
-    else if (row == 5) {
+    else if (row == kSelectionPosts) {
         cell.titleField.stringValue = @"Posts";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
@@ -1199,7 +1240,7 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_posts"];
 		}
     }
-    else if (row == 6) {
+    else if (row == kSelectionPages) {
         cell.titleField.stringValue = @"Pages";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
@@ -1214,7 +1255,7 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
 		}
     }
-    else if (row == 7) {
+    else if (row == kSelectionUploads) {
         cell.titleField.stringValue = @"Uploads";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
@@ -1229,36 +1270,58 @@
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_uploads"];
 		}
     }
+	else if (row == kSelectionReplies) {
+		cell.titleField.stringValue = @"Replies";
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left" accessibilityDescription:@"Replies"];
+			if (self.window.isKeyWindow) {
+				cell.iconView.alphaValue = 1.0;
+			}
+			else {
+				cell.iconView.alphaValue = 0.5;
+			}
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+		}
+	}
 
 	return cell;
 }
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
-	if (row == 0) {
+	if (row == kSelectionTimeline) {
 		[self showTimeline:nil];
 	}
-	else if (row == 1) {
+	else if (row == kSelectionMentions) {
 		[self showMentions:nil];
 	}
-	else if (row == 2) {
+	else if (row == kSelectionFavorites) {
 		[self showFavorites:nil];
 	}
-	else if (row == 3) {
+	else if (row == kSelectionDiscover) {
 		[self showDiscover:nil];
 	}
-    else if (row == 4) {
+    else if (row == kSelectionDivider1) {
         // separator
         return NO;
     }
-	else if (row == 5) {
+	else if (row == kSelectionPosts) {
 		[self showPosts:nil];
 	}
-	else if (row == 6) {
+	else if (row == kSelectionPages) {
 		[self showPages:nil];
 	}
-	else if (row == 7) {
+	else if (row == kSelectionUploads) {
 		[self showUploads:nil];
+	}
+	else if (row == kSelectionDivider2) {
+		// separator
+		return NO;
+	}
+	else if (row == kSelectionReplies) {
+		[self showReplies:nil];
 	}
 
 	return YES;
@@ -1266,7 +1329,7 @@
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    if (row == 4) {
+    if ((row == kSelectionDivider1) || (row == kSelectionDivider2)) {
         return 10;
     }
     else {

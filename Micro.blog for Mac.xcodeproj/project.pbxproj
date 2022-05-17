@@ -166,6 +166,8 @@
 		4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */; };
 		4BF537312247BDCD00CF9D66 /* PostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF5372F2247BDCD00CF9D66 /* PostCell.xib */; };
 		4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537332247CD1D00CF9D66 /* RFPost.m */; };
+		4BF7E50A2834374F00500C59 /* RFRepliesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E5092834374F00500C59 /* RFRepliesController.m */; };
+		4BF7E50D28343C9900500C59 /* Replies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E50B28343C9900500C59 /* Replies.xib */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -467,6 +469,9 @@
 		4BF537302247BDCD00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PostCell.xib; sourceTree = "<group>"; };
 		4BF537322247CD1D00CF9D66 /* RFPost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPost.h; path = Source/RFPost.h; sourceTree = "<group>"; };
 		4BF537332247CD1D00CF9D66 /* RFPost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPost.m; path = Source/RFPost.m; sourceTree = "<group>"; };
+		4BF7E5082834374F00500C59 /* RFRepliesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFRepliesController.h; path = Source/RFRepliesController.h; sourceTree = "<group>"; };
+		4BF7E5092834374F00500C59 /* RFRepliesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFRepliesController.m; path = Source/RFRepliesController.m; sourceTree = "<group>"; };
+		4BF7E50C28343C9900500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Replies.xib; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -699,6 +704,8 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4BF7E5082834374F00500C59 /* RFRepliesController.h */,
+				4BF7E5092834374F00500C59 /* RFRepliesController.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4B5DDAB724E44892007674FF /* RFPostWindowController.h */,
@@ -830,6 +837,7 @@
 				4B3840CC2692019B00AD3781 /* Export.xib */,
 				4BF537292247345F00CF9D66 /* AllPosts.xib */,
 				4BED646424BD5AB80018644C /* AllUploads.xib */,
+				4BF7E50B28343C9900500C59 /* Replies.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B5DDAB424E44853007674FF /* PostWindow.xib */,
 				4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */,
@@ -985,6 +993,7 @@
 				4B5EE28C206405AC00C87A78 /* AccountCell.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
 				4BED646624BD5AB80018644C /* AllUploads.xib in Resources */,
+				4BF7E50D28343C9900500C59 /* Replies.xib in Resources */,
 				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
 				4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
@@ -1064,6 +1073,7 @@
 				4B2CAB191F90667300D9B10E /* istack.c in Sources */,
 				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
 				4B2CAB141F90667300D9B10E /* utf8.c in Sources */,
+				4BF7E50A2834374F00500C59 /* RFRepliesController.m in Sources */,
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
 				4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */,
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,
@@ -1443,6 +1453,14 @@
 			name = PostCell.xib;
 			sourceTree = "<group>";
 		};
+		4BF7E50B28343C9900500C59 /* Replies.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BF7E50C28343C9900500C59 /* Base */,
+			);
+			name = Replies.xib;
+			sourceTree = "<group>";
+		};
 		4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1567,7 +1585,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 107;
+				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1582,7 +1600,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.5;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -1598,7 +1616,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 107;
+				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1613,7 +1631,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.5;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;

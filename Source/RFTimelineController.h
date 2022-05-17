@@ -18,15 +18,7 @@
 @class RFAccount;
 @class RFGoToUserController;
 
-typedef enum {
-	kSelectionTimeline = 0,
-	kSelectionMentions = 1,
-	kSelectionFavorites = 2,
-	kSelectionDiscover = 3,
-	kSelectionPosts = 4,
-	kSelectionPages = 5,
-	kSelectionUploads = 6
-} RFSelectedTimelineType;
+typedef NSInteger RFSelectedTimelineType;
 
 @interface RFTimelineController : NSWindowController <NSSplitViewDelegate, NSTableViewDelegate, NSTableViewDataSource, WebFrameLoadDelegate, WebPolicyDelegate, WebResourceLoadDelegate, WebUIDelegate, NSUserNotificationCenterDelegate, NSSharingServicePickerDelegate, NSToolbarDelegate>
 
@@ -60,6 +52,7 @@ typedef enum {
 @property (strong, nonatomic) NSTimer* checkTimer;
 @property (strong, nonatomic) NSNumber* checkSeconds;
 @property (strong, nonatomic) RFGoToUserController* goToUserController;
+@property (strong, nonatomic) NSMutableArray* sidebarItems; // RFSelectedTimelineType
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)
