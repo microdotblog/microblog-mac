@@ -16,6 +16,7 @@
 #import "RFAllPostsController.h"
 #import "RFAllUploadsController.h"
 #import "RFRepliesController.h"
+#import "RFBookshelvesController.h"
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
@@ -45,6 +46,7 @@ static NSInteger const kSelectionPages = 6;
 static NSInteger const kSelectionUploads = 7;
 static NSInteger const kSelectionDivider2 = 8;
 static NSInteger const kSelectionReplies = 9;
+static NSInteger const kSelectionBookshelves = 10;
 
 @implementation RFTimelineController
 
@@ -187,6 +189,7 @@ static NSInteger const kSelectionReplies = 9;
 	[self.sidebarItems addObject:@(kSelectionUploads)];
 	[self.sidebarItems addObject:@(kSelectionDivider2)];
 	[self.sidebarItems addObject:@(kSelectionReplies)];
+	[self.sidebarItems addObject:@(kSelectionBookshelves)];
 }
 
 #pragma mark -
@@ -358,7 +361,7 @@ static NSInteger const kSelectionReplies = 9;
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
 	
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionTimeline] byExtendingSelection:NO];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -372,7 +375,7 @@ static NSInteger const kSelectionReplies = 9;
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionMentions] byExtendingSelection:NO];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -386,7 +389,7 @@ static NSInteger const kSelectionReplies = 9;
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:2] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionFavorites] byExtendingSelection:NO];
 }
 
 - (IBAction) showDiscover:(id)sender
@@ -400,7 +403,7 @@ static NSInteger const kSelectionReplies = 9;
 	[self setupWebDelegates:controller.webView];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:3] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionDiscover] byExtendingSelection:NO];
 }
 
 - (IBAction) showPosts:(id)sender
@@ -412,7 +415,7 @@ static NSInteger const kSelectionReplies = 9;
 	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:NO];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:5] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionPosts] byExtendingSelection:NO];
 }
 
 - (IBAction) showPages:(id)sender
@@ -424,7 +427,7 @@ static NSInteger const kSelectionReplies = 9;
 	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:YES];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:6] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionPages] byExtendingSelection:NO];
 }
 
 - (IBAction) showUploads:(id)sender
@@ -436,7 +439,7 @@ static NSInteger const kSelectionReplies = 9;
 	RFAllUploadsController* controller = [[RFAllUploadsController alloc] init];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:7] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionUploads] byExtendingSelection:NO];
 }
 
 - (IBAction) showReplies:(id)sender
@@ -448,7 +451,19 @@ static NSInteger const kSelectionReplies = 9;
 	RFRepliesController* controller = [[RFRepliesController alloc] init];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:9] byExtendingSelection:NO];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionReplies] byExtendingSelection:NO];
+}
+
+- (IBAction) showBookshelves:(id)sender
+{
+	self.selectedTimeline = kSelectionBookshelves;
+
+	[self closeOverlays];
+
+	RFBookshelvesController* controller = [[RFBookshelvesController alloc] init];
+	[self showAllPostsController:controller];
+
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionBookshelves] byExtendingSelection:NO];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -1285,7 +1300,21 @@ static NSInteger const kSelectionReplies = 9;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
 		}
 	}
-
+	else if (row == kSelectionBookshelves) {
+		cell.titleField.stringValue = @"Bookshelves";
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"books.vertical" accessibilityDescription:@"Bookshelves"];
+			if (self.window.isKeyWindow) {
+				cell.iconView.alphaValue = 1.0;
+			}
+			else {
+				cell.iconView.alphaValue = 0.5;
+			}
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+		}
+	}
 	return cell;
 }
 

@@ -168,6 +168,8 @@
 		4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537332247CD1D00CF9D66 /* RFPost.m */; };
 		4BF7E50A2834374F00500C59 /* RFRepliesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E5092834374F00500C59 /* RFRepliesController.m */; };
 		4BF7E50D28343C9900500C59 /* Replies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E50B28343C9900500C59 /* Replies.xib */; };
+		4BF7E51128343DFE00500C59 /* RFBookshelvesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */; };
+		4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E51328343E3000500C59 /* Bookshelves.xib */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -472,6 +474,9 @@
 		4BF7E5082834374F00500C59 /* RFRepliesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFRepliesController.h; path = Source/RFRepliesController.h; sourceTree = "<group>"; };
 		4BF7E5092834374F00500C59 /* RFRepliesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFRepliesController.m; path = Source/RFRepliesController.m; sourceTree = "<group>"; };
 		4BF7E50C28343C9900500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Replies.xib; sourceTree = "<group>"; };
+		4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookshelvesController.h; path = Source/RFBookshelvesController.h; sourceTree = "<group>"; };
+		4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookshelvesController.m; path = Source/RFBookshelvesController.m; sourceTree = "<group>"; };
+		4BF7E51428343E3000500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookshelves.xib; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -706,6 +711,8 @@
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 				4BF7E5082834374F00500C59 /* RFRepliesController.h */,
 				4BF7E5092834374F00500C59 /* RFRepliesController.m */,
+				4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */,
+				4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4B5DDAB724E44892007674FF /* RFPostWindowController.h */,
@@ -838,6 +845,7 @@
 				4BF537292247345F00CF9D66 /* AllPosts.xib */,
 				4BED646424BD5AB80018644C /* AllUploads.xib */,
 				4BF7E50B28343C9900500C59 /* Replies.xib */,
+				4BF7E51328343E3000500C59 /* Bookshelves.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B5DDAB424E44853007674FF /* PostWindow.xib */,
 				4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */,
@@ -992,6 +1000,7 @@
 				4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */,
 				4B5EE28C206405AC00C87A78 /* AccountCell.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
+				4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */,
 				4BED646624BD5AB80018644C /* AllUploads.xib in Resources */,
 				4BF7E50D28343C9900500C59 /* Replies.xib in Resources */,
 				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
@@ -1170,6 +1179,7 @@
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */,
 				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
+				4BF7E51128343DFE00500C59 /* RFBookshelvesController.m in Sources */,
 				4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
@@ -1459,6 +1469,14 @@
 				4BF7E50C28343C9900500C59 /* Base */,
 			);
 			name = Replies.xib;
+			sourceTree = "<group>";
+		};
+		4BF7E51328343E3000500C59 /* Bookshelves.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BF7E51428343E3000500C59 /* Base */,
+			);
+			name = Bookshelves.xib;
 			sourceTree = "<group>";
 		};
 		4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */ = {
