@@ -170,6 +170,10 @@
 		4BF7E50D28343C9900500C59 /* Replies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E50B28343C9900500C59 /* Replies.xib */; };
 		4BF7E51128343DFE00500C59 /* RFBookshelvesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */; };
 		4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E51328343E3000500C59 /* Bookshelves.xib */; };
+		4BF7E51828354F6900500C59 /* BookshelfCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E51628354F6900500C59 /* BookshelfCell.xib */; };
+		4BF7E51B28354F9500500C59 /* RFBookshelfCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E51A28354F9500500C59 /* RFBookshelfCell.m */; };
+		4BF7E51E2835850600500C59 /* RFBookshelf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E51D2835850600500C59 /* RFBookshelf.m */; };
+		4BF7E521283597DC00500C59 /* MBBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E520283597DC00500C59 /* MBBook.m */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -477,6 +481,13 @@
 		4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookshelvesController.h; path = Source/RFBookshelvesController.h; sourceTree = "<group>"; };
 		4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookshelvesController.m; path = Source/RFBookshelvesController.m; sourceTree = "<group>"; };
 		4BF7E51428343E3000500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookshelves.xib; sourceTree = "<group>"; };
+		4BF7E51728354F6900500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BookshelfCell.xib; sourceTree = "<group>"; };
+		4BF7E51928354F9500500C59 /* RFBookshelfCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookshelfCell.h; path = Source/RFBookshelfCell.h; sourceTree = "<group>"; };
+		4BF7E51A28354F9500500C59 /* RFBookshelfCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookshelfCell.m; path = Source/RFBookshelfCell.m; sourceTree = "<group>"; };
+		4BF7E51C2835850600500C59 /* RFBookshelf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookshelf.h; path = Source/RFBookshelf.h; sourceTree = "<group>"; };
+		4BF7E51D2835850600500C59 /* RFBookshelf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookshelf.m; path = Source/RFBookshelf.m; sourceTree = "<group>"; };
+		4BF7E51F283597DC00500C59 /* MBBook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBook.h; path = Source/MBBook.h; sourceTree = "<group>"; };
+		4BF7E520283597DC00500C59 /* MBBook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBook.m; path = Source/MBBook.m; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -711,6 +722,12 @@
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 				4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */,
 				4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */,
+				4BF7E51928354F9500500C59 /* RFBookshelfCell.h */,
+				4BF7E51A28354F9500500C59 /* RFBookshelfCell.m */,
+				4BF7E51C2835850600500C59 /* RFBookshelf.h */,
+				4BF7E51D2835850600500C59 /* RFBookshelf.m */,
+				4BF7E51F283597DC00500C59 /* MBBook.h */,
+				4BF7E520283597DC00500C59 /* MBBook.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4BF7E5082834374F00500C59 /* RFRepliesController.h */,
@@ -846,6 +863,7 @@
 				4BED646424BD5AB80018644C /* AllUploads.xib */,
 				4BF7E50B28343C9900500C59 /* Replies.xib */,
 				4BF7E51328343E3000500C59 /* Bookshelves.xib */,
+				4BF7E51628354F6900500C59 /* BookshelfCell.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B5DDAB424E44853007674FF /* PostWindow.xib */,
 				4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */,
@@ -1031,6 +1049,7 @@
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */,
 				4B3840CE2692019B00AD3781 /* Export.xib in Resources */,
+				4BF7E51828354F6900500C59 /* BookshelfCell.xib in Resources */,
 				4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */,
 				4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */,
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
@@ -1141,6 +1160,7 @@
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
+				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
 				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
 				4B3840D4269203B400AD3781 /* RFDayOneExportController.m in Sources */,
@@ -1167,6 +1187,7 @@
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
 				4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */,
 				4B2CAB051F90667300D9B10E /* streamio.c in Sources */,
+				4BF7E51B28354F9500500C59 /* RFBookshelfCell.m in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
 				4B5EE2862063FD9300C87A78 /* RFAccount.m in Sources */,
 				4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */,
@@ -1192,6 +1213,7 @@
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
 				4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */,
+				4BF7E51E2835850600500C59 /* RFBookshelf.m in Sources */,
 				4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
@@ -1477,6 +1499,14 @@
 				4BF7E51428343E3000500C59 /* Base */,
 			);
 			name = Bookshelves.xib;
+			sourceTree = "<group>";
+		};
+		4BF7E51628354F6900500C59 /* BookshelfCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BF7E51728354F6900500C59 /* Base */,
+			);
+			name = BookshelfCell.xib;
 			sourceTree = "<group>";
 		};
 		4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */ = {

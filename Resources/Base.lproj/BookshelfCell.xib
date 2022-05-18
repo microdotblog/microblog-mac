@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="miF-jZ-Afc" customClass="RFBookshelfCell">
+            <rect key="frame" x="0.0" y="0.0" width="395" height="138"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eIX-ZZ-ZSO">
+                    <rect key="frame" x="10" y="110" width="375" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Currently reading" id="ajP-pr-V4I">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <scrollView wantsLayer="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bdo-Iq-GTb">
+                    <rect key="frame" x="0.0" y="0.0" width="395" height="110"/>
+                    <clipView key="contentView" drawsBackground="NO" id="pF0-er-wUj">
+                        <rect key="frame" x="0.0" y="0.0" width="395" height="110"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView id="g7P-Dh-bAe">
+                                <rect key="frame" x="0.0" y="0.0" width="395" height="158"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="5" minimumLineSpacing="5" scrollDirection="horizontal" id="eSh-Tf-CpM">
+                                    <size key="itemSize" width="60" height="90"/>
+                                    <edgeInsets key="sectionInset" left="12" right="0.0" top="0.0" bottom="0.0"/>
+                                </collectionViewFlowLayout>
+                                <color key="primaryBackgroundColor" red="1" green="1" blue="0.86453551259999994" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="miF-jZ-Afc" id="3Eb-OM-KQG"/>
+                                    <outlet property="delegate" destination="miF-jZ-Afc" id="MJB-qb-s8P"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    </clipView>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="110" id="cEM-IK-3SK"/>
+                    </constraints>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="3Yu-TT-7c9">
+                        <rect key="frame" x="-100" y="-100" width="371" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Xbt-go-pkt">
+                        <rect key="frame" x="-100" y="-100" width="16" height="110"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="eIX-ZZ-ZSO" secondAttribute="trailing" constant="12" id="2oP-L0-1vV"/>
+                <constraint firstItem="eIX-ZZ-ZSO" firstAttribute="top" secondItem="miF-jZ-Afc" secondAttribute="top" constant="12" id="8Td-BP-SSM"/>
+                <constraint firstAttribute="bottom" secondItem="bdo-Iq-GTb" secondAttribute="bottom" id="Ewy-Ix-r68"/>
+                <constraint firstItem="bdo-Iq-GTb" firstAttribute="top" secondItem="eIX-ZZ-ZSO" secondAttribute="bottom" id="Wfe-Jq-FHc"/>
+                <constraint firstItem="bdo-Iq-GTb" firstAttribute="leading" secondItem="miF-jZ-Afc" secondAttribute="leading" id="eH0-NB-cam"/>
+                <constraint firstItem="eIX-ZZ-ZSO" firstAttribute="leading" secondItem="miF-jZ-Afc" secondAttribute="leading" constant="12" id="nsZ-8S-q2c"/>
+                <constraint firstAttribute="trailing" secondItem="bdo-Iq-GTb" secondAttribute="trailing" id="our-ct-cTT"/>
+            </constraints>
+            <connections>
+                <outlet property="collectionView" destination="g7P-Dh-bAe" id="g74-uc-N8h"/>
+                <outlet property="titleField" destination="eIX-ZZ-ZSO" id="T16-nE-Ccj"/>
+            </connections>
+            <point key="canvasLocation" x="268.5" y="49"/>
+        </customView>
+    </objects>
+</document>

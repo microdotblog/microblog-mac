@@ -1352,6 +1352,9 @@ static NSInteger const kSelectionBookshelves = 10;
 	else if (row == kSelectionReplies) {
 		[self showReplies:nil];
 	}
+	else if (row == kSelectionBookshelves) {
+		[self showBookshelves:nil];
+	}
 
 	return YES;
 }
