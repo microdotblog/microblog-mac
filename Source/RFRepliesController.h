@@ -10,7 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFRepliesController : NSViewController
+@interface RFRepliesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+
+@property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+
+@property (strong, nonatomic) NSArray* allReplies; // RFPost
 
 @end
 
