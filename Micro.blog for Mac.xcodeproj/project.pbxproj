@@ -174,6 +174,7 @@
 		4BF7E51B28354F9500500C59 /* RFBookshelfCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E51A28354F9500500C59 /* RFBookshelfCell.m */; };
 		4BF7E51E2835850600500C59 /* RFBookshelf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E51D2835850600500C59 /* RFBookshelf.m */; };
 		4BF7E521283597DC00500C59 /* MBBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E520283597DC00500C59 /* MBBook.m */; };
+		4BF7E5242836085900500C59 /* MBDisabledScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E5232836085900500C59 /* MBDisabledScrollView.m */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -488,6 +489,8 @@
 		4BF7E51D2835850600500C59 /* RFBookshelf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookshelf.m; path = Source/RFBookshelf.m; sourceTree = "<group>"; };
 		4BF7E51F283597DC00500C59 /* MBBook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBook.h; path = Source/MBBook.h; sourceTree = "<group>"; };
 		4BF7E520283597DC00500C59 /* MBBook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBook.m; path = Source/MBBook.m; sourceTree = "<group>"; };
+		4BF7E5222836085900500C59 /* MBDisabledScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDisabledScrollView.h; path = Source/MBDisabledScrollView.h; sourceTree = "<group>"; };
+		4BF7E5232836085900500C59 /* MBDisabledScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDisabledScrollView.m; path = Source/MBDisabledScrollView.m; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -728,6 +731,8 @@
 				4BF7E51D2835850600500C59 /* RFBookshelf.m */,
 				4BF7E51F283597DC00500C59 /* MBBook.h */,
 				4BF7E520283597DC00500C59 /* MBBook.m */,
+				4BF7E5222836085900500C59 /* MBDisabledScrollView.h */,
+				4BF7E5232836085900500C59 /* MBDisabledScrollView.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4BF7E5082834374F00500C59 /* RFRepliesController.h */,
@@ -1137,6 +1142,7 @@
 				4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */,
 				4BED646924BDF29A0018644C /* RFUpload.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,
+				4BF7E5242836085900500C59 /* MBDisabledScrollView.m in Sources */,
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
 				C549E92121EEB6D600730675 /* RFUserCache.m in Sources */,
