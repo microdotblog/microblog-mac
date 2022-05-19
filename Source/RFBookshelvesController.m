@@ -8,6 +8,7 @@
 
 #import "RFBookshelvesController.h"
 
+#import "MBBooksWindowController.h"
 #import "RFBookshelfCell.h"
 #import "RFBookshelf.h"
 #import "RFClient.h"
@@ -37,7 +38,7 @@
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BookshelfCell" bundle:nil] forIdentifier:@"BookshelfCell"];
 	[self.tableView setTarget:self];
-//	[self.tableView setDoubleAction:@selector(openRow:)];
+	[self.tableView setDoubleAction:@selector(openRow:)];
 	self.tableView.alphaValue = 0.0;
 }
 
@@ -76,6 +77,27 @@
 
 #pragma mark -
 
+- (IBAction) openRow:(id)sender
+{
+	NSInteger row = [self.tableView clickedRow];
+	if (row < 0) {
+		row = [self.tableView selectedRow];
+	}
+		
+	if (row >= 0) {
+		RFBookshelf* bookshelf = [self.bookshelves objectAtIndex:row];
+		[self openBookshelf:bookshelf];
+	}
+}
+
+- (void) openBookshelf:(RFBookshelf *)bookshelf
+{
+	MBBooksWindowController* books_controller = [[MBBooksWindowController alloc] initWithBookshelf:bookshelf];
+	[books_controller showWindow:nil];
+}
+
+#pragma mark -
+
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
 	return self.bookshelves.count;
@@ -92,4 +114,5 @@
 
 	return cell;
 }
+
 @end

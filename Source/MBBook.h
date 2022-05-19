@@ -13,9 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBBook : NSObject
 
 @property (strong) NSNumber* bookID;
+@property (strong) NSString* isbn;
 @property (strong) NSString* title;
 @property (strong) NSString* coverURL;
 @property (strong) NSImage* coverImage;
+@property (strong) NSArray* authors; // NSString
 
 @end
 
