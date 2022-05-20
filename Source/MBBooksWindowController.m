@@ -63,7 +63,10 @@
 	}
 	else {
 		NSString* s;
-		if (self.allBooks.count == 1) {
+		if (self.allBooks.count == 0) {
+			s = @"";
+		}
+		else if (self.allBooks.count == 1) {
 			s = @"1 book";
 		}
 		else {
