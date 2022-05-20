@@ -35,6 +35,7 @@
 	[self setupTitle];
 	[self setupTable];
 	[self setupNotifications];
+	[self setupBooksCount];
 	
 	[self fetchBooks];
 }
@@ -53,6 +54,24 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addBookNotification:) name:kAddBookNotification object:nil];
+}
+
+- (void) setupBooksCount
+{
+	if ([self isSearch]) {
+		self.booksCountField.hidden = YES;
+	}
+	else {
+		NSString* s;
+		if (self.allBooks.count == 1) {
+			s = @"1 book";
+		}
+		else {
+			s = [NSString stringWithFormat:@"%lu books", (unsigned long)self.allBooks.count];
+		}
+		self.booksCountField.stringValue = s;
+		self.booksCountField.hidden = NO;
+	}
 }
 
 - (void) fetchBooks
@@ -88,6 +107,7 @@
 				self.allBooks = new_books;
 				self.currentBooks = new_books;
 				[self.tableView reloadData];
+				[self setupBooksCount];
 			});
 		}
 	}];
@@ -95,6 +115,7 @@
 
 - (void) fetchBooksForSearch:(NSString *)search
 {
+	self.booksCountField.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 
 	NSString* url = @"https://www.googleapis.com/books/v1/volumes";
@@ -197,6 +218,7 @@
 	if (s.length == 0) {
 		self.currentBooks = self.allBooks;
 		[self.tableView reloadData];
+		[self setupBooksCount];
 	}
 	else if (s.length >= 3) {
 		[self fetchBooksForSearch:s];
