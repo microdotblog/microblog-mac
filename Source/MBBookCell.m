@@ -9,11 +9,13 @@
 #import "MBBookCell.h"
 
 #import "MBBook.h"
+#import "RFConstants.h"
 
 @implementation MBBookCell
 
 - (void) setupWithBook:(MBBook *)book
 {
+	self.book = book;
 	self.titleField.stringValue = book.title;
 	
 	if ([book.authors count] > 0) {
@@ -24,6 +26,9 @@
 	}
 	
 	self.coverImageView.image = book.coverImage;
+	
+	// search results don't have a book ID, show the add button
+	self.addButton.hidden = (book.bookID != nil);
 }
 
 - (void) drawBackgroundInRect:(NSRect)dirtyRect
@@ -50,6 +55,13 @@
 	}
 	
 	NSRectFill (r);
+}
+
+- (IBAction) addBook:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kAddBookNotification object:self userInfo:@{
+		kAddBookKey: self.book
+	}];	
 }
 
 @end

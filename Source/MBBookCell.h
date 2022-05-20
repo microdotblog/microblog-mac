@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSImageView* coverImageView;
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextField* authorField;
+@property (strong, nonatomic) IBOutlet NSButton* addButton;
+
+@property (strong, nonatomic) MBBook* book;
 
 - (void) setupWithBook:(MBBook *)book;
 

@@ -13,6 +13,7 @@
 #import "RFBookshelf.h"
 #import "RFClient.h"
 #import "RFMacros.h"
+#import "RFConstants.h"
 
 @implementation RFBookshelvesController
 
@@ -30,6 +31,7 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
+	[self setupNotifications];
 	
 	[self fetchBookshelves];
 }
@@ -40,6 +42,11 @@
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
 	self.tableView.alphaValue = 0.0;
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasAddedNotification:) name:kBookWasAddedNotification object:nil];
 }
 
 - (void) fetchBookshelves
@@ -73,6 +80,11 @@
 			});
 		}
 	}];
+}
+
+- (void) bookWasAddedNotification:(NSNotification *)notification
+{
+	[self fetchBookshelves];
 }
 
 #pragma mark -

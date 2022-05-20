@@ -8,6 +8,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBBooksWindowController">
             <connections>
+                <outlet property="booksCountField" destination="dI4-c7-XjA" id="vyX-N4-F6e"/>
+                <outlet property="progressSpinner" destination="6R6-qI-4Gk" id="uXm-Pk-0jg"/>
+                <outlet property="searchField" destination="uNA-3l-ASe" id="ak2-YF-qJb"/>
                 <outlet property="tableView" destination="uNd-0J-cNj" id="o3s-b8-7Nv"/>
                 <outlet property="window" destination="vBW-a4-Woh" id="MvO-ox-3MH"/>
             </connections>
@@ -23,13 +26,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="80" horizontalPageScroll="10" verticalLineScroll="80" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-aR-LlJ">
-                        <rect key="frame" x="-1" y="-1" width="493" height="441"/>
+                        <rect key="frame" x="-1" y="-1" width="493" height="387"/>
                         <clipView key="contentView" id="h4R-hn-ZUu">
-                            <rect key="frame" x="0.0" y="0.0" width="493" height="441"/>
+                            <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj">
-                                    <rect key="frame" x="0.0" y="0.0" width="493" height="441"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -76,7 +79,7 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="vXZ-ge-4oI">
-                            <rect key="frame" x="0.0" y="425" width="493" height="16"/>
+                            <rect key="frame" x="0.0" y="371" width="493" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="35F-A5-27r">
@@ -84,12 +87,52 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNA-3l-ASe">
+                        <rect key="frame" x="221" y="402" width="250" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="250" id="YBH-fe-BOp"/>
+                        </constraints>
+                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Search for books to add" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="GaD-Tg-PBF">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </searchFieldCell>
+                        <connections>
+                            <action selector="search:" target="-2" id="9qd-Qp-maA"/>
+                        </connections>
+                    </searchField>
+                    <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="rdo-mY-zgu">
+                        <rect key="frame" x="0.0" y="384" width="491" height="5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="8e0-Sz-SnC"/>
+                        </constraints>
+                    </box>
+                    <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-qI-4Gk">
+                        <rect key="frame" x="20" y="405" width="16" height="16"/>
+                    </progressIndicator>
+                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dI4-c7-XjA">
+                        <rect key="frame" x="18" y="405" width="52" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="2 books" id="6dC-yU-5lh">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="dI4-c7-XjA" firstAttribute="centerY" secondItem="uNA-3l-ASe" secondAttribute="centerY" id="1Zu-8C-CxN"/>
                     <constraint firstAttribute="bottom" secondItem="Ieq-aR-LlJ" secondAttribute="bottom" constant="-1" id="DvA-jJ-leq"/>
+                    <constraint firstItem="6R6-qI-4Gk" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" constant="20" id="Mru-Pm-lHe"/>
+                    <constraint firstAttribute="trailing" secondItem="uNA-3l-ASe" secondAttribute="trailing" constant="20" id="S7u-HL-IIF"/>
                     <constraint firstItem="Ieq-aR-LlJ" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" constant="-1" id="Urf-ua-5P0"/>
+                    <constraint firstItem="rdo-mY-zgu" firstAttribute="top" secondItem="uNA-3l-ASe" secondAttribute="bottom" constant="15" id="Wh6-Qj-jEf"/>
+                    <constraint firstItem="rdo-mY-zgu" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" id="YW1-wl-FFI"/>
                     <constraint firstAttribute="trailing" secondItem="Ieq-aR-LlJ" secondAttribute="trailing" constant="-1" id="aZA-l5-8za"/>
-                    <constraint firstItem="Ieq-aR-LlJ" firstAttribute="top" secondItem="aGr-C3-8Q9" secondAttribute="top" constant="-1" id="bse-R1-IZB"/>
+                    <constraint firstItem="Ieq-aR-LlJ" firstAttribute="top" secondItem="rdo-mY-zgu" secondAttribute="bottom" id="ban-Bp-GTb"/>
+                    <constraint firstAttribute="trailing" secondItem="rdo-mY-zgu" secondAttribute="trailing" id="eW1-JO-Pk1"/>
+                    <constraint firstItem="dI4-c7-XjA" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" constant="20" id="t6l-VU-Ip3"/>
+                    <constraint firstItem="6R6-qI-4Gk" firstAttribute="centerY" secondItem="uNA-3l-ASe" secondAttribute="centerY" id="usj-Wc-GSg"/>
+                    <constraint firstItem="uNA-3l-ASe" firstAttribute="top" secondItem="aGr-C3-8Q9" secondAttribute="top" constant="15" id="yae-dk-xgE"/>
                 </constraints>
             </view>
             <connections>

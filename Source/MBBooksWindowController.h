@@ -15,9 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBBooksWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSSearchField* searchField;
+@property (strong, nonatomic) IBOutlet NSTextField* booksCountField;
 
 @property (strong, nonatomic) RFBookshelf* bookshelf;
-@property (strong, nonatomic) NSArray* books; // RFBook
+@property (strong, nonatomic) NSArray* allBooks; // RFBook
+@property (strong, nonatomic) NSArray* currentBooks; // RFBook
 
 - (instancetype) initWithBookshelf:(RFBookshelf *)bookshelf;
 

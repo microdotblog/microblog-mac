@@ -101,4 +101,9 @@ static NSString* const kEditorWindowTextDidChangeNotification = @"EditorWindowTe
 static NSString* const kEditorWindowTextTitleKey = @"title";
 static NSString* const kEditorWindowTextMarkdownKey = @"markdown";
 
+static NSString* const kAddBookNotification = @"AddBookNotification";
+static NSString* const kAddBookKey = @"book";
+
+static NSString* const kBookWasAddedNotification = @"BookWasAddedNotification";
+
 #define APPSTORE 1

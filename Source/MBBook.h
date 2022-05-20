@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* coverURL;
 @property (strong) NSImage* coverImage;
 @property (strong) NSArray* authors; // NSString
+@property (strong) NSString* bookDescription;
 
 @end
 
