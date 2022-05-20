@@ -94,7 +94,7 @@
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	MBBookCell* cell = [tableView makeViewWithIdentifier:@"BookCell" owner:self];
-	
+
 	if (row < self.books.count) {
 		MBBook* b = [self.books objectAtIndex:row];
 		[cell setupWithBook:b];
@@ -106,7 +106,7 @@
 - (void) tableView:(NSTableView *)tableView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
 	MBBook* b = [self.books objectAtIndex:row];
-
+	
 	if (b.coverImage == nil) {
 		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
 
@@ -116,9 +116,12 @@
 				RFDispatchMain(^{
 					b.coverImage = img;
 					@try {
-						[tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:row] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+						NSIndexSet* selected_rows = [tableView selectedRowIndexes];
+						[tableView reloadData];
+						[tableView selectRowIndexes:selected_rows byExtendingSelection:NO];
 					}
 					@catch (NSException* e) {
+						NSLog (@"exception");
 					}
 				});
 			}
