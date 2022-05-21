@@ -210,6 +210,23 @@
 	}];
 }
 
+- (void) removeBook:(MBBook *)book fromBookshelf:(RFBookshelf *)bookshelf
+{
+	[self.progressSpinner startAnimation:nil];
+
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/books/bookshelves/%@/remove/%@", bookshelf.bookshelfID, book.bookID];
+	[client deleteWithObject:nil completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			RFDispatchMainAsync (^{
+				[self.progressSpinner stopAnimation:nil];
+				[self fetchBooks];
+				
+				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasRemovedNotification object:self];
+			});
+		}
+	}];
+}
+
 - (BOOL) isSearch
 {
 	return [[self.searchField stringValue] length] > 0;
@@ -232,6 +249,25 @@
 {
 	MBBook* b = [[notification userInfo] objectForKey:kAddBookKey];
 	[self addBook:b toBookshelf:self.bookshelf];
+}
+
+- (void) delete:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBBook* b = [self.currentBooks objectAtIndex:row];
+		
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"Remove \"%@\"?", b.title];
+		sheet.informativeText = [NSString stringWithFormat:@"This book will be removed from the bookshelf \"%@\".", self.bookshelf.title];
+		[sheet addButtonWithTitle:@"Remove"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				[self removeBook:b fromBookshelf:self.bookshelf];
+			}
+		}];
+	}
 }
 
 #pragma mark -

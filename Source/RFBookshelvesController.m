@@ -47,6 +47,7 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasAddedNotification:) name:kBookWasAddedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasRemovedNotification:) name:kBookWasRemovedNotification object:nil];
 }
 
 - (void) fetchBookshelves
@@ -83,6 +84,11 @@
 }
 
 - (void) bookWasAddedNotification:(NSNotification *)notification
+{
+	[self fetchBookshelves];
+}
+
+- (void) bookWasRemovedNotification:(NSNotification *)notification
 {
 	[self fetchBookshelves];
 }
