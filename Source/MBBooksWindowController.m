@@ -251,7 +251,7 @@
 	[self addBook:b toBookshelf:self.bookshelf];
 }
 
-- (void) delete:(id)sender
+- (IBAction) delete:(id)sender
 {
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
@@ -268,6 +268,51 @@
 			}
 		}];
 	}
+}
+
+- (IBAction) startNewPost:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBBook* b = [self.currentBooks objectAtIndex:row];
+		
+		NSString* link = [b microblogURL];
+		NSString* s;
+		if (b.authors.count > 0) {
+			s = [NSString stringWithFormat:@"%@: [%@](%@) by %@ 📚", self.bookshelf.title, b.title, link, [b.authors firstObject]];
+		}
+		else {
+			s = [NSString stringWithFormat:@"%@: [%@](%@) 📚", self.bookshelf.title, b.title, link];
+		}
+				
+		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", [s rf_urlEncoded]]];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) openInBrowser:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBBook* b = [self.currentBooks objectAtIndex:row];
+		NSURL* url = [NSURL URLWithString:[b microblogURL]];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBBook* b = [self.currentBooks objectAtIndex:row];
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:[b microblogURL] forType:NSPasteboardTypeString];
+	}
+}
+
+- (IBAction) assignToBookshelf:(id)sender
+{
 }
 
 #pragma mark -

@@ -10,4 +10,9 @@
 
 @implementation MBBook
 
+- (NSString *) microblogURL;
+{
+	return [NSString stringWithFormat:@"https://micro.blog/books/%@", self.isbn];
+}
+
 @end

@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSArray* authors; // NSString
 @property (strong) NSString* bookDescription;
 
+- (NSString *) microblogURL;
+
 @end
 
 NS_ASSUME_NONNULL_END

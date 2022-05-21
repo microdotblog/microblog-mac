@@ -75,6 +75,7 @@
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="dvL-bu-PAe"/>
                                         <outlet property="delegate" destination="-2" id="QqF-Cx-6KG"/>
+                                        <outlet property="menu" destination="Z9F-C1-hHf" id="Rle-wq-s44"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -141,5 +142,31 @@
             </connections>
             <point key="canvasLocation" x="127.5" y="241.5"/>
         </window>
+        <menu id="Z9F-C1-hHf">
+            <items>
+                <menuItem title="New Post..." id="I8F-TU-x9R">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="startNewPost:" target="-2" id="UbM-0I-OqO"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="ojn-HI-5Xb"/>
+                <menuItem title="Remove" id="IIb-gO-xa3">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="delete:" target="-2" id="wYO-ET-9Pe"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="obO-bv-N1F"/>
+                <menuItem title="Open in Safari" id="VDp-cZ-9mK">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Copy Link" id="8Y8-49-HRd">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="pKh-fm-Q0O"/>
+            </items>
+            <point key="canvasLocation" x="520" y="58"/>
+        </menu>
     </objects>
 </document>
