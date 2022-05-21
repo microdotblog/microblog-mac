@@ -9,6 +9,8 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBBooksWindowController">
             <connections>
                 <outlet property="booksCountField" destination="dI4-c7-XjA" id="vyX-N4-F6e"/>
+                <outlet property="browserMenuItem" destination="VDp-cZ-9mK" id="02v-Dy-uV4"/>
+                <outlet property="contextMenu" destination="Z9F-C1-hHf" id="t3Q-wd-58v"/>
                 <outlet property="progressSpinner" destination="6R6-qI-4Gk" id="uXm-Pk-0jg"/>
                 <outlet property="searchField" destination="uNA-3l-ASe" id="ak2-YF-qJb"/>
                 <outlet property="tableView" destination="uNd-0J-cNj" id="o3s-b8-7Nv"/>
@@ -160,9 +162,15 @@
                 <menuItem isSeparatorItem="YES" id="obO-bv-N1F"/>
                 <menuItem title="Open in Safari" id="VDp-cZ-9mK">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openInBrowser:" target="-2" id="5Jd-Ue-7RC"/>
+                    </connections>
                 </menuItem>
                 <menuItem title="Copy Link" id="8Y8-49-HRd">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyLink:" target="-2" id="U6C-Rl-aOt"/>
+                    </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="pKh-fm-Q0O"/>
             </items>

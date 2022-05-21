@@ -36,8 +36,10 @@
 	[self setupTable];
 	[self setupNotifications];
 	[self setupBooksCount];
+	[self setupBrowser];
 	
 	[self fetchBooks];
+	[self fetchBookshelves];
 }
 
 - (void) setupTitle
@@ -76,6 +78,35 @@
 		self.booksCountField.hidden = NO;
 	}
 }
+
+- (void) setupBrowser
+{
+	NSString* browser_s = @"Open in Browser";
+	
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		browser_s = @"Open in Chrome";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		browser_s = @"Open in Firefox";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
+		browser_s = @"Open in Safari";
+	}
+
+	self.browserMenuItem.title = browser_s;
+}
+
+- (void) setupBookshelvesMenu
+{
+	for (RFBookshelf* shelf in self.bookshelves) {
+		NSMenuItem* new_item = [self.contextMenu addItemWithTitle:shelf.title action:@selector(assignToBookshelf:) keyEquivalent:@""];
+		new_item.representedObject = shelf;
+	}
+}
+
+#pragma mark -
 
 - (void) fetchBooks
 {
@@ -184,6 +215,35 @@
 	}];
 }
 
+- (void) fetchBookshelves
+{
+	self.bookshelves = @[];
+
+	NSDictionary* args = @{};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/books/bookshelves"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_bookshelves = [NSMutableArray array];
+
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				RFBookshelf* shelf = [[RFBookshelf alloc] init];
+				shelf.bookshelfID = [item objectForKey:@"id"];
+				shelf.title = [item objectForKey:@"title"];
+				shelf.booksCount = [[item objectForKey:@"_microblog"] objectForKey:@"books_count"];
+
+				[new_bookshelves addObject:shelf];
+			}
+			
+			RFDispatchMainAsync (^{
+				self.bookshelves = new_bookshelves;
+				[self setupBookshelvesMenu];
+			});
+		}
+	}];
+}
+
 - (void) addBook:(MBBook *)book toBookshelf:(RFBookshelf *)bookshelf
 {
 	[self.progressSpinner startAnimation:nil];
@@ -222,6 +282,27 @@
 				[self fetchBooks];
 				
 				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasRemovedNotification object:self];
+			});
+		}
+	}];
+}
+
+- (void) assignBook:(MBBook *)book toBookshelf:(RFBookshelf *)bookshelf
+{
+	[self.progressSpinner startAnimation:nil];
+
+	NSDictionary* params = @{
+		@"book_id": book.bookID
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/books/bookshelves/%@/assign", bookshelf.bookshelfID];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			RFDispatchMainAsync (^{
+				[self.progressSpinner stopAnimation:nil];
+				[self fetchBooks];
+
+				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self];
 			});
 		}
 	}];
@@ -311,8 +392,31 @@
 	}
 }
 
-- (IBAction) assignToBookshelf:(id)sender
+- (IBAction) assignToBookshelf:(NSMenuItem *)sender
 {
+	RFBookshelf* shelf = sender.representedObject;
+	if (shelf) {
+		NSInteger row = self.tableView.selectedRow;
+		if (row >= 0) {
+			MBBook* b = [self.currentBooks objectAtIndex:row];
+			[self assignBook:b toBookshelf:shelf];
+		}
+	}
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(assignToBookshelf:)) {
+		RFBookshelf* shelf = item.representedObject;
+		if ([shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
+			[item setState:NSControlStateValueOn];
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+		}
+	}
+
+	return ![self isSearch];
 }
 
 #pragma mark -

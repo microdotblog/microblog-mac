@@ -18,10 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 @property (strong, nonatomic) IBOutlet NSTextField* booksCountField;
+@property (strong, nonatomic) IBOutlet NSMenu* contextMenu;
+@property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 
 @property (strong, nonatomic) RFBookshelf* bookshelf;
-@property (strong, nonatomic) NSArray* allBooks; // RFBook
-@property (strong, nonatomic) NSArray* currentBooks; // RFBook
+@property (strong, nonatomic) NSArray* allBooks; // MBBook
+@property (strong, nonatomic) NSArray* currentBooks; // MBBook
+@property (strong, nonatomic) NSArray* bookshelves; // RFBookshelf
 
 - (instancetype) initWithBookshelf:(RFBookshelf *)bookshelf;
 
