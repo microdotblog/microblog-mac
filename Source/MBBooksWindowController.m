@@ -155,7 +155,7 @@
 	NSString* url = @"https://www.googleapis.com/books/v1/volumes";
 	
 	NSDictionary* args = @{
-		@"q": [search rf_urlEncoded]
+		@"q": search
 	};
 	
 	UUHttpRequest* request = [UUHttpRequest getRequest:url queryArguments:args];
