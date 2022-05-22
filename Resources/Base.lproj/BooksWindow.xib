@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,7 +31,7 @@
                 <subviews>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="80" horizontalPageScroll="10" verticalLineScroll="80" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-aR-LlJ">
                         <rect key="frame" x="-1" y="-1" width="493" height="387"/>
-                        <clipView key="contentView" id="h4R-hn-ZUu">
+                        <clipView key="contentView" drawsBackground="NO" id="h4R-hn-ZUu">
                             <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -38,7 +39,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
-                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="color_table_background"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn width="461" minWidth="40" maxWidth="1000" id="hSX-fE-Pcd">
@@ -177,4 +178,9 @@
             <point key="canvasLocation" x="520" y="58"/>
         </menu>
     </objects>
+    <resources>
+        <namedColor name="color_table_background">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>
