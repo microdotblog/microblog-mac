@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* url;
 @property (strong) NSDate* postedAt;
 @property (assign) BOOL isDraft;
+@property (assign) BOOL isReply;
 @property (strong) NSString* channel;
 @property (strong) NSArray* categories;
 

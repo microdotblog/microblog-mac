@@ -34,6 +34,8 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
+	[self setupBrowser];
+	[self setupNotifications];
 	
 	[self fetchReplies];
 }
@@ -42,9 +44,35 @@
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
 	[self.tableView setTarget:self];
-//	[self.tableView setDoubleAction:@selector(openRow:)];
+	[self.tableView setDoubleAction:@selector(openRow:)];
 	self.tableView.alphaValue = 0.0;
 }
+
+- (void) setupBrowser
+{
+	NSString* browser_s = @"Open in Browser";
+	
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		browser_s = @"Open in Chrome";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		browser_s = @"Open in Firefox";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
+		browser_s = @"Open in Safari";
+	}
+
+	self.browserMenuItem.title = browser_s;
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyDidUpdateNotification:) name:kReplyDidUpdateNotification object:nil];
+}
+
+#pragma mark -
 
 - (void) fetchReplies
 {
@@ -75,6 +103,7 @@
 				post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
 
 				post.isDraft = NO;
+				post.isReply = YES;
 				post.channel = @"";
 				post.categories = @[];
 				
@@ -89,6 +118,107 @@
 			});
 		}
 	}];
+}
+
+- (IBAction) openRow:(id)sender
+{
+	NSInteger row = [self.tableView clickedRow];
+	if (row < 0) {
+		row = [self.tableView selectedRow];
+	}
+		
+	if (row >= 0) {
+		RFPost* post = [self.allReplies objectAtIndex:row];
+		[self openPost:post];
+	}
+}
+
+- (IBAction) openInBrowser:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		RFPost* post = [self.allReplies objectAtIndex:row];
+		NSURL* url = [NSURL URLWithString:post.url];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		RFPost* post = [self.allReplies objectAtIndex:row];
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:post.url forType:NSPasteboardTypeString];
+	}
+}
+
+- (void) openPost:(RFPost *)post
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
+}
+
+- (IBAction) delete:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		RFPost* post = [self.allReplies objectAtIndex:row];
+		NSString* s = post.title;
+		if (s.length == 0) {
+			s = [post summary];
+			if (s.length > 20) {
+				s = [s substringToIndex:20];
+				s = [s stringByAppendingString:@"..."];
+			}
+		}
+		
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.informativeText = @"This post will be removed from your blog and the Micro.blog timeline.";
+		[sheet addButtonWithTitle:@"Delete"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				[self deletePost:post];
+			}
+		}];
+	}
+}
+
+- (void) deletePost:(RFPost *)post
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"action": @"delete",
+		@"mp-destination": destination_uid,
+		@"url": post.url,
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+				[self.progressSpinner stopAnimation:nil];
+				NSString* msg = response.parsedResponse[@"error_description"];
+				[NSAlert rf_showOneButtonAlert:@"Error Deleting Post" message:msg button:@"OK" completionHandler:NULL];
+			}
+			else {
+				[self fetchReplies];
+			}
+		});
+	}];
+}
+
+- (void) replyDidUpdateNotification:(NSNotification *)notification
+{
+	[self fetchReplies];
 }
 
 #pragma mark -

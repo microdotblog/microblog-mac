@@ -66,7 +66,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (self) {
 		self.editingPost = post;
 		self.initialText = post.text;
-		self.isShowingTitle = YES;
+		self.isReply = post.isReply;
+		if (post.isReply) {
+			self.isShowingTitle = NO;
+		}
+		else {
+			self.isShowingTitle = YES;
+		}
 		self.channel = self.editingPost.channel;
 	}
 	
@@ -550,7 +556,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self updateRemainingChars];
 
 	if (!self.isReply && ([self currentProcessedMarkup].length > 280)) {
-		self.isShowingTitle = YES;
+		if (!self.isReply) {
+			self.isShowingTitle = YES;
+		}
 	}
 
 	[self updateTitleHeader];
@@ -999,6 +1007,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDraftDidUpdateNotification object:self];
 }
 
+- (void) sendUpdatedReplyNotification
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kReplyDidUpdateNotification object:self];
+}
+
 - (void) updateRemainingChars
 {
 	if (!self.isReply && [self currentTitle].length > 0) {
@@ -1042,28 +1055,60 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	if (self.isReply) {
 		[self showProgressHeader:@"Now sending your reply..."];
-		RFClient* client = [[RFClient alloc] initWithPath:@"/posts/reply"];
-		NSDictionary* args = @{
-			@"id": self.replyPostID,
-			@"text": text
-		};
-		[client postWithParams:args completion:^(UUHttpResponse* response) {
-			RFDispatchMainAsync (^{
-				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
-					[self hideProgressHeader];
-					NSString* msg = response.parsedResponse[@"error_description"];
-					[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
+		if (self.editingPost.postID == nil) {
+			RFClient* client = [[RFClient alloc] initWithPath:@"/posts/reply"];
+			NSDictionary* args = @{
+				@"id": self.replyPostID,
+				@"text": text
+			};
+			[client postWithParams:args completion:^(UUHttpResponse* response) {
+				RFDispatchMainAsync (^{
+					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+						[self hideProgressHeader];
+						NSString* msg = response.parsedResponse[@"error_description"];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else if (response.httpError) {
+						[self hideProgressHeader];
+						NSString* msg = [response.httpError localizedDescription];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else {
+						[self sendUpdatedReplyNotification];
+						[self closeWithoutSaving];
+					}
+				});
+			}];
+		}
+		else {
+			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+			NSDictionary* info = @{
+				@"action": @"update",
+				@"url": self.editingPost.url,
+				@"replace": @{
+					@"content": text
 				}
-				else if (response.httpError) {
-					[self hideProgressHeader];
-					NSString* msg = [response.httpError localizedDescription];
-					[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
-				}
-				else {
-					[self closeWithoutSaving];
-				}
-			});
-		}];
+			};
+			
+			[client postWithObject:info completion:^(UUHttpResponse* response) {
+				RFDispatchMainAsync (^{
+					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+						[self hideProgressHeader];
+						NSString* msg = response.parsedResponse[@"error_description"];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else if (response.httpError) {
+						[self hideProgressHeader];
+						NSString* msg = [response.httpError localizedDescription];
+						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
+					}
+					else {
+						[self sendUpdatedReplyNotification];
+						[self closeWithoutSaving];
+					}
+				});
+			}];
+		}
 	}
 	else {
 		[self showProgressHeader:@"Now publishing to your microblog..."];

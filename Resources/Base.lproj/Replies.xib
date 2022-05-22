@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFRepliesController">
             <connections>
+                <outlet property="browserMenuItem" destination="luX-bu-V6z" id="fno-CB-Uof"/>
                 <outlet property="tableView" destination="KFU-m9-WQE" id="uqq-W4-UHZ"/>
                 <outlet property="view" destination="igd-db-apc" id="k7M-Yx-KwQ"/>
             </connections>
@@ -44,7 +45,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="376" height="358"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="KFU-m9-WQE">
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="KFU-m9-WQE" customClass="RFPostTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="358"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
@@ -87,6 +88,7 @@
                                             <connections>
                                                 <outlet property="dataSource" destination="-2" id="Lik-er-rP8"/>
                                                 <outlet property="delegate" destination="-2" id="yaG-H0-J3z"/>
+                                                <outlet property="menu" destination="m5l-s7-fGc" id="QbA-rb-lib"/>
                                             </connections>
                                         </tableView>
                                     </subviews>
@@ -126,5 +128,35 @@
             </constraints>
             <point key="canvasLocation" x="275" y="78"/>
         </customView>
+        <menu id="m5l-s7-fGc">
+            <items>
+                <menuItem title="Edit" id="e91-Nk-bq5">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openRow:" target="-2" id="GBn-7F-wzn"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Delete" id="KIK-hS-zyP">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="delete:" target="-2" id="fxP-ND-Ubq"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="7hz-VC-ewq"/>
+                <menuItem title="Open in Browser" id="luX-bu-V6z">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openInBrowser:" target="-2" id="g7E-lh-ffK"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Link" id="lYd-w5-vR7">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyLink:" target="-2" id="ggH-VQ-aUS"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="608" y="16.5"/>
+        </menu>
     </objects>
 </document>
