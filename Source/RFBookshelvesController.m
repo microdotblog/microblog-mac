@@ -52,9 +52,14 @@
 
 - (void) fetchBookshelves
 {
+	BOOL first_fetch = (self.bookshelves.count == 0);
+	
 	self.bookshelves = @[];
 	[self.progressSpinner startAnimation:nil];
-	self.tableView.animator.alphaValue = 0.0;
+	if (first_fetch) {
+		// only start blank if this is the first time loading bookshelves
+		self.tableView.animator.alphaValue = 0.0;
+	}
 
 	NSDictionary* args = @{};
 	
