@@ -419,6 +419,11 @@
 	return ![self isSearch];
 }
 
+- (void) performFindPanelAction:(id)sender
+{
+	[self.searchField becomeFirstResponder];
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
