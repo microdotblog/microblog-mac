@@ -416,6 +416,9 @@
 			[item setState:NSControlStateValueOff];
 		}
 	}
+	else if (item.action == @selector(performFindPanelAction:)) {
+		return YES;
+	}
 
 	return ![self isSearch];
 }
