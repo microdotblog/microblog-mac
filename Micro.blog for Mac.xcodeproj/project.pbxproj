@@ -147,6 +147,7 @@
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
+		4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */; };
 		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
 		4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BD8339E273C3FF0007350F2 /* GoToUser.xib */; };
 		4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD833A2273C60A5007350F2 /* RFPostTableView.m */; };
@@ -450,6 +451,8 @@
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookshelvesTableView.h; path = Source/MBBookshelvesTableView.h; sourceTree = "<group>"; };
+		4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookshelvesTableView.m; path = Source/MBBookshelvesTableView.m; sourceTree = "<group>"; };
 		4BD83398273C3DF3007350F2 /* RFGoToUserController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFGoToUserController.h; path = Source/RFGoToUserController.h; sourceTree = "<group>"; };
 		4BD83399273C3DF3007350F2 /* RFGoToUserController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFGoToUserController.m; path = Source/RFGoToUserController.m; sourceTree = "<group>"; };
 		4BD8339F273C3FF0007350F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/GoToUser.xib; sourceTree = "<group>"; };
@@ -792,6 +795,8 @@
 				4BD833A2273C60A5007350F2 /* RFPostTableView.m */,
 				4BF7E53228394C5C00500C59 /* MBBooksTableView.h */,
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
+				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
+				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
 				4BF537322247CD1D00CF9D66 /* RFPost.h */,
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
@@ -1212,6 +1217,7 @@
 				4B2CAAC31F90652800D9B10E /* RFStack.m in Sources */,
 				4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */,
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
+				4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
