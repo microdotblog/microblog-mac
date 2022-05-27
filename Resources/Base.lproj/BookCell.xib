@@ -19,11 +19,11 @@
                         <constraint firstAttribute="width" constant="60" id="KSs-o4-bUQ"/>
                         <constraint firstAttribute="height" constant="60" id="vvk-Be-BiZ"/>
                     </constraints>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="mac-vZ-Nz6"/>
+                    <imageCell key="cell" alignment="left" imageScaling="proportionallyDown" id="mac-vZ-Nz6"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DEf-d8-CX8">
                     <rect key="frame" x="89" y="44" width="270" height="16"/>
-                    <textFieldCell key="cell" title="Book title" id="9BU-PD-BCF">
+                    <textFieldCell key="cell" refusesFirstResponder="YES" title="Book title" id="9BU-PD-BCF">
                         <font key="font" metaFont="systemMedium" size="13"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -31,7 +31,7 @@
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bm2-WP-3ly">
                     <rect key="frame" x="89" y="20" width="270" height="16"/>
-                    <textFieldCell key="cell" title="Author" id="WFu-Pv-JwR">
+                    <textFieldCell key="cell" refusesFirstResponder="YES" title="Author" id="WFu-Pv-JwR">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -43,7 +43,7 @@
                         <constraint firstAttribute="height" constant="25" id="h2k-w9-GLL"/>
                         <constraint firstAttribute="width" constant="25" id="ybn-au-XCa"/>
                     </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jCW-kh-u2q">
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jCW-kh-u2q">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
