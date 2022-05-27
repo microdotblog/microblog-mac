@@ -35,6 +35,9 @@ static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";
 static NSString* const kFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
 static NSString* const kFoundUserAutoCompleteInfoKey = @"RFFoundUserAutoCompleteInfokey";
 
+static NSString* const kOpenBookshelfNotification = @"MBOpenBookshelfNotification";
+static NSString* const kOpenBookshelfKey = @"bookshelf";
+
 static NSString* const kTextSizePrefKey = @"TextSize";
 static NSInteger const kTextSizeTiny = 12;
 static NSInteger const kTextSizeSmall = 13;

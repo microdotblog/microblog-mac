@@ -115,8 +115,7 @@
 
 - (void) openBookshelf:(RFBookshelf *)bookshelf
 {
-	MBBooksWindowController* books_controller = [[MBBooksWindowController alloc] initWithBookshelf:bookshelf];
-	[books_controller showWindow:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenBookshelfNotification object:self userInfo:@{ kOpenBookshelfKey: bookshelf }];
 }
 
 #pragma mark -

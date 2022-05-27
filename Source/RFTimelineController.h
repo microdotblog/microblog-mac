@@ -53,6 +53,7 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) NSNumber* checkSeconds;
 @property (strong, nonatomic) RFGoToUserController* goToUserController;
 @property (strong, nonatomic) NSMutableArray* sidebarItems; // RFSelectedTimelineType
+@property (strong, nonatomic) NSMutableArray* booksWindowControllers; // MBBooksWindowController
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)

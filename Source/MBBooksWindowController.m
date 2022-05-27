@@ -51,6 +51,7 @@
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BookCell" bundle:nil] forIdentifier:@"BookCell"];
 	[self.tableView setTarget:self];
+	self.window.initialFirstResponder = self.tableView;
 }
 
 - (void) setupNotifications

@@ -31,6 +31,8 @@
 #import "RFClient.h"
 #import "RFPost.h"
 #import "RFStack.h"
+#import "RFBookshelf.h"
+#import "MBBooksWindowController.h"
 #import "NSImage+Extras.h"
 #import "RFGoToUserController.h"
 #import "NSAppearance+Extras.h"
@@ -56,6 +58,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	if (self) {
 		self.navigationStack = [[RFStack alloc] init];
 		self.checkSeconds = @5;
+		self.booksWindowControllers = [NSMutableArray array];
 	}
 	
 	return self;
@@ -164,6 +167,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openBookshelfNotification:) name:kOpenBookshelfNotification object:nil];
 
 //	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
@@ -318,6 +322,29 @@ static NSInteger const kSelectionBookshelves = 10;
 - (void) popNavigationNotification:(NSNotification *)notification
 {
 	[self popViewController];
+}
+
+- (void) openBookshelfNotification:(NSNotification *)notification
+{
+	RFBookshelf* bookshelf = [notification.userInfo objectForKey:kOpenBookshelfKey];
+	MBBooksWindowController* found_controller = nil;
+	
+	for (MBBooksWindowController* controller in self.booksWindowControllers) {
+		if ([controller.bookshelf.bookshelfID isEqualToNumber:bookshelf.bookshelfID]) {
+			found_controller = controller;
+			break;
+		}
+	}
+	
+	if (found_controller) {
+		[found_controller showWindow:nil];
+	}
+	else {
+		MBBooksWindowController* books_controller = [[MBBooksWindowController alloc] initWithBookshelf:bookshelf];
+		[books_controller showWindow:nil];
+
+		[self.booksWindowControllers addObject:books_controller];
+	}
 }
 
 #pragma mark -
