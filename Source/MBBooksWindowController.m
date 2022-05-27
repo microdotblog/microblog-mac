@@ -141,6 +141,7 @@
 			RFDispatchMainAsync (^{
 				self.allBooks = new_books;
 				self.currentBooks = new_books;
+				self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
 				[self.tableView reloadData];
 				[self setupBooksCount];
 			});
@@ -210,6 +211,7 @@
 			RFDispatchMainAsync (^{
 				self.currentBooks = new_books;
 				[self.progressSpinner stopAnimation:nil];
+				self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleNone;
 				[self.tableView reloadData];
 			});
 		}
@@ -319,6 +321,7 @@
 	NSString* s = [sender stringValue];
 	if (s.length == 0) {
 		self.currentBooks = self.allBooks;
+		self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
 		[self.tableView reloadData];
 		[self setupBooksCount];
 	}
@@ -472,9 +475,9 @@
 	}
 }
 
-//- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
-//{
-//	return ![self isSearch];
-//}
+- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+	return ![self isSearch];
+}
 
 @end
