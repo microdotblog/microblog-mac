@@ -92,6 +92,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	[item disableMenu];
 	
 	if (indexPath.item < self.books.count) {
 		MBBook* b = [self.books objectAtIndex:indexPath.item];
