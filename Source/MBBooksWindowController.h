@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* bookshelves; // RFBookshelf
 
 - (instancetype) initWithBookshelf:(RFBookshelf *)bookshelf;
+- (void) fetchBooks;
 
 @end
 

@@ -115,4 +115,7 @@ static NSString* const kBookWasAddedBookshelfKey = @"bookshelf";
 static NSString* const kBookWasRemovedNotification = @"BookWasRemovedNotification";
 static NSString* const kBookWasRemovedBookshelfKey = @"bookshelf";
 
+static NSString* const kBookWasAssignedNotification = @"BookWasAssignedNotification";
+static NSString* const kBookWasAssignedBookshelfKey = @"bookshelf";
+
 #define APPSTORE 1

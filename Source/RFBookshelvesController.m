@@ -48,6 +48,7 @@
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasAddedNotification:) name:kBookWasAddedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasRemovedNotification:) name:kBookWasRemovedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasAssignedNotification:) name:kBookWasAssignedNotification object:nil];
 }
 
 - (void) fetchBookshelves
@@ -112,6 +113,11 @@
 {
 	RFBookshelf* shelf = [notification.userInfo objectForKey:kBookWasAddedBookshelfKey];
 	[self refreshBookshelf:shelf];
+}
+
+- (void) bookWasAssignedNotification:(NSNotification *)notification
+{
+	[self fetchBookshelves];
 }
 
 #pragma mark -

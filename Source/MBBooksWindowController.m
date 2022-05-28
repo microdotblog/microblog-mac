@@ -305,7 +305,7 @@
 				[self.progressSpinner stopAnimation:nil];
 				[self fetchBooks];
 
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self userInfo:@{ kBookWasAddedBookshelfKey: bookshelf }];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAssignedNotification object:self userInfo:@{ kBookWasAssignedBookshelfKey: bookshelf }];
 			});
 		}
 	}];

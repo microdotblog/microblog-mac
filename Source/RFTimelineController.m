@@ -338,6 +338,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	
 	if (found_controller) {
 		[found_controller showWindow:nil];
+		[found_controller fetchBooks];
 	}
 	else {
 		MBBooksWindowController* books_controller = [[MBBooksWindowController alloc] initWithBookshelf:bookshelf];
