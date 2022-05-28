@@ -440,6 +440,17 @@ CA
                                     <action selector="showUploads:" target="-1" id="6rH-yU-e5s"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="3JP-ZY-dVL"/>
+                            <menuItem title="Replies" keyEquivalent="8" id="KzB-ww-uxy">
+                                <connections>
+                                    <action selector="showReplies:" target="-1" id="C97-YB-g8K"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Bookshelves" keyEquivalent="9" id="GcL-tC-8V0">
+                                <connections>
+                                    <action selector="showBookshelves:" target="-1" id="6vM-wd-pbi"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="SvD-l1-Axj"/>
                             <menuItem title="Refresh" keyEquivalent="R" id="x5U-wS-VS9">
                                 <connections>
