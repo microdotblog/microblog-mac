@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* title;
 @property (strong) NSNumber* booksCount;
 
+- (BOOL) isEqualTo:(RFBookshelf *)bookshelf;
+
 @end
 
 NS_ASSUME_NONNULL_END

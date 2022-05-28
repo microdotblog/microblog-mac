@@ -88,14 +88,30 @@
 	}];
 }
 
+- (void) refreshBookshelf:(RFBookshelf *)bookshelf
+{
+	for (NSInteger i = 0; i < self.bookshelves.count; i++) {
+		RFBookshelf* shelf = [self.bookshelves objectAtIndex:i];
+		if ([shelf isEqualTo:bookshelf]) {
+			RFBookshelfCell* cell = [self.tableView rowViewAtRow:i makeIfNecessary:NO];
+			if ([cell isKindOfClass:[RFBookshelfCell class]]) {
+				[cell fetchBooks];
+			}
+			break;
+		}
+	}
+}
+
 - (void) bookWasAddedNotification:(NSNotification *)notification
 {
-	[self fetchBookshelves];
+	RFBookshelf* shelf = [notification.userInfo objectForKey:kBookWasAddedBookshelfKey];
+	[self refreshBookshelf:shelf];
 }
 
 - (void) bookWasRemovedNotification:(NSNotification *)notification
 {
-	[self fetchBookshelves];
+	RFBookshelf* shelf = [notification.userInfo objectForKey:kBookWasAddedBookshelfKey];
+	[self refreshBookshelf:shelf];
 }
 
 #pragma mark -

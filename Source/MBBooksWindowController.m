@@ -267,7 +267,7 @@
 				[self.searchField setStringValue:@""];
 				[self fetchBooks];
 				
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self userInfo:@{ kBookWasAddedBookshelfKey: bookshelf }];
 			});
 		}
 	}];
@@ -284,7 +284,7 @@
 				[self.progressSpinner stopAnimation:nil];
 				[self fetchBooks];
 				
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasRemovedNotification object:self];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasRemovedNotification object:self userInfo:@{ kBookWasRemovedBookshelfKey: bookshelf }];
 			});
 		}
 	}];
@@ -305,7 +305,7 @@
 				[self.progressSpinner stopAnimation:nil];
 				[self fetchBooks];
 
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self userInfo:@{ kBookWasAddedBookshelfKey: bookshelf }];
 			});
 		}
 	}];

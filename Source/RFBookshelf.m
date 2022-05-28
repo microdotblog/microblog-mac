@@ -10,4 +10,9 @@
 
 @implementation RFBookshelf
 
+- (BOOL) isEqualTo:(RFBookshelf *)bookshelf
+{
+	return [self.bookshelfID isEqualToNumber:bookshelf.bookshelfID];
+}
+
 @end
