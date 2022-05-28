@@ -9,13 +9,16 @@
 #import "MBBookCell.h"
 
 #import "MBBook.h"
+#import "RFBookshelf.h"
 #import "RFConstants.h"
 
 @implementation MBBookCell
 
-- (void) setupWithBook:(MBBook *)book
+- (void) setupWithBook:(MBBook *)book inBookshelf:(RFBookshelf *)bookshelf
 {
 	self.book = book;
+	self.bookshelf = bookshelf;
+	
 	self.titleField.stringValue = book.title;
 	
 	if ([book.authors count] > 0) {
@@ -60,7 +63,8 @@
 - (IBAction) addBook:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kAddBookNotification object:self userInfo:@{
-		kAddBookKey: self.book
+		kAddBookKey: self.book,
+		kAddBookBookshelfKey: self.bookshelf
 	}];	
 }
 

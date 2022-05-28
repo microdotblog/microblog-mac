@@ -333,7 +333,10 @@
 - (void) addBookNotification:(NSNotification *)notification
 {
 	MBBook* b = [[notification userInfo] objectForKey:kAddBookKey];
-	[self addBook:b toBookshelf:self.bookshelf];
+	RFBookshelf* shelf = [[notification userInfo] objectForKey:kAddBookBookshelfKey];
+	if ([shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
+		[self addBook:b toBookshelf:self.bookshelf];
+	}
 }
 
 - (IBAction) delete:(id)sender
@@ -444,7 +447,7 @@
 
 	if (row < self.currentBooks.count) {
 		MBBook* b = [self.currentBooks objectAtIndex:row];
-		[cell setupWithBook:b];
+		[cell setupWithBook:b inBookshelf:self.bookshelf];
 	}
 
 	return cell;

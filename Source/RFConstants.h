@@ -107,6 +107,7 @@ static NSString* const kEditorWindowTextMarkdownKey = @"markdown";
 
 static NSString* const kAddBookNotification = @"AddBookNotification";
 static NSString* const kAddBookKey = @"book";
+static NSString* const kAddBookBookshelfKey = @"bookshelf";
 
 static NSString* const kBookWasAddedNotification = @"BookWasAddedNotification";
 static NSString* const kBookWasRemovedNotification = @"BookWasRemovedNotification";

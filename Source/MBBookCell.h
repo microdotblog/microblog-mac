@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MBBook;
+@class RFBookshelf;
 
 @interface MBBookCell : NSTableRowView
 
@@ -20,8 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* addButton;
 
 @property (strong, nonatomic) MBBook* book;
+@property (strong, nonatomic) RFBookshelf* bookshelf;
 
-- (void) setupWithBook:(MBBook *)book;
+- (void) setupWithBook:(MBBook *)book inBookshelf:(RFBookshelf *)bookshelf;
 
 @end
 
