@@ -159,6 +159,12 @@
                         <action selector="copyLink:" target="-2" id="U6C-Rl-aOt"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Copy Markdown" alternate="YES" id="7CN-wr-CQh">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="copyMarkdown:" target="-2" id="hXV-5Y-fLh"/>
+                    </connections>
+                </menuItem>
                 <menuItem isSeparatorItem="YES" id="pKh-fm-Q0O"/>
             </items>
             <point key="canvasLocation" x="520" y="58"/>

@@ -399,6 +399,18 @@
 	}
 }
 
+- (IBAction) copyMarkdown:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBBook* b = [self.currentBooks objectAtIndex:row];
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		NSString* s = [NSString stringWithFormat:@"[%@](%@)", b.title, [b microblogURL]];
+		[pb setString:s forType:NSPasteboardTypeString];
+	}
+}
+
 - (IBAction) assignToBookshelf:(NSMenuItem *)sender
 {
 	RFBookshelf* shelf = sender.representedObject;
