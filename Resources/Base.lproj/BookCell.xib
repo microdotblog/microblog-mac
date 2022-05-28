@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="8aQ-ai-odG" customClass="MBBookCell">
+            <rect key="frame" x="0.0" y="0.0" width="422" height="80"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jfM-zl-gja">
+                    <rect key="frame" x="15" y="10" width="60" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="KSs-o4-bUQ"/>
+                        <constraint firstAttribute="height" constant="60" id="vvk-Be-BiZ"/>
+                    </constraints>
+                    <imageCell key="cell" alignment="left" imageScaling="proportionallyDown" id="mac-vZ-Nz6"/>
+                </imageView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DEf-d8-CX8">
+                    <rect key="frame" x="89" y="44" width="270" height="16"/>
+                    <textFieldCell key="cell" title="Book title" id="9BU-PD-BCF">
+                        <font key="font" metaFont="systemMedium" size="13"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bm2-WP-3ly">
+                    <rect key="frame" x="89" y="20" width="270" height="16"/>
+                    <textFieldCell key="cell" title="Author" id="WFu-Pv-JwR">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UYg-Yw-FIb">
+                    <rect key="frame" x="377" y="27" width="25" height="27"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="h2k-w9-GLL"/>
+                        <constraint firstAttribute="width" constant="25" id="ybn-au-XCa"/>
+                    </constraints>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jCW-kh-u2q">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="addBook:" target="8aQ-ai-odG" id="jRa-D3-HFy"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="UYg-Yw-FIb" firstAttribute="leading" secondItem="bm2-WP-3ly" secondAttribute="trailing" constant="20" id="7jk-7k-JJd"/>
+                <constraint firstItem="bm2-WP-3ly" firstAttribute="top" secondItem="DEf-d8-CX8" secondAttribute="bottom" constant="8" symbolic="YES" id="Hcs-eb-OUn"/>
+                <constraint firstItem="bm2-WP-3ly" firstAttribute="leading" secondItem="jfM-zl-gja" secondAttribute="trailing" constant="16" id="Mq1-A2-lOO"/>
+                <constraint firstItem="UYg-Yw-FIb" firstAttribute="leading" secondItem="DEf-d8-CX8" secondAttribute="trailing" constant="20" id="SEc-Eg-Xxw"/>
+                <constraint firstItem="DEf-d8-CX8" firstAttribute="top" secondItem="8aQ-ai-odG" secondAttribute="top" constant="20" symbolic="YES" id="Vo2-b5-tk1"/>
+                <constraint firstItem="UYg-Yw-FIb" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="l4N-tT-wuu"/>
+                <constraint firstAttribute="trailing" secondItem="UYg-Yw-FIb" secondAttribute="trailing" constant="20" id="nwr-DY-buI"/>
+                <constraint firstItem="jfM-zl-gja" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="rGW-D9-qff"/>
+                <constraint firstItem="jfM-zl-gja" firstAttribute="leading" secondItem="8aQ-ai-odG" secondAttribute="leading" constant="15" id="ryA-hz-dZT"/>
+                <constraint firstItem="DEf-d8-CX8" firstAttribute="leading" secondItem="jfM-zl-gja" secondAttribute="trailing" constant="16" id="yel-BT-hPT"/>
+            </constraints>
+            <connections>
+                <outlet property="addButton" destination="UYg-Yw-FIb" id="9dJ-Qq-SGO"/>
+                <outlet property="authorField" destination="bm2-WP-3ly" id="LSW-Qj-gwq"/>
+                <outlet property="coverImageView" destination="jfM-zl-gja" id="gdj-5O-CcR"/>
+                <outlet property="titleField" destination="DEf-d8-CX8" id="deD-hh-Khl"/>
+            </connections>
+            <point key="canvasLocation" x="310" y="-47"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="NSAddTemplate" width="14" height="13"/>
+    </resources>
+</document>

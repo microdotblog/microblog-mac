@@ -11,6 +11,7 @@ static NSString* const kOpenPostingNotification = @"RFOpenPosting";
 static NSString* const kOpenPostingPostKey = @"post";
 static NSString* const kClosePostingNotification = @"RFClosePosting";
 static NSString* const kDraftDidUpdateNotification = @"MBDraftDidUpdate";
+static NSString* const kReplyDidUpdateNotification = @"MBReplyDidUpdate";
 static NSString* const kRefreshTimelineNotification = @"RFRefreshTimeline";
 static NSString* const kCheckTimelineNotification = @"RFCheckTimeline";
 static NSString* const kUpdatedBlogNotification = @"RFUpdatedBlog";
@@ -33,6 +34,9 @@ static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";
 
 static NSString* const kFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
 static NSString* const kFoundUserAutoCompleteInfoKey = @"RFFoundUserAutoCompleteInfokey";
+
+static NSString* const kOpenBookshelfNotification = @"MBOpenBookshelfNotification";
+static NSString* const kOpenBookshelfKey = @"bookshelf";
 
 static NSString* const kTextSizePrefKey = @"TextSize";
 static NSInteger const kTextSizeTiny = 12;
@@ -100,5 +104,18 @@ static NSString* const kDarkModeAppearanceDidChangeNotification = @"DarkModeAppe
 static NSString* const kEditorWindowTextDidChangeNotification = @"EditorWindowTextDidChange";
 static NSString* const kEditorWindowTextTitleKey = @"title";
 static NSString* const kEditorWindowTextMarkdownKey = @"markdown";
+
+static NSString* const kAddBookNotification = @"AddBookNotification";
+static NSString* const kAddBookKey = @"book";
+static NSString* const kAddBookBookshelfKey = @"bookshelf";
+
+static NSString* const kBookWasAddedNotification = @"BookWasAddedNotification";
+static NSString* const kBookWasAddedBookshelfKey = @"bookshelf";
+
+static NSString* const kBookWasRemovedNotification = @"BookWasRemovedNotification";
+static NSString* const kBookWasRemovedBookshelfKey = @"bookshelf";
+
+static NSString* const kBookWasAssignedNotification = @"BookWasAssignedNotification";
+static NSString* const kBookWasAssignedBookshelfKey = @"bookshelf";
 
 #define APPSTORE 1

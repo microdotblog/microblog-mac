@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -118,7 +118,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uK0-xJ-ygW">
-                        <rect key="frame" x="113" y="58" width="257" height="25"/>
+                        <rect key="frame" x="112" y="57" width="259" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Vyu-QU-bIa"/>
                         </constraints>
@@ -206,7 +206,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dAB-WX-QVA">
-                        <rect key="frame" x="113" y="20" width="257" height="25"/>
+                        <rect key="frame" x="112" y="19" width="259" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="h1e-p3-Lte"/>
                         </constraints>
@@ -238,7 +238,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iVr-XZ-NWu">
-                        <rect key="frame" x="113" y="340" width="257" height="25"/>
+                        <rect key="frame" x="112" y="339" width="259" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="z3W-eI-vcY"/>
                         </constraints>

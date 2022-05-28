@@ -36,6 +36,11 @@
 	self.browserMenuItem.title = browser_s;
 }
 
+- (void) disableMenu
+{
+	self.selectionOverlayView.menu = nil;
+}
+
 - (IBAction) openInBrowser:(id)sender
 {
 	NSURL* url = [NSURL URLWithString:self.url];
