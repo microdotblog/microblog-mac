@@ -25,13 +25,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="408" height="475"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uks-Oo-UlR">
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="148" horizontalPageScroll="10" verticalLineScroll="148" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uks-Oo-UlR">
                                 <rect key="frame" x="0.0" y="0.0" width="408" height="475"/>
                                 <clipView key="contentView" id="YDM-2x-Oco">
                                     <rect key="frame" x="0.0" y="0.0" width="408" height="475"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="44d-ci-2fS" customClass="MBBookshelvesTableView">
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="148" viewBased="YES" id="44d-ci-2fS" customClass="MBBookshelvesTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="408" height="475"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>

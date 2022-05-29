@@ -106,7 +106,12 @@
 - (void) bookWasAddedNotification:(NSNotification *)notification
 {
 	RFBookshelf* shelf = [notification.userInfo objectForKey:kBookWasAddedBookshelfKey];
-	[self refreshBookshelf:shelf];
+	if ([shelf.booksCount integerValue] > 0) {
+		[self refreshBookshelf:shelf];
+	}
+	else {
+		[self fetchBookshelves];
+	}
 }
 
 - (void) bookWasRemovedNotification:(NSNotification *)notification
@@ -157,6 +162,20 @@
 	}
 
 	return cell;
+}
+
+- (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+	CGFloat result = 44;
+	
+	if (row < self.bookshelves.count) {
+		RFBookshelf* bookshelf = [self.bookshelves objectAtIndex:row];
+		if ([bookshelf.booksCount integerValue] > 0) {
+			result = 148;
+		}
+	}
+	
+	return result;
 }
 
 @end
