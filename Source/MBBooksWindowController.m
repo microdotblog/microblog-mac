@@ -23,6 +23,8 @@
 	self = [super initWithWindowNibName:@"BooksWindow"];
 	if (self) {
 		self.bookshelf = bookshelf;
+		self.allBooks = @[];
+		self.currentBooks = @[];
 	}
 	
 	return self;
@@ -111,9 +113,6 @@
 
 - (void) fetchBooks
 {
-	self.allBooks = @[];
-	self.currentBooks = @[];
-	
 	NSDictionary* args = @{};
 	
 	RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/books/bookshelves/%@", self.bookshelf.bookshelfID]];
@@ -139,11 +138,13 @@
 			}
 			
 			RFDispatchMainAsync (^{
-				self.allBooks = new_books;
-				self.currentBooks = new_books;
-				self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
-				[self.tableView reloadData];
-				[self setupBooksCount];
+				if (![RFBookshelf isSameBooks:self.allBooks asBooks:new_books]) {
+					self.allBooks = new_books;
+					self.currentBooks = new_books;
+					self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
+					[self.tableView reloadData];
+					[self setupBooksCount];
+				}
 			});
 		}
 	}];
