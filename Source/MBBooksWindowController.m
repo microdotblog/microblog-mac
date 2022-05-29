@@ -438,6 +438,15 @@
 	else if (item.action == @selector(performFindPanelAction:)) {
 		return YES;
 	}
+	else if (item.action == @selector(newDocument:)) {
+		NSInteger row = self.tableView.selectedRow;
+		if (row >= 0) {
+			[item setTitle:@"New Post with Book"];
+		}
+		else {
+			[item setTitle:@"New Post"];
+		}
+	}
 
 	return ![self isSearch];
 }
@@ -445,6 +454,18 @@
 - (void) performFindPanelAction:(id)sender
 {
 	[self.searchField becomeFirstResponder];
+}
+
+- (void) newDocument:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		[self startNewPost:nil];
+	}
+	else {
+		// try to bubble it up to the top to be handled
+		[[NSApplication sharedApplication] tryToPerform:@selector(newDocument:) with:sender];
+	}
 }
 
 #pragma mark -
