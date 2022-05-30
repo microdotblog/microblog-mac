@@ -1638,7 +1638,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
-		self.destinations = [response.parsedResponse objectForKey:@"destination"];
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			self.destinations = [response.parsedResponse objectForKey:@"destination"];
+		}
 	}];
 }
 
