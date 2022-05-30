@@ -40,12 +40,21 @@
 
 - (void) fetchBlogs
 {
+	self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer* timer) {
+		// only show progress if download is taking longer than 1 second
+		[self.progressSpinner startAnimation:nil];
+	}];
+	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
-		self.destinations = [response.parsedResponse objectForKey:@"destination"];
-		RFDispatchMainAsync (^{
-			[self.tableView reloadData];
-		});
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			self.destinations = [response.parsedResponse objectForKey:@"destination"];
+			RFDispatchMainAsync (^{
+				[self.progressTimer invalidate];
+				[self.progressSpinner stopAnimation:nil];
+				[self.tableView reloadData];
+			});
+		}
 	}];
 }
 

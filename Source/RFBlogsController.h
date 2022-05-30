@@ -11,7 +11,9 @@
 @interface RFBlogsController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary (uid, name)
+@property (strong, nonatomic) NSTimer* progressTimer;
 
 @end

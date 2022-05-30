@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFBlogsController">
             <connections>
+                <outlet property="progressSpinner" destination="k9h-dk-AMK" id="f5x-Kc-p0v"/>
                 <outlet property="tableView" destination="9w6-YI-YFr" id="4so-Ie-Awj"/>
                 <outlet property="view" destination="c22-O7-iKe" id="hyC-uN-Ror"/>
             </connections>
@@ -26,15 +27,14 @@
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" viewBased="YES" id="9w6-YI-YFr">
                                 <rect key="frame" x="0.0" y="0.0" width="262" height="299"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="deviceWhite"/>
                                 <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                 <color key="gridColor" white="0.85366462010603683" alpha="1" colorSpace="calibratedWhite"/>
                                 <tableColumns>
-                                    <tableColumn identifier="" width="259" minWidth="40" maxWidth="1000" id="zjj-4T-XnM">
+                                    <tableColumn width="230" minWidth="40" maxWidth="1000" id="zjj-4T-XnM">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -46,7 +46,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="ziJ-Nq-Fh4">
-                                                <rect key="frame" x="1" y="1" width="259" height="17"/>
+                                                <rect key="frame" x="11" y="1" width="239" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </tableCellView>
                                         </prototypeCellViews>
@@ -60,17 +60,22 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="fyM-bG-jrU">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="fyM-bG-jrU">
                         <rect key="frame" x="1" y="282" width="260" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="efH-u6-smc">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="efH-u6-smc">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
+                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="k9h-dk-AMK">
+                    <rect key="frame" x="234" y="268" width="16" height="16"/>
+                </progressIndicator>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="k9h-dk-AMK" secondAttribute="trailing" constant="12" id="7VF-BG-QzZ"/>
+                <constraint firstItem="k9h-dk-AMK" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="15" id="9F9-hD-jgv"/>
                 <constraint firstItem="NY7-00-QOK" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="cPU-Bj-kTG"/>
                 <constraint firstAttribute="trailing" secondItem="NY7-00-QOK" secondAttribute="trailing" id="evb-hX-ByI"/>
                 <constraint firstItem="NY7-00-QOK" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="yI9-My-17y"/>
