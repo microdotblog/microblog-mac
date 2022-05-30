@@ -491,7 +491,7 @@
 {
 	MBBook* b = [self.currentBooks objectAtIndex:row];
 	
-	if (b.coverImage == nil) {
+	if ((b.coverImage == nil) && (b.coverURL.length > 0)) {
 		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
 
 		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
