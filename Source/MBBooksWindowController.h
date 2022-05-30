@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* allBooks; // MBBook
 @property (strong, nonatomic) NSArray* currentBooks; // MBBook
 @property (strong, nonatomic) NSArray* bookshelves; // RFBookshelf
+@property (strong) NSMutableSet* coversQueue; // MBBook
+@property (strong) NSTimer* coversTimer;
+@property (assign) NSInteger coverDownloadsCount;
 
 - (instancetype) initWithBookshelf:(RFBookshelf *)bookshelf;
 - (void) fetchBooks;

@@ -25,6 +25,7 @@
 		self.bookshelf = bookshelf;
 		self.allBooks = @[];
 		self.currentBooks = @[];
+		self.coversQueue = [NSMutableSet set];
 	}
 	
 	return self;
@@ -317,6 +318,51 @@
 	return [[self.searchField stringValue] length] > 0;
 }
 
+- (void) downloadCoverForBook:(MBBook *)book
+{
+	[self.coversQueue addObject:book];
+	if (self.coversTimer == nil) {
+		// timer to check for book covers to download, max 4 at a time
+		self.coversTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+			if (self.coverDownloadsCount < 4) {
+				[self checkCovers];
+			}
+		}];
+	}
+}
+
+- (void) checkCovers
+{
+	MBBook* b = [self.coversQueue anyObject];
+	if (b) {
+		self.coverDownloadsCount++;
+		[self.coversQueue removeObject:b];
+		
+		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
+		
+		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+				NSImage* img = response.parsedResponse;
+				RFDispatchMain(^{
+					b.coverImage = img;
+					
+					@try {
+						NSIndexSet* selected_rows = [self.tableView selectedRowIndexes];
+						[self.tableView reloadData];
+						[self.tableView selectRowIndexes:selected_rows byExtendingSelection:NO];
+					}
+					@catch (NSException* e) {
+					}
+					
+					self.coverDownloadsCount--;
+				});
+			}
+		}];
+	}
+}
+
+#pragma mark -
+
 - (IBAction) search:(id)sender
 {
 	NSString* s = [sender stringValue];
@@ -492,23 +538,7 @@
 	MBBook* b = [self.currentBooks objectAtIndex:row];
 	
 	if ((b.coverImage == nil) && (b.coverURL.length > 0)) {
-		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
-
-		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
-			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
-				NSImage* img = response.parsedResponse;
-				RFDispatchMain(^{
-					b.coverImage = img;
-					@try {
-						NSIndexSet* selected_rows = [tableView selectedRowIndexes];
-						[tableView reloadData];
-						[tableView selectRowIndexes:selected_rows byExtendingSelection:NO];
-					}
-					@catch (NSException* e) {
-					}
-				});
-			}
-		}];
+		[self downloadCoverForBook:b];
 	}
 }
 
