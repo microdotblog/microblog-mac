@@ -21,7 +21,7 @@
                     </constraints>
                     <imageCell key="cell" alignment="left" imageScaling="proportionallyDown" id="mac-vZ-Nz6"/>
                 </imageView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DEf-d8-CX8">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEf-d8-CX8">
                     <rect key="frame" x="89" y="44" width="270" height="16"/>
                     <textFieldCell key="cell" title="Book title" id="9BU-PD-BCF">
                         <font key="font" metaFont="systemMedium" size="13"/>
@@ -58,6 +58,7 @@
                 <constraint firstItem="bm2-WP-3ly" firstAttribute="leading" secondItem="jfM-zl-gja" secondAttribute="trailing" constant="16" id="Mq1-A2-lOO"/>
                 <constraint firstItem="UYg-Yw-FIb" firstAttribute="leading" secondItem="DEf-d8-CX8" secondAttribute="trailing" constant="20" id="SEc-Eg-Xxw"/>
                 <constraint firstItem="DEf-d8-CX8" firstAttribute="top" secondItem="8aQ-ai-odG" secondAttribute="top" constant="20" symbolic="YES" id="Vo2-b5-tk1"/>
+                <constraint firstAttribute="bottom" secondItem="bm2-WP-3ly" secondAttribute="bottom" constant="20" symbolic="YES" id="bf6-ll-bTe"/>
                 <constraint firstItem="UYg-Yw-FIb" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="l4N-tT-wuu"/>
                 <constraint firstAttribute="trailing" secondItem="UYg-Yw-FIb" secondAttribute="trailing" constant="20" id="nwr-DY-buI"/>
                 <constraint firstItem="jfM-zl-gja" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="rGW-D9-qff"/>
