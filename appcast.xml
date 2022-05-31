@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added viewing and editing your replies.</li>
+	 				<li>Added new Bookshelves pane to manage books you're reading or want to blog about. Right-click or control-click on a book for more options.</li>
+	 				<li>Fixed some other potential bugs with slow internet connections and errors.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 31 May 2022 09:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.5.zip" sparkle:shortVersionString="2.5" sparkle:version="113" length="3736201" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.4.4</title>
  			<description><![CDATA[
 				<style>
