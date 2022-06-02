@@ -34,11 +34,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="xLA-JS-1DO"/>
                 </imageView>
-                <customView wantsLayer="YES" fixedFrame="YES" alphaValue="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="8e5-OI-o8O">
+                <customView wantsLayer="YES" fixedFrame="YES" alphaValue="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="8e5-OI-o8O" customClass="MBPhotoSelectionView">
                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <connections>
                         <outlet property="menu" destination="ILg-2w-hks" id="1pY-KG-f5A"/>
+                        <outlet property="photoCell" destination="na8-0v-oNY" id="Pwy-Po-EBe"/>
                     </connections>
                 </customView>
             </subviews>

@@ -68,6 +68,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesNotification:) name:kUploadFilesNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectPhotoCellNotification:) name:kSelectPhotoCellNotification object:nil];
 }
 
 - (void) fetchPosts
@@ -195,6 +196,32 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self uploadNextPhoto:new_photos];
 	[self showUploadProgress];
 }
+
+- (void) selectPhotoCellNotification:(NSNotification *)notification
+{
+	RFPhotoCell* cell = [notification.userInfo objectForKey:kSelectPhotoCellKey];
+
+	// deselect all
+	for (NSInteger i = 0; i < self.allPosts.count; i++) {
+		NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
+		NSSet* deselect_set = [NSSet setWithObject:index_path];
+		[self collectionView:self.collectionView didDeselectItemsAtIndexPaths:deselect_set];
+	}
+	
+	// find clicked cell and select it
+	for (NSInteger i = 0; i < self.allPosts.count; i++) {
+		RFUpload* up = [self.allPosts objectAtIndex:i];
+		if ([cell.url isEqualToString:up.url]) {
+			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
+			NSSet* select_set = [NSSet setWithObject:index_path];
+			[self.collectionView selectItemsAtIndexPaths:select_set scrollPosition:NSCollectionViewScrollPositionNone];
+			[self collectionView:self.collectionView didSelectItemsAtIndexPaths:select_set];
+			break;
+		}
+	}
+}
+
+#pragma mark -
 
 - (void) uploadNextPhoto:(NSMutableArray *)paths
 {

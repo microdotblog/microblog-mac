@@ -118,4 +118,7 @@ static NSString* const kBookWasRemovedBookshelfKey = @"bookshelf";
 static NSString* const kBookWasAssignedNotification = @"BookWasAssignedNotification";
 static NSString* const kBookWasAssignedBookshelfKey = @"bookshelf";
 
+static NSString* const kSelectPhotoCellNotification = @"SelectPhotoCellNotification";
+static NSString* const kSelectPhotoCellKey = @"cell"; // RFPhotoCell
+
 #define APPSTORE 1
