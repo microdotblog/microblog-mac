@@ -188,10 +188,14 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self.sidebarItems addObject:@(kSelectionFavorites)];
 	[self.sidebarItems addObject:@(kSelectionDiscover)];
 	[self.sidebarItems addObject:@(kSelectionDivider1)];
-	[self.sidebarItems addObject:@(kSelectionPosts)];
-	[self.sidebarItems addObject:@(kSelectionPages)];
-	[self.sidebarItems addObject:@(kSelectionUploads)];
-	[self.sidebarItems addObject:@(kSelectionDivider2)];
+
+	if ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]) {
+		[self.sidebarItems addObject:@(kSelectionPosts)];
+		[self.sidebarItems addObject:@(kSelectionPages)];
+		[self.sidebarItems addObject:@(kSelectionUploads)];
+		[self.sidebarItems addObject:@(kSelectionDivider2)];
+	}
+	
 	[self.sidebarItems addObject:@(kSelectionReplies)];
 	[self.sidebarItems addObject:@(kSelectionBookshelves)];
 }
@@ -1191,24 +1195,21 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	if ([RFSettings hasSnippetsBlog] && ![RFSettings prefersExternalBlog]) {
-		return [self.sidebarItems count];
-	}
-	else {
-		return 4;
-	}
+	return [self.sidebarItems count];
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
-    if ((row == kSelectionDivider1) || (row == kSelectionDivider2)) {
+	NSInteger sidebar_row = [[self.sidebarItems objectAtIndex:row] integerValue];
+	
+    if ((sidebar_row == kSelectionDivider1) || (sidebar_row == kSelectionDivider2)) {
         RFSeparatorCell* separator = [tableView makeViewWithIdentifier:@"SeparatorCell" owner:self];
         return separator;
     }
 
     RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
 	
-	if (row == kSelectionTimeline) {
+	if (sidebar_row == kSelectionTimeline) {
 		cell.titleField.stringValue = @"Timeline";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
@@ -1223,7 +1224,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_timeline"];
 		}
 	}
-	else if (row == kSelectionMentions) {
+	else if (sidebar_row == kSelectionMentions) {
 		cell.titleField.stringValue = @"Mentions";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
@@ -1238,7 +1239,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_mentions"];
 		}
 	}
-	else if (row == kSelectionFavorites) {
+	else if (sidebar_row == kSelectionFavorites) {
 		cell.titleField.stringValue = @"Bookmarks";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
@@ -1253,7 +1254,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_bookmarks"];
 		}
 	}
-	else if (row == kSelectionDiscover) {
+	else if (sidebar_row == kSelectionDiscover) {
 		cell.titleField.stringValue = @"Discover";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
@@ -1268,7 +1269,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_discover"];
 		}
 	}
-    else if (row == kSelectionPosts) {
+    else if (sidebar_row == kSelectionPosts) {
         cell.titleField.stringValue = @"Posts";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
@@ -1283,7 +1284,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_posts"];
 		}
     }
-    else if (row == kSelectionPages) {
+    else if (sidebar_row == kSelectionPages) {
         cell.titleField.stringValue = @"Pages";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
@@ -1298,7 +1299,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
 		}
     }
-    else if (row == kSelectionUploads) {
+    else if (sidebar_row == kSelectionUploads) {
         cell.titleField.stringValue = @"Uploads";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
@@ -1313,7 +1314,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_uploads"];
 		}
     }
-	else if (row == kSelectionReplies) {
+	else if (sidebar_row == kSelectionReplies) {
 		cell.titleField.stringValue = @"Replies";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left" accessibilityDescription:@"Replies"];
@@ -1328,7 +1329,7 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
 		}
 	}
-	else if (row == kSelectionBookshelves) {
+	else if (sidebar_row == kSelectionBookshelves) {
 		cell.titleField.stringValue = @"Bookshelves";
 		if (@available(macOS 11.0, *)) {
 			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"books.vertical" accessibilityDescription:@"Bookshelves"];
@@ -1348,39 +1349,41 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
-	if (row == kSelectionTimeline) {
+	NSInteger sidebar_row = [[self.sidebarItems objectAtIndex:row] integerValue];
+
+	if (sidebar_row == kSelectionTimeline) {
 		[self showTimeline:nil];
 	}
-	else if (row == kSelectionMentions) {
+	else if (sidebar_row == kSelectionMentions) {
 		[self showMentions:nil];
 	}
-	else if (row == kSelectionFavorites) {
+	else if (sidebar_row == kSelectionFavorites) {
 		[self showFavorites:nil];
 	}
-	else if (row == kSelectionDiscover) {
+	else if (sidebar_row == kSelectionDiscover) {
 		[self showDiscover:nil];
 	}
-    else if (row == kSelectionDivider1) {
+    else if (sidebar_row == kSelectionDivider1) {
         // separator
         return NO;
     }
-	else if (row == kSelectionPosts) {
+	else if (sidebar_row == kSelectionPosts) {
 		[self showPosts:nil];
 	}
-	else if (row == kSelectionPages) {
+	else if (sidebar_row == kSelectionPages) {
 		[self showPages:nil];
 	}
-	else if (row == kSelectionUploads) {
+	else if (sidebar_row == kSelectionUploads) {
 		[self showUploads:nil];
 	}
-	else if (row == kSelectionDivider2) {
+	else if (sidebar_row == kSelectionDivider2) {
 		// separator
 		return NO;
 	}
-	else if (row == kSelectionReplies) {
+	else if (sidebar_row == kSelectionReplies) {
 		[self showReplies:nil];
 	}
-	else if (row == kSelectionBookshelves) {
+	else if (sidebar_row == kSelectionBookshelves) {
 		[self showBookshelves:nil];
 	}
 
@@ -1389,7 +1392,9 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    if ((row == kSelectionDivider1) || (row == kSelectionDivider2)) {
+	NSInteger sidebar_row = [[self.sidebarItems objectAtIndex:row] integerValue];
+
+	if ((sidebar_row == kSelectionDivider1) || (sidebar_row == kSelectionDivider2)) {
         return 10;
     }
     else {
