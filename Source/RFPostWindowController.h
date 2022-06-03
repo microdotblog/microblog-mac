@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSTimer* previewTimer;
 @property (strong, nonatomic) NSTimer* autosaveTimer;
 
+@property (assign, nonatomic) BOOL isSavingAndClosing;
+
 - (instancetype) initWithPostController:(RFPostController *)postController;
 
 @end

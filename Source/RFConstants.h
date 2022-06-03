@@ -29,9 +29,6 @@ static NSString* const kRefreshAccountsNotification = @"RFRefreshAccounts";
 static NSString* const kPostStartProgressNotification = @"RFPostStartProgress";
 static NSString* const kPostStopProgressNotification = @"RFPostStopProgress";
 
-static NSString* const kLatestDraftTitlePrefKey = @"LatestDraftTitle";
-static NSString* const kLatestDraftTextPrefKey = @"LatestDraftText";
-
 static NSString* const kFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
 static NSString* const kFoundUserAutoCompleteInfoKey = @"RFFoundUserAutoCompleteInfokey";
 

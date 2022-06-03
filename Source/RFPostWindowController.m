@@ -70,6 +70,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStartProgressNotification:) name:kPostStartProgressNotification object:self.postController];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStopProgressNotification:) name:kPostStopProgressNotification object:self.postController];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:self.postController];
 }
 
 - (void) setupPreviewTimer
@@ -149,6 +150,7 @@
 		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
 				// save (if published, will revert to draft)
+				self.isSavingAndClosing = YES;
 				[self.postController save:nil];
 			}
 			else if (returnCode == 1002) {
@@ -192,6 +194,17 @@
 {
 	[self.progressSpinner stopAnimation:nil];
 	self.progressSpinner.hidden = YES;
+}
+
+- (void) draftDidUpdateNotification:(NSNotification *)notification
+{
+	if (self.isSavingAndClosing) {
+		[self.previewTimer invalidate];
+		[self.autosaveTimer invalidate];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
+		[self clearAutosaveDraft];
+		[self close];
+	}
 }
 
 #pragma mark -

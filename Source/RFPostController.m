@@ -168,16 +168,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	else if (self.initialText) {
 		self.textView.string = self.initialText;
 	}
-	else {
-		NSString* title = [[NSUserDefaults standardUserDefaults] objectForKey:kLatestDraftTitlePrefKey];
-		NSString* draft = [[NSUserDefaults standardUserDefaults] objectForKey:kLatestDraftTextPrefKey];
-		if (title) {
-			self.titleField.stringValue = title;
-		}
-		if (draft) {
-			self.textView.string = draft;
-		}
-	}
 
 	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
 	self.textView.typingAttributes = @{
@@ -429,9 +419,6 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) closeWithoutSaving
 {
 	self.isSent = YES;
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTitlePrefKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kLatestDraftTextPrefKey];
-	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kCheckTimelineNotification object:self];
 
@@ -441,10 +428,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) finishClose
 {
 	if (!self.isReply && !self.isSent && !self.editingPost) {
-		NSString* title = [self currentTitle];
-		NSString* draft = [self currentText];
-		[[NSUserDefaults standardUserDefaults] setObject:title forKey:kLatestDraftTitlePrefKey];
-		[[NSUserDefaults standardUserDefaults] setObject:draft forKey:kLatestDraftTextPrefKey];
+//		NSString* title = [self currentTitle];
+//		NSString* draft = [self currentText];
 	}
 }
 
@@ -963,6 +948,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	// cmd-S saves to server
 	self.isDraft = YES;
+	self.view.window.documentEdited = NO;
 	[self uploadPost];
 }
 
