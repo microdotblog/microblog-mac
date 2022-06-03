@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) RFPostController* postController;
 @property (strong, nonatomic) NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) NSTimer* previewTimer;
+@property (strong, nonatomic) NSTimer* autosaveTimer;
 
 - (instancetype) initWithPostController:(RFPostController *)postController;
 

@@ -13,6 +13,7 @@
 
 @property (strong) NSString* username;
 
++ (NSString *) autosaveDraftFile;
 - (NSString *) profileImageURL;
 - (NSImage *) cachedProfileImage;
 - (void) saveProfileImage:(NSImage *)image;

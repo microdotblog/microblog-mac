@@ -10,6 +10,7 @@
 
 #import "RFPostController.h"
 #import "MBPostWindow.h"
+#import "RFAccount.h"
 #import "RFConstants.h"
 
 @implementation RFPostWindowController
@@ -31,8 +32,9 @@
 	[self setupView];
 	[self setupToolbar];
 	[self setupNotifications];
-	[self setupTimerPreview];
-	
+	[self setupPreviewTimer];
+	[self setupAutosaveTimer];
+
 	self.window.delegate = self;
 }
 
@@ -70,7 +72,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStopProgressNotification:) name:kPostStopProgressNotification object:self.postController];
 }
 
-- (void) setupTimerPreview
+- (void) setupPreviewTimer
 {
 	self.previewTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer) {
 		if ([self isFrontPostWindow]) {
@@ -82,6 +84,29 @@
 			}];
 		}
 	}];
+}
+
+- (void) setupAutosaveTimer
+{
+	self.autosaveTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
+		NSString* s = [self.postController currentText];
+		if (s.length > 0) {
+			NSString* path = [RFAccount autosaveDraftFile];
+			[s writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+		}
+	}];
+}
+
+- (void) clearAutosaveDraft
+{
+	NSString* path = [RFAccount autosaveDraftFile];
+	NSFileManager* fm = [NSFileManager defaultManager];
+	BOOL is_dir = NO;
+	if ([fm fileExistsAtPath:path isDirectory:&is_dir]) {
+		if (!is_dir) {
+			[fm removeItemAtPath:path error:NULL];
+		}
+	}
 }
 
 - (BOOL) isFrontPostWindow
@@ -124,7 +149,9 @@
 			else if (returnCode == 1002) {
 				// don't save
 				[self.previewTimer invalidate];
+				[self.autosaveTimer invalidate];
 				[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
+				[self clearAutosaveDraft];
 				[self close];
 			}
 		}];
@@ -134,7 +161,9 @@
 	else {
 		// close because we can't save this as a draft
 		[self.previewTimer invalidate];
+		[self.autosaveTimer invalidate];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
+		[self clearAutosaveDraft];
 		[self close];
 		
 		return YES;

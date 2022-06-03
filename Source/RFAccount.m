@@ -10,6 +10,19 @@
 
 @implementation RFAccount
 
++ (NSString *) autosaveDraftFile
+{
+	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	NSString* support_folder = [paths firstObject];
+
+	NSError* error = nil;
+	NSString* microblog_folder = [support_folder stringByAppendingPathComponent:@"Micro.blog"];
+	[[NSFileManager defaultManager] createDirectoryAtPath:microblog_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	NSString* draft_file = [microblog_folder stringByAppendingPathComponent:@"Draft.md"];
+	return draft_file;
+}
+
 + (NSString *) cachedProfileFolder
 {
 	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
