@@ -19,6 +19,7 @@
 #import "RFMicropub.h"
 #import "RFPost.h"
 #import "RFSettings.h"
+#import "RFAccount.h"
 #import "RFHighlightingTextStorage.h"
 #import "UUString.h"
 #import "UUDate.h"
@@ -122,6 +123,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
+
+	[self restoreDraft];
 
 	[self setupTitle];
 	[self setupText];
@@ -260,6 +263,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 #pragma mark -
 
+- (void) restoreDraft
+{
+	NSString* path = [RFAccount autosaveDraftFileForChannel:self.channel];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
+		self.initialText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+	}
+}
+
 - (BOOL) isPage
 {
 	return [self.channel isEqualToString:@"pages"];
@@ -385,6 +396,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	else {
 		self.categoriesHeightConstraint.animator.constant = 0;
 	}
+}
+
+- (void) updateEditedState
+{
+	self.view.window.documentEdited = YES;
 }
 
 - (NSString *) postButtonTitle
@@ -562,6 +578,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 
 	[self updateTitleHeader];
+	[self updateEditedState];
 }
 
 - (IBAction) titleFieldDidChange:(id)sender

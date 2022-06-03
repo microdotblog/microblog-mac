@@ -10,7 +10,7 @@
 
 @implementation RFAccount
 
-+ (NSString *) autosaveDraftFile
++ (NSString *) autosaveDraftFileForChannel:(NSString *)channel
 {
 	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString* support_folder = [paths firstObject];
@@ -19,7 +19,15 @@
 	NSString* microblog_folder = [support_folder stringByAppendingPathComponent:@"Micro.blog"];
 	[[NSFileManager defaultManager] createDirectoryAtPath:microblog_folder withIntermediateDirectories:YES attributes:nil error:&error];
 
-	NSString* draft_file = [microblog_folder stringByAppendingPathComponent:@"Draft.md"];
+	NSString* drafts_folder = [microblog_folder stringByAppendingPathComponent:@"Drafts"];
+	[[NSFileManager defaultManager] createDirectoryAtPath:drafts_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	NSString* filename = @"Post.md";
+	if ([channel isEqualToString:@"pages"]) {
+		filename = @"Page.md";
+	}
+	
+	NSString* draft_file = [drafts_folder stringByAppendingPathComponent:filename];
 	return draft_file;
 }
 

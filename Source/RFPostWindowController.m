@@ -91,7 +91,7 @@
 	self.autosaveTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
 		NSString* s = [self.postController currentText];
 		if (s.length > 0) {
-			NSString* path = [RFAccount autosaveDraftFile];
+			NSString* path = [RFAccount autosaveDraftFileForChannel:self.postController.channel];
 			[s writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 		}
 	}];
@@ -99,7 +99,7 @@
 
 - (void) clearAutosaveDraft
 {
-	NSString* path = [RFAccount autosaveDraftFile];
+	NSString* path = [RFAccount autosaveDraftFileForChannel:self.postController.channel];
 	NSFileManager* fm = [NSFileManager defaultManager];
 	BOOL is_dir = NO;
 	if ([fm fileExistsAtPath:path isDirectory:&is_dir]) {
@@ -131,9 +131,14 @@
 	return is_frontmost;
 }
 
+- (BOOL) isNeedingSavePrompt
+{
+	return ![self.postController isReply] && self.window.isDocumentEdited && ([self.postController currentText].length > 0);
+}
+
 - (BOOL) windowShouldClose:(NSWindow *)sender
 {
-	if (false) {
+	if ([self isNeedingSavePrompt]) {
 		NSAlert* alert = [[NSAlert alloc] init];
 		alert.messageText = @"Save changes to blog post before closing?";
 		alert.informativeText = @"Saving will store the draft on Micro.blog.";
@@ -143,8 +148,8 @@
 
 		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
-				// save or publish
-				// ...
+				// save (if published, will revert to draft)
+				[self.postController save:nil];
 			}
 			else if (returnCode == 1002) {
 				// don't save

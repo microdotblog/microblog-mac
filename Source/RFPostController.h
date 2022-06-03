@@ -52,6 +52,7 @@
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;
 - (IBAction) sendPost:(id)sender;
+- (IBAction) save:(id)sender;
 - (NSString *) postButtonTitle;
 
 - (NSString *) currentTitle;
