@@ -21,6 +21,7 @@
 #import "RFSettings.h"
 #import "RFAccount.h"
 #import "RFHighlightingTextStorage.h"
+#import "MBPostWindow.h"
 #import "UUString.h"
 #import "UUDate.h"
 #import "RFXMLRPCRequest.h"
@@ -255,10 +256,31 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) restoreDraft
 {
-	NSString* path = [RFAccount autosaveDraftFileForChannel:self.channel];
-	if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
-		self.initialText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+	// only restore draft if there aren't other post windows open already
+	if ([self countPostWindows] == 0) {
+		NSString* path = [RFAccount autosaveDraftFileForChannel:self.channel];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
+			self.initialText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+		}
 	}
+}
+
+- (NSInteger) countPostWindows
+{
+	NSInteger num_windows = 0;
+	
+	NSArray* windows = CFBridgingRelease (CGWindowListCopyWindowInfo (kCGWindowListOptionOnScreenOnly, kCGNullWindowID));
+	for (NSDictionary* info in windows) {
+		NSNumber* num = [info objectForKey:(NSString *)kCGWindowNumber];
+		NSWindow* win = [[NSApplication sharedApplication] windowWithWindowNumber:num.integerValue];
+		if (win) {
+			if ([win isKindOfClass:[MBPostWindow class]]) {
+				num_windows++;
+			}
+		}
+	}
+		
+	return num_windows;
 }
 
 - (BOOL) isPage

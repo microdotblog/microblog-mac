@@ -393,7 +393,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
 	
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionTimeline] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionTimeline];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -407,7 +407,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionMentions] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionMentions];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -421,7 +421,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionFavorites] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionFavorites];
 }
 
 - (IBAction) showDiscover:(id)sender
@@ -435,7 +435,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self setupWebDelegates:controller.webView];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionDiscover] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionDiscover];
 }
 
 - (IBAction) showPosts:(id)sender
@@ -447,7 +447,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:NO];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionPosts] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionPosts];
 }
 
 - (IBAction) showPages:(id)sender
@@ -459,7 +459,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:YES];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionPages] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionPages];
 }
 
 - (IBAction) showUploads:(id)sender
@@ -471,7 +471,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	RFAllUploadsController* controller = [[RFAllUploadsController alloc] init];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionUploads] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionUploads];
 }
 
 - (IBAction) showReplies:(id)sender
@@ -483,7 +483,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	RFRepliesController* controller = [[RFRepliesController alloc] init];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionReplies] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionReplies];
 }
 
 - (IBAction) showBookshelves:(id)sender
@@ -495,7 +495,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	RFBookshelvesController* controller = [[RFBookshelvesController alloc] init];
 	[self showAllPostsController:controller];
 
-	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:kSelectionBookshelves] byExtendingSelection:NO];
+	[self selectSidebarRow:kSelectionBookshelves];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -944,6 +944,17 @@ static NSInteger const kSelectionBookshelves = 10;
 		
 		[self.optionsPopover performClose:nil];
 		self.optionsPopover = nil;
+	}
+}
+
+- (void) selectSidebarRow:(NSInteger)sidebarRow
+{
+	for (NSInteger row = 0; row < self.sidebarItems.count; row++) {
+		NSInteger sidebar_row = [[self.sidebarItems objectAtIndex:row] integerValue];
+		if (sidebar_row == sidebarRow) {
+			[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+			break;
+		}
 	}
 }
 
