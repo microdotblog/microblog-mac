@@ -143,7 +143,7 @@
 		NSAlert* alert = [[NSAlert alloc] init];
 		
 		if ([self.postController.channel isEqualToString:@"pages"]) {
-			alert.messageText = @"Publish changes to blog post before closing?";
+			alert.messageText = @"Publish changes to blog page before closing?";
 			alert.informativeText = @"This will publish your changes to Micro.blog.";
 			[alert addButtonWithTitle:@"Publish"];
 			[alert addButtonWithTitle:@"Cancel"];
