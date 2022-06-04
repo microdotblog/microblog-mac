@@ -963,6 +963,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	// post button always publishes
 	self.isDraft = NO;
+	self.view.window.documentEdited = NO;
 	[self uploadPost];
 }
 
@@ -981,6 +982,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		if (returnCode == NSModalResponseOK) {
 			self.postedAt = date_controller.date;
 			self.isDraft = NO;
+			self.view.window.documentEdited = NO;
 			[self uploadPost];
 		}
 	}];
