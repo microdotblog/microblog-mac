@@ -141,11 +141,22 @@
 {
 	if ([self isNeedingSavePrompt]) {
 		NSAlert* alert = [[NSAlert alloc] init];
-		alert.messageText = @"Save changes to blog post before closing?";
-		alert.informativeText = @"Saving will store the draft on Micro.blog.";
-		[alert addButtonWithTitle:@"Save"];
-		[alert addButtonWithTitle:@"Cancel"];
-		[alert addButtonWithTitle:@"Don't Save"];
+		
+		if ([self.postController.channel isEqualToString:@"pages"]) {
+			alert.messageText = @"Publish changes to blog post before closing?";
+			alert.informativeText = @"This will publish your changes to Micro.blog.";
+			[alert addButtonWithTitle:@"Publish"];
+			[alert addButtonWithTitle:@"Cancel"];
+			[alert addButtonWithTitle:@"Don't Save"];
+		}
+		else {
+			alert.messageText = @"Save changes to blog post before closing?";
+			alert.informativeText = @"Saving will store the draft on Micro.blog.";
+			[alert addButtonWithTitle:@"Save"];
+			[alert addButtonWithTitle:@"Cancel"];
+			[alert addButtonWithTitle:@"Don't Save"];
+		}
+		
 
 		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
