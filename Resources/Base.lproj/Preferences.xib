@@ -21,9 +21,9 @@
                 <outlet property="progressSpinner" destination="GsW-0h-utd" id="Gty-Zd-J7e"/>
                 <outlet property="publishHostedBlog" destination="8Eh-Mk-bT3" id="msC-FJ-7pL"/>
                 <outlet property="publishWordPressBlog" destination="T0C-fL-nk1" id="uJN-8G-DXX"/>
-                <outlet property="returnButton" destination="yk6-d0-KBL" id="Z43-hF-jJz"/>
                 <outlet property="textSizePopup" destination="iVr-XZ-NWu" id="Sk4-Pd-Oiw"/>
                 <outlet property="websiteField" destination="1e3-uC-J1t" id="MVu-b2-eYH"/>
+                <outlet property="websiteReturnButton" destination="yk6-d0-KBL" id="Z43-hF-jJz"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="hRW-hv-vMb"/>
                 <outlet property="wordPressSeparatorLine" destination="GX3-D2-htv" id="p1R-v1-Bdj"/>
             </connections>
@@ -165,7 +165,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="returnButtonPressed:" target="-2" id="SLN-fq-IXg"/>
+                            <action selector="websiteReturnButtonPressed:" target="-2" id="SLN-fq-IXg"/>
                         </connections>
                     </button>
                     <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="e0X-yV-XWC">

@@ -99,7 +99,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) setupFields
 {
-	self.returnButton.alphaValue = 0.0;
+	self.websiteReturnButton.alphaValue = 0.0;
 	self.websiteField.delegate = self;
 	
 	NSString* s = [RFSettings stringForKey:kExternalBlogURL account:self.selectedAccount];
@@ -255,9 +255,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self showMenusIfWordPress];
 }
 
-- (IBAction) returnButtonPressed:(id)sender
+- (IBAction) websiteReturnButtonPressed:(id)sender
 {
-	[self hideReturnButton];
+	[self hideWebsiteReturnButton];
 	[self checkWebsite];
 }
 
@@ -278,16 +278,16 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSString* s = self.websiteField.stringValue;
 	if (s.length > 0) {
-		[self showReturnButton];
+		[self showWebsiteReturnButton];
 	}
 	else {
-		[self hideReturnButton];
+		[self hideWebsiteReturnButton];
 	}
 }
 
 - (IBAction) websiteTextChanged:(NSTextField *)sender
 {
-	[self hideReturnButton];
+	[self hideWebsiteReturnButton];
 	if (sender.stringValue.length > 0) {
 		[self checkWebsite];
 	}
@@ -418,14 +418,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	}
 }
 
-- (void) showReturnButton
+- (void) showWebsiteReturnButton
 {
-	self.returnButton.animator.alphaValue = 1.0;
+	self.websiteReturnButton.animator.alphaValue = 1.0;
 }
 
-- (void) hideReturnButton
+- (void) hideWebsiteReturnButton
 {
-	self.returnButton.animator.alphaValue = 0.0;
+	self.websiteReturnButton.animator.alphaValue = 0.0;
 }
 
 - (void) checkWebsite

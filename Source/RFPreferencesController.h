@@ -18,7 +18,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* messageTopConstraint;
 @property (strong, nonatomic) IBOutlet NSButton* publishHostedBlog;
 @property (strong, nonatomic) IBOutlet NSButton* publishWordPressBlog;
-@property (strong, nonatomic) IBOutlet NSButton* returnButton;
+@property (strong, nonatomic) IBOutlet NSButton* websiteReturnButton;
 @property (strong, nonatomic) IBOutlet NSTextField* websiteField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSTextField *postFormatField;
