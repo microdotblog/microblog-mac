@@ -23,8 +23,8 @@
 	 				<li>Fixed Uploads to select image when right-clicking.</li>
  				</ul>
  			]]></description>
-			<pubDate>Sat, 04 Jun 2022 11:00:00 -0500</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.5.1.zip" sparkle:shortVersionString="2.5.1" sparkle:version="114" length="3742344" type="application/octet-stream" />
+			<pubDate>Sat, 04 Jun 2022 11:05:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.5.1.zip" sparkle:shortVersionString="2.5.1" sparkle:version="115" length="3742344" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
 		</item>		
 		<item>
