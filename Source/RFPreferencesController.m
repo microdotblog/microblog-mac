@@ -154,7 +154,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint account:self.selectedAccount];
 	if (xmlrpc_endpoint) {
-		[self.progressSpinner startAnimation:nil];
+		[self.websiteProgressSpinner startAnimation:nil];
 
 		NSString* blog_s = [RFSettings stringForKey:kExternalBlogID account:self.selectedAccount];
 		NSString* username = [RFSettings stringForKey:kExternalBlogUsername account:self.selectedAccount];
@@ -193,7 +193,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 				
 				self.hasLoadedCategories = YES;
 				[self updateMenus];
-				[self.progressSpinner stopAnimation:nil];
+				[self.websiteProgressSpinner stopAnimation:nil];
 			});
 		}];
 	}
@@ -430,7 +430,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) checkWebsite
 {
-	[self.progressSpinner startAnimation:nil];
+	[self.websiteProgressSpinner startAnimation:nil];
 
 	NSString* full_url = [self normalizeURL:self.websiteField.stringValue];
 	[RFSettings setString:full_url forKey:kExternalBlogURL account:self.selectedAccount];
@@ -441,7 +441,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		if ([rsd_parser.foundURLs count] > 0) {
 			NSString* rsd_url = [rsd_parser.foundURLs firstObject];
             RFDispatchMainAsync (^{
-				[self.progressSpinner stopAnimation:nil];
+				[self.websiteProgressSpinner stopAnimation:nil];
 
                 self.wordpressController = [[RFWordpressController alloc] initWithWebsite:full_url rsdURL:rsd_url];
 				[self.window beginSheet:self.wordpressController.window completionHandler:^(NSModalResponse returnCode) {
@@ -479,14 +479,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 					[RFSettings setString:micropub_endpoint forKey:kExternalMicropubPostingEndpoint account:self.selectedAccount];
 
 					RFDispatchMainAsync (^{
-						[self.progressSpinner stopAnimation:nil];
+						[self.websiteProgressSpinner stopAnimation:nil];
 						[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:auth_with_params]];
 					});
 				}
 			}
 			else {
 				RFDispatchMainAsync (^{
-					[self.progressSpinner stopAnimation:nil];
+					[self.websiteProgressSpinner stopAnimation:nil];
 					[NSAlert rf_showOneButtonAlert:@"Error Discovering Settings" message:@"Could not find the XML-RPC endpoint or Micropub API for your weblog." button:@"OK" completionHandler:NULL];
 				});
 			}

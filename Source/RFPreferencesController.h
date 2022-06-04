@@ -20,7 +20,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* publishWordPressBlog;
 @property (strong, nonatomic) IBOutlet NSButton* websiteReturnButton;
 @property (strong, nonatomic) IBOutlet NSTextField* websiteField;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* websiteProgressSpinner;
 @property (strong, nonatomic) IBOutlet NSTextField *postFormatField;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* postFormatPopup;
 @property (strong, nonatomic) IBOutlet NSTextField *categoryField;
