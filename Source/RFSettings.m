@@ -91,7 +91,7 @@
 {
 	NSString* username = [[NSUserDefaults standardUserDefaults] objectForKey:kAccountUsername];
 	if (username.length > 0) {
-		NSArray* keys = @[ kExternalBlogIsPreferred, kAccountUsername, kAccountFullName, kAccountDefaultSite, kAccountEmail, kAccountGravatarURL, kHasSnippetsBlog, kIsFullAccess, kExternalMicropubState, kExternalMicropubTokenEndpoint, kExternalMicropubMe, kExternalBlogUsername, kExternalBlogEndpoint, kExternalBlogID, kExternalBlogApp, kExternalBlogURL, kExternalMicropubPostingEndpoint, kExternalMicropubMediaEndpoint, kCurrentDestinationUID, kCurrentDestinationName, kExternalBlogFormat, kExternalBlogCategory ];
+		NSArray* keys = @[ kExternalBlogIsPreferred, kAccountUsername, kAccountFullName, kAccountDefaultSite, kAccountEmail, kAccountGravatarURL, kHasSnippetsBlog, kIsFullAccess, kExternalMicropubState, kExternalMicropubTokenEndpoint, kExternalMicropubMe, kExternalBlogUsername, kExternalBlogEndpoint, kExternalBlogID, kExternalBlogApp, kExternalBlogURL, kExternalMicropubPostingEndpoint, kExternalMicropubMediaEndpoint, kCurrentDestinationUID, kCurrentDestinationName, kExternalBlogFormat, kExternalBlogCategory, kDayOneJournalName ];
 		for (NSString* old_k in keys) {
 			NSString* new_k = [NSString stringWithFormat:@"%@_%@", username, old_k];
 			id val = [[NSUserDefaults standardUserDefaults] objectForKey:old_k];

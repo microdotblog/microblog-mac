@@ -52,7 +52,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self updateMenus];
 	
 	[self hideMessage];
-	[self hideWordPressMenus];
+    [self hideWordPressMenus];
 }
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
@@ -348,8 +348,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.size.height += kWordPressMenusHeight;
 			win_r.origin.y -= kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
-			self.wordPressSeparatorLine.hidden = NO;
-			self.isShowingWordPressMenus = YES;
+            [self setWordpressMenuVisibility: NO];
+            self.dayOneJournalTopConstraint.constant += kWordPressMenusHeight;
+            self.isShowingWordPressMenus = YES;
 		}
 	}
 	else {
@@ -357,20 +358,31 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.size.height -= kWordPressMenusHeight;
 			win_r.origin.y += kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
-			self.wordPressSeparatorLine.hidden = YES;
-			self.isShowingWordPressMenus = NO;
+            [self setWordpressMenuVisibility: YES];
+            self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
+            self.isShowingWordPressMenus = NO;
 		}
 	}
 }
 
+- (void) setWordpressMenuVisibility:(BOOL)isHidden
+{
+    self.wordPressSeparatorLine.hidden = isHidden;
+    self.postFormatField.hidden = isHidden;
+    self.postFormatPopup.hidden = isHidden;
+    self.categoryField.hidden = isHidden;
+    self.categoryPopup.hidden = isHidden;
+}
+
 - (void) hideWordPressMenus
 {
-	NSRect win_r = self.window.frame;
-	win_r.size.height -= kWordPressMenusHeight;
-	win_r.origin.y += kWordPressMenusHeight;
-	[self.window setFrame:win_r display:YES];
-	self.wordPressSeparatorLine.hidden = YES;
-	self.isShowingWordPressMenus = NO;
+    NSRect win_r = self.window.frame;
+    win_r.size.height -= kWordPressMenusHeight;
+    win_r.origin.y += kWordPressMenusHeight;
+    [self.window setFrame:win_r display:YES];
+    [self setWordpressMenuVisibility: YES];
+    self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
+    self.isShowingWordPressMenus = NO;
 }
 
 - (void) updateRadioButtons
