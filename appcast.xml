@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.5.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added auto-saving draft posts to your Mac and prompting to save a draft to Micro.blog when closing without publishing.</li>
+	 				<li>Fixed new sidebar Replies and Bookshelves rows when using an external blog.</li>
+	 				<li>Fixed Uploads to select image when right-clicking.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Sat, 04 Jun 2022 11:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.5.1.zip" sparkle:shortVersionString="2.5.1" sparkle:version="114" length="3742344" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.5</title>
  			<description><![CDATA[
 				<style>
