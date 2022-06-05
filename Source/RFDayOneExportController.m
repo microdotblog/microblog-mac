@@ -16,7 +16,24 @@
 static NSString* const kDayOneCommandLinePath = @"/usr/local/bin/dayone2";
 static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/articles/435871-command-line-interface-cli";
 
+@interface RFDayOneExportController ()
+
+@property (readwrite) RFAccount* account;
+
+@end
+
 @implementation RFDayOneExportController
+
+- (instancetype) initWithAccount:(RFAccount *)account
+{
+    self = [super init];
+
+    if (self) {
+        self.account = account;
+    }
+
+    return self;
+}
 
 - (void) windowDidLoad
 {
@@ -140,7 +157,7 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 
 - (NSString *) journalName
 {
-    NSString *s = [RFSettings stringForKey:kDayOneJournalName];
+    NSString *s = [RFSettings stringForKey:kDayOneJournalName account:self.account];
 
     if (s != nil && s.length > 0) {
         return s;
