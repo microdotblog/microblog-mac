@@ -557,7 +557,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) setupDayOneField
 {
-    self.dayOneReturnButton.hidden = YES;
+    [self hideDayOneReturnButton];
     self.dayOneJournalNameField.delegate = self;
 
     NSString* s = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
@@ -611,8 +611,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
         alertMessage = [NSString stringWithFormat:@"Day One will import to the journal \"%@\". Make sure it exists before exporting your posts.", journalName];
     }
 
-    self.dayOneReturnButton.hidden = YES;
-
+    [self hideDayOneReturnButton];
     [RFSettings setString:journalName forKey:kDayOneJournalName account:self.selectedAccount];
 
     RFDispatchMainAsync (^{
