@@ -604,12 +604,19 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) saveDayOneJournal
 {
+    NSString* journalName = self.dayOneJournalNameField.stringValue;
+    NSString* alertMessage = @"Day One will import to the default journal (first journal in the list of journals).";
+
+    if (journalName.length > 0) {
+        alertMessage = [NSString stringWithFormat:@"Day One will import to the journal \"%@\". Make sure it exists before exporting your posts.", journalName];
+    }
+
     self.dayOneReturnButton.hidden = YES;
 
-    [RFSettings setString:self.dayOneJournalNameField.stringValue forKey:kDayOneJournalName account:self.selectedAccount];
+    [RFSettings setString:journalName forKey:kDayOneJournalName account:self.selectedAccount];
 
     RFDispatchMainAsync (^{
-        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:@"Make sure a Day One journal matching the informed name exists before exporting your posts." button:@"OK" completionHandler:NULL];
+        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:alertMessage button:@"OK" completionHandler:NULL];
     });
 }
 
