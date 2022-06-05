@@ -157,7 +157,7 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 
 - (NSString *) journalName
 {
-    NSString *s = [RFSettings stringForKey:kDayOneJournalName account:self.account];
+    NSString* s = [RFSettings stringForKey:kDayOneJournalName account:self.account];
 
     if (s != nil && s.length > 0) {
         return s;

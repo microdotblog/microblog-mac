@@ -355,7 +355,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.size.height += kWordPressMenusHeight;
 			win_r.origin.y -= kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
-            [self setWordpressMenuVisibility: NO];
+            [self setWordpressMenuVisibility:NO];
             self.dayOneJournalTopConstraint.constant += kWordPressMenusHeight;
             self.isShowingWordPressMenus = YES;
 		}
@@ -365,7 +365,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.size.height -= kWordPressMenusHeight;
 			win_r.origin.y += kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
-            [self setWordpressMenuVisibility: YES];
+            [self setWordpressMenuVisibility:YES];
             self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
             self.isShowingWordPressMenus = NO;
 		}
@@ -387,7 +387,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
     win_r.size.height -= kWordPressMenusHeight;
     win_r.origin.y += kWordPressMenusHeight;
     [self.window setFrame:win_r display:YES];
-    [self setWordpressMenuVisibility: YES];
+    [self setWordpressMenuVisibility:YES];
     self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
     self.isShowingWordPressMenus = NO;
 }
@@ -604,7 +604,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) saveDayOneJournal
 {
-    [self.dayOneReturnButton setHidden:YES];
+    self.dayOneReturnButton.hidden = YES;
+
     [RFSettings setString:self.dayOneJournalNameField.stringValue forKey:kDayOneJournalName account:self.selectedAccount];
 
     RFDispatchMainAsync (^{
