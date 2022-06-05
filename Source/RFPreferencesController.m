@@ -606,6 +606,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
     [self.dayOneReturnButton setHidden:YES];
     [RFSettings setString:self.dayOneJournalNameField.stringValue forKey:kDayOneJournalName account:self.selectedAccount];
+
+    RFDispatchMainAsync (^{
+        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:@"Make sure a Day One journal matching the informed name exists before exporting your posts." button:@"OK" completionHandler:NULL];
+    });
 }
 
 @end
