@@ -397,12 +397,26 @@
 - (IBAction) exportDayOne:(id)sender
 {
 	if ([RFDayOneExportController checkForDayOne]) {
-		[NSAlert rf_showTwoButtonAlert:@"Day One Default Journal" message:@"Micro.blog will download your posts and add them to the default journal in Day One. To test the import first, create a new Day One journal and move it to the top of your list in Day One's preferences." okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
-			if (returnCode == 1000) {
-				self.exportController = [[RFDayOneExportController alloc] init];
-				[self.exportController showWindow:nil];
-			}
-		}];
+        for (RFAccount* a in [RFSettings accounts]) {
+            NSString* s = [RFSettings stringForKey:kDayOneJournalName account:a];
+            NSString* j = @"Default";
+            NSString* alertDescription = @"Micro.blog will download your posts and add them to the default journal in Day One. To test the import first, create a new Day One journal and move it to the top of your list in Day One's preferences.";
+            NSString* alertDescriptionJournal = @"Micro.blog will download your posts and add them to the specified journal in Day One. If the specified journal doesn't exist, create it first or rename the journal in Micro.blog's Preferences window.";
+
+            if (s != nil && s.length > 0) {
+                j = s;
+                alertDescription = alertDescriptionJournal;
+            }
+
+            NSString* alertTitle = [NSString stringWithFormat:@"Day One %@ Journal", j];
+
+            [NSAlert rf_showTwoButtonAlert:alertTitle message:alertDescriptionJournal okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+                if (returnCode == 1000) {
+                    self.exportController = [[RFDayOneExportController alloc] init];
+                    [self.exportController showWindow:nil];
+                }
+            }];
+        }
 	}
 }
 
