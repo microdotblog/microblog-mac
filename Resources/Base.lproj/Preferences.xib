@@ -13,6 +13,7 @@
                 <outlet property="categoryPopup" destination="dAB-WX-QVA" id="V2f-wZ-Eve"/>
                 <outlet property="dayOneJournalNameField" destination="Pub-fF-3Iv" id="MFh-5Y-6bZ"/>
                 <outlet property="dayOneJournalTopConstraint" destination="2Vc-JD-K7Y" id="wIG-Ca-Lbc"/>
+                <outlet property="dayOneReturnButton" destination="76n-nb-d2Y" id="vjf-PC-pTS"/>
                 <outlet property="messageField" destination="UK6-9N-kOk" id="6BJ-sH-62d"/>
                 <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
                 <outlet property="messageTopConstraint" destination="xBT-xn-WX9" id="drj-is-oYf"/>
@@ -353,6 +354,9 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <action selector="dayOneTextChanged:" target="-2" id="AVD-sZ-QBm"/>
+                        </connections>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="76n-nb-d2Y" userLabel="Day One Return Button">
                         <rect key="frame" x="371" y="24" width="22" height="22"/>
@@ -364,14 +368,10 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="dayOneJournalReturnClicked:" target="-2" id="PCY-Vz-c5Q"/>
+                        </connections>
                     </button>
-                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="wkZ-P7-NAg" userLabel="Day One Progress Indicator">
-                        <rect key="frame" x="374" y="27" width="16" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="16" id="BfB-1U-grd"/>
-                            <constraint firstAttribute="height" constant="16" id="uI5-QN-ohS"/>
-                        </constraints>
-                    </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstItem="GX3-D2-htv" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="0cP-Yy-b90"/>
@@ -390,7 +390,6 @@
                     <constraint firstItem="zil-dW-qZT" firstAttribute="top" secondItem="blp-LE-vz2" secondAttribute="bottom" id="CNW-ti-bgO"/>
                     <constraint firstItem="VRq-Zm-nw2" firstAttribute="top" secondItem="T0C-fL-nk1" secondAttribute="bottom" constant="24" id="DWl-mp-mwJ"/>
                     <constraint firstAttribute="trailing" secondItem="zil-dW-qZT" secondAttribute="trailing" constant="20" id="EaY-Ck-kva"/>
-                    <constraint firstItem="wkZ-P7-NAg" firstAttribute="centerY" secondItem="Pub-fF-3Iv" secondAttribute="centerY" id="FOl-LK-PkB"/>
                     <constraint firstAttribute="trailing" secondItem="GX3-D2-htv" secondAttribute="trailing" constant="20" id="GCf-da-Abr"/>
                     <constraint firstItem="yk6-d0-KBL" firstAttribute="leading" secondItem="1e3-uC-J1t" secondAttribute="trailing" constant="5" id="HSh-kT-1cn"/>
                     <constraint firstItem="Jez-ql-5hu" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="Hh4-2N-kdd"/>
@@ -400,7 +399,6 @@
                     <constraint firstItem="uK0-xJ-ygW" firstAttribute="top" secondItem="1e3-uC-J1t" secondAttribute="bottom" constant="49" id="Lag-vY-Nzf"/>
                     <constraint firstItem="blp-LE-vz2" firstAttribute="leading" secondItem="HEb-qM-PKK" secondAttribute="trailing" constant="8" id="MiD-b5-sLP"/>
                     <constraint firstItem="zil-dW-qZT" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="NMp-LJ-WFw"/>
-                    <constraint firstItem="GsW-0h-utd" firstAttribute="width" secondItem="wkZ-P7-NAg" secondAttribute="width" id="ON2-NW-3QM"/>
                     <constraint firstItem="iVr-XZ-NWu" firstAttribute="top" secondItem="e0X-yV-XWC" secondAttribute="bottom" constant="17" id="P9q-Qh-2kS"/>
                     <constraint firstItem="e0X-yV-XWC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="PnO-91-67S"/>
                     <constraint firstItem="GX3-D2-htv" firstAttribute="top" secondItem="VRq-Zm-nw2" secondAttribute="bottom" constant="22" id="Q2Z-oj-qtK"/>
@@ -434,7 +432,6 @@
                     <constraint firstItem="wxE-lU-Q6W" firstAttribute="top" secondItem="e0X-yV-XWC" secondAttribute="bottom" constant="18" id="tWe-du-IoH"/>
                     <constraint firstItem="tcY-90-dE6" firstAttribute="top" secondItem="FOb-i6-SLf" secondAttribute="bottom" constant="22" id="tjl-fl-Q18"/>
                     <constraint firstItem="Jez-ql-5hu" firstAttribute="top" secondItem="zil-dW-qZT" secondAttribute="bottom" constant="15" id="vDa-At-JUF"/>
-                    <constraint firstItem="GsW-0h-utd" firstAttribute="centerX" secondItem="wkZ-P7-NAg" secondAttribute="centerX" id="vLC-QV-2t4"/>
                     <constraint firstItem="1e3-uC-J1t" firstAttribute="leading" secondItem="VRq-Zm-nw2" secondAttribute="trailing" constant="9" id="vfP-FV-mrj"/>
                     <constraint firstItem="FOb-i6-SLf" firstAttribute="top" secondItem="REh-Co-egA" secondAttribute="bottom" constant="15" id="wE4-Im-jrX"/>
                     <constraint firstItem="e0X-yV-XWC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="xBT-xn-WX9"/>

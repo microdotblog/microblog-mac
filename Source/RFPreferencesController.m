@@ -47,7 +47,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupCollectionView];
 	[self selectFirstAccount];
 	
-	[self setupFields];
+	[self setupWebsiteField];
+    [self setupDayOneField];
 	[self updateRadioButtons];
 	[self updateMenus];
 	
@@ -97,7 +98,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.accounts = [self.accounts arrayByAddingObject:blank_a];
 }
 
-- (void) setupFields
+- (void) setupWebsiteField
 {
 	self.websiteReturnButton.alphaValue = 0.0;
 	self.websiteField.delegate = self;
@@ -223,7 +224,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	self.selectedAccount = account;
 	
-	[self setupFields];
+	[self setupWebsiteField];
+    [self setupDayOneField];
 	[self updateRadioButtons];
 	[self updateMenus];
 
@@ -276,13 +278,18 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) controlTextDidChange:(NSNotification *)notification
 {
-	NSString* s = self.websiteField.stringValue;
-	if (s.length > 0) {
-		[self showWebsiteReturnButton];
-	}
-	else {
-		[self hideWebsiteReturnButton];
-	}
+    if ([notification.object isEqual:self.websiteField]) {
+        NSString* s = self.websiteField.stringValue;
+        if (s.length > 0) {
+            [self showWebsiteReturnButton];
+        }
+        else {
+            [self hideWebsiteReturnButton];
+        }
+    }
+    else if ([notification.object isEqual:self.dayOneJournalNameField]) {
+        [self dayOneTextDidChange];
+    }
 }
 
 - (IBAction) websiteTextChanged:(NSTextField *)sender
@@ -403,6 +410,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSString* selected_format = [RFSettings stringForKey:kExternalBlogFormat account:self.selectedAccount];
 	NSString* selected_category = [RFSettings stringForKey:kExternalBlogCategory account:self.selectedAccount];
+    NSString* selected_dayOneJournal = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
 
 	if (self.hasLoadedCategories) {
 		self.postFormatPopup.enabled = YES;
@@ -416,6 +424,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	if (selected_category) {
 		[self.categoryPopup selectItemWithTag:selected_category.integerValue];
 	}
+
+    if (selected_dayOneJournal) {
+        [self.dayOneJournalNameField setStringValue:selected_dayOneJournal];
+    }
 }
 
 - (void) showWebsiteReturnButton
@@ -539,6 +551,61 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		RFAccount* a = [self.accounts objectAtIndex:index_path.item];
 		[self showSettingsForAccount:a];
 	}
+}
+
+#pragma mark -
+
+- (void) setupDayOneField
+{
+    self.dayOneReturnButton.hidden = YES;
+    self.dayOneJournalNameField.delegate = self;
+
+    NSString* s = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
+
+    if (s) {
+        self.dayOneJournalNameField.stringValue = s;
+    }
+    else {
+        self.dayOneJournalNameField.stringValue = @"";
+    }
+}
+
+- (void) dayOneTextDidChange
+{
+    NSString* s = self.dayOneJournalNameField.stringValue;
+
+    if (s.length > 0) {
+        [self showDayOneReturnButton];
+    }
+    else {
+        [self hideDayOneReturnButton];
+    }
+}
+
+- (IBAction) dayOneTextChanged:(NSTextField *)sender
+{
+    [self saveDayOneJournal];
+}
+
+- (IBAction) dayOneJournalReturnClicked:(NSButton *)sender
+{
+    [self saveDayOneJournal];
+}
+
+- (void) showDayOneReturnButton
+{
+    self.dayOneReturnButton.hidden = NO;
+}
+
+- (void) hideDayOneReturnButton
+{
+    self.dayOneReturnButton.hidden = YES;
+}
+
+- (void) saveDayOneJournal
+{
+    [self.dayOneReturnButton setHidden:YES];
+    [RFSettings setString:self.dayOneJournalNameField.stringValue forKey:kDayOneJournalName account:self.selectedAccount];
 }
 
 @end

@@ -30,6 +30,7 @@
 @property (strong, nonatomic) IBOutlet NSBox* wordPressSeparatorLine;
 @property (strong, nonatomic) IBOutlet NSTextField* dayOneJournalNameField;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* dayOneJournalTopConstraint;
+@property (strong, nonatomic) IBOutlet NSButton* dayOneReturnButton;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;
