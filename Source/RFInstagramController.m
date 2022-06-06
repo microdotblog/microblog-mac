@@ -46,7 +46,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	[self setupHostname];
 	[self setupSummary];
-	[self setupColletionView];
+	[self setupCollectionView];
 }
 
 - (void) setupPhotos
@@ -113,7 +113,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 }
 
-- (void) setupColletionView
+- (void) setupCollectionView
 {
 	self.collectionView.delegate = self;
 	self.collectionView.dataSource = self;

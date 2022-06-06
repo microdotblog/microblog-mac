@@ -44,15 +44,16 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupAccounts];
 	[self setupTextPopup];
 	[self setupNotifications];
-	[self setupColletionView];
+	[self setupCollectionView];
 	[self selectFirstAccount];
 	
-	[self setupFields];
+	[self setupWebsiteField];
+    [self setupDayOneField];
 	[self updateRadioButtons];
 	[self updateMenus];
 	
 	[self hideMessage];
-	[self hideWordPressMenus];
+    [self hideWordPressMenus];
 }
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
@@ -97,9 +98,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.accounts = [self.accounts arrayByAddingObject:blank_a];
 }
 
-- (void) setupFields
+- (void) setupWebsiteField
 {
-	self.returnButton.alphaValue = 0.0;
+	self.websiteReturnButton.alphaValue = 0.0;
 	self.websiteField.delegate = self;
 	
 	NSString* s = [RFSettings stringForKey:kExternalBlogURL account:self.selectedAccount];
@@ -142,7 +143,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 }
 
-- (void) setupColletionView
+- (void) setupCollectionView
 {
 	self.accountsCollectionView.delegate = self;
 	self.accountsCollectionView.dataSource = self;
@@ -154,7 +155,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSString* xmlrpc_endpoint = [RFSettings stringForKey:kExternalBlogEndpoint account:self.selectedAccount];
 	if (xmlrpc_endpoint) {
-		[self.progressSpinner startAnimation:nil];
+		[self.websiteProgressSpinner startAnimation:nil];
 
 		NSString* blog_s = [RFSettings stringForKey:kExternalBlogID account:self.selectedAccount];
 		NSString* username = [RFSettings stringForKey:kExternalBlogUsername account:self.selectedAccount];
@@ -193,7 +194,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 				
 				self.hasLoadedCategories = YES;
 				[self updateMenus];
-				[self.progressSpinner stopAnimation:nil];
+				[self.websiteProgressSpinner stopAnimation:nil];
 			});
 		}];
 	}
@@ -223,7 +224,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	self.selectedAccount = account;
 	
-	[self setupFields];
+	[self setupWebsiteField];
+    [self setupDayOneField];
 	[self updateRadioButtons];
 	[self updateMenus];
 
@@ -255,9 +257,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self showMenusIfWordPress];
 }
 
-- (IBAction) returnButtonPressed:(id)sender
+- (IBAction) websiteReturnButtonPressed:(id)sender
 {
-	[self hideReturnButton];
+	[self hideWebsiteReturnButton];
 	[self checkWebsite];
 }
 
@@ -276,18 +278,23 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (void) controlTextDidChange:(NSNotification *)notification
 {
-	NSString* s = self.websiteField.stringValue;
-	if (s.length > 0) {
-		[self showReturnButton];
-	}
-	else {
-		[self hideReturnButton];
-	}
+    if ([notification.object isEqual:self.websiteField]) {
+        NSString* s = self.websiteField.stringValue;
+        if (s.length > 0) {
+            [self showWebsiteReturnButton];
+        }
+        else {
+            [self hideWebsiteReturnButton];
+        }
+    }
+    else if ([notification.object isEqual:self.dayOneJournalNameField]) {
+        [self dayOneTextDidChange];
+    }
 }
 
 - (IBAction) websiteTextChanged:(NSTextField *)sender
 {
-	[self hideReturnButton];
+	[self hideWebsiteReturnButton];
 	if (sender.stringValue.length > 0) {
 		[self checkWebsite];
 	}
@@ -348,8 +355,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.size.height += kWordPressMenusHeight;
 			win_r.origin.y -= kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
-			self.wordPressSeparatorLine.hidden = NO;
-			self.isShowingWordPressMenus = YES;
+            [self setWordpressMenuVisibility:NO];
+            self.dayOneJournalTopConstraint.constant += kWordPressMenusHeight;
+            self.isShowingWordPressMenus = YES;
 		}
 	}
 	else {
@@ -357,20 +365,31 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.size.height -= kWordPressMenusHeight;
 			win_r.origin.y += kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
-			self.wordPressSeparatorLine.hidden = YES;
-			self.isShowingWordPressMenus = NO;
+            [self setWordpressMenuVisibility:YES];
+            self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
+            self.isShowingWordPressMenus = NO;
 		}
 	}
 }
 
+- (void) setWordpressMenuVisibility:(BOOL)isHidden
+{
+    self.wordPressSeparatorLine.hidden = isHidden;
+    self.postFormatField.hidden = isHidden;
+    self.postFormatPopup.hidden = isHidden;
+    self.categoryField.hidden = isHidden;
+    self.categoryPopup.hidden = isHidden;
+}
+
 - (void) hideWordPressMenus
 {
-	NSRect win_r = self.window.frame;
-	win_r.size.height -= kWordPressMenusHeight;
-	win_r.origin.y += kWordPressMenusHeight;
-	[self.window setFrame:win_r display:YES];
-	self.wordPressSeparatorLine.hidden = YES;
-	self.isShowingWordPressMenus = NO;
+    NSRect win_r = self.window.frame;
+    win_r.size.height -= kWordPressMenusHeight;
+    win_r.origin.y += kWordPressMenusHeight;
+    [self.window setFrame:win_r display:YES];
+    [self setWordpressMenuVisibility:YES];
+    self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
+    self.isShowingWordPressMenus = NO;
 }
 
 - (void) updateRadioButtons
@@ -391,6 +410,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSString* selected_format = [RFSettings stringForKey:kExternalBlogFormat account:self.selectedAccount];
 	NSString* selected_category = [RFSettings stringForKey:kExternalBlogCategory account:self.selectedAccount];
+    NSString* selected_dayOneJournal = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
 
 	if (self.hasLoadedCategories) {
 		self.postFormatPopup.enabled = YES;
@@ -404,21 +424,25 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	if (selected_category) {
 		[self.categoryPopup selectItemWithTag:selected_category.integerValue];
 	}
+
+    if (selected_dayOneJournal) {
+        [self.dayOneJournalNameField setStringValue:selected_dayOneJournal];
+    }
 }
 
-- (void) showReturnButton
+- (void) showWebsiteReturnButton
 {
-	self.returnButton.animator.alphaValue = 1.0;
+	self.websiteReturnButton.animator.alphaValue = 1.0;
 }
 
-- (void) hideReturnButton
+- (void) hideWebsiteReturnButton
 {
-	self.returnButton.animator.alphaValue = 0.0;
+	self.websiteReturnButton.animator.alphaValue = 0.0;
 }
 
 - (void) checkWebsite
 {
-	[self.progressSpinner startAnimation:nil];
+	[self.websiteProgressSpinner startAnimation:nil];
 
 	NSString* full_url = [self normalizeURL:self.websiteField.stringValue];
 	[RFSettings setString:full_url forKey:kExternalBlogURL account:self.selectedAccount];
@@ -429,7 +453,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		if ([rsd_parser.foundURLs count] > 0) {
 			NSString* rsd_url = [rsd_parser.foundURLs firstObject];
             RFDispatchMainAsync (^{
-				[self.progressSpinner stopAnimation:nil];
+				[self.websiteProgressSpinner stopAnimation:nil];
 
                 self.wordpressController = [[RFWordpressController alloc] initWithWebsite:full_url rsdURL:rsd_url];
 				[self.window beginSheet:self.wordpressController.window completionHandler:^(NSModalResponse returnCode) {
@@ -467,14 +491,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 					[RFSettings setString:micropub_endpoint forKey:kExternalMicropubPostingEndpoint account:self.selectedAccount];
 
 					RFDispatchMainAsync (^{
-						[self.progressSpinner stopAnimation:nil];
+						[self.websiteProgressSpinner stopAnimation:nil];
 						[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:auth_with_params]];
 					});
 				}
 			}
 			else {
 				RFDispatchMainAsync (^{
-					[self.progressSpinner stopAnimation:nil];
+					[self.websiteProgressSpinner stopAnimation:nil];
 					[NSAlert rf_showOneButtonAlert:@"Error Discovering Settings" message:@"Could not find the XML-RPC endpoint or Micropub API for your weblog." button:@"OK" completionHandler:NULL];
 				});
 			}
@@ -527,6 +551,72 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		RFAccount* a = [self.accounts objectAtIndex:index_path.item];
 		[self showSettingsForAccount:a];
 	}
+}
+
+#pragma mark -
+
+- (void) setupDayOneField
+{
+    [self hideDayOneReturnButton];
+    self.dayOneJournalNameField.delegate = self;
+
+    NSString* s = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
+
+    if (s) {
+        self.dayOneJournalNameField.stringValue = s;
+    }
+    else {
+        self.dayOneJournalNameField.stringValue = @"";
+    }
+}
+
+- (void) dayOneTextDidChange
+{
+    NSString* s = self.dayOneJournalNameField.stringValue;
+
+    if (s.length > 0) {
+        [self showDayOneReturnButton];
+    }
+    else {
+        [self hideDayOneReturnButton];
+    }
+}
+
+- (IBAction) dayOneTextChanged:(NSTextField *)sender
+{
+    [self saveDayOneJournal];
+}
+
+- (IBAction) dayOneJournalReturnClicked:(NSButton *)sender
+{
+    [self saveDayOneJournal];
+}
+
+- (void) showDayOneReturnButton
+{
+    self.dayOneReturnButton.hidden = NO;
+}
+
+- (void) hideDayOneReturnButton
+{
+    self.dayOneReturnButton.hidden = YES;
+}
+
+- (void) saveDayOneJournal
+{
+    NSString* journalName = self.dayOneJournalNameField.stringValue;
+    NSString* alertMessage = @"Day One will import to the default journal (first journal in the list of journals).";
+
+    if (journalName.length > 0) {
+        alertMessage = [NSString stringWithFormat:@"Day One will import to the journal \"%@\". Make sure it exists before exporting your posts.", journalName];
+    }
+
+    [self hideDayOneReturnButton];
+    [RFSettings setString:journalName forKey:kDayOneJournalName account:self.selectedAccount];
+
+    RFDispatchMainAsync (^{
+        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:alertMessage button:@"OK" completionHandler:NULL];
+    });
 }
 
 @end

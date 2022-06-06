@@ -9,13 +9,31 @@
 #import "RFDayOneExportController.h"
 
 #import "RFPost.h"
+#import "RFSettings.h"
 #import "NSAlert+Extras.h"
 #import "HTMLParser.h"
 
 static NSString* const kDayOneCommandLinePath = @"/usr/local/bin/dayone2";
 static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/articles/435871-command-line-interface-cli";
 
+@interface RFDayOneExportController ()
+
+@property (readwrite) RFAccount* account;
+
+@end
+
 @implementation RFDayOneExportController
+
+- (instancetype) initWithAccount:(RFAccount *)account
+{
+    self = [super init];
+
+    if (self) {
+        self.account = account;
+    }
+
+    return self;
+}
 
 - (void) windowDidLoad
 {
@@ -122,7 +140,11 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 	NSFileHandle* f = [NSFileHandle fileHandleForReadingAtPath:path];
 	NSString* d = [post.postedAt description];
 
-	[args addObjectsFromArray:@[ @"-d", d, @"--", @"new"]];
+    if (self.journalName) {
+        [args addObjectsFromArray:@[@"-j", self.journalName]];
+    }
+
+	[args addObjectsFromArray:@[@"-d", d, @"--", @"new"]];
 	
 	NSTask* t = [[NSTask alloc] init];
 	t.launchPath = kDayOneCommandLinePath;
@@ -131,6 +153,17 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 	
 	[t launch];
 	[t waitUntilExit];
+}
+
+- (NSString *) journalName
+{
+    NSString* s = [RFSettings stringForKey:kDayOneJournalName account:self.account];
+
+    if (s != nil && s.length > 0) {
+        return s;
+    } else {
+        return nil;
+    }
 }
 
 - (NSString *) writePost:(RFPost *)post

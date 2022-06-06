@@ -35,6 +35,7 @@ static NSString* const kCurrentDestinationUID = @"CurrentDestinationUID";
 static NSString* const kCurrentDestinationName = @"CurrentDestinationName";
 static NSString* const kExternalBlogFormat = @"ExternalBlogFormat";
 static NSString* const kExternalBlogCategory = @"ExternalBlogCategory";
+static NSString* const kDayOneJournalName = @"DayOneJournalName";
 
 @interface RFSettings : NSObject
 

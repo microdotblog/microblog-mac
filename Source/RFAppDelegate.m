@@ -397,12 +397,25 @@
 - (IBAction) exportDayOne:(id)sender
 {
 	if ([RFDayOneExportController checkForDayOne]) {
-		[NSAlert rf_showTwoButtonAlert:@"Day One Default Journal" message:@"Micro.blog will download your posts and add them to the default journal in Day One. To test the import first, create a new Day One journal and move it to the top of your list in Day One's preferences." okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
-			if (returnCode == 1000) {
-				self.exportController = [[RFDayOneExportController alloc] init];
-				[self.exportController showWindow:nil];
-			}
-		}];
+        RFAccount* account = [RFSettings defaultAccount];
+        NSString* journalName = @"Default";
+        NSString* savedJournalName = [RFSettings stringForKey:kDayOneJournalName account:account];
+        NSString* alertDescription = @"Micro.blog will download your posts and add them to the default journal in Day One. To test the import first, create a new Day One journal and move it to the top of your list in Day One's preferences.";
+        NSString* alertDescriptionJournal = @"Micro.blog will download your posts and add them to the specified journal in Day One. If the specified journal doesn't exist, create it first or rename the journal in Micro.blog's Preferences window.";
+
+        if (savedJournalName != nil && savedJournalName.length > 0) {
+            journalName = savedJournalName;
+            alertDescription = alertDescriptionJournal;
+        }
+
+        NSString* alertTitle = [NSString stringWithFormat:@"Day One %@ Journal", journalName];
+
+        [NSAlert rf_showTwoButtonAlert:alertTitle message:alertDescriptionJournal okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+            if (returnCode == 1000) {
+                self.exportController = [[RFDayOneExportController alloc] initWithAccount:account];
+                [self.exportController showWindow:nil];
+            }
+        }];
 	}
 }
 
@@ -434,6 +447,8 @@
 		[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint account:a];
 		[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint account:a];
 		[RFSettings removeObjectForKey:kExternalMicropubState account:a];
+
+        [RFSettings removeObjectForKey:kDayOneJournalName account:a];
 	}
 	
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUsername];

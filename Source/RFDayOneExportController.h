@@ -8,10 +8,15 @@
 
 #import "RFExportController.h"
 
+@class RFAccount;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RFDayOneExportController : RFExportController
 
+@property (strong, nonatomic, readonly) RFAccount* account;
+
+- (instancetype) initWithAccount:(RFAccount *)account;
 + (BOOL) checkForDayOne;
 
 @end
