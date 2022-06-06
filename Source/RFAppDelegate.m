@@ -447,6 +447,8 @@
 		[RFSettings removeObjectForKey:kExternalMicropubPostingEndpoint account:a];
 		[RFSettings removeObjectForKey:kExternalMicropubMediaEndpoint account:a];
 		[RFSettings removeObjectForKey:kExternalMicropubState account:a];
+
+        [RFSettings removeObjectForKey:kDayOneJournalName account:a];
 	}
 	
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUsername];
