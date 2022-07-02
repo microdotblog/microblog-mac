@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="19529"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -50,7 +50,7 @@
                                     </visualEffectView>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="36" horizontalPageScroll="10" verticalLineScroll="36" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDk-PI-ElO">
                                         <rect key="frame" x="-1" y="-1" width="182" height="602"/>
-                                        <clipView key="contentView" drawsBackground="NO" id="ZGH-vB-5eE">
+                                        <clipView key="contentView" id="ZGH-vB-5eE">
                                             <rect key="frame" x="1" y="1" width="180" height="600"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -96,7 +96,7 @@
                                                     </tableColumns>
                                                 </tableView>
                                             </subviews>
-                                            <nil key="backgroundColor"/>
+                                            <color key="backgroundColor" name="color_sidebar_background"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="CwN-PH-Vd1">
                                             <rect key="frame" x="-100" y="-100" width="180" height="16"/>
