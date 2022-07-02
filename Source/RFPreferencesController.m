@@ -23,7 +23,8 @@
 #import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
 
-static CGFloat const kWordPressMenusHeight = 125;
+static CGFloat const kWordPressMenusHeight = 100;
+static CGFloat const kDayOneSettingsPadding = 15;
 static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 @implementation RFPreferencesController
@@ -356,7 +357,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.origin.y -= kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
             [self setWordpressMenuVisibility:NO];
-            self.dayOneJournalTopConstraint.constant += kWordPressMenusHeight;
+            self.dayOneJournalTopConstraint.constant += (kWordPressMenusHeight - kDayOneSettingsPadding);
             self.isShowingWordPressMenus = YES;
 		}
 	}
@@ -366,7 +367,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 			win_r.origin.y += kWordPressMenusHeight;
 			[self.window.animator setFrame:win_r display:YES];
             [self setWordpressMenuVisibility:YES];
-            self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
+            self.dayOneJournalTopConstraint.constant -= (kWordPressMenusHeight - kDayOneSettingsPadding);
             self.isShowingWordPressMenus = NO;
 		}
 	}
@@ -388,7 +389,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
     win_r.origin.y += kWordPressMenusHeight;
     [self.window setFrame:win_r display:YES];
     [self setWordpressMenuVisibility:YES];
-    self.dayOneJournalTopConstraint.constant -= kWordPressMenusHeight;
+    self.dayOneJournalTopConstraint.constant -= (kWordPressMenusHeight - kDayOneSettingsPadding);
     self.isShowingWordPressMenus = NO;
 }
 
@@ -605,17 +606,18 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) saveDayOneJournal
 {
     NSString* journalName = self.dayOneJournalNameField.stringValue;
-    NSString* alertMessage = @"Day One will import to the default journal (first journal in the list of journals).";
+    NSString* alertMessage = @"Day One will import to the default journal (first in list).";
 
     if (journalName.length > 0) {
-        alertMessage = [NSString stringWithFormat:@"Day One will import to the journal \"%@\". Make sure it exists before exporting your posts.", journalName];
+        alertMessage = [NSString stringWithFormat:@"Day One will import to \"%@\". Make sure it exists.", journalName];
     }
 
     [self hideDayOneReturnButton];
     [RFSettings setString:journalName forKey:kDayOneJournalName account:self.selectedAccount];
 
     RFDispatchMainAsync (^{
-        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:alertMessage button:@"OK" completionHandler:NULL];
+		[self showMessage:alertMessage];
+//        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:alertMessage button:@"OK" completionHandler:NULL];
     });
 }
 
