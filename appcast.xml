@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.5.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added preference for Day One journal used during export. Thanks @otaviocc!</li>
+	 				<li>Fixed color bar at top of main window sidebar that would appear and then disappear when scrolling.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Sat, 02 Jul 2022 10:45:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.5.2.zip" sparkle:shortVersionString="2.5.2" sparkle:version="116" length="3747586" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.5.1</title>
  			<description><![CDATA[
 				<style>
