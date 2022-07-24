@@ -48,7 +48,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupCollectionView
 {
-	[self.collectionView registerForDraggedTypes:@[ NSPasteboardTypeFileURL ]];
+	[self.collectionView registerForDraggedTypes:[NSFilePromiseReceiver readableDraggedTypes]];
 	[self.collectionView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
 }
 

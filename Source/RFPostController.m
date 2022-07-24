@@ -241,7 +241,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) setupDragging
 {
-	[self.textView registerForDraggedTypes:@[ NSFilenamesPboardType ]];
+	[self.textView registerForDraggedTypes:[NSFilePromiseReceiver readableDraggedTypes]];
 }
 
 - (void) setupNotifications
