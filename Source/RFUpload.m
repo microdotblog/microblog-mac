@@ -18,7 +18,7 @@
 - (BOOL) isPhoto
 {
 	NSString* e = [[[self filename] pathExtension] lowercaseString];
-	return ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"] || [e isEqualToString:@"png"] || [e isEqualToString:@"gif"]);
+	return ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"] || [e isEqualToString:@"png"] || [e isEqualToString:@"gif"] || [e isEqualToString:@"webp"]);
 }
 
 - (BOOL) isVideo
