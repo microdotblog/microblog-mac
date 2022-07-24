@@ -67,6 +67,18 @@
                         <action selector="copyLink:" target="na8-0v-oNY" id="wZX-0v-2m4"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Copy HTML" id="5yO-zj-zj0">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyHTML:" target="na8-0v-oNY" id="PeO-9W-3XC"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Markdown" alternate="YES" id="yKk-oV-Zk3">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="copyMarkdown:" target="na8-0v-oNY" id="Iho-G3-A3a"/>
+                    </connections>
+                </menuItem>
             </items>
             <point key="canvasLocation" x="-94" y="-412"/>
         </menu>

@@ -10,6 +10,16 @@
 
 @implementation RFUpload
 
+- (instancetype) initWithURL:(NSString *)url
+{
+	self = [super init];
+	if (self) {
+		self.url = url;
+	}
+	
+	return self;
+}
+
 - (NSString *) filename
 {
 	return [self.url lastPathComponent];

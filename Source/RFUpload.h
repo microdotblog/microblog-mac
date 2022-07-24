@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) NSInteger height;
 @property (strong) NSDate* createdAt;
 
+- (instancetype) initWithURL:(NSString *)url;
+
 - (NSString *) filename;
 - (BOOL) isPhoto;
 - (BOOL) isVideo;

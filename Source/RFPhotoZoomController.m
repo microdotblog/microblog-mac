@@ -139,7 +139,7 @@
 
 - (IBAction) copyHTML:(id)sender
 {
-	NSString* s = [NSString stringWithFormat:@"<img src=\"%@\" />", self.photoURL];
+	NSString* s = [NSString stringWithFormat:@"<img src=\"%@\">", self.photoURL];
 
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	[pb clearContents];

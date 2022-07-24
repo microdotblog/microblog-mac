@@ -8,6 +8,8 @@
 
 #import "RFPhotoCell.h"
 
+#import "RFUpload.h"
+
 @implementation RFPhotoCell
 
 - (void) viewDidLoad
@@ -52,6 +54,46 @@
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	[pb clearContents];
 	[pb setString:self.url forType:NSPasteboardTypeString];
+}
+
+- (IBAction) copyHTML:(id)sender
+{
+	NSString* s;
+	
+	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
+	if ([up isPhoto]) {
+		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
+	}
+	else if ([up isVideo]) {
+		s = [NSString stringWithFormat:@"<video src=\"%@\">", self.url];
+	}
+	else if ([up isAudio]) {
+		s = [NSString stringWithFormat:@"<audio src=\"%@\">", self.url];
+	}
+	else {
+		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
+	}
+	
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:s forType:NSPasteboardTypeString];
+}
+
+- (IBAction) copyMarkdown:(id)sender
+{
+	NSString* s;
+
+	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
+	if ([up isPhoto]) {
+		s = [NSString stringWithFormat:@"![](%@)", self.url];
+	}
+	else {
+		s = [NSString stringWithFormat:@"[](%@)", self.url];
+	}
+
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:s forType:NSPasteboardTypeString];
 }
 
 @end
