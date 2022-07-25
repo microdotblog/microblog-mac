@@ -36,6 +36,7 @@ static NSString* const kCurrentDestinationName = @"CurrentDestinationName";
 static NSString* const kExternalBlogFormat = @"ExternalBlogFormat";
 static NSString* const kExternalBlogCategory = @"ExternalBlogCategory";
 static NSString* const kDayOneJournalName = @"DayOneJournalName";
+static NSString* const kTemporaryFoldersPrefKey = @"TemporaryFolders";
 
 @interface RFSettings : NSObject
 
@@ -62,5 +63,8 @@ static NSString* const kDayOneJournalName = @"DayOneJournalName";
 
 + (void) removeObjectForKey:(NSString *)prefKey;
 + (void) removeObjectForKey:(NSString *)prefKey account:(RFAccount *)account;
+
++ (void) addTemporaryFolder:(NSString *)path;
++ (void) cleanupTemporaryFolders;
 
 @end

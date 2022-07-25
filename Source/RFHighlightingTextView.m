@@ -9,6 +9,7 @@
 #import "RFHighlightingTextView.h"
 #import "RFAutoCompleteCache.h"
 #import "RFConstants.h"
+#import "RFSettings.h"
 
 @implementation RFHighlightingTextView
 
@@ -91,6 +92,7 @@
 	if (best_type != nil) {
 		NSString* temp_filename = [NSString stringWithFormat:@"Micro.blog-%@", [[NSUUID UUID] UUIDString]];
 		NSString* temp_folder = [NSTemporaryDirectory() stringByAppendingPathComponent:temp_filename];
+		[RFSettings addTemporaryFolder:temp_folder];
 		[[NSFileManager defaultManager] createDirectoryAtPath:temp_folder withIntermediateDirectories:YES attributes:nil error:NULL];
 		NSURL* dest_url = [NSURL fileURLWithPath:temp_folder];
 

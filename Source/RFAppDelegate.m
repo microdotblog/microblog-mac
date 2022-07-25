@@ -121,6 +121,7 @@
 
 - (void) applicationWillTerminate:(NSNotification *)notification
 {
+	[RFSettings cleanupTemporaryFolders];
 }
 
 - (void) removeSandboxedContainer

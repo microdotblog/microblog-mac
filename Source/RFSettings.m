@@ -188,4 +188,31 @@
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:k];
 }
 
+#pragma mark -
+
++ (void) addTemporaryFolder:(NSString *)path
+{
+	NSMutableArray* paths = [[[NSUserDefaults standardUserDefaults] arrayForKey:kTemporaryFoldersPrefKey] mutableCopy];
+	if (paths == nil) {
+		paths = [NSMutableArray array];
+	}
+	
+	[paths addObject:path];
+	[[NSUserDefaults standardUserDefaults] setObject:paths forKey:kTemporaryFoldersPrefKey];
+}
+
++ (void) cleanupTemporaryFolders
+{
+	NSArray* paths = [[NSUserDefaults standardUserDefaults] arrayForKey:kTemporaryFoldersPrefKey];
+	for (NSString* path in paths) {
+		// sanity check that it's one of our paths
+		if ([path containsString:@"Micro.blog"]) {
+			NSError* error = nil;
+			[[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+		}
+	}
+	
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kTemporaryFoldersPrefKey];
+}
+
 @end
