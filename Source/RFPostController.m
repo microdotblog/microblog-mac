@@ -1430,10 +1430,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				}
 
 				if (photo.isVideo) {
-					s = [s stringByAppendingFormat:@"<video controls=\"controls\" src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
+					s = [s stringByAppendingFormat:@"<video controls=\"controls\" src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\">", photo.publishedURL, width, height, photo.altText];
 				}
 				else {
-					s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\" />", photo.publishedURL, width, height, photo.altText];
+					s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" alt=\"%@\">", photo.publishedURL, width, height, photo.altText];
 				}
 			}
 		}

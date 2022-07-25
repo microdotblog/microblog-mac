@@ -230,7 +230,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						width = height / original_size.height * original_size.width;
 					}
 
-					s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\" />", photo.publishedURL, width, height];
+					s = [s stringByAppendingFormat:@"<img src=\"%@\" width=\"%.0f\" height=\"%.0f\">", photo.publishedURL, width, height];
 				}
 
 				[self uploadText:s date:d forPhoto:photo completion:^{

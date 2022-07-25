@@ -65,10 +65,10 @@
 		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
 	}
 	else if ([up isVideo]) {
-		s = [NSString stringWithFormat:@"<video src=\"%@\">", self.url];
+		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", self.url];
 	}
 	else if ([up isAudio]) {
-		s = [NSString stringWithFormat:@"<audio src=\"%@\">", self.url];
+		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\">", self.url];
 	}
 	else {
 		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
