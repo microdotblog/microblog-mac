@@ -35,14 +35,14 @@
                             <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj" customClass="MBBooksTableView">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj" customClass="MBBooksTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="color_table_background"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="461" minWidth="40" maxWidth="1000" id="hSX-fE-Pcd">
+                                        <tableColumn width="476" minWidth="40" maxWidth="1000" id="hSX-fE-Pcd">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -55,7 +55,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="yJ5-Np-Vji">
-                                                    <rect key="frame" x="18" y="0.0" width="456" height="24"/>
+                                                    <rect key="frame" x="8" y="0.0" width="476" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </tableCellView>
                                             </prototypeCellViews>
