@@ -475,7 +475,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	NSString* s;
 	if ([upload isPhoto]) {
-		s = [NSString stringWithFormat:@"<img src=\"%@\" />", upload.url];
+		s = [NSString stringWithFormat:@"<img src=\"%@\">", upload.url];
 	}
 	else if ([upload isVideo]) {
 		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
