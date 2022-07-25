@@ -41,7 +41,7 @@
                     <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fkA-Zg-Ds4">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                         <subviews>
-                            <customView id="kIC-ao-4PD">
+                            <customView id="kIC-ao-4PD" customClass="MBRestoreCursorView">
                                 <rect key="frame" x="0.0" y="0.0" width="179" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
