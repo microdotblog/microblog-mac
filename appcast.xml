@@ -6,6 +6,31 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.5.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Updated dragging from Apple Photos to support higher resolution photos.</li>
+					<li>Added context menu item for Copy HTML to photos in Uploads. Hold down option key to copy Markdown instead.</li>
+					<li>Added support for previewing animated GIFs in zoomed image window.</li>
+					<li>Fixed displaying GIFs and WebP in Posts screen and Uploads.</li>
+					<li>Fixed restoring arrow cursor over sidebar menu.</li>
+					<li>Fixed extra space at top of some lists.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 25 Jul 2022 09:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.5.3.zip" sparkle:shortVersionString="2.5.3" sparkle:version="118" length="3722447" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.5.2</title>
  			<description><![CDATA[
 				<style>
