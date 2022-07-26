@@ -10,16 +10,4 @@
 
 @implementation RFPhotoImageView
 
-- (void) awakeFromNib
-{
-	[super awakeFromNib];
-	
-	[self unregisterDraggedTypes];
-}
-
-- (NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
-{
-	return NSDragOperationNone;
-}
-
 @end

@@ -409,9 +409,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 	if ([up isPhoto]) {
 		item.thumbnailImageView.image = up.cachedImage;
+		item.iconView.hidden = YES;
 	}
 	else if (@available(macOS 11.0, *)) {
 		item.thumbnailImageView.image = nil;
+		item.iconView.hidden = NO;
 		if ([up isVideo]) {
 			item.iconView.image = [NSImage imageWithSystemSymbolName:@"film" accessibilityDescription:@""];
 		}

@@ -182,6 +182,7 @@
 		4BF7E52D2836CE2D00500C59 /* MBBookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E52C2836CE2D00500C59 /* MBBookCell.m */; };
 		4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E52E2836CE4700500C59 /* BookCell.xib */; };
 		4BF7E53328394C5C00500C59 /* MBBooksTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E53128394C5C00500C59 /* MBBooksTableView.m */; };
+		4BFF2CBF289030C900B74D18 /* MBDisableDragImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF2CBE289030C900B74D18 /* MBDisableDragImageView.m */; };
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
@@ -510,6 +511,8 @@
 		4BF7E52F2836CE4700500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BookCell.xib; sourceTree = "<group>"; };
 		4BF7E53128394C5C00500C59 /* MBBooksTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBBooksTableView.m; path = Source/MBBooksTableView.m; sourceTree = "<group>"; };
 		4BF7E53228394C5C00500C59 /* MBBooksTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBBooksTableView.h; path = Source/MBBooksTableView.h; sourceTree = "<group>"; };
+		4BFF2CBD289030C900B74D18 /* MBDisableDragImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDisableDragImageView.h; path = Source/MBDisableDragImageView.h; sourceTree = "<group>"; };
+		4BFF2CBE289030C900B74D18 /* MBDisableDragImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDisableDragImageView.m; path = Source/MBDisableDragImageView.m; sourceTree = "<group>"; };
 		4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFCategoryCell.h; path = Source/RFCategoryCell.h; sourceTree = "<group>"; };
 		4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFCategoryCell.m; path = Source/RFCategoryCell.m; sourceTree = "<group>"; };
 		4BFFD3DD22001FCC00372D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoryCell.xib; sourceTree = "<group>"; };
@@ -822,6 +825,8 @@
 				4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */,
 				4B5DDAB124E2F03D007674FF /* RFPhotoImageView.h */,
 				4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */,
+				4BFF2CBD289030C900B74D18 /* MBDisableDragImageView.h */,
+				4BFF2CBE289030C900B74D18 /* MBDisableDragImageView.m */,
 				4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */,
 				4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
@@ -1243,6 +1248,7 @@
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */,
 				4B8FBDE71F867A4000906C86 /* UUDictionary.m in Sources */,
+				4BFF2CBF289030C900B74D18 /* MBDisableDragImageView.m in Sources */,
 				4BF7E51128343DFE00500C59 /* RFBookshelvesController.m in Sources */,
 				4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
@@ -1693,7 +1699,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 119;
+				CURRENT_PROJECT_VERSION = 120;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1724,7 +1730,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 119;
+				CURRENT_PROJECT_VERSION = 120;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
