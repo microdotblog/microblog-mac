@@ -160,6 +160,13 @@
 				[self setupBlogName];
 				self.blogNameButton.hidden = NO;
 				self.tableView.animator.alphaValue = 1.0;
+
+				// would be nice to restore selection, but might be a different blog, etc.
+				// do this later
+//				NSIndexSet* selection = [self.tableView selectedRowIndexes];
+//				if (selection.count > 0) {
+//					[self.tableView selectRowIndexes:selection byExtendingSelection:NO];
+//				}
 			});
 		}
 	}];
