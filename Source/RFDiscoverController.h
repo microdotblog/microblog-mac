@@ -17,9 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* statusField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* spinner;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* popupButton;
+@property (strong, nonatomic) IBOutlet NSView* headerView;
+@property (strong, nonatomic) IBOutlet NSView* searchView;
+@property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
 @property (strong) NSString* selectedTopic;
 @property (strong) NSMutableArray* tagmoji;
+
+- (IBAction) showSearch:(id)sender;
+- (IBAction) hideSearch:(id)sender;
 
 @end
 

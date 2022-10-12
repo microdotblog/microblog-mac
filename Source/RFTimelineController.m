@@ -546,7 +546,10 @@ static NSInteger const kSelectionBookshelves = 10;
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
 	if (item.action == @selector(performFindPanelAction:)) {
-		if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPosts)) {
+		if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionDiscover)) {
+			return YES;
+		}
+		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPosts)) {
 			return YES;
 		}
 		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPages)) {
@@ -577,7 +580,12 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (void) performFindPanelAction:(id)sender
 {
-	if (self.selectedTimeline == kSelectionPosts) {
+	if (self.selectedTimeline == kSelectionDiscover) {
+		if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
+			[(RFDiscoverController *)self.allPostsController showSearch:nil];
+		}
+	}
+	else if (self.selectedTimeline == kSelectionPosts) {
 		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
 			[(RFAllPostsController *)self.allPostsController focusSearch];
 		}

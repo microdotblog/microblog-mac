@@ -151,4 +151,34 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 	}
 }
 
+- (IBAction) showSearch:(id)sender
+{
+	if (self.searchView.superview != nil) {
+		[self.searchView removeFromSuperview];
+	}
+	
+	CGRect r = self.headerView.frame;
+	self.searchView.frame = r;
+	self.searchView.alphaValue = 0.0;
+	self.searchView.hidden = NO;
+	[self.headerView.superview addSubview:self.searchView];
+
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+		self.searchView.animator.alphaValue = 1.0;
+		self.headerView.animator.alphaValue = 0.0;
+	} completionHandler:^{
+		[self.searchField becomeFirstResponder];
+	}];
+}
+
+- (IBAction) hideSearch:(id)sender
+{
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+		self.searchView.animator.alphaValue = 0.0;
+		self.headerView.animator.alphaValue = 1.0;
+	} completionHandler:^{
+		self.searchView.hidden = YES;
+	}];
+}
+
 @end
