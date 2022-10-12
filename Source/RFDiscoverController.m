@@ -12,6 +12,7 @@
 #import "RFMacros.h"
 #import "RFConstants.h"
 #import "NSAppearance+Extras.h"
+#import "NSString+Extras.h"
 
 static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 
@@ -165,9 +166,9 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		self.searchView.animator.alphaValue = 1.0;
-		self.headerView.animator.alphaValue = 0.0;
 	} completionHandler:^{
 		[self.searchField becomeFirstResponder];
+		self.headerView.animator.alphaValue = 0.0;
 	}];
 }
 
@@ -179,6 +180,16 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 	} completionHandler:^{
 		self.searchView.hidden = YES;
 	}];
+}
+
+- (IBAction) search:(id)sender
+{
+	NSString* s = [sender stringValue];
+	if (s.length > 0) {
+		NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/discover/search?q=%@", [s rf_urlEncoded]];
+		NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+		[[self.webView mainFrame] loadRequest:request];
+	}
 }
 
 @end

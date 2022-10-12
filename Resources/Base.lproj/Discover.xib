@@ -9,7 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFDiscoverController">
             <connections>
-                <outlet property="headerView" destination="3gz-se-iln" id="PjP-Pl-fgp"/>
+                <outlet property="headerView" destination="3gz-se-iln" id="3b2-bC-JiW"/>
                 <outlet property="popupButton" destination="jF2-Gm-goX" id="lA2-pG-w2F"/>
                 <outlet property="searchField" destination="s0C-1o-Ftd" id="MEi-Le-G30"/>
                 <outlet property="searchView" destination="DmJ-Dm-q9A" id="Cfc-Sx-non"/>
@@ -25,7 +25,7 @@
             <rect key="frame" x="0.0" y="0.0" width="455" height="448"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <box boxType="custom" borderType="none" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
+                <box boxType="custom" borderType="none" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
                     <rect key="frame" x="0.0" y="404" width="455" height="44"/>
                     <view key="contentView" id="MnU-VL-RXJ">
                         <rect key="frame" x="0.0" y="0.0" width="455" height="44"/>
@@ -124,19 +124,23 @@
             </constraints>
             <point key="canvasLocation" x="67.5" y="168"/>
         </customView>
-        <box boxType="custom" borderType="none" cornerRadius="4" translatesAutoresizingMaskIntoConstraints="NO" id="DmJ-Dm-q9A">
+        <box boxType="custom" borderType="none" cornerRadius="4" id="DmJ-Dm-q9A" customClass="RFHeaderBox">
             <rect key="frame" x="0.0" y="0.0" width="455" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView" id="gI9-UD-phC">
                 <rect key="frame" x="0.0" y="0.0" width="455" height="44"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0C-1o-Ftd">
                         <rect key="frame" x="40" y="11" width="395" height="22"/>
-                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="dkw-LV-6bT">
+                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="dkw-LV-6bT">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </searchFieldCell>
+                        <connections>
+                            <action selector="search:" target="-2" id="9rP-5J-Iej"/>
+                        </connections>
                     </searchField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="4Z0-Zz-0Lx">
                         <rect key="frame" x="0.0" y="7" width="40" height="30"/>
@@ -154,7 +158,6 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="s0C-1o-Ftd" firstAttribute="leading" secondItem="4Z0-Zz-0Lx" secondAttribute="trailing" id="8Me-Il-Mge"/>
                     <constraint firstItem="s0C-1o-Ftd" firstAttribute="leading" secondItem="4Z0-Zz-0Lx" secondAttribute="trailing" id="Lob-y2-gvZ"/>
                     <constraint firstItem="s0C-1o-Ftd" firstAttribute="centerY" secondItem="gI9-UD-phC" secondAttribute="centerY" id="XDD-u8-5tc"/>
                     <constraint firstItem="4Z0-Zz-0Lx" firstAttribute="leading" secondItem="gI9-UD-phC" secondAttribute="leading" id="cF7-Sa-QsR"/>
