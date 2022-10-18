@@ -9,7 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RFDiscoverController">
             <connections>
-                <outlet property="headerView" destination="3gz-se-iln" id="3b2-bC-JiW"/>
+                <outlet property="headerView" destination="MnU-VL-RXJ" id="uWN-ao-hIK"/>
                 <outlet property="popupButton" destination="jF2-Gm-goX" id="lA2-pG-w2F"/>
                 <outlet property="searchField" destination="s0C-1o-Ftd" id="MEi-Le-G30"/>
                 <outlet property="searchView" destination="DmJ-Dm-q9A" id="Cfc-Sx-non"/>

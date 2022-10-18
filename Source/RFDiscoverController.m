@@ -158,17 +158,18 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 		[self.searchView removeFromSuperview];
 	}
 	
-	CGRect r = self.headerView.frame;
+	// header view is actually subview of NSBox
+	CGRect r = self.headerView.superview.frame;
 	self.searchView.frame = r;
 	self.searchView.alphaValue = 0.0;
 	self.searchView.hidden = NO;
-	[self.headerView.superview addSubview:self.searchView positioned:NSWindowAbove relativeTo:self.headerView];
+	[self.headerView.superview.superview addSubview:self.searchView positioned:NSWindowAbove relativeTo:self.headerView];
 
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		self.searchView.animator.alphaValue = 1.0;
+		self.headerView.animator.alphaValue = 0.0;
 	} completionHandler:^{
 		[self.searchField becomeFirstResponder];
-		self.headerView.animator.alphaValue = 0.0;
 	}];
 }
 
