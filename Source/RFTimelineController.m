@@ -68,6 +68,7 @@ static NSInteger const kSelectionBookshelves = 10;
 {
 	[super windowDidLoad];
 	
+	[self setupBackground];
 	[self setupSidebar];
 	[self setupToolbar];
 	[self setupFullScreen];
@@ -77,6 +78,16 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self setupUser];
 	[self setupNotifications];
 	[self setupTimer];
+}
+
+- (void) setupBackground
+{
+	if ([NSAppearance rf_isDarkMode]) {
+		self.window.backgroundColor = [NSColor windowBackgroundColor];
+	}
+	else {
+		self.window.backgroundColor = [NSColor whiteColor];
+	}
 }
 
 - (void) setupToolbar
