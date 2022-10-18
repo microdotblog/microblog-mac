@@ -162,7 +162,7 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 	self.searchView.frame = r;
 	self.searchView.alphaValue = 0.0;
 	self.searchView.hidden = NO;
-	[self.headerView.superview addSubview:self.searchView];
+	[self.headerView.superview addSubview:self.searchView positioned:NSWindowAbove relativeTo:self.headerView];
 
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		self.searchView.animator.alphaValue = 1.0;
@@ -180,6 +180,10 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 	} completionHandler:^{
 		self.searchView.hidden = YES;
 	}];
+
+	NSString* url = @"https://micro.blog/hybrid/discover";
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
 }
 
 - (IBAction) search:(id)sender
