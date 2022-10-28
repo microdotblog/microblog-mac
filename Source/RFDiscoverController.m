@@ -163,7 +163,7 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 	self.searchView.frame = r;
 	self.searchView.alphaValue = 0.0;
 	self.searchView.hidden = NO;
-	[self.headerView.superview.superview addSubview:self.searchView positioned:NSWindowAbove relativeTo:self.headerView];
+	[self.headerView.superview.superview addSubview:self.searchView positioned:NSWindowAbove relativeTo:self.headerView.superview];
 
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		self.searchView.animator.alphaValue = 1.0;
