@@ -40,12 +40,13 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
+	NSLog(@"applicationDidFinishLaunching");
+	
 	[self removeSandboxedContainer];
 	
 	[self setupDefaults];
 	[self setupNotifications];
 	[self setupAppearance];
-	[self setupURLs];
 	[self setupFollowerAutoComplete];
 
 	self.postWindows = [NSMutableArray array];
@@ -64,13 +65,9 @@
 	return YES;
 }
 
-// 10.13
-// - (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
-
-- (void) handleGetURLEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+- (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
 {
-	NSURL* url = [NSURL URLWithString:[[event paramDescriptorForKeyword:keyDirectObject] stringValue]];
-	[self handleURLs:@[ url ]];
+	[self handleURLs:urls];
 }
 
 - (void) handleURLs:(NSArray *)urls
@@ -182,12 +179,6 @@
 - (void) setupAppearance
 {
 	[[NSApplication sharedApplication] addObserver:self forKeyPath:@"effectiveAppearance" options:0 context:NULL];
-}
-
-- (void) setupURLs
-{
-	NSAppleEventManager* manager = [NSAppleEventManager sharedAppleEventManager];
-	[manager setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
 }
 
 - (void) setupFollowerAutoComplete
@@ -680,6 +671,8 @@
 
 - (void) showPostController:(RFPostController *)controller
 {
+	NSLog(@"showPostController");
+	
 	RFPostWindowController* window_controller = [[RFPostWindowController alloc] initWithPostController:controller];
 	[window_controller showWindow:nil];
 	[self.postWindows addObject:window_controller];
