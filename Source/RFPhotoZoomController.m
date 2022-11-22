@@ -39,15 +39,18 @@
 - (NSString *) extractPhotoURL:(NSString *)url
 {
 	NSString* photo_url = url;
+	NSArray* prefixes = @[ @"https://micro.blog/photos/", @"https://cdn.micro.blog/photos/" ];
 	
-	if ([photo_url containsString:@"https://micro.blog/photos/"]) {
-		NSString* partial_url = [photo_url stringByReplacingOccurrencesOfString:@"https://micro.blog/photos/" withString:@""];
-		NSArray* pieces = [partial_url componentsSeparatedByString:@"/"];
-		if ([pieces count] > 1) {
-			NSString* size_component = [pieces firstObject];
-			NSString* size_path = [NSString stringWithFormat:@"%@/", size_component];
-			photo_url = [partial_url stringByReplacingOccurrencesOfString:size_path withString:@""];
-			photo_url = [photo_url uuUrlDecoded];
+	for (NSString* prefix in prefixes) {
+		if ([photo_url containsString:prefix]) {
+			NSString* partial_url = [photo_url stringByReplacingOccurrencesOfString:prefix withString:@""];
+			NSArray* pieces = [partial_url componentsSeparatedByString:@"/"];
+			if ([pieces count] > 1) {
+				NSString* size_component = [pieces firstObject];
+				NSString* size_path = [NSString stringWithFormat:@"%@/", size_component];
+				photo_url = [partial_url stringByReplacingOccurrencesOfString:size_path withString:@""];
+				photo_url = [photo_url uuUrlDecoded];
+			}
 		}
 	}
 
