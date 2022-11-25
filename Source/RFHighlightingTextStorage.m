@@ -86,6 +86,11 @@
 	return (isalnum (c) || (c == '_'));
 }
 
+- (BOOL) isValidMstodonChar:(unichar)c
+{
+	return (isalnum (c) || (c == '_') || (c == '.') || (c == '-'));
+}
+
 - (void) processBold
 {
 	NSFont* bold_font = [NSFont boldSystemFontOfSize:kDefaultFontSize];
@@ -292,6 +297,7 @@
 	
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_username = NO;
+	BOOL is_mastodon = NO;
 	
 	for (NSInteger i = 0; i < self.string.length; i++) {
 		unichar c = [self.string characterAtIndex:i];
@@ -300,17 +306,31 @@
 			next_c = [self.string characterAtIndex:i + 1];
 		}
 
-		if ((c == '@') && [self isValidUsernameChar:next_c]) {
+		if ((c == '@') && is_username) {
+			// if we're in a Mastodon username, we allow more characters
+			is_mastodon = YES;
+		}
+		else if ((c == '@') && [self isValidUsernameChar:next_c]) {
 			if (!is_username) {
 				is_username = YES;
 				current_r.location = i;
 			}
 		}
 		else if (![self isValidUsernameChar:c]) {
-			if (is_username) {
-				is_username = NO;
-				current_r.length = i - current_r.location;
-				[self safe_addAttribute:NSForegroundColorAttributeName value:username_c range:current_r];
+			if (is_mastodon) {
+				if (![self isValidMstodonChar:c]) {
+					is_username = NO;
+					is_mastodon = NO;
+					current_r.length = i - current_r.location;
+					[self safe_addAttribute:NSForegroundColorAttributeName value:username_c range:current_r];
+				}
+			}
+			else {
+				if (is_username) {
+					is_username = NO;
+					current_r.length = i - current_r.location;
+					[self safe_addAttribute:NSForegroundColorAttributeName value:username_c range:current_r];
+				}
 			}
 		}
 	}
