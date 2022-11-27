@@ -405,6 +405,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	self.webView.hidden = NO;
 	
 	[self selectSidebarRow:kSelectionTimeline];
+	[self startLoadingSidebarRow:kSelectionTimeline];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -419,6 +420,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	self.webView.hidden = NO;
 
 	[self selectSidebarRow:kSelectionMentions];
+	[self startLoadingSidebarRow:kSelectionMentions];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -433,6 +435,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	self.webView.hidden = NO;
 
 	[self selectSidebarRow:kSelectionFavorites];
+	[self startLoadingSidebarRow:kSelectionFavorites];
 }
 
 - (IBAction) showDiscover:(id)sender
@@ -447,6 +450,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionDiscover];
+	[self startLoadingSidebarRow:kSelectionDiscover];
 }
 
 - (IBAction) showPosts:(id)sender
@@ -977,6 +981,18 @@ static NSInteger const kSelectionBookshelves = 10;
 	}
 }
 
+- (void) startLoadingSidebarRow:(NSInteger)sidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStartLoading object:self userInfo:@{
+		kTimelineSidebarRowKey: @(sidebarRow)
+	}];
+}
+
+- (void) stopLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+}
+
 #pragma mark -
 
 - (void) showNotificationWithTitle:(NSString *)title text:(NSString *)text
@@ -1149,6 +1165,8 @@ static NSInteger const kSelectionBookshelves = 10;
 	NSScrollView* scrollview = webView.mainFrame.frameView.documentView.enclosingScrollView;
 	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
 	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
+	
+	[self stopLoadingSidebarRow];
 }
 
 - (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
@@ -1238,6 +1256,7 @@ static NSInteger const kSelectionBookshelves = 10;
     }
 
     RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
+	cell.sidebarRow = row;
 	
 	if (sidebar_row == kSelectionTimeline) {
 		cell.titleField.stringValue = @"Timeline";

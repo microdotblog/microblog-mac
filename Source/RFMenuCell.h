@@ -12,5 +12,8 @@
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSImageView* iconView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+
+@property (assign, nonatomic) NSInteger sidebarRow;
 
 @end

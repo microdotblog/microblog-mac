@@ -118,4 +118,8 @@ static NSString* const kBookWasAssignedBookshelfKey = @"bookshelf";
 static NSString* const kSelectPhotoCellNotification = @"SelectPhotoCellNotification";
 static NSString* const kSelectPhotoCellKey = @"cell"; // RFPhotoCell
 
+static NSString* const kTimelineDidStartLoading = @"TimelineDidStartLoading";
+static NSString* const kTimelineDidStopLoading = @"TimelineDidStopLoading";
+static NSString* const kTimelineSidebarRowKey = @"row";
+
 #define APPSTORE 1

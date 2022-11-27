@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17132" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17132"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,7 +14,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HZB-bv-PgW">
-                    <rect key="frame" x="33" y="6" width="121" height="19"/>
+                    <rect key="frame" x="33" y="6" width="113" height="19"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Timeline" id="i7D-au-ecM">
                         <font key="font" metaFont="system" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -21,29 +22,39 @@
                     </textFieldCell>
                 </textField>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fCm-G0-kQc">
-                    <rect key="frame" x="8" y="1" width="24" height="29"/>
+                    <rect key="frame" x="8" y="-0.5" width="24" height="31"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="kPA-vO-FhR"/>
                         <constraint firstAttribute="width" constant="24" id="sQf-UX-8a1"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="bubble.right" catalog="system" id="AyK-pr-eut"/>
                 </imageView>
+                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aHh-Pv-oex">
+                    <rect key="frame" x="152" y="8" width="14" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="14" id="GhX-C5-oRs"/>
+                        <constraint firstAttribute="height" constant="14" id="HDd-5H-MHe"/>
+                    </constraints>
+                </progressIndicator>
             </subviews>
             <constraints>
                 <constraint firstItem="HZB-bv-PgW" firstAttribute="centerY" secondItem="WOV-ev-LvX" secondAttribute="centerY" id="GOe-Ea-2Qf"/>
                 <constraint firstItem="fCm-G0-kQc" firstAttribute="leading" secondItem="WOV-ev-LvX" secondAttribute="leading" constant="8" id="LkL-nN-ISM"/>
                 <constraint firstItem="HZB-bv-PgW" firstAttribute="leading" secondItem="fCm-G0-kQc" secondAttribute="trailing" constant="3" id="WQ0-uj-r0Y"/>
+                <constraint firstAttribute="trailing" secondItem="aHh-Pv-oex" secondAttribute="trailing" constant="10" id="Zwa-JP-ymv"/>
+                <constraint firstItem="aHh-Pv-oex" firstAttribute="centerY" secondItem="WOV-ev-LvX" secondAttribute="centerY" id="gfd-O4-7OI"/>
                 <constraint firstItem="fCm-G0-kQc" firstAttribute="centerY" secondItem="WOV-ev-LvX" secondAttribute="centerY" id="pBb-fm-Cas"/>
-                <constraint firstAttribute="trailing" secondItem="HZB-bv-PgW" secondAttribute="trailing" constant="24" id="yd0-Lk-kXL"/>
+                <constraint firstItem="aHh-Pv-oex" firstAttribute="leading" secondItem="HZB-bv-PgW" secondAttribute="trailing" constant="8" symbolic="YES" id="sxn-1u-ax8"/>
             </constraints>
             <connections>
                 <outlet property="iconView" destination="fCm-G0-kQc" id="QAG-am-wjH"/>
+                <outlet property="progressSpinner" destination="aHh-Pv-oex" id="1rP-qV-zbm"/>
                 <outlet property="titleField" destination="HZB-bv-PgW" id="bsw-ye-Jis"/>
             </connections>
-            <point key="canvasLocation" x="-231" y="-67.5"/>
+            <point key="canvasLocation" x="-231" y="-68"/>
         </customView>
     </objects>
     <resources>
-        <image name="bubble.right" catalog="system" width="18" height="14"/>
+        <image name="bubble.right" catalog="system" width="17" height="16"/>
     </resources>
 </document>
