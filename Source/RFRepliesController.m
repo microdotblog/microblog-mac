@@ -77,7 +77,6 @@
 - (void) fetchReplies
 {
 	self.allReplies = @[];
-	[self.progressSpinner startAnimation:nil];
 	self.tableView.animator.alphaValue = 0.0;
 
 	NSDictionary* args;
@@ -113,11 +112,16 @@
 			RFDispatchMainAsync (^{
 				self.allReplies = new_posts;
 				[self.tableView reloadData];
-				[self.progressSpinner stopAnimation:nil];
 				self.tableView.animator.alphaValue = 1.0;
+				[self stopLoadingSidebarRow];
 			});
 		}
 	}];
+}
+
+- (void) stopLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
 }
 
 - (IBAction) openRow:(id)sender

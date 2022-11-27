@@ -97,7 +97,6 @@
 {
 	self.currentPosts = @[];
 	self.blogNameButton.hidden = YES;
-	[self.progressSpinner startAnimation:nil];	
 	self.tableView.animator.alphaValue = 0.0;
 
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
@@ -156,8 +155,8 @@
 				}
 				self.currentPosts = new_posts;
 				[self.tableView reloadData];
-				[self.progressSpinner stopAnimation:nil];
 				[self setupBlogName];
+				[self stopLoadingSidebarRow];
 				self.blogNameButton.hidden = NO;
 				self.tableView.animator.alphaValue = 1.0;
 
@@ -170,6 +169,11 @@
 			});
 		}
 	}];
+}
+
+- (void) stopLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
 }
 
 #pragma mark -

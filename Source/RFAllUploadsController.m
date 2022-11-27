@@ -77,7 +77,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	self.allPosts = @[];
 	self.blogNameButton.hidden = YES;
-	[self.progressSpinner startAnimation:nil];
 	self.collectionView.animator.alphaValue = 0.0;
 
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
@@ -112,14 +111,21 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			RFDispatchMainAsync (^{
 				self.allPosts = new_posts;
 				[self.collectionView reloadData];
-				[self.progressSpinner stopAnimation:nil];
 				[self setupBlogName];
+				[self stopLoadingSidebarRow];
 				self.blogNameButton.hidden = NO;
 				self.collectionView.animator.alphaValue = 1.0;
 			});
 		}
 	}];
 }
+
+- (void) stopLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+}
+
+#pragma mark -
 
 - (IBAction) blogNameClicked:(id)sender
 {

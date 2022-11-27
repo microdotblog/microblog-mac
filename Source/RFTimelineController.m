@@ -463,6 +463,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionPosts];
+	[self startLoadingSidebarRow:kSelectionPosts];
 }
 
 - (IBAction) showPages:(id)sender
@@ -475,6 +476,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionPages];
+	[self startLoadingSidebarRow:kSelectionPages];
 }
 
 - (IBAction) showUploads:(id)sender
@@ -487,6 +489,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionUploads];
+	[self startLoadingSidebarRow:kSelectionUploads];
 }
 
 - (IBAction) showReplies:(id)sender
@@ -499,6 +502,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionReplies];
+	[self startLoadingSidebarRow:kSelectionReplies];
 }
 
 - (IBAction) showBookshelves:(id)sender
@@ -511,6 +515,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionBookshelves];
+	[self startLoadingSidebarRow:kSelectionBookshelves];
 }
 
 - (IBAction) refreshTimeline:(id)sender

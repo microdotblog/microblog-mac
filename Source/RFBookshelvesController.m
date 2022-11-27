@@ -56,7 +56,6 @@
 	BOOL first_fetch = (self.bookshelves.count == 0);
 	
 	self.bookshelves = @[];
-	[self.progressSpinner startAnimation:nil];
 	if (first_fetch) {
 		// only start blank if this is the first time loading bookshelves
 		self.tableView.animator.alphaValue = 0.0;
@@ -82,11 +81,16 @@
 			RFDispatchMainAsync (^{
 				self.bookshelves = new_bookshelves;
 				[self.tableView reloadData];
-				[self.progressSpinner stopAnimation:nil];
 				self.tableView.animator.alphaValue = 1.0;
+				[self stopLoadingSidebarRow];
 			});
 		}
 	}];
+}
+
+- (void) stopLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
 }
 
 - (void) refreshBookshelf:(RFBookshelf *)bookshelf

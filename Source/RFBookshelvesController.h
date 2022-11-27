@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RFBookshelvesController : NSViewController
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSArray* bookshelves; // RFBookshelf
 
