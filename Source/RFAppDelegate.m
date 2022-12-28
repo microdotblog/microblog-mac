@@ -75,7 +75,8 @@
 	NSURL* url = [urls firstObject];
 	NSString* param = [url.path stringByReplacingOccurrencesOfString:@"/" withString:@""];
 	if ([url.host isEqualToString:@"open"]) {
-		[self showOptionsMenuWithPostID:param];
+//		[self showOptionsMenuWithPostID:param];
+		[self showConversationWithPostID:param];
 	}
 	else if ([url.host isEqualToString:@"photo"]) {
 		NSString* photo_url = [url.path substringFromIndex:1];
@@ -529,6 +530,11 @@
 {
 	NSURL* url = [notification.userInfo objectForKey:kOpenPhotoURLKey];
 	[self showPhotoWithURL:url.absoluteString];
+}
+
+- (void) showConversationWithPostID:(NSString *)postID
+{
+	[self.timelineController showConversationWithPostID:postID];
 }
 
 - (void) showOptionsMenuWithPostID:(NSString *)postID

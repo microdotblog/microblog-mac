@@ -62,6 +62,7 @@ typedef NSInteger RFSelectedTimelineType;
 
 - (IBAction) performClose:(id)sender;
 
+- (void) showConversationWithPostID:(NSString *)postID;
 - (void) showProfileWithUsername:(NSString *)username;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 - (void) hideOptionsMenu;

@@ -905,11 +905,24 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (void) showConversationWithPostID:(NSString *)postID
 {
+	// select and remember webview for unselection
+	[self setSelected:YES withPostID:postID];
+	WebView* current_webview = [self currentWebView];
+
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
 
-	[self pushViewController:controller];
+	// give the selection a moment to be visible before animating away
+	RFDispatchSeconds (0.1, ^{
+		[self pushViewController:controller];
+	});
+	
+	// unselect after delay
+	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
+	RFDispatchSeconds (0.5, ^{
+		[current_webview stringByEvaluatingJavaScriptFromString:js];
+	});
 }
 
 - (void) showShareWithPostID:(NSString *)postID
