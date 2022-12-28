@@ -615,6 +615,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	[self setupBlogName];
 	[self hideBlogsMenu];
+	[self downloadCategories];
 }
 
 - (void) removeAttachedPhotoNotification:(NSNotification *)notification
