@@ -97,6 +97,10 @@
 		NSString* text = [[[url absoluteString] uuFindQueryStringArg:@"text"] uuUrlDecoded];
 		[self showNewPostWithText:text];
 	}
+	else if ([url.host isEqualToString:@"reply"]) {
+		NSString* username = [self.timelineController usernameOfPostID:param];
+		[self showReplyWithPostID:param username:username];
+	}
 	else if ([url.host isEqualToString:@"bookmark"]) {
 		NSString* bookmark_url = [[[url absoluteString] uuFindQueryStringArg:@"url"] uuUrlDecoded];
 		[self showNewBookmarkWithURL:bookmark_url];

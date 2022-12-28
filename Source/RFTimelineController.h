@@ -66,5 +66,6 @@ typedef NSInteger RFSelectedTimelineType;
 - (void) showOptionsMenuWithPostID:(NSString *)postID;
 - (void) hideOptionsMenu;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
+- (NSString *) usernameOfPostID:(NSString *)postID;
 
 @end
