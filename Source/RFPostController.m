@@ -927,7 +927,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	NSRange r = self.textView.selectedRange;
 	if (r.length == 0) {
-		[self.textView insertText:@"[]()"];
+		[self replaceSelectionBySurrounding:@[ @"[]()" ]];
 		r = self.textView.selectedRange;
 		r.location = r.location - 3;
 		self.textView.selectedRange = r;
