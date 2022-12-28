@@ -12,7 +12,7 @@
 
 @implementation RFBookshelf
 
-- (BOOL) isEqualTo:(RFBookshelf *)bookshelf
+- (BOOL) isEqualToBookshelf:(RFBookshelf *)bookshelf
 {
 	return [self.bookshelfID isEqualToNumber:bookshelf.bookshelfID];
 }

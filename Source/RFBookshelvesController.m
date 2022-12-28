@@ -97,7 +97,7 @@
 {
 	for (NSInteger i = 0; i < self.bookshelves.count; i++) {
 		RFBookshelf* shelf = [self.bookshelves objectAtIndex:i];
-		if ([shelf isEqualTo:bookshelf]) {
+		if ([shelf isEqualToBookshelf:bookshelf]) {
 			RFBookshelfCell* cell = [self.tableView rowViewAtRow:i makeIfNecessary:NO];
 			if ([cell isKindOfClass:[RFBookshelfCell class]]) {
 				[cell fetchBooks];
