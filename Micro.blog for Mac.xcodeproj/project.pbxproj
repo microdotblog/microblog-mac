@@ -87,7 +87,7 @@
 		4B5650661F8564AE00B03FFD /* Options.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650641F8562B900B03FFD /* Options.xib */; };
 		4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650681F8585C900B03FFD /* RFRoundedImageView.m */; };
 		4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5714CA224BD01C001F8E4F /* HTMLParser.m */; };
-		4B5714CF224BD01D001F8E4F /* HTMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5714CB224BD01D001F8E4F /* HTMLNode.m */; };
+		4B5714CF224BD01D001F8E4F /* HTMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5714CB224BD01D001F8E4F /* HTMLNode.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B5714D0224BD048001F8E4F /* libxml2.tbd */; };
 		4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A25061F83FE37007C548F /* RFWelcomeController.m */; };
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
