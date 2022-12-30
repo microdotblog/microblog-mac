@@ -28,14 +28,16 @@
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-
+	
 	[self setupView];
 	[self setupToolbar];
 	[self setupNotifications];
 	[self setupPreviewTimer];
 	[self setupAutosaveTimer];
-
+	
 	self.window.delegate = self;
+
+	[self adjustWindowHeight];
 }
 
 - (void) setupView
@@ -96,6 +98,14 @@
 			[s writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 		}
 	}];
+}
+
+- (void) adjustWindowHeight
+{
+	// window is restoring with too much height, try to adjust... but why?
+	NSRect r = self.window.frame;
+	r.size.height -= 14;
+	[self.window setFrame:r display:NO];
 }
 
 - (void) clearAutosaveDraft
