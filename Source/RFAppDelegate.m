@@ -40,8 +40,6 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
-	NSLog(@"applicationDidFinishLaunching");
-	
 	[self removeSandboxedContainer];
 	
 	[self setupDefaults];
@@ -681,8 +679,6 @@
 
 - (void) showPostController:(RFPostController *)controller
 {
-	NSLog(@"showPostController");
-	
 	RFPostWindowController* window_controller = [[RFPostWindowController alloc] initWithPostController:controller];
 	[window_controller showWindow:nil];
 	[self.postWindows addObject:window_controller];
