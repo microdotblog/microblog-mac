@@ -59,7 +59,7 @@
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9TN-w4-kgu">
                                 <rect key="frame" x="18" y="14" width="247" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Some recent posts from the community." id="jK5-Il-Bsv">
+                                <textFieldCell key="cell" title="Some recent posts from the community." id="jK5-Il-Bsv">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -91,12 +91,12 @@
                             <constraint firstAttribute="bottom" secondItem="jF2-Gm-goX" secondAttribute="bottom" constant="12" id="7iP-70-NXu"/>
                             <constraint firstItem="YZZ-qi-jtu" firstAttribute="leading" secondItem="9TN-w4-kgu" secondAttribute="trailing" constant="8" symbolic="YES" id="DDJ-p3-nNh"/>
                             <constraint firstItem="9TN-w4-kgu" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="20" symbolic="YES" id="Hro-EP-S1G"/>
+                            <constraint firstItem="9TN-w4-kgu" firstAttribute="centerY" secondItem="MnU-VL-RXJ" secondAttribute="centerY" id="VB0-90-dsv"/>
                             <constraint firstItem="pur-8l-Dqb" firstAttribute="leading" secondItem="jF2-Gm-goX" secondAttribute="trailing" constant="10" id="Zg6-zT-SAq"/>
                             <constraint firstItem="YZZ-qi-jtu" firstAttribute="centerY" secondItem="jF2-Gm-goX" secondAttribute="centerY" id="io8-b8-dWX"/>
                             <constraint firstItem="jF2-Gm-goX" firstAttribute="leading" secondItem="YZZ-qi-jtu" secondAttribute="trailing" constant="8" symbolic="YES" id="jWj-tx-Njc"/>
                             <constraint firstAttribute="trailing" secondItem="pur-8l-Dqb" secondAttribute="trailing" constant="20" symbolic="YES" id="oHs-WO-0JR"/>
                             <constraint firstItem="pur-8l-Dqb" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="12" id="ui0-np-eBz"/>
-                            <constraint firstItem="9TN-w4-kgu" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="14" id="wls-Q4-qrC"/>
                         </constraints>
                     </view>
                     <constraints>
