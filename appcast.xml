@@ -6,6 +6,30 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.7</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new macOS icon. Thanks Brad Ellis!</li>
+					<li>Added inline Reply/Bookmark buttons for the timeline. Click on a post to show the conversation, and click on the date/time to open the post URL for sharing.</li>
+					<li>Fixed new post window increasing in height.</li>
+					<li>Fixed categories pane reloading when selected blog changes.</li>
+					<li>Fixed main window default size and truncated Discover text.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Tue, 03 Jan 2023 10:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.7.zip" sparkle:shortVersionString="2.7" sparkle:version="126" length="4050101" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.6.1</title>
  			<description><![CDATA[
 				<style>
