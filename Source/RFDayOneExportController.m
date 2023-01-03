@@ -66,6 +66,9 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 {
 	NSMutableArray* urls = [NSMutableArray array];
 	
+	// TODO: if contains Markdown, should convert post text to HTML to find these URLs
+	// ...
+	
 	NSError* error = nil;
 	HTMLParser* p = [[HTMLParser alloc] initWithString:post.text error:&error];
 	if (error == nil) {
