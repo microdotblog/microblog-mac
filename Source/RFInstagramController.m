@@ -99,10 +99,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSInteger num_selected = [self.collectionView selectionIndexPaths].count;
 	
 	if (self.photos.count == 1) {
-		self.summaryField.stringValue = [NSString stringWithFormat:@"1 photo (%lu selected)", (unsigned long)num_selected];
+		self.summaryField.stringValue = [NSString stringWithFormat:@"1 post (%lu selected)", (unsigned long)num_selected];
 	}
 	else {
-		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu photos (%lu selected)", (unsigned long)self.photos.count, (unsigned long)num_selected];
+		self.summaryField.stringValue = [NSString stringWithFormat:@"%lu posts (%lu selected)", (unsigned long)self.photos.count, (unsigned long)num_selected];
 	}
 	
 	if ((num_selected > 0) && [self hasAnyBlog]) {
@@ -173,8 +173,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) importPhoto:(NSDictionary *)info
 {
 	NSArray* media = [info objectForKey:@"media"];
-	for (NSDictionary* photo in media) {
-		NSString* caption = [photo objectForKey:@"title"];
+    NSDictionary* photo = [media firstObject];
+    NSString* caption;
+    if(media.count == 1){
+        caption = [photo objectForKey:@"title"];
+    }else{
+        caption = [info objectForKey:@"title"];
+    }
+		
 		NSString* relative_path = [photo objectForKey:@"uri"];
 		NSNumber* taken_at = [photo objectForKey:@"creation_timestamp"];
 
@@ -241,7 +247,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		else {
 			[self importNextPhoto];
 		}
-	}
 }
 
 - (void) importNextPhoto
