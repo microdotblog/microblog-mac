@@ -407,7 +407,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			@"content": text,
 			@"photo": photo.publishedURL,
 			@"published": [date uuRfc3339StringForUTCTimeZone],
-			@"mp-destination": destination_uid
+			@"mp-destination": destination_uid,
+            @"category": [NSArray arrayWithObjects: @"Instagram",nil]
 		};
 
 		[client postWithParams:args completion:^(UUHttpResponse* response) {
@@ -430,7 +431,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			@"name": @"",
 			@"content": text,
 			@"photo": photo.publishedURL,
-			@"published": [date uuRfc3339StringForUTCTimeZone]
+			@"published": [date uuRfc3339StringForUTCTimeZone],
+            @"category": [NSArray arrayWithObjects: @"Instagram",nil]
 		};
 		
 		[client postWithParams:args completion:^(UUHttpResponse* response) {
