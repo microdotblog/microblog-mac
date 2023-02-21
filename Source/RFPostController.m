@@ -14,6 +14,7 @@
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
 #import "RFCategoryCell.h"
+#import "MBCrosspostCell.h"
 #import "RFBlogsController.h"
 #import "RFPhotoAltController.h"
 #import "RFMicropub.h"
@@ -39,6 +40,7 @@
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static NSString* const kCategoryCellIdentifier = @"CategoryCell";
+static NSString* const kCrosspostCellIdentifier = @"CrosspostCell";
 static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
 
@@ -56,6 +58,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.attachedPhotos = @[];
 		self.queuedPhotos = @[];
 		self.categories = @[];
+		self.crosspostServices = @[ @"Twitter", @"Mastodon" ];
 		self.channel = @"default";
 	}
 	
@@ -235,7 +238,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 	self.photosHeightConstraint.constant = 0;
 
-	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CategoryCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
+	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CategoryCell" bundle:nil] forItemWithIdentifier:kCategoryCellIdentifier];
+	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CrosspostCell" bundle:nil] forItemWithIdentifier:kCrosspostCellIdentifier];
 	self.categoriesHeightConstraint.constant = 0;
 }
 
@@ -329,6 +333,24 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			return YES;
 		}
 	}
+	else if (item.action == @selector(toggleCrossposting:)) {
+		if ([self isPage]) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isReply) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isShowingCrosspostServices) {
+			[item setState:NSControlStateValueOn];
+			return YES;
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+			return YES;
+		}
+	}
 	else if (item.action == @selector(save:)) {
 		if ([self isPage]) {
 			return NO;
@@ -407,6 +429,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
 		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
 	}
+	if (self.isShowingCrosspostServices) {
+		// 3 items per row
+		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
+		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
+	}
 	else {
 		self.categoriesHeightConstraint.animator.constant = 0;
 	}
@@ -478,6 +505,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (IBAction) toggleCategories:(id)sender
 {
 	self.isShowingCategories = !self.isShowingCategories;
+	self.isShowingCrosspostServices = NO;
+	[self updateCategoriesPane];
+}
+
+- (IBAction) toggleCrossposting:(id)sender
+{
+	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
+	self.isShowingCategories = NO;
 	[self updateCategoriesPane];
 }
 
@@ -726,6 +761,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (collectionView == self.photosCollectionView) {
 		return self.attachedPhotos.count;
 	}
+	else if (self.isShowingCrosspostServices) {
+		return self.crosspostServices.count;
+	}
 	else {
 		return self.categories.count;
 	}
@@ -741,10 +779,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		
 		return item;
 	}
+	else if (self.isShowingCrosspostServices) {
+		NSString* service_name = [self.crosspostServices objectAtIndex:indexPath.item];
+
+		MBCrosspostCell* item = (MBCrosspostCell *)[collectionView makeItemWithIdentifier:kCrosspostCellIdentifier forIndexPath:indexPath];
+		item.nameCheckbox.title = service_name;
+		
+		return item;
+	}
 	else {
 		NSString* category_name = [self.categories objectAtIndex:indexPath.item];
 
-		RFCategoryCell* item = (RFCategoryCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+		RFCategoryCell* item = (RFCategoryCell *)[collectionView makeItemWithIdentifier:kCategoryCellIdentifier forIndexPath:indexPath];
 		item.categoryCheckbox.title = category_name;
 		
 		if (self.editingPost) {
