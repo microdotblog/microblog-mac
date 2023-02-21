@@ -42,6 +42,9 @@ static NSInteger const kTextSizeMedium = 15;
 static NSInteger const kTextSizeLarge = 17;
 static NSInteger const kTextSizeHuge = 19;
 
+static NSInteger const kMaxCharsDefault = 300;
+static NSInteger const kMaxCharsBlockquote = 600;
+
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url" // NSURL
 
