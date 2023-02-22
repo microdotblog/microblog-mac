@@ -427,13 +427,17 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) updateCategoriesPane
 {
 	if (self.isShowingCategories) {
-		// 3 items per row
-		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
+		NSInteger estimated_rows = ceil (self.categories.count / [self bestCheckboxColumnsCount]);
+		if (estimated_rows == 0) {
+			estimated_rows = 1;
+		}
 		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
 	}
 	else if (self.isShowingCrosspostServices) {
-		// 3 items per row
-		NSInteger estimated_rows = ceil (self.crosspostServices.count / 3.0);
+		NSInteger estimated_rows = ceil (self.crosspostServices.count / [self bestCheckboxColumnsCount]);
+		if (estimated_rows == 0) {
+			estimated_rows = 1;
+		}
 		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
 	}
 	else {
@@ -469,6 +473,20 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	if (self.isShowingCrosspostServices) {
 		self.selectedCrosspostUIDs = [self currentSelectedCrossposting];
+	}
+}
+
+- (NSInteger) bestCheckboxColumnsCount
+{
+	CGFloat w = self.categoriesCollectionView.bounds.size.width;
+	if (w > 600.0) {
+		return 4;
+	}
+	else if (w > 400.0) {
+		return 3;
+	}
+	else {
+		return 2;
 	}
 }
 
@@ -833,6 +851,22 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
 		[collectionView deselectAll:nil];
 	}
+}
+
+- (NSSize) collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	NSSize cell_size;
+	
+	if (collectionView == self.photosCollectionView) {
+		cell_size.width = 100;
+		cell_size.height = 100;
+	}
+	else {
+		cell_size.width = collectionView.bounds.size.width / [self bestCheckboxColumnsCount];
+		cell_size.height = 30;
+	}
+	
+	return cell_size;
 }
 
 #pragma mark -
