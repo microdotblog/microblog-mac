@@ -58,7 +58,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.attachedPhotos = @[];
 		self.queuedPhotos = @[];
 		self.categories = @[];
-		self.crosspostServices = @[ @"Twitter", @"Mastodon" ];
+		self.crosspostServices = @[];
+		self.selectedCategories = @[];
+		self.selectedCrosspostUIDs = @[];
 		self.channel = @"default";
 	}
 	
@@ -431,7 +433,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else if (self.isShowingCrosspostServices) {
 		// 3 items per row
-		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
+		NSInteger estimated_rows = ceil (self.crosspostServices.count / 3.0);
 		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
 	}
 	else {
@@ -457,6 +459,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		return @"Post";
+	}
+}
+
+- (void) updateSelectedCheckboxes
+{
+	if (self.isShowingCategories) {
+		self.selectedCategories = [self currentSelectedCategories];
+	}
+	if (self.isShowingCrosspostServices) {
+		self.selectedCrosspostUIDs = [self currentSelectedCrossposting];
 	}
 }
 
@@ -504,16 +516,22 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) toggleCategories:(id)sender
 {
+	[self updateSelectedCheckboxes];
+	
 	self.isShowingCategories = !self.isShowingCategories;
 	self.isShowingCrosspostServices = NO;
+
 	[self updateCategoriesPane];
 	[self.categoriesCollectionView reloadData];
 }
 
 - (IBAction) toggleCrossposting:(id)sender
 {
+	[self updateSelectedCheckboxes];
+
 	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
 	self.isShowingCategories = NO;
+
 	[self updateCategoriesPane];
 	[self.categoriesCollectionView reloadData];
 }
@@ -782,9 +800,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		return item;
 	}
 	else if (self.isShowingCrosspostServices) {
-		NSString* service_name = [self.crosspostServices objectAtIndex:indexPath.item];
+		NSDictionary* info = [self.crosspostServices objectAtIndex:indexPath.item];
+		NSString* service_uid = info[@"uid"];
+		NSString* service_name = info[@"name"];
 
 		MBCrosspostCell* item = (MBCrosspostCell *)[collectionView makeItemWithIdentifier:kCrosspostCellIdentifier forIndexPath:indexPath];
+		item.uid = service_uid;
 		item.nameCheckbox.title = service_name;
 		
 		return item;
@@ -888,6 +909,27 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	
 	return categories;
+}
+
+- (NSArray *) currentSelectedCrossposting
+{
+	NSMutableArray* uids = [NSMutableArray array];
+	
+	if (self.isShowingCrosspostServices) {
+		NSUInteger num = [self.categoriesCollectionView numberOfItemsInSection:0];
+		for (NSUInteger i = 0; i < num; i++) {
+			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
+			NSCollectionViewItem* item = [self.categoriesCollectionView itemAtIndexPath:index_path];
+			if ([item isKindOfClass:[MBCrosspostCell class]]) {
+				MBCrosspostCell* cell = (MBCrosspostCell *)item;
+				if (cell.nameCheckbox.state == NSControlStateValueOn) {
+					[uids addObject:cell.uid];
+				}
+			}
+		}
+	}
+	
+	return uids;
 }
 
 #pragma mark -
@@ -1041,6 +1083,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) uploadPost
 {
+	// update selected categories and cross-posting if visible
+	[self updateSelectedCheckboxes];
+	
 	// upload photos and then text
 	NSString* s = [self currentText];
 	if ((s.length > 0) || (self.attachedPhotos.count > 0)) {
@@ -1196,7 +1241,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			if (destination_uid == nil) {
 				destination_uid = @"";
 			}
-			NSArray* category_names = [self currentSelectedCategories];
+			NSArray* category_names = self.selectedCategories;
+			NSArray* crosspost_uids = self.selectedCrosspostUIDs;
 			NSMutableArray* photo_urls = [NSMutableArray array];
 			NSMutableArray* photo_alts = [NSMutableArray array];
 			NSMutableArray* video_urls = [NSMutableArray array];
@@ -1267,6 +1313,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"mp-destination": destination_uid,
 					@"mp-channel": self.channel,
 					@"category[]": category_names,
+					@"mp-syndicate-to[]": crosspost_uids,
 					@"post-status": [self currentStatus]
 				};
 
@@ -1715,9 +1762,24 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) downloadBlogs
 {
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"q": @"config",
+		@"mp-destination": destination_uid
+	};
+
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			self.destinations = [response.parsedResponse objectForKey:@"destination"];
+
+			NSArray* syndicate_to = [response.parsedResponse objectForKey:@"syndicate-to"];
+			if (syndicate_to) {
+				self.crosspostServices = syndicate_to;
+			}
 		}
 	}];
 }

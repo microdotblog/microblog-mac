@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSButton* nameCheckbox;
 
+@property (strong) NSString* uid;
+
 @end
 
 NS_ASSUME_NONNULL_END
