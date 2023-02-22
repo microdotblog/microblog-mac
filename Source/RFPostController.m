@@ -429,7 +429,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
 		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
 	}
-	if (self.isShowingCrosspostServices) {
+	else if (self.isShowingCrosspostServices) {
 		// 3 items per row
 		NSInteger estimated_rows = ceil (self.categories.count / 3.0);
 		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
@@ -507,6 +507,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.isShowingCategories = !self.isShowingCategories;
 	self.isShowingCrosspostServices = NO;
 	[self updateCategoriesPane];
+	[self.categoriesCollectionView reloadData];
 }
 
 - (IBAction) toggleCrossposting:(id)sender
@@ -514,6 +515,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
 	self.isShowingCategories = NO;
 	[self updateCategoriesPane];
+	[self.categoriesCollectionView reloadData];
 }
 
 //- (IBAction) close:(id)sender
