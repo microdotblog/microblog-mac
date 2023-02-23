@@ -6,6 +6,26 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.8</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new menu item View → Cross-posting to show checkboxes for which cross-posting services are used for the new post.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Thu, 23 Feb 2023 10:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.8.zip" sparkle:shortVersionString="2.8" sparkle:version="127" length="4055991" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.7</title>
  			<description><![CDATA[
 				<style>
