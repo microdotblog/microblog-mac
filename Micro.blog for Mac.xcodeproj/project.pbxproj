@@ -60,6 +60,8 @@
 		4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */; };
 		4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CAB3D1F93EFB400D9B10E /* Friends.xib */; };
 		4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB411F93F00000D9B10E /* RFFriendsController.m */; };
+		4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */; };
+		4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B36915529A2BAD800561D9A /* CrosspostCell.xib */; };
 		4B3840CB2692014000AD3781 /* RFExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840CA2692014000AD3781 /* RFExportController.m */; };
 		4B3840CE2692019B00AD3781 /* Export.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B3840CC2692019B00AD3781 /* Export.xib */; };
 		4B3840D12692038B00AD3781 /* RFMarkdownExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */; };
@@ -300,6 +302,9 @@
 		4B2CAB3E1F93EFB400D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Friends.xib; sourceTree = "<group>"; };
 		4B2CAB401F93F00000D9B10E /* RFFriendsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFFriendsController.h; path = Source/RFFriendsController.h; sourceTree = "<group>"; };
 		4B2CAB411F93F00000D9B10E /* RFFriendsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFFriendsController.m; path = Source/RFFriendsController.m; sourceTree = "<group>"; };
+		4B36915229A2BA8B00561D9A /* MBCrosspostCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCrosspostCell.h; path = Source/MBCrosspostCell.h; sourceTree = "<group>"; };
+		4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCrosspostCell.m; path = Source/MBCrosspostCell.m; sourceTree = "<group>"; };
+		4B36915629A2BAD800561D9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CrosspostCell.xib; sourceTree = "<group>"; };
 		4B3840C92692014000AD3781 /* RFExportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFExportController.h; path = Source/RFExportController.h; sourceTree = "<group>"; };
 		4B3840CA2692014000AD3781 /* RFExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFExportController.m; path = Source/RFExportController.m; sourceTree = "<group>"; };
 		4B3840CD2692019B00AD3781 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Export.xib; sourceTree = "<group>"; };
@@ -829,6 +834,8 @@
 				4BFF2CBE289030C900B74D18 /* MBDisableDragImageView.m */,
 				4BFFD3D922001F6A00372D03 /* RFCategoryCell.h */,
 				4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */,
+				4B36915229A2BA8B00561D9A /* MBCrosspostCell.h */,
+				4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */,
 				4B5A25051F83FE37007C548F /* RFWelcomeController.h */,
 				4B5A25061F83FE37007C548F /* RFWelcomeController.m */,
 				4BDB3826278A83A300BD457C /* MBPreviewController.h */,
@@ -914,6 +921,7 @@
 				4BBD6DD024A59D800018C337 /* SeparatorCell.xib */,
 				4B2CAAA91F8FCB7100D9B10E /* PhotoCell.xib */,
 				4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */,
+				4B36915529A2BAD800561D9A /* CrosspostCell.xib */,
 				4B5EE28A206405AC00C87A78 /* AccountCell.xib */,
 				4B5EE27820632C6800C87A78 /* Blogs.xib */,
 				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
@@ -1068,6 +1076,7 @@
 				4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */,
 				4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
+				4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */,
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */,
@@ -1203,6 +1212,7 @@
 				4B2CAB121F90667300D9B10E /* lexer.c in Sources */,
 				4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */,
 				4B8FBDF41F86820500906C86 /* NSString+Extras.m in Sources */,
+				4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
 				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
@@ -1341,6 +1351,14 @@
 				4B2CAB3E1F93EFB400D9B10E /* Base */,
 			);
 			name = Friends.xib;
+			sourceTree = "<group>";
+		};
+		4B36915529A2BAD800561D9A /* CrosspostCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B36915629A2BAD800561D9A /* Base */,
+			);
+			name = CrosspostCell.xib;
 			sourceTree = "<group>";
 		};
 		4B3840CC2692019B00AD3781 /* Export.xib */ = {
@@ -1701,7 +1719,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 126;
+				CURRENT_PROJECT_VERSION = 127;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1717,7 +1735,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -1733,7 +1751,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 126;
+				CURRENT_PROJECT_VERSION = 127;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1749,7 +1767,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;

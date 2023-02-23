@@ -31,6 +31,7 @@
 @property (assign, nonatomic) BOOL isDraft;
 @property (assign, nonatomic) BOOL isShowingTitle;
 @property (assign, nonatomic) BOOL isShowingCategories;
+@property (assign, nonatomic) BOOL isShowingCrosspostServices;
 @property (strong, nonatomic) RFPost* editingPost;
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;
@@ -39,6 +40,9 @@
 @property (strong, nonatomic) NSArray* attachedPhotos; // RFPhoto
 @property (strong, nonatomic) NSArray* queuedPhotos; // RFPhoto
 @property (strong, nonatomic) NSArray* categories; // NSString
+@property (strong, nonatomic) NSArray* crosspostServices; // NSDictionary (uid, name)
+@property (strong, nonatomic) NSArray* selectedCategories; // NSString
+@property (strong, nonatomic) NSArray* selectedCrosspostUIDs; // NSString
 @property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
