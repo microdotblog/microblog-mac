@@ -1274,6 +1274,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			}
 			NSArray* category_names = self.selectedCategories;
 			NSArray* crosspost_uids = self.selectedCrosspostUIDs;
+			
+			// if everything unselected, we need to send some value so the server knows not to run all services
+			if (crosspost_uids.count == 0) {
+				crosspost_uids = @[ @"" ];
+			}
+			
 			NSMutableArray* photo_urls = [NSMutableArray array];
 			NSMutableArray* photo_alts = [NSMutableArray array];
 			NSMutableArray* video_urls = [NSMutableArray array];
