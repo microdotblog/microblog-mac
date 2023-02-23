@@ -81,6 +81,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			self.isShowingTitle = YES;
 		}
 		self.channel = self.editingPost.channel;
+		self.selectedCategories = self.editingPost.categories;
 	}
 	
 	return self;
@@ -471,7 +472,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	if (self.isShowingCategories) {
 		self.selectedCategories = [self currentSelectedCategories];
 	}
-	if (self.isShowingCrosspostServices) {
+	else if (self.isShowingCrosspostServices) {
 		self.selectedCrosspostUIDs = [self currentSelectedCrossposting];
 	}
 }
@@ -825,6 +826,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		MBCrosspostCell* item = (MBCrosspostCell *)[collectionView makeItemWithIdentifier:kCrosspostCellIdentifier forIndexPath:indexPath];
 		item.uid = service_uid;
 		item.nameCheckbox.title = service_name;
+		item.nameCheckbox.state = [self.selectedCrosspostUIDs containsObject:service_uid];
 		
 		return item;
 	}
@@ -833,12 +835,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 		RFCategoryCell* item = (RFCategoryCell *)[collectionView makeItemWithIdentifier:kCategoryCellIdentifier forIndexPath:indexPath];
 		item.categoryCheckbox.title = category_name;
-		
-		if (self.editingPost) {
-			if ([self.editingPost.categories containsObject:category_name]) {
-				item.categoryCheckbox.state = NSControlStateValueOn;
-			}
-		}
+		item.categoryCheckbox.state = [self.selectedCategories containsObject:category_name];
 		
 		return item;
 	}
@@ -1813,6 +1810,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			NSArray* syndicate_to = [response.parsedResponse objectForKey:@"syndicate-to"];
 			if (syndicate_to) {
 				self.crosspostServices = syndicate_to;
+
+				// select all cross-post options by default
+				NSMutableArray* selected_uids = [NSMutableArray array];
+				for (NSDictionary* info in self.crosspostServices) {
+					[selected_uids addObject:info[@"uid"]];
+				}
+				self.selectedCrosspostUIDs = selected_uids;
 			}
 		}
 	}];
