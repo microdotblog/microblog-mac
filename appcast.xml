@@ -6,6 +6,26 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.9</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Updated new post limit to 300 characters, or 600 if there's a block quote included in the post. Full-length blog posts with titles can still be as long as you want.</li>
+ 				</ul>
+ 			]]></description>
+			<pubDate>Mon, 25 Feb 2023 09:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.9.zip" sparkle:shortVersionString="2.9" sparkle:version="129" length="4056097" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>		
+		<item>
 			<title>Version 2.8.1</title>
  			<description><![CDATA[
 				<style>
