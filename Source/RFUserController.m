@@ -96,8 +96,8 @@
 	self.headerField.hidden = NO;
 
 	NSString* s = [microblog_info objectForKey:@"bio"];
-	if (s.length > 280) {
-		s = [[s substringToIndex:280] stringByAppendingString:@"..."];
+	if (s.length > kMaxCharsDefault) {
+		s = [[s substringToIndex:kMaxCharsDefault] stringByAppendingString:@"..."];
 	}
 	self.bioField.stringValue = s;
 	self.bioField.hidden = NO;

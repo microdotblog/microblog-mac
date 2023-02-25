@@ -654,7 +654,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	[self updateRemainingChars];
 
-	if (!self.isReply && ([self currentProcessedMarkup].length > 280)) {
+	if (!self.isReply && ([self currentProcessedMarkup].length > [self maxCharsForCurrentText])) {
 		if (!self.isReply) {
 			self.isShowingTitle = YES;
 		}
@@ -909,6 +909,24 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	
 	return [html rf_stripHTML];
+}
+
+- (NSString *) currentHTML
+{
+	NSError* error = nil;
+	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] error:&error];
+	return html;
+}
+
+- (NSInteger) maxCharsForCurrentText
+{
+	NSString* s = [self currentHTML];
+	if ([s containsString:@"<blockquote"]) {
+		return kMaxCharsBlockquote;
+	}
+	else {
+		return kMaxCharsDefault;
+	}
 }
 
 - (NSString *) currentStatus
@@ -1178,7 +1196,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.remainingField.hidden = NO;
 	}
 
-	NSInteger max_chars = 280;
+	NSInteger max_chars = [self maxCharsForCurrentText];
 	NSInteger num_chars = [self currentProcessedMarkup].length;
 	NSInteger num_remaining = max_chars - num_chars;
 
@@ -1190,11 +1208,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	para.alignment = NSTextAlignmentRight;
 	[attr addAttribute:NSParagraphStyleAttributeName value:para range:NSMakeRange (0, s.length)];
 
-	if (num_chars <= 140) {
-		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor colorWithCalibratedRed:0.2588 green:0.5450 blue:0.7921 alpha:1.0] range:NSMakeRange (0, num_len)];
-		self.remainingField.attributedStringValue = attr;
-	}
-	else if (num_remaining < 0) {
+	if (num_remaining < 0) {
 		[attr addAttribute:NSForegroundColorAttributeName value:[NSColor colorWithCalibratedRed:1.0 green:0.3764 blue:0.3411 alpha:1.0] range:NSMakeRange (0, num_len)];
 		self.remainingField.attributedStringValue = attr;
 	}
