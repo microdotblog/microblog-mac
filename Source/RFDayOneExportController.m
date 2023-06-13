@@ -12,6 +12,7 @@
 #import "RFSettings.h"
 #import "NSAlert+Extras.h"
 #import "HTMLParser.h"
+#import "MMMarkdown.h"
 
 static NSString* const kDayOneCommandLinePath = @"/usr/local/bin/dayone2";
 static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/articles/435871-command-line-interface-cli";
@@ -65,31 +66,42 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 - (NSArray *) extractAttachmentURLs:(RFPost *)post
 {
 	NSMutableArray* urls = [NSMutableArray array];
+	NSString* post_html = post.text;
+
+	// if contains Markdown, convert post text to HTML to find these URLs
+	if ([post_html containsString:@"]("]) {
+		NSError* error = nil;
+		post_html = [MMMarkdown HTMLStringWithMarkdown:post_html error:&error];
+	}
 	
-	// TODO: if contains Markdown, should convert post text to HTML to find these URLs
-	// ...
-	
+	// parse for media tags
 	NSError* error = nil;
-	HTMLParser* p = [[HTMLParser alloc] initWithString:post.text error:&error];
+	HTMLParser* p = [[HTMLParser alloc] initWithString:post_html error:&error];
 	if (error == nil) {
 		HTMLNode* body = [p body];
 
 		NSArray* img_tags = [body findChildTags:@"img"];
 		for (HTMLNode* img_tag in img_tags) {
 			NSString* url = [img_tag getAttributeNamed:@"src"];
-			[urls addObject:url];
+			if (url) {
+				[urls addObject:url];
+			}
 		}
 
 		NSArray* video_tags = [body findChildTags:@"video"];
 		for (HTMLNode* video_tag in video_tags) {
 			NSString* url = [video_tag getAttributeNamed:@"src"];
-			[urls addObject:url];
+			if (url) {
+				[urls addObject:url];
+			}
 		}
 
 		NSArray* audio_tags = [body findChildTags:@"audio"];
 		for (HTMLNode* audio_tag in audio_tags) {
 			NSString* url = [audio_tag getAttributeNamed:@"src"];
-			[urls addObject:url];
+			if (url) {
+				[urls addObject:url];
+			}
 		}
 	}
 	
