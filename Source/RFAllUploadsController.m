@@ -311,23 +311,28 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[client uploadFileData:d named:@"file" filename:filename contentType:content_type httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
 		NSDictionary* headers = response.httpResponse.allHeaderFields;
 		NSString* image_url = headers[@"Location"];
-		RFDispatchMainAsync (^{
-			if (image_url == nil) {
+		RFDispatchMainAsync ((^{
+			if (response.httpError) {
+				NSString* msg = [response.httpError.userInfo objectForKey:@"kUUHttpSessionHttpErrorMessageKey"];
+				NSString* s = [NSString stringWithFormat:@"Server returned error: %@", msg];
+				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:s button:@"OK" completionHandler:NULL];
+				[self hideUploadProgress];
+			}
+			else if (image_url == nil) {
 				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
 				[self hideUploadProgress];
 			}
 			else {
 				handler();
 			}
-		});
+		}));
 	}];
 }
 
 - (void) showUploadProgress
 {
 	[self.uploadProgressBar startAnimation:nil];
-	self.uploadProgressBar.hidden = NO;
-}
+	self.uploadProgressBar.hidden = NO;}
 
 - (void) hideUploadProgress
 {
