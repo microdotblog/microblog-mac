@@ -226,8 +226,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) setupButtons
 {
-	if (@available(macOS 11.0, *)) {
-		NSImage* img = [NSImage rf_imageWithSystemSymbolName:@"camera" accessibilityDescription:@"camera"];
+	if (@available(macOS 10.16, *)) {
+		NSImage* img = [NSImage rf_imageWithSystemSymbolName:@"photo" accessibilityDescription:@"photo"];
 		self.photoButton.image = img;
 	}
 }
