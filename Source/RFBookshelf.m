@@ -17,6 +17,11 @@
 	return [self.bookshelfID isEqualToNumber:bookshelf.bookshelfID];
 }
 
+- (BOOL) isLibrary;
+{
+	return [self.type isEqualToString:@"loans"] || [self.type isEqualToString:@"holds"];
+}
+
 + (BOOL) isSameBooks:(NSArray *)books asBooks:(NSArray *)otherBooks
 {
 	NSMutableSet* isbns1 = [NSMutableSet set];

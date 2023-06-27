@@ -15,8 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSNumber* bookshelfID;
 @property (strong) NSString* title;
 @property (strong) NSNumber* booksCount;
+@property (strong) NSString* type;
 
 - (BOOL) isEqualToBookshelf:(RFBookshelf *)bookshelf;
+- (BOOL) isLibrary;
 + (BOOL) isSameBooks:(NSArray *)books asBooks:(NSArray *)otherBooks;
 
 @end

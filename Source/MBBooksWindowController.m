@@ -105,8 +105,10 @@
 - (void) setupBookshelvesMenu
 {
 	for (RFBookshelf* shelf in self.bookshelves) {
-		NSMenuItem* new_item = [self.contextMenu addItemWithTitle:shelf.title action:@selector(assignToBookshelf:) keyEquivalent:@""];
-		new_item.representedObject = shelf;
+		if (![shelf isLibrary]) {
+			NSMenuItem* new_item = [self.contextMenu addItemWithTitle:shelf.title action:@selector(assignToBookshelf:) keyEquivalent:@""];
+			new_item.representedObject = shelf;
+		}
 	}
 }
 
@@ -237,6 +239,7 @@
 				shelf.bookshelfID = [item objectForKey:@"id"];
 				shelf.title = [item objectForKey:@"title"];
 				shelf.booksCount = [[item objectForKey:@"_microblog"] objectForKey:@"books_count"];
+				shelf.type = [[item objectForKey:@"_microblog"] objectForKey:@"type"];
 
 				[new_bookshelves addObject:shelf];
 			}
