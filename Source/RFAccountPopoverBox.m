@@ -54,7 +54,8 @@
 {
 	if ([self hasMultipleAccounts]) {
 		NSMenu* menu = [[NSMenu alloc] initWithTitle:@"Accounts"];
-		
+		[menu setAutoenablesItems:YES];
+
 		NSArray* accounts = [RFSettings accounts];
 		for (RFAccount* a in accounts) {
 			NSString* s = [NSString stringWithFormat:@"@%@", a.username];
@@ -64,6 +65,7 @@
 			img.size = CGSizeMake (20, 20);
 			item.image = img;
 			item.representedObject = a;
+			item.target = self;
 			
 			if ([a.username isEqualToString:[RFSettings defaultAccount].username]) {
 				item.state = NSControlStateValueOn;
@@ -75,7 +77,9 @@
 			[menu addItem:item];
 		}
 
-		[NSMenu popUpContextMenu:menu withEvent:event forView:self];
+		NSPoint pt = NSMakePoint (0, -7);
+		[menu popUpMenuPositioningItem:nil atLocation:pt inView:self];
+
 	}
 }
 
@@ -86,6 +90,12 @@
     self.fillColor = self.savedFillColor;
 }
 
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	// always enable our account pop-up menu
+	return YES;
+}
+	
 - (void) mouseEntered:(NSEvent *)event
 {
 	if ([self hasMultipleAccounts]) {
