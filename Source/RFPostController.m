@@ -993,7 +993,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			if (hostname && [hostname isEqualToString:[info objectForKey:@"name"]]) {
 				is_ok = [[info objectForKey:@"microblog-audio"] boolValue];
 				if (!is_ok) {
-					NSString* msg = @"Video upload requires the $10/month hosting plan. Upgrade your hosting to support podcasting and video hosting.";
+					NSString* msg = @"Video upload requires Micro.blog Premium ($10/month). Upgrade your hosting to support podcasting and video hosting.";
 					[NSAlert rf_showTwoButtonAlert:@"Upgrade Subscription" message:msg okButton:@"Learn More" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
 						if (returnCode == 1000) {
 							[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://micro.blog/new/audio"]];
@@ -1008,8 +1008,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	NSDictionary* file_info = [[NSFileManager defaultManager] attributesOfItemAtPath:fileURL.path error:NULL];
 	NSNumber* file_size = [file_info objectForKey:NSFileSize];
-	if ([file_size integerValue] > 45000000) { // 45 MB
-		NSString* msg = @"Micro.blog is designed for short videos. File uploads should be 45 MB or less. (Usually about 2 minutes of video.)";
+	if ([file_size integerValue] > 75000000) { // 75 MB
+		NSString* msg = @"Micro.blog is designed for short videos. File uploads should be 75 MB or less. (Usually about 4 minutes of video.)";
 		[NSAlert rf_showOneButtonAlert:@"Video Can't Be Uploaded" message:msg button:@"OK" completionHandler:NULL];
 		is_ok = NO;
 	}
