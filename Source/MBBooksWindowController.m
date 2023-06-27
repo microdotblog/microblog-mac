@@ -110,6 +110,12 @@
 			new_item.representedObject = shelf;
 		}
 	}
+	
+	if ([self.bookshelf isLibrary]) {
+		NSMenu* menu = [self.deleteMenuItem menu];
+		[menu removeItem:self.deleteMenuItem];
+		[menu removeItem:self.deleteSeparatorItem];
+	}
 }
 
 #pragma mark -

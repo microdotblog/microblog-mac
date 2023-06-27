@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* booksCountField;
 @property (strong, nonatomic) IBOutlet NSMenu* contextMenu;
 @property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
+@property (strong, nonatomic) IBOutlet NSMenuItem* deleteMenuItem;
+@property (strong, nonatomic) IBOutlet NSMenuItem* deleteSeparatorItem;
 
 @property (strong, nonatomic) RFBookshelf* bookshelf;
 @property (strong, nonatomic) NSArray* allBooks; // MBBook

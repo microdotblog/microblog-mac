@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +12,8 @@
                 <outlet property="booksCountField" destination="dI4-c7-XjA" id="vyX-N4-F6e"/>
                 <outlet property="browserMenuItem" destination="VDp-cZ-9mK" id="02v-Dy-uV4"/>
                 <outlet property="contextMenu" destination="Z9F-C1-hHf" id="t3Q-wd-58v"/>
+                <outlet property="deleteMenuItem" destination="IIb-gO-xa3" id="eKc-jc-ld7"/>
+                <outlet property="deleteSeparatorItem" destination="obO-bv-N1F" id="nUb-S1-y2q"/>
                 <outlet property="progressSpinner" destination="6R6-qI-4Gk" id="uXm-Pk-0jg"/>
                 <outlet property="searchField" destination="uNA-3l-ASe" id="ak2-YF-qJb"/>
                 <outlet property="tableView" destination="uNd-0J-cNj" id="o3s-b8-7Nv"/>
@@ -33,7 +35,7 @@
                         <rect key="frame" x="-1" y="-1" width="493" height="387"/>
                         <clipView key="contentView" drawsBackground="NO" id="h4R-hn-ZUu">
                             <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj" customClass="MBBooksTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
