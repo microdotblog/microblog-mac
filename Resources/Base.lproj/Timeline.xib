@@ -131,7 +131,7 @@
                                             <nil key="identifier"/>
                                         </webPreferences>
                                     </webView>
-                                    <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="ad0-0M-Keo">
+                                    <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="ad0-0M-Keo" customClass="MBMessageBox">
                                         <rect key="frame" x="-1" y="567" width="437" height="34"/>
                                         <view key="contentView" id="gUd-Pe-vB8">
                                             <rect key="frame" x="1" y="1" width="435" height="32"/>

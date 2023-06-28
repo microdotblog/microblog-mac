@@ -70,6 +70,7 @@
 		4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D9269645E000AD3781 /* RFBarExportController.m */; };
 		4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 4B3840DC26964F3B00AD3781 /* ZipArchive */; };
 		4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */; };
+		4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B332A4C72AA00CAACCD /* MBMessageBox.m */; };
 		4B3ADB2828494546003CD107 /* MBPhotoSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */; };
 		4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF3201EC55A00C71AAF /* MMScanner.m */; };
 		4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF7201EC55A00C71AAF /* MMDocument.m */; };
@@ -319,6 +320,8 @@
 		4B3840D9269645E000AD3781 /* RFBarExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBarExportController.m; path = Source/RFBarExportController.m; sourceTree = "<group>"; };
 		4B390B2F2A4C655C00CAACCD /* MBStatusBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatusBubbleView.h; path = Source/MBStatusBubbleView.h; sourceTree = "<group>"; };
 		4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatusBubbleView.m; path = Source/MBStatusBubbleView.m; sourceTree = "<group>"; };
+		4B390B322A4C72AA00CAACCD /* MBMessageBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMessageBox.h; path = Source/MBMessageBox.h; sourceTree = "<group>"; };
+		4B390B332A4C72AA00CAACCD /* MBMessageBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMessageBox.m; path = Source/MBMessageBox.m; sourceTree = "<group>"; };
 		4B3ADB2628494546003CD107 /* MBPhotoSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPhotoSelectionView.h; path = Source/MBPhotoSelectionView.h; sourceTree = "<group>"; };
 		4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPhotoSelectionView.m; path = Source/MBPhotoSelectionView.m; sourceTree = "<group>"; };
 		4B400CF2201EC55A00C71AAF /* MMElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMElement.h; path = Shared/MMMarkdown/Source/MMElement.h; sourceTree = "<group>"; };
@@ -856,6 +859,8 @@
 				4BEFA48321EFE799006B1691 /* RFHeaderBox.h */,
 				4B390B2F2A4C655C00CAACCD /* MBStatusBubbleView.h */,
 				4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */,
+				4B390B322A4C72AA00CAACCD /* MBMessageBox.h */,
+				4B390B332A4C72AA00CAACCD /* MBMessageBox.m */,
 				4BEFA48421EFE799006B1691 /* RFHeaderBox.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
@@ -1200,6 +1205,7 @@
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
 				C549E92121EEB6D600730675 /* RFUserCache.m in Sources */,
 				4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */,
+				4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */,
 				4B5650691F8585C900B03FFD /* RFRoundedImageView.m in Sources */,
 				4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
