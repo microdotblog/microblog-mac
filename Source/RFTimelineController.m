@@ -221,6 +221,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	NSIndexSet* indexes = [self.tableView selectedRowIndexes];
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
+	self.statusBubble.alphaValue = 1.0;
 }
 
 - (void) windowDidResignKey:(NSNotification *)notification
@@ -228,6 +229,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	NSIndexSet* indexes = [self.tableView selectedRowIndexes];
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
+	self.statusBubble.alphaValue = 0.5;
 }
 
 - (void) timelineDidScroll:(NSNotification *)notification
