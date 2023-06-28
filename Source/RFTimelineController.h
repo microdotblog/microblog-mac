@@ -36,6 +36,8 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) IBOutlet NSImageView* switchAccountView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* timelineLeftConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* timelineRightConstraint;
+@property (strong, nonatomic) IBOutlet NSView* statusBubble;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* statusProgressSpinner;
 
 @property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) NSPopover* optionsPopover;

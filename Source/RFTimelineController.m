@@ -100,6 +100,8 @@ static NSInteger const kSelectionBookshelves = 10;
     [toolbar setDelegate:self];
     
     [self.window setToolbar:toolbar];
+	
+	[self hidePublishingStatus:NO];
 }
 
 - (void) setupFullScreen
@@ -551,8 +553,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	}
 
 	RFDispatchSeconds (1.5, ^{
-		self.messageTopConstraint.animator.constant = -35;
-		[self.messageSpinner stopAnimation:nil];
+		[self hideMessageField];
 	});
 }
 
@@ -621,57 +622,52 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (void) checkPostsFromTimer:(NSTimer *)timer
 {
-	if (self.selectedTimeline == kSelectionTimeline) {
 //		[self showNotificationWithTitle:@"Some User (@manton)" text:@"@manton Hello hello"];
 
-		NSString* top_post_id = [self topPostID];
-		if (top_post_id.length > 0) {
-			RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
-			NSDictionary* args = @{ @"since_id": top_post_id };
-			[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-				if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-					NSNumber* count = [response.parsedResponse objectForKey:@"count"];
-					NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
-					NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
-					if (is_publishing && [is_publishing boolValue]) {
-						NSString* msg = @"Publishing latest changes to your blog...";
-
-						RFDispatchMainAsync (^{
-							self.messageField.stringValue = msg;
-							self.messageTopConstraint.animator.constant = -1;
-						});
-					}
-					else if (count && count.integerValue > 0) {
-						NSString* msg;
-						if (count.integerValue == 1) {
-							msg = @"1 new post";
-						}
-						else {
-							msg = [NSString stringWithFormat:@"%@ new posts", count];
-						}
-
-						RFDispatchMainAsync (^{
-							self.messageField.stringValue = msg;
-							self.messageTopConstraint.animator.constant = -1;
-						});
+	NSString* top_post_id = [self topPostID];
+	if (top_post_id.length > 0) {
+		RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
+		NSDictionary* args = @{ @"since_id": top_post_id };
+		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+			if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+				NSNumber* count = [response.parsedResponse objectForKey:@"count"];
+				NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
+				NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
+				if (is_publishing && [is_publishing boolValue]) {
+					RFDispatchMainAsync (^{
+						[self showPublishingStatus];
+					});
+				}
+				else if (count && count.integerValue > 0) {
+					NSString* msg;
+					if (count.integerValue == 1) {
+						msg = @"1 new post";
 					}
 					else {
-						RFDispatchMainAsync (^{
-							self.messageTopConstraint.animator.constant = -35;
-							[self.messageSpinner stopAnimation:nil];
-						});
-					}
-
-					if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
-						self.checkSeconds = check_seconds;
+						msg = [NSString stringWithFormat:@"%@ new posts", count];
 					}
 
 					RFDispatchMainAsync (^{
-						[self setupTimer];
+						[self showMessageField:msg];
+						[self hidePublishingStatus:YES];
 					});
 				}
-			}];
-		}
+				else {
+					RFDispatchMainAsync (^{
+						[self hideMessageField];
+						[self hidePublishingStatus:YES];
+					});
+				}
+
+				if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
+					self.checkSeconds = check_seconds;
+				}
+
+				RFDispatchMainAsync (^{
+					[self setupTimer];
+				});
+			}
+		}];
 	}
 
 	[self setupTimer];
@@ -1176,6 +1172,37 @@ static NSInteger const kSelectionBookshelves = 10;
 	}
 }
 
+- (void) showPublishingStatus
+{
+	[self.statusProgressSpinner startAnimation:nil];
+	self.statusBubble.animator.alphaValue = 1.0;
+}
+
+- (void) hidePublishingStatus:(BOOL)animate
+{
+	[self.statusProgressSpinner stopAnimation:nil];
+	if (animate) {
+		self.statusBubble.animator.alphaValue = 0.0;
+	}
+	else {
+		self.statusBubble.alphaValue = 0.0;
+	}
+}
+
+- (void) showMessageField:(NSString *)message
+{
+	if (self.selectedTimeline == kSelectionTimeline) {
+		self.messageField.stringValue = message;
+		self.messageTopConstraint.animator.constant = -1;
+	}
+}
+
+- (void) hideMessageField
+{
+	self.messageTopConstraint.animator.constant = -35;
+	[self.messageSpinner stopAnimation:nil];
+}
+
 #pragma mark -
 
 - (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame
@@ -1495,17 +1522,22 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
 }
 
 - ( NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
-    if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
+	if ([itemIdentifier isEqualToString:@"StatusBubble"]) {
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.view = self.statusBubble;
+		return item;
+	}
+    else if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
         NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
         item.view = self.profileBox;
         return item;
