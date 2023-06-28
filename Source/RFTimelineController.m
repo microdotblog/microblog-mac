@@ -305,7 +305,7 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (void) checkTimelineNotification:(NSNotification *)notification
 {
-	self.checkSeconds = @2;
+	self.checkSeconds = @1;
 	[self setupTimer];
 }
 
