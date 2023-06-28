@@ -6,6 +6,31 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 2.9.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Updated bookshelves to recognize library loans and holds. Use the web version of Micro.blog to connect with Libby.</li>
+					<li>Updated photo icon in new post window.</li>
+					<li>Moved publishing status message to the toolbar.</li>
+					<li>Fixed Day One export to attach photos when referenced with Markdown.</li>
+					<li>Fixed large video uploads to show better error message.</li>
+					<li>Fixed accounts pop-up for multiple accounts to use better menu position.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Wed, 28 Jun 2023 11:22:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_2.9.1.zip" sparkle:shortVersionString="2.9.1" sparkle:version="132" length="4090980" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 2.9</title>
  			<description><![CDATA[
 				<style>
