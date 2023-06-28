@@ -71,6 +71,7 @@
 		4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 4B3840DC26964F3B00AD3781 /* ZipArchive */; };
 		4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */; };
 		4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B332A4C72AA00CAACCD /* MBMessageBox.m */; };
+		4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */; };
 		4B3ADB2828494546003CD107 /* MBPhotoSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */; };
 		4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF3201EC55A00C71AAF /* MMScanner.m */; };
 		4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF7201EC55A00C71AAF /* MMDocument.m */; };
@@ -322,6 +323,8 @@
 		4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatusBubbleView.m; path = Source/MBStatusBubbleView.m; sourceTree = "<group>"; };
 		4B390B322A4C72AA00CAACCD /* MBMessageBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMessageBox.h; path = Source/MBMessageBox.h; sourceTree = "<group>"; };
 		4B390B332A4C72AA00CAACCD /* MBMessageBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMessageBox.m; path = Source/MBMessageBox.m; sourceTree = "<group>"; };
+		4B390B352A4C8BE400CAACCD /* MBUnacceptableToolbarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBUnacceptableToolbarItem.h; path = Source/MBUnacceptableToolbarItem.h; sourceTree = "<group>"; };
+		4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBUnacceptableToolbarItem.m; path = Source/MBUnacceptableToolbarItem.m; sourceTree = "<group>"; };
 		4B3ADB2628494546003CD107 /* MBPhotoSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPhotoSelectionView.h; path = Source/MBPhotoSelectionView.h; sourceTree = "<group>"; };
 		4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPhotoSelectionView.m; path = Source/MBPhotoSelectionView.m; sourceTree = "<group>"; };
 		4B400CF2201EC55A00C71AAF /* MMElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMElement.h; path = Shared/MMMarkdown/Source/MMElement.h; sourceTree = "<group>"; };
@@ -859,6 +862,8 @@
 				4BEFA48321EFE799006B1691 /* RFHeaderBox.h */,
 				4B390B2F2A4C655C00CAACCD /* MBStatusBubbleView.h */,
 				4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */,
+				4B390B352A4C8BE400CAACCD /* MBUnacceptableToolbarItem.h */,
+				4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */,
 				4B390B322A4C72AA00CAACCD /* MBMessageBox.h */,
 				4B390B332A4C72AA00CAACCD /* MBMessageBox.m */,
 				4BEFA48421EFE799006B1691 /* RFHeaderBox.m */,
@@ -1164,6 +1169,7 @@
 				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
 				4B2CAB141F90667300D9B10E /* utf8.c in Sources */,
 				4BF7E50A2834374F00500C59 /* RFRepliesController.m in Sources */,
+				4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */,
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
 				4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */,
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,

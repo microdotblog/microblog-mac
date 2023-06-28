@@ -251,7 +251,7 @@
                     <constraint firstItem="WA0-ys-uhG" firstAttribute="leading" secondItem="dzD-B1-h1U" secondAttribute="trailing" constant="5" id="w8f-Ef-QXN"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="-257" y="-181"/>
+            <point key="canvasLocation" x="-306" y="-180"/>
         </box>
         <customView id="G22-WN-mnh">
             <rect key="frame" x="0.0" y="0.0" width="348" height="39"/>
@@ -293,7 +293,7 @@
                 <constraint firstAttribute="bottom" secondItem="tLG-Iv-7Jr" secondAttribute="bottom" id="mfw-0W-pAL"/>
                 <constraint firstItem="tLG-Iv-7Jr" firstAttribute="top" secondItem="G22-WN-mnh" secondAttribute="top" id="r2V-r4-1iY"/>
             </constraints>
-            <point key="canvasLocation" x="-486" y="-406.5"/>
+            <point key="canvasLocation" x="-183" y="-300"/>
         </customView>
     </objects>
     <resources>

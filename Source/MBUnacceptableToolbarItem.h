@@ -1,5 +1,5 @@
 //
-//  MBStatusBubbleView.h
+//  MBUnacceptableToolbarItem.h
 //  Micro.blog
 //
 //  Created by Manton Reece on 6/28/23.
@@ -10,10 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBStatusBubbleView : NSView
-
-@property (strong, nonatomic) NSTrackingArea* customTrackingArea;
-@property (strong, nonatomic) NSColor* fillColor;
+@interface MBUnacceptableToolbarItem : NSToolbarItem
 
 @end
 

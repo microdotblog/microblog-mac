@@ -101,7 +101,7 @@ static NSInteger const kSelectionBookshelves = 10;
     
     [self.window setToolbar:toolbar];
 	
-	[self hidePublishingStatus:NO];
+//	[self hidePublishingStatus:NO];
 }
 
 - (void) setupFullScreen

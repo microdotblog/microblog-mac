@@ -10,6 +10,11 @@
 
 @implementation MBStatusBubbleView
 
+- (void) awakeFromNib
+{
+	self.fillColor = [NSColor colorNamed:@"color_notification_background"];
+}
+
 - (void) drawRect:(NSRect)dirtyRect
 {
 	[super drawRect:dirtyRect];
@@ -19,7 +24,7 @@
 	
 	CGPathRef path = CGPathCreateWithRoundedRect(r, 7.0, 7.0, NULL);
 
-	[[NSColor colorNamed:@"color_notification_background"] set];
+	[self.fillColor set];
 	CGContextAddPath (context, path);
 	CGContextFillPath (context);
 
@@ -27,6 +32,41 @@
 	CGContextSetLineWidth (context, 0.5);
 	CGContextAddPath (context, path);
 	CGContextStrokePath (context);
+}
+
+- (void) updateTrackingAreas
+{
+	if (self.customTrackingArea) {
+		[self removeTrackingArea:self.customTrackingArea];
+	}
+
+	self.customTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingActiveInKeyWindow | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited owner:self userInfo:nil];
+	[self addTrackingArea:self.customTrackingArea];
+}
+
+- (BOOL) acceptsFirstMouse:(NSEvent *)event
+{
+	return NO;
+}
+
+- (void) mouseUp:(NSEvent *)event
+{
+	if (self.superview.alphaValue == 1.0) {
+		NSURL* url = [NSURL URLWithString:@"https://micro.blog/account/logs"];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (void) mouseEntered:(NSEvent *)event
+{
+	self.fillColor = [NSColor colorNamed:@"color_notification_background_hover"];
+	[self setNeedsDisplay:YES];
+}
+
+- (void) mouseExited:(NSEvent *)event
+{
+	self.fillColor = [NSColor colorNamed:@"color_notification_background"];
+	[self setNeedsDisplay:YES];
 }
 
 @end
