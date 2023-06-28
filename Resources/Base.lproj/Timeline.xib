@@ -266,7 +266,7 @@
                                 <constraint firstAttribute="width" constant="230" id="ZcY-83-o7c"/>
                             </constraints>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="Publishing latest changes to your blog..." id="fAb-7T-WWY">
-                                <font key="font" metaFont="system" size="12"/>
+                                <font key="font" metaFont="cellTitle"/>
                                 <color key="textColor" name="color_notification_text"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
