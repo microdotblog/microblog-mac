@@ -44,13 +44,9 @@
 	[self addTrackingArea:self.customTrackingArea];
 }
 
-- (BOOL) acceptsFirstMouse:(NSEvent *)event
-{
-	return NO;
-}
-
 - (void) mouseUp:(NSEvent *)event
 {
+	// only allow clicks if the parent isn't dimmed or hidden
 	if (self.superview.alphaValue == 1.0) {
 		NSURL* url = [NSURL URLWithString:@"https://micro.blog/account/logs"];
 		[[NSWorkspace sharedWorkspace] openURL:url];

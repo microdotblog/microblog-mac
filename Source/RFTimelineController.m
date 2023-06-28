@@ -101,7 +101,7 @@ static NSInteger const kSelectionBookshelves = 10;
     
     [self.window setToolbar:toolbar];
 	
-//	[self hidePublishingStatus:NO];
+	[self hidePublishingStatus:NO];
 }
 
 - (void) setupFullScreen
@@ -222,7 +222,10 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
 	if (self.statusBubble.alphaValue != 0.0) {
-		self.statusBubble.alphaValue = 1.0;
+		// delay changing alpha to avoid clicks right away
+		RFDispatchSeconds(1.0, ^{
+			self.statusBubble.alphaValue = 1.0;
+		});
 	}
 }
 
@@ -1548,10 +1551,6 @@ static NSInteger const kSelectionBookshelves = 10;
         item.view = self.profileBox;
         return item;
     }
-//    else if ([itemIdentifier isEqualToString:@"Separator"]) {
-//        NSToolbarItem* separator = [NSTrackingSeparatorToolbarItem trackingSeparatorToolbarItemWithIdentifier:itemIdentifier splitView:self.splitView dividerIndex:0];
-//        return separator;
-//    }
     else if ([itemIdentifier isEqualToString:@"NewPost"]) {
         NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		if (@available(macOS 11.0, *)) {
