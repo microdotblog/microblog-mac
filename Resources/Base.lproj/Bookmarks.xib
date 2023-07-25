@@ -10,6 +10,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBBookmarksController">
             <connections>
+                <outlet property="highlightsCountButton" destination="DDH-Ir-Y8s" id="8x6-cU-VbG"/>
+                <outlet property="highlightsTopConstraint" destination="JcL-kO-GiP" id="wT0-gk-vgQ"/>
                 <outlet property="view" destination="c22-O7-iKe" id="Gyx-G8-w6m"/>
                 <outlet property="webView" destination="dJ3-8Q-iCM" id="8m6-O6-Azn"/>
             </connections>
@@ -21,13 +23,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="afl-rL-umg">
-                    <rect key="frame" x="-1" y="484" width="456" height="44"/>
+                    <rect key="frame" x="-1" y="493" width="456" height="35"/>
                     <view key="contentView" id="bBM-c5-6vi">
-                        <rect key="frame" x="1" y="1" width="454" height="42"/>
+                        <rect key="frame" x="1" y="1" width="454" height="33"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="20" y="13" width="414" height="16"/>
+                                <rect key="frame" x="15" y="5" width="424" height="23"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -38,19 +40,20 @@
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="20" id="FFf-63-NRd"/>
-                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="KyK-P8-88d"/>
-                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="20" id="LIb-hE-eB9"/>
+                            <constraint firstAttribute="trailing" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="15" id="FFf-63-NRd"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="15" id="LIb-hE-eB9"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="top" secondItem="bBM-c5-6vi" secondAttribute="top" constant="5" id="eym-nk-GAq"/>
+                            <constraint firstAttribute="bottom" secondItem="DDH-Ir-Y8s" secondAttribute="bottom" constant="5" id="wVb-yW-N8Q"/>
                         </constraints>
                     </view>
                     <constraints>
-                        <constraint firstAttribute="height" constant="44" id="0Lk-f9-ac3"/>
+                        <constraint firstAttribute="height" constant="35" id="0Lk-f9-ac3"/>
                     </constraints>
                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                     <color key="fillColor" name="color_highlight_background"/>
                 </box>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
-                    <rect key="frame" x="0.0" y="0.0" width="454" height="484"/>
+                    <rect key="frame" x="0.0" y="0.0" width="454" height="493"/>
                 </customView>
             </subviews>
             <constraints>
