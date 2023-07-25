@@ -3,6 +3,8 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,21 +20,54 @@
             <rect key="frame" x="0.0" y="0.0" width="454" height="527"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <box fixedFrame="YES" boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="afl-rL-umg">
-                    <rect key="frame" x="0.0" y="469" width="454" height="58"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="afl-rL-umg">
+                    <rect key="frame" x="-1" y="484" width="456" height="44"/>
                     <view key="contentView" id="bBM-c5-6vi">
-                        <rect key="frame" x="1" y="1" width="452" height="56"/>
+                        <rect key="frame" x="1" y="1" width="454" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
+                                <rect key="frame" x="20" y="13" width="414" height="16"/>
+                                <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="showHighlights:" target="-2" id="mPH-Mr-dXR"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="20" id="FFf-63-NRd"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="KyK-P8-88d"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="20" id="LIb-hE-eB9"/>
+                        </constraints>
                     </view>
-                    <color key="fillColor" name="systemYellowColor" catalog="System" colorSpace="catalog"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="0Lk-f9-ac3"/>
+                    </constraints>
+                    <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                    <color key="fillColor" name="color_highlight_background"/>
                 </box>
-                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
-                    <rect key="frame" x="0.0" y="0.0" width="454" height="466"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
+                    <rect key="frame" x="0.0" y="0.0" width="454" height="484"/>
                 </customView>
             </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="afl-rL-umg" secondAttribute="trailing" constant="-1" id="3ml-o2-utE"/>
+                <constraint firstItem="afl-rL-umg" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="-1" id="5VD-4T-vLD"/>
+                <constraint firstAttribute="bottom" secondItem="dJ3-8Q-iCM" secondAttribute="bottom" id="DHS-gU-GXp"/>
+                <constraint firstItem="afl-rL-umg" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="-1" id="JcL-kO-GiP"/>
+                <constraint firstItem="dJ3-8Q-iCM" firstAttribute="top" secondItem="afl-rL-umg" secondAttribute="bottom" id="JnC-OS-vF6"/>
+                <constraint firstAttribute="trailing" secondItem="dJ3-8Q-iCM" secondAttribute="trailing" id="fUF-iX-h63"/>
+                <constraint firstItem="dJ3-8Q-iCM" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="x6q-vo-Lp4"/>
+            </constraints>
             <point key="canvasLocation" x="173" y="120.5"/>
         </customView>
     </objects>
+    <resources>
+        <namedColor name="color_highlight_background">
+            <color red="0.99607843137254903" green="0.97647058823529409" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

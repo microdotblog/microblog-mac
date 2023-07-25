@@ -8,6 +8,8 @@
 
 #import "MBBookmarksController.h"
 
+#import "RFConstants.h"
+
 @implementation MBBookmarksController
 
 - (id) init
@@ -22,6 +24,11 @@
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
+}
+
+- (IBAction) showHighlights:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowHighlightsNotification object:self];
 }
 
 @end

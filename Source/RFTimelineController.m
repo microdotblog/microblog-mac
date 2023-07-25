@@ -492,10 +492,6 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (IBAction) showPages:(id)sender
 {
-	// testing
-	[self showHighlights];
-	return;
-	
 	self.selectedTimeline = kSelectionPages;
 
 	[self closeOverlays];
