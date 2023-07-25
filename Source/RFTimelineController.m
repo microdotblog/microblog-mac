@@ -22,6 +22,8 @@
 #import "RFTopicController.h"
 #import "RFDiscoverController.h"
 #import "RFUserController.h"
+#import "MBHighlightsController.h"
+#import "MBBookmarksController.h"
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
 #import "RFConstants.h"
@@ -175,6 +177,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserProfileNotification:) name:kShowUserProfileNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showDiscoverTopicNotification:) name:kShowDiscoverTopicNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showHighlightsNotification:) name:kShowHighlightsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkTimelineNotification:) name:kCheckTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
@@ -296,6 +299,11 @@ static NSInteger const kSelectionBookshelves = 10;
 {
 	NSString* topic = [notification.userInfo objectForKey:kShowDiscoverTopicNameKey];
 	[self showTopicsWithSearch:topic];
+}
+
+- (void) showHighlightsNotification:(NSNotification *)notification
+{
+	[self showHighlights];
 }
 
 - (void) refreshTimelineNotification:(NSNotification *)notification
@@ -440,10 +448,15 @@ static NSInteger const kSelectionBookshelves = 10;
 
 	[self closeOverlays];
 
+	MBBookmarksController* controller = [[MBBookmarksController alloc] init];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
+	[self showAllPostsController:controller];
+
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/favorites"];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-	self.webView.hidden = NO;
+	[[controller.webView mainFrame] loadRequest:request];
+	controller.webView.hidden = NO;
 
 	[self selectSidebarRow:kSelectionFavorites];
 	[self startLoadingSidebarRow:kSelectionFavorites];
@@ -479,6 +492,10 @@ static NSInteger const kSelectionBookshelves = 10;
 
 - (IBAction) showPages:(id)sender
 {
+	// testing
+	[self showHighlights];
+	return;
+	
 	self.selectedTimeline = kSelectionPages;
 
 	[self closeOverlays];
@@ -905,6 +922,16 @@ static NSInteger const kSelectionBookshelves = 10;
 	[controller view];
 	[self setupWebDelegates:controller.webView];
 
+	[self pushViewController:controller];
+}
+
+- (void) showHighlights
+{
+	[self hideOptionsMenu];
+
+	NSViewController* controller = [[MBHighlightsController alloc] init];
+	[controller view];
+	
 	[self pushViewController:controller];
 }
 
