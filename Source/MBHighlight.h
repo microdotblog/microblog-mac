@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* selectionText;
 @property (strong) NSString* title;
 @property (strong) NSString* url;
+@property (strong) NSDate* createdAt;
 
 @end
 

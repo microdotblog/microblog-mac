@@ -13,6 +13,7 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "RFConstants.h"
+#import "UUDate.h"
 
 @implementation MBHighlightsController
 
@@ -54,6 +55,8 @@
 				h.selectionText = [info objectForKey:@"content_text"];
 				h.title = [info objectForKey:@"title"];
 				h.url = [info objectForKey:@"url"];
+				NSString* date_s = [info objectForKey:@"date_published"];
+				h.createdAt = [NSDate uuDateFromRfc3339String:date_s];
 				
 				[new_highlights addObject:h];
 			}

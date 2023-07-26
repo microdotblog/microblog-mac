@@ -44,7 +44,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView id="Kiz-YJ-dsk" customClass="MBHighlightCell">
+                                            <tableCellView identifier="HighlightCell" id="Kiz-YJ-dsk" customClass="MBHighlightCell">
                                                 <rect key="frame" x="18" y="0.0" width="463" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>

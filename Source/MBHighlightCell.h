@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBHighlightCell : NSTableRowView
 
 @property (strong, nonatomic) IBOutlet NSTextField* selectionTextField;
+@property (strong, nonatomic) IBOutlet NSTextField* titleField;
+@property (strong, nonatomic) IBOutlet NSTextField* dateField;
 
 @property (strong) MBHighlight* highlight;
 	
