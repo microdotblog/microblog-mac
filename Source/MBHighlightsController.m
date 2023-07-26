@@ -13,6 +13,7 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "RFConstants.h"
+#import "NSString+Extras.h"
 #import "UUDate.h"
 
 @implementation MBHighlightsController
@@ -31,6 +32,7 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
+	[self setupBrowser];
 	
 	[self fetchHighlights];
 }
@@ -38,9 +40,30 @@
 - (void) setupTable
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"HighlightCell" bundle:nil] forIdentifier:@"HighlightCell"];
-//	[self.tableView setTarget:self];
-//	[self.tableView setDoubleAction:@selector(openRow:)];
-//	self.tableView.alphaValue = 0.0;
+	[self.tableView setTarget:self];
+	[self.tableView setDoubleAction:@selector(openRow:)];
+	self.tableView.alphaValue = 0.0;
+
+	self.view.window.initialFirstResponder = self.tableView;
+}
+
+- (void) setupBrowser
+{
+	NSString* browser_s = @"Open in Browser";
+	
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		browser_s = @"Open in Chrome";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		browser_s = @"Open in Firefox";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
+		browser_s = @"Open in Safari";
+	}
+
+	self.browserMenuItem.title = browser_s;
 }
 
 - (void) fetchHighlights
@@ -64,6 +87,7 @@
 			RFDispatchMainAsync (^{
 				self.currentHighlights = new_highlights;
 				[self.tableView reloadData];
+				self.tableView.animator.alphaValue = 1.0;
 			});
 		}
 	}];
@@ -72,6 +96,92 @@
 - (IBAction) back:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
+}
+
+- (IBAction) delete:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
+		
+		NSString* s = h.selectionText;
+		if (s.length > 50) {
+			s = [s substringToIndex:50];
+			s = [s stringByAppendingString:@"..."];
+		}
+		
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.informativeText = @"This highlight will be deleted.";
+		[sheet addButtonWithTitle:@"Delete"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				// TODO: hit server to delete it, refresh
+				// ...
+			}
+		}];
+	}
+}
+
+- (IBAction) startNewPost:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
+		
+		NSString* s;
+		s = [NSString stringWithFormat:@"[%@](%@)\n\n> %@", h.title, h.url, h.selectionText];
+				
+		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", [s rf_urlEncoded]]];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) openRow:(id)sender
+{
+	NSInteger row = [self.tableView clickedRow];
+	if (row < 0) {
+		row = [self.tableView selectedRow];
+	}
+		
+	if (row >= 0) {
+		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
+		NSURL* url = [NSURL URLWithString:h.url];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) openInBrowser:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
+		NSURL* url = [NSURL URLWithString:h.url];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:h.url forType:NSPasteboardTypeString];
+	}
+}
+
+- (IBAction) copyText:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:h.selectionText forType:NSPasteboardTypeString];
+	}
 }
 
 #pragma mark -

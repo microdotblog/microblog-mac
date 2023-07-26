@@ -9,23 +9,24 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBHighlightsController">
             <connections>
+                <outlet property="browserMenuItem" destination="nTi-sh-Y0s" id="PE9-za-Nvb"/>
                 <outlet property="tableView" destination="N7o-iT-Tun" id="YTM-7g-e0h"/>
                 <outlet property="view" destination="c22-O7-iKe" id="DLd-Y7-JYT"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="c22-O7-iKe">
+        <customView id="c22-O7-iKe" customClass="MBRestoreCursorView">
             <rect key="frame" x="0.0" y="0.0" width="500" height="543"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
                     <rect key="frame" x="0.0" y="0.0" width="500" height="504"/>
                     <clipView key="contentView" drawsBackground="NO" id="Z2x-kS-S6r">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="60" usesAutomaticRowHeights="YES" viewBased="YES" id="N7o-iT-Tun">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="60" usesAutomaticRowHeights="YES" viewBased="YES" id="N7o-iT-Tun" customClass="MBHighlightsTableView">
                                 <rect key="frame" x="0.0" y="0.0" width="500" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
@@ -68,12 +69,14 @@
                                 <connections>
                                     <outlet property="dataSource" destination="-2" id="Fyy-cQ-AKV"/>
                                     <outlet property="delegate" destination="-2" id="cji-8B-CtI"/>
+                                    <outlet property="menu" destination="ze9-3U-HD8" id="52D-Lc-jSo"/>
                                 </connections>
                             </tableView>
                         </subviews>
+                        <nil key="backgroundColor"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="GEH-YR-9tl">
-                        <rect key="frame" x="0.0" y="488" width="500" height="16"/>
+                        <rect key="frame" x="-100" y="-100" width="500" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="EBr-q5-s5y">
@@ -124,6 +127,43 @@
             </constraints>
             <point key="canvasLocation" x="63" y="156.5"/>
         </customView>
+        <menu id="ze9-3U-HD8">
+            <items>
+                <menuItem title="New Post..." id="SeR-hA-drp">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="startNewPost:" target="-2" id="4A9-p3-EH0"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Rat-Bq-sne"/>
+                <menuItem title="Delete" id="rVL-Zp-sjT">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="delete:" target="-2" id="Spn-Dc-b9S"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="BrP-hE-ZuJ"/>
+                <menuItem title="Open in Safari" id="nTi-sh-Y0s">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openInBrowser:" target="-2" id="O2S-9m-spZ"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Link" id="QWU-Ux-VcT">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyLink:" target="-2" id="1N5-6h-iPs"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Text" id="MHU-g0-5r6">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyText:" target="-2" id="Uqh-GQ-UpE"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="-114" y="574"/>
+        </menu>
     </objects>
     <resources>
         <image name="BackNormal" width="20" height="20"/>

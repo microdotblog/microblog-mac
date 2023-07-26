@@ -16,7 +16,7 @@
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-Xk-oPr">
                     <rect key="frame" x="18" y="70" width="348" height="19"/>
-                    <textFieldCell key="cell" selectable="YES" title="Selection text" id="iBb-RZ-eA9">
+                    <textFieldCell key="cell" title="Selection text" id="iBb-RZ-eA9">
                         <font key="font" metaFont="system" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -63,7 +63,7 @@
     </objects>
     <resources>
         <namedColor name="color_date_text">
-            <color red="0.60392156862745094" green="0.60392156862745094" blue="0.60392156862745094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

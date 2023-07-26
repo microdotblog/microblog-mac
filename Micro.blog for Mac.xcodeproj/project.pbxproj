@@ -149,6 +149,7 @@
 		4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7449121E84AC500371388 /* RFPhotoZoomController.m */; };
 		4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB744A121EA4E1800371388 /* RFPhotoAltController.m */; };
 		4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB744A321EA4E3800371388 /* PhotoAlt.xib */; };
+		4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */; };
 		4BBD6DCF24A59D620018C337 /* RFSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */; };
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
@@ -469,6 +470,8 @@
 		4BB744A021EA4E1800371388 /* RFPhotoAltController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoAltController.h; path = Source/RFPhotoAltController.h; sourceTree = "<group>"; };
 		4BB744A121EA4E1800371388 /* RFPhotoAltController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoAltController.m; path = Source/RFPhotoAltController.m; sourceTree = "<group>"; };
 		4BB744A421EA4E3800371388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoAlt.xib; sourceTree = "<group>"; };
+		4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBHighlightsTableView.h; path = Source/MBHighlightsTableView.h; sourceTree = "<group>"; };
+		4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBHighlightsTableView.m; path = Source/MBHighlightsTableView.m; sourceTree = "<group>"; };
 		4BBD6DCD24A59D620018C337 /* RFSeparatorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFSeparatorCell.h; path = Source/RFSeparatorCell.h; sourceTree = "<group>"; };
 		4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFSeparatorCell.m; path = Source/RFSeparatorCell.m; sourceTree = "<group>"; };
 		4BBD6DD124A59D800018C337 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/SeparatorCell.xib; sourceTree = "<group>"; };
@@ -837,6 +840,8 @@
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
 				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
+				4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */,
+				4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */,
 				4BF537322247CD1D00CF9D66 /* RFPost.h */,
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
@@ -1213,6 +1218,7 @@
 				4B2CAB031F90664800D9B10E /* CTidy.m in Sources */,
 				4B2CAB0A1F90667300D9B10E /* attrask.c in Sources */,
 				4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */,
+				4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */,
 				4B2CAB111F90667300D9B10E /* tidylib.c in Sources */,
 				4B5EE2892064057F00C87A78 /* RFAccountCell.m in Sources */,
 				4BF7E53328394C5C00500C59 /* MBBooksTableView.m in Sources */,

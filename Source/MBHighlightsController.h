@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBHighlightsController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 
 @property (strong) NSArray* currentHighlights; // MBHighlight
 
