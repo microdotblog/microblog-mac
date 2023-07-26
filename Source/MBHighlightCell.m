@@ -8,7 +8,16 @@
 
 #import "MBHighlightCell.h"
 
+#import "MBHighlight.h"
+
 @implementation MBHighlightCell
+
+- (void) setupWithHighlight:(MBHighlight *)highlight
+{
+	self.highlight = highlight;
+	
+	[self.selectionTextField setStringValue:self.highlight.selectionText];
+}
 
 - (void) drawRect:(NSRect)dirtyRect
 {

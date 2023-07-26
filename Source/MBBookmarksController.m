@@ -11,6 +11,7 @@
 #import "RFClient.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
+#import "NSAppearance+Extras.h"
 
 static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 
@@ -28,10 +29,23 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
-	
+
+	[self setupWebView];
 	[self setupHighlightsButton];
 	
 	[self fetchHighlights];
+}
+
+- (void) setupWebView
+{
+	if ([NSAppearance rf_isDarkMode]) {
+		[self.webView setDrawsBackground:NO];
+	}
+	
+	NSString* url = @"https://micro.blog/hybrid/bookmarks";
+	
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
 }
 
 - (void) setupHighlightsButton
@@ -79,7 +93,6 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 			}));
 		}
 	}];
-
 }
 
 - (IBAction) showHighlights:(id)sender

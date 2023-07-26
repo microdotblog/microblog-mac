@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -10,20 +11,48 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView identifier="HighlightCell" id="EMJ-Qe-hFm" customClass="MBHighlightCell">
-            <rect key="frame" x="0.0" y="0.0" width="384" height="96"/>
+            <rect key="frame" x="0.0" y="0.0" width="384" height="60"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nk1-RL-bho">
-                    <rect key="frame" x="39" y="40" width="270" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="joP-3D-gL2">
-                        <font key="font" usesAppearanceFont="YES"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
+                <box boxType="custom" borderType="line" borderWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="AhK-JR-B8a">
+                    <rect key="frame" x="0.0" y="0.0" width="384" height="60"/>
+                    <view key="contentView" id="kt4-XT-k8E">
+                        <rect key="frame" x="0.0" y="0.0" width="384" height="60"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nk1-RL-bho">
+                                <rect key="frame" x="18" y="22" width="348" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="joP-3D-gL2">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Nk1-RL-bho" secondAttribute="trailing" constant="20" id="1o4-vY-Mwf"/>
+                            <constraint firstItem="Nk1-RL-bho" firstAttribute="leading" secondItem="kt4-XT-k8E" secondAttribute="leading" constant="20" id="8MY-Ds-eGs"/>
+                            <constraint firstItem="Nk1-RL-bho" firstAttribute="centerY" secondItem="kt4-XT-k8E" secondAttribute="centerY" id="DDV-Tn-VuI"/>
+                        </constraints>
+                    </view>
+                    <color key="fillColor" name="color_highlight_background"/>
+                </box>
             </subviews>
-            <point key="canvasLocation" x="-251" y="-446"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="AhK-JR-B8a" secondAttribute="bottom" id="EmQ-IK-y4Q"/>
+                <constraint firstItem="AhK-JR-B8a" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" id="YsH-QQ-HCx"/>
+                <constraint firstItem="AhK-JR-B8a" firstAttribute="top" secondItem="EMJ-Qe-hFm" secondAttribute="top" id="iDa-tt-9db"/>
+                <constraint firstAttribute="trailing" secondItem="AhK-JR-B8a" secondAttribute="trailing" id="qeD-6t-bL9"/>
+            </constraints>
+            <connections>
+                <outlet property="selectionTextField" destination="Nk1-RL-bho" id="DfA-D2-DCk"/>
+            </connections>
+            <point key="canvasLocation" x="-251" y="-458.5"/>
         </customView>
     </objects>
+    <resources>
+        <namedColor name="color_highlight_background">
+            <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

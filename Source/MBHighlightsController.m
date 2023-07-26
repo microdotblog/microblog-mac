@@ -10,6 +10,8 @@
 
 #import "MBHighlight.h"
 #import "MBHighlightCell.h"
+#import "RFClient.h"
+#import "RFMacros.h"
 
 @implementation MBHighlightsController
 
@@ -28,7 +30,7 @@
 	
 	[self setupTable];
 	
-	self.currentHighlights = @[ @"hi" ];
+	[self fetchHighlights];
 }
 
 - (void) setupTable
@@ -37,6 +39,30 @@
 //	[self.tableView setTarget:self];
 //	[self.tableView setDoubleAction:@selector(openRow:)];
 //	self.tableView.alphaValue = 0.0;
+}
+
+- (void) fetchHighlights
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/highlights"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_highlights = [NSMutableArray array];
+			for (NSDictionary* info in [response.parsedResponse objectForKey:@"items"]) {
+				MBHighlight* h = [[MBHighlight alloc] init];
+				h.highlightID = [info objectForKey:@"id"];
+				h.selectionText = [info objectForKey:@"content_text"];
+				h.title = [info objectForKey:@"title"];
+				h.url = [info objectForKey:@"url"];
+				
+				[new_highlights addObject:h];
+			}
+			
+			RFDispatchMainAsync (^{
+				self.currentHighlights = new_highlights;
+				[self.tableView reloadData];
+			});
+		}
+	}];
 }
 
 #pragma mark -
@@ -52,7 +78,7 @@
 
 	if (row < self.currentHighlights.count) {
 		MBHighlight* h = [self.currentHighlights objectAtIndex:row];
-//		[cell setupWithHighlight:h];
+		[cell setupWithHighlight:h];
 	}
 
 	return cell;

@@ -453,11 +453,6 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self setupWebDelegates:controller.webView];
 	[self showAllPostsController:controller];
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/favorites"];
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[controller.webView mainFrame] loadRequest:request];
-	controller.webView.hidden = NO;
-
 	[self selectSidebarRow:kSelectionFavorites];
 	[self startLoadingSidebarRow:kSelectionFavorites];
 }
@@ -740,9 +735,17 @@ static NSInteger const kSelectionBookshelves = 10;
 		RFDiscoverController* discover_controller = (RFDiscoverController *)controller;
 		return discover_controller.webView;
 	}
+	else if ([controller isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)controller;
+		return bookmarks_controller.webView;
+	}
 	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
 		RFDiscoverController* discover_controller = (RFDiscoverController *)self.allPostsController;
 		return discover_controller.webView;
+	}
+	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)self.allPostsController;
+		return bookmarks_controller.webView;
 	}
 	else {
 		return self.webView;
@@ -757,6 +760,9 @@ static NSInteger const kSelectionBookshelves = 10;
 	}
 	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
 		return ((RFDiscoverController *)self.allPostsController).view;
+	}
+	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
+		return ((MBBookmarksController *)self.allPostsController).view;
 	}
 	else {
 		return self.webView;
@@ -902,7 +908,6 @@ static NSInteger const kSelectionBookshelves = 10;
 	self.allPostsController.view.alphaValue = 0.0;
 	
 	self.allPostsController.view.translatesAutoresizingMaskIntoConstraints = NO;
-//	[self.window.contentView addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
 	[[self.webView superview] addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.allPostsController.view.animator.alphaValue = 1.0;

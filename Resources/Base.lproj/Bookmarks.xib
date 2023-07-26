@@ -70,7 +70,7 @@
     </objects>
     <resources>
         <namedColor name="color_highlight_background">
-            <color red="0.99607843137254903" green="0.97647058823529409" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBHighlight : NSObject
 
+@property (strong) NSNumber* highlightID;
+@property (strong) NSString* selectionText;
+@property (strong) NSString* title;
+@property (strong) NSString* url;
+
 @end
 
 NS_ASSUME_NONNULL_END
