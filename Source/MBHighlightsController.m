@@ -184,6 +184,33 @@
 	}
 }
 
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(newDocument:)) {
+		NSInteger row = self.tableView.selectedRow;
+		if (row >= 0) {
+			[item setTitle:@"New Post with Highlight"];
+		}
+		else {
+			[item setTitle:@"New Post"];
+		}
+	}
+
+	return YES;
+}
+
+- (void) newDocument:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		[self startNewPost:nil];
+	}
+	else {
+		// try to bubble it up to the top to be handled
+		[[NSApplication sharedApplication] tryToPerform:@selector(newDocument:) with:sender];
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView

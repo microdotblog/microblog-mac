@@ -254,6 +254,9 @@
 			[item setState:NSControlStateValueOff];
 		}
 	}
+	else if (item.action == @selector(newDocument:)) {
+		[item setTitle:@"New Post"];
+	}
 
 	return YES;
 }
