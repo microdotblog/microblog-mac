@@ -16,7 +16,7 @@
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-Xk-oPr">
                     <rect key="frame" x="18" y="70" width="348" height="19"/>
-                    <textFieldCell key="cell" title="Selection text" id="iBb-RZ-eA9">
+                    <textFieldCell key="cell" refusesFirstResponder="YES" title="Selection text" id="iBb-RZ-eA9">
                         <font key="font" metaFont="system" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -24,7 +24,7 @@
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a6r-Dq-veN">
                     <rect key="frame" x="18" y="41" width="348" height="19"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Page title" id="bPk-BC-iNb">
+                    <textFieldCell key="cell" lineBreakMode="clipping" refusesFirstResponder="YES" title="Page title" id="bPk-BC-iNb">
                         <font key="font" metaFont="systemSemibold" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -32,7 +32,7 @@
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sRX-3O-G46">
                     <rect key="frame" x="18" y="15" width="348" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Date" id="VDP-DC-wbO">
+                    <textFieldCell key="cell" lineBreakMode="clipping" refusesFirstResponder="YES" title="Date" id="VDP-DC-wbO">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="color_date_text"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

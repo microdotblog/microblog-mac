@@ -12,6 +12,17 @@
 
 @implementation MBHighlightsTableView
 
+- (void) mouseDown:(NSEvent *)event
+{
+	[super mouseDown:event];
+
+	// right-click isn't working when we push a controller in our nav stack
+	// so we'll manually handle control-click for now (not great)
+	if ((event.modifierFlags & NSEventModifierFlagControl) == NSEventModifierFlagControl) {
+		[NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
+	}
+}
+
 - (void) drawContextMenuHighlightForRow:(NSInteger)row
 {
 	// override to avoid the focus highlight rectangle
