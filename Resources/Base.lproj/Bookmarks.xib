@@ -23,13 +23,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="afl-rL-umg">
-                    <rect key="frame" x="-1" y="493" width="456" height="35"/>
+                    <rect key="frame" x="-1" y="488" width="456" height="40"/>
                     <view key="contentView" id="bBM-c5-6vi">
-                        <rect key="frame" x="1" y="1" width="454" height="33"/>
+                        <rect key="frame" x="1" y="1" width="454" height="38"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="15" y="5" width="424" height="23"/>
+                                <rect key="frame" x="15" y="5" width="424" height="28"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -47,13 +47,13 @@
                         </constraints>
                     </view>
                     <constraints>
-                        <constraint firstAttribute="height" constant="35" id="0Lk-f9-ac3"/>
+                        <constraint firstAttribute="height" constant="40" id="0Lk-f9-ac3"/>
                     </constraints>
                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                     <color key="fillColor" name="color_highlight_background"/>
                 </box>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
-                    <rect key="frame" x="0.0" y="0.0" width="454" height="493"/>
+                    <rect key="frame" x="0.0" y="0.0" width="454" height="488"/>
                 </customView>
             </subviews>
             <constraints>

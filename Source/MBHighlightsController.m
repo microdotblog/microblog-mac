@@ -12,6 +12,7 @@
 #import "MBHighlightCell.h"
 #import "RFClient.h"
 #import "RFMacros.h"
+#import "RFConstants.h"
 
 @implementation MBHighlightsController
 
@@ -63,6 +64,11 @@
 			});
 		}
 	}];
+}
+
+- (IBAction) back:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
 }
 
 #pragma mark -

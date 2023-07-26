@@ -11,18 +11,18 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView identifier="HighlightCell" id="EMJ-Qe-hFm" customClass="MBHighlightCell">
-            <rect key="frame" x="0.0" y="0.0" width="384" height="60"/>
+            <rect key="frame" x="0.0" y="0.0" width="384" height="58"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box boxType="custom" borderType="line" borderWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="AhK-JR-B8a">
-                    <rect key="frame" x="0.0" y="0.0" width="384" height="60"/>
+                    <rect key="frame" x="0.0" y="2" width="384" height="56"/>
                     <view key="contentView" id="kt4-XT-k8E">
-                        <rect key="frame" x="0.0" y="0.0" width="384" height="60"/>
+                        <rect key="frame" x="0.0" y="0.0" width="384" height="56"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nk1-RL-bho">
-                                <rect key="frame" x="18" y="22" width="348" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="joP-3D-gL2">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-Xk-oPr">
+                                <rect key="frame" x="18" y="20" width="348" height="16"/>
+                                <textFieldCell key="cell" selectable="YES" title="Selection text" id="iBb-RZ-eA9">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -30,24 +30,25 @@
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Nk1-RL-bho" secondAttribute="trailing" constant="20" id="1o4-vY-Mwf"/>
-                            <constraint firstItem="Nk1-RL-bho" firstAttribute="leading" secondItem="kt4-XT-k8E" secondAttribute="leading" constant="20" id="8MY-Ds-eGs"/>
-                            <constraint firstItem="Nk1-RL-bho" firstAttribute="centerY" secondItem="kt4-XT-k8E" secondAttribute="centerY" id="DDV-Tn-VuI"/>
+                            <constraint firstAttribute="trailing" secondItem="ZGu-Xk-oPr" secondAttribute="trailing" constant="20" symbolic="YES" id="78w-ZZ-UC9"/>
+                            <constraint firstItem="ZGu-Xk-oPr" firstAttribute="top" secondItem="kt4-XT-k8E" secondAttribute="top" constant="20" id="96V-5k-qGG"/>
+                            <constraint firstItem="ZGu-Xk-oPr" firstAttribute="leading" secondItem="kt4-XT-k8E" secondAttribute="leading" constant="20" symbolic="YES" id="Pca-iF-PZ7"/>
+                            <constraint firstAttribute="bottom" secondItem="ZGu-Xk-oPr" secondAttribute="bottom" constant="20" id="SpX-QP-wDG"/>
                         </constraints>
                     </view>
                     <color key="fillColor" name="color_highlight_background"/>
                 </box>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="AhK-JR-B8a" secondAttribute="bottom" id="EmQ-IK-y4Q"/>
+                <constraint firstItem="AhK-JR-B8a" firstAttribute="top" secondItem="EMJ-Qe-hFm" secondAttribute="top" id="1fB-hB-usj"/>
                 <constraint firstItem="AhK-JR-B8a" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" id="YsH-QQ-HCx"/>
-                <constraint firstItem="AhK-JR-B8a" firstAttribute="top" secondItem="EMJ-Qe-hFm" secondAttribute="top" id="iDa-tt-9db"/>
+                <constraint firstAttribute="bottom" secondItem="AhK-JR-B8a" secondAttribute="bottom" constant="2" id="b2Y-1N-L8J"/>
                 <constraint firstAttribute="trailing" secondItem="AhK-JR-B8a" secondAttribute="trailing" id="qeD-6t-bL9"/>
             </constraints>
             <connections>
-                <outlet property="selectionTextField" destination="Nk1-RL-bho" id="DfA-D2-DCk"/>
+                <outlet property="selectionTextField" destination="ZGu-Xk-oPr" id="mhN-Gr-IVe"/>
             </connections>
-            <point key="canvasLocation" x="-251" y="-458.5"/>
+            <point key="canvasLocation" x="-251" y="-459"/>
         </customView>
     </objects>
     <resources>
