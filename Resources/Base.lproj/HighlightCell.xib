@@ -38,10 +38,17 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="q1d-uK-Nur">
+                    <rect key="frame" x="0.0" y="-2" width="384" height="5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="JZo-da-CHt"/>
+                    </constraints>
+                </box>
             </subviews>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="ZGu-Xk-oPr" secondAttribute="trailing" constant="20" symbolic="YES" id="39w-Po-Rwo"/>
                 <constraint firstAttribute="trailing" secondItem="sRX-3O-G46" secondAttribute="trailing" constant="20" symbolic="YES" id="5eM-qD-4kx"/>
+                <constraint firstAttribute="bottom" secondItem="q1d-uK-Nur" secondAttribute="bottom" id="Ag2-MS-w4z"/>
                 <constraint firstItem="a6r-Dq-veN" firstAttribute="top" secondItem="ZGu-Xk-oPr" secondAttribute="bottom" constant="10" id="Cy1-WL-Ush"/>
                 <constraint firstItem="a6r-Dq-veN" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="Dg5-cu-Eo1"/>
                 <constraint firstAttribute="trailing" secondItem="ZGu-Xk-oPr" secondAttribute="trailing" constant="20" symbolic="YES" id="EeX-h4-C4a"/>
@@ -52,6 +59,8 @@
                 <constraint firstItem="ZGu-Xk-oPr" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="ePH-6O-blb"/>
                 <constraint firstItem="sRX-3O-G46" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="gRf-V4-aW4"/>
                 <constraint firstAttribute="bottom" secondItem="sRX-3O-G46" secondAttribute="bottom" constant="15" id="jMA-vz-J8T"/>
+                <constraint firstAttribute="trailing" secondItem="q1d-uK-Nur" secondAttribute="trailing" id="kfo-Gk-ats"/>
+                <constraint firstItem="q1d-uK-Nur" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" id="mCV-0h-Rxz"/>
             </constraints>
             <connections>
                 <outlet property="dateField" destination="sRX-3O-G46" id="Jra-jd-biS"/>
