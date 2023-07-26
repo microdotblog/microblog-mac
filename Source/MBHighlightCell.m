@@ -18,22 +18,13 @@
 	self.highlight = highlight;
 	
 	self.selectionTextField.stringValue = highlight.selectionText;
-	self.titleField.stringValue = highlight.title;
+	
+	NSURL* url = [NSURL URLWithString:highlight.url];
+	NSString* s = [NSString stringWithFormat:@"%@: %@", url.host, highlight.title];
+	self.titleField.stringValue = s;
 	
 	NSString* date_s = [highlight.createdAt uuIso8601DateString];
 	self.dateField.stringValue = date_s;
-}
-
-- (void) setSelected:(BOOL)selected
-{
-	[super setSelected:selected];
-	
-//	if (selected) {
-//		self.backgroundBox.fillColor = nil; // [NSColor colorNamed:@"color_highlight_selected"];
-//	}
-//	else {
-//		self.backgroundBox.fillColor = [NSColor colorNamed:@"color_highlight_background"];
-//	}
 }
 
 - (void) drawBackgroundInRect:(NSRect)dirtyRect

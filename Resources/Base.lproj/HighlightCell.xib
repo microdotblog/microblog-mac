@@ -25,8 +25,8 @@
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a6r-Dq-veN">
                     <rect key="frame" x="18" y="41" width="348" height="19"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" refusesFirstResponder="YES" title="Page title" id="bPk-BC-iNb">
-                        <font key="font" metaFont="systemSemibold" size="15"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <font key="font" metaFont="system" size="15"/>
+                        <color key="textColor" name="color_date_text"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
