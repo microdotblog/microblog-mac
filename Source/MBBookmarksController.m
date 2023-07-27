@@ -11,6 +11,7 @@
 #import "RFClient.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
+#import "NSString+Extras.h"
 #import "NSAppearance+Extras.h"
 
 static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
@@ -75,6 +76,7 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 			NSNumber* num = [mb objectForKey:@"count"];
 			
 			RFDispatchMainAsync ((^{
+				self.highlightsCount = num;
 				if ([num integerValue] > 0) {
 					[[NSUserDefaults standardUserDefaults] setObject:num forKey:kHighlightsCountPrefKey];
 					NSString* s;
@@ -87,10 +89,38 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 					[self.highlightsCountButton setTitle:s];
 					self.highlightsCountButton.hidden = NO;
 				}
-				else {
+				
+				// then fetch tags
+				[self fetchTags];
+			}));
+		}
+	}];
+}
+
+- (void) fetchTags
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/tags"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSArray class]]) {
+			NSMutableArray* new_tags = [NSMutableArray array];
+
+			for (NSString* tag_name in response.parsedResponse) {
+				[new_tags addObject:tag_name];
+			}
+
+			RFDispatchMainAsync (^{
+				// now that we have both highlights and tags, update bar
+				if ((new_tags.count == 0) && (self.highlightsCount.integerValue == 0)) {
 					[self hideHighlightsBar];
 				}
-			}));
+				else {
+					self.tags = new_tags;
+					for (NSString* tag_name in self.tags) {
+						[self.tagsButton addItemWithTitle:tag_name];
+					}
+					self.tagsButton.hidden = NO;
+				}
+			});
 		}
 	}];
 }
@@ -98,6 +128,15 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 - (IBAction) showHighlights:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kShowHighlightsNotification object:self];
+}
+
+- (IBAction) selectTag:(id)sender
+{
+	NSString* tag_name = [sender selectedItem].title;
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tag_name rf_urlEncoded]];
+	
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
 }
 
 - (void) hideHighlightsBar

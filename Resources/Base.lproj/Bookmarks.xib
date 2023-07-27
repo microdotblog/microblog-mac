@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="highlightsCountButton" destination="DDH-Ir-Y8s" id="8x6-cU-VbG"/>
                 <outlet property="highlightsTopConstraint" destination="JcL-kO-GiP" id="wT0-gk-vgQ"/>
+                <outlet property="tagsButton" destination="19n-45-pjW" id="g0J-pZ-wvb"/>
                 <outlet property="view" destination="c22-O7-iKe" id="Gyx-G8-w6m"/>
                 <outlet property="webView" destination="dJ3-8Q-iCM" id="8m6-O6-Azn"/>
             </connections>
@@ -29,7 +30,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="15" y="5" width="424" height="28"/>
+                                <rect key="frame" x="15" y="5" width="366" height="28"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -38,11 +39,31 @@
                                     <action selector="showHighlights:" target="-2" id="mPH-Mr-dXR"/>
                                 </connections>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="19n-45-pjW">
+                                <rect key="frame" x="386" y="5" width="57" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="E5N-Sh-sT3"/>
+                                </constraints>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" id="XxI-f7-TCr">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" autoenablesItems="NO" id="MYu-pW-ukj">
+                                        <items>
+                                            <menuItem state="on" image="tag" catalog="system" hidden="YES" id="2FC-Vg-pFi"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="selectTag:" target="-2" id="l6r-mw-bB1"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="15" id="FFf-63-NRd"/>
+                            <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="15" id="KiJ-eQ-agP"/>
                             <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="15" id="LIb-hE-eB9"/>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="Pnf-vK-gmG"/>
                             <constraint firstItem="DDH-Ir-Y8s" firstAttribute="top" secondItem="bBM-c5-6vi" secondAttribute="top" constant="5" id="eym-nk-GAq"/>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="8" symbolic="YES" id="piI-Z7-eZK"/>
                             <constraint firstAttribute="bottom" secondItem="DDH-Ir-Y8s" secondAttribute="bottom" constant="5" id="wVb-yW-N8Q"/>
                         </constraints>
                     </view>
@@ -69,6 +90,7 @@
         </customView>
     </objects>
     <resources>
+        <image name="tag" catalog="system" width="17" height="17"/>
         <namedColor name="color_highlight_background">
             <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
