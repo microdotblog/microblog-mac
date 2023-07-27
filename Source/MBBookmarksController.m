@@ -99,7 +99,7 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 
 - (void) fetchTags
 {
-	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/tags"];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/tags?recent=1&count=10"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSArray class]]) {
 			NSMutableArray* new_tags = [NSMutableArray array];
@@ -115,9 +115,22 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 				}
 				else {
 					self.tags = new_tags;
+					NSMenu* menu = self.tagsButton.menu;
+					NSMenuItem* item;
+					
+					item = [menu addItemWithTitle:@"Recent Tags" action:NULL keyEquivalent:@""];
+					[item setEnabled:NO];
+					
 					for (NSString* tag_name in self.tags) {
 						[self.tagsButton addItemWithTitle:tag_name];
 					}
+
+					[menu addItem:[NSMenuItem separatorItem]];
+					
+					[self.tagsButton addItemWithTitle:@"All Tags"];
+					item = [self.tagsButton lastItem];
+					[item setRepresentedObject:@"all_tags"];
+
 					self.tagsButton.hidden = NO;
 				}
 			});
@@ -132,11 +145,17 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 
 - (IBAction) selectTag:(id)sender
 {
-	NSString* tag_name = [sender selectedItem].title;
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tag_name rf_urlEncoded]];
-	
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
+	NSMenuItem* item = [sender selectedItem];
+	if ([[item representedObject] isEqualToString:@"all_tags"]) {
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://micro.blog/bookmarks/tags"]];
+	}
+	else {
+		NSString* tag_name = item.title;
+		NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tag_name rf_urlEncoded]];
+		
+		NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+		[[self.webView mainFrame] loadRequest:request];
+	}
 }
 
 - (void) hideHighlightsBar
