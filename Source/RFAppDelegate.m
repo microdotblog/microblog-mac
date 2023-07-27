@@ -23,6 +23,7 @@
 #import "RFPostController.h"
 #import "MBBlogImportController.h"
 #import "MBPreviewController.h"
+#import "MBEditTagsController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -103,6 +104,9 @@
 	else if ([url.host isEqualToString:@"bookmark"]) {
 		NSString* bookmark_url = [[[url absoluteString] uuFindQueryStringArg:@"url"] uuUrlDecoded];
 		[self showNewBookmarkWithURL:bookmark_url];
+	}
+	else if ([url.host isEqualToString:@"tag"]) {
+		[self editTagsWithBookmarkID:param];
 	}
 }
 
@@ -678,6 +682,17 @@
 	}
 	
 	[self.bookmarkController showWindow:nil];
+}
+
+- (void) editTagsWithBookmarkID:(NSString *)bookmarkID
+{
+	NSWindowController* window_controller = [[MBEditTagsController alloc] initWithBookmarkID:bookmarkID];
+	[self.timelineController.window beginSheet:window_controller.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSModalResponseOK) {
+			// refresh hybrid view?
+			// ...
+		}
+	}];
 }
 
 - (void) showPostController:(RFPostController *)controller

@@ -86,6 +86,8 @@
 		4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
+		4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5606D02A7318D200843D59 /* MBEditTagsController.m */; };
+		4B5606D42A73191800843D59 /* EditTags.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5606D22A73191800843D59 /* EditTags.xib */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
 		4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B56505D1F8561A300B03FFD /* RFPostController.m */; };
 		4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650601F85626200B03FFD /* RFOptionsController.m */; };
@@ -360,6 +362,9 @@
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
+		4B5606CF2A7318D200843D59 /* MBEditTagsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBEditTagsController.h; path = Source/MBEditTagsController.h; sourceTree = "<group>"; };
+		4B5606D02A7318D200843D59 /* MBEditTagsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBEditTagsController.m; path = Source/MBEditTagsController.m; sourceTree = "<group>"; };
+		4B5606D32A73191800843D59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/EditTags.xib; sourceTree = "<group>"; };
 		4B56505A1F85619100B03FFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Post.xib; sourceTree = "<group>"; };
 		4B56505C1F8561A300B03FFD /* RFPostController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostController.h; path = Source/RFPostController.h; sourceTree = "<group>"; };
 		4B56505D1F8561A300B03FFD /* RFPostController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostController.m; path = Source/RFPostController.m; sourceTree = "<group>"; };
@@ -782,6 +787,8 @@
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 				4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */,
 				4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */,
+				4B5606CF2A7318D200843D59 /* MBEditTagsController.h */,
+				4B5606D02A7318D200843D59 /* MBEditTagsController.m */,
 				4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */,
 				4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */,
 				4BF7E51928354F9500500C59 /* RFBookshelfCell.h */,
@@ -979,6 +986,7 @@
 				4BDB3823278A838A00BD457C /* Preview.xib */,
 				4BE23F8A2A7008C800E24718 /* Highlights.xib */,
 				4BE23F932A700A9F00E24718 /* HighlightCell.xib */,
+				4B5606D22A73191800843D59 /* EditTags.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1140,6 +1148,7 @@
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
+				4B5606D42A73191800843D59 /* EditTags.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */,
 				4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */,
@@ -1225,6 +1234,7 @@
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
+				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
@@ -1429,6 +1439,14 @@
 				4B4DC44E1BB04B970095CCBB /* Base */,
 			);
 			name = Timeline.xib;
+			sourceTree = "<group>";
+		};
+		4B5606D22A73191800843D59 /* EditTags.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B5606D32A73191800843D59 /* Base */,
+			);
+			name = EditTags.xib;
 			sourceTree = "<group>";
 		};
 		4B5650591F85619100B03FFD /* Post.xib */ = {
