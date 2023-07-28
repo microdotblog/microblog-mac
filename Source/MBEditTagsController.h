@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class MBBookmark;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MBEditTagsController : NSWindowController
@@ -16,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSString* bookmarkID;
+@property (strong, nonatomic) MBBookmark* bookmark;
 
 - (id) initWithBookmarkID:(NSString *)bookmarkID;
 

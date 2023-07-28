@@ -127,4 +127,8 @@ static NSString* const kTimelineSidebarRowKey = @"row";
 
 static NSString* const kShowHighlightsNotification = @"MBShowHighlightsNotification";
 
+static NSString* const kTagsDidUpdateNotification = @"MBTagsDidUpdateNotification";
+static NSString* const kTagsDidUpdateIDKey = @"id";
+static NSString* const kTagsDidUpdateTagsKey = @"tags";
+
 #define APPSTORE 1

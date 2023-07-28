@@ -36,7 +36,7 @@ DQ
                             <action selector="update:" target="-2" id="iyQ-jP-g0q"/>
                         </connections>
                     </button>
-                    <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V55-mn-gi4">
+                    <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V55-mn-gi4" customClass="MBTokenField">
                         <rect key="frame" x="20" y="60" width="383" height="21"/>
                         <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Tags" drawsBackground="YES" allowsEditingTextAttributes="YES" id="mJv-TI-xDv">
                             <font key="font" metaFont="system"/>
