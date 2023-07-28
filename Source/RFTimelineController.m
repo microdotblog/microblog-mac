@@ -171,6 +171,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineDidScroll:) name:NSScrollViewWillStartLiveScrollNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasFavoritedNotification:) name:kPostWasFavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tagsDidUpdateNotification:) name:kTagsDidUpdateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sharePostNotification:) name:kSharePostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
@@ -263,6 +264,15 @@ static NSInteger const kSelectionBookshelves = 10;
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
 	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_favorite');", post_id];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+}
+
+- (void) tagsDidUpdateNotification:(NSNotification *)notification
+{
+	id bookmark_id = [notification.userInfo objectForKey:kTagsDidUpdateIDKey];
+	NSString* new_tags = [notification.userInfo objectForKey:kTagsDidUpdateTagsKey];
+	
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('tags_%@').textContent = \"Tags: %@\";", bookmark_id, new_tags];
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 

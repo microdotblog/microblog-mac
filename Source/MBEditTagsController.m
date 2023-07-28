@@ -75,7 +75,7 @@
 		RFDispatchMainAsync ((^{
 			NSDictionary* info = @{
 				kTagsDidUpdateIDKey: self.bookmarkID,
-				kTagsDidUpdateTagsKey: self.bookmark.flatTags
+				kTagsDidUpdateTagsKey: self.tagsField.stringValue
 			};
 			[[NSNotificationCenter defaultCenter] postNotificationName:kTagsDidUpdateNotification object:self userInfo:info];
 			[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
