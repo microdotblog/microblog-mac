@@ -93,6 +93,16 @@
 	}];
 }
 
+- (void) deleteHighlight:(MBHighlight *)highlight
+{
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/bookmarks/highlights/%@", highlight.highlightID];
+	[client deleteWithObject:nil completion:^(UUHttpResponse *response) {
+		RFDispatchMainAsync (^{
+			[self fetchHighlights];
+		});
+	}];
+}
+
 - (IBAction) back:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
@@ -117,8 +127,7 @@
 		[sheet addButtonWithTitle:@"Cancel"];
 		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
-				// TODO: hit server to delete it, refresh
-				// ...
+				[self deleteHighlight:h];
 			}
 		}];
 	}
