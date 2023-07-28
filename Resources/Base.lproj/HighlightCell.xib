@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="HighlightCell" id="EMJ-Qe-hFm" customClass="MBHighlightCell">
+            <rect key="frame" x="0.0" y="0.0" width="384" height="104"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-Xk-oPr">
+                    <rect key="frame" x="18" y="70" width="348" height="19"/>
+                    <textFieldCell key="cell" refusesFirstResponder="YES" title="Selection text" id="iBb-RZ-eA9">
+                        <font key="font" metaFont="system" size="15"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a6r-Dq-veN">
+                    <rect key="frame" x="18" y="41" width="348" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" refusesFirstResponder="YES" title="Page title" id="bPk-BC-iNb">
+                        <font key="font" metaFont="system" size="15"/>
+                        <color key="textColor" name="color_date_text"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sRX-3O-G46">
+                    <rect key="frame" x="18" y="15" width="348" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" refusesFirstResponder="YES" title="Date" id="VDP-DC-wbO">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="color_date_text"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="q1d-uK-Nur">
+                    <rect key="frame" x="0.0" y="-2" width="384" height="5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="JZo-da-CHt"/>
+                    </constraints>
+                </box>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="ZGu-Xk-oPr" secondAttribute="trailing" constant="20" symbolic="YES" id="39w-Po-Rwo"/>
+                <constraint firstAttribute="trailing" secondItem="sRX-3O-G46" secondAttribute="trailing" constant="20" symbolic="YES" id="5eM-qD-4kx"/>
+                <constraint firstAttribute="bottom" secondItem="q1d-uK-Nur" secondAttribute="bottom" id="Ag2-MS-w4z"/>
+                <constraint firstItem="a6r-Dq-veN" firstAttribute="top" secondItem="ZGu-Xk-oPr" secondAttribute="bottom" constant="10" id="Cy1-WL-Ush"/>
+                <constraint firstItem="a6r-Dq-veN" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="Dg5-cu-Eo1"/>
+                <constraint firstAttribute="trailing" secondItem="ZGu-Xk-oPr" secondAttribute="trailing" constant="20" symbolic="YES" id="EeX-h4-C4a"/>
+                <constraint firstAttribute="trailing" secondItem="a6r-Dq-veN" secondAttribute="trailing" constant="20" symbolic="YES" id="HZL-8c-wtt"/>
+                <constraint firstItem="sRX-3O-G46" firstAttribute="top" secondItem="a6r-Dq-veN" secondAttribute="bottom" constant="10" id="Jbh-Zb-6Kw"/>
+                <constraint firstItem="ZGu-Xk-oPr" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="NZK-5h-18E"/>
+                <constraint firstItem="ZGu-Xk-oPr" firstAttribute="top" secondItem="EMJ-Qe-hFm" secondAttribute="top" constant="15" id="Oqm-1s-TXZ"/>
+                <constraint firstItem="ZGu-Xk-oPr" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="ePH-6O-blb"/>
+                <constraint firstItem="sRX-3O-G46" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" constant="20" symbolic="YES" id="gRf-V4-aW4"/>
+                <constraint firstAttribute="bottom" secondItem="sRX-3O-G46" secondAttribute="bottom" constant="15" id="jMA-vz-J8T"/>
+                <constraint firstAttribute="trailing" secondItem="q1d-uK-Nur" secondAttribute="trailing" id="kfo-Gk-ats"/>
+                <constraint firstItem="q1d-uK-Nur" firstAttribute="leading" secondItem="EMJ-Qe-hFm" secondAttribute="leading" id="mCV-0h-Rxz"/>
+            </constraints>
+            <connections>
+                <outlet property="dateField" destination="sRX-3O-G46" id="Jra-jd-biS"/>
+                <outlet property="selectionTextField" destination="ZGu-Xk-oPr" id="mhN-Gr-IVe"/>
+                <outlet property="titleField" destination="a6r-Dq-veN" id="y5F-Uv-lJP"/>
+            </connections>
+            <point key="canvasLocation" x="-251" y="-407"/>
+        </customView>
+    </objects>
+    <resources>
+        <namedColor name="color_date_text">
+            <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBEditTagsController">
+            <connections>
+                <outlet property="tagsField" destination="V55-mn-gi4" id="pFr-c3-xAF"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="80D-9K-2IZ"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Edit Tags" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="423" height="153"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="423" height="153"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Rfz-Ir-osB">
+                        <rect key="frame" x="331" y="13" width="79" height="32"/>
+                        <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fml-wN-rrU">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="update:" target="-2" id="iyQ-jP-g0q"/>
+                        </connections>
+                    </button>
+                    <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V55-mn-gi4" customClass="MBTokenField">
+                        <rect key="frame" x="20" y="60" width="383" height="21"/>
+                        <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Tags" drawsBackground="YES" allowsEditingTextAttributes="YES" id="mJv-TI-xDv">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </tokenFieldCell>
+                    </tokenField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0dq-iw-ubh">
+                        <rect key="frame" x="18" y="101" width="387" height="32"/>
+                        <textFieldCell key="cell" selectable="YES" title="Assign tags to a bookmark to help organize your bookmarks and find them later." id="i9h-WF-JWu">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="xS6-g6-uT3">
+                        <rect key="frame" x="20" y="22" width="16" height="16"/>
+                    </progressIndicator>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OZA-gq-erD">
+                        <rect key="frame" x="257" y="13" width="76" height="32"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KZm-Vp-XEt">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancel:" target="-2" id="n19-Ds-5ho"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="V55-mn-gi4" secondAttribute="trailing" constant="20" symbolic="YES" id="85o-TQ-TgJ"/>
+                    <constraint firstAttribute="trailing" secondItem="0dq-iw-ubh" secondAttribute="trailing" constant="20" symbolic="YES" id="EuT-GS-Vuf"/>
+                    <constraint firstAttribute="bottom" secondItem="xS6-g6-uT3" secondAttribute="bottom" constant="22" id="GTT-z6-Z4S"/>
+                    <constraint firstItem="0dq-iw-ubh" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="JOa-8V-xd7"/>
+                    <constraint firstItem="Rfz-Ir-osB" firstAttribute="top" secondItem="V55-mn-gi4" secondAttribute="bottom" constant="20" symbolic="YES" id="PAF-td-des"/>
+                    <constraint firstItem="0dq-iw-ubh" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="Pn4-hp-nVw"/>
+                    <constraint firstItem="V55-mn-gi4" firstAttribute="top" secondItem="0dq-iw-ubh" secondAttribute="bottom" constant="20" id="X9E-az-QCr"/>
+                    <constraint firstItem="V55-mn-gi4" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="fyp-Dl-SpJ"/>
+                    <constraint firstItem="Rfz-Ir-osB" firstAttribute="leading" secondItem="OZA-gq-erD" secondAttribute="trailing" constant="12" symbolic="YES" id="gfv-YN-j7V"/>
+                    <constraint firstAttribute="bottom" secondItem="Rfz-Ir-osB" secondAttribute="bottom" constant="20" symbolic="YES" id="nnU-o6-Dwh"/>
+                    <constraint firstItem="xS6-g6-uT3" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="r8S-Kj-7b9"/>
+                    <constraint firstAttribute="bottom" secondItem="OZA-gq-erD" secondAttribute="bottom" constant="20" symbolic="YES" id="sWr-8V-6Lg"/>
+                    <constraint firstAttribute="trailing" secondItem="Rfz-Ir-osB" secondAttribute="trailing" constant="20" symbolic="YES" id="vk6-9a-XXN"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="189.5" y="91.5"/>
+        </window>
+    </objects>
+</document>

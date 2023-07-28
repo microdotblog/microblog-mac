@@ -35,7 +35,7 @@
                         <rect key="frame" x="-1" y="-1" width="493" height="387"/>
                         <clipView key="contentView" drawsBackground="NO" id="h4R-hn-ZUu">
                             <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj" customClass="MBBooksTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>

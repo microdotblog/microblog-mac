@@ -86,6 +86,10 @@
 		4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */; };
 		4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4DC44D1BB04B970095CCBB /* Timeline.xib */; };
 		4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */; };
+		4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5606D02A7318D200843D59 /* MBEditTagsController.m */; };
+		4B5606D42A73191800843D59 /* EditTags.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5606D22A73191800843D59 /* EditTags.xib */; };
+		4B5606D72A73F78700843D59 /* MBBookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5606D62A73F78700843D59 /* MBBookmark.m */; };
+		4B5606DA2A73F92F00843D59 /* MBTokenField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5606D92A73F92F00843D59 /* MBTokenField.m */; };
 		4B56505B1F85619100B03FFD /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5650591F85619100B03FFD /* Post.xib */; };
 		4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B56505D1F8561A300B03FFD /* RFPostController.m */; };
 		4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5650601F85626200B03FFD /* RFOptionsController.m */; };
@@ -149,6 +153,7 @@
 		4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7449121E84AC500371388 /* RFPhotoZoomController.m */; };
 		4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB744A121EA4E1800371388 /* RFPhotoAltController.m */; };
 		4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB744A321EA4E3800371388 /* PhotoAlt.xib */; };
+		4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */; };
 		4BBD6DCF24A59D620018C337 /* RFSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */; };
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
@@ -164,6 +169,13 @@
 		4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB382F278CDC2B00BD457C /* MBRestoreCursorView.m */; };
 		4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BDB783B2774E89400D7783C /* MBBlogImportController.m */; };
 		4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDB783D2774E8F100D7783C /* BlogImport.xib */; };
+		4BE23F8C2A7008C800E24718 /* Highlights.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BE23F8A2A7008C800E24718 /* Highlights.xib */; };
+		4BE23F8F2A70090D00E24718 /* MBHighlightsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BE23F8E2A70090D00E24718 /* MBHighlightsController.m */; };
+		4BE23F922A700A7200E24718 /* MBHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BE23F912A700A7200E24718 /* MBHighlight.m */; };
+		4BE23F952A700A9F00E24718 /* HighlightCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BE23F932A700A9F00E24718 /* HighlightCell.xib */; };
+		4BE23F982A700AFA00E24718 /* MBHighlightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BE23F972A700AFA00E24718 /* MBHighlightCell.m */; };
+		4BE23F9B2A70110900E24718 /* Bookmarks.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BE23F992A70110900E24718 /* Bookmarks.xib */; };
+		4BE23F9E2A70117F00E24718 /* MBBookmarksController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
 		4BED646624BD5AB80018644C /* AllUploads.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BED646424BD5AB80018644C /* AllUploads.xib */; };
 		4BED646924BDF29A0018644C /* RFUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646824BDF29A0018644C /* RFUpload.m */; };
@@ -352,6 +364,13 @@
 		4B4DC44E1BB04B970095CCBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Timeline.xib; sourceTree = "<group>"; };
 		4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFTimelineController.h; path = Source/RFTimelineController.h; sourceTree = "<group>"; };
 		4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFTimelineController.m; path = Source/RFTimelineController.m; sourceTree = "<group>"; };
+		4B5606CF2A7318D200843D59 /* MBEditTagsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBEditTagsController.h; path = Source/MBEditTagsController.h; sourceTree = "<group>"; };
+		4B5606D02A7318D200843D59 /* MBEditTagsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBEditTagsController.m; path = Source/MBEditTagsController.m; sourceTree = "<group>"; };
+		4B5606D32A73191800843D59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/EditTags.xib; sourceTree = "<group>"; };
+		4B5606D52A73F78700843D59 /* MBBookmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookmark.h; path = Source/MBBookmark.h; sourceTree = "<group>"; };
+		4B5606D62A73F78700843D59 /* MBBookmark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookmark.m; path = Source/MBBookmark.m; sourceTree = "<group>"; };
+		4B5606D82A73F92F00843D59 /* MBTokenField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTokenField.h; path = Source/MBTokenField.h; sourceTree = "<group>"; };
+		4B5606D92A73F92F00843D59 /* MBTokenField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTokenField.m; path = Source/MBTokenField.m; sourceTree = "<group>"; };
 		4B56505A1F85619100B03FFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Post.xib; sourceTree = "<group>"; };
 		4B56505C1F8561A300B03FFD /* RFPostController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostController.h; path = Source/RFPostController.h; sourceTree = "<group>"; };
 		4B56505D1F8561A300B03FFD /* RFPostController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostController.m; path = Source/RFPostController.m; sourceTree = "<group>"; };
@@ -462,6 +481,8 @@
 		4BB744A021EA4E1800371388 /* RFPhotoAltController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoAltController.h; path = Source/RFPhotoAltController.h; sourceTree = "<group>"; };
 		4BB744A121EA4E1800371388 /* RFPhotoAltController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoAltController.m; path = Source/RFPhotoAltController.m; sourceTree = "<group>"; };
 		4BB744A421EA4E3800371388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoAlt.xib; sourceTree = "<group>"; };
+		4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBHighlightsTableView.h; path = Source/MBHighlightsTableView.h; sourceTree = "<group>"; };
+		4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBHighlightsTableView.m; path = Source/MBHighlightsTableView.m; sourceTree = "<group>"; };
 		4BBD6DCD24A59D620018C337 /* RFSeparatorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFSeparatorCell.h; path = Source/RFSeparatorCell.h; sourceTree = "<group>"; };
 		4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFSeparatorCell.m; path = Source/RFSeparatorCell.m; sourceTree = "<group>"; };
 		4BBD6DD124A59D800018C337 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/SeparatorCell.xib; sourceTree = "<group>"; };
@@ -487,6 +508,17 @@
 		4BDB783A2774E89400D7783C /* MBBlogImportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBlogImportController.h; path = Source/MBBlogImportController.h; sourceTree = "<group>"; };
 		4BDB783B2774E89400D7783C /* MBBlogImportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBlogImportController.m; path = Source/MBBlogImportController.m; sourceTree = "<group>"; };
 		4BDB783E2774E8F100D7783C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BlogImport.xib; sourceTree = "<group>"; };
+		4BE23F8B2A7008C800E24718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Highlights.xib; sourceTree = "<group>"; };
+		4BE23F8D2A70090D00E24718 /* MBHighlightsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBHighlightsController.h; path = Source/MBHighlightsController.h; sourceTree = "<group>"; };
+		4BE23F8E2A70090D00E24718 /* MBHighlightsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBHighlightsController.m; path = Source/MBHighlightsController.m; sourceTree = "<group>"; };
+		4BE23F902A700A7200E24718 /* MBHighlight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBHighlight.h; path = Source/MBHighlight.h; sourceTree = "<group>"; };
+		4BE23F912A700A7200E24718 /* MBHighlight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBHighlight.m; path = Source/MBHighlight.m; sourceTree = "<group>"; };
+		4BE23F942A700A9F00E24718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/HighlightCell.xib; sourceTree = "<group>"; };
+		4BE23F962A700AFA00E24718 /* MBHighlightCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBHighlightCell.h; path = Source/MBHighlightCell.h; sourceTree = "<group>"; };
+		4BE23F972A700AFA00E24718 /* MBHighlightCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBHighlightCell.m; path = Source/MBHighlightCell.m; sourceTree = "<group>"; };
+		4BE23F9A2A70110900E24718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookmarks.xib; sourceTree = "<group>"; };
+		4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookmarksController.h; path = Source/MBBookmarksController.h; sourceTree = "<group>"; };
+		4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookmarksController.m; path = Source/MBBookmarksController.m; sourceTree = "<group>"; };
 		4BED646124BD59ED0018644C /* RFAllUploadsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllUploadsController.h; path = Source/RFAllUploadsController.h; sourceTree = "<group>"; };
 		4BED646224BD59ED0018644C /* RFAllUploadsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllUploadsController.m; path = Source/RFAllUploadsController.m; sourceTree = "<group>"; };
 		4BED646524BD5AB80018644C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllUploads.xib; sourceTree = "<group>"; };
@@ -759,6 +791,14 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */,
+				4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */,
+				4B5606D52A73F78700843D59 /* MBBookmark.h */,
+				4B5606D62A73F78700843D59 /* MBBookmark.m */,
+				4B5606CF2A7318D200843D59 /* MBEditTagsController.h */,
+				4B5606D02A7318D200843D59 /* MBEditTagsController.m */,
+				4B5606D82A73F92F00843D59 /* MBTokenField.h */,
+				4B5606D92A73F92F00843D59 /* MBTokenField.m */,
 				4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */,
 				4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */,
 				4BF7E51928354F9500500C59 /* RFBookshelfCell.h */,
@@ -817,6 +857,8 @@
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
 				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
+				4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */,
+				4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */,
 				4BF537322247CD1D00CF9D66 /* RFPost.h */,
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
@@ -895,6 +937,12 @@
 				4B9F06422767BCE60007F21D /* MBDateController.m */,
 				4BDB382E278CDC2B00BD457C /* MBRestoreCursorView.h */,
 				4BDB382F278CDC2B00BD457C /* MBRestoreCursorView.m */,
+				4BE23F8D2A70090D00E24718 /* MBHighlightsController.h */,
+				4BE23F8E2A70090D00E24718 /* MBHighlightsController.m */,
+				4BE23F902A700A7200E24718 /* MBHighlight.h */,
+				4BE23F912A700A7200E24718 /* MBHighlight.m */,
+				4BE23F962A700AFA00E24718 /* MBHighlightCell.h */,
+				4BE23F972A700AFA00E24718 /* MBHighlightCell.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -909,6 +957,7 @@
 				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
+				4BE23F992A70110900E24718 /* Bookmarks.xib */,
 				4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */,
 				4BD8339E273C3FF0007350F2 /* GoToUser.xib */,
 				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
@@ -945,6 +994,9 @@
 				4B9F063E2767BC400007F21D /* Date.xib */,
 				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
 				4BDB3823278A838A00BD457C /* Preview.xib */,
+				4BE23F8A2A7008C800E24718 /* Highlights.xib */,
+				4BE23F932A700A9F00E24718 /* HighlightCell.xib */,
+				4B5606D22A73191800843D59 /* EditTags.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1017,7 +1069,6 @@
 				4B7F0AD51BAF4B77004553A6 /* Frameworks */,
 				4B7F0AD61BAF4B77004553A6 /* Resources */,
 				4BE541211BDEA34800E1868B /* CopyFiles */,
-				4B6AE7761F8B345500CB7950 /* ShellScript */,
 				4BA2FD0C234D4E4100D5F93C /* ShellScript */,
 			);
 			buildRules = (
@@ -1080,10 +1131,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */,
+				4BE23F8C2A7008C800E24718 /* Highlights.xib in Resources */,
 				4B5EE28C206405AC00C87A78 /* AccountCell.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
 				4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */,
 				4BED646624BD5AB80018644C /* AllUploads.xib in Resources */,
+				4BE23F952A700A9F00E24718 /* HighlightCell.xib in Resources */,
 				4BF7E50D28343C9900500C59 /* Replies.xib in Resources */,
 				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
 				4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */,
@@ -1105,6 +1158,7 @@
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
+				4B5606D42A73191800843D59 /* EditTags.xib in Resources */,
 				4B5650661F8564AE00B03FFD /* Options.xib in Resources */,
 				4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */,
 				4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */,
@@ -1116,6 +1170,7 @@
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */,
 				4B3840CE2692019B00AD3781 /* Export.xib in Resources */,
+				4BE23F9B2A70110900E24718 /* Bookmarks.xib in Resources */,
 				4BF7E51828354F6900500C59 /* BookshelfCell.xib in Resources */,
 				4B2CAAB11F8FE99900D9B10E /* Preferences.xib in Resources */,
 				4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */,
@@ -1127,19 +1182,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4B6AE7761F8B345500CB7950 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Shared/Fabric.framework/run 8dad69922a39f4f51a31347f60f2e16d40193eb5 2492a44f53c59554cc623477936514640948a414be2668ba256d9d0ee55d9fb6\n";
-		};
 		4BA2FD0C234D4E4100D5F93C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1187,6 +1229,7 @@
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
+				4BE23F8F2A70090D00E24718 /* MBHighlightsController.m in Sources */,
 				4B400D05201EC55B00C71AAF /* MMElement.m in Sources */,
 				4B2CAAC51F90652800D9B10E /* RFXMLRPCParser.m in Sources */,
 				4B2CAB161F90667300D9B10E /* iconvtc.c in Sources */,
@@ -1194,12 +1237,14 @@
 				4B2CAB031F90664800D9B10E /* CTidy.m in Sources */,
 				4B2CAB0A1F90667300D9B10E /* attrask.c in Sources */,
 				4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */,
+				4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */,
 				4B2CAB111F90667300D9B10E /* tidylib.c in Sources */,
 				4B5EE2892064057F00C87A78 /* RFAccountCell.m in Sources */,
 				4BF7E53328394C5C00500C59 /* MBBooksTableView.m in Sources */,
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
+				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
@@ -1265,9 +1310,11 @@
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
 				4BF7E5272836CAC400500C59 /* MBBooksWindowController.m in Sources */,
 				4B5EE2862063FD9300C87A78 /* RFAccount.m in Sources */,
+				4BE23F9E2A70117F00E24718 /* MBBookmarksController.m in Sources */,
 				4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */,
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
+				4B5606D72A73F78700843D59 /* MBBookmark.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
 				4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */,
@@ -1286,6 +1333,9 @@
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B9F06432767BCE60007F21D /* MBDateController.m in Sources */,
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
+				4B5606DA2A73F92F00843D59 /* MBTokenField.m in Sources */,
+				4BE23F982A700AFA00E24718 /* MBHighlightCell.m in Sources */,
+				4BE23F922A700A7200E24718 /* MBHighlight.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
 				4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */,
@@ -1401,6 +1451,14 @@
 				4B4DC44E1BB04B970095CCBB /* Base */,
 			);
 			name = Timeline.xib;
+			sourceTree = "<group>";
+		};
+		4B5606D22A73191800843D59 /* EditTags.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B5606D32A73191800843D59 /* Base */,
+			);
+			name = EditTags.xib;
 			sourceTree = "<group>";
 		};
 		4B5650591F85619100B03FFD /* Post.xib */ = {
@@ -1545,6 +1603,30 @@
 				4BDB783E2774E8F100D7783C /* Base */,
 			);
 			name = BlogImport.xib;
+			sourceTree = "<group>";
+		};
+		4BE23F8A2A7008C800E24718 /* Highlights.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BE23F8B2A7008C800E24718 /* Base */,
+			);
+			name = Highlights.xib;
+			sourceTree = "<group>";
+		};
+		4BE23F932A700A9F00E24718 /* HighlightCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BE23F942A700A9F00E24718 /* Base */,
+			);
+			name = HighlightCell.xib;
+			sourceTree = "<group>";
+		};
+		4BE23F992A70110900E24718 /* Bookmarks.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BE23F9A2A70110900E24718 /* Base */,
+			);
+			name = Bookmarks.xib;
 			sourceTree = "<group>";
 		};
 		4BED646424BD5AB80018644C /* AllUploads.xib */ = {
@@ -1737,7 +1819,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 132;
+				CURRENT_PROJECT_VERSION = 133;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1753,7 +1835,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.9.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 3.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -1769,7 +1852,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 132;
+				CURRENT_PROJECT_VERSION = 133;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1785,7 +1868,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.9.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 3.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;

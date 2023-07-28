@@ -22,6 +22,8 @@
 #import "RFTopicController.h"
 #import "RFDiscoverController.h"
 #import "RFUserController.h"
+#import "MBHighlightsController.h"
+#import "MBBookmarksController.h"
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
 #import "RFConstants.h"
@@ -169,12 +171,14 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineDidScroll:) name:NSScrollViewWillStartLiveScrollNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasFavoritedNotification:) name:kPostWasFavoritedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasUnfavoritedNotification:) name:kPostWasUnfavoritedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tagsDidUpdateNotification:) name:kTagsDidUpdateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConversationNotification:) name:kShowConversationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sharePostNotification:) name:kSharePostNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popNavigationNotification:) name:kPopNavigationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserFollowingNotification:) name:kShowUserFollowingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUserProfileNotification:) name:kShowUserProfileNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showDiscoverTopicNotification:) name:kShowDiscoverTopicNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showHighlightsNotification:) name:kShowHighlightsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTimelineNotification:) name:kRefreshTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkTimelineNotification:) name:kCheckTimelineNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchAccountNotification:) name:kSwitchAccountNotification object:nil];
@@ -263,6 +267,15 @@ static NSInteger const kSelectionBookshelves = 10;
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
+- (void) tagsDidUpdateNotification:(NSNotification *)notification
+{
+	id bookmark_id = [notification.userInfo objectForKey:kTagsDidUpdateIDKey];
+	NSString* new_tags = [notification.userInfo objectForKey:kTagsDidUpdateTagsKey];
+	
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('tags_%@').textContent = \"Tags: %@\";", bookmark_id, new_tags];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+}
+
 - (void) showConversationNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
@@ -296,6 +309,11 @@ static NSInteger const kSelectionBookshelves = 10;
 {
 	NSString* topic = [notification.userInfo objectForKey:kShowDiscoverTopicNameKey];
 	[self showTopicsWithSearch:topic];
+}
+
+- (void) showHighlightsNotification:(NSNotification *)notification
+{
+	[self showHighlights];
 }
 
 - (void) refreshTimelineNotification:(NSNotification *)notification
@@ -410,7 +428,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	
 	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 	self.webView.hidden = NO;
@@ -440,10 +458,10 @@ static NSInteger const kSelectionBookshelves = 10;
 
 	[self closeOverlays];
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/favorites"];
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-	self.webView.hidden = NO;
+	MBBookmarksController* controller = [[MBBookmarksController alloc] init];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
+	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionFavorites];
 	[self startLoadingSidebarRow:kSelectionFavorites];
@@ -727,9 +745,17 @@ static NSInteger const kSelectionBookshelves = 10;
 		RFDiscoverController* discover_controller = (RFDiscoverController *)controller;
 		return discover_controller.webView;
 	}
+	else if ([controller isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)controller;
+		return bookmarks_controller.webView;
+	}
 	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
 		RFDiscoverController* discover_controller = (RFDiscoverController *)self.allPostsController;
 		return discover_controller.webView;
+	}
+	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)self.allPostsController;
+		return bookmarks_controller.webView;
 	}
 	else {
 		return self.webView;
@@ -744,6 +770,9 @@ static NSInteger const kSelectionBookshelves = 10;
 	}
 	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
 		return ((RFDiscoverController *)self.allPostsController).view;
+	}
+	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
+		return ((MBBookmarksController *)self.allPostsController).view;
 	}
 	else {
 		return self.webView;
@@ -889,7 +918,6 @@ static NSInteger const kSelectionBookshelves = 10;
 	self.allPostsController.view.alphaValue = 0.0;
 	
 	self.allPostsController.view.translatesAutoresizingMaskIntoConstraints = NO;
-//	[self.window.contentView addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:[self currentWebView]];
 	[[self.webView superview] addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.allPostsController.view.animator.alphaValue = 1.0;
@@ -905,6 +933,16 @@ static NSInteger const kSelectionBookshelves = 10;
 	[controller view];
 	[self setupWebDelegates:controller.webView];
 
+	[self pushViewController:controller];
+}
+
+- (void) showHighlights
+{
+	[self hideOptionsMenu];
+
+	NSViewController* controller = [[MBHighlightsController alloc] init];
+	[controller view];
+	
 	[self pushViewController:controller];
 }
 

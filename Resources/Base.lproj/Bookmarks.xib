@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBBookmarksController">
+            <connections>
+                <outlet property="highlightsCountButton" destination="DDH-Ir-Y8s" id="8x6-cU-VbG"/>
+                <outlet property="highlightsTopConstraint" destination="JcL-kO-GiP" id="wT0-gk-vgQ"/>
+                <outlet property="tagsButton" destination="19n-45-pjW" id="g0J-pZ-wvb"/>
+                <outlet property="view" destination="c22-O7-iKe" id="Gyx-G8-w6m"/>
+                <outlet property="webView" destination="dJ3-8Q-iCM" id="8m6-O6-Azn"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="454" height="527"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <box boxType="custom" borderType="line" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="afl-rL-umg">
+                    <rect key="frame" x="-1" y="488" width="456" height="40"/>
+                    <view key="contentView" id="bBM-c5-6vi">
+                        <rect key="frame" x="1" y="1" width="454" height="38"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
+                                <rect key="frame" x="15" y="5" width="366" height="28"/>
+                                <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="showHighlights:" target="-2" id="mPH-Mr-dXR"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="19n-45-pjW">
+                                <rect key="frame" x="386" y="5" width="57" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="E5N-Sh-sT3"/>
+                                </constraints>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" id="XxI-f7-TCr">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" autoenablesItems="NO" id="MYu-pW-ukj">
+                                        <items>
+                                            <menuItem state="on" image="tag" catalog="system" hidden="YES" id="2FC-Vg-pFi"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="selectTag:" target="-2" id="l6r-mw-bB1"/>
+                                </connections>
+                            </popUpButton>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="15" id="KiJ-eQ-agP"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="15" id="LIb-hE-eB9"/>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="Pnf-vK-gmG"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="top" secondItem="bBM-c5-6vi" secondAttribute="top" constant="5" id="eym-nk-GAq"/>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="8" symbolic="YES" id="piI-Z7-eZK"/>
+                            <constraint firstAttribute="bottom" secondItem="DDH-Ir-Y8s" secondAttribute="bottom" constant="5" id="wVb-yW-N8Q"/>
+                        </constraints>
+                    </view>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="0Lk-f9-ac3"/>
+                    </constraints>
+                    <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                    <color key="fillColor" name="color_highlight_background"/>
+                </box>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
+                    <rect key="frame" x="0.0" y="0.0" width="454" height="488"/>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="afl-rL-umg" secondAttribute="trailing" constant="-1" id="3ml-o2-utE"/>
+                <constraint firstItem="afl-rL-umg" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="-1" id="5VD-4T-vLD"/>
+                <constraint firstAttribute="bottom" secondItem="dJ3-8Q-iCM" secondAttribute="bottom" id="DHS-gU-GXp"/>
+                <constraint firstItem="afl-rL-umg" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="-1" id="JcL-kO-GiP"/>
+                <constraint firstItem="dJ3-8Q-iCM" firstAttribute="top" secondItem="afl-rL-umg" secondAttribute="bottom" id="JnC-OS-vF6"/>
+                <constraint firstAttribute="trailing" secondItem="dJ3-8Q-iCM" secondAttribute="trailing" id="fUF-iX-h63"/>
+                <constraint firstItem="dJ3-8Q-iCM" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="x6q-vo-Lp4"/>
+            </constraints>
+            <point key="canvasLocation" x="173" y="120.5"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="tag" catalog="system" width="17" height="17"/>
+        <namedColor name="color_highlight_background">
+            <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
