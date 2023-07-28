@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,6 +11,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBHighlightsController">
             <connections>
                 <outlet property="browserMenuItem" destination="nTi-sh-Y0s" id="PE9-za-Nvb"/>
+                <outlet property="progressSpinner" destination="qSq-cZ-guW" id="sog-6v-xYb"/>
                 <outlet property="tableView" destination="N7o-iT-Tun" id="YTM-7g-e0h"/>
                 <outlet property="view" destination="c22-O7-iKe" id="DLd-Y7-JYT"/>
             </connections>
@@ -104,9 +106,14 @@
                                     <action selector="back:" target="-2" id="tda-aA-au5"/>
                                 </connections>
                             </button>
+                            <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="qSq-cZ-guW">
+                                <rect key="frame" x="464" y="11" width="16" height="16"/>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Lws-QZ-DsH" firstAttribute="centerY" secondItem="rs8-VO-drM" secondAttribute="centerY" id="ODT-37-0QJ"/>
+                            <constraint firstAttribute="trailing" secondItem="qSq-cZ-guW" secondAttribute="trailing" constant="20" symbolic="YES" id="SXy-TO-dez"/>
+                            <constraint firstItem="qSq-cZ-guW" firstAttribute="centerY" secondItem="rs8-VO-drM" secondAttribute="centerY" id="Z5z-Xc-cwG"/>
                             <constraint firstItem="Lws-QZ-DsH" firstAttribute="leading" secondItem="rs8-VO-drM" secondAttribute="leading" constant="5" id="hCC-4C-O27"/>
                         </constraints>
                     </view>
@@ -114,6 +121,7 @@
                         <constraint firstAttribute="height" constant="40" id="1Zr-8e-wi4"/>
                     </constraints>
                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                    <color key="fillColor" name="color_header_alt_background"/>
                 </box>
             </subviews>
             <constraints>
@@ -168,5 +176,8 @@
     <resources>
         <image name="BackNormal" width="20" height="20"/>
         <image name="BackPressed" width="20" height="20"/>
+        <namedColor name="color_header_alt_background">
+            <color red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

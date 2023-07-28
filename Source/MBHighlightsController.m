@@ -68,6 +68,8 @@
 
 - (void) fetchHighlights
 {
+	[self.progressSpinner startAnimation:nil];
+
 	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/highlights"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -88,6 +90,7 @@
 				self.currentHighlights = new_highlights;
 				[self.tableView reloadData];
 				self.tableView.animator.alphaValue = 1.0;
+				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
@@ -95,6 +98,8 @@
 
 - (void) deleteHighlight:(MBHighlight *)highlight
 {
+	[self.progressSpinner startAnimation:nil];
+	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/bookmarks/highlights/%@", highlight.highlightID];
 	[client deleteWithObject:nil completion:^(UUHttpResponse *response) {
 		RFDispatchMainAsync (^{
