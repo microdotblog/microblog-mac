@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBBookmarksController : NSViewController
 
 @property (strong, nonatomic) IBOutlet NSButton* highlightsCountButton;
+@property (strong, nonatomic) IBOutlet NSButton* currentTagCloseButton;
+@property (strong, nonatomic) IBOutlet NSTextField* currentTagField;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* tagsButton;
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* highlightsTopConstraint;

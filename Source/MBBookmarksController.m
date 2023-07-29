@@ -33,7 +33,8 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 
 	[self setupWebView];
 	[self setupHighlightsButton];
-	
+	[self hideCurrentTag];
+
 	[self fetchHighlights];
 }
 
@@ -65,6 +66,12 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 	else {
 		self.highlightsCountButton.hidden = YES;
 	}
+}
+
+- (void) hideCurrentTag
+{
+	self.currentTagField.hidden = YES;
+	self.currentTagCloseButton.hidden = YES;
 }
 
 - (void) fetchHighlights
@@ -155,7 +162,17 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 		
 		NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 		[[self.webView mainFrame] loadRequest:request];
+		
+		self.currentTagField.stringValue = tag_name;
+		self.currentTagField.hidden = NO;
+		self.currentTagCloseButton.hidden = NO;
 	}
+}
+
+- (IBAction) clearCurrentTag:(id)sender
+{
+	[self hideCurrentTag];
+	[self setupWebView];
 }
 
 - (void) hideHighlightsBar

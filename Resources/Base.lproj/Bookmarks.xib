@@ -10,6 +10,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBBookmarksController">
             <connections>
+                <outlet property="currentTagCloseButton" destination="Bv2-Qf-nrK" id="M5C-83-LHW"/>
+                <outlet property="currentTagField" destination="oyw-LX-dfu" id="XKa-0A-vIV"/>
                 <outlet property="highlightsCountButton" destination="DDH-Ir-Y8s" id="8x6-cU-VbG"/>
                 <outlet property="highlightsTopConstraint" destination="JcL-kO-GiP" id="wT0-gk-vgQ"/>
                 <outlet property="tagsButton" destination="19n-45-pjW" id="g0J-pZ-wvb"/>
@@ -30,7 +32,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="15" y="5" width="366" height="28"/>
+                                <rect key="frame" x="15" y="5" width="241" height="28"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -57,13 +59,39 @@
                                     <action selector="selectTag:" target="-2" id="l6r-mw-bB1"/>
                                 </connections>
                             </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-LX-dfu">
+                                <rect key="frame" x="322" y="11" width="61" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="tag name" id="7BV-Sg-PE6">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bv2-Qf-nrK">
+                                <rect key="frame" x="294" y="4" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Nz0-Ik-h1g"/>
+                                    <constraint firstAttribute="width" constant="30" id="eHV-D5-5Dy"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="CloseNormal" imagePosition="overlaps" alignment="center" alternateImage="ClosePressed" imageScaling="proportionallyDown" inset="2" id="v3f-sx-Mby">
+                                    <behavior key="behavior" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="clearCurrentTag:" target="-2" id="8rD-xW-jHK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="oyw-LX-dfu" secondAttribute="trailing" constant="8" symbolic="YES" id="JfF-Qu-ud1"/>
                             <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="15" id="KiJ-eQ-agP"/>
                             <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="15" id="LIb-hE-eB9"/>
+                            <constraint firstItem="Bv2-Qf-nrK" firstAttribute="centerY" secondItem="oyw-LX-dfu" secondAttribute="centerY" id="M3H-Y7-ebv"/>
+                            <constraint firstItem="Bv2-Qf-nrK" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="38" id="OQs-4M-7Pc"/>
                             <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="Pnf-vK-gmG"/>
                             <constraint firstItem="DDH-Ir-Y8s" firstAttribute="top" secondItem="bBM-c5-6vi" secondAttribute="top" constant="5" id="eym-nk-GAq"/>
-                            <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="8" symbolic="YES" id="piI-Z7-eZK"/>
+                            <constraint firstItem="oyw-LX-dfu" firstAttribute="leading" secondItem="Bv2-Qf-nrK" secondAttribute="trailing" id="fDz-Wo-wgu"/>
+                            <constraint firstItem="oyw-LX-dfu" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="vKC-HH-AvB"/>
                             <constraint firstAttribute="bottom" secondItem="DDH-Ir-Y8s" secondAttribute="bottom" constant="5" id="wVb-yW-N8Q"/>
                         </constraints>
                     </view>
@@ -90,6 +118,8 @@
         </customView>
     </objects>
     <resources>
+        <image name="CloseNormal" width="20" height="20"/>
+        <image name="ClosePressed" width="20" height="20"/>
         <image name="tag" catalog="system" width="17" height="17"/>
         <namedColor name="color_highlight_background">
             <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
