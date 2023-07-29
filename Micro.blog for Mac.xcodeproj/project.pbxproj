@@ -159,6 +159,7 @@
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */; };
+		4BD709042A754CCD00F154C6 /* MBTimelineBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD709032A754CCD00F154C6 /* MBTimelineBackgroundView.m */; };
 		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
 		4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BD8339E273C3FF0007350F2 /* GoToUser.xib */; };
 		4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD833A2273C60A5007350F2 /* RFPostTableView.m */; };
@@ -492,6 +493,8 @@
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookshelvesTableView.h; path = Source/MBBookshelvesTableView.h; sourceTree = "<group>"; };
 		4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookshelvesTableView.m; path = Source/MBBookshelvesTableView.m; sourceTree = "<group>"; };
+		4BD709022A754CCD00F154C6 /* MBTimelineBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineBackgroundView.h; path = Source/MBTimelineBackgroundView.h; sourceTree = "<group>"; };
+		4BD709032A754CCD00F154C6 /* MBTimelineBackgroundView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTimelineBackgroundView.m; path = Source/MBTimelineBackgroundView.m; sourceTree = "<group>"; };
 		4BD83398273C3DF3007350F2 /* RFGoToUserController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFGoToUserController.h; path = Source/RFGoToUserController.h; sourceTree = "<group>"; };
 		4BD83399273C3DF3007350F2 /* RFGoToUserController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFGoToUserController.m; path = Source/RFGoToUserController.m; sourceTree = "<group>"; };
 		4BD8339F273C3FF0007350F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/GoToUser.xib; sourceTree = "<group>"; };
@@ -943,6 +946,8 @@
 				4BE23F912A700A7200E24718 /* MBHighlight.m */,
 				4BE23F962A700AFA00E24718 /* MBHighlightCell.h */,
 				4BE23F972A700AFA00E24718 /* MBHighlightCell.m */,
+				4BD709022A754CCD00F154C6 /* MBTimelineBackgroundView.h */,
+				4BD709032A754CCD00F154C6 /* MBTimelineBackgroundView.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -1248,6 +1253,7 @@
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
+				4BD709042A754CCD00F154C6 /* MBTimelineBackgroundView.m in Sources */,
 				4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */,
 				4BED646924BDF29A0018644C /* RFUpload.m in Sources */,
 				4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */,

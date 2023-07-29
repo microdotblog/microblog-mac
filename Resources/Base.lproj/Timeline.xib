@@ -121,7 +121,7 @@
                                     <constraint firstAttribute="trailing" secondItem="8ZP-da-d7y" secondAttribute="trailing" id="sAk-8m-2JS"/>
                                 </constraints>
                             </customView>
-                            <customView id="tQN-jO-jUp">
+                            <customView id="tQN-jO-jUp" customClass="MBTimelineBackgroundView">
                                 <rect key="frame" x="215" y="0.0" width="435" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>

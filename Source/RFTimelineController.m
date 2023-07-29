@@ -805,7 +805,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	NSView* last_view = [self currentContainerView];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.window.contentView addSubview:controller.view positioned:NSWindowBelow relativeTo:self.webView];
+	[self.window.contentView addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
