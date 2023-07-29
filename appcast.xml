@@ -16,6 +16,29 @@
 						padding: 2px;
 					}
 				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added current selected tag to Bookmarks screen.</li>
+					<li>Fixed actually deleting highlight when delete option chosen in right-click menu.</li>
+					<li>Fixed dark mode inconsistencies and improved colors.</li>
+				</ul>
+				<p>Micro.blog now requires macOS 11 Big Sur.</p>
+ 			]]></description>
+			<pubDate>Sat, 29 Jul 2023 09:10:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.0.1.zip" sparkle:shortVersionString="3.0.1" sparkle:version="134" length="4098020" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
+			<title>Version 3.0</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
  				<p>This new version is for Micro.blog Premium subscribers:</p>
  				<ul>
 					<li>Added highlights screen with recent highlights and tags filter button.</li>
