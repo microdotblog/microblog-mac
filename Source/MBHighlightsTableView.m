@@ -52,7 +52,7 @@
 
 - (void) scrollWheel:(NSEvent *)event
 {
-	CGFloat threshold_x = 50;
+	CGFloat threshold_x = 70;
 	CGFloat allowed_y = 10;
 	if ((event.scrollingDeltaX > threshold_x) && (event.scrollingDeltaY < allowed_y)) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
