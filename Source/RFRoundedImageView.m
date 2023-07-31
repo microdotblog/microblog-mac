@@ -29,6 +29,8 @@
 		CGContextAddPath (context, path);
 		[[NSColor colorWithWhite:0.8 alpha:1.0] set];
 		CGContextFillPath (context);
+		
+		CGPathRelease (path);
 	}
 }
 

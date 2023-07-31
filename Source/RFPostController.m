@@ -593,6 +593,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					self.attachedPhotos = new_photos;
 					[self stopProgressAnimation];
 					[self.photosCollectionView reloadData];
+					
+					CGImageRelease (cgImage);
 				}
 				else {
 					[self stopProgressAnimation];
@@ -704,11 +706,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	NSArray* array = dictionary[@"array"];
 	self.activeReplacementString = dictionary[@"string"];
 
-	CGFloat size = 36.0;
 	if (!array.count)
 	{
-		size = 0.0;
-						   
 		if (self.activeReplacementString.length > 3)
 		{
 			NSString* cleanUserName = self.activeReplacementString;

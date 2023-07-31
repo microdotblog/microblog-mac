@@ -412,7 +412,7 @@
 
         NSString* alertTitle = [NSString stringWithFormat:@"Day One %@ Journal", journalName];
 
-        [NSAlert rf_showTwoButtonAlert:alertTitle message:alertDescriptionJournal okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+        [NSAlert rf_showTwoButtonAlert:alertTitle message:alertDescription okButton:@"Continue" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
             if (returnCode == 1000) {
                 self.exportController = [[RFDayOneExportController alloc] initWithAccount:account];
                 [self.exportController showWindow:nil];
