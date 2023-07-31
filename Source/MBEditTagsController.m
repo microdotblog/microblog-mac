@@ -69,13 +69,17 @@
 		@"tags": self.tagsField.stringValue
 	};
 	
+	// format tags with space after commas
+	NSArray* tags = [self.tagsField.stringValue componentsSeparatedByString:@","];
+	NSString* new_tags = [tags componentsJoinedByString:@", "];
+	
 	// save tags to server
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/bookmarks/%@", self.bookmarkID];
 	[client postWithParams:params completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync ((^{
 			NSDictionary* info = @{
 				kTagsDidUpdateIDKey: self.bookmarkID,
-				kTagsDidUpdateTagsKey: self.tagsField.stringValue
+				kTagsDidUpdateTagsKey: new_tags
 			};
 			[[NSNotificationCenter defaultCenter] postNotificationName:kTagsDidUpdateNotification object:self userInfo:info];
 			[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
