@@ -9,6 +9,7 @@
 #import "MBHighlightsTableView.h"
 
 #import "RFAllPostsController.h"
+#import "RFConstants.h"
 
 @implementation MBHighlightsTableView
 
@@ -46,6 +47,18 @@
 	if (row >= 0) {
 		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
 		[self selectRowIndexes:index_set byExtendingSelection:NO];
+	}
+}
+
+- (void) scrollWheel:(NSEvent *)event
+{
+	CGFloat threshold_x = 50;
+	CGFloat allowed_y = 10;
+	if ((event.scrollingDeltaX > threshold_x) && (event.scrollingDeltaY < allowed_y)) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
+	}
+	else {
+		[super scrollWheel:event];
 	}
 }
 
