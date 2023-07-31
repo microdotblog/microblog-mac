@@ -686,12 +686,9 @@
 
 - (void) editTagsWithBookmarkID:(NSString *)bookmarkID
 {
-	NSWindowController* window_controller = [[MBEditTagsController alloc] initWithBookmarkID:bookmarkID];
-	[self.timelineController.window beginSheet:window_controller.window completionHandler:^(NSModalResponse returnCode) {
-		if (returnCode == NSModalResponseOK) {
-			// refresh hybrid view?
-			// ...
-		}
+	self.editTagsController = [[MBEditTagsController alloc] initWithBookmarkID:bookmarkID];
+	[self.timelineController.window beginSheet:self.editTagsController.window completionHandler:^(NSModalResponse returnCode) {
+		self.editTagsController = nil;
 	}];
 }
 
