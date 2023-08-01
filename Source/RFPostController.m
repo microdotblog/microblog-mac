@@ -1118,14 +1118,15 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) schedulePost:(id)sender
 {
-	MBDateController* date_controller = [[MBDateController alloc] init];
-	[self.view.window beginSheet:date_controller.window completionHandler:^(NSModalResponse returnCode) {
+	self.dateController = [[MBDateController alloc] init];
+	[self.view.window beginSheet:self.dateController.window completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == NSModalResponseOK) {
-			self.postedAt = date_controller.date;
+			self.postedAt = self.dateController.date;
 			self.isDraft = NO;
 			self.view.window.documentEdited = NO;
 			[self uploadPost];
-		}
+        }
+        self.dateController = nil;
 	}];
 }
 
@@ -1727,8 +1728,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
 	self.altController = [[RFPhotoAltController alloc] initWithPhoto:photo atIndex:indexPath];
 	[self.view.window beginSheet:self.altController.window completionHandler:^(NSModalResponse returnCode) {
-		if (returnCode == NSModalResponseOK) {
-		}
+        self.altController = nil;
 	}];
 }
 

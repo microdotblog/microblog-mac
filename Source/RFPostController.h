@@ -49,6 +49,7 @@
 @property (strong, nonatomic) RFPhotoAltController* altController;
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary
 @property (strong, nonatomic) NSDate* postedAt;
+@property (strong, nonatomic) MBDateController* dateController;
 
 - (id) initWithPost:(RFPost *)post;
 - (id) initWithChannel:(NSString *)channel;

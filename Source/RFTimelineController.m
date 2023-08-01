@@ -588,6 +588,7 @@ static NSInteger const kSelectionBookshelves = 10;
 {
 	self.goToUserController = [[RFGoToUserController alloc] init];
 	[self.window beginSheet:self.goToUserController.window completionHandler:^(NSModalResponse returnCode) {
+        self.goToUserController = nil;
 	}];
 }
 
