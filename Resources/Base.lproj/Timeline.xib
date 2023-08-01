@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="21701"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,7 +34,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="343" y="100" width="650" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
             <value key="minSize" type="size" width="570" height="300"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="650" height="600"/>
@@ -254,25 +254,25 @@
             <point key="canvasLocation" x="-306" y="-180"/>
         </box>
         <customView id="G22-WN-mnh">
-            <rect key="frame" x="0.0" y="0.0" width="348" height="39"/>
+            <rect key="frame" x="0.0" y="0.0" width="280" height="104"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="tLG-Iv-7Jr" customClass="MBStatusBubbleView">
-                    <rect key="frame" x="34" y="0.0" width="280" height="39"/>
+                    <rect key="frame" x="0.0" y="0.0" width="280" height="104"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDV-JP-c4m">
-                            <rect key="frame" x="13" y="12" width="234" height="15"/>
+                            <rect key="frame" x="13" y="45" width="231" height="14"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="230" id="ZcY-83-o7c"/>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="230" id="O6L-Mk-Su9"/>
                             </constraints>
-                            <textFieldCell key="cell" lineBreakMode="clipping" title="Publishing latest changes to your blog..." id="fAb-7T-WWY">
-                                <font key="font" metaFont="cellTitle"/>
+                            <textFieldCell key="cell" title="status message" id="fAb-7T-WWY">
+                                <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="color_notification_text"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
                         <progressIndicator maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Fgo-Yw-IrN">
-                            <rect key="frame" x="253" y="14" width="12" height="12"/>
+                            <rect key="frame" x="253" y="46" width="12" height="12"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="12" id="VGq-dw-ZPM"/>
                                 <constraint firstAttribute="height" constant="12" id="iOa-lJ-s3J"/>
@@ -281,19 +281,25 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Fgo-Yw-IrN" secondAttribute="trailing" constant="15" id="661-bH-6PL"/>
-                        <constraint firstAttribute="width" constant="280" id="Ck7-fJ-TXR"/>
+                        <constraint firstItem="Fgo-Yw-IrN" firstAttribute="leading" secondItem="YDV-JP-c4m" secondAttribute="trailing" constant="11" id="7vw-vB-fwU"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="Ck7-fJ-TXR"/>
                         <constraint firstItem="YDV-JP-c4m" firstAttribute="leading" secondItem="tLG-Iv-7Jr" secondAttribute="leading" constant="15" id="ESz-aY-caS"/>
                         <constraint firstItem="Fgo-Yw-IrN" firstAttribute="centerY" secondItem="tLG-Iv-7Jr" secondAttribute="centerY" id="giQ-kJ-t07"/>
                         <constraint firstItem="YDV-JP-c4m" firstAttribute="centerY" secondItem="tLG-Iv-7Jr" secondAttribute="centerY" id="v90-cc-cyq"/>
                     </constraints>
+                    <connections>
+                        <outlet property="statusMessageTextField" destination="YDV-JP-c4m" id="VBl-K7-1pU"/>
+                    </connections>
                 </customView>
             </subviews>
             <constraints>
                 <constraint firstItem="tLG-Iv-7Jr" firstAttribute="centerX" secondItem="G22-WN-mnh" secondAttribute="centerX" id="bwM-b7-N0C"/>
+                <constraint firstItem="tLG-Iv-7Jr" firstAttribute="leading" secondItem="G22-WN-mnh" secondAttribute="leading" id="lBZ-xY-aHO"/>
                 <constraint firstAttribute="bottom" secondItem="tLG-Iv-7Jr" secondAttribute="bottom" id="mfw-0W-pAL"/>
+                <constraint firstAttribute="trailing" secondItem="tLG-Iv-7Jr" secondAttribute="trailing" id="ppO-wm-Kwd"/>
                 <constraint firstItem="tLG-Iv-7Jr" firstAttribute="top" secondItem="G22-WN-mnh" secondAttribute="top" id="r2V-r4-1iY"/>
             </constraints>
-            <point key="canvasLocation" x="-183" y="-300"/>
+            <point key="canvasLocation" x="-200.5" y="-329"/>
         </customView>
     </objects>
     <resources>

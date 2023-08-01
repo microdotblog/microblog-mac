@@ -1577,11 +1577,13 @@ static NSInteger const kSelectionBookshelves = 10;
     return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
 }
 
-- ( NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
 	if ([itemIdentifier isEqualToString:@"StatusBubble"]) {
 		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		item.view = self.statusBubble;
+        item.minSize = NSMakeSize(80, self.statusBubble.bounds.size.height);
+        item.maxSize = self.statusBubble.bounds.size;
 		return item;
 	}
     else if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
