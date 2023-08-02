@@ -6,7 +6,33 @@
 		<language>en</language>
 
 		<item>
-			<title>Version 3.0</title>
+			<title>Version 3.0.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Improved toolbar to not hide new post and account button at narrow window sizes. Publishing status collapses with shorter text. Thanks @otaviocc!</li>
+					<li>Added swipe back on highlights screen.</li>
+					<li>Fixed highlight web page title wrapping.</li>
+					<li>Fixed some memory leaks and other little bugs.</li>
+					<li>Fixed potential hang when editing tags on some systems.</li>
+					<li>Fixed showing edited tags with spaces after commas.</li>
+				</ul>
+				<p>Micro.blog now requires macOS 11 Big Sur.</p>
+ 			]]></description>
+			<pubDate>Wed, 02 Aug 2023 10:45:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.0.2.zip" sparkle:shortVersionString="3.0.2" sparkle:version="136" length="4104235" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
+			<title>Version 3.0.1</title>
  			<description><![CDATA[
 				<style>
 					ul {
