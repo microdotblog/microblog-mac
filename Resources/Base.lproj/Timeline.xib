@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="21507"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,7 +34,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="343" y="100" width="650" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="570" height="300"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="650" height="600"/>
@@ -261,12 +261,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="280" height="104"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDV-JP-c4m">
-                            <rect key="frame" x="13" y="45" width="231" height="14"/>
+                            <rect key="frame" x="13" y="45" width="231" height="15"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="230" id="O6L-Mk-Su9"/>
                             </constraints>
                             <textFieldCell key="cell" title="status message" id="fAb-7T-WWY">
-                                <font key="font" metaFont="smallSystem"/>
+                                <font key="font" metaFont="system" size="12"/>
                                 <color key="textColor" name="color_notification_text"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>

@@ -19,13 +19,20 @@
 {
 	[super drawRect:dirtyRect];
 
-    if (dirtyRect.size.width < 200) {
+	CGRect r = NSRectToCGRect (self.bounds);
+	if (r.size.width < 180) {
+		self.statusMessageTextField.cell.title = @"Publishing...";
+	}
+    else if (r.size.width < 210) {
         self.statusMessageTextField.cell.title = @"Publishing changes...";
-    } else {
+    }
+	else if (r.size.width < 280) {
+		self.statusMessageTextField.cell.title = @"Publishing latest changes...";
+	}
+	else {
         self.statusMessageTextField.cell.title = @"Publishing latest changes to your blog...";
     }
 
-	CGRect r = NSRectToCGRect (self.bounds);
 	CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
 	
 	CGPathRef path = CGPathCreateWithRoundedRect(r, 7.0, 7.0, NULL);
