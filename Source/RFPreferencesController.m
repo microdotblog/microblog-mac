@@ -461,6 +461,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 					if (returnCode == NSModalResponseOK) {
 						[self showMessage:@"Weblog settings have been updated."];
 					}
+                    self.wordpressController = nil;
 				}];
             });
 		}
