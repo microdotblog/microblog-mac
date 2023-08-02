@@ -19,6 +19,12 @@
 {
 	[super drawRect:dirtyRect];
 
+    if (dirtyRect.size.width < 200) {
+        self.statusMessageTextField.cell.title = @"Publishing changes...";
+    } else {
+        self.statusMessageTextField.cell.title = @"Publishing latest changes to your blog...";
+    }
+
 	CGRect r = NSRectToCGRect (self.bounds);
 	CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
 	
