@@ -20,19 +20,19 @@
             <rect key="contentRect" x="181" y="118" width="276" height="378"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="200" height="200"/>
-            <value key="maxSize" type="size" width="400" height="1000"/>
+            <value key="maxSize" type="size" width="400" height="1500"/>
             <view key="contentView" id="p9W-8T-uOu">
                 <rect key="frame" x="0.0" y="0.0" width="276" height="378"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="32" horizontalPageScroll="10" verticalLineScroll="32" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FVM-dg-dzW">
-                        <rect key="frame" x="0.0" y="0.0" width="276" height="378"/>
+                        <rect key="frame" x="0.0" y="0.0" width="276" height="334"/>
                         <clipView key="contentView" id="g5V-Cp-xA3">
-                            <rect key="frame" x="0.0" y="0.0" width="276" height="378"/>
+                            <rect key="frame" x="0.0" y="0.0" width="276" height="334"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView identifier="TagCell" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="32" viewBased="YES" id="22b-vE-qMB">
-                                    <rect key="frame" x="0.0" y="0.0" width="276" height="378"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="276" height="334"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -73,11 +73,22 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="36p-pI-l4H">
+                        <rect key="frame" x="10" y="345" width="256" height="22"/>
+                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="FmS-Fq-q01">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </searchFieldCell>
+                    </searchField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="FVM-dg-dzW" firstAttribute="top" secondItem="p9W-8T-uOu" secondAttribute="top" id="05h-lp-ULB"/>
+                    <constraint firstItem="36p-pI-l4H" firstAttribute="top" secondItem="p9W-8T-uOu" secondAttribute="top" constant="11" id="22R-mF-GpL"/>
                     <constraint firstAttribute="bottom" secondItem="FVM-dg-dzW" secondAttribute="bottom" id="2bt-YS-oSb"/>
+                    <constraint firstItem="36p-pI-l4H" firstAttribute="leading" secondItem="p9W-8T-uOu" secondAttribute="leading" constant="10" id="En3-IQ-udz"/>
                     <constraint firstAttribute="trailing" secondItem="FVM-dg-dzW" secondAttribute="trailing" id="MHs-xa-vsU"/>
+                    <constraint firstAttribute="trailing" secondItem="36p-pI-l4H" secondAttribute="trailing" constant="10" id="YA9-mi-arH"/>
+                    <constraint firstItem="FVM-dg-dzW" firstAttribute="top" secondItem="36p-pI-l4H" secondAttribute="bottom" constant="11" id="kQi-dl-7U8"/>
                     <constraint firstItem="FVM-dg-dzW" firstAttribute="leading" secondItem="p9W-8T-uOu" secondAttribute="leading" id="yly-az-5Hk"/>
                 </constraints>
             </view>
