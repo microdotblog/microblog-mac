@@ -482,7 +482,10 @@
 {
 	// also show bookmarks if first time opening window
 	if ((self.allTagsController == nil) || ![self.allTagsController.window isVisible]) {
-		[self.timelineController showFavorites:nil];
+		// and favorites isn't already showing
+		if (![self.timelineController isSelectedFavorites]) {
+			[self.timelineController showFavorites:nil];
+		}
 	}
 	
 	// show tags palette

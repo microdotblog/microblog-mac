@@ -1251,6 +1251,11 @@ static NSInteger const kSelectionBookshelves = 10;
 	[self.messageSpinner stopAnimation:nil];
 }
 
+- (BOOL) isSelectedFavorites
+{
+	return (self.selectedTimeline == kSelectionFavorites);
+}
+
 #pragma mark -
 
 - (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame

@@ -72,4 +72,6 @@ typedef NSInteger RFSelectedTimelineType;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
 - (NSString *) usernameOfPostID:(NSString *)postID;
 
+- (BOOL) isSelectedFavorites;
+
 @end
