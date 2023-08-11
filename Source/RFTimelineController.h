@@ -63,6 +63,7 @@ typedef NSInteger RFSelectedTimelineType;
 // make an RFTimelineController that is just a web view
 
 - (IBAction) performClose:(id)sender;
+- (IBAction) showFavorites:(id)sender;
 
 - (void) showConversationWithPostID:(NSString *)postID;
 - (void) showProfileWithUsername:(NSString *)username;

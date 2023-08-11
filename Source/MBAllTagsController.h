@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBAllTagsController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource, NSSearchFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
 @property (strong, nonatomic) NSArray* allTags; // NSString
 @property (strong, nonatomic) NSArray* currentTags; // NSString

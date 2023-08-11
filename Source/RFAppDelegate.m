@@ -480,10 +480,13 @@
 
 - (IBAction) showAllTags:(id)sender
 {
-	if (self.allTagsController == nil) {
-		self.allTagsController = [[MBAllTagsController alloc] init];
+	// also show bookmarks if first time opening window
+	if ((self.allTagsController == nil) || ![self.allTagsController.window isVisible]) {
+		[self.timelineController showFavorites:nil];
 	}
-	[self.allTagsController showWindow:nil];
+	
+	// show tags palette
+	[self showAllTags];
 }
 
 #pragma mark -
@@ -724,6 +727,14 @@
 {
 	RFPostController* controller = [[RFPostController alloc] initWithPostID:postID username:username];
 	[self showPostController:controller];
+}
+
+- (void) showAllTags
+{
+	if (self.allTagsController == nil) {
+		self.allTagsController = [[MBAllTagsController alloc] init];
+	}
+	[self.allTagsController showWindow:nil];
 }
 
 @end

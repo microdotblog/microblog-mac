@@ -89,6 +89,11 @@
 	[self.tableView reloadData];
 }
 
+- (void) performFindPanelAction:(id)sender
+{
+	[self.searchField becomeFirstResponder];
+}
+
 - (void) selectTag:(NSString *)tagName
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kSelectTagNotification object:self userInfo:@{ kSelectTagNameKey: tagName }];

@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBAllTagsController">
             <connections>
+                <outlet property="searchField" destination="36p-pI-l4H" id="Wli-PY-x63"/>
                 <outlet property="tableView" destination="22b-vE-qMB" id="tKj-um-SVP"/>
                 <outlet property="window" destination="hAi-as-NWl" id="s0r-ya-6Ki"/>
             </connections>
