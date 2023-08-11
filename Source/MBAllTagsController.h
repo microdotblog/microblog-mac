@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBAllTagsController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource>
+@interface MBAllTagsController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource, NSSearchFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 

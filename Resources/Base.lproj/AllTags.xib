@@ -82,6 +82,7 @@
                         </searchFieldCell>
                         <connections>
                             <action selector="searchTags:" target="-2" id="2QX-k8-Ftg"/>
+                            <outlet property="delegate" destination="-2" id="App-Ey-bZT"/>
                         </connections>
                     </searchField>
                 </subviews>

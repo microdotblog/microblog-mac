@@ -24,4 +24,15 @@
 	}
 }
 
+- (BOOL) becomeFirstResponder
+{
+	[super becomeFirstResponder];
+	
+	// select first tag
+	NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:0];
+	[self selectRowIndexes:indexes byExtendingSelection:NO];
+	
+	return YES;
+}
+
 @end

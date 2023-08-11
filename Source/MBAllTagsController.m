@@ -94,6 +94,17 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:kSelectTagNotification object:self userInfo:@{ kSelectTagNameKey: tagName }];
 }
 
+- (BOOL) control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector
+{
+	if (commandSelector == @selector(insertNewline:)) {
+		[self.window makeFirstResponder:self.tableView];
+		return YES;
+	}
+	else {
+		return NO;
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
