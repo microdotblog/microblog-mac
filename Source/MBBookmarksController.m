@@ -143,6 +143,8 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 					[self.tagsButton addItemWithTitle:@"All Tags"];
 					item = [self.tagsButton lastItem];
 					[item setRepresentedObject:@"all_tags"];
+					[item setKeyEquivalent:@"T"];
+					[item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
 
 					self.tagsButton.hidden = NO;
 				}
