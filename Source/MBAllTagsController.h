@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 
+@property (strong, nonatomic) NSArray* allTags; // NSString
 @property (strong, nonatomic) NSArray* currentTags; // NSString
 
 @end

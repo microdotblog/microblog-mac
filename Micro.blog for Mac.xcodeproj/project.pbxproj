@@ -157,6 +157,7 @@
 		4BB990612A857A8200C490E2 /* MBAllTagsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB990602A857A8200C490E2 /* MBAllTagsController.m */; };
 		4BB990642A86861A00C490E2 /* TagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB990622A86861A00C490E2 /* TagCell.xib */; };
 		4BB990672A86865B00C490E2 /* MBTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB990662A86865B00C490E2 /* MBTagCell.m */; };
+		4BB9906A2A8694C900C490E2 /* MBTagsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB990692A8694C900C490E2 /* MBTagsTableView.m */; };
 		4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */; };
 		4BBD6DCF24A59D620018C337 /* RFSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */; };
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
@@ -492,6 +493,8 @@
 		4BB990632A86861A00C490E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/TagCell.xib; sourceTree = "<group>"; };
 		4BB990652A86865B00C490E2 /* MBTagCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTagCell.h; path = Source/MBTagCell.h; sourceTree = "<group>"; };
 		4BB990662A86865B00C490E2 /* MBTagCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTagCell.m; path = Source/MBTagCell.m; sourceTree = "<group>"; };
+		4BB990682A8694C900C490E2 /* MBTagsTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTagsTableView.h; path = Source/MBTagsTableView.h; sourceTree = "<group>"; };
+		4BB990692A8694C900C490E2 /* MBTagsTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTagsTableView.m; path = Source/MBTagsTableView.m; sourceTree = "<group>"; };
 		4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBHighlightsTableView.h; path = Source/MBHighlightsTableView.h; sourceTree = "<group>"; };
 		4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBHighlightsTableView.m; path = Source/MBHighlightsTableView.m; sourceTree = "<group>"; };
 		4BBD6DCD24A59D620018C337 /* RFSeparatorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFSeparatorCell.h; path = Source/RFSeparatorCell.h; sourceTree = "<group>"; };
@@ -872,6 +875,8 @@
 				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
 				4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */,
 				4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */,
+				4BB990682A8694C900C490E2 /* MBTagsTableView.h */,
+				4BB990692A8694C900C490E2 /* MBTagsTableView.m */,
 				4BF537322247CD1D00CF9D66 /* RFPost.h */,
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
@@ -1373,6 +1378,7 @@
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
 				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
+				4BB9906A2A8694C900C490E2 /* MBTagsTableView.m in Sources */,
 				4BF7E52D2836CE2D00500C59 /* MBBookCell.m in Sources */,
 				4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */,
 				4B2CAB1D1F90667300D9B10E /* parser.c in Sources */,

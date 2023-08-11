@@ -31,11 +31,17 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 {
 	[super viewDidLoad];
 
+	[self setupNotifications];
 	[self setupWebView];
 	[self setupHighlightsButton];
 	[self hideCurrentTag];
 
 	[self fetchHighlights];
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectTagNotification:) name:kSelectTagNotification object:nil];
 }
 
 - (void) setupWebView
@@ -157,15 +163,7 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 		[[NSNotificationCenter defaultCenter] postNotificationName:kShowTagsNotification object:self];
 	}
 	else {
-		NSString* tag_name = item.title;
-		NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tag_name rf_urlEncoded]];
-		
-		NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-		[[self.webView mainFrame] loadRequest:request];
-		
-		self.currentTagField.stringValue = tag_name;
-		self.currentTagField.hidden = NO;
-		self.currentTagCloseButton.hidden = NO;
+		[self selectTagWithName:item.title];
 	}
 }
 
@@ -178,6 +176,24 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 - (void) hideHighlightsBar
 {
 	self.highlightsTopConstraint.animator.constant = -35;
+}
+
+- (void) selectTagWithName:(NSString *)tagName
+{
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tagName rf_urlEncoded]];
+	
+	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[[self.webView mainFrame] loadRequest:request];
+	
+	self.currentTagField.stringValue = tagName;
+	self.currentTagField.hidden = NO;
+	self.currentTagCloseButton.hidden = NO;
+}
+
+- (void) selectTagNotification:(NSNotification *)notification
+{
+	NSString* t = [notification.userInfo objectForKey:kSelectTagNameKey];
+	[self selectTagWithName:t];
 }
 
 @end
