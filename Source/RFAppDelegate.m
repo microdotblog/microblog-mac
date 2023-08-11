@@ -24,6 +24,7 @@
 #import "MBBlogImportController.h"
 #import "MBPreviewController.h"
 #import "MBEditTagsController.h"
+#import "MBAllTagsController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -181,6 +182,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAllTagsNotification:) name:kShowTagsNotification object:nil];	
 }
 
 - (void) setupAppearance
@@ -476,6 +478,14 @@
 	}
 }
 
+- (IBAction) showAllTags:(id)sender
+{
+	if (self.allTagsController == nil) {
+		self.allTagsController = [[MBAllTagsController alloc] init];
+	}
+	[self.allTagsController showWindow:nil];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -496,6 +506,11 @@
 {
 	RFPostWindowController* controller = notification.object;
 	[self.postWindows removeObject:controller];
+}
+
+- (void) showAllTagsNotification:(NSNotification *)notification
+{
+	[self showAllTags:nil];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification

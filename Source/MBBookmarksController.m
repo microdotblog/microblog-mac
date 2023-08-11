@@ -154,7 +154,7 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 {
 	NSMenuItem* item = [sender selectedItem];
 	if ([[item representedObject] isEqualToString:@"all_tags"]) {
-		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://micro.blog/bookmarks/tags"]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kShowTagsNotification object:self];
 	}
 	else {
 		NSString* tag_name = item.title;

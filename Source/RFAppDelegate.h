@@ -17,6 +17,7 @@
 @class RFBookmarkController;
 @class MBPreviewController;
 @class MBEditTagsController;
+@class MBAllTagsController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -29,6 +30,7 @@
 @property (strong, nonatomic) RFBookmarkController* bookmarkController;
 @property (strong, nonatomic) MBPreviewController* previewController;
 @property (strong, nonatomic) MBEditTagsController* editTagsController;
+@property (strong, nonatomic) MBAllTagsController* allTagsController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 
 @end

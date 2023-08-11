@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="TagCell" id="xvF-Fo-32x" customClass="MBTagCell">
+            <rect key="frame" x="0.0" y="0.0" width="326" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Av-sq-qNj">
+                    <rect key="frame" x="38" y="9" width="270" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="tag" id="T5F-ks-PW4">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ePP-gj-6C3">
+                    <rect key="frame" x="10" y="-3" width="30" height="38"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Ouu-mO-T1v"/>
+                        <constraint firstAttribute="width" constant="30" id="un8-w1-n7Z"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="tag" catalog="system" id="WYf-4v-aVi"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="7Av-sq-qNj" firstAttribute="top" secondItem="xvF-Fo-32x" secondAttribute="top" constant="7" id="PQv-oD-o93"/>
+                <constraint firstItem="ePP-gj-6C3" firstAttribute="leading" secondItem="xvF-Fo-32x" secondAttribute="leading" constant="10" id="ZJG-pj-mAL"/>
+                <constraint firstItem="ePP-gj-6C3" firstAttribute="centerY" secondItem="xvF-Fo-32x" secondAttribute="centerY" id="aBV-P2-pzI"/>
+                <constraint firstAttribute="trailing" secondItem="7Av-sq-qNj" secondAttribute="trailing" constant="20" symbolic="YES" id="f3Z-6V-6Zf"/>
+                <constraint firstItem="7Av-sq-qNj" firstAttribute="leading" secondItem="ePP-gj-6C3" secondAttribute="trailing" id="tfq-Gf-8o9"/>
+            </constraints>
+            <connections>
+                <outlet property="nameField" destination="7Av-sq-qNj" id="u0n-P2-Qm8"/>
+            </connections>
+            <point key="canvasLocation" x="121" y="-234.5"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="tag" catalog="system" width="17" height="17"/>
+    </resources>
+</document>

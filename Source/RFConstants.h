@@ -131,4 +131,6 @@ static NSString* const kTagsDidUpdateNotification = @"MBTagsDidUpdateNotificatio
 static NSString* const kTagsDidUpdateIDKey = @"id";
 static NSString* const kTagsDidUpdateTagsKey = @"tags";
 
+static NSString* const kShowTagsNotification = @"MBShowTagsNotification";
+
 #define APPSTORE 1
