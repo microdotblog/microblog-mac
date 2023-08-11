@@ -6,6 +6,28 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.0.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new tags window (cmd-shift-T) for Micro.blog Premium subscribers to filter bookmarks.</li>
+					<li>Fixed showing a view from an existing conversation causing pane overlapping problems.</li>
+				</ul>
+				<p>Micro.blog now requires macOS 11 Big Sur.</p>
+ 			]]></description>
+			<pubDate>Fri, 11 Aug 2023 14:30:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.0.3.zip" sparkle:shortVersionString="3.0.3" sparkle:version="138" length="4123288" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.0.2</title>
  			<description><![CDATA[
 				<style>

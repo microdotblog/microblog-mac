@@ -266,7 +266,7 @@
                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="230" id="O6L-Mk-Su9"/>
                             </constraints>
                             <textFieldCell key="cell" title="status message" id="fAb-7T-WWY">
-                                <font key="font" metaFont="system" size="12"/>
+                                <font key="font" metaFont="cellTitle"/>
                                 <color key="textColor" name="color_notification_text"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
