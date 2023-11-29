@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="22505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,7 +34,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="343" y="100" width="650" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2304" height="1271"/>
             <value key="minSize" type="size" width="570" height="300"/>
             <view key="contentView" id="ugu-9q-Cxg">
                 <rect key="frame" x="0.0" y="0.0" width="650" height="600"/>
@@ -79,7 +79,7 @@
                                                                     <rect key="frame" x="2" y="1" width="210" height="20"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-Wk-RTO">
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-Wk-RTO">
                                                                             <rect key="frame" x="0.0" y="3" width="210" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="oKH-vH-pea">
@@ -137,7 +137,7 @@
                                             <rect key="frame" x="1" y="1" width="435" height="32"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
                                                     <rect key="frame" x="7" y="2" width="395" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1 new post" id="NQ2-w9-WtX">
@@ -224,7 +224,7 @@
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="g0z-Ci-b4e"/>
                     </imageView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WA0-ys-uhG">
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WA0-ys-uhG">
                         <rect key="frame" x="37" y="12" width="44" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="@test" id="6S3-kn-cpb">
                             <font key="font" metaFont="system"/>
@@ -260,12 +260,12 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="tLG-Iv-7Jr" customClass="MBStatusBubbleView">
                     <rect key="frame" x="0.0" y="0.0" width="280" height="104"/>
                     <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDV-JP-c4m">
+                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDV-JP-c4m">
                             <rect key="frame" x="13" y="45" width="231" height="15"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="230" id="O6L-Mk-Su9"/>
                             </constraints>
-                            <textFieldCell key="cell" title="status message" id="fAb-7T-WWY">
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" title="status message" id="fAb-7T-WWY">
                                 <font key="font" metaFont="cellTitle"/>
                                 <color key="textColor" name="color_notification_text"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -284,6 +284,7 @@
                         <constraint firstItem="Fgo-Yw-IrN" firstAttribute="leading" secondItem="YDV-JP-c4m" secondAttribute="trailing" constant="11" id="7vw-vB-fwU"/>
                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="Ck7-fJ-TXR"/>
                         <constraint firstItem="YDV-JP-c4m" firstAttribute="leading" secondItem="tLG-Iv-7Jr" secondAttribute="leading" constant="15" id="ESz-aY-caS"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="MFZ-2z-G9H"/>
                         <constraint firstItem="Fgo-Yw-IrN" firstAttribute="centerY" secondItem="tLG-Iv-7Jr" secondAttribute="centerY" id="giQ-kJ-t07"/>
                         <constraint firstItem="YDV-JP-c4m" firstAttribute="centerY" secondItem="tLG-Iv-7Jr" secondAttribute="centerY" id="v90-cc-cyq"/>
                     </constraints>
