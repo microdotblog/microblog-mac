@@ -390,12 +390,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		@"url": upload.url,
 	};
 
+	self.blogNameButton.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 	
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			self.blogNameButton.hidden = NO;
+
 			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
-				[self.progressSpinner stopAnimation:nil];
 				NSString* msg = response.parsedResponse[@"error_description"];
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Upload" message:msg button:@"OK" completionHandler:NULL];
 			}
