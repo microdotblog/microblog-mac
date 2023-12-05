@@ -191,6 +191,7 @@
 		4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */; };
 		4BF537312247BDCD00CF9D66 /* PostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF5372F2247BDCD00CF9D66 /* PostCell.xib */; };
 		4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537332247CD1D00CF9D66 /* RFPost.m */; };
+		4BF612BB2B1EF89800F415AA /* MBDraftLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF612BA2B1EF89800F415AA /* MBDraftLabel.m */; };
 		4BF7E50A2834374F00500C59 /* RFRepliesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E5092834374F00500C59 /* RFRepliesController.m */; };
 		4BF7E50D28343C9900500C59 /* Replies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E50B28343C9900500C59 /* Replies.xib */; };
 		4BF7E51128343DFE00500C59 /* RFBookshelvesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */; };
@@ -550,6 +551,8 @@
 		4BF537302247BDCD00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PostCell.xib; sourceTree = "<group>"; };
 		4BF537322247CD1D00CF9D66 /* RFPost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPost.h; path = Source/RFPost.h; sourceTree = "<group>"; };
 		4BF537332247CD1D00CF9D66 /* RFPost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPost.m; path = Source/RFPost.m; sourceTree = "<group>"; };
+		4BF612B92B1EF89800F415AA /* MBDraftLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDraftLabel.h; path = Source/MBDraftLabel.h; sourceTree = "<group>"; };
+		4BF612BA2B1EF89800F415AA /* MBDraftLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDraftLabel.m; path = Source/MBDraftLabel.m; sourceTree = "<group>"; };
 		4BF7E5082834374F00500C59 /* RFRepliesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFRepliesController.h; path = Source/RFRepliesController.h; sourceTree = "<group>"; };
 		4BF7E5092834374F00500C59 /* RFRepliesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFRepliesController.m; path = Source/RFRepliesController.m; sourceTree = "<group>"; };
 		4BF7E50C28343C9900500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Replies.xib; sourceTree = "<group>"; };
@@ -867,6 +870,8 @@
 				4B5EE27C206330B800C87A78 /* RFBlogCell.m */,
 				4BF5372C2247BD8D00CF9D66 /* RFPostCell.h */,
 				4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */,
+				4BF612B92B1EF89800F415AA /* MBDraftLabel.h */,
+				4BF612BA2B1EF89800F415AA /* MBDraftLabel.m */,
 				4BD833A1273C60A5007350F2 /* RFPostTableView.h */,
 				4BD833A2273C60A5007350F2 /* RFPostTableView.m */,
 				4BF7E53228394C5C00500C59 /* MBBooksTableView.h */,
@@ -1307,6 +1312,7 @@
 				4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
+				4BF612BB2B1EF89800F415AA /* MBDraftLabel.m in Sources */,
 				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
 				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,

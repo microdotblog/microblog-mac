@@ -30,7 +30,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3L-Cl-lup">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3L-Cl-lup" customClass="MBDraftLabel">
                     <rect key="frame" x="226" y="146" width="32" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="28" id="JsT-fG-NIx"/>
@@ -113,7 +113,7 @@
     </objects>
     <resources>
         <namedColor name="color_date_text">
-            <color red="0.60392156862745094" green="0.60392156862745094" blue="0.60392156862745094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
