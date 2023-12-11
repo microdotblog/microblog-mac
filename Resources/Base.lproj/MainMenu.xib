@@ -90,6 +90,12 @@
                                     <action selector="newBookmark:" target="Voe-Tx-rLC" id="GIh-25-pmA"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="New Note" id="pAK-jG-U2O">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newNote:" target="-1" id="7Ka-v1-QNo"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="GPE-K0-Iig"/>
                             <menuItem title="Send Post" id="Ajj-u2-KN0">
                                 <string key="keyEquivalent" base64-UTF8="YES">
@@ -449,6 +455,12 @@ CA
                             <menuItem title="Bookshelves" keyEquivalent="9" id="GcL-tC-8V0">
                                 <connections>
                                     <action selector="showBookshelves:" target="-1" id="6vM-wd-pbi"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Notes" id="080-RH-df5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showNotes:" target="-1" id="Cw6-GR-lFy"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="SvD-l1-Axj"/>

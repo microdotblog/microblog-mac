@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CCF2B27944300BBF456 /* MBNotesController.m */; };
+		4B001CD32B27955900BBF456 /* MBNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CD22B27955900BBF456 /* MBNote.m */; };
+		4B001CD62B27957800BBF456 /* MBNoteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CD52B27957800BBF456 /* MBNoteCell.m */; };
+		4B001CDF2B2795F800BBF456 /* Notes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B001CDD2B2795F800BBF456 /* Notes.xib */; };
+		4B001CE22B27962800BBF456 /* NoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B001CE02B27962800BBF456 /* NoteCell.xib */; };
 		4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; };
 		4B00B686255D842200CBE873 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
@@ -227,6 +232,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B001CCE2B27944300BBF456 /* MBNotesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesController.h; path = Source/MBNotesController.h; sourceTree = "<group>"; };
+		4B001CCF2B27944300BBF456 /* MBNotesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesController.m; path = Source/MBNotesController.m; sourceTree = "<group>"; };
+		4B001CD12B27955900BBF456 /* MBNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNote.h; path = Source/MBNote.h; sourceTree = "<group>"; };
+		4B001CD22B27955900BBF456 /* MBNote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNote.m; path = Source/MBNote.m; sourceTree = "<group>"; };
+		4B001CD42B27957800BBF456 /* MBNoteCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNoteCell.h; path = Source/MBNoteCell.h; sourceTree = "<group>"; };
+		4B001CD52B27957800BBF456 /* MBNoteCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNoteCell.m; path = Source/MBNoteCell.m; sourceTree = "<group>"; };
+		4B001CDE2B2795F800BBF456 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Notes.xib; sourceTree = "<group>"; };
+		4B001CE12B27962800BBF456 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/NoteCell.xib; sourceTree = "<group>"; };
 		4B00B678255D827800CBE873 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
 		4B1FA568269E0491006E0451 /* RFDiscoverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFDiscoverController.h; path = Source/RFDiscoverController.h; sourceTree = "<group>"; };
@@ -834,6 +847,12 @@
 				4BF7E5232836085900500C59 /* MBDisabledScrollView.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
+				4B001CCE2B27944300BBF456 /* MBNotesController.h */,
+				4B001CCF2B27944300BBF456 /* MBNotesController.m */,
+				4B001CD12B27955900BBF456 /* MBNote.h */,
+				4B001CD22B27955900BBF456 /* MBNote.m */,
+				4B001CD42B27957800BBF456 /* MBNoteCell.h */,
+				4B001CD52B27957800BBF456 /* MBNoteCell.m */,
 				4BF7E5082834374F00500C59 /* RFRepliesController.h */,
 				4BF7E5092834374F00500C59 /* RFRepliesController.m */,
 				4B5DDAB724E44892007674FF /* RFPostWindowController.h */,
@@ -1028,6 +1047,8 @@
 				4BE23F8A2A7008C800E24718 /* Highlights.xib */,
 				4BE23F932A700A9F00E24718 /* HighlightCell.xib */,
 				4B5606D22A73191800843D59 /* EditTags.xib */,
+				4B001CE02B27962800BBF456 /* NoteCell.xib */,
+				4B001CDD2B2795F800BBF456 /* Notes.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1176,6 +1197,7 @@
 				4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */,
+				4B001CE22B27962800BBF456 /* NoteCell.xib in Resources */,
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */,
@@ -1183,6 +1205,7 @@
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B9F06402767BC400007F21D /* Date.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
+				4B001CDF2B2795F800BBF456 /* Notes.xib in Resources */,
 				4B608B482003B86400589F77 /* Topic.xib in Resources */,
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
 				4BB990642A86861A00C490E2 /* TagCell.xib in Resources */,
@@ -1239,6 +1262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B001CD32B27955900BBF456 /* MBNote.m in Sources */,
 				4B400D06201EC55B00C71AAF /* MMMarkdown.m in Sources */,
 				4B2CAB191F90667300D9B10E /* istack.c in Sources */,
 				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
@@ -1364,6 +1388,7 @@
 				4B2CAB321F91B8F800D9B10E /* WebView+Swipe.m in Sources */,
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
+				4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */,
 				4B5650621F85626200B03FFD /* RFOptionsController.m in Sources */,
 				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
@@ -1389,12 +1414,29 @@
 				4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */,
 				4B2CAB1D1F90667300D9B10E /* parser.c in Sources */,
 				4B56505E1F8561A300B03FFD /* RFPostController.m in Sources */,
+				4B001CD62B27957800BBF456 /* MBNoteCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4B001CDD2B2795F800BBF456 /* Notes.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B001CDE2B2795F800BBF456 /* Base */,
+			);
+			name = Notes.xib;
+			sourceTree = "<group>";
+		};
+		4B001CE02B27962800BBF456 /* NoteCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B001CE12B27962800BBF456 /* Base */,
+			);
+			name = NoteCell.xib;
+			sourceTree = "<group>";
+		};
 		4B1FA565269E0434006E0451 /* Discover.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

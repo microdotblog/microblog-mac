@@ -35,6 +35,7 @@
 #import "RFStack.h"
 #import "RFBookshelf.h"
 #import "MBBooksWindowController.h"
+#import "MBNotesController.h"
 #import "NSImage+Extras.h"
 #import "RFGoToUserController.h"
 #import "NSAppearance+Extras.h"
@@ -51,6 +52,7 @@ static NSInteger const kSelectionUploads = 7;
 static NSInteger const kSelectionDivider2 = 8;
 static NSInteger const kSelectionReplies = 9;
 static NSInteger const kSelectionBookshelves = 10;
+static NSInteger const kSelectionNotes = 11;
 
 @implementation RFTimelineController
 
@@ -215,6 +217,7 @@ static NSInteger const kSelectionBookshelves = 10;
 	
 	[self.sidebarItems addObject:@(kSelectionReplies)];
 	[self.sidebarItems addObject:@(kSelectionBookshelves)];
+	[self.sidebarItems addObject:@(kSelectionNotes)];
 }
 
 #pragma mark -
@@ -545,6 +548,19 @@ static NSInteger const kSelectionBookshelves = 10;
 
 	[self selectSidebarRow:kSelectionBookshelves];
 	[self startLoadingSidebarRow:kSelectionBookshelves];
+}
+
+- (IBAction) showNotes:(id)sender
+{
+	self.selectedTimeline = kSelectionNotes;
+
+	[self closeOverlays];
+
+	MBNotesController* controller = [[MBNotesController alloc] init];
+	[self showAllPostsController:controller];
+
+	[self selectSidebarRow:kSelectionNotes];
+	[self startLoadingSidebarRow:kSelectionNotes];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -1491,6 +1507,22 @@ static NSInteger const kSelectionBookshelves = 10;
 			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
 		}
 	}
+	else if (sidebar_row == kSelectionNotes) {
+		cell.titleField.stringValue = @"Notes";
+		if (@available(macOS 11.0, *)) {
+			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"note" accessibilityDescription:@"Notes"];
+			if (self.window.isKeyWindow) {
+				cell.iconView.alphaValue = 1.0;
+			}
+			else {
+				cell.iconView.alphaValue = 0.5;
+			}
+		}
+		else {
+			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+		}
+	}
+
 	return cell;
 }
 
@@ -1532,6 +1564,9 @@ static NSInteger const kSelectionBookshelves = 10;
 	}
 	else if (sidebar_row == kSelectionBookshelves) {
 		[self showBookshelves:nil];
+	}
+	else if (sidebar_row == kSelectionNotes) {
+		[self showNotes:nil];
 	}
 
 	return YES;

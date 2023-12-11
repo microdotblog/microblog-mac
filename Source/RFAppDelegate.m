@@ -345,6 +345,10 @@
 	[self.bookmarkController showWindow:nil];
 }
 
+- (IBAction) newNote:(id)sender
+{
+}
+
 - (IBAction) importBlogArchive:(id)sender
 {
 	if (self.blogImportController) {
