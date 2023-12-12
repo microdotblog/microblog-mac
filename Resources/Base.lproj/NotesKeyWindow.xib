@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBNotesKeyController">
+            <connections>
+                <outlet property="window" destination="QvC-M9-y7g" id="AWT-kF-yYu"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Secret Key" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7aP-Eh-yp0">
+                        <rect key="frame" x="277" y="13" width="76" height="32"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L9B-y5-BZx">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="44Q-hn-2Xa">
+                        <rect key="frame" x="18" y="202" width="444" height="48"/>
+                        <textFieldCell key="cell" selectable="YES" id="uvC-To-ojf">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">Notes in Micro.blog are encrypted. To sync notes across devices, you will need to save a secret key so the notes can be decrypted later. If you lose your key, you will lose access to your notes too.</string>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bkm-Qa-2pA">
+                        <rect key="frame" x="18" y="166" width="444" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Enter your saved secret key:" id="jAm-1c-UBY">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="zTk-BK-0oO">
+                        <rect key="frame" x="20" y="60" width="440" height="86"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="86" id="8zK-cr-x17"/>
+                            <constraint firstAttribute="width" constant="440" id="sO7-Xh-jrI"/>
+                        </constraints>
+                        <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="dsc-5J-Fg6">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="agU-lH-tn3">
+                        <rect key="frame" x="351" y="13" width="116" height="32"/>
+                        <buttonCell key="cell" type="push" title="Unlock Notes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BPR-3M-sSp">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Bkm-Qa-2pA" secondAttribute="trailing" constant="20" symbolic="YES" id="0YQ-5L-TYt"/>
+                    <constraint firstItem="zTk-BK-0oO" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="7Hv-dh-VdL"/>
+                    <constraint firstAttribute="bottom" secondItem="agU-lH-tn3" secondAttribute="bottom" constant="20" symbolic="YES" id="9sK-X4-5zR"/>
+                    <constraint firstAttribute="trailing" secondItem="agU-lH-tn3" secondAttribute="trailing" constant="20" id="EB6-MH-G06"/>
+                    <constraint firstAttribute="trailing" secondItem="44Q-hn-2Xa" secondAttribute="trailing" constant="20" symbolic="YES" id="F2g-Ls-OBo"/>
+                    <constraint firstItem="44Q-hn-2Xa" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="GQT-sH-Cj4"/>
+                    <constraint firstItem="zTk-BK-0oO" firstAttribute="top" secondItem="Bkm-Qa-2pA" secondAttribute="bottom" constant="20" id="Kat-Da-11a"/>
+                    <constraint firstAttribute="trailing" secondItem="zTk-BK-0oO" secondAttribute="trailing" constant="20" symbolic="YES" id="SJB-5C-RKB"/>
+                    <constraint firstItem="agU-lH-tn3" firstAttribute="leading" secondItem="7aP-Eh-yp0" secondAttribute="trailing" constant="12" symbolic="YES" id="eJR-wz-Xuj"/>
+                    <constraint firstItem="agU-lH-tn3" firstAttribute="top" secondItem="zTk-BK-0oO" secondAttribute="bottom" constant="20" id="fCs-Oz-tsz"/>
+                    <constraint firstAttribute="trailing" secondItem="zTk-BK-0oO" secondAttribute="trailing" constant="20" symbolic="YES" id="qTa-fi-sBG"/>
+                    <constraint firstAttribute="bottom" secondItem="7aP-Eh-yp0" secondAttribute="bottom" constant="20" symbolic="YES" id="r0I-b3-1Ut"/>
+                    <constraint firstItem="Bkm-Qa-2pA" firstAttribute="top" secondItem="44Q-hn-2Xa" secondAttribute="bottom" constant="20" id="rqv-87-CFS"/>
+                    <constraint firstItem="Bkm-Qa-2pA" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="t1Q-mu-dkf"/>
+                    <constraint firstItem="zTk-BK-0oO" firstAttribute="top" secondItem="Bkm-Qa-2pA" secondAttribute="bottom" constant="20" id="uif-xL-kGh"/>
+                    <constraint firstItem="44Q-hn-2Xa" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="v6O-LG-Bbp"/>
+                    <constraint firstItem="zTk-BK-0oO" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="zkL-v1-GUp"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="52" y="144"/>
+        </window>
+    </objects>
+</document>
