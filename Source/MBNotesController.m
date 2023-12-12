@@ -44,7 +44,6 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"NoteCell" bundle:nil] forIdentifier:@"NoteCell"];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
-	self.tableView.alphaValue = 0.0;
 }
 
 - (void) setupNotifications
@@ -54,6 +53,32 @@
 - (void) fetchNotes
 {
 	[self.progressSpinner startAnimation:nil];
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks/1"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_notes = [NSMutableArray array];
+			
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				MBNote* n = [[MBNote alloc] init];
+				n.text = [item objectForKey:@"content_text"];
+				
+				NSString* date_s = [item objectForKey:@"date_published"];
+				n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
+				
+				[new_notes addObject:n];
+			}
+			
+			RFDispatchMainAsync(^{
+				self.allNotes = new_notes;
+				self.currentNotes = new_notes;
+				[self.tableView reloadData];
+			});
+		}
+
+		[self stopLoadingSidebarRow];
+	}];
 }
 
 - (void) stopLoadingSidebarRow

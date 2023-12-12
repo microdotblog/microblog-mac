@@ -14,6 +14,7 @@
 
 - (void) setupWithNote:(MBNote *)note
 {
+	[self.textView setStringValue:note.text];
 }
 
 @end

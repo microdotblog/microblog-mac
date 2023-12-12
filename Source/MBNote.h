@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBNote : NSObject
 
+@property (strong) NSNumber* noteID;
+@property (strong) NSString* text;
+@property (strong) NSDate* createdAt;
+@property (strong) NSDate* updatedAt;
+
 @end
 
 NS_ASSUME_NONNULL_END

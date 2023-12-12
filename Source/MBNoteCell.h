@@ -12,7 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class MBNote;
 
-@interface MBNoteCell : NSTableCellView
+@interface MBNoteCell : NSTableRowView
+
+@property (strong, nonatomic) IBOutlet NSTextField* textView;
 
 - (void) setupWithNote:(MBNote *)note;
 
