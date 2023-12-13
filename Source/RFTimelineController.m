@@ -1593,7 +1593,7 @@ static NSInteger const kSelectionNotes = 11;
 
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
-	return 300;
+	return 200;
 }
 
 - (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
