@@ -134,6 +134,9 @@
                                                     </fragment>
                                                 </attributedString>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="-2" id="E6D-qt-jw3"/>
+                                                </connections>
                                             </textView>
                                         </subviews>
                                         <color key="backgroundColor" name="color_highlight_background"/>

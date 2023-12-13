@@ -10,7 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+@class MBNote;
+
+@interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSTextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
@@ -20,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString* secretKey;
 @property (strong, nonatomic) NSArray* allNotes; // MBNote
 @property (strong, nonatomic) NSArray* currentNotes; // MBNote
+@property (strong, nonatomic) NSMutableSet* editedNotes; // MBNote
+@property (strong, nonatomic) MBNote* selectedNote;
 
 @end
 

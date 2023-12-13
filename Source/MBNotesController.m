@@ -24,6 +24,7 @@
 {
 	self = [super initWithNibName:@"Notes" bundle:nil];
 	if (self) {
+		self.editedNotes = [NSMutableSet set];
 	}
 	
 	return self;
@@ -36,6 +37,7 @@
 	[self setupSecretKey];
 	[self setupTable];
 	[self setupNotifications];
+	[self setupTimer];
 	
 	[self fetchNotes];
 }
@@ -58,6 +60,11 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startNewNoteNotification:) name:kNewNoteNotification object:nil];
 }
 
+- (void) setupTimer
+{
+	[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(syncFromTimer:) userInfo:nil repeats:YES];
+}
+
 - (void) fetchNotes
 {
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks/1"];
@@ -70,8 +77,11 @@
 				NSDictionary* mb = [item objectForKey:@"_microblog"];
 				
 				MBNote* n = [[MBNote alloc] init];
+				
 				n.noteID = [item objectForKey:@"id"];
-				if ([[mb objectForKey:@"is_encrypted"] boolValue]) {
+				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
+				
+				if (n.isEncrypted) {
 					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
 					if (n.text == nil) {
 						// decryption probably failed
@@ -96,6 +106,7 @@
 		}
 
 		RFDispatchMainAsync(^{
+			[self.progressSpinner stopAnimation:nil];
 			[self stopLoadingSidebarRow];
 		});
 	}];
@@ -166,7 +177,7 @@
 	}];
 }
 
-- (void) syncNote:(MBNote *)note
+- (void) syncNote:(MBNote *)note refresh:(BOOL)refresh
 {
 	[self.progressSpinner startAnimation:nil];
 
@@ -195,9 +206,26 @@
 	
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync(^{
-			[self.progressSpinner startAnimation:nil];
+			[self.progressSpinner stopAnimation:nil];
+			if (refresh) {
+				[self fetchNotes];
+			}
 		});
 	}];
+}
+
+- (void) syncFromTimer:(NSTimer *)timer
+{
+	@synchronized (self.editedNotes) {
+		if (self.editedNotes.count > 0) {
+			NSLog(@"Syncing %lu notes", (unsigned long)self.editedNotes.count);
+			for (MBNote* n in self.editedNotes) {
+				[self syncNote:n refresh:NO];
+			}
+			
+			[self.editedNotes removeAllObjects];
+		}
+	}
 }
 
 - (void) startNewNoteNotification:(NSNotification *)notification
@@ -214,7 +242,7 @@
 	self.currentNotes = new_notes;
 	[self.tableView reloadData];
 	
-	[self syncNote:n];
+	[self syncNote:n refresh:YES];
 }
 
 #pragma mark -
@@ -241,7 +269,18 @@
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
+		self.selectedNote = n;
 		[self.detailTextView setString:n.text];
+	}
+}
+
+#pragma mark -
+
+- (void) textDidChange:(NSNotification *)notification
+{
+	if (self.selectedNote) {
+		self.selectedNote.text = [self.detailTextView string];
+		[self.editedNotes addObject:self.selectedNote];
 	}
 }
 
