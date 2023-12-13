@@ -12,6 +12,20 @@
 
 @implementation MBNote
 
+- (id) copyWithZone:(NSZone *)zone
+{
+	MBNote* new_note = [[MBNote allocWithZone:zone] init];
+
+	new_note.noteID = [self.noteID copyWithZone:zone];
+	new_note.text = [self.text copyWithZone:zone];
+	new_note.isEncrypted = self.isEncrypted;
+	new_note.isShared = self.isShared;
+	new_note.createdAt = [self.createdAt copyWithZone:zone];
+	new_note.updatedAt = [self.updatedAt copyWithZone:zone];
+	
+	return new_note;
+}
+
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key
 {
 	NSData* key_data = [self dataFromHexString:key];

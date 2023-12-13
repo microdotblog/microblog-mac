@@ -207,6 +207,7 @@
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync(^{
 			[self.progressSpinner stopAnimation:nil];
+			[self reloadRowForNote:note];
 			if (refresh) {
 				[self fetchNotes];
 			}
@@ -218,12 +219,35 @@
 {
 	@synchronized (self.editedNotes) {
 		if (self.editedNotes.count > 0) {
-			NSLog(@"Syncing %lu notes", (unsigned long)self.editedNotes.count);
 			for (MBNote* n in self.editedNotes) {
 				[self syncNote:n refresh:NO];
 			}
 			
 			[self.editedNotes removeAllObjects];
+		}
+	}
+}
+
+- (void) reloadRowForNote:(MBNote *)note
+{
+	for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+		MBNote* n = [self.currentNotes objectAtIndex:i];
+		if (note.noteID && [n.noteID isEqualToNumber:note.noteID]) {
+			// copy the edited note and insert into array
+			MBNote* note_copy = [note copy];
+			NSMutableArray* new_notes = [self.currentNotes mutableCopy];
+			[new_notes replaceObjectAtIndex:i withObject:note_copy];
+			
+			// update the cell view
+			id cell = [self.tableView rowViewAtRow:i makeIfNecessary:NO];
+			if ([cell isKindOfClass:[MBNoteCell class]]) {
+				MBNoteCell* view = (MBNoteCell *)cell;
+				[view setupWithNote:note_copy];
+			}
+			
+			self.currentNotes = new_notes;
+			
+			break;
 		}
 	}
 }
@@ -266,11 +290,18 @@
 
 - (void) tableViewSelectionDidChange:(NSNotification *)notification
 {
+	// force a sync if selection is changing
+	[self syncFromTimer:nil];
+	
+	// update current edited note text
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
-		self.selectedNote = n;
-		[self.detailTextView setString:n.text];
+		self.selectedNote = [n copy];
+		[self.detailTextView setString:self.selectedNote.text];
+	}
+	else {
+		self.selectedNote = nil;
 	}
 }
 

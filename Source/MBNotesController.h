@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* allNotes; // MBNote
 @property (strong, nonatomic) NSArray* currentNotes; // MBNote
 @property (strong, nonatomic) NSMutableSet* editedNotes; // MBNote
-@property (strong, nonatomic) MBNote* selectedNote;
+@property (strong, nonatomic, nullable) MBNote* selectedNote;
 
 @end
 
