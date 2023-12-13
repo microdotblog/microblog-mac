@@ -131,6 +131,7 @@
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
 		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
+		4B7CC9892B291B2E00AA8085 /* MBNoteCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */; };
 		4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
 		4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */; };
@@ -453,6 +454,8 @@
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
+		4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Micro.blog-Bridging-Header.h"; sourceTree = "<group>"; };
+		4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBNoteCrypto.swift; path = Source/MBNoteCrypto.swift; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7F0AEE1BAF4C27004553A6 /* RFAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFAppDelegate.h; path = Source/RFAppDelegate.h; sourceTree = "<group>"; };
 		4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFAppDelegate.m; path = Source/RFAppDelegate.m; sourceTree = "<group>"; };
@@ -856,6 +859,7 @@
 				4B001CCF2B27944300BBF456 /* MBNotesController.m */,
 				4B001CD12B27955900BBF456 /* MBNote.h */,
 				4B001CD22B27955900BBF456 /* MBNote.m */,
+				4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */,
 				4B001CD42B27957800BBF456 /* MBNoteCell.h */,
 				4B001CD52B27957800BBF456 /* MBNoteCell.m */,
 				4BF7E5082834374F00500C59 /* RFRepliesController.h */,
@@ -998,6 +1002,7 @@
 				4BB990602A857A8200C490E2 /* MBAllTagsController.m */,
 				4B001CE62B27AE2000BBF456 /* MBNotesKeyController.h */,
 				4B001CE72B27AE2000BBF456 /* MBNotesKeyController.m */,
+				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -1155,6 +1160,7 @@
 					4B7F0AD71BAF4B77004553A6 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 3F9MDJ6K4E;
+						LastSwiftMigration = 1410;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -1314,6 +1320,7 @@
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
+				4B7CC9892B291B2E00AA8085 /* MBNoteCrypto.swift in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
 				4BD709042A754CCD00F154C6 /* MBTimelineBackgroundView.m in Sources */,
 				4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */,
@@ -1929,6 +1936,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Micro.blog.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1955,6 +1963,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Micro.blog-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1962,6 +1973,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Micro.blog.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1988,6 +2000,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Micro.blog-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

@@ -15,8 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
+@property (strong, nonatomic) IBOutlet NSTextView* detailTextView;
 
-@property (assign, nonatomic) BOOL isShowingPages;
+@property (strong, nonatomic) NSString* secretKey;
 @property (strong, nonatomic) NSArray* allNotes; // MBNote
 @property (strong, nonatomic) NSArray* currentNotes; // MBNote
 

@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate* createdAt;
 @property (strong) NSDate* updatedAt;
 
++ (NSString *) decryptText:(NSString *)text withKey:(NSString *)key;
+
 @end
 
 NS_ASSUME_NONNULL_END

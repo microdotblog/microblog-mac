@@ -33,10 +33,17 @@
 {
 	[super viewDidLoad];
 	
+	[self setupSecretKey];
 	[self setupTable];
 	[self setupNotifications];
 	
 	[self fetchNotes];
+}
+
+- (void) setupSecretKey
+{
+	NSString* s = [[NSUserDefaults standardUserDefaults] objectForKey:@"NotesSecretKey"];
+	self.secretKey = [s substringFromIndex:4];
 }
 
 - (void) setupTable
@@ -52,8 +59,6 @@
 
 - (void) fetchNotes
 {
-	[self.progressSpinner startAnimation:nil];
-	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks/1"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -61,8 +66,19 @@
 			
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
+				NSDictionary* mb = [item objectForKey:@"_microblog"];
+				
 				MBNote* n = [[MBNote alloc] init];
-				n.text = [item objectForKey:@"content_text"];
+				if ([[mb objectForKey:@"is_encrypted"] boolValue]) {
+					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
+					if (n.text == nil) {
+						// decryption probably failed
+						n.text = @"";
+					}
+				}
+				else {
+					n.text = [item objectForKey:@"content_text"];
+				}
 				
 				NSString* date_s = [item objectForKey:@"date_published"];
 				n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
@@ -77,7 +93,9 @@
 			});
 		}
 
-		[self stopLoadingSidebarRow];
+		RFDispatchMainAsync(^{
+			[self stopLoadingSidebarRow];
+		});
 	}];
 }
 
@@ -118,6 +136,15 @@
 	}
 
 	return cell;
+}
+
+- (void) tableViewSelectionDidChange:(NSNotification *)notification
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBNote* n = [self.currentNotes objectAtIndex:row];
+		[self.detailTextView setString:n.text];
+	}
 }
 
 @end

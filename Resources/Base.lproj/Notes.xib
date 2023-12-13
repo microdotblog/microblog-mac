@@ -9,6 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBNotesController">
             <connections>
+                <outlet property="detailTextView" destination="YbT-7i-Zi1" id="n0v-Vp-3BM"/>
                 <outlet property="progressSpinner" destination="XG2-RC-yYo" id="Pnl-Zp-YDX"/>
                 <outlet property="searchField" destination="a7S-Gl-bR0" id="RwR-wZ-VwR"/>
                 <outlet property="tableView" destination="Sif-9p-2X2" id="n5n-9F-Djv"/>
