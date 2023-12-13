@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBNotesKeyController : NSWindowController
 
+@property (strong, nonatomic) IBOutlet NSTextField* secretKeyField;
+
 @end
 
 NS_ASSUME_NONNULL_END

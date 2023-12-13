@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MBNote;
+@class MBNotesKeyController;
 
 @interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSTextViewDelegate>
 
@@ -24,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* currentNotes; // MBNote
 @property (strong, nonatomic) NSMutableSet* editedNotes; // MBNote
 @property (strong, nonatomic, nullable) MBNote* selectedNote;
+@property (strong, nonatomic, nullable) MBNotesKeyController* notesKeyController;
 
 @end
 

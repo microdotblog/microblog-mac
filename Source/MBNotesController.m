@@ -10,6 +10,7 @@
 
 #import "MBNote.h"
 #import "MBNoteCell.h"
+#import "MBNotesKeyController.h"
 #import "RFClient.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
@@ -17,6 +18,7 @@
 #import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
+#import "SAMKeychain.h"
 
 @implementation MBNotesController
 
@@ -45,8 +47,19 @@
 
 - (void) setupSecretKey
 {
-	NSString* s = [[NSUserDefaults standardUserDefaults] objectForKey:@"NotesSecretKey"];
-	self.secretKey = [s substringFromIndex:4];
+	NSString* s = [SAMKeychain passwordForService:@"Micro.blog Notes" account:@""];
+	if (s) {
+		self.secretKey = [s substringFromIndex:4];
+	}
+	else {
+		// a bit hacky
+		RFDispatchSeconds(0.5, ^{
+			self.notesKeyController = [[MBNotesKeyController alloc] init];
+			[self.view.window beginSheet:self.notesKeyController.window completionHandler:^(NSModalResponse returnCode) {
+				self.notesKeyController = nil;
+			}];
+		});
+	}
 }
 
 - (void) setupTable
@@ -59,6 +72,7 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startNewNoteNotification:) name:kNewNoteNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notesKeyUpdatedNotification:) name:kNotesKeyUpdatedNotification object:nil];
 }
 
 - (void) setupTimer
@@ -80,6 +94,10 @@
 
 - (void) fetchNotesWithCompletion:(void (^)(void))handler
 {
+	if (self.secretKey == nil) {
+		return;
+	}
+	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks/1"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -295,6 +313,12 @@
 			[self.view.window makeFirstResponder:self.detailTextView];
 		}];
 	}];
+}
+
+- (void) notesKeyUpdatedNotification:(NSNotification *)notification
+{
+	[self setupSecretKey];
+	[self fetchNotes];
 }
 
 #pragma mark -

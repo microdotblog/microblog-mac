@@ -137,5 +137,6 @@ static NSString* const kSelectTagNotification = @"MBSelectTagNotification";
 static NSString* const kSelectTagNameKey = @"name";
 
 static NSString* const kNewNoteNotification = @"MBNewNoteNotification";
+static NSString* const kNotesKeyUpdatedNotification = @"MBNotesKeyUpdatedNotification";
 
 #define APPSTORE 1

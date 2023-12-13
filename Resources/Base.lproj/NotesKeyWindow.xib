@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBNotesKeyController">
             <connections>
+                <outlet property="secretKeyField" destination="zTk-BK-0oO" id="9lu-Tw-JUD"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="AWT-kF-yYu"/>
             </connections>
         </customObject>
@@ -31,6 +32,9 @@
 Gw
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="cancel:" target="-2" id="oRE-ag-n75"/>
+                        </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="44Q-hn-2Xa">
                         <rect key="frame" x="18" y="202" width="444" height="48"/>
@@ -70,6 +74,9 @@ Gw
 DQ
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="unlockNotes:" target="-2" id="kIX-lH-mC7"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
