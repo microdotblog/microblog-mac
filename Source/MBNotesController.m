@@ -69,6 +69,7 @@
 				NSDictionary* mb = [item objectForKey:@"_microblog"];
 				
 				MBNote* n = [[MBNote alloc] init];
+				n.noteID = [item objectForKey:@"id"];
 				if ([[mb objectForKey:@"is_encrypted"] boolValue]) {
 					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
 					if (n.text == nil) {
@@ -114,9 +115,54 @@
 	}
 		
 	if (row >= 0) {
-//		RFPost* post = [self.currentPosts objectAtIndex:row];
-//		[self openPost:post];
+//		MBNote* n = [self.currentNotes objectAtIndex:row];
+//		[self openNote:n];
 	}
+}
+
+- (void) delete:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBNote* n = [self.currentNotes objectAtIndex:row];
+
+		NSString* s = n.text;
+		if (s.length > 20) {
+			s = [s substringToIndex:20];
+			s = [s stringByAppendingString:@"..."];
+		}
+		
+		NSAlert* sheet = [[NSAlert alloc] init];
+		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.informativeText = @"This note will be deleted from Micro.blog.";
+		[sheet addButtonWithTitle:@"Delete"];
+		[sheet addButtonWithTitle:@"Cancel"];
+		[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+			if (returnCode == 1000) {
+				[self deleteNote:n];
+			}
+		}];
+	}
+}
+
+- (void) deleteNote:(MBNote *)note
+{
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/%@", note.noteID];
+
+	[self.progressSpinner startAnimation:nil];
+	
+	[client deleteWithObject:nil completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+				[self.progressSpinner stopAnimation:nil];
+				NSString* msg = response.parsedResponse[@"error"];
+				[NSAlert rf_showOneButtonAlert:@"Error Deleting Note" message:msg button:@"OK" completionHandler:NULL];
+			}
+			else {
+				[self fetchNotes];
+			}
+		});
+	}];
 }
 
 #pragma mark -
