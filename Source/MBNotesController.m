@@ -38,6 +38,7 @@
 	[self setupTable];
 	[self setupNotifications];
 	[self setupTimer];
+	[self setupDetail];
 	
 	[self fetchNotes];
 }
@@ -64,6 +65,13 @@
 {
 	[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(syncFromTimer:) userInfo:nil repeats:YES];
 }
+
+- (void) setupDetail
+{
+	[self.detailTextView setFont:[NSFont systemFontOfSize:14]];
+}
+
+#pragma mark -
 
 - (void) fetchNotes
 {
@@ -181,6 +189,8 @@
 			else {
 				[self fetchNotes];
 			}
+			
+			self.detailTextView.string = @"";
 		});
 	}];
 }

@@ -123,16 +123,6 @@
                                                 <color key="backgroundColor" name="color_highlight_background"/>
                                                 <size key="minSize" width="222" height="541"/>
                                                 <size key="maxSize" width="242" height="10000000"/>
-                                                <attributedString key="textStorage">
-                                                    <fragment content="Test">
-                                                        <attributes>
-                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                            <font key="NSFont" metaFont="system"/>
-                                                            <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="-2" id="E6D-qt-jw3"/>
