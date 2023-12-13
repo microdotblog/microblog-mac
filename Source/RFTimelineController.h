@@ -17,6 +17,7 @@
 @class RFStack;
 @class RFAccount;
 @class RFGoToUserController;
+@class MBNotesController;
 
 typedef NSInteger RFSelectedTimelineType;
 
@@ -56,6 +57,7 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) RFGoToUserController* goToUserController;
 @property (strong, nonatomic) NSMutableArray* sidebarItems; // RFSelectedTimelineType
 @property (strong, nonatomic) NSMutableArray* booksWindowControllers; // MBBooksWindowController
+@property (strong, nonatomic) MBNotesController* notesController;
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)

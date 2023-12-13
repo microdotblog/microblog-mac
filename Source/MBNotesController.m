@@ -67,6 +67,11 @@
 
 - (void) fetchNotes
 {
+	[self fetchNotesWithCompletion:nil];
+}
+
+- (void) fetchNotesWithCompletion:(void (^)(void))handler
+{
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks/1"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -102,6 +107,9 @@
 				self.allNotes = new_notes;
 				self.currentNotes = new_notes;
 				[self.tableView reloadData];
+				if (handler) {
+					handler();
+				}
 			});
 		}
 
@@ -177,7 +185,7 @@
 	}];
 }
 
-- (void) syncNote:(MBNote *)note refresh:(BOOL)refresh
+- (void) syncNote:(MBNote *)note completion:(void (^)(void))handler
 {
 	[self.progressSpinner startAnimation:nil];
 
@@ -208,8 +216,8 @@
 		RFDispatchMainAsync(^{
 			[self.progressSpinner stopAnimation:nil];
 			[self reloadRowForNote:note];
-			if (refresh) {
-				[self fetchNotes];
+			if (handler) {
+				handler();
 			}
 		});
 	}];
@@ -220,7 +228,7 @@
 	@synchronized (self.editedNotes) {
 		if (self.editedNotes.count > 0) {
 			for (MBNote* n in self.editedNotes) {
-				[self syncNote:n refresh:NO];
+				[self syncNote:n completion:nil];
 			}
 			
 			[self.editedNotes removeAllObjects];
@@ -266,7 +274,17 @@
 	self.currentNotes = new_notes;
 	[self.tableView reloadData];
 	
-	[self syncNote:n refresh:YES];
+	[self syncNote:n completion:^{
+		// reload so we get new ID
+		[self fetchNotesWithCompletion:^{
+			// select new note
+			NSIndexSet* index = [NSIndexSet indexSetWithIndex:0];
+			[self.tableView selectRowIndexes:index byExtendingSelection:NO];
+			
+			// focus note editor
+			[self.view.window makeFirstResponder:self.detailTextView];
+		}];
+	}];
 }
 
 #pragma mark -

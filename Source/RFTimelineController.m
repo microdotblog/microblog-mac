@@ -556,8 +556,11 @@ static NSInteger const kSelectionNotes = 11;
 
 	[self closeOverlays];
 
-	MBNotesController* controller = [[MBNotesController alloc] init];
-	[self showAllPostsController:controller];
+	if (self.notesController == nil) {
+		self.notesController = [[MBNotesController alloc] init];
+	}
+	
+	[self showAllPostsController:self.notesController];
 
 	[self selectSidebarRow:kSelectionNotes];
 	[self startLoadingSidebarRow:kSelectionNotes];
