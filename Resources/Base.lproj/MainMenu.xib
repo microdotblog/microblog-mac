@@ -90,8 +90,8 @@
                                     <action selector="newBookmark:" target="Voe-Tx-rLC" id="GIh-25-pmA"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Note" id="pAK-jG-U2O">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="New Note" keyEquivalent="n" id="pAK-jG-U2O">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="newNote:" target="-1" id="7Ka-v1-QNo"/>
                                 </connections>

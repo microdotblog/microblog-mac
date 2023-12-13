@@ -14,9 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong) NSNumber* noteID;
 @property (strong) NSString* text;
+@property (assign) BOOL isEncrypted;
+@property (assign) BOOL isShared;
 @property (strong) NSDate* createdAt;
 @property (strong) NSDate* updatedAt;
 
++ (NSString *) encryptText:(NSString *)text withKey:(NSString *)key;
 + (NSString *) decryptText:(NSString *)text withKey:(NSString *)key;
 
 @end

@@ -347,6 +347,7 @@
 
 - (IBAction) newNote:(id)sender
 {
+	[[NSNotificationCenter defaultCenter] postNotificationName:kNewNoteNotification object:self];
 }
 
 - (IBAction) importBlogArchive:(id)sender

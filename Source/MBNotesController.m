@@ -55,6 +55,7 @@
 
 - (void) setupNotifications
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startNewNoteNotification:) name:kNewNoteNotification object:nil];
 }
 
 - (void) fetchNotes
@@ -163,6 +164,57 @@
 			}
 		});
 	}];
+}
+
+- (void) syncNote:(MBNote *)note
+{
+	[self.progressSpinner startAnimation:nil];
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/notes"];
+	NSString* s = note.text;
+	
+	if (note.isEncrypted) {
+		s = [MBNote encryptText:s withKey:self.secretKey];
+	}
+	
+	NSDictionary* args;
+	
+	if (note.noteID == nil) {
+		args = @{
+			@"text": s,
+			@"is_encrypted": @(YES)
+		};
+	}
+	else {
+		args = @{
+			@"id": note.noteID,
+			@"text": s,
+			@"is_encrypted": [NSNumber numberWithBool:note.isEncrypted]
+		};
+	}
+	
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			[self.progressSpinner startAnimation:nil];
+		});
+	}];
+}
+
+- (void) startNewNoteNotification:(NSNotification *)notification
+{
+	MBNote* n = [[MBNote alloc] init];
+	n.text = @"";
+	n.isEncrypted = YES;
+	n.createdAt = [NSDate date];
+	
+	NSMutableArray* new_notes = [self.allNotes mutableCopy];
+	[new_notes insertObject:n atIndex:0];
+	
+	self.allNotes = new_notes;
+	self.currentNotes = new_notes;
+	[self.tableView reloadData];
+	
+	[self syncNote:n];
 }
 
 #pragma mark -

@@ -12,8 +12,25 @@
 
 @implementation MBNote
 
++ (NSString *) encryptText:(NSString *)text withKey:(NSString *)key
+{
+	NSData* key_data = [self dataFromHexString:key];
+
+	// call to Swift wrapper
+	MBNoteCrypto* crypto = [[MBNoteCrypto alloc] init];
+	NSData* encrypted_data = [crypto encryptWithPlaintext:text key:key_data];
+	
+	// convert to base64 encoding
+	NSString* s = [encrypted_data base64EncodedStringWithOptions:0];
+	return s;
+}
+
 + (NSString *) decryptText:(NSString *)text withKey:(NSString *)key
 {
+	if (text.length == 0) {
+		return @"";
+	}
+	
 	NSData* key_data = [self dataFromHexString:key];
 	NSData* decoded_data = [[NSData alloc] initWithBase64EncodedString:text options:0];
 
