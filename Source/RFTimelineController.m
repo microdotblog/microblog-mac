@@ -559,6 +559,9 @@ static NSInteger const kSelectionNotes = 11;
 	if (self.notesController == nil) {
 		self.notesController = [[MBNotesController alloc] init];
 	}
+	else {
+		[self.notesController fetchNotes];
+	}
 	
 	[self showAllPostsController:self.notesController];
 

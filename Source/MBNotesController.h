@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) MBNote* selectedNote;
 @property (strong, nonatomic, nullable) MBNotesKeyController* notesKeyController;
 
+- (void) fetchNotes;
+
 @end
 
 NS_ASSUME_NONNULL_END
