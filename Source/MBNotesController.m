@@ -97,52 +97,61 @@
 	if (self.secretKey == nil) {
 		return;
 	}
-	
-	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks/1"];
-	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			NSMutableArray* new_notes = [NSMutableArray array];
-			
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			for (NSDictionary* item in items) {
-				NSDictionary* mb = [item objectForKey:@"_microblog"];
-				
-				MBNote* n = [[MBNote alloc] init];
-				
-				n.noteID = [item objectForKey:@"id"];
-				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
-				
-				if (n.isEncrypted) {
-					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
-					if (n.text == nil) {
-						// decryption probably failed
-						n.text = @"";
-					}
-				}
-				else {
-					n.text = [item objectForKey:@"content_text"];
-				}
-				
-				NSString* date_s = [item objectForKey:@"date_published"];
-				n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
-				
-				[new_notes addObject:n];
-			}
-			
-			RFDispatchMainAsync(^{
-				self.allNotes = new_notes;
-				self.currentNotes = new_notes;
-				[self.tableView reloadData];
-				if (handler) {
-					handler();
-				}
-			});
-		}
 
-		RFDispatchMainAsync(^{
-			[self.progressSpinner stopAnimation:nil];
-			[self stopLoadingSidebarRow];
-		});
+	RFClient* notebooks_client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
+	[notebooks_client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			NSDictionary* item = [items firstObject];
+			NSNumber* notebook_id = [item objectForKey:@"id"];
+
+			RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/notebooks/%@", notebook_id];
+			[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+				if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+					NSMutableArray* new_notes = [NSMutableArray array];
+					
+					NSArray* items = [response.parsedResponse objectForKey:@"items"];
+					for (NSDictionary* item in items) {
+						NSDictionary* mb = [item objectForKey:@"_microblog"];
+						
+						MBNote* n = [[MBNote alloc] init];
+						
+						n.noteID = [item objectForKey:@"id"];
+						n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
+						
+						if (n.isEncrypted) {
+							n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
+							if (n.text == nil) {
+								// decryption probably failed
+								n.text = @"";
+							}
+						}
+						else {
+							n.text = [item objectForKey:@"content_text"];
+						}
+						
+						NSString* date_s = [item objectForKey:@"date_published"];
+						n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
+						
+						[new_notes addObject:n];
+					}
+					
+					RFDispatchMainAsync(^{
+						self.allNotes = new_notes;
+						self.currentNotes = new_notes;
+						[self.tableView reloadData];
+						if (handler) {
+							handler();
+						}
+					});
+				}
+
+				RFDispatchMainAsync(^{
+					[self.progressSpinner stopAnimation:nil];
+					[self stopLoadingSidebarRow];
+				});
+			}];
+		}
 	}];
 }
 
