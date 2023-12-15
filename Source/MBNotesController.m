@@ -98,6 +98,14 @@
 		return;
 	}
 
+	// remember selection if there is one
+	NSNumber* selected_id = nil;
+	NSInteger selected_row = [self.tableView selectedRow];
+	if (selected_row >= 0) {
+		MBNote* n = [self.currentNotes objectAtIndex:selected_row];
+		selected_id = n.noteID;
+	}
+	
 	RFClient* notebooks_client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
 	[notebooks_client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -142,6 +150,18 @@
 						[self.tableView reloadData];
 						if (handler) {
 							handler();
+						}
+						
+						// restore selection
+						if (selected_id) {
+							for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+								MBNote* n = [self.currentNotes objectAtIndex:i];
+								if ([n.noteID isEqualToNumber:selected_id]) {
+									NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+									[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+									break;
+								}
+							}
 						}
 					});
 				}
