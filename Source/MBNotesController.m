@@ -350,6 +350,30 @@
 	[self fetchNotes];
 }
 
+- (void) focusSearch
+{
+	[self.searchField becomeFirstResponder];
+}
+
+- (IBAction) search:(id)sender
+{
+	NSString* s = [sender stringValue];
+	if (s.length == 0) {
+		self.currentNotes = self.allNotes;
+		[self.tableView reloadData];
+	}
+	else {
+		NSMutableArray* filtered_notes = [NSMutableArray array];
+		for (MBNote* n in self.allNotes) {
+			if ([[n.text lowercaseString] containsString:s]) {
+				[filtered_notes addObject:n];
+			}
+		}
+
+		self.currentNotes = filtered_notes;
+		[self.tableView reloadData];
+	}
+}
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView

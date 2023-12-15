@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) MBNotesKeyController* notesKeyController;
 
 - (void) fetchNotes;
+- (void) focusSearch;
 
 @end
 
