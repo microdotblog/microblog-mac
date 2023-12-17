@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <CloudKit/CloudKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

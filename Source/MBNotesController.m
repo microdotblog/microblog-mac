@@ -20,6 +20,9 @@
 #import "NSAlert+Extras.h"
 #import "SAMKeychain.h"
 
+static NSString* const kNotesCloudContainer = @"iCloud.blog.micro.shared";
+static NSString* const kNotesSettingsType = @"Setting";
+
 @implementation MBNotesController
 
 - (id) init
@@ -43,22 +46,29 @@
 	[self setupDetail];
 	
 	[self fetchNotes];
+	[self saveKeyToCloud];
 }
 
 - (void) setupSecretKey
 {
 	NSString* s = [SAMKeychain passwordForService:@"Micro.blog Notes" account:@""];
 	if (s) {
+		// use key in Keychain
 		self.secretKey = [s substringFromIndex:4];
 	}
 	else {
-		// a bit hacky
-		RFDispatchSeconds(0.5, ^{
-			self.notesKeyController = [[MBNotesKeyController alloc] init];
-			[self.view.window beginSheet:self.notesKeyController.window completionHandler:^(NSModalResponse returnCode) {
-				self.notesKeyController = nil;
-			}];
-		});
+		// try to find key on iCloud
+		[self fetchKeyFromCloudWithCompletion:^(NSString* key) {
+			if (key == nil) {
+				// a bit hacky, prompt for new key
+				RFDispatchSeconds(0.5, ^{
+					self.notesKeyController = [[MBNotesKeyController alloc] init];
+					[self.view.window beginSheet:self.notesKeyController.window completionHandler:^(NSModalResponse returnCode) {
+						self.notesKeyController = nil;
+					}];
+				});
+			}
+		}];
 	}
 }
 
@@ -170,6 +180,73 @@
 					[self.progressSpinner stopAnimation:nil];
 					[self stopLoadingSidebarRow];
 				});
+			}];
+		}
+	}];
+}
+
+- (void) fetchKeyFromCloudWithCompletion:(void (^)(NSString* key))handler
+{
+	CKContainer* container = [CKContainer containerWithIdentifier:kNotesCloudContainer];
+
+	[container accountStatusWithCompletionHandler:^(CKAccountStatus status, NSError* error) {
+		if (status != CKAccountStatusAvailable) {
+			NSLog(@"iCloud: User not signed in to iCloud.");
+		}
+		else {
+			CKDatabase* db = [container privateCloudDatabase];
+			
+			NSPredicate* predicate = [NSPredicate predicateWithValue:YES]; // match all records of type
+			CKQuery* query = [[CKQuery alloc] initWithRecordType:kNotesSettingsType predicate:predicate];
+			
+			CKQueryOperation* op = [[CKQueryOperation alloc] initWithQuery:query];
+			op.resultsLimit = 1;
+			
+			__block NSString* found_key = nil;
+			
+			[op setRecordFetchedBlock:^(CKRecord* record) {
+				NSLog(@"iCloud: Got Record: %@", record);
+				found_key = [record objectForKey:@"notesKey"];
+			}];
+
+			[op setQueryCompletionBlock:^(CKQueryCursor* cursor, NSError* error) {
+				if (error) {
+					NSLog(@"iCloud: Error querying records: %@", error);
+					handler(nil);
+				}
+				else {
+					NSLog(@"iCloud: Query successful.");
+					handler(found_key);
+				}
+			}];
+
+			[db addOperation:op];
+		}
+	}];
+}
+
+- (void) saveKeyToCloud
+{
+	CKContainer* container = [CKContainer containerWithIdentifier:kNotesCloudContainer];
+
+	[container accountStatusWithCompletionHandler:^(CKAccountStatus status, NSError* error) {
+		if (status != CKAccountStatusAvailable) {
+			NSLog(@"iCloud: User not signed in to iCloud.");
+		}
+		else {
+			CKDatabase* db = [container privateCloudDatabase];
+			CKRecord* record = [[CKRecord alloc] initWithRecordType:kNotesSettingsType];
+
+			NSString* s = self.secretKey;
+			[record setObject:s forKey:@"notesKey"];
+			
+			[db saveRecord:record completionHandler:^(CKRecord* record, NSError* error) {
+				if (error) {
+					NSLog(@"iCloud: Error saving record: %@", error);
+				}
+				else {
+					NSLog(@"iCloud: Saved secret key to the cloud.");
+				}
 			}];
 		}
 	}];
