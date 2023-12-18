@@ -13,9 +13,14 @@
 
 @interface RFPreferencesController : NSWindowController <NSTextFieldDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
 
+@property (strong, nonatomic) IBOutlet NSToolbar* toolbar;
+@property (strong, nonatomic) IBOutlet NSView* generalPane;
+@property (strong, nonatomic) IBOutlet NSView* notesPane;
+
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
 @property (strong, nonatomic) IBOutlet NSBox* messageHeader;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* messageTopConstraint;
+
 @property (strong, nonatomic) IBOutlet NSButton* publishHostedBlog;
 @property (strong, nonatomic) IBOutlet NSButton* publishWordPressBlog;
 @property (strong, nonatomic) IBOutlet NSButton* websiteReturnButton;
@@ -29,7 +34,6 @@
 @property (strong, nonatomic) IBOutlet NSCollectionView* accountsCollectionView;
 @property (strong, nonatomic) IBOutlet NSBox* wordPressSeparatorLine;
 @property (strong, nonatomic) IBOutlet NSTextField* dayOneJournalNameField;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint* dayOneJournalTopConstraint;
 @property (strong, nonatomic) IBOutlet NSButton* dayOneReturnButton;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;

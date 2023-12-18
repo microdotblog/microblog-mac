@@ -25,6 +25,7 @@
 
 static CGFloat const kWordPressMenusHeight = 100;
 static CGFloat const kDayOneSettingsPadding = 15;
+static CGFloat const kToolbarHeight = 82;
 static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 @implementation RFPreferencesController
@@ -41,7 +42,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-
+	
+	[self setupToolbar];
 	[self setupAccounts];
 	[self setupTextPopup];
 	[self setupNotifications];
@@ -49,12 +51,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self selectFirstAccount];
 	
 	[self setupWebsiteField];
-    [self setupDayOneField];
+	[self setupDayOneField];
 	[self updateRadioButtons];
 	[self updateMenus];
-	
+
 	[self hideMessage];
-    [self hideWordPressMenus];
+	[self hideWordPressMenus];
+	
+	[self showGeneralPane:nil];
 }
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
@@ -88,6 +92,11 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) refreshAccountsNotification:(NSNotification *)notification
 {
 	[self refreshAccounts];
+}
+
+- (void) setupToolbar
+{
+	[self.toolbar setSelectedItemIdentifier:@"General"];
 }
 
 - (void) setupAccounts
@@ -317,6 +326,22 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	}];
 }
 
+- (IBAction) showGeneralPane:(id)sender
+{
+	self.notesPane.hidden = YES;
+	[self.window.contentView addSubview:self.generalPane];
+	[self.generalPane setFrameOrigin:NSMakePoint(0, 0)];
+	self.generalPane.hidden = NO;
+}
+
+- (IBAction) showNotesPane:(id)sender
+{
+	self.generalPane.hidden = YES;
+	[self.window.contentView addSubview:self.notesPane];
+	[self.notesPane setFrameOrigin:NSMakePoint(0, 0)];
+	self.notesPane.hidden = NO;
+}
+
 #pragma mark -
 
 - (void) showMessage:(NSString *)message
@@ -343,53 +368,37 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.messageTopConstraint.constant = -(self.messageHeader.bounds.size.height);
 	
 	NSSize win_size = self.window.frame.size;
-	win_size.height -= self.messageHeader.bounds.size.height;
+	win_size.height -= (self.messageHeader.bounds.size.height + kToolbarHeight);
 	[self.window setContentSize:win_size];
 }
 
 - (void) showMenusIfWordPress
 {
-	NSRect win_r = self.window.frame;
-
 	if ([RFSettings boolForKey:kExternalBlogIsPreferred account:self.selectedAccount] && [[RFSettings stringForKey:kExternalBlogApp account:self.selectedAccount] isEqualToString:@"WordPress"]) {
 		if (!self.isShowingWordPressMenus) {
-			win_r.size.height += kWordPressMenusHeight;
-			win_r.origin.y -= kWordPressMenusHeight;
-			[self.window.animator setFrame:win_r display:YES];
-            [self setWordpressMenuVisibility:NO];
-            self.dayOneJournalTopConstraint.constant += (kWordPressMenusHeight - kDayOneSettingsPadding);
+			[self setWordPressEnabled:YES];
             self.isShowingWordPressMenus = YES;
 		}
 	}
 	else {
 		if (self.isShowingWordPressMenus) {
-			win_r.size.height -= kWordPressMenusHeight;
-			win_r.origin.y += kWordPressMenusHeight;
-			[self.window.animator setFrame:win_r display:YES];
-            [self setWordpressMenuVisibility:YES];
-            self.dayOneJournalTopConstraint.constant -= (kWordPressMenusHeight - kDayOneSettingsPadding);
+			[self setWordPressEnabled:NO];
             self.isShowingWordPressMenus = NO;
 		}
 	}
 }
 
-- (void) setWordpressMenuVisibility:(BOOL)isHidden
+- (void) setWordPressEnabled:(BOOL)isEnabled
 {
-    self.wordPressSeparatorLine.hidden = isHidden;
-    self.postFormatField.hidden = isHidden;
-    self.postFormatPopup.hidden = isHidden;
-    self.categoryField.hidden = isHidden;
-    self.categoryPopup.hidden = isHidden;
+	self.postFormatField.enabled = isEnabled;
+	self.postFormatPopup.enabled = isEnabled;
+	self.categoryField.enabled = isEnabled;
+	self.categoryPopup.enabled = isEnabled;
 }
 
 - (void) hideWordPressMenus
 {
-    NSRect win_r = self.window.frame;
-    win_r.size.height -= kWordPressMenusHeight;
-    win_r.origin.y += kWordPressMenusHeight;
-    [self.window setFrame:win_r display:YES];
-    [self setWordpressMenuVisibility:YES];
-    self.dayOneJournalTopConstraint.constant -= (kWordPressMenusHeight - kDayOneSettingsPadding);
+	[self setWordPressEnabled:NO];
     self.isShowingWordPressMenus = NO;
 }
 
