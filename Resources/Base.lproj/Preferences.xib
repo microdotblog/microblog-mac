@@ -17,11 +17,14 @@
                 <outlet property="messageField" destination="UK6-9N-kOk" id="6BJ-sH-62d"/>
                 <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
                 <outlet property="messageTopConstraint" destination="xBT-xn-WX9" id="drj-is-oYf"/>
+                <outlet property="notesCloudCheckbox" destination="lFS-tK-LeF" id="SLi-j5-MN3"/>
+                <outlet property="notesKeyField" destination="PpW-Zm-Vp1" id="fbV-fz-iwN"/>
                 <outlet property="notesPane" destination="YMl-Rz-Pmv" id="eTS-kH-9Dd"/>
                 <outlet property="postFormatField" destination="fgW-ep-2gy" id="8tS-BB-Uuk"/>
                 <outlet property="postFormatPopup" destination="oEB-XA-wMC" id="9xS-PQ-upl"/>
                 <outlet property="publishHostedBlog" destination="cTl-7y-AGO" id="Tel-Ub-cTT"/>
                 <outlet property="publishWordPressBlog" destination="bf9-0q-YKa" id="eZf-YA-kM5"/>
+                <outlet property="showNotesKeyButton" destination="9i9-be-zbc" id="MDe-sb-53i"/>
                 <outlet property="textSizePopup" destination="W83-Xx-rHt" id="fZ5-0E-FFS"/>
                 <outlet property="toolbar" destination="0BJ-9c-nr7" id="hC5-j4-OnJ"/>
                 <outlet property="websiteField" destination="eaN-LV-3cP" id="s5B-46-EC1"/>
@@ -100,17 +103,18 @@
             <rect key="frame" x="0.0" y="0.0" width="409" height="457"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lFS-tK-LeF">
-                    <rect key="frame" x="18" y="337" width="188" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lFS-tK-LeF">
+                    <rect key="frame" x="18" y="337" width="180" height="18"/>
                     <buttonCell key="cell" type="check" title="Save secret key to iCloud" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="xkR-hY-6tC">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="cloudCheckboxChanged:" target="-2" id="gju-a8-fec"/>
+                    </connections>
                 </button>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xT9-EZ-swE">
-                    <rect key="frame" x="20" y="364" width="371" height="73"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xT9-EZ-swE">
+                    <rect key="frame" x="18" y="373" width="373" height="64"/>
                     <textFieldCell key="cell" selectable="YES" id="mEM-79-LtA">
                         <font key="font" metaFont="system"/>
                         <string key="title">Notes in Micro.blog are encrypted. To sync notes across devices, you will need to save a secret key so the notes can be decrypted later. If you lose your key, you will lose access to your notes too.</string>
@@ -118,24 +122,53 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9i9-be-zbc">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9i9-be-zbc">
                     <rect key="frame" x="13" y="290" width="136" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="122" id="ipa-qv-JMN"/>
+                    </constraints>
                     <buttonCell key="cell" type="push" title="Show Secret Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="buK-Vi-xYA">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="showSecretKey:" target="-2" id="nS6-wx-YWG"/>
+                    </connections>
                 </button>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4I2-KF-Jxw">
-                    <rect key="frame" x="147" y="290" width="120" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Download Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bgR-WB-0ue">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4I2-KF-Jxw">
+                    <rect key="frame" x="147" y="290" width="100" height="32"/>
+                    <buttonCell key="cell" type="push" title="Save Key..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bgR-WB-0ue">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="saveSecretKey:" target="-2" id="ArC-OC-f6S"/>
+                    </connections>
                 </button>
+                <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PpW-Zm-Vp1">
+                    <rect key="frame" x="20" y="260" width="371" height="16"/>
+                    <textFieldCell key="cell" selectable="YES" title="mkey123456789" id="8gd-1D-ici">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
-            <point key="canvasLocation" x="436" y="60"/>
+            <constraints>
+                <constraint firstItem="xT9-EZ-swE" firstAttribute="top" secondItem="YMl-Rz-Pmv" secondAttribute="top" constant="20" symbolic="YES" id="0Yd-VA-U3l"/>
+                <constraint firstItem="9i9-be-zbc" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="0o0-fj-RRq"/>
+                <constraint firstAttribute="trailing" secondItem="xT9-EZ-swE" secondAttribute="trailing" constant="20" symbolic="YES" id="BNH-jI-azV"/>
+                <constraint firstItem="PpW-Zm-Vp1" firstAttribute="top" secondItem="9i9-be-zbc" secondAttribute="bottom" constant="21" id="DB6-08-mnF"/>
+                <constraint firstItem="xT9-EZ-swE" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" id="FlV-Sc-ITO"/>
+                <constraint firstItem="4I2-KF-Jxw" firstAttribute="leading" secondItem="9i9-be-zbc" secondAttribute="trailing" constant="12" symbolic="YES" id="QbU-Rq-ycC"/>
+                <constraint firstItem="PpW-Zm-Vp1" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="22" id="Qdk-BW-Vaj"/>
+                <constraint firstItem="9i9-be-zbc" firstAttribute="top" secondItem="lFS-tK-LeF" secondAttribute="bottom" constant="21" id="RcY-MT-e82"/>
+                <constraint firstItem="4I2-KF-Jxw" firstAttribute="centerY" secondItem="9i9-be-zbc" secondAttribute="centerY" id="Z8x-rf-qYH"/>
+                <constraint firstAttribute="trailing" secondItem="PpW-Zm-Vp1" secondAttribute="trailing" constant="20" symbolic="YES" id="vg4-gh-faI"/>
+                <constraint firstItem="lFS-tK-LeF" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="xuF-aw-FeC"/>
+                <constraint firstItem="lFS-tK-LeF" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="19" id="xxV-lh-d3z"/>
+            </constraints>
+            <point key="canvasLocation" x="435.5" y="59.5"/>
         </customView>
         <view wantsLayer="YES" id="aU5-ED-gYs">
             <rect key="frame" x="0.0" y="0.0" width="409" height="457"/>

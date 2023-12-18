@@ -342,6 +342,42 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.notesPane.hidden = NO;
 }
 
+- (IBAction) cloudCheckboxChanged:(id)sender
+{
+}
+
+- (IBAction) showSecretKey:(id)sender
+{
+	if (self.notesKeyField.hidden) {
+		NSString* s = [SAMKeychain passwordForService:@"Micro.blog Notes" account:@""];
+		if (s) {
+			self.notesKeyField.stringValue = s;
+			self.notesKeyField.hidden = NO;
+			
+			[self.showNotesKeyButton setTitle:@"Hide Secret Key"];
+		}
+	}
+	else {
+		self.notesKeyField.stringValue = @"";
+		self.notesKeyField.hidden = YES;
+
+		[self.showNotesKeyButton setTitle:@"Show Secret Key"];
+	}
+}
+
+- (IBAction) saveSecretKey:(id)sender
+{
+	NSString* s = [SAMKeychain passwordForService:@"Micro.blog Notes" account:@""];
+	if (s) {
+		NSSavePanel* panel = [NSSavePanel savePanel];
+		panel.nameFieldStringValue = @"microblog_notes_key.txt";
+		NSModalResponse response = [panel runModal];
+		if (response == NSModalResponseOK) {
+			[s writeToURL:panel.URL atomically:NO encoding:NSUTF8StringEncoding error:NULL];
+		}
+	}
+}
+
 #pragma mark -
 
 - (void) showMessage:(NSString *)message

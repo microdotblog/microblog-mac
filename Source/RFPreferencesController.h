@@ -36,6 +36,10 @@
 @property (strong, nonatomic) IBOutlet NSTextField* dayOneJournalNameField;
 @property (strong, nonatomic) IBOutlet NSButton* dayOneReturnButton;
 
+@property (strong, nonatomic) IBOutlet NSButton* notesCloudCheckbox;
+@property (strong, nonatomic) IBOutlet NSButton* showNotesKeyButton;
+@property (strong, nonatomic) IBOutlet NSTextField* notesKeyField;
+
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;
 @property (assign, nonatomic) BOOL hasLoadedCategories;
