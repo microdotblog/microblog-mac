@@ -374,9 +374,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	}
 }
 
-- (void) generateQRCode:(NSString *)string
+- (void) generateQRCode:(NSString *)key
 {
-	NSData* d = [string dataUsingEncoding:NSUTF8StringEncoding];
+	NSString* s = [NSString stringWithFormat:@"strata://qrcode/%@", key];
+	NSData* d = [s dataUsingEncoding:NSUTF8StringEncoding];
 
 	// QR code generator filter
 	CIFilter* filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
