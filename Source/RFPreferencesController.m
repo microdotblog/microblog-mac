@@ -22,6 +22,7 @@
 #import "UUString.h"
 #import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
+#import <CoreImage/CoreImage.h>
 
 static CGFloat const kWordPressMenusHeight = 100;
 static CGFloat const kDayOneSettingsPadding = 15;
@@ -353,6 +354,11 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		if (s) {
 			self.notesKeyField.stringValue = s;
 			self.notesKeyField.hidden = NO;
+
+			[self generateQRCode:s];
+			self.qrCodeView.hidden = NO;
+			self.qrCodeArrow.hidden = NO;
+			self.qrCodeInfo.hidden = NO;
 			
 			[self.showNotesKeyButton setTitle:@"Hide Secret Key"];
 		}
@@ -360,9 +366,34 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	else {
 		self.notesKeyField.stringValue = @"";
 		self.notesKeyField.hidden = YES;
+		self.qrCodeView.hidden = YES;
+		self.qrCodeArrow.hidden = YES;
+		self.qrCodeInfo.hidden = YES;
 
 		[self.showNotesKeyButton setTitle:@"Show Secret Key"];
 	}
+}
+
+- (void) generateQRCode:(NSString *)string
+{
+	NSData* d = [string dataUsingEncoding:NSUTF8StringEncoding];
+
+	// QR code generator filter
+	CIFilter* filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+	[filter setValue:d forKey:@"inputMessage"];
+	[filter setValue:@"H" forKey:@"inputCorrectionLevel"];
+
+	// figure out how to scale this up, 2x for retina
+	CIImage* cg_img = filter.outputImage;
+	CGFloat scale = (self.qrCodeView.bounds.size.width / cg_img.extent.size.width) * 2.0;
+	CGAffineTransform t = CGAffineTransformMakeScale(scale, scale);
+
+	// transform and convert to an NSImage
+	CIImage* ci_img = [cg_img imageByApplyingTransform:t];
+	NSImage* img = [[NSImage alloc] initWithSize:self.qrCodeView.bounds.size];
+	[img addRepresentation:[NSCIImageRep imageRepWithCIImage:ci_img]];
+
+	[self.qrCodeView setImage:img];
 }
 
 - (IBAction) saveSecretKey:(id)sender

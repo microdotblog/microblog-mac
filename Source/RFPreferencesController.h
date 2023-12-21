@@ -39,6 +39,9 @@
 @property (strong, nonatomic) IBOutlet NSButton* notesCloudCheckbox;
 @property (strong, nonatomic) IBOutlet NSButton* showNotesKeyButton;
 @property (strong, nonatomic) IBOutlet NSTextField* notesKeyField;
+@property (strong, nonatomic) IBOutlet NSImageView* qrCodeView;
+@property (strong, nonatomic) IBOutlet NSTextField* qrCodeArrow;
+@property (strong, nonatomic) IBOutlet NSTextField* qrCodeInfo;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;
