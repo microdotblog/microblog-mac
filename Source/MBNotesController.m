@@ -12,6 +12,7 @@
 #import "MBNoteCell.h"
 #import "MBNotesKeyController.h"
 #import "RFClient.h"
+#import "RFAccount.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
@@ -99,7 +100,9 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotes
 {
-	[self fetchNotesWithCompletion:nil];
+	[self fetchNotesWithCompletion:^{
+		[self saveNotesToDisk];
+	}];
 }
 
 - (void) fetchNotesWithCompletion:(void (^)(void))handler
@@ -227,6 +230,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) saveKeyToCloud
 {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:kSaveKeyToCloudPrefKey]) {
+		return;
+	}
+	
 	CKContainer* container = [CKContainer containerWithIdentifier:kNotesCloudContainer];
 
 	[container accountStatusWithCompletionHandler:^(CKAccountStatus status, NSError* error) {
@@ -255,6 +262,23 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) stopLoadingSidebarRow
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+}
+
+- (void) saveNotesToDisk
+{
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:kSaveNotesToFolderPrefKey]) {
+		return;
+	}
+
+	NSString* notes_folder = [RFAccount notesFolder];
+	for (MBNote* n in self.allNotes) {
+		// for now we're using note IDs, later need small db to track better filenames
+		if (n.noteID != nil) {
+			NSString* filename = [NSString stringWithFormat:@"%@.md", n.noteID];
+			NSString* path = [notes_folder stringByAppendingPathComponent:filename];
+			[n.text writeToFile:path atomically:NO];
+		}
+	}
 }
 
 #pragma mark -

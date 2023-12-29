@@ -18,6 +18,7 @@
                 <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
                 <outlet property="messageTopConstraint" destination="xBT-xn-WX9" id="drj-is-oYf"/>
                 <outlet property="notesCloudCheckbox" destination="lFS-tK-LeF" id="SLi-j5-MN3"/>
+                <outlet property="notesFolderCheckbox" destination="vbd-mb-sxh" id="kck-Ds-w6Z"/>
                 <outlet property="notesKeyField" destination="PpW-Zm-Vp1" id="fbV-fz-iwN"/>
                 <outlet property="notesPane" destination="YMl-Rz-Pmv" id="eTS-kH-9Dd"/>
                 <outlet property="postFormatField" destination="fgW-ep-2gy" id="8tS-BB-Uuk"/>
@@ -107,7 +108,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lFS-tK-LeF">
-                    <rect key="frame" x="18" y="337" width="180" height="18"/>
+                    <rect key="frame" x="18" y="300" width="180" height="18"/>
                     <buttonCell key="cell" type="check" title="Save secret key to iCloud" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="xkR-hY-6tC">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -126,7 +127,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9i9-be-zbc">
-                    <rect key="frame" x="13" y="290" width="136" height="32"/>
+                    <rect key="frame" x="13" y="254" width="136" height="32"/>
                     <buttonCell key="cell" type="push" title="Show Secret Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="buK-Vi-xYA">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -139,7 +140,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4I2-KF-Jxw">
-                    <rect key="frame" x="147" y="290" width="100" height="32"/>
+                    <rect key="frame" x="147" y="254" width="100" height="32"/>
                     <buttonCell key="cell" type="push" title="Save Key..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bgR-WB-0ue">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -149,7 +150,7 @@
                     </connections>
                 </button>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PpW-Zm-Vp1">
-                    <rect key="frame" x="20" y="260" width="371" height="16"/>
+                    <rect key="frame" x="20" y="224" width="371" height="16"/>
                     <textFieldCell key="cell" selectable="YES" title="mkey123456789" id="8gd-1D-ici">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -157,15 +158,15 @@
                     </textFieldCell>
                 </textField>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QOm-co-d9F">
-                    <rect key="frame" x="22" y="40" width="200" height="200"/>
+                    <rect key="frame" x="22" y="24" width="180" height="180"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="200" id="3Rg-2L-NX5"/>
-                        <constraint firstAttribute="height" constant="200" id="rCK-6H-jen"/>
+                        <constraint firstAttribute="width" constant="180" id="3Rg-2L-NX5"/>
+                        <constraint firstAttribute="height" constant="180" id="rCK-6H-jen"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="P4J-95-6hv"/>
                 </imageView>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Zo-Onj">
-                    <rect key="frame" x="270" y="115" width="130" height="50"/>
+                    <rect key="frame" x="250" y="89" width="130" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="126" id="ExI-gT-ECB"/>
                         <constraint firstAttribute="height" constant="50" id="Ue4-iU-b2K"/>
@@ -177,7 +178,7 @@
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNT-6i-zu9">
-                    <rect key="frame" x="235" y="130" width="24" height="20"/>
+                    <rect key="frame" x="215" y="104" width="24" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="H7f-1Y-mOc"/>
                         <constraint firstAttribute="height" constant="20" id="cjX-pz-djm"/>
@@ -188,25 +189,49 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-mb-sxh">
+                    <rect key="frame" x="18" y="336" width="151" height="18"/>
+                    <buttonCell key="cell" type="check" title="Save notes to folder:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ffi-yp-70i">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="folderCheckboxChanged:" target="-2" id="c4O-9m-zLW"/>
+                    </connections>
+                </button>
+                <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hL1-ML-R2g">
+                    <rect key="frame" x="173" y="333" width="72" height="23"/>
+                    <buttonCell key="cell" type="roundTextured" title="Notes" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6v4-Ys-J0A">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="showNotesFolder:" target="-2" id="3Cg-eQ-9QB"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="xT9-EZ-swE" firstAttribute="top" secondItem="YMl-Rz-Pmv" secondAttribute="top" constant="20" symbolic="YES" id="0Yd-VA-U3l"/>
                 <constraint firstItem="9i9-be-zbc" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="0o0-fj-RRq"/>
+                <constraint firstItem="vbd-mb-sxh" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="6E1-gR-xMJ"/>
                 <constraint firstItem="tuh-Zo-Onj" firstAttribute="centerY" secondItem="QOm-co-d9F" secondAttribute="centerY" id="AA2-bX-vIJ"/>
                 <constraint firstAttribute="trailing" secondItem="xT9-EZ-swE" secondAttribute="trailing" constant="20" symbolic="YES" id="BNH-jI-azV"/>
+                <constraint firstItem="vbd-mb-sxh" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="20" id="BPS-Lk-GQc"/>
                 <constraint firstItem="PpW-Zm-Vp1" firstAttribute="top" secondItem="9i9-be-zbc" secondAttribute="bottom" constant="21" id="DB6-08-mnF"/>
                 <constraint firstItem="xT9-EZ-swE" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" id="FlV-Sc-ITO"/>
                 <constraint firstItem="QOm-co-d9F" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="22" id="Iwo-Bj-U7o"/>
                 <constraint firstItem="PNT-6i-zu9" firstAttribute="centerY" secondItem="QOm-co-d9F" secondAttribute="centerY" id="QHq-b1-Vek"/>
                 <constraint firstItem="4I2-KF-Jxw" firstAttribute="leading" secondItem="9i9-be-zbc" secondAttribute="trailing" constant="12" symbolic="YES" id="QbU-Rq-ycC"/>
                 <constraint firstItem="PpW-Zm-Vp1" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="22" id="Qdk-BW-Vaj"/>
-                <constraint firstItem="9i9-be-zbc" firstAttribute="top" secondItem="lFS-tK-LeF" secondAttribute="bottom" constant="21" id="RcY-MT-e82"/>
+                <constraint firstItem="9i9-be-zbc" firstAttribute="top" secondItem="lFS-tK-LeF" secondAttribute="bottom" constant="20" id="RcY-MT-e82"/>
                 <constraint firstItem="4I2-KF-Jxw" firstAttribute="centerY" secondItem="9i9-be-zbc" secondAttribute="centerY" id="Z8x-rf-qYH"/>
+                <constraint firstItem="hL1-ML-R2g" firstAttribute="centerY" secondItem="vbd-mb-sxh" secondAttribute="centerY" id="fFP-bg-TQH"/>
+                <constraint firstItem="lFS-tK-LeF" firstAttribute="top" secondItem="vbd-mb-sxh" secondAttribute="bottom" constant="20" id="iQG-YF-CjW"/>
                 <constraint firstItem="QOm-co-d9F" firstAttribute="top" secondItem="PpW-Zm-Vp1" secondAttribute="bottom" constant="20" id="jIl-9b-hfg"/>
+                <constraint firstItem="hL1-ML-R2g" firstAttribute="leading" secondItem="vbd-mb-sxh" secondAttribute="trailing" constant="5" id="lPq-au-MyX"/>
                 <constraint firstAttribute="trailing" secondItem="PpW-Zm-Vp1" secondAttribute="trailing" constant="20" symbolic="YES" id="vg4-gh-faI"/>
                 <constraint firstItem="tuh-Zo-Onj" firstAttribute="leading" secondItem="PNT-6i-zu9" secondAttribute="trailing" constant="15" id="vmR-Ya-mvB"/>
                 <constraint firstItem="lFS-tK-LeF" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="xuF-aw-FeC"/>
-                <constraint firstItem="lFS-tK-LeF" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="19" id="xxV-lh-d3z"/>
                 <constraint firstItem="PNT-6i-zu9" firstAttribute="leading" secondItem="QOm-co-d9F" secondAttribute="trailing" constant="15" id="zuF-hc-rV7"/>
             </constraints>
             <point key="canvasLocation" x="435.5" y="59.5"/>
@@ -580,8 +605,20 @@
             </constraints>
             <point key="canvasLocation" x="-45" y="60"/>
         </view>
+        <menu id="mJf-R5-Zmr">
+            <items>
+                <menuItem title="Show in Finder" id="hFb-Dm-10Y">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Change Folder..." id="JXf-4y-qIA">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="774" y="-142"/>
+        </menu>
     </objects>
     <resources>
+        <image name="folder.fill" catalog="system" width="18" height="14"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="note" catalog="system" width="16" height="14"/>
     </resources>

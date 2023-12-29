@@ -14,6 +14,7 @@
 @property (strong) NSString* username;
 
 + (NSString *) autosaveDraftFileForChannel:(NSString *)channel;
++ (NSString *) notesFolder;
 - (NSString *) profileImageURL;
 - (NSImage *) cachedProfileImage;
 - (void) saveProfileImage:(NSImage *)image;

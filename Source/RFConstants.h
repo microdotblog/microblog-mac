@@ -45,6 +45,9 @@ static NSInteger const kTextSizeHuge = 19;
 static NSInteger const kMaxCharsDefault = 300;
 static NSInteger const kMaxCharsBlockquote = 600;
 
+static NSString* const kSaveNotesToFolderPrefKey = @"SaveNotesToFolder";
+static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
+
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url" // NSURL
 

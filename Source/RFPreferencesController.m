@@ -53,6 +53,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	
 	[self setupWebsiteField];
 	[self setupDayOneField];
+	[self setupNotesCheckboxes];
+	
 	[self updateRadioButtons];
 	[self updateMenus];
 
@@ -160,6 +162,25 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.accountsCollectionView.dataSource = self;
 	
 	[self.accountsCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"AccountCell" bundle:nil] forItemWithIdentifier:kAccountCellIdentifier];
+}
+
+- (void) setupNotesCheckboxes
+{
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	
+	if ([defaults boolForKey:kSaveNotesToFolderPrefKey]) {
+		[self.notesFolderCheckbox setState:NSControlStateValueOn];
+	}
+	else {
+		[self.notesFolderCheckbox setState:NSControlStateValueOff];
+	}
+	
+	if ([defaults boolForKey:kSaveKeyToCloudPrefKey]) {
+		[self.notesCloudCheckbox setState:NSControlStateValueOn];
+	}
+	else {
+		[self.notesCloudCheckbox setState:NSControlStateValueOff];
+	}
 }
 
 - (void) loadCategories
@@ -343,8 +364,21 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.notesPane.hidden = NO;
 }
 
+- (IBAction) folderCheckboxChanged:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveNotesToFolderPrefKey];
+}
+
 - (IBAction) cloudCheckboxChanged:(id)sender
 {
+	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveKeyToCloudPrefKey];
+}
+
+- (IBAction) showNotesFolder:(id)sender
+{
+	NSString* notes_folder = [RFAccount notesFolder];
+	NSURL* url = [NSURL fileURLWithPath:notes_folder];
+	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ url ]];
 }
 
 - (IBAction) showSecretKey:(id)sender
