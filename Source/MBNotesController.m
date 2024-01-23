@@ -244,7 +244,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			CKDatabase* db = [container privateCloudDatabase];
 			CKRecord* record = [[CKRecord alloc] initWithRecordType:kNotesSettingsType];
 
-			NSString* s = self.secretKey;
+			NSString* s = [@"mkey" stringByAppendingString:self.secretKey];
 			[record setObject:s forKey:@"notesKey"];
 			
 			[db saveRecord:record completionHandler:^(CKRecord* record, NSError* error) {
