@@ -501,7 +501,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (void) hideWordPressMenus
 {
 	[self setWordPressEnabled:NO];
-    self.isShowingWordPressMenus = NO;
+	self.isShowingWordPressMenus = NO;
 }
 
 - (void) updateRadioButtons
@@ -510,11 +510,15 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		self.publishHostedBlog.state = NSControlStateValueOn;
 		self.publishWordPressBlog.state = NSControlStateValueOff;
 		self.websiteField.enabled = NO;
+		self.postFormatPopup.enabled = NO;
+		self.categoryPopup.enabled = NO;
 	}
 	else {
 		self.publishHostedBlog.state = NSControlStateValueOff;
 		self.publishWordPressBlog.state = NSControlStateValueOn;
 		self.websiteField.enabled = YES;
+		self.postFormatPopup.enabled = YES;
+		self.categoryPopup.enabled = YES;
 	}
 }
 
@@ -525,8 +529,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
     NSString* selected_dayOneJournal = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
 
 	if (self.hasLoadedCategories) {
-		self.postFormatPopup.enabled = YES;
-		self.categoryPopup.enabled = YES;
+		if ([RFSettings boolForKey:kExternalBlogIsPreferred account:self.selectedAccount]) {
+			self.postFormatPopup.enabled = YES;
+			self.categoryPopup.enabled = YES;
+		}
 	}
 
 	if (selected_format) {
