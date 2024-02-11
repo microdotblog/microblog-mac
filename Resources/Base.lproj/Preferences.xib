@@ -81,14 +81,14 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="0DFE76A8-CED5-4EF3-8A19-E8B54CF24807" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="0BJ-9c-nr7">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="FB8B8808-76C4-408A-8CF7-A43150A7EFBF" explicitItemIdentifier="General" label="General" paletteLabel="General" tag="-1" image="gearshape" catalog="system" bordered="YES" selectable="YES" id="K2G-iN-6st">
+                    <toolbarItem implicitItemIdentifier="FB8B8808-76C4-408A-8CF7-A43150A7EFBF" explicitItemIdentifier="General" label="General" paletteLabel="General" tag="-1" image="gearshape" catalog="system" selectable="YES" id="K2G-iN-6st">
                         <size key="minSize" width="28" height="25"/>
                         <size key="maxSize" width="28" height="25"/>
                         <connections>
                             <action selector="showGeneralPane:" target="-2" id="ufK-9I-2Df"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="2FE5B1CB-D1E4-481B-9052-D657FB3565C3" explicitItemIdentifier="Notes" label="Notes" paletteLabel="Notes" tag="-1" image="note" catalog="system" bordered="YES" selectable="YES" id="Zr9-2p-gjQ">
+                    <toolbarItem implicitItemIdentifier="2FE5B1CB-D1E4-481B-9052-D657FB3565C3" explicitItemIdentifier="Notes" label="Notes" paletteLabel="Notes" tag="-1" image="note" catalog="system" selectable="YES" id="Zr9-2p-gjQ">
                         <size key="minSize" width="28" height="25"/>
                         <size key="maxSize" width="28" height="25"/>
                         <connections>
@@ -158,15 +158,15 @@
                     </textFieldCell>
                 </textField>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QOm-co-d9F">
-                    <rect key="frame" x="22" y="24" width="180" height="180"/>
+                    <rect key="frame" x="22" y="39" width="170" height="170"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="180" id="3Rg-2L-NX5"/>
-                        <constraint firstAttribute="height" constant="180" id="rCK-6H-jen"/>
+                        <constraint firstAttribute="width" constant="170" id="3Rg-2L-NX5"/>
+                        <constraint firstAttribute="height" constant="170" id="rCK-6H-jen"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="P4J-95-6hv"/>
                 </imageView>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Zo-Onj">
-                    <rect key="frame" x="250" y="89" width="130" height="50"/>
+                    <rect key="frame" x="240" y="99" width="130" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="126" id="ExI-gT-ECB"/>
                         <constraint firstAttribute="height" constant="50" id="Ue4-iU-b2K"/>
@@ -178,7 +178,7 @@
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNT-6i-zu9">
-                    <rect key="frame" x="215" y="104" width="24" height="20"/>
+                    <rect key="frame" x="205" y="114" width="24" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="H7f-1Y-mOc"/>
                         <constraint firstAttribute="height" constant="20" id="cjX-pz-djm"/>
@@ -227,7 +227,7 @@
                 <constraint firstItem="4I2-KF-Jxw" firstAttribute="centerY" secondItem="9i9-be-zbc" secondAttribute="centerY" id="Z8x-rf-qYH"/>
                 <constraint firstItem="hL1-ML-R2g" firstAttribute="centerY" secondItem="vbd-mb-sxh" secondAttribute="centerY" id="fFP-bg-TQH"/>
                 <constraint firstItem="lFS-tK-LeF" firstAttribute="top" secondItem="vbd-mb-sxh" secondAttribute="bottom" constant="20" id="iQG-YF-CjW"/>
-                <constraint firstItem="QOm-co-d9F" firstAttribute="top" secondItem="PpW-Zm-Vp1" secondAttribute="bottom" constant="20" id="jIl-9b-hfg"/>
+                <constraint firstItem="QOm-co-d9F" firstAttribute="top" secondItem="PpW-Zm-Vp1" secondAttribute="bottom" constant="15" id="jIl-9b-hfg"/>
                 <constraint firstItem="hL1-ML-R2g" firstAttribute="leading" secondItem="vbd-mb-sxh" secondAttribute="trailing" constant="5" id="lPq-au-MyX"/>
                 <constraint firstAttribute="trailing" secondItem="PpW-Zm-Vp1" secondAttribute="trailing" constant="20" symbolic="YES" id="vg4-gh-faI"/>
                 <constraint firstItem="tuh-Zo-Onj" firstAttribute="leading" secondItem="PNT-6i-zu9" secondAttribute="trailing" constant="15" id="vmR-Ya-mvB"/>
