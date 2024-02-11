@@ -621,7 +621,7 @@
 			NSString* email = [response.parsedResponse objectForKey:@"email"];
 			NSString* gravatar_url = [response.parsedResponse objectForKey:@"gravatar_url"];
 			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
-			NSNumber* is_fullaccess = [response.parsedResponse objectForKey:@"is_fullaccess"];
+			NSNumber* is_premium = [response.parsedResponse objectForKey:@"is_fullaccess"];
 			NSString* default_site = [response.parsedResponse objectForKey:@"default_site"];
 			
 			RFAccount* a = [[RFAccount alloc] init];
@@ -634,7 +634,7 @@
 			[RFSettings setString:email forKey:kAccountEmail account:a];
 			[RFSettings setString:gravatar_url forKey:kAccountGravatarURL account:a];
 			[RFSettings setBool:[has_site boolValue] forKey:kHasSnippetsBlog account:a];
-			[RFSettings setBool:[is_fullaccess boolValue] forKey:kIsFullAccess account:a];
+			[RFSettings setBool:[is_premium boolValue] forKey:kIsPremium account:a];
 		
 			RFDispatchMainAsync (^{
 				[self loadTimelineWithToken:token account:a];
