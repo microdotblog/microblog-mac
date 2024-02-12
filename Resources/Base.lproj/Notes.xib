@@ -89,6 +89,7 @@
                                                 <connections>
                                                     <outlet property="dataSource" destination="-2" id="bon-tR-cpH"/>
                                                     <outlet property="delegate" destination="-2" id="NJW-hh-gdr"/>
+                                                    <outlet property="menu" destination="qCE-k7-O17" id="MCN-5S-8O0"/>
                                                 </connections>
                                             </tableView>
                                         </subviews>
@@ -195,6 +196,36 @@
             </constraints>
             <point key="canvasLocation" x="145" y="68"/>
         </customView>
+        <menu id="qCE-k7-O17">
+            <items>
+                <menuItem title="Share" id="qMi-ma-aFq">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="shareOrUnshare:" target="-2" id="bV8-Mn-p1F"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Delete" id="bwa-7p-2XP">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="delete:" target="-1" id="nFy-4v-KAB"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="dwN-O2-xzr"/>
+                <menuItem title="Open in Safari" id="8k0-Rv-YZk">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openInBrowser:" target="-2" id="Leu-ru-ILL"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Link" id="ume-WW-KAY">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyLink:" target="-2" id="yC1-3j-EI8"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="498" y="14.5"/>
+        </menu>
     </objects>
     <resources>
         <namedColor name="color_highlight_background">

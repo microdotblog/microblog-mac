@@ -19,6 +19,7 @@
 	new_note.noteID = [self.noteID copyWithZone:zone];
 	new_note.notebookID = [self.notebookID copyWithZone:zone];
 	new_note.text = [self.text copyWithZone:zone];
+	new_note.sharedURL = [self.sharedURL copyWithZone:zone];
 	new_note.isEncrypted = self.isEncrypted;
 	new_note.isShared = self.isShared;
 	new_note.createdAt = [self.createdAt copyWithZone:zone];

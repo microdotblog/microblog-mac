@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 @property (strong, nonatomic) IBOutlet NSTextView* detailTextView;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* notebooksPopup;
+@property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 
 @property (strong, nonatomic) NSString* secretKey;
 @property (strong, nonatomic) NSArray* allNotes; // MBNote

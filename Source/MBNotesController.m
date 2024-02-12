@@ -192,6 +192,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 				
 				n.noteID = [item objectForKey:@"id"];
 				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
+				n.sharedURL = [mb objectForKey:@"shared_url"];
 				n.notebookID = notebookID;
 
 				if (n.isEncrypted) {
@@ -566,6 +567,26 @@ static NSString* const kNotesSettingsType = @"Setting";
 		self.currentNotes = filtered_notes;
 		[self.tableView reloadData];
 	}
+}
+
+- (IBAction) shareOrUnshare:(id)sender
+{
+	[self.progressSpinner startAnimation:nil];
+}
+
+- (IBAction) openInBrowser:(id)sender
+{
+	if (self.selectedNote) {
+		NSURL* url = [NSURL URLWithString:self.selectedNote.sharedURL];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:self.selectedNote.sharedURL forType:NSPasteboardTypeString];
 }
 
 - (IBAction) applyFormatBold:(id)sender

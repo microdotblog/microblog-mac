@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -76,7 +76,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrF-A6-KAh">
+                            <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrF-A6-KAh">
                                 <rect key="frame" x="241" y="429" width="145" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="145" id="RKs-Cf-e27"/>
@@ -99,13 +99,13 @@
                             </box>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9">
                                 <rect key="frame" x="11" y="425" width="132" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="Pai-Fy-zI5"/>
-                                </constraints>
                                 <buttonCell key="cell" type="bevel" title="username.micro.blog" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Pai-Fy-zI5"/>
+                                </constraints>
                                 <connections>
                                     <action selector="blogNameClicked:" target="-2" id="7do-uH-82s"/>
                                 </connections>
@@ -167,7 +167,7 @@
                     </connections>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="342.5" y="-41.5"/>
+            <point key="canvasLocation" x="330" y="-40"/>
         </menu>
     </objects>
 </document>

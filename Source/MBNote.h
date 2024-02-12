@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSNumber* noteID;
 @property (strong) NSNumber* notebookID;
 @property (copy) NSString* text;
+@property (copy) NSString* sharedURL;
 @property (assign) BOOL isEncrypted;
 @property (assign) BOOL isShared;
 @property (strong) NSDate* createdAt;
