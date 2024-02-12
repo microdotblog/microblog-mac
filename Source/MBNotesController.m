@@ -671,6 +671,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 	else {
 		self.selectedNote = nil;
+		[self.detailTextView setString:@""];
 	}
 }
 
