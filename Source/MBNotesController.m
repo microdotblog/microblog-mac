@@ -101,6 +101,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotes
 {
+	[self.progressSpinner startAnimation:nil];
+
 	[self fetchNotebooksWithCompletion:^{
 		[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
 			[self saveNotesToDisk];
@@ -152,9 +154,17 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotesWithNotebookID:(NSNumber *)notebookID completion:(void (^)(void))handler
 {
+	NSMutableArray* new_notes = [NSMutableArray array];
+	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:new_notes completion:handler];
+}
+
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array completion:(void (^)(void))handler
+{
 	if (self.secretKey == nil) {
 		return;
 	}
+	
+	NSInteger count = 100;
 	
 	// remember selection if there is one
 	NSNumber* selected_id = nil;
@@ -164,8 +174,13 @@ static NSString* const kNotesSettingsType = @"Setting";
 		selected_id = n.noteID;
 	}
 	
+	NSDictionary* args = @{
+		@"count": @(count),
+		@"offset": @(offset)
+	};
+	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/notebooks/%@", notebookID];
-	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_notes = [NSMutableArray array];
 			
@@ -196,32 +211,39 @@ static NSString* const kNotesSettingsType = @"Setting";
 				[new_notes addObject:n];
 			}
 			
+			[array addObjectsFromArray:new_notes];
+			
 			RFDispatchMainAsync(^{
-				self.allNotes = new_notes;
-				self.currentNotes = new_notes;
-				[self.tableView reloadData];
-				if (handler) {
-					handler();
-				}
-				
-				// restore selection
-				if (selected_id) {
-					for (NSInteger i = 0; i < self.currentNotes.count; i++) {
-						MBNote* n = [self.currentNotes objectAtIndex:i];
-						if ([n.noteID isEqualToNumber:selected_id]) {
-							NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
-							[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-							break;
+				if (items.count < count) {
+					self.allNotes = array;
+					self.currentNotes = array;
+					[self.tableView reloadData];
+					if (handler) {
+						handler();
+					}
+					
+					// restore selection
+					if (selected_id) {
+						for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+							MBNote* n = [self.currentNotes objectAtIndex:i];
+							if ([n.noteID isEqualToNumber:selected_id]) {
+								NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+								[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+								break;
+							}
 						}
 					}
+
+					[self.progressSpinner stopAnimation:nil];
+					[self stopLoadingSidebarRow];
+				}
+				else {
+					NSLog(@"Fetching another page of notes, offset: %ld", (long)offset);
+					NSInteger new_offset = offset + count;
+					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array completion:handler];
 				}
 			});
 		}
-		
-		RFDispatchMainAsync(^{
-			[self.progressSpinner stopAnimation:nil];
-			[self stopLoadingSidebarRow];
-		});
 	}];
 }
 
@@ -468,7 +490,9 @@ static NSString* const kNotesSettingsType = @"Setting";
 			break;
 		}
 	}
-	
+
+	[self.progressSpinner startAnimation:nil];
+
 	[self fetchNotesWithNotebookID:@(notebook_id) completion:^{
 	}];
 	
