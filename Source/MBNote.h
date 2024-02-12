@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy) NSString* sharedURL;
 @property (assign) BOOL isEncrypted;
 @property (assign) BOOL isShared;
+@property (assign) BOOL isSharing;
+@property (assign) BOOL isUnsharing;
 @property (strong) NSDate* createdAt;
 @property (strong) NSDate* updatedAt;
 

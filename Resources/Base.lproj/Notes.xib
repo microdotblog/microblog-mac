@@ -9,10 +9,14 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBNotesController">
             <connections>
+                <outlet property="browserMenuItem" destination="8k0-Rv-YZk" id="pNH-Gn-pgQ"/>
                 <outlet property="detailTextView" destination="YbT-7i-Zi1" id="n0v-Vp-3BM"/>
+                <outlet property="linkMenuItem" destination="ume-WW-KAY" id="NCe-Yi-hmW"/>
                 <outlet property="notebooksPopup" destination="Shg-8z-gSu" id="X5F-xZ-jDr"/>
                 <outlet property="progressSpinner" destination="XG2-RC-yYo" id="Pnl-Zp-YDX"/>
                 <outlet property="searchField" destination="a7S-Gl-bR0" id="RwR-wZ-VwR"/>
+                <outlet property="separatorMenuItem" destination="dwN-O2-xzr" id="yfh-Qp-CC0"/>
+                <outlet property="shareMenuItem" destination="qMi-ma-aFq" id="yB0-u4-Lta"/>
                 <outlet property="tableView" destination="Sif-9p-2X2" id="n5n-9F-Djv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="q4Y-Df-f8v"/>
             </connections>

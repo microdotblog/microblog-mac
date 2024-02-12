@@ -46,6 +46,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self setupNotifications];
 	[self setupTimer];
 	[self setupDetail];
+	[self setupBrowser];
 	
 	[self fetchNotes];
 	[self saveKeyToCloud];
@@ -95,6 +96,47 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) setupDetail
 {
 	[self.detailTextView setFont:[NSFont systemFontOfSize:14]];
+}
+
+- (void) setupBrowser
+{
+	NSString* browser_s = @"Open in Browser";
+	
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		browser_s = @"Open in Chrome";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		browser_s = @"Open in Firefox";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
+		browser_s = @"Open in Safari";
+	}
+
+	self.browserMenuItem.title = browser_s;
+}
+
+- (void) setupMenuForNote:(MBNote *)note
+{
+	if (note.isShared) {
+		[self.shareMenuItem setTitle:@"Unshare"];
+	}
+	else {
+		[self.shareMenuItem setTitle:@"Share"];
+	}
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(openInBrowser:)) {
+		return self.selectedNote.isShared;
+	}
+	else if (item.action == @selector(copyLink:)) {
+		return self.selectedNote.isShared;
+	}
+
+	return YES;
 }
 
 #pragma mark -
@@ -192,9 +234,17 @@ static NSString* const kNotesSettingsType = @"Setting";
 				
 				n.noteID = [item objectForKey:@"id"];
 				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
+				n.isShared = [[mb objectForKey:@"is_shared"] boolValue];
 				n.sharedURL = [mb objectForKey:@"shared_url"];
 				n.notebookID = notebookID;
 
+				// if selected note, update if sharing changed
+				if (self.selectedNote) {
+					if ([n.noteID isEqualToNumber:self.selectedNote.noteID]) {
+						self.selectedNote.sharedURL = n.sharedURL;
+					}
+				}
+				
 				if (n.isEncrypted) {
 					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
 					if (n.text == nil) {
@@ -433,6 +483,17 @@ static NSString* const kNotesSettingsType = @"Setting";
 		};
 	}
 	
+	if (note.isSharing) {
+		NSMutableDictionary* new_args = [args mutableCopy];
+		[new_args setObject:[NSNumber numberWithBool:YES] forKey:@"is_sharing"];
+		args = new_args;
+	}
+	else if (note.isUnsharing) {
+		NSMutableDictionary* new_args = [args mutableCopy];
+		[new_args setObject:[NSNumber numberWithBool:YES] forKey:@"is_unsharing"];
+		args = new_args;
+	}
+	
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync(^{
 			[self.progressSpinner stopAnimation:nil];
@@ -572,6 +633,30 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (IBAction) shareOrUnshare:(id)sender
 {
 	[self.progressSpinner startAnimation:nil];
+	
+	if (self.selectedNote.isShared) {
+		self.selectedNote.isUnsharing = YES;
+		[self syncNote:self.selectedNote completion:^{
+			self.selectedNote.isShared = NO;
+			self.selectedNote.isUnsharing = NO;
+
+			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+				[self.progressSpinner stopAnimation:nil];
+			}];
+		}];
+	}
+	else {
+		self.selectedNote.isSharing = YES;
+		self.selectedNote.isEncrypted = NO;
+		[self syncNote:self.selectedNote completion:^{
+			self.selectedNote.isShared = YES;
+			self.selectedNote.isSharing = NO;
+
+			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+				[self.progressSpinner stopAnimation:nil];
+			}];
+		}];
+	}
 }
 
 - (IBAction) openInBrowser:(id)sender
@@ -668,6 +753,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 		MBNote* n = [self.currentNotes objectAtIndex:row];
 		self.selectedNote = [n copy];
 		[self.detailTextView setString:self.selectedNote.text];
+		[self setupMenuForNote:self.selectedNote];
 	}
 	else {
 		self.selectedNote = nil;
