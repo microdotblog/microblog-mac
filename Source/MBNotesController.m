@@ -567,6 +567,56 @@ static NSString* const kNotesSettingsType = @"Setting";
 		[self.tableView reloadData];
 	}
 }
+
+- (IBAction) applyFormatBold:(id)sender
+{
+	[self replaceSelectionBySurrounding:@[ @"**", @"**" ]];
+}
+
+- (IBAction) applyFormatItalic:(id)sender
+{
+	[self replaceSelectionBySurrounding:@[ @"_", @"_" ]];
+}
+
+- (IBAction) applyFormatLink:(id)sender
+{
+	NSRange r = self.detailTextView.selectedRange;
+	if (r.length == 0) {
+		[self replaceSelectionBySurrounding:@[ @"[]()" ]];
+		r = self.detailTextView.selectedRange;
+		r.location = r.location - 3;
+		self.detailTextView.selectedRange = r;
+	}
+	else {
+		[self replaceSelectionBySurrounding:@[ @"[", @"]()" ]];
+
+		NSInteger markdown_length = [@"[]()" length];
+		r.location = r.location + r.length + markdown_length - 1;
+		r.length = 0;
+		self.detailTextView.selectedRange = r;
+	}
+}
+
+- (void) replaceSelectionBySurrounding:(NSArray *)markup
+{
+	NSRange r = self.detailTextView.selectedRange;
+	if (r.length == 0) {
+		[self.detailTextView replaceCharactersInRange:r withString:[markup firstObject]];
+		r.location = r.location + [markup.firstObject length];
+		self.detailTextView.selectedRange = r;
+	}
+	else {
+		NSString* s = [self.detailTextView.string substringWithRange:r];
+		NSString* new_s = [NSString stringWithFormat:@"%@%@%@", [markup firstObject], s, [markup lastObject]];
+		[self.detailTextView replaceCharactersInRange:r withString:new_s];
+
+		NSInteger markdown_length = [[markup componentsJoinedByString:@""] length];
+		r.location = r.location + r.length + markdown_length;
+		r.length = 0;
+		self.detailTextView.selectedRange = r;
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
