@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) fetchNotes;
 - (void) focusSearch;
+- (void) deselectAll;
 
 @end
 

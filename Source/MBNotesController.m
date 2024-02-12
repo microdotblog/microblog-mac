@@ -398,6 +398,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			}
 			
 			self.detailTextView.string = @"";
+			self.selectedNote = nil;
 		});
 	}];
 }
@@ -497,6 +498,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}];
 	
 	self.detailTextView.string = @"";
+	self.selectedNote = nil;
 }
 
 - (void) startNewNoteNotification:(NSNotification *)notification
@@ -536,6 +538,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) focusSearch
 {
 	[self.searchField becomeFirstResponder];
+}
+
+- (void) deselectAll
+{
+	[self.tableView deselectAll:nil];
+
+	[self.detailTextView setString:@""];
+	self.selectedNote = nil;
 }
 
 - (IBAction) search:(id)sender

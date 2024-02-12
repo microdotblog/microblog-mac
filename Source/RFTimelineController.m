@@ -564,6 +564,7 @@ static NSInteger const kSelectionNotes = 11;
 		self.notesController = [[MBNotesController alloc] init];
 	}
 	else {
+		[self.notesController deselectAll];
 		[self.notesController fetchNotes];
 	}
 	
