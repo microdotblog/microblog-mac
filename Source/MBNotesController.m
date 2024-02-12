@@ -395,7 +395,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Note" message:msg button:@"OK" completionHandler:NULL];
 			}
 			else {
-				[self fetchNotes];
+				[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:nil];
 			}
 			
 			self.detailTextView.string = @"";
