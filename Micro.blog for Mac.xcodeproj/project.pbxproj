@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -190,6 +190,7 @@
 		4BE23F982A700AFA00E24718 /* MBHighlightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BE23F972A700AFA00E24718 /* MBHighlightCell.m */; };
 		4BE23F9B2A70110900E24718 /* Bookmarks.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BE23F992A70110900E24718 /* Bookmarks.xib */; };
 		4BE23F9E2A70117F00E24718 /* MBBookmarksController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */; };
+		4BEB08F32B79348C004082CB /* MBNotebook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEB08F22B79348C004082CB /* MBNotebook.m */; };
 		4BED646324BD59ED0018644C /* RFAllUploadsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646224BD59ED0018644C /* RFAllUploadsController.m */; };
 		4BED646624BD5AB80018644C /* AllUploads.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BED646424BD5AB80018644C /* AllUploads.xib */; };
 		4BED646924BDF29A0018644C /* RFUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646824BDF29A0018644C /* RFUpload.m */; };
@@ -557,6 +558,8 @@
 		4BE23F9A2A70110900E24718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookmarks.xib; sourceTree = "<group>"; };
 		4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookmarksController.h; path = Source/MBBookmarksController.h; sourceTree = "<group>"; };
 		4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookmarksController.m; path = Source/MBBookmarksController.m; sourceTree = "<group>"; };
+		4BEB08F12B79348C004082CB /* MBNotebook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotebook.h; path = Source/MBNotebook.h; sourceTree = "<group>"; };
+		4BEB08F22B79348C004082CB /* MBNotebook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotebook.m; path = Source/MBNotebook.m; sourceTree = "<group>"; };
 		4BED646124BD59ED0018644C /* RFAllUploadsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllUploadsController.h; path = Source/RFAllUploadsController.h; sourceTree = "<group>"; };
 		4BED646224BD59ED0018644C /* RFAllUploadsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllUploadsController.m; path = Source/RFAllUploadsController.m; sourceTree = "<group>"; };
 		4BED646524BD5AB80018644C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllUploads.xib; sourceTree = "<group>"; };
@@ -858,6 +861,8 @@
 				4B001CCE2B27944300BBF456 /* MBNotesController.h */,
 				4B001CCF2B27944300BBF456 /* MBNotesController.m */,
 				4B001CD12B27955900BBF456 /* MBNote.h */,
+				4BEB08F12B79348C004082CB /* MBNotebook.h */,
+				4BEB08F22B79348C004082CB /* MBNotebook.m */,
 				4B001CD22B27955900BBF456 /* MBNote.m */,
 				4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */,
 				4B001CD42B27957800BBF456 /* MBNoteCell.h */,
@@ -1304,6 +1309,7 @@
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
 				4BE23F8F2A70090D00E24718 /* MBHighlightsController.m in Sources */,
 				4B400D05201EC55B00C71AAF /* MMElement.m in Sources */,
+				4BEB08F32B79348C004082CB /* MBNotebook.m in Sources */,
 				4B2CAAC51F90652800D9B10E /* RFXMLRPCParser.m in Sources */,
 				4B2CAB161F90667300D9B10E /* iconvtc.c in Sources */,
 				4B2CAB071F90667300D9B10E /* pprint.c in Sources */,

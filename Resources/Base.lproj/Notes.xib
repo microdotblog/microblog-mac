@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,6 +10,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBNotesController">
             <connections>
                 <outlet property="detailTextView" destination="YbT-7i-Zi1" id="n0v-Vp-3BM"/>
+                <outlet property="notebooksPopup" destination="Shg-8z-gSu" id="X5F-xZ-jDr"/>
                 <outlet property="progressSpinner" destination="XG2-RC-yYo" id="Pnl-Zp-YDX"/>
                 <outlet property="searchField" destination="a7S-Gl-bR0" id="RwR-wZ-VwR"/>
                 <outlet property="tableView" destination="Sif-9p-2X2" id="n5n-9F-Djv"/>
@@ -22,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="486" height="596"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7S-Gl-bR0">
+                <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7S-Gl-bR0">
                     <rect key="frame" x="329" y="563" width="145" height="22"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="MJ3-8Y-ua3"/>
@@ -44,7 +45,7 @@
                     </constraints>
                 </box>
                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
-                    <rect key="frame" x="12" y="566" width="16" height="16"/>
+                    <rect key="frame" x="116" y="566" width="16" height="16"/>
                 </progressIndicator>
                 <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8i-KT-xcK">
                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
@@ -158,17 +159,37 @@
                         <real value="250"/>
                     </holdingPriorities>
                 </splitView>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Shg-8z-gSu">
+                    <rect key="frame" x="11" y="560" width="99" height="25"/>
+                    <popUpButtonCell key="cell" type="push" title="Notebook" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="k0r-Sd-GWc" id="jKc-n8-hQz">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="menu"/>
+                        <menu key="menu" id="NEf-TZ-cwg">
+                            <items>
+                                <menuItem title="Notebook" state="on" id="k0r-Sd-GWc"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="0pk-Rs-A0k"/>
+                    </constraints>
+                    <connections>
+                        <action selector="currentNotebookChanged:" target="-2" id="Wmw-9q-Sfq"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <constraints>
                 <constraint firstItem="hLb-A7-1dk" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="0nv-7k-Vl3"/>
                 <constraint firstItem="XG2-RC-yYo" firstAttribute="centerY" secondItem="a7S-Gl-bR0" secondAttribute="centerY" id="59P-Oc-4EB"/>
-                <constraint firstItem="XG2-RC-yYo" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="6A6-sm-lRE"/>
                 <constraint firstItem="a7S-Gl-bR0" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="11" id="7iS-Q9-EAQ"/>
                 <constraint firstItem="K8i-KT-xcK" firstAttribute="top" secondItem="hLb-A7-1dk" secondAttribute="bottom" id="KTz-53-Hbh"/>
                 <constraint firstItem="hLb-A7-1dk" firstAttribute="top" secondItem="a7S-Gl-bR0" secondAttribute="bottom" constant="11" id="Nla-d8-TN1"/>
                 <constraint firstAttribute="trailing" secondItem="a7S-Gl-bR0" secondAttribute="trailing" constant="12" id="ObX-KS-v83"/>
                 <constraint firstAttribute="bottom" secondItem="K8i-KT-xcK" secondAttribute="bottom" id="OnH-7x-UmB"/>
                 <constraint firstItem="K8i-KT-xcK" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="XXT-o3-OpJ"/>
+                <constraint firstItem="XG2-RC-yYo" firstAttribute="leading" secondItem="Shg-8z-gSu" secondAttribute="trailing" constant="10" id="esM-Va-B3Q"/>
+                <constraint firstItem="Shg-8z-gSu" firstAttribute="centerY" secondItem="a7S-Gl-bR0" secondAttribute="centerY" id="gAH-Hv-hQT"/>
+                <constraint firstItem="Shg-8z-gSu" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="14" id="hSH-Ux-UQp"/>
                 <constraint firstAttribute="trailing" secondItem="hLb-A7-1dk" secondAttribute="trailing" id="p2n-dL-qyb"/>
                 <constraint firstAttribute="trailing" secondItem="K8i-KT-xcK" secondAttribute="trailing" id="yeB-sf-Mh1"/>
             </constraints>

@@ -9,6 +9,7 @@
 #import "MBNotesController.h"
 
 #import "MBNote.h"
+#import "MBNotebook.h"
 #import "MBNoteCell.h"
 #import "MBNotesKeyController.h"
 #import "RFClient.h"
@@ -100,17 +101,61 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotes
 {
-	[self fetchNotesWithCompletion:^{
-		[self saveNotesToDisk];
+	[self fetchNotebooksWithCompletion:^{
+		[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+			[self saveNotesToDisk];
+		}];
 	}];
 }
 
-- (void) fetchNotesWithCompletion:(void (^)(void))handler
+- (void) fetchNotebooksWithCompletion:(void (^)(void))handler
 {
 	if (self.secretKey == nil) {
 		return;
 	}
 
+	NSMutableArray* new_notebooks = [[NSMutableArray alloc] init];
+	
+	RFClient* notebooks_client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
+	[notebooks_client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			for (NSDictionary* item in [response.parsedResponse objectForKey:@"items"]) {
+				NSNumber* notebook_id = [item objectForKey:@"id"];
+				NSString* notebook_name = [item objectForKey:@"title"];
+				
+				MBNotebook* nb = [[MBNotebook alloc] init];
+				nb.notebookID = notebook_id;
+				nb.name = notebook_name;
+				[new_notebooks addObject:nb];
+				
+				if (self.currentNotebook == nil) {
+					self.currentNotebook = nb;
+				}
+			}
+			
+			RFDispatchMainAsync(^{
+				self.notebooks = new_notebooks;
+
+				[self.notebooksPopup removeAllItems];
+				
+				for (MBNotebook* nb in new_notebooks) {
+					NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:nb.name action:NULL keyEquivalent:@""];
+					item.tag = [nb.notebookID integerValue];
+					[self.notebooksPopup.menu addItem:item];
+				}
+
+				handler();
+			});
+		}
+	}];
+}
+
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID completion:(void (^)(void))handler
+{
+	if (self.secretKey == nil) {
+		return;
+	}
+	
 	// remember selection if there is one
 	NSNumber* selected_id = nil;
 	NSInteger selected_row = [self.tableView selectedRow];
@@ -119,72 +164,64 @@ static NSString* const kNotesSettingsType = @"Setting";
 		selected_id = n.noteID;
 	}
 	
-	RFClient* notebooks_client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
-	[notebooks_client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/notebooks/%@", notebookID];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_notes = [NSMutableArray array];
+			
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			NSDictionary* item = [items firstObject];
-			NSNumber* notebook_id = [item objectForKey:@"id"];
+			for (NSDictionary* item in items) {
+				NSDictionary* mb = [item objectForKey:@"_microblog"];
+				
+				MBNote* n = [[MBNote alloc] init];
+				
+				n.noteID = [item objectForKey:@"id"];
+				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
+				n.notebookID = notebookID;
 
-			RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/notebooks/%@", notebook_id];
-			[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
-				if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-					NSMutableArray* new_notes = [NSMutableArray array];
-					
-					NSArray* items = [response.parsedResponse objectForKey:@"items"];
-					for (NSDictionary* item in items) {
-						NSDictionary* mb = [item objectForKey:@"_microblog"];
-						
-						MBNote* n = [[MBNote alloc] init];
-						
-						n.noteID = [item objectForKey:@"id"];
-						n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
-						
-						if (n.isEncrypted) {
-							n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
-							if (n.text == nil) {
-								// decryption probably failed
-								n.text = @"";
-							}
-						}
-						else {
-							n.text = [item objectForKey:@"content_text"];
-						}
-						
-						NSString* date_s = [item objectForKey:@"date_published"];
-						n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
-						
-						[new_notes addObject:n];
+				if (n.isEncrypted) {
+					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
+					if (n.text == nil) {
+						// decryption probably failed
+						n.text = @"";
 					}
-					
-					RFDispatchMainAsync(^{
-						self.allNotes = new_notes;
-						self.currentNotes = new_notes;
-						[self.tableView reloadData];
-						if (handler) {
-							handler();
-						}
-						
-						// restore selection
-						if (selected_id) {
-							for (NSInteger i = 0; i < self.currentNotes.count; i++) {
-								MBNote* n = [self.currentNotes objectAtIndex:i];
-								if ([n.noteID isEqualToNumber:selected_id]) {
-									NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
-									[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-									break;
-								}
-							}
-						}
-					});
 				}
-
-				RFDispatchMainAsync(^{
-					[self.progressSpinner stopAnimation:nil];
-					[self stopLoadingSidebarRow];
-				});
-			}];
+				else {
+					n.text = [item objectForKey:@"content_text"];
+				}
+				
+				NSString* date_s = [item objectForKey:@"date_published"];
+				n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
+				
+				[new_notes addObject:n];
+			}
+			
+			RFDispatchMainAsync(^{
+				self.allNotes = new_notes;
+				self.currentNotes = new_notes;
+				[self.tableView reloadData];
+				if (handler) {
+					handler();
+				}
+				
+				// restore selection
+				if (selected_id) {
+					for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+						MBNote* n = [self.currentNotes objectAtIndex:i];
+						if ([n.noteID isEqualToNumber:selected_id]) {
+							NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+							[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+							break;
+						}
+					}
+				}
+			});
 		}
+		
+		RFDispatchMainAsync(^{
+			[self.progressSpinner stopAnimation:nil];
+			[self stopLoadingSidebarRow];
+		});
 	}];
 }
 
@@ -359,14 +396,16 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (note.noteID == nil) {
 		args = @{
 			@"text": s,
-			@"is_encrypted": @(YES)
+			@"is_encrypted": @(YES),
+			@"notebook_id": note.notebookID
 		};
 	}
 	else {
 		args = @{
 			@"id": note.noteID,
 			@"text": s,
-			@"is_encrypted": [NSNumber numberWithBool:note.isEncrypted]
+			@"is_encrypted": [NSNumber numberWithBool:note.isEncrypted],
+			@"notebook_id": note.notebookID
 		};
 	}
 	
@@ -418,10 +457,29 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (IBAction) currentNotebookChanged:(id)sender
+{
+	NSMenuItem* item = [sender selectedItem];
+	NSInteger notebook_id = item.tag;
+	
+	for (MBNotebook* nb in self.notebooks) {
+		if (nb.notebookID.integerValue == notebook_id) {
+			self.currentNotebook = nb;
+			break;
+		}
+	}
+	
+	[self fetchNotesWithNotebookID:@(notebook_id) completion:^{
+	}];
+	
+	self.detailTextView.string = @"";
+}
+
 - (void) startNewNoteNotification:(NSNotification *)notification
 {
 	MBNote* n = [[MBNote alloc] init];
 	n.text = @"";
+	n.notebookID = self.currentNotebook.notebookID;
 	n.isEncrypted = YES;
 	n.createdAt = [NSDate date];
 	
@@ -434,7 +492,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	[self syncNote:n completion:^{
 		// reload so we get new ID
-		[self fetchNotesWithCompletion:^{
+		[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
 			// select new note
 			NSIndexSet* index = [NSIndexSet indexSetWithIndex:0];
 			[self.tableView selectRowIndexes:index byExtendingSelection:NO];

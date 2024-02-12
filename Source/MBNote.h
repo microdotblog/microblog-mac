@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBNote : NSObject <NSCopying>
 
 @property (strong) NSNumber* noteID;
+@property (strong) NSNumber* notebookID;
 @property (copy) NSString* text;
 @property (assign) BOOL isEncrypted;
 @property (assign) BOOL isShared;
