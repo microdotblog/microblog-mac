@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.1.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Fixed accidentally showing the new Notes sidebar item (and related problems) even if there's no Micro.blog Premium subscription.</li>
+					<li>For more about the new notes feature in version 3.1, see <a href="https://www.manton.org/2024/02/13/introducing-notes-in.html">this blog post from Manton Reece</a>.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Tue, 13 Feb 2024 12:12:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.1.1.zip" sparkle:shortVersionString="3.1.1" sparkle:version="143" length="4216941" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.1</title>
  			<description><![CDATA[
 				<style>
