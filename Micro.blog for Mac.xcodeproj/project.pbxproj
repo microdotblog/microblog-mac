@@ -152,6 +152,7 @@
 		4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FBDFB1F86827800906C86 /* Security.framework */; };
 		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
+		4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
 		4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50721EE52140095F903 /* NSAppearance+Extras.m */; };
@@ -495,6 +496,8 @@
 		4B9F063F2767BC400007F21D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Date.xib; sourceTree = "<group>"; };
 		4B9F06412767BCE60007F21D /* MBDateController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDateController.h; path = Source/MBDateController.h; sourceTree = "<group>"; };
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
+		4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSColor+Extras.h"; path = "Source/NSColor+Extras.h"; sourceTree = "<group>"; };
+		4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extras.m"; path = "Source/NSColor+Extras.m"; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BB5B50321EE4F3C0095F903 /* RFButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFButton.h; path = Source/RFButton.h; sourceTree = "<group>"; };
@@ -967,6 +970,8 @@
 				4BEFA48421EFE799006B1691 /* RFHeaderBox.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
+				4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */,
+				4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */,
 				4B5EF5ED1FA6120100CB7A02 /* NSImage+Extras.h */,
 				4B5EF5EE1FA6120100CB7A02 /* NSImage+Extras.m */,
 				4B2CAB301F91B8F800D9B10E /* WebView+Swipe.h */,
@@ -1315,6 +1320,7 @@
 				4B2CAB071F90667300D9B10E /* pprint.c in Sources */,
 				4B2CAB031F90664800D9B10E /* CTidy.m in Sources */,
 				4B2CAB0A1F90667300D9B10E /* attrask.c in Sources */,
+				4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */,
 				4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */,
 				4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */,
 				4B2CAB111F90667300D9B10E /* tidylib.c in Sources */,
@@ -1947,7 +1953,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 141;
+				CURRENT_PROJECT_VERSION = 142;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1984,7 +1990,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 141;
+				CURRENT_PROJECT_VERSION = 142;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong) NSNumber* notebookID;
 @property (strong) NSString* name;
+@property (strong) NSColor* lightColor;
+@property (strong) NSColor* darkColor;
 
 @end
 

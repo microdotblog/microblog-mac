@@ -20,7 +20,9 @@
 #import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
+#import "NSColor+Extras.h"
 #import "SAMKeychain.h"
+#import "NSAppearance+Extras.h"
 
 static NSString* const kNotesCloudContainer = @"iCloud.blog.micro.shared";
 static NSString* const kNotesSettingsType = @"Setting";
@@ -164,16 +166,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[notebooks_client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			for (NSDictionary* item in [response.parsedResponse objectForKey:@"items"]) {
+				NSDictionary* mb = [item objectForKey:@"_microblog"];
 				NSNumber* notebook_id = [item objectForKey:@"id"];
 				NSString* notebook_name = [item objectForKey:@"title"];
-				
+				NSString* light_color = [[mb objectForKey:@"colors"] objectForKey:@"light"];
+				NSString* dark_color = [[mb objectForKey:@"colors"] objectForKey:@"dark"];
+			
 				MBNotebook* nb = [[MBNotebook alloc] init];
 				nb.notebookID = notebook_id;
 				nb.name = notebook_name;
+				nb.lightColor = [NSColor mb_colorFromString:light_color];
+				nb.darkColor = [NSColor mb_colorFromString:dark_color];
 				[new_notebooks addObject:nb];
 				
 				if (self.currentNotebook == nil) {
 					self.currentNotebook = nb;
+					[self updateDetailsColor];
 				}
 			}
 			
@@ -391,6 +399,18 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (void) updateDetailsColor
+{
+	RFDispatchMainAsync(^{
+		if ([NSAppearance rf_isDarkMode]) {
+			self.detailTextView.backgroundColor = self.currentNotebook.darkColor;
+		}
+		else {
+			self.detailTextView.backgroundColor = self.currentNotebook.lightColor;
+		}
+	});
+}
+
 #pragma mark -
 
 - (IBAction) openRow:(id)sender
@@ -550,6 +570,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	for (MBNotebook* nb in self.notebooks) {
 		if (nb.notebookID.integerValue == notebook_id) {
 			self.currentNotebook = nb;
+			[self updateDetailsColor];
 			break;
 		}
 	}
