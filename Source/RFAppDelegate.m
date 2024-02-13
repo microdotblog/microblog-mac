@@ -621,7 +621,7 @@
 			NSString* email = [response.parsedResponse objectForKey:@"email"];
 			NSString* gravatar_url = [response.parsedResponse objectForKey:@"gravatar_url"];
 			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
-			NSNumber* is_premium = [response.parsedResponse objectForKey:@"is_fullaccess"];
+			NSNumber* is_premium = [response.parsedResponse objectForKey:@"is_premium"];
 			NSString* default_site = [response.parsedResponse objectForKey:@"default_site"];
 			
 			RFAccount* a = [[RFAccount alloc] init];
