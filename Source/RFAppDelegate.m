@@ -448,6 +448,7 @@
 		[RFSettings removeObjectForKey:kAccountDefaultSite account:a];
 
 		[RFSettings removeObjectForKey:kHasSnippetsBlog account:a];
+		[RFSettings removeObjectForKey:kIsPremium account:a];
 
 		[RFSettings removeObjectForKey:kExternalBlogUsername account:a];
 		[RFSettings removeObjectForKey:kExternalBlogApp account:a];
