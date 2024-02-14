@@ -148,9 +148,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self.progressSpinner startAnimation:nil];
 
 	[self fetchNotebooksWithCompletion:^{
-		[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-			[self saveNotesToDisk];
-		}];
+		if (self.currentNotebook) {
+			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+				[self saveNotesToDisk];
+			}];
+		}
 	}];
 }
 
@@ -586,6 +588,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) startNewNoteNotification:(NSNotification *)notification
 {
+	if (self.currentNotebook == nil) {
+		return;
+	}
+	
 	MBNote* n = [[MBNote alloc] init];
 	n.text = @"";
 	n.notebookID = self.currentNotebook.notebookID;
