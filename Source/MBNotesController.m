@@ -59,19 +59,36 @@ static NSString* const kNotesSettingsType = @"Setting";
 	NSString* s = [SAMKeychain passwordForService:@"Micro.blog Notes" account:@""];
 	if (s) {
 		// use key in Keychain
-		self.secretKey = [s substringFromIndex:4];
+		if ([s containsString:@"mkey"]) {
+			self.secretKey = [s substringFromIndex:4];
+		}
+		else {
+			self.secretKey = s;
+		}
 	}
 	else {
 		// try to find key on iCloud
 		[self fetchKeyFromCloudWithCompletion:^(NSString* key) {
 			if (key == nil) {
 				// a bit hacky, prompt for new key
-				RFDispatchSeconds(0.5, ^{
+				RFDispatchSeconds(1.0, ^{
 					self.notesKeyController = [[MBNotesKeyController alloc] init];
 					[self.view.window beginSheet:self.notesKeyController.window completionHandler:^(NSModalResponse returnCode) {
 						self.notesKeyController = nil;
 					}];
 				});
+			}
+			else {
+				NSString* key_with_prefix = key;
+				if ([key containsString:@"mkey"]) {
+					self.secretKey = [key substringFromIndex:4];
+				}
+				else {
+					self.secretKey = key;
+					key_with_prefix = [@"mkey" stringByAppendingString:key];
+				}
+				[SAMKeychain setPassword:key_with_prefix forService:@"Micro.blog Notes" account:@""];
+				[self fetchNotes];
 			}
 		}];
 	}
@@ -350,7 +367,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) saveKeyToCloud
 {
-	if (![[NSUserDefaults standardUserDefaults] boolForKey:kSaveKeyToCloudPrefKey]) {
+	if ((self.secretKey == nil) || ![[NSUserDefaults standardUserDefaults] boolForKey:kSaveKeyToCloudPrefKey]) {
 		return;
 	}
 	
