@@ -692,6 +692,19 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (IBAction) startNewPost:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBNote* n = [self.currentNotes objectAtIndex:row];
+		
+		NSString* s = n.text;
+		
+		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", [s rf_urlEncoded]]];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
 - (IBAction) shareOrUnshare:(id)sender
 {
 	[self.progressSpinner startAnimation:nil];

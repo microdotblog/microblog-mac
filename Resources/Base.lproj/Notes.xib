@@ -202,6 +202,13 @@
         </customView>
         <menu id="qCE-k7-O17">
             <items>
+                <menuItem title="New Post..." id="gX5-vF-8Td">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="startNewPost:" target="-2" id="8GN-r1-SiG"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="SVD-Bs-fcY"/>
                 <menuItem title="Share" id="qMi-ma-aFq">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
