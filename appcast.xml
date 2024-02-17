@@ -19,7 +19,7 @@
  				<p>Changes in this version:</p>
  				<ul>
 					<li>Added an indicator in the notes list for shared notes.</li>
-					<li>Added a "New Post" right-click menu option for notes.</li>
+					<li>Added a "New Post" right-click menu option for notes, to copy the note text into a new blog post.</li>
 					<li>Fixed an issue with resetting the note text after searching.</li>
 					<li>Fixed showing the currently selected notebook in the notebooks menu.</li>
 				</ul>
