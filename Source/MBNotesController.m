@@ -581,6 +581,19 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (MBNote *) findNote:(MBNote *)note inArray:(NSArray *)array
+{
+	MBNote* result = nil;
+	
+	for (MBNote* n in array) {
+		if ([n.noteID isEqualToNumber:note.noteID]) {
+			return n;
+		}
+	}
+	
+	return result;
+}
+
 - (IBAction) currentNotebookChanged:(id)sender
 {
 	NSMenuItem* item = [sender selectedItem];
@@ -810,8 +823,20 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) textDidChange:(NSNotification *)notification
 {
 	if (self.selectedNote) {
+		// add to sync queue
 		self.selectedNote.text = [self.detailTextView string];
 		[self.editedNotes addObject:self.selectedNote];
+		
+		// also update the copy in the notes list
+		MBNote* n;
+		n = [self findNote:self.selectedNote inArray:self.currentNotes];
+		if (n) {
+			n.text = self.selectedNote.text;
+		}
+		n = [self findNote:self.selectedNote inArray:self.allNotes];
+		if (n) {
+			n.text = self.selectedNote.text;
+		}
 	}
 }
 

@@ -22,6 +22,8 @@
 	new_note.sharedURL = [self.sharedURL copyWithZone:zone];
 	new_note.isEncrypted = self.isEncrypted;
 	new_note.isShared = self.isShared;
+	new_note.isSharing = self.isSharing;
+	new_note.isUnsharing = self.isUnsharing;
 	new_note.createdAt = [self.createdAt copyWithZone:zone];
 	new_note.updatedAt = [self.updatedAt copyWithZone:zone];
 	
