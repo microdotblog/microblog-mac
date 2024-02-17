@@ -14,6 +14,15 @@
 
 - (void) setupWithNote:(MBNote *)note
 {
+	if (note.isShared) {
+		self.sharedView.hidden = NO;
+		self.sharedHeightConstraint.constant = 28;
+	}
+	else {
+		self.sharedView.hidden = YES;
+		self.sharedHeightConstraint.constant = 0;
+	}
+	
 	NSString* s = note.text;
 	if (s.length > 100) {
 		s = [s substringToIndex:100];

@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBNoteCell : NSTableRowView
 
 @property (strong, nonatomic) IBOutlet NSTextField* textView;
+@property (strong, nonatomic) IBOutlet NSView* sharedView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* sharedHeightConstraint;
 
 - (void) setupWithNote:(MBNote *)note;
 

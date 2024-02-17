@@ -49,7 +49,7 @@
                     </constraints>
                 </box>
                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
-                    <rect key="frame" x="116" y="566" width="16" height="16"/>
+                    <rect key="frame" x="114" y="566" width="16" height="16"/>
                 </progressIndicator>
                 <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8i-KT-xcK">
                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
@@ -165,7 +165,7 @@
                     </holdingPriorities>
                 </splitView>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Shg-8z-gSu">
-                    <rect key="frame" x="11" y="560" width="99" height="25"/>
+                    <rect key="frame" x="9" y="560" width="99" height="25"/>
                     <popUpButtonCell key="cell" type="push" title="Notebook" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="k0r-Sd-GWc" id="jKc-n8-hQz">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
@@ -194,7 +194,7 @@
                 <constraint firstItem="K8i-KT-xcK" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="XXT-o3-OpJ"/>
                 <constraint firstItem="XG2-RC-yYo" firstAttribute="leading" secondItem="Shg-8z-gSu" secondAttribute="trailing" constant="10" id="esM-Va-B3Q"/>
                 <constraint firstItem="Shg-8z-gSu" firstAttribute="centerY" secondItem="a7S-Gl-bR0" secondAttribute="centerY" id="gAH-Hv-hQT"/>
-                <constraint firstItem="Shg-8z-gSu" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="14" id="hSH-Ux-UQp"/>
+                <constraint firstItem="Shg-8z-gSu" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="hSH-Ux-UQp"/>
                 <constraint firstAttribute="trailing" secondItem="hLb-A7-1dk" secondAttribute="trailing" id="p2n-dL-qyb"/>
                 <constraint firstAttribute="trailing" secondItem="K8i-KT-xcK" secondAttribute="trailing" id="yeB-sf-Mh1"/>
             </constraints>
