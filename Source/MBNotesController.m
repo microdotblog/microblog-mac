@@ -214,6 +214,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 					item.tag = [nb.notebookID integerValue];
 					[self.notebooksPopup.menu addItem:item];
 				}
+				
+				// update selected menu item
+				if (self.currentNotebook) {
+					[self.notebooksPopup selectItemWithTag:[self.currentNotebook.notebookID integerValue]];
+				}
 
 				handler();
 			});
