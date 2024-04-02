@@ -22,8 +22,10 @@
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	
 	// line across the top
-	[path moveToPoint:NSMakePoint(r.origin.x, r.origin.y + r.size.height)];
-	[path lineToPoint:NSMakePoint(r.origin.x + r.size.width, r.origin.y + r.size.height)];
+	if (r.size.height > 1) {
+		[path moveToPoint:NSMakePoint(r.origin.x, r.origin.y + r.size.height)];
+		[path lineToPoint:NSMakePoint(r.origin.x + r.size.width, r.origin.y + r.size.height)];
+	}
 
 	// line across the bottom
 	[path moveToPoint:NSMakePoint(r.origin.x, r.origin.y)];
