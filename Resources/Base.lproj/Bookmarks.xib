@@ -25,13 +25,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box boxType="custom" borderType="none" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="afl-rL-umg" customClass="MBOutlineHeaderBox">
-                    <rect key="frame" x="0.0" y="487" width="454" height="40"/>
+                    <rect key="frame" x="0.0" y="483" width="454" height="44"/>
                     <view key="contentView" id="bBM-c5-6vi">
-                        <rect key="frame" x="0.0" y="0.0" width="454" height="40"/>
+                        <rect key="frame" x="0.0" y="0.0" width="454" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="12" y="5" width="244" height="30"/>
+                                <rect key="frame" x="12" y="5" width="244" height="34"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -41,7 +41,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="19n-45-pjW">
-                                <rect key="frame" x="386" y="6" width="57" height="25"/>
+                                <rect key="frame" x="386" y="8" width="57" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" id="XxI-f7-TCr">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -59,7 +59,7 @@
                                 </connections>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-LX-dfu">
-                                <rect key="frame" x="322" y="12" width="61" height="16"/>
+                                <rect key="frame" x="322" y="14" width="61" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="tag name" id="7BV-Sg-PE6">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -67,7 +67,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bv2-Qf-nrK">
-                                <rect key="frame" x="294" y="5" width="30" height="30"/>
+                                <rect key="frame" x="294" y="7" width="30" height="30"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="CloseNormal" imagePosition="overlaps" alignment="center" alternateImage="ClosePressed" imageScaling="proportionallyDown" inset="2" id="v3f-sx-Mby">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -95,13 +95,13 @@
                         </constraints>
                     </view>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="0Lk-f9-ac3"/>
+                        <constraint firstAttribute="height" constant="44" id="0Lk-f9-ac3"/>
                     </constraints>
                     <color key="borderColor" name="color_highlight_line"/>
                     <color key="fillColor" name="color_highlight_background"/>
                 </box>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
-                    <rect key="frame" x="0.0" y="0.0" width="454" height="487"/>
+                    <rect key="frame" x="0.0" y="0.0" width="454" height="483"/>
                 </customView>
             </subviews>
             <constraints>

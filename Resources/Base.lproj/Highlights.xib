@@ -23,13 +23,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
-                    <rect key="frame" x="0.0" y="0.0" width="500" height="503"/>
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="499"/>
                     <clipView key="contentView" drawsBackground="NO" id="Z2x-kS-S6r">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="503"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="499"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="60" usesAutomaticRowHeights="YES" viewBased="YES" id="N7o-iT-Tun" customClass="MBHighlightsTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="503"/>
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="499"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -87,13 +87,13 @@
                     </scroller>
                 </scrollView>
                 <box autoresizesSubviews="NO" boxType="custom" borderType="none" translatesAutoresizingMaskIntoConstraints="NO" id="iLe-1W-Cas" customClass="MBOutlineHeaderBox">
-                    <rect key="frame" x="0.0" y="503" width="500" height="40"/>
+                    <rect key="frame" x="0.0" y="499" width="500" height="44"/>
                     <view key="contentView" autoresizesSubviews="NO" id="rs8-VO-drM">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="40"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lws-QZ-DsH">
-                                <rect key="frame" x="5" y="5" width="30" height="30"/>
+                                <rect key="frame" x="5" y="7" width="30" height="30"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="BackNormal" imagePosition="only" alignment="center" alternateImage="BackPressed" imageScaling="proportionallyDown" inset="2" id="Y6U-kn-dJg">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -107,10 +107,10 @@
                                 </connections>
                             </button>
                             <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="qSq-cZ-guW">
-                                <rect key="frame" x="396" y="12" width="16" height="16"/>
+                                <rect key="frame" x="396" y="14" width="16" height="16"/>
                             </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="stB-hV-4dc">
-                                <rect key="frame" x="420" y="12" width="68" height="16"/>
+                                <rect key="frame" x="420" y="14" width="68" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Highlights" id="iTj-Au-auc">
                                     <font key="font" metaFont="systemMedium" size="13"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -128,7 +128,7 @@
                         </constraints>
                     </view>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="1Zr-8e-wi4"/>
+                        <constraint firstAttribute="height" constant="44" id="1Zr-8e-wi4"/>
                     </constraints>
                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                     <color key="fillColor" name="color_header_alt_background"/>
