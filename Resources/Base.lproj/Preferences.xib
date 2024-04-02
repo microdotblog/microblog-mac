@@ -253,7 +253,7 @@
                 </textField>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="cTl-7y-AGO">
                     <rect key="frame" x="40" y="279" width="352" height="26"/>
-                    <buttonCell key="cell" type="radio" title="Micro.blog hosted weblog" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="0eG-B0-pga">
+                    <buttonCell key="cell" type="radio" title="Micro.blog hosted blog" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="0eG-B0-pga">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -266,7 +266,7 @@
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="bf9-0q-YKa">
                     <rect key="frame" x="40" y="249" width="352" height="26"/>
-                    <buttonCell key="cell" type="radio" title="WordPress or compatible weblog" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cOV-0r-rYy">
+                    <buttonCell key="cell" type="radio" title="WordPress or compatible blog" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cOV-0r-rYy">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -283,7 +283,7 @@
                         <constraint firstAttribute="height" constant="24" id="QvC-H2-PBH"/>
                         <constraint firstAttribute="width" constant="91" id="nYp-uv-l9I"/>
                     </constraints>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="Web site URL:" id="ic8-im-Kc8">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="Blog URL:" id="ic8-im-Kc8">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -370,7 +370,7 @@
                     </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hqo-O7-Wox">
-                    <rect key="frame" x="14" y="122" width="95" height="24"/>
+                    <rect key="frame" x="14" y="119" width="95" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="91" id="72i-Df-vdC"/>
                         <constraint firstAttribute="height" constant="24" id="yXV-e0-kbR"/>
@@ -382,7 +382,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2AP-RA-v1x">
-                    <rect key="frame" x="112" y="123" width="260" height="26"/>
+                    <rect key="frame" x="112" y="120" width="260" height="26"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pBg-Bv-1VJ" id="Akz-U9-Jfl">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
@@ -577,7 +577,7 @@
                 <constraint firstItem="ScL-Yc-zjW" firstAttribute="top" secondItem="ThW-eM-XLA" secondAttribute="bottom" constant="100" id="OCL-dP-F6P"/>
                 <constraint firstAttribute="trailing" secondItem="vNv-qr-loI" secondAttribute="trailing" constant="15" id="OgN-9K-stp"/>
                 <constraint firstItem="7KU-A7-PmQ" firstAttribute="leading" secondItem="aU5-ED-gYs" secondAttribute="leading" constant="16" id="Oqo-Ao-N5s"/>
-                <constraint firstItem="hqo-O7-Wox" firstAttribute="top" secondItem="fgW-ep-2gy" secondAttribute="bottom" constant="14" id="Pfj-Wc-MgO"/>
+                <constraint firstItem="hqo-O7-Wox" firstAttribute="top" secondItem="fgW-ep-2gy" secondAttribute="bottom" constant="17" id="Pfj-Wc-MgO"/>
                 <constraint firstItem="4rz-Io-E7o" firstAttribute="top" secondItem="BFK-C6-Z1x" secondAttribute="bottom" constant="20" id="QYF-p5-E4C"/>
                 <constraint firstItem="cTl-7y-AGO" firstAttribute="leading" secondItem="aU5-ED-gYs" secondAttribute="leading" constant="42" id="VOS-aL-vhe"/>
                 <constraint firstItem="ScL-Yc-zjW" firstAttribute="leading" secondItem="aU5-ED-gYs" secondAttribute="leading" constant="20" id="YNt-tt-gDw"/>
@@ -600,7 +600,7 @@
                 <constraint firstItem="vNv-qr-loI" firstAttribute="top" secondItem="bf9-0q-YKa" secondAttribute="bottom" constant="23" id="qfb-dd-2Uc"/>
                 <constraint firstItem="7KU-A7-PmQ" firstAttribute="top" secondItem="wjX-Sh-cc9" secondAttribute="bottom" constant="31" id="rrc-uy-APe"/>
                 <constraint firstItem="eaN-LV-3cP" firstAttribute="centerX" secondItem="Uaa-gd-eFu" secondAttribute="centerX" id="sS6-Qq-YBP"/>
-                <constraint firstItem="2AP-RA-v1x" firstAttribute="top" secondItem="oEB-XA-wMC" secondAttribute="bottom" constant="17" id="yRb-Tc-xyS"/>
+                <constraint firstItem="2AP-RA-v1x" firstAttribute="top" secondItem="oEB-XA-wMC" secondAttribute="bottom" constant="20" id="yRb-Tc-xyS"/>
                 <constraint firstAttribute="trailing" secondItem="W83-Xx-rHt" secondAttribute="trailing" constant="41" id="z3m-fI-AE4"/>
             </constraints>
             <point key="canvasLocation" x="-45" y="60"/>
