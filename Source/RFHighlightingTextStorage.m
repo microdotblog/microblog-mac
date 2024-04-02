@@ -344,7 +344,7 @@
 - (void) processHeaders
 {
 	NSFont* header_font = [NSFont boldSystemFontOfSize:kDefaultFontSize];
-	NSColor* header_c = [NSColor blueColor];
+	NSColor* header_c = [NSColor colorNamed:@"color_syntax_headers"];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_header = NO;
 	
