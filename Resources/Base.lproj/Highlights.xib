@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -23,13 +23,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
-                    <rect key="frame" x="0.0" y="0.0" width="500" height="504"/>
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="503"/>
                     <clipView key="contentView" drawsBackground="NO" id="Z2x-kS-S6r">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="503"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="60" usesAutomaticRowHeights="YES" viewBased="YES" id="N7o-iT-Tun" customClass="MBHighlightsTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="503"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -86,28 +86,28 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
-                <box boxType="custom" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="iLe-1W-Cas">
-                    <rect key="frame" x="-1" y="504" width="502" height="40"/>
-                    <view key="contentView" id="rs8-VO-drM">
-                        <rect key="frame" x="1" y="1" width="500" height="38"/>
+                <box autoresizesSubviews="NO" boxType="custom" borderType="none" translatesAutoresizingMaskIntoConstraints="NO" id="iLe-1W-Cas" customClass="MBOutlineHeaderBox">
+                    <rect key="frame" x="0.0" y="503" width="500" height="40"/>
+                    <view key="contentView" autoresizesSubviews="NO" id="rs8-VO-drM">
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="40"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lws-QZ-DsH">
-                                <rect key="frame" x="5" y="4" width="30" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="gta-Qs-Eyo"/>
-                                    <constraint firstAttribute="height" constant="30" id="wK2-z9-TZo"/>
-                                </constraints>
+                                <rect key="frame" x="5" y="5" width="30" height="30"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="BackNormal" imagePosition="only" alignment="center" alternateImage="BackPressed" imageScaling="proportionallyDown" inset="2" id="Y6U-kn-dJg">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="gta-Qs-Eyo"/>
+                                    <constraint firstAttribute="height" constant="30" id="wK2-z9-TZo"/>
+                                </constraints>
                                 <connections>
                                     <action selector="back:" target="-2" id="tda-aA-au5"/>
                                 </connections>
                             </button>
                             <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="qSq-cZ-guW">
-                                <rect key="frame" x="464" y="11" width="16" height="16"/>
+                                <rect key="frame" x="464" y="12" width="16" height="16"/>
                             </progressIndicator>
                         </subviews>
                         <constraints>
@@ -128,10 +128,10 @@
                 <constraint firstAttribute="trailing" secondItem="JbW-2g-UKv" secondAttribute="trailing" id="AVr-BG-lJU"/>
                 <constraint firstItem="JbW-2g-UKv" firstAttribute="top" secondItem="iLe-1W-Cas" secondAttribute="bottom" id="D7I-gN-sCO"/>
                 <constraint firstAttribute="bottom" secondItem="JbW-2g-UKv" secondAttribute="bottom" id="F2s-d3-O4t"/>
-                <constraint firstAttribute="trailing" secondItem="iLe-1W-Cas" secondAttribute="trailing" constant="-1" id="GtE-nl-0cY"/>
-                <constraint firstItem="iLe-1W-Cas" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="-1" id="VkZ-o9-4Du"/>
+                <constraint firstAttribute="trailing" secondItem="iLe-1W-Cas" secondAttribute="trailing" id="GtE-nl-0cY"/>
+                <constraint firstItem="iLe-1W-Cas" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="VkZ-o9-4Du"/>
                 <constraint firstItem="JbW-2g-UKv" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="XPH-IL-lny"/>
-                <constraint firstItem="iLe-1W-Cas" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="-1" id="bU2-PG-VfI"/>
+                <constraint firstItem="iLe-1W-Cas" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="bU2-PG-VfI"/>
             </constraints>
             <point key="canvasLocation" x="63" y="156.5"/>
         </customView>
@@ -177,7 +177,7 @@
         <image name="BackNormal" width="20" height="20"/>
         <image name="BackPressed" width="20" height="20"/>
         <namedColor name="color_header_alt_background">
-            <color red="0.96100002527236938" green="0.96100002527236938" blue="0.96100002527236938" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

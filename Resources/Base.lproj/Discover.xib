@@ -4,6 +4,7 @@
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <plugIn identifier="com.apple.WebKitIBPlugin" version="22689"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,7 +32,7 @@
                         <nil key="identifier"/>
                     </webPreferences>
                 </webView>
-                <box boxType="custom" borderType="none" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
+                <box boxType="custom" borderType="none" borderWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
                     <rect key="frame" x="0.0" y="404" width="455" height="44"/>
                     <view key="contentView" id="MnU-VL-RXJ">
                         <rect key="frame" x="0.0" y="0.0" width="455" height="44"/>
@@ -102,6 +103,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="pjy-Ug-95j"/>
                     </constraints>
+                    <color key="fillColor" name="color_timeline_background"/>
                 </box>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Kvs-M2-DAj">
                     <rect key="frame" x="12" y="402" width="431" height="5"/>
@@ -124,7 +126,7 @@
             </constraints>
             <point key="canvasLocation" x="67.5" y="168"/>
         </customView>
-        <box boxType="custom" borderType="none" cornerRadius="4" id="DmJ-Dm-q9A" customClass="RFHeaderBox">
+        <box boxType="custom" borderType="none" borderWidth="0.0" cornerRadius="4" id="DmJ-Dm-q9A" customClass="RFHeaderBox">
             <rect key="frame" x="0.0" y="0.0" width="455" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <view key="contentView" id="gI9-UD-phC">
@@ -165,6 +167,7 @@
                     <constraint firstItem="4Z0-Zz-0Lx" firstAttribute="centerY" secondItem="gI9-UD-phC" secondAttribute="centerY" id="t33-9w-Kj9"/>
                 </constraints>
             </view>
+            <color key="fillColor" name="color_timeline_background"/>
             <point key="canvasLocation" x="68" y="485"/>
         </box>
     </objects>
@@ -172,5 +175,8 @@
         <image name="CloseNormal" width="20" height="20"/>
         <image name="ClosePressed" width="20" height="20"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
+        <namedColor name="color_timeline_background">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

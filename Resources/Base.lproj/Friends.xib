@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="15400"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="22689"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +21,7 @@
             <rect key="frame" x="0.0" y="0.0" width="340" height="448"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <box boxType="custom" borderType="none" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
+                <box boxType="custom" borderType="none" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="3gz-se-iln" customClass="RFHeaderBox">
                     <rect key="frame" x="0.0" y="404" width="340" height="44"/>
                     <view key="contentView" id="MnU-VL-RXJ">
                         <rect key="frame" x="0.0" y="0.0" width="340" height="44"/>
@@ -29,6 +30,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="pjy-Ug-95j"/>
                     </constraints>
+                    <color key="fillColor" name="color_timeline_background"/>
                 </box>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Kvs-M2-DAj">
                     <rect key="frame" x="12" y="402" width="316" height="5"/>
@@ -38,20 +40,20 @@
                 </box>
                 <webView translatesAutoresizingMaskIntoConstraints="NO" id="7LD-DW-RCG">
                     <rect key="frame" x="0.0" y="0.0" width="340" height="404"/>
-                    <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
+                    <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0" javaEnabled="NO">
                         <nil key="identifier"/>
                     </webPreferences>
                 </webView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y2P-ns-QQm">
                     <rect key="frame" x="9" y="413" width="43" height="27"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="43" id="nNG-ZT-Fb9"/>
-                        <constraint firstAttribute="height" constant="27" id="ylz-CH-Tf6"/>
-                    </constraints>
                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="BackNormal" imagePosition="left" alignment="center" alternateImage="BackPressed" imageScaling="proportionallyDown" inset="2" id="7iT-ug-o0Q">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="43" id="nNG-ZT-Fb9"/>
+                        <constraint firstAttribute="height" constant="27" id="ylz-CH-Tf6"/>
+                    </constraints>
                     <connections>
                         <action selector="back:" target="-2" id="dEg-qO-r0X"/>
                     </connections>
@@ -91,5 +93,8 @@
     <resources>
         <image name="BackNormal" width="20" height="20"/>
         <image name="BackPressed" width="20" height="20"/>
+        <namedColor name="color_timeline_background">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -14,12 +14,6 @@
 
 - (void) awakeFromNib
 {
-	if ([NSAppearance rf_isDarkMode]) {
-		self.fillColor = [NSColor colorNamed:@"color_timeline_background"];
-	}
-	else {
-		self.fillColor = [NSColor whiteColor];
-	}
 }
 
 @end

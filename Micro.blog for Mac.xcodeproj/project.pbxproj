@@ -139,6 +139,7 @@
 		4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7F0B011BAF4F73004553A6 /* WebKit.framework */; };
 		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
 		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
+		4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
 		4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDF1F867A3200906C86 /* UUDataCache.m */; };
 		4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD91F867A3200906C86 /* UUDate.m */; };
@@ -470,6 +471,8 @@
 		4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBackgroundView.m; path = Source/RFHeaderBackgroundView.m; sourceTree = "<group>"; };
 		4B7F0B071BAF5792004553A6 /* RFPostingBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFPostingBarView.h; path = Source/RFPostingBarView.h; sourceTree = "<group>"; };
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
+		4B88CFA72BBCB6AE0091BB19 /* MBOutlineHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBOutlineHeaderBox.h; path = Source/MBOutlineHeaderBox.h; sourceTree = "<group>"; };
+		4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBOutlineHeaderBox.m; path = Source/MBOutlineHeaderBox.m; sourceTree = "<group>"; };
 		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
 		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
 		4B8FBDD91F867A3200906C86 /* UUDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDate.m; path = Shared/UUToolbox/UUDate.m; sourceTree = "<group>"; };
@@ -968,6 +971,8 @@
 				4B390B322A4C72AA00CAACCD /* MBMessageBox.h */,
 				4B390B332A4C72AA00CAACCD /* MBMessageBox.m */,
 				4BEFA48421EFE799006B1691 /* RFHeaderBox.m */,
+				4B88CFA72BBCB6AE0091BB19 /* MBOutlineHeaderBox.h */,
+				4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
 				4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */,
@@ -1329,6 +1334,7 @@
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
+				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
