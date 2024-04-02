@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,10 +38,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jF2-Gm-goX">
-                                <rect key="frame" x="296" y="8" width="97" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="90" id="WyE-a4-cSr"/>
-                                </constraints>
+                                <rect key="frame" x="304" y="8" width="97" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="CAz-kQ-HDx" id="StW-Zo-t5F">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -53,12 +50,15 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="90" id="WyE-a4-cSr"/>
+                                </constraints>
                                 <connections>
                                     <action selector="selectTagmoji:" target="-2" id="SKi-sv-Mve"/>
                                 </connections>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9TN-w4-kgu">
-                                <rect key="frame" x="18" y="14" width="247" height="16"/>
+                                <rect key="frame" x="10" y="14" width="263" height="16"/>
                                 <textFieldCell key="cell" title="Some recent posts from the community." id="jK5-Il-Bsv">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -66,21 +66,21 @@
                                 </textFieldCell>
                             </textField>
                             <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="YZZ-qi-jtu">
-                                <rect key="frame" x="271" y="14" width="20" height="16"/>
+                                <rect key="frame" x="279" y="14" width="20" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="vc1-i2-9pZ"/>
                                 </constraints>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pur-8l-Dqb">
-                                <rect key="frame" x="392" y="5" width="50" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="36" id="Pil-pg-PG9"/>
-                                    <constraint firstAttribute="height" constant="20" id="xBP-8d-nNF"/>
-                                </constraints>
+                                <rect key="frame" x="400" y="5" width="50" height="32"/>
                                 <buttonCell key="cell" type="push" bezelStyle="rounded" image="magnifyingglass" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U2d-lp-6x4">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="36" id="Pil-pg-PG9"/>
+                                    <constraint firstAttribute="height" constant="20" id="xBP-8d-nNF"/>
+                                </constraints>
                                 <connections>
                                     <action selector="showSearch:" target="-2" id="HNc-rM-ZXA"/>
                                 </connections>
@@ -90,12 +90,12 @@
                             <constraint firstItem="jF2-Gm-goX" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="12" id="1wK-99-73L"/>
                             <constraint firstAttribute="bottom" secondItem="jF2-Gm-goX" secondAttribute="bottom" constant="12" id="7iP-70-NXu"/>
                             <constraint firstItem="YZZ-qi-jtu" firstAttribute="leading" secondItem="9TN-w4-kgu" secondAttribute="trailing" constant="8" symbolic="YES" id="DDJ-p3-nNh"/>
-                            <constraint firstItem="9TN-w4-kgu" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="20" symbolic="YES" id="Hro-EP-S1G"/>
+                            <constraint firstItem="9TN-w4-kgu" firstAttribute="leading" secondItem="MnU-VL-RXJ" secondAttribute="leading" constant="12" id="Hro-EP-S1G"/>
                             <constraint firstItem="9TN-w4-kgu" firstAttribute="centerY" secondItem="MnU-VL-RXJ" secondAttribute="centerY" id="VB0-90-dsv"/>
                             <constraint firstItem="pur-8l-Dqb" firstAttribute="leading" secondItem="jF2-Gm-goX" secondAttribute="trailing" constant="10" id="Zg6-zT-SAq"/>
                             <constraint firstItem="YZZ-qi-jtu" firstAttribute="centerY" secondItem="jF2-Gm-goX" secondAttribute="centerY" id="io8-b8-dWX"/>
                             <constraint firstItem="jF2-Gm-goX" firstAttribute="leading" secondItem="YZZ-qi-jtu" secondAttribute="trailing" constant="8" symbolic="YES" id="jWj-tx-Njc"/>
-                            <constraint firstAttribute="trailing" secondItem="pur-8l-Dqb" secondAttribute="trailing" constant="20" symbolic="YES" id="oHs-WO-0JR"/>
+                            <constraint firstAttribute="trailing" secondItem="pur-8l-Dqb" secondAttribute="trailing" constant="12" id="oHs-WO-0JR"/>
                             <constraint firstItem="pur-8l-Dqb" firstAttribute="top" secondItem="MnU-VL-RXJ" secondAttribute="top" constant="12" id="ui0-np-eBz"/>
                         </constraints>
                     </view>
@@ -144,14 +144,14 @@
                     </searchField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="4Z0-Zz-0Lx">
                         <rect key="frame" x="0.0" y="7" width="40" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="40" id="4E8-O6-yGu"/>
-                            <constraint firstAttribute="height" constant="30" id="zXR-89-Tc4"/>
-                        </constraints>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="CloseNormal" imagePosition="only" alignment="center" alternateImage="ClosePressed" inset="2" id="F5y-rK-aDw">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="4E8-O6-yGu"/>
+                            <constraint firstAttribute="height" constant="30" id="zXR-89-Tc4"/>
+                        </constraints>
                         <connections>
                             <action selector="hideSearch:" target="-2" id="IBz-DM-dur"/>
                         </connections>

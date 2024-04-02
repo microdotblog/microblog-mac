@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,7 +31,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="15" y="5" width="241" height="28"/>
+                                <rect key="frame" x="12" y="5" width="244" height="28"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -42,9 +42,6 @@
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="19n-45-pjW">
                                 <rect key="frame" x="386" y="5" width="57" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="E5N-Sh-sT3"/>
-                                </constraints>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" id="XxI-f7-TCr">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -54,6 +51,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="E5N-Sh-sT3"/>
+                                </constraints>
                                 <connections>
                                     <action selector="selectTag:" target="-2" id="l6r-mw-bB1"/>
                                 </connections>
@@ -68,14 +68,14 @@
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bv2-Qf-nrK">
                                 <rect key="frame" x="294" y="4" width="30" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Nz0-Ik-h1g"/>
-                                    <constraint firstAttribute="width" constant="30" id="eHV-D5-5Dy"/>
-                                </constraints>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="CloseNormal" imagePosition="overlaps" alignment="center" alternateImage="ClosePressed" imageScaling="proportionallyDown" inset="2" id="v3f-sx-Mby">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Nz0-Ik-h1g"/>
+                                    <constraint firstAttribute="width" constant="30" id="eHV-D5-5Dy"/>
+                                </constraints>
                                 <connections>
                                     <action selector="clearCurrentTag:" target="-2" id="8rD-xW-jHK"/>
                                 </connections>
@@ -84,7 +84,7 @@
                         <constraints>
                             <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="oyw-LX-dfu" secondAttribute="trailing" constant="8" symbolic="YES" id="JfF-Qu-ud1"/>
                             <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="15" id="KiJ-eQ-agP"/>
-                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="15" id="LIb-hE-eB9"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="12" id="LIb-hE-eB9"/>
                             <constraint firstItem="Bv2-Qf-nrK" firstAttribute="centerY" secondItem="oyw-LX-dfu" secondAttribute="centerY" id="M3H-Y7-ebv"/>
                             <constraint firstItem="Bv2-Qf-nrK" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="38" id="OQs-4M-7Pc"/>
                             <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="Pnf-vK-gmG"/>
