@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -65,15 +65,15 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d95-L8-OAI">
-                    <rect key="frame" x="8" y="2" width="36" height="32"/>
+                    <rect key="frame" x="8" y="-0.5" width="36.5" height="37.5"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="photo" catalog="system" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="cnQ-jt-XSF">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system" size="15"/>
+                    </buttonCell>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="IWs-s6-qMN"/>
                         <constraint firstAttribute="width" constant="36" id="Vmi-LC-xVv"/>
                     </constraints>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="camera_icon" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="cnQ-jt-XSF">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
                     <connections>
                         <action selector="choosePhoto:" target="-2" id="XS9-GS-Voh"/>
                     </connections>
@@ -189,6 +189,6 @@
         </customView>
     </objects>
     <resources>
-        <image name="camera_icon" width="16" height="16"/>
+        <image name="photo" catalog="system" width="18" height="14"/>
     </resources>
 </document>

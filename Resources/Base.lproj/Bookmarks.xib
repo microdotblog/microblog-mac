@@ -67,10 +67,10 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bv2-Qf-nrK">
-                                <rect key="frame" x="294" y="7" width="30" height="30"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="CloseNormal" imagePosition="overlaps" alignment="center" alternateImage="ClosePressed" imageScaling="proportionallyDown" inset="2" id="v3f-sx-Mby">
+                                <rect key="frame" x="294" y="3.5" width="30" height="36.5"/>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle.fill" catalog="system" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="v3f-sx-Mby">
                                     <behavior key="behavior" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="system" size="16"/>
                                 </buttonCell>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Nz0-Ik-h1g"/>
@@ -117,9 +117,8 @@
         </customView>
     </objects>
     <resources>
-        <image name="CloseNormal" width="20" height="20"/>
-        <image name="ClosePressed" width="20" height="20"/>
         <image name="tag" catalog="system" width="17" height="17"/>
+        <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="color_highlight_background">
             <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

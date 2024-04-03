@@ -145,10 +145,10 @@
                         </connections>
                     </searchField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="4Z0-Zz-0Lx">
-                        <rect key="frame" x="0.0" y="7" width="40" height="30"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="CloseNormal" imagePosition="only" alignment="center" alternateImage="ClosePressed" inset="2" id="F5y-rK-aDw">
+                        <rect key="frame" x="0.0" y="3.5" width="40" height="36.5"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="xmark.circle.fill" catalog="system" imagePosition="only" alignment="center" inset="2" id="F5y-rK-aDw">
                             <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="system" size="16"/>
                         </buttonCell>
                         <constraints>
                             <constraint firstAttribute="width" constant="40" id="4E8-O6-yGu"/>
@@ -172,9 +172,8 @@
         </box>
     </objects>
     <resources>
-        <image name="CloseNormal" width="20" height="20"/>
-        <image name="ClosePressed" width="20" height="20"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
+        <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="color_timeline_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
