@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -55,6 +55,13 @@
         </customView>
         <menu id="ILg-2w-hks">
             <items>
+                <menuItem title="Delete" id="5cy-R7-Exy">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="deleteSelectedPhoto:" target="na8-0v-oNY" id="1IL-4c-aKM"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="QEG-uN-E4D"/>
                 <menuItem title="Open in Browser" id="2cQ-VA-lrc">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>

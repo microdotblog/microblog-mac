@@ -67,10 +67,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupNotifications
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesNotification:) name:kUploadFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectPhotoCellNotification:) name:kSelectPhotoCellNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedPhotoNotification:) name:kDeleteSelectedPhotoNotification object:nil];
 }
 
 - (void) fetchPosts
@@ -222,11 +223,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		if ([cell.url isEqualToString:up.url]) {
 			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
 			NSSet* select_set = [NSSet setWithObject:index_path];
+			[self.self.collectionView deselectAll:nil];
 			[self.collectionView selectItemsAtIndexPaths:select_set scrollPosition:NSCollectionViewScrollPositionNone];
 			[self collectionView:self.collectionView didSelectItemsAtIndexPaths:select_set];
 			break;
 		}
 	}
+}
+
+- (void) deleteSelectedPhotoNotification:(NSNotification *)notification
+{
+	[self delete:nil];
 }
 
 #pragma mark -

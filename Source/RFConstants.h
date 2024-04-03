@@ -143,5 +143,6 @@ static NSString* const kNewNoteNotification = @"MBNewNoteNotification";
 static NSString* const kNotesKeyUpdatedNotification = @"MBNotesKeyUpdatedNotification";
 
 static NSString* const kShowLogsNotification = @"MBShowLogsNotification";
+static NSString* const kDeleteSelectedPhotoNotification = @"MBDeleteSelectedPhotoNotification";
 
 #define APPSTORE 1

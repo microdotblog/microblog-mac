@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -35,13 +35,13 @@
                             </box>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9">
                                 <rect key="frame" x="11" y="425" width="208" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="Pai-Fy-zI5"/>
-                                </constraints>
                                 <buttonCell key="cell" type="bevel" title="username.micro.blog" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Pai-Fy-zI5"/>
+                                </constraints>
                                 <connections>
                                     <action selector="blogNameClicked:" target="-2" id="7do-uH-82s"/>
                                 </connections>

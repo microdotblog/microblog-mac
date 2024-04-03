@@ -9,6 +9,7 @@
 #import "RFPhotoCell.h"
 
 #import "RFUpload.h"
+#import "RFConstants.h"
 
 @implementation RFPhotoCell
 
@@ -41,6 +42,11 @@
 - (void) disableMenu
 {
 	self.selectionOverlayView.menu = nil;
+}
+
+- (IBAction) deleteSelectedPhoto:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kDeleteSelectedPhotoNotification object:self];
 }
 
 - (IBAction) openInBrowser:(id)sender
