@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextField* authorField;
 @property (strong, nonatomic) IBOutlet NSButton* addButton;
+@property (strong, nonatomic) IBOutlet NSButton* optionsButton;
 
 @property (strong, nonatomic) MBBook* book;
 @property (strong, nonatomic) RFBookshelf* bookshelf;

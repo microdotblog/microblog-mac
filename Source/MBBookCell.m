@@ -60,12 +60,26 @@
 	NSRectFill (r);
 }
 
+- (void) setSelected:(BOOL)selected
+{
+	[super setSelected:selected];
+	
+	self.optionsButton.hidden = !selected;
+}
+
 - (IBAction) addBook:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kAddBookNotification object:self userInfo:@{
 		kAddBookKey: self.book,
 		kAddBookBookshelfKey: self.bookshelf
 	}];	
+}
+
+- (IBAction) showOptionsMenu:(id)sender
+{
+	NSTableView* table = (NSTableView *)[self superview];
+	NSMenu* menu = table.menu;
+	[menu popUpMenuPositioningItem:nil atLocation:[NSEvent mouseLocation] inView:nil];
 }
 
 @end

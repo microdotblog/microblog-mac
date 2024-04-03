@@ -38,4 +38,10 @@
 	}
 }
 
+- (BOOL) validateProposedFirstResponder:(NSResponder *)responder forEvent:(NSEvent *)event
+{
+	// allow clicks in buttons no matter the selection style
+	return YES;
+}
+
 @end
