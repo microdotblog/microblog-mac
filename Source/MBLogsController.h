@@ -13,8 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBLogsController : NSWindowController
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSSegmentedControl* segmentedControl;
 
-@property (strong, nonatomic) NSArray* logs;
+@property (assign, nonatomic) BOOL isShowingErrors;
+@property (strong, nonatomic) NSArray* allLogs; // MBLog
+@property (strong, nonatomic) NSArray* errorLogs; // MBLog
+@property (strong, nonatomic) NSTimer* refreshTimer;
 
 @end
 

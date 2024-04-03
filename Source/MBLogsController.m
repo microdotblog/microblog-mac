@@ -22,7 +22,8 @@
 {
 	self = [super initWithWindowNibName:@"Logs" owner:self];
 	if (self) {
-		self.logs = @[];
+		self.allLogs = @[];
+		self.errorLogs = @[];
 	}
 	
 	return self;
@@ -33,6 +34,7 @@
 	[super windowDidLoad];
 	
 	[self setupTable];
+	[self setupTimer];
 	
 	[self fetchLogs];
 }
@@ -42,42 +44,77 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"LogCell" bundle:nil] forIdentifier:@"LogCell"];
 }
 
+- (void) setupTimer
+{
+	[self.refreshTimer invalidate];
+	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
+		[self fetchLogs];
+	}];
+}
+
 - (void) fetchLogs
 {
+	[self.progressSpinner startAnimation:nil];
+	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/users/logs"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([[response parsedResponse] isKindOfClass:[NSArray class]]) {
 			NSMutableArray* new_logs = [NSMutableArray array];
+			NSMutableArray* new_errors = [NSMutableArray array];
 			for (NSDictionary* info in [response parsedResponse]) {
 				MBLog* log = [[MBLog alloc] init];
 				NSString* date_s = [info objectForKey:@"date"];
 				log.date = [NSDate uuDateFromRfc3339String:date_s];
 				log.message = [info objectForKey:@"message"];
 				[new_logs addObject:log];
+				if ([[info objectForKey:@"is_error"] boolValue]) {
+					[new_errors addObject:log];
+				}
 			}
 				
 			RFDispatchMain(^{
-				self.logs = new_logs;
+				self.allLogs = new_logs;
+				self.errorLogs = new_errors;
 				[self.tableView reloadData];
+				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
 }
 
+- (IBAction) segmentChanged:(NSSegmentedControl *)sender
+{
+	self.isShowingErrors = (sender.selectedSegment == 1);
+	[self.tableView reloadData];
+}
+	
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return self.logs.count;
+	if (self.isShowingErrors) {
+		return self.errorLogs.count;
+	}
+	else {
+		return self.allLogs.count;
+	}
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	MBLogCell* cell = [tableView makeViewWithIdentifier:@"LogCell" owner:self];
 
-	if (row < self.logs.count) {
-		MBLog* log = [self.logs objectAtIndex:row];
-		[cell setupWithLog:log];
+	if (self.isShowingErrors) {
+		if (row < self.errorLogs.count) {
+			MBLog* log = [self.errorLogs objectAtIndex:row];
+			[cell setupWithLog:log];
+		}
+	}
+	else {
+		if (row < self.allLogs.count) {
+			MBLog* log = [self.allLogs objectAtIndex:row];
+			[cell setupWithLog:log];
+		}
 	}
 
 	return cell;

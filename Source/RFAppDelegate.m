@@ -188,7 +188,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAllTagsNotification:) name:kShowTagsNotification object:nil];	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAllTagsNotification:) name:kShowTagsNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogsNotification:) name:kShowLogsNotification object:nil];
 }
 
 - (void) setupAppearance
@@ -534,6 +535,11 @@
 - (void) showAllTagsNotification:(NSNotification *)notification
 {
 	[self showAllTags:nil];
+}
+
+- (void) showLogsNotification:(NSNotification *)notification
+{
+	[self showLogs];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification

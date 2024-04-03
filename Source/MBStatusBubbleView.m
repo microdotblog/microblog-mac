@@ -8,6 +8,8 @@
 
 #import "MBStatusBubbleView.h"
 
+#import "RFConstants.h"
+
 @implementation MBStatusBubbleView
 
 - (void) awakeFromNib
@@ -63,8 +65,7 @@
 {
 	// only allow clicks if the parent isn't dimmed or hidden
 	if (self.superview.alphaValue == 1.0) {
-		NSURL* url = [NSURL URLWithString:@"https://micro.blog/account/logs"];
-		[[NSWorkspace sharedWorkspace] openURL:url];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kShowLogsNotification object:self];
 	}
 }
 
