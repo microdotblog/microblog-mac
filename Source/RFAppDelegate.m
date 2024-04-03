@@ -62,7 +62,9 @@
 
 - (BOOL) applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
 {
-	[self showMainWindow:nil];
+	if (self.postWindows.count == 0) {
+		[self showMainWindow:nil];
+	}
 	return YES;
 }
 
