@@ -88,10 +88,10 @@
                                 </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eb7-qH-QCf">
-                                <rect key="frame" x="230" y="114" width="24" height="21"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="dots_normal" imagePosition="only" alignment="center" alternateImage="dots_pressed" imageScaling="proportionallyDown" inset="2" id="7yf-CV-wHF">
+                                <rect key="frame" x="230" y="110.5" width="24" height="27.5"/>
+                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ellipsis.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="7yf-CV-wHF">
                                     <behavior key="behavior" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="system" size="16"/>
                                 </buttonCell>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="9kN-wZ-AnH"/>
@@ -189,8 +189,7 @@
     </objects>
     <resources>
         <image name="chevron.left.circle.fill" catalog="system" width="15" height="15"/>
-        <image name="dots_normal" width="20" height="20"/>
-        <image name="dots_pressed" width="20" height="20"/>
+        <image name="ellipsis.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="color_timeline_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
