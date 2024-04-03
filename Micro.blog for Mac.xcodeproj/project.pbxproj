@@ -140,6 +140,11 @@
 		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
 		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
 		4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */; };
+		4B88CFAF2BBD92950091BB19 /* Logs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFAD2BBD92950091BB19 /* Logs.xib */; };
+		4B88CFB22BBD92DA0091BB19 /* MBLogsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */; };
+		4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB42BBD95360091BB19 /* MBLogCell.m */; };
+		4B88CFB82BBD954A0091BB19 /* LogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFB62BBD954A0091BB19 /* LogCell.xib */; };
+		4B88CFBB2BBD9D3B0091BB19 /* MBLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
 		4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDF1F867A3200906C86 /* UUDataCache.m */; };
 		4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD91F867A3200906C86 /* UUDate.m */; };
@@ -473,6 +478,14 @@
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
 		4B88CFA72BBCB6AE0091BB19 /* MBOutlineHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBOutlineHeaderBox.h; path = Source/MBOutlineHeaderBox.h; sourceTree = "<group>"; };
 		4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBOutlineHeaderBox.m; path = Source/MBOutlineHeaderBox.m; sourceTree = "<group>"; };
+		4B88CFAE2BBD92950091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Logs.xib; sourceTree = "<group>"; };
+		4B88CFB02BBD92DA0091BB19 /* MBLogsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLogsController.h; path = Source/MBLogsController.h; sourceTree = "<group>"; };
+		4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLogsController.m; path = Source/MBLogsController.m; sourceTree = "<group>"; };
+		4B88CFB32BBD95360091BB19 /* MBLogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLogCell.h; path = Source/MBLogCell.h; sourceTree = "<group>"; };
+		4B88CFB42BBD95360091BB19 /* MBLogCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLogCell.m; path = Source/MBLogCell.m; sourceTree = "<group>"; };
+		4B88CFB72BBD954A0091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/LogCell.xib; sourceTree = "<group>"; };
+		4B88CFB92BBD9D3B0091BB19 /* MBLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLog.h; path = Source/MBLog.h; sourceTree = "<group>"; };
+		4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLog.m; path = Source/MBLog.m; sourceTree = "<group>"; };
 		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
 		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
 		4B8FBDD91F867A3200906C86 /* UUDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDate.m; path = Shared/UUToolbox/UUDate.m; sourceTree = "<group>"; };
@@ -1017,6 +1030,12 @@
 				4BB990602A857A8200C490E2 /* MBAllTagsController.m */,
 				4B001CE62B27AE2000BBF456 /* MBNotesKeyController.h */,
 				4B001CE72B27AE2000BBF456 /* MBNotesKeyController.m */,
+				4B88CFB02BBD92DA0091BB19 /* MBLogsController.h */,
+				4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */,
+				4B88CFB32BBD95360091BB19 /* MBLogCell.h */,
+				4B88CFB42BBD95360091BB19 /* MBLogCell.m */,
+				4B88CFB92BBD9D3B0091BB19 /* MBLog.h */,
+				4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1077,6 +1096,8 @@
 				4B001CE02B27962800BBF456 /* NoteCell.xib */,
 				4B001CDD2B2795F800BBF456 /* Notes.xib */,
 				4B001CE32B27AB1B00BBF456 /* NotesKeyWindow.xib */,
+				4B88CFAD2BBD92950091BB19 /* Logs.xib */,
+				4B88CFB62BBD954A0091BB19 /* LogCell.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1213,6 +1234,8 @@
 			files = (
 				4B2CAB2C1F912E4900D9B10E /* Conversation.xib in Resources */,
 				4BE23F8C2A7008C800E24718 /* Highlights.xib in Resources */,
+				4B88CFB82BBD954A0091BB19 /* LogCell.xib in Resources */,
+				4B88CFAF2BBD92950091BB19 /* Logs.xib in Resources */,
 				4B5EE28C206405AC00C87A78 /* AccountCell.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
 				4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */,
@@ -1300,6 +1323,7 @@
 				4B2CAB141F90667300D9B10E /* utf8.c in Sources */,
 				4BF7E50A2834374F00500C59 /* RFRepliesController.m in Sources */,
 				4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */,
+				4B88CFB22BBD92DA0091BB19 /* MBLogsController.m in Sources */,
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
 				4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */,
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,
@@ -1314,6 +1338,7 @@
 				4B2CAB371F91C04200D9B10E /* RFUserController.m in Sources */,
 				4B2A47C222579C58003AF2EC /* SDAVAssetExportSession.m in Sources */,
 				4B2CAAC41F90652800D9B10E /* RFXMLRPCRequest.m in Sources */,
+				4B88CFBB2BBD9D3B0091BB19 /* MBLog.m in Sources */,
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
@@ -1442,6 +1467,7 @@
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
+				4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
 				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
 				4BB9906A2A8694C900C490E2 /* MBTagsTableView.m in Sources */,
@@ -1662,6 +1688,22 @@
 				4B7F0AF61BAF4C37004553A6 /* Base */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		4B88CFAD2BBD92950091BB19 /* Logs.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B88CFAE2BBD92950091BB19 /* Base */,
+			);
+			name = Logs.xib;
+			sourceTree = "<group>";
+		};
+		4B88CFB62BBD954A0091BB19 /* LogCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B88CFB72BBD954A0091BB19 /* Base */,
+			);
+			name = LogCell.xib;
 			sourceTree = "<group>";
 		};
 		4B9F063E2767BC400007F21D /* Date.xib */ = {

@@ -25,6 +25,7 @@
 #import "MBPreviewController.h"
 #import "MBEditTagsController.h"
 #import "MBAllTagsController.h"
+#import "MBLogsController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -503,6 +504,11 @@
 	[self showAllTags];
 }
 
+- (IBAction) showLogs:(id)sender
+{
+	[self showLogs];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -749,6 +755,14 @@
 		self.allTagsController = [[MBAllTagsController alloc] init];
 	}
 	[self.allTagsController showWindow:nil];
+}
+
+- (void) showLogs
+{
+	if (self.logsController == nil) {
+		self.logsController = [[MBLogsController alloc] init];
+	}
+	[self.logsController showWindow:nil];
 }
 
 @end

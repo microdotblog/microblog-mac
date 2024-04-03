@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -548,6 +548,11 @@ CA
                             <menuItem title="Tags" keyEquivalent="T" id="RkD-fd-sCR">
                                 <connections>
                                     <action selector="showAllTags:" target="Voe-Tx-rLC" id="dzg-X9-5Qe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Logs" keyEquivalent="L" id="TI6-7r-cwf">
+                                <connections>
+                                    <action selector="showLogs:" target="Voe-Tx-rLC" id="CO6-aF-tDj"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
