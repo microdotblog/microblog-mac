@@ -58,6 +58,7 @@ NSString * const kUUDayOfMonthSuffixNthKey              = @"UUDayOfMonthSuffixNt
 // Common Date Formats
 NSString * const kUURFC3339DateTimeFormatter			= @"yyyy-MM-dd'T'HH:mm:ssZZ";
 NSString * const kUURFC3339DateTimeAlternateFormatter	= @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z";
+NSString * const kUURFC3339DateTimeAltMillisecondsFormatter = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
 NSString * const kUUISO8601DateFormatter				= @"yyyy-MM-dd";
 NSString * const kUUISO8601TimeFormatter				= @"HH:mm:ss";
 NSString * const kUUISO8601DateTimeFormatter			= @"yyyy-MM-dd HH:mm:ss";
@@ -437,8 +438,12 @@ const double kUUSecondsPerDay = (60 * 60 * 24);
 + (NSDate*) uuDateFromRfc3339String:(NSString*)string
 {
 	NSDate* date = [self uuDateFromString:string withFormat:kUURFC3339DateTimeFormatter timeZone:theDefaultTimeZone];
-	if (!date)
+	if (!date) {
 		date = [self uuDateFromString:string withFormat:kUURFC3339DateTimeAlternateFormatter timeZone:theDefaultTimeZone];
+		if (!date) {
+			date = [self uuDateFromString:string withFormat:kUURFC3339DateTimeAltMillisecondsFormatter timeZone:theDefaultTimeZone];
+		}
+	}
 	
 	return date;
 }
