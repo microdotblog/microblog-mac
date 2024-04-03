@@ -148,10 +148,10 @@
                     </webPreferences>
                 </webView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y2P-ns-QQm">
-                    <rect key="frame" x="9" y="413" width="43" height="27"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="BackNormal" imagePosition="left" alignment="center" alternateImage="BackPressed" imageScaling="proportionallyDown" inset="2" id="7iT-ug-o0Q">
+                    <rect key="frame" x="9" y="409.5" width="43" height="33.5"/>
+                    <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="chevron.left.circle.fill" catalog="system" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="7iT-ug-o0Q">
                         <behavior key="behavior" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="system" size="16"/>
                     </buttonCell>
                     <constraints>
                         <constraint firstAttribute="height" constant="27" id="IsS-Ep-H3f"/>
@@ -188,8 +188,7 @@
         </customView>
     </objects>
     <resources>
-        <image name="BackNormal" width="20" height="20"/>
-        <image name="BackPressed" width="20" height="20"/>
+        <image name="chevron.left.circle.fill" catalog="system" width="15" height="15"/>
         <image name="dots_normal" width="20" height="20"/>
         <image name="dots_pressed" width="20" height="20"/>
         <namedColor name="color_timeline_background">

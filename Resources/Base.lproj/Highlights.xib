@@ -93,10 +93,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lws-QZ-DsH">
-                                <rect key="frame" x="5" y="7" width="30" height="30"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="BackNormal" imagePosition="only" alignment="center" alternateImage="BackPressed" imageScaling="proportionallyDown" inset="2" id="Y6U-kn-dJg">
+                                <rect key="frame" x="5" y="3.5" width="30" height="36.5"/>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="chevron.left.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Y6U-kn-dJg">
                                     <behavior key="behavior" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="system" size="16"/>
                                 </buttonCell>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="gta-Qs-Eyo"/>
@@ -184,8 +184,7 @@
         </menu>
     </objects>
     <resources>
-        <image name="BackNormal" width="20" height="20"/>
-        <image name="BackPressed" width="20" height="20"/>
+        <image name="chevron.left.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="color_header_alt_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
