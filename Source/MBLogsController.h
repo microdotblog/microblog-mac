@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* errorLogs; // MBLog
 @property (strong, nonatomic) NSTimer* refreshTimer;
 
+- (void) refresh;
+
 @end
 
 NS_ASSUME_NONNULL_END

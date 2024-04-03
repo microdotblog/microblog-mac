@@ -35,6 +35,7 @@
 	
 	[self setupTable];
 	[self setupTimer];
+	[self setupNotifications];
 	
 	[self fetchLogs];
 }
@@ -50,6 +51,17 @@
 	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
 		[self fetchLogs];
 	}];
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:self.window];
+}
+
+- (void) refresh
+{
+	[self setupTimer];
+	[self fetchLogs];
 }
 
 - (void) fetchLogs
@@ -87,7 +99,12 @@
 	self.isShowingErrors = (sender.selectedSegment == 1);
 	[self.tableView reloadData];
 }
-	
+
+- (void) windowWillClose:(NSNotification *)notification
+{
+	[self.refreshTimer invalidate];
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView

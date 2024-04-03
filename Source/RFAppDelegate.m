@@ -767,8 +767,12 @@
 {
 	if (self.logsController == nil) {
 		self.logsController = [[MBLogsController alloc] init];
+		[self.logsController showWindow:nil];
 	}
-	[self.logsController showWindow:nil];
+	else {
+		[self.logsController showWindow:nil];
+		[self.logsController refresh];
+	}
 }
 
 @end
