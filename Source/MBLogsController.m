@@ -83,15 +83,64 @@
 					[new_errors addObject:log];
 				}
 			}
-				
+			
 			RFDispatchMain(^{
 				self.allLogs = new_logs;
 				self.errorLogs = new_errors;
-				[self.tableView reloadData];
+				
+				[self fetchErrors];
+			});
+		}
+	}];
+}
+
+- (void) fetchErrors
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/users/logs/errors"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([[response parsedResponse] isKindOfClass:[NSArray class]]) {
+			NSMutableArray* new_errors = [NSMutableArray array];
+			for (NSDictionary* info in [response parsedResponse]) {
+				MBLog* log = [[MBLog alloc] init];
+				NSString* date_s = [info objectForKey:@"date"];
+				log.date = [NSDate uuDateFromRfc3339String:date_s];
+				log.message = [info objectForKey:@"message"];
+				[new_errors addObject:log];
+			}
+				
+			RFDispatchMain(^{
+				self.errorLogs = new_errors;
+				if ([self checkNeedingReload]) {
+					[self reloadRestoringSelection];
+				}
 				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
+}
+
+- (BOOL) checkNeedingReload
+{
+	MBLog* new_latest = [self.allLogs firstObject];
+
+	if (self.latestDate != nil) {
+		if (new_latest && [new_latest.date isEqualTo:self.latestDate]) {
+			return NO;
+		}
+	}
+	
+	if (new_latest) {
+		self.latestDate = new_latest.date;
+	}
+	
+	return YES;
+}
+
+- (void) reloadRestoringSelection
+{
+	NSIndexSet* index_set = [self.tableView selectedRowIndexes];
+	[self.tableView reloadData];
+	[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
 }
 
 - (IBAction) segmentChanged:(NSSegmentedControl *)sender

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) BOOL isShowingErrors;
 @property (strong, nonatomic) NSArray* allLogs; // MBLog
 @property (strong, nonatomic) NSArray* errorLogs; // MBLog
+@property (strong, nonatomic, nullable) NSDate* latestDate;
 @property (strong, nonatomic) NSTimer* refreshTimer;
 
 - (void) refresh;
