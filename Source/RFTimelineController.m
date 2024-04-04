@@ -690,6 +690,14 @@ static NSInteger const kSelectionNotes = 11;
 	}];
 }
 
+- (IBAction) goToProfile:(id)sender
+{
+	RFAccount* a = [RFSettings defaultAccount];
+	if (a) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kShowUserProfileNotification object:self userInfo:@{ kShowUserProfileUsernameKey: a.username }];
+	}
+}
+
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
 	if (item.action == @selector(performFindPanelAction:)) {
@@ -727,6 +735,13 @@ static NSInteger const kSelectionNotes = 11;
 	else if (item.action == @selector(reply:)) {
 		if (self.selectedPostID.length == 0) {
 			return NO;
+		}
+	}
+	else if (item.action == @selector(goToProfile:)) {
+		RFAccount* a = [RFSettings defaultAccount];
+		if (a) {
+			NSString* s = [NSString stringWithFormat:@"Go to @%@", a.username];
+			[item setTitle:s];
 		}
 	}
 
