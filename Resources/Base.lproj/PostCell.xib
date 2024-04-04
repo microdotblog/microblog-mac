@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SHu-UC-LXk">
-                    <rect key="frame" x="8" y="138" width="214" height="19"/>
+                    <rect key="frame" x="10" y="138" width="212" height="19"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Title" id="fuH-m6-LAJ">
                         <font key="font" metaFont="systemMedium" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -23,7 +23,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="cqh-qn-4tc">
-                    <rect key="frame" x="8" y="116" width="239" height="19"/>
+                    <rect key="frame" x="10" y="116" width="237" height="19"/>
                     <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="JGb-iT-Ibo">
                         <font key="font" metaFont="system" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -86,11 +86,11 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="qsJ-3v-yGf" secondAttribute="bottom" constant="10" id="5Xv-DY-qm2"/>
                 <constraint firstItem="SHu-UC-LXk" firstAttribute="top" secondItem="c6c-8Z-vh5" secondAttribute="top" constant="10" id="AeT-xz-iWl"/>
-                <constraint firstItem="cqh-qn-4tc" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="10" id="Fxg-s3-Lav"/>
+                <constraint firstItem="cqh-qn-4tc" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="12" id="Fxg-s3-Lav"/>
                 <constraint firstItem="qsJ-3v-yGf" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="10" id="LG4-cs-qCv"/>
                 <constraint firstAttribute="trailing" secondItem="XNp-zY-KaG" secondAttribute="trailing" constant="10" id="MM1-v2-oFq"/>
                 <constraint firstAttribute="trailing" secondItem="b3L-Cl-lup" secondAttribute="trailing" constant="9" id="PRR-XB-3b4"/>
-                <constraint firstItem="SHu-UC-LXk" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="10" id="PrR-DA-bg6"/>
+                <constraint firstItem="SHu-UC-LXk" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="12" id="PrR-DA-bg6"/>
                 <constraint firstItem="XNp-zY-KaG" firstAttribute="top" secondItem="cqh-qn-4tc" secondAttribute="bottom" constant="5" id="dAf-EY-cw2"/>
                 <constraint firstItem="XNp-zY-KaG" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="10" id="eas-Nn-sbQ"/>
                 <constraint firstAttribute="trailing" secondItem="cqh-qn-4tc" secondAttribute="trailing" constant="20" id="fWe-xJ-v5o"/>
