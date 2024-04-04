@@ -474,6 +474,11 @@ CA
                                     <action selector="goToUser:" target="-1" id="Zc3-JZ-2CZ"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Back" keyEquivalent="[" id="soE-zd-9Ig">
+                                <connections>
+                                    <action selector="back:" target="-1" id="zft-4A-Abc"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="EhK-8W-xZb"/>
                             <menuItem title="Title Field" id="yuR-L8-Vdb">
                                 <modifierMask key="keyEquivalentModifierMask"/>

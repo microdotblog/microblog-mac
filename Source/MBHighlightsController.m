@@ -108,6 +108,8 @@
 	}];
 }
 
+#pragma mark -
+
 - (IBAction) back:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
@@ -209,6 +211,7 @@
 			[item setTitle:@"New Post"];
 		}
 	}
+
 
 	return YES;
 }

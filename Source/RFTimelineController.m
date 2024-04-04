@@ -861,6 +861,9 @@ static NSInteger const kSelectionNotes = 11;
 		// after animating, temporary pin to right
 		self.navigationRightConstraint.active = NO;
 		self.navigationPinnedConstraint.active = YES;
+		
+		// focus new controller
+		[self.window makeFirstResponder:controller];
 	}];
 }
 
