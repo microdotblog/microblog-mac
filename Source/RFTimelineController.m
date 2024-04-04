@@ -1393,152 +1393,102 @@ static NSInteger const kSelectionNotes = 11;
 	
 	if (sidebar_row == kSelectionTimeline) {
 		cell.titleField.stringValue = @"Timeline";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_timeline"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
 	else if (sidebar_row == kSelectionMentions) {
 		cell.titleField.stringValue = @"Mentions";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"at" accessibilityDescription:@"Mentions"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_mentions"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
 	else if (sidebar_row == kSelectionFavorites) {
 		cell.titleField.stringValue = @"Bookmarks";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"star" accessibilityDescription:@"Bookmarks"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_bookmarks"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
 	else if (sidebar_row == kSelectionDiscover) {
 		cell.titleField.stringValue = @"Discover";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"magnifyingglass" accessibilityDescription:@"Discover"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_discover"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
     else if (sidebar_row == kSelectionPosts) {
         cell.titleField.stringValue = @"Posts";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"doc" accessibilityDescription:@"Posts"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_posts"];
+			cell.iconView.alphaValue = 0.5;
 		}
     }
     else if (sidebar_row == kSelectionPages) {
         cell.titleField.stringValue = @"Pages";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"rectangle.stack" accessibilityDescription:@"Pages"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+			cell.iconView.alphaValue = 0.5;
 		}
     }
     else if (sidebar_row == kSelectionUploads) {
         cell.titleField.stringValue = @"Uploads";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"photo.on.rectangle" accessibilityDescription:@"Uploads"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_uploads"];
+			cell.iconView.alphaValue = 0.5;
 		}
     }
 	else if (sidebar_row == kSelectionReplies) {
 		cell.titleField.stringValue = @"Replies";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left" accessibilityDescription:@"Replies"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left" accessibilityDescription:@"Replies"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
 	else if (sidebar_row == kSelectionBookshelves) {
 		cell.titleField.stringValue = @"Bookshelves";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"books.vertical" accessibilityDescription:@"Bookshelves"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"books.vertical" accessibilityDescription:@"Bookshelves"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
 	else if (sidebar_row == kSelectionNotes) {
 		cell.titleField.stringValue = @"Notes";
-		if (@available(macOS 11.0, *)) {
-			cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"note" accessibilityDescription:@"Notes"];
-			if (self.window.isKeyWindow) {
-				cell.iconView.alphaValue = 1.0;
-			}
-			else {
-				cell.iconView.alphaValue = 0.5;
-			}
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"note" accessibilityDescription:@"Notes"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
 		}
 		else {
-			cell.iconView.image = [NSImage imageNamed:@"sidebar_pages"];
+			cell.iconView.alphaValue = 0.5;
 		}
 	}
 
