@@ -923,8 +923,8 @@ static NSInteger const kSelectionNotes = 11;
 			self.navigationRightConstraint = self.overlayRightConstraint;
 		}
 		else {
-			self.navigationLeftConstraint = self.timelineLeftConstraint;
-			self.navigationRightConstraint = self.timelineRightConstraint;
+//			self.navigationLeftConstraint = self.timelineLeftConstraint;
+//			self.navigationRightConstraint = self.timelineRightConstraint;
 		}
 		self.navigationLeftConstraint.constant = 0;
 		self.navigationRightConstraint.constant = 0;
@@ -941,12 +941,12 @@ static NSInteger const kSelectionNotes = 11;
 	NSView* last_view = [self currentContainerView];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[[self.webView superview] addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
+	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
 	
-	[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		context.duration = 0.3;
 		context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 		self.navigationLeftConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
@@ -975,11 +975,12 @@ static NSInteger const kSelectionNotes = 11;
 		self.navigationRightConstraint.active = YES;
 		self.navigationPinnedConstraint.active = NO;
 
-		[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 			context.duration = 0.3;
 			context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+
 			self.navigationLeftConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
-			self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
+			self.navigationRightConstraint.animator.constant = [self.navigationStack count] * (-self.containerView.bounds.size.width);
 		} completionHandler:^{
 			[controller.view removeFromSuperview];
 
@@ -1066,7 +1067,7 @@ static NSInteger const kSelectionNotes = 11;
 	self.rootController.view.alphaValue = 0.0;
 	
 	self.rootController.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[[self.webView superview] addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.webView];
+	[self.containerView addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.rootController.view.animator.alphaValue = 1.0;
 	[self addResizeConstraintsToOverlay:self.rootController.view containerView:self.containerView];
