@@ -43,7 +43,7 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
-@property (strong, nonatomic) NSViewController* allPostsController;
+@property (strong, nonatomic) NSViewController* rootController;
 @property (strong, nonatomic) RFDiscoverController* discoverController;
 @property (assign, nonatomic) RFSelectedTimelineType selectedTimeline;
 @property (strong, nonatomic) RFStack* navigationStack;

@@ -135,8 +135,8 @@ static NSInteger const kSelectionNotes = 11;
 {
 	self.messageTopConstraint.constant = -35;
 	
-	[self setupWebDelegates:self.webView];
-	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
+//	[self setupWebDelegates:self.webView];
+//	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self showTimeline:nil];
 }
 
@@ -502,12 +502,7 @@ static NSInteger const kSelectionNotes = 11;
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
-	[self showAllPostsController:controller];
-
-//	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-//	[[self.webView mainFrame] loadRequest:request];
-//	self.webView.hidden = NO;
-//	[self showTimelineController:self];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionTimeline];
 	[self startLoadingSidebarRow:kSelectionTimeline];
@@ -524,7 +519,7 @@ static NSInteger const kSelectionNotes = 11;
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionMentions];
 	[self startLoadingSidebarRow:kSelectionMentions];
@@ -539,7 +534,7 @@ static NSInteger const kSelectionNotes = 11;
 	MBBookmarksController* controller = [[MBBookmarksController alloc] init];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionFavorites];
 	[self startLoadingSidebarRow:kSelectionFavorites];
@@ -554,7 +549,7 @@ static NSInteger const kSelectionNotes = 11;
 	RFDiscoverController* controller = [[RFDiscoverController alloc] init];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionDiscover];
 	[self startLoadingSidebarRow:kSelectionDiscover];
@@ -567,7 +562,7 @@ static NSInteger const kSelectionNotes = 11;
 	[self closeOverlays];
 
 	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:NO];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionPosts];
 	[self startLoadingSidebarRow:kSelectionPosts];
@@ -580,7 +575,7 @@ static NSInteger const kSelectionNotes = 11;
 	[self closeOverlays];
 
 	RFAllPostsController* controller = [[RFAllPostsController alloc] initShowingPages:YES];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionPages];
 	[self startLoadingSidebarRow:kSelectionPages];
@@ -593,7 +588,7 @@ static NSInteger const kSelectionNotes = 11;
 	[self closeOverlays];
 
 	RFAllUploadsController* controller = [[RFAllUploadsController alloc] init];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionUploads];
 	[self startLoadingSidebarRow:kSelectionUploads];
@@ -606,7 +601,7 @@ static NSInteger const kSelectionNotes = 11;
 	[self closeOverlays];
 
 	RFRepliesController* controller = [[RFRepliesController alloc] init];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionReplies];
 	[self startLoadingSidebarRow:kSelectionReplies];
@@ -619,7 +614,7 @@ static NSInteger const kSelectionNotes = 11;
 	[self closeOverlays];
 
 	RFBookshelvesController* controller = [[RFBookshelvesController alloc] init];
-	[self showAllPostsController:controller];
+	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionBookshelves];
 	[self startLoadingSidebarRow:kSelectionBookshelves];
@@ -639,7 +634,7 @@ static NSInteger const kSelectionNotes = 11;
 		[self.notesController fetchNotes];
 	}
 	
-	[self showAllPostsController:self.notesController];
+	[self showRootController:self.notesController];
 
 	[self selectSidebarRow:kSelectionNotes];
 	[self startLoadingSidebarRow:kSelectionNotes];
@@ -662,18 +657,18 @@ static NSInteger const kSelectionNotes = 11;
 		[self showDiscover:nil];
 	}
 	else if (self.selectedTimeline == kSelectionPosts) {
-		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.allPostsController fetchPosts];
+		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.rootController fetchPosts];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionPages) {
-		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.allPostsController fetchPosts];
+		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.rootController fetchPosts];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionUploads) {
-		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.allPostsController fetchPosts];
+		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.rootController fetchPosts];
 		}
 	}
 
@@ -751,23 +746,23 @@ static NSInteger const kSelectionNotes = 11;
 - (void) performFindPanelAction:(id)sender
 {
 	if (self.selectedTimeline == kSelectionDiscover) {
-		if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
-			[(RFDiscoverController *)self.allPostsController showSearch:nil];
+		if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
+			[(RFDiscoverController *)self.rootController showSearch:nil];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionPosts) {
-		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.allPostsController focusSearch];
+		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.rootController focusSearch];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionPages) {
-		if ([self.allPostsController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.allPostsController focusSearch];
+		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
+			[(RFAllPostsController *)self.rootController focusSearch];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionNotes) {
-		if ([self.allPostsController isKindOfClass:[MBNotesController class]]) {
-			[(MBNotesController *)self.allPostsController focusSearch];
+		if ([self.rootController isKindOfClass:[MBNotesController class]]) {
+			[(MBNotesController *)self.rootController focusSearch];
 		}
 	}
 }
@@ -846,9 +841,9 @@ static NSInteger const kSelectionNotes = 11;
 	self.messageTopConstraint.animator.constant = -35;
 	[self.messageSpinner stopAnimation:nil];
 
-	if (self.allPostsController) {
-		[self.allPostsController.view removeFromSuperview];
-		self.allPostsController = nil;
+	if (self.rootController) {
+		[self.rootController.view removeFromSuperview];
+		self.rootController = nil;
 	}
 	
 	self.overlayLeftConstraint = nil;
@@ -888,16 +883,16 @@ static NSInteger const kSelectionNotes = 11;
 		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)controller;
 		return bookmarks_controller.webView;
 	}
-	else if ([self.allPostsController isKindOfClass:[MBSimpleTimelineController class]]) {
-		MBSimpleTimelineController* simple_controller = (MBSimpleTimelineController *)self.allPostsController;
+	else if ([self.rootController isKindOfClass:[MBSimpleTimelineController class]]) {
+		MBSimpleTimelineController* simple_controller = (MBSimpleTimelineController *)self.rootController;
 		return simple_controller.webView;
 	}
-	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
-		RFDiscoverController* discover_controller = (RFDiscoverController *)self.allPostsController;
+	else if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
+		RFDiscoverController* discover_controller = (RFDiscoverController *)self.rootController;
 		return discover_controller.webView;
 	}
-	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
-		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)self.allPostsController;
+	else if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)self.rootController;
 		return bookmarks_controller.webView;
 	}
 	else {
@@ -911,14 +906,14 @@ static NSInteger const kSelectionNotes = 11;
 		NSViewController* controller = [self.navigationStack peek];
 		return controller.view;
 	}
-	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
-		return ((RFDiscoverController *)self.allPostsController).view;
+	else if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
+		return ((RFDiscoverController *)self.rootController).view;
 	}
-	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
-		return ((MBBookmarksController *)self.allPostsController).view;
+	else if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
+		return ((MBBookmarksController *)self.rootController).view;
 	}
-	else if ([self.allPostsController isKindOfClass:[MBSimpleTimelineController class]]) {
-		return ((MBSimpleTimelineController *)self.allPostsController).view;
+	else if ([self.rootController isKindOfClass:[MBSimpleTimelineController class]]) {
+		return ((MBSimpleTimelineController *)self.rootController).view;
 	}
 	else {
 		return self.webView;
@@ -993,8 +988,14 @@ static NSInteger const kSelectionNotes = 11;
 		} completionHandler:^{
 			[controller.view removeFromSuperview];
 
-			// focus new controller
-			[self.window makeFirstResponder:[self.navigationStack peek]];
+			// focus old controller
+			NSViewController* controller = [self.navigationStack peek];
+			if (controller) {
+				[self.window makeFirstResponder:controller];
+			}
+			else {
+				[self.window makeFirstResponder:self.rootController];
+			}
 		}];
 	}
 }
@@ -1061,29 +1062,23 @@ static NSInteger const kSelectionNotes = 11;
 //	width_constraint.active = YES;
 }
 
-- (void) showTimelineController:(RFTimelineController *)controller
+- (void) showRootController:(NSViewController *)controller
 {
-	[self.window makeFirstResponder:controller.webView];
-}
-
-- (void) showAllPostsController:(NSViewController *)controller
-{
-	self.allPostsController = controller;
+	self.rootController = controller;
 
 	NSRect r = self.webView.bounds;
-	self.allPostsController.view.frame = r;
-	self.allPostsController.view.alphaValue = 0.0;
+	self.rootController.view.frame = r;
+	self.rootController.view.alphaValue = 0.0;
 	
-	self.allPostsController.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[[self.webView superview] addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:self.webView];
+	self.rootController.view.translatesAutoresizingMaskIntoConstraints = NO;
+	[[self.webView superview] addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.webView];
 
-	self.allPostsController.view.animator.alphaValue = 1.0;
-//	self.allPostsController.nextResponder = controller;
-	[self addResizeConstraintsToOverlay:self.allPostsController.view containerView:self.containerView];
-	
-//	if ([controller isKindOfClass:[self class]]) {
+	self.rootController.view.animator.alphaValue = 1.0;
+	[self addResizeConstraintsToOverlay:self.rootController.view containerView:self.containerView];
+
+	RFDispatchMainAsync(^{
 		[self.window makeFirstResponder:controller];
-//	}
+	});
 }
 
 - (void) showTopicsWithSearch:(NSString *)term
