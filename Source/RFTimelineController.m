@@ -226,6 +226,67 @@ static NSInteger const kSelectionNotes = 11;
 
 #pragma mark -
 
+- (void) keyDown:(NSEvent *)event
+{
+	if ([[event characters] isEqualToString:@"\r"]) {
+		if ([self.selectedPostID length] > 0) {
+			[self showConversationWithPostID:self.selectedPostID];
+		}
+	}
+	else {
+		[super keyDown:event];
+	}
+}
+
+- (void) moveUp:(id)sender
+{
+	NSString* js;
+	
+	if ([self.selectedPostID length] > 0) {
+		// deselect last
+		[self setSelected:NO withPostID:self.selectedPostID];
+		
+		// select prevous
+		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
+			var next_div = div.previousElementSibling;\
+			if (next_div && next_div.classList.contains('post')) {\
+				next_div.classList.add('is_selected');\
+			};", self.selectedPostID];
+	}
+	else {
+		// select first
+		js = @"var div = document.querySelector('.post');\
+		div.classList.add('is_selected');";
+	}
+
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	[self updateSelectionFromMove];
+}
+
+- (void) moveDown:(id)sender
+{
+	NSString* js;
+	
+	if ([self.selectedPostID length] > 0) {
+		// deselect last
+		[self setSelected:NO withPostID:self.selectedPostID];
+		
+		// select next
+		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
+			var next_div = div.nextElementSibling;\
+			if (next_div && next_div.classList.contains('post')) {\
+				next_div.classList.add('is_selected');\
+			};", self.selectedPostID];
+	}
+	else {
+		// select first
+		js = @"var div = document.querySelector('.post');\
+		div.classList.add('is_selected');";
+	}
+
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	[self updateSelectionFromMove];
+}
 
 - (void) windowDidBecomeKey:(NSNotification *)notification
 {
@@ -882,6 +943,9 @@ static NSInteger const kSelectionNotes = 11;
 			self.navigationRightConstraint.animator.constant = [self.navigationStack count] * self.containerView.bounds.size.width;
 		} completionHandler:^{
 			[controller.view removeFromSuperview];
+
+			// focus new controller
+			[self.window makeFirstResponder:[self.navigationStack peek]];
 		}];
 	}
 }
@@ -1133,6 +1197,20 @@ static NSInteger const kSelectionNotes = 11;
 	return post_id;
 }
 
+- (NSString *) findSelectedPostID
+{
+	NSString* js = @"var div = document.querySelector('.post.is_selected');\
+		if (div) {\
+			div.id.split('_')[1];\
+		}\
+		else {\
+			"";\
+		}\
+	";
+	NSString* post_id = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	return post_id;
+}
+
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID
 {
 	NSString* js;
@@ -1143,6 +1221,13 @@ static NSInteger const kSelectionNotes = 11;
 		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
 	}
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+}
+
+- (void) updateSelectionFromMove
+{
+	self.selectedPostID = [self findSelectedPostID];
+	NSRect r = [self rectOfPostID:self.selectedPostID];
+	[[self currentWebView] scrollRectToVisible:r];
 }
 
 - (NSRect) rectOfPostID:(NSString *)postID
