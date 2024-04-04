@@ -116,6 +116,11 @@ DQ
                                     <action selector="schedulePost:" target="-1" id="sqT-tY-uB1"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Reply" keyEquivalent="r" id="fCb-uL-iCW">
+                                <connections>
+                                    <action selector="reply:" target="-1" id="Nvd-1f-OeG"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="EWd-1i-I6l"/>
                             <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                 <connections>

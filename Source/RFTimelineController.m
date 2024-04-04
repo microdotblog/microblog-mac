@@ -714,6 +714,11 @@ static NSInteger const kSelectionNotes = 11;
 			return NO;
 		}
 	}
+	else if (item.action == @selector(reply:)) {
+		if (self.selectedPostID.length == 0) {
+			return NO;
+		}
+	}
 
 	return YES;
 }
@@ -739,6 +744,14 @@ static NSInteger const kSelectionNotes = 11;
 		if ([self.allPostsController isKindOfClass:[MBNotesController class]]) {
 			[(MBNotesController *)self.allPostsController focusSearch];
 		}
+	}
+}
+
+- (IBAction) reply:(id)sender
+{
+	if (self.selectedPostID.length > 0) {
+		NSString* url = [NSString stringWithFormat:@"microblog://reply/%@", self.selectedPostID];
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
 	}
 }
 
