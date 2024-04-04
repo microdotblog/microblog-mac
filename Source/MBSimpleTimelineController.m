@@ -9,6 +9,7 @@
 #import "MBSimpleTimelineController.h"
 
 #import "NSAppearance+Extras.h"
+#import "RFConstants.h"
 
 @implementation MBSimpleTimelineController
 
@@ -45,7 +46,7 @@
 {
 	if ([[event characters] isEqualToString:@"\r"]) {
 		if ([self.selectedPostID length] > 0) {
-//			[self showConversationWithPostID:self.selectedPostID];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kShowConversationNotification object:self userInfo:@{ kShowConversationPostIDKey: self.selectedPostID }];
 		}
 	}
 	else {
