@@ -247,7 +247,7 @@ static NSInteger const kSelectionNotes = 11;
 		// deselect last
 		[self setSelected:NO withPostID:self.selectedPostID];
 		
-		// select prevous
+		// select previous
 		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
 			var next_div = div.previousElementSibling;\
 			if (next_div && next_div.classList.contains('post')) {\
@@ -1120,12 +1120,6 @@ static NSInteger const kSelectionNotes = 11;
 	// give the selection a moment to be visible before animating away
 	RFDispatchSeconds (0.1, ^{
 		[self pushViewController:controller];
-	});
-	
-	// unselect after delay
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
-	RFDispatchSeconds (0.5, ^{
-		[current_webview stringByEvaluatingJavaScriptFromString:js];
 	});
 }
 

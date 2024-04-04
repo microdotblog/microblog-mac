@@ -57,11 +57,11 @@
 {
 	NSString* js;
 	
+	NSString* last_selected_id = nil;
 	if ([self.selectedPostID length] > 0) {
-		// deselect last
-		[self setSelected:NO withPostID:self.selectedPostID];
+		last_selected_id = self.selectedPostID;
 		
-		// select prevous
+		// select previous
 		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
 			var next_div = div.previousElementSibling;\
 			if (next_div && next_div.classList.contains('post')) {\
@@ -71,11 +71,16 @@
 	else {
 		// select first
 		js = @"var div = document.querySelector('.post');\
-		div.classList.add('is_selected');";
+			div.classList.add('is_selected');";
 	}
-
+	
 	[self.webView stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
+	
+	// deselect last if changed
+	if (last_selected_id && ![last_selected_id isEqualToString:self.selectedPostID]) {
+		[self setSelected:NO withPostID:last_selected_id];
+	}
 }
 
 - (void) moveDown:(id)sender
@@ -101,6 +106,14 @@
 
 	[self.webView stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
+}
+
+- (IBAction) reply:(id)sender
+{
+	if (self.selectedPostID.length > 0) {
+		NSString* url = [NSString stringWithFormat:@"microblog://reply/%@", self.selectedPostID];
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+	}
 }
 
 - (NSString *) topPostID
