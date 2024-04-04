@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSColor (Extras)
 
 + (NSColor *) mb_colorFromString:(NSString *)hexString;
+- (NSString *) mb_hexString;
 
 @end
 

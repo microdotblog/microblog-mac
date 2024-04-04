@@ -201,6 +201,7 @@
 		4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFA48421EFE799006B1691 /* RFHeaderBox.m */; };
 		4BF1A1222BBEF57B00256D3C /* MBSimpleTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */; };
 		4BF1A1252BBEF5CB00256D3C /* Simple.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF1A1232BBEF5CB00256D3C /* Simple.xib */; };
+		4BF1A1272BBF5BC200256D3C /* Posts.css in Resources */ = {isa = PBXBuildFile; fileRef = 4BF1A1262BBF5BC200256D3C /* Posts.css */; };
 		4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537272247341800CF9D66 /* RFAllPostsController.m */; };
 		4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF537292247345F00CF9D66 /* AllPosts.xib */; };
 		4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */; };
@@ -584,6 +585,7 @@
 		4BF1A1202BBEF57B00256D3C /* MBSimpleTimelineController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSimpleTimelineController.h; path = Source/MBSimpleTimelineController.h; sourceTree = "<group>"; };
 		4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSimpleTimelineController.m; path = Source/MBSimpleTimelineController.m; sourceTree = "<group>"; };
 		4BF1A1242BBEF5CB00256D3C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Simple.xib; sourceTree = "<group>"; };
+		4BF1A1262BBF5BC200256D3C /* Posts.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = Posts.css; path = Resources/Posts.css; sourceTree = "<group>"; };
 		4BF537262247341800CF9D66 /* RFAllPostsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllPostsController.h; path = Source/RFAllPostsController.h; sourceTree = "<group>"; };
 		4BF537272247341800CF9D66 /* RFAllPostsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllPostsController.m; path = Source/RFAllPostsController.m; sourceTree = "<group>"; };
 		4BF5372A2247345F00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllPosts.xib; sourceTree = "<group>"; };
@@ -1045,6 +1047,7 @@
 				4B7F0AFB1BAF4C67004553A6 /* Info.plist */,
 				4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */,
 				4BDB3829278A8FE200BD457C /* Preview.html */,
+				4BF1A1262BBF5BC200256D3C /* Posts.css */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
@@ -1233,6 +1236,7 @@
 				4BE23F8C2A7008C800E24718 /* Highlights.xib in Resources */,
 				4B88CFB82BBD954A0091BB19 /* LogCell.xib in Resources */,
 				4B88CFAF2BBD92950091BB19 /* Logs.xib in Resources */,
+				4BF1A1272BBF5BC200256D3C /* Posts.css in Resources */,
 				4B5EE28C206405AC00C87A78 /* AccountCell.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
 				4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */,

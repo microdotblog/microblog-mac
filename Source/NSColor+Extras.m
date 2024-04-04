@@ -29,4 +29,24 @@
 	return [NSColor colorWithRed:red green:green blue:blue alpha:1.0];
 }
 
+- (NSString *) mb_hexString
+{
+	NSColor* c = [self colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+	if (!c) {
+		NSLog(@"Error: Color conversion to RGB failed.");
+		return nil;
+	}
+	
+	// extract the components
+	CGFloat red, green, blue, alpha;
+	[c getRed:&red green:&green blue:&blue alpha:&alpha];
+	
+	// format as hexadecimal string
+	NSString* s = [NSString stringWithFormat:@"#%02X%02X%02X",
+						   (int)(red * 255.0),
+						   (int)(green * 255.0),
+						   (int)(blue * 255.0)];
+	return s;
+}
+
 @end

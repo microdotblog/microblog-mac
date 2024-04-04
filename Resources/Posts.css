@@ -1,0 +1,16 @@
+.is_selected {
+	background-color: [SELECTED_BACKGROUND];
+	color: #FFFFFF;
+}
+
+.is_selected a {
+	color: #FFFFFF;
+}
+
+.is_pressed {
+	background-color: [PRESSED_BACKGROUND];
+}
+
+.is_selected.is_pressed {
+	background-color: [SELECTED_BACKGROUND];
+}

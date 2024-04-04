@@ -1097,15 +1097,22 @@ static NSInteger const kSelectionNotes = 11;
 - (void) showConversationWithPostID:(NSString *)postID
 {
 	// select and remember webview for unselection
-	[self setSelected:YES withPostID:postID];
-
+	WebView* current_webview = [self currentWebView];
+	[self setPressed:YES withPostID:postID];
+	
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
-
+	
 	// give the selection a moment to be visible before animating away
 	RFDispatchSeconds (0.1, ^{
 		[self pushViewController:controller];
+	});
+	
+	// unselect after delay
+	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
+	RFDispatchSeconds (0.5, ^{
+		[current_webview stringByEvaluatingJavaScriptFromString:js];
 	});
 }
 
@@ -1222,6 +1229,18 @@ static NSInteger const kSelectionNotes = 11;
 	}
 	else {
 		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
+	}
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+}
+
+- (void) setPressed:(BOOL)isPressed withPostID:(NSString *)postID
+{
+	NSString* js;
+	if (isPressed) {
+		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_pressed');", postID];
+	}
+	else {
+		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
 	}
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
