@@ -202,6 +202,8 @@
 		4BED646624BD5AB80018644C /* AllUploads.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BED646424BD5AB80018644C /* AllUploads.xib */; };
 		4BED646924BDF29A0018644C /* RFUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BED646824BDF29A0018644C /* RFUpload.m */; };
 		4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFA48421EFE799006B1691 /* RFHeaderBox.m */; };
+		4BF1A1222BBEF57B00256D3C /* MBSimpleTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */; };
+		4BF1A1252BBEF5CB00256D3C /* Simple.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF1A1232BBEF5CB00256D3C /* Simple.xib */; };
 		4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537272247341800CF9D66 /* RFAllPostsController.m */; };
 		4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF537292247345F00CF9D66 /* AllPosts.xib */; };
 		4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */; };
@@ -586,6 +588,9 @@
 		4BED646824BDF29A0018644C /* RFUpload.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUpload.m; path = Source/RFUpload.m; sourceTree = "<group>"; };
 		4BEFA48321EFE799006B1691 /* RFHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHeaderBox.h; path = Source/RFHeaderBox.h; sourceTree = "<group>"; };
 		4BEFA48421EFE799006B1691 /* RFHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHeaderBox.m; path = Source/RFHeaderBox.m; sourceTree = "<group>"; };
+		4BF1A1202BBEF57B00256D3C /* MBSimpleTimelineController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSimpleTimelineController.h; path = Source/MBSimpleTimelineController.h; sourceTree = "<group>"; };
+		4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSimpleTimelineController.m; path = Source/MBSimpleTimelineController.m; sourceTree = "<group>"; };
+		4BF1A1242BBEF5CB00256D3C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Simple.xib; sourceTree = "<group>"; };
 		4BF537262247341800CF9D66 /* RFAllPostsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllPostsController.h; path = Source/RFAllPostsController.h; sourceTree = "<group>"; };
 		4BF537272247341800CF9D66 /* RFAllPostsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllPostsController.m; path = Source/RFAllPostsController.m; sourceTree = "<group>"; };
 		4BF5372A2247345F00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllPosts.xib; sourceTree = "<group>"; };
@@ -855,6 +860,8 @@
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
 				4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */,
 				4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */,
+				4BF1A1202BBEF57B00256D3C /* MBSimpleTimelineController.h */,
+				4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */,
 				4B5606D52A73F78700843D59 /* MBBookmark.h */,
 				4B5606D62A73F78700843D59 /* MBBookmark.m */,
 				4B5606CF2A7318D200843D59 /* MBEditTagsController.h */,
@@ -1052,6 +1059,7 @@
 				4B2CAB2A1F912E4900D9B10E /* Conversation.xib */,
 				4B2CAB331F91C01B00D9B10E /* User.xib */,
 				4BE23F992A70110900E24718 /* Bookmarks.xib */,
+				4BF1A1232BBEF5CB00256D3C /* Simple.xib */,
 				4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */,
 				4BD8339E273C3FF0007350F2 /* GoToUser.xib */,
 				4B2CAB3D1F93EFB400D9B10E /* Friends.xib */,
@@ -1243,6 +1251,7 @@
 				4BE23F952A700A9F00E24718 /* HighlightCell.xib in Resources */,
 				4BF7E50D28343C9900500C59 /* Replies.xib in Resources */,
 				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
+				4BF1A1252BBEF5CB00256D3C /* Simple.xib in Resources */,
 				4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4B2CAB291F91220900D9B10E /* OptionsWithUnfavorite.xib in Resources */,
@@ -1420,6 +1429,7 @@
 				4B2CAAC31F90652800D9B10E /* RFStack.m in Sources */,
 				4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */,
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
+				4BF1A1222BBEF57B00256D3C /* MBSimpleTimelineController.m in Sources */,
 				4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
@@ -1816,6 +1826,14 @@
 				4BED646524BD5AB80018644C /* Base */,
 			);
 			name = AllUploads.xib;
+			sourceTree = "<group>";
+		};
+		4BF1A1232BBEF5CB00256D3C /* Simple.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BF1A1242BBEF5CB00256D3C /* Base */,
+			);
+			name = Simple.xib;
 			sourceTree = "<group>";
 		};
 		4BF537292247345F00CF9D66 /* AllPosts.xib */ = {

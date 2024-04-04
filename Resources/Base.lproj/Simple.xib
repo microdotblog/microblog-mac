@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBSimpleTimelineController">
+            <connections>
+                <outlet property="view" destination="c22-O7-iKe" id="sG8-UY-aLU"/>
+                <outlet property="webView" destination="Ldq-qN-lwp" id="vpb-jM-PxG"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="548"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Ldq-qN-lwp" customClass="WebView">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="548"/>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Ldq-qN-lwp" secondAttribute="trailing" id="OPf-UO-1dI"/>
+                <constraint firstItem="Ldq-qN-lwp" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="W3L-aB-0In"/>
+                <constraint firstAttribute="bottom" secondItem="Ldq-qN-lwp" secondAttribute="bottom" id="jj4-uJ-Q7a"/>
+                <constraint firstItem="Ldq-qN-lwp" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="vD6-tx-bOH"/>
+            </constraints>
+            <point key="canvasLocation" x="161" y="219"/>
+        </customView>
+    </objects>
+</document>

@@ -8,6 +8,7 @@
 
 #import "RFTimelineController.h"
 
+#import "MBSimpleTimelineController.h"
 #import "RFMenuCell.h"
 #import "RFSeparatorCell.h"
 #import "RFOptionsController.h"
@@ -497,10 +498,17 @@ static NSInteger const kSelectionNotes = 11;
 	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-	self.webView.hidden = NO;
-	
+
+	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
+	[self showAllPostsController:controller];
+
+//	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+//	[[self.webView mainFrame] loadRequest:request];
+//	self.webView.hidden = NO;
+//	[self showTimelineController:self];
+
 	[self selectSidebarRow:kSelectionTimeline];
 	[self startLoadingSidebarRow:kSelectionTimeline];
 }
@@ -512,9 +520,11 @@ static NSInteger const kSelectionNotes = 11;
 	[self closeOverlays];
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/mentions"];
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-	self.webView.hidden = NO;
+	
+	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
+	[controller view];
+	[self setupWebDelegates:controller.webView];
+	[self showAllPostsController:controller];
 
 	[self selectSidebarRow:kSelectionMentions];
 	[self startLoadingSidebarRow:kSelectionMentions];
@@ -851,6 +861,10 @@ static NSInteger const kSelectionNotes = 11;
 		RFTopicController* topic_controller = (RFTopicController *)controller;
 		return topic_controller.webView;
 	}
+	else if ([controller isKindOfClass:[MBSimpleTimelineController class]]) {
+		MBSimpleTimelineController* simple_controller = (MBSimpleTimelineController *)controller;
+		return simple_controller.webView;
+	}
 	else if ([controller isKindOfClass:[RFDiscoverController class]]) {
 		RFDiscoverController* discover_controller = (RFDiscoverController *)controller;
 		return discover_controller.webView;
@@ -858,6 +872,10 @@ static NSInteger const kSelectionNotes = 11;
 	else if ([controller isKindOfClass:[MBBookmarksController class]]) {
 		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)controller;
 		return bookmarks_controller.webView;
+	}
+	else if ([self.allPostsController isKindOfClass:[MBSimpleTimelineController class]]) {
+		MBSimpleTimelineController* simple_controller = (MBSimpleTimelineController *)self.allPostsController;
+		return simple_controller.webView;
 	}
 	else if ([self.allPostsController isKindOfClass:[RFDiscoverController class]]) {
 		RFDiscoverController* discover_controller = (RFDiscoverController *)self.allPostsController;
@@ -1025,6 +1043,11 @@ static NSInteger const kSelectionNotes = 11;
 //	width_constraint.active = YES;
 }
 
+- (void) showTimelineController:(RFTimelineController *)controller
+{
+	[self.window makeFirstResponder:controller.webView];
+}
+
 - (void) showAllPostsController:(NSViewController *)controller
 {
 	self.allPostsController = controller;
@@ -1037,8 +1060,12 @@ static NSInteger const kSelectionNotes = 11;
 	[[self.webView superview] addSubview:self.allPostsController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.allPostsController.view.animator.alphaValue = 1.0;
-	self.allPostsController.nextResponder = self;
+//	self.allPostsController.nextResponder = controller;
 	[self addResizeConstraintsToOverlay:self.allPostsController.view containerView:self.containerView];
+	
+//	if ([controller isKindOfClass:[self class]]) {
+		[self.window makeFirstResponder:controller];
+//	}
 }
 
 - (void) showTopicsWithSearch:(NSString *)term
