@@ -78,7 +78,6 @@
 	NSURL* url = [urls firstObject];
 	NSString* param = [url.path stringByReplacingOccurrencesOfString:@"/" withString:@""];
 	if ([url.host isEqualToString:@"open"]) {
-//		[self showOptionsMenuWithPostID:param];
 		[self showConversationWithPostID:param];
 	}
 	else if ([url.host isEqualToString:@"photo"]) {
@@ -285,8 +284,6 @@
 
 - (IBAction) newPage:(id)sender
 {
-	[self.timelineController hideOptionsMenu];
-
 	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
 	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
 	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
@@ -305,8 +302,6 @@
 
 - (void) showEditPost:(RFPost *)post
 {
-	[self.timelineController hideOptionsMenu];
-
 	BOOL has_hosted = [RFSettings boolForKey:kHasSnippetsBlog];
 	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
 	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
@@ -547,9 +542,7 @@
 - (void) postWasUnselectedNotification:(NSNotification *)notification
 {
 //	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
-//	[self.timelineController setSelected:NO withPostID:post_id];
-	
-	[self showOptionsMenuWithPostID:nil];
+//	[self.timelineController setSelected:NO withPostID:post_id];	
 }
 
 - (void) showPhotoWithURL:(NSString *)photoURL
@@ -586,11 +579,6 @@
 - (void) showConversationWithPostID:(NSString *)postID
 {
 	[self.timelineController showConversationWithPostID:postID];
-}
-
-- (void) showOptionsMenuWithPostID:(NSString *)postID
-{
-	[self.timelineController showOptionsMenuWithPostID:postID];
 }
 
 - (void) showProfileWithUsername:(NSString *)username

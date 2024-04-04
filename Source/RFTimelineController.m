@@ -11,7 +11,6 @@
 #import "MBSimpleTimelineController.h"
 #import "RFMenuCell.h"
 #import "RFSeparatorCell.h"
-#import "RFOptionsController.h"
 #import "RFPostController.h"
 #import "RFPostWindowController.h"
 #import "RFAllPostsController.h"
@@ -317,7 +316,6 @@ static NSInteger const kSelectionNotes = 11;
 	if ([notification.object isKindOfClass:[NSView class]]) {
 		NSView* view = (NSView *)notification.object;
 		if ([view isDescendantOf:[self currentWebView]]) {
-			[self hideOptionsMenu];
 		}
 	}
 }
@@ -835,9 +833,6 @@ static NSInteger const kSelectionNotes = 11;
 	self.webView.hidden = YES;
 	[self popToRootViewController];
 	
-	[self.optionsPopover performClose:nil];
-	self.optionsPopover = nil;
-
 	self.messageTopConstraint.animator.constant = -35;
 	[self.messageSpinner stopAnimation:nil];
 
@@ -1083,8 +1078,6 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) showTopicsWithSearch:(NSString *)term
 {
-	[self hideOptionsMenu];
-	
 	RFTopicController* controller = [[RFTopicController alloc] initWithTopic:term];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
@@ -1094,8 +1087,6 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) showHighlights
 {
-	[self hideOptionsMenu];
-
 	NSViewController* controller = [[MBHighlightsController alloc] init];
 	[controller view];
 	
@@ -1106,7 +1097,6 @@ static NSInteger const kSelectionNotes = 11;
 {
 	// select and remember webview for unselection
 	[self setSelected:YES withPostID:postID];
-	WebView* current_webview = [self currentWebView];
 
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
 	[controller view];
@@ -1120,8 +1110,6 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) showShareWithPostID:(NSString *)postID
 {
-	[self hideOptionsMenu];
-
 	NSString* link = [self linkOfPostID:postID];
 	NSURL* url = [NSURL URLWithString:link];
 	
@@ -1137,8 +1125,6 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) showProfileWithUsername:(NSString *)username
 {
-	[self hideOptionsMenu];
-	
 	if (self.selectedTimeline >= kSelectionPosts) {
 		[self showTimeline:nil];
 	}
@@ -1148,37 +1134,6 @@ static NSInteger const kSelectionNotes = 11;
 	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
-}
-
-- (void) showOptionsMenuWithPostID:(NSString *)postID
-{
-	if (self.optionsPopover) {
-		[self hideOptionsMenu];
-	}
-	else {
-		[self setSelected:YES withPostID:postID];
-		NSString* username = [self usernameOfPostID:postID];
-		RFOptionsPopoverType popover_type = [self popoverTypeOfPostID:postID];
-
-		RFOptionsController* options_controller = [[RFOptionsController alloc] initWithPostID:postID username:username popoverType:popover_type];
-		
-		self.optionsPopover = [[NSPopover alloc] init];
-		self.optionsPopover.contentViewController = options_controller;
-
-		NSRect r = [self rectOfPostID:postID];
-		[self.optionsPopover showRelativeToRect:r ofView:[self currentWebView] preferredEdge:NSRectEdgeMinY];
-	}
-}
-
-- (void) hideOptionsMenu
-{
-	if (self.optionsPopover) {
-		RFOptionsController* options_controller = (RFOptionsController *)self.optionsPopover.contentViewController;
-		[self setSelected:NO withPostID:options_controller.postID];
-		
-		[self.optionsPopover performClose:nil];
-		self.optionsPopover = nil;
-	}
 }
 
 - (void) selectSidebarRow:(NSInteger)sidebarRow
@@ -1311,24 +1266,14 @@ static NSInteger const kSelectionNotes = 11;
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-- (RFOptionsPopoverType) popoverTypeOfPostID:(NSString *)postID
-{
-	NSString* is_favorite_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_favorite');", postID];
-	NSString* is_deletable_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_deletable');", postID];
-
-	NSString* is_favorite_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_favorite_js];
-	NSString* is_deletable_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_deletable_js];
-
-	if ([is_favorite_s boolValue]) {
-		return kOptionsPopoverWithUnfavorite;
-	}
-	else if ([is_deletable_s boolValue]) {
-		return kOptionsPopoverWithDelete;
-	}
-	else {
-		return kOptionsPopoverDefault;
-	}
-}
+//- (RFOptionsPopoverType) popoverTypeOfPostID:(NSString *)postID
+//{
+//	NSString* is_favorite_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_favorite');", postID];
+//	NSString* is_deletable_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_deletable');", postID];
+//
+//	NSString* is_favorite_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_favorite_js];
+//	NSString* is_deletable_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_deletable_js];
+//}
 
 - (void) showURL:(NSURL *)url
 {

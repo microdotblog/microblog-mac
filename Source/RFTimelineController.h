@@ -41,7 +41,6 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* statusProgressSpinner;
 
 @property (strong, nonatomic) RFAccount* selectedAccount;
-@property (strong, nonatomic) NSPopover* optionsPopover;
 @property (strong, nonatomic) RFPostController* postController;
 @property (strong, nonatomic) NSViewController* rootController;
 @property (strong, nonatomic) RFDiscoverController* discoverController;
@@ -70,8 +69,6 @@ typedef NSInteger RFSelectedTimelineType;
 
 - (void) showConversationWithPostID:(NSString *)postID;
 - (void) showProfileWithUsername:(NSString *)username;
-- (void) showOptionsMenuWithPostID:(NSString *)postID;
-- (void) hideOptionsMenu;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
 - (NSString *) usernameOfPostID:(NSString *)postID;
 
