@@ -140,8 +140,8 @@
 - (void) updateSelectionFromMove
 {
 	self.selectedPostID = [self findSelectedPostID];
-	NSRect r = [self rectOfPostID:self.selectedPostID];
-	[self.webView scrollRectToVisible:r];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@').scrollIntoView({ behavior: 'smooth', block: 'nearest' });", self.selectedPostID];
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (NSRect) rectOfPostID:(NSString *)postID
@@ -154,7 +154,8 @@
 	NSString* height_s = [self.webView stringByEvaluatingJavaScriptFromString:height_js];
 	NSString* scroll_s = [self.webView stringByEvaluatingJavaScriptFromString:scroll_js];
 	
-	CGFloat top_f = self.webView.bounds.size.height - [top_s floatValue] - [height_s floatValue];
+//	CGFloat top_f = self.webView.bounds.size.height - [top_s floatValue] - [height_s floatValue];
+	CGFloat top_f = [top_s floatValue] - [height_s floatValue];
 	top_f += [scroll_s floatValue];
 	
 	// adjust to full cell width

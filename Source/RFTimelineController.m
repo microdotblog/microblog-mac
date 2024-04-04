@@ -917,6 +917,9 @@ static NSInteger const kSelectionNotes = 11;
 	else if ([self.allPostsController isKindOfClass:[MBBookmarksController class]]) {
 		return ((MBBookmarksController *)self.allPostsController).view;
 	}
+	else if ([self.allPostsController isKindOfClass:[MBSimpleTimelineController class]]) {
+		return ((MBSimpleTimelineController *)self.allPostsController).view;
+	}
 	else {
 		return self.webView;
 	}
@@ -1281,8 +1284,8 @@ static NSInteger const kSelectionNotes = 11;
 - (void) updateSelectionFromMove
 {
 	self.selectedPostID = [self findSelectedPostID];
-	NSRect r = [self rectOfPostID:self.selectedPostID];
-	[[self currentWebView] scrollRectToVisible:r];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@').scrollIntoView({ behavior: 'smooth', block: 'nearest' });", self.selectedPostID];
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (NSRect) rectOfPostID:(NSString *)postID
