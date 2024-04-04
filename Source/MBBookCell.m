@@ -29,6 +29,9 @@
 	}
 	
 	self.coverImageView.image = book.coverImage;
+	if (book.coverImage == nil) {
+		self.coverImageView.image = [book cachedCover];
+	}
 	
 	// search results don't have a book ID, show the add button
 	self.addButton.hidden = (book.bookID != nil);

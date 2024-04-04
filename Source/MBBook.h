@@ -6,7 +6,7 @@
 //  Copyright © 2022 Micro.blog. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* bookDescription;
 
 - (NSString *) microblogURL;
+- (NSImage *) cachedCover;
+- (void) setCachedCover:(NSImage *)image;
 
 @end
 

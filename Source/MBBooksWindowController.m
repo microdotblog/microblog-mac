@@ -347,26 +347,34 @@
 		self.coverDownloadsCount++;
 		[self.coversQueue removeObject:b];
 		
-		NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
-		
-		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
-			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
-				NSImage* img = response.parsedResponse;
-				RFDispatchMain(^{
-					b.coverImage = img;
-					
-					@try {
-						NSIndexSet* selected_rows = [self.tableView selectedRowIndexes];
-						[self.tableView reloadData];
-						[self.tableView selectRowIndexes:selected_rows byExtendingSelection:NO];
-					}
-					@catch (NSException* e) {
-					}
-					
-					self.coverDownloadsCount--;
-				});
-			}
-		}];
+		NSImage* cached_img = [b cachedCover];
+		if (cached_img) {
+			b.coverImage = cached_img;
+			self.coverDownloadsCount--;
+		}
+		else {
+			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
+			
+			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+					NSImage* img = response.parsedResponse;
+					RFDispatchMain(^{
+						b.coverImage = img;
+						[b setCachedCover:img];
+						 
+						@try {
+							NSIndexSet* selected_rows = [self.tableView selectedRowIndexes];
+							[self.tableView reloadData];
+							[self.tableView selectRowIndexes:selected_rows byExtendingSelection:NO];
+						}
+						@catch (NSException* e) {
+						}
+						
+						self.coverDownloadsCount--;
+					});
+				}
+			}];
+		}
 	}
 }
 

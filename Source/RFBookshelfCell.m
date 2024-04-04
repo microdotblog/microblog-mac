@@ -44,6 +44,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				b.bookID = [item objectForKey:@"id"];
 				b.title = [item objectForKey:@"title"];
 				b.coverURL = [item objectForKey:@"image"];
+				b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
 
 				[new_books addObject:b];
 			}
@@ -97,6 +98,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if (indexPath.item < self.books.count) {
 		MBBook* b = [self.books objectAtIndex:indexPath.item];
 		item.thumbnailImageView.image = b.coverImage;
+		if (item.thumbnailImageView.image == nil) {
+			b.coverImage = [b cachedCover];
+			item.thumbnailImageView.image = b.coverImage;
+		}
 	}
 	
 	return item;
