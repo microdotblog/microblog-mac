@@ -7,10 +7,23 @@
 	color: #FFFFFF;
 }
 
+.is_selected .post_archived_links {
+	color: #FFFFFF;
+}
+
 .is_pressed {
 	background-color: [PRESSED_BACKGROUND];
 }
 
 .is_selected.is_pressed {
 	background-color: [SELECTED_BACKGROUND];
+}
+
+.container.blur .is_selected {
+	background-color: [UNFOCUSED_BACKGROUND];
+	color: [UNFOCUSED_TEXT];
+}
+
+.container.blur .is_selected a {
+	color: [UNFOCUSED_TEXT];
 }

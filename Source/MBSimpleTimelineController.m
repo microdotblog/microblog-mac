@@ -8,6 +8,7 @@
 
 #import "MBSimpleTimelineController.h"
 
+#import "NSObject+SharedTimeline.h"
 #import "NSAppearance+Extras.h"
 #import "RFConstants.h"
 
@@ -28,6 +29,7 @@
 	[super viewDidLoad];
 
 	[self setupWebView];
+	[self setupNotifications];
 }
 
 - (void) setupWebView
@@ -38,6 +40,22 @@
 	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
 	[[self.webView mainFrame] loadRequest:request];
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignKeyNotification:) name:NSWindowDidResignKeyNotification object:self.view.window];
+}
+
+- (void) windowDidBecomeKeyNotification:(NSNotification *)notification
+{
+	[self applyForegroundJS:self.webView];
+}
+
+- (void) windowDidResignKeyNotification:(NSNotification *)notification
+{
+	[self applyBackgroundJS:self.webView];
 }
 
 #pragma mark -

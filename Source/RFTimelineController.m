@@ -310,6 +310,8 @@ static NSInteger const kSelectionNotes = 11;
 			self.statusBubble.alphaValue = 1.0;
 		});
 	}
+	
+	[self applyForegroundJS:[self currentWebView]];
 }
 
 - (void) windowDidResignKey:(NSNotification *)notification
@@ -320,6 +322,8 @@ static NSInteger const kSelectionNotes = 11;
 	if (self.statusBubble.alphaValue != 0.0) {
 		self.statusBubble.alphaValue = 0.5;
 	}
+	
+	[self applyBackgroundJS:[self currentWebView]];
 }
 
 - (void) timelineDidScroll:(NSNotification *)notification
@@ -1416,7 +1420,7 @@ static NSInteger const kSelectionNotes = 11;
 	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
 	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
 		
-	[self setupCSS:webView];
+	[self setupCSS:webView];	
 	[self stopLoadingSidebarRow];
 }
 
