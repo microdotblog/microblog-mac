@@ -273,25 +273,30 @@ static NSInteger const kSelectionNotes = 11;
 {
 	NSString* js;
 	
+	NSString* last_selected_id = nil;
 	if ([self.selectedPostID length] > 0) {
-		// deselect last
-		[self setSelected:NO withPostID:self.selectedPostID];
-		
+		last_selected_id = self.selectedPostID;
+				
 		// select next
 		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
-			var next_div = div.nextElementSibling;\
-			if (next_div && next_div.classList.contains('post')) {\
-				next_div.classList.add('is_selected');\
-			};", self.selectedPostID];
+   var next_div = div.nextElementSibling;\
+   if (next_div && next_div.classList.contains('post')) {\
+	next_div.classList.add('is_selected');\
+   };", self.selectedPostID];
 	}
 	else {
 		// select first
 		js = @"var div = document.querySelector('.post');\
-		div.classList.add('is_selected');";
+  div.classList.add('is_selected');";
 	}
-
-	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
+	
+	// deselect last if changed
+	if (last_selected_id && ![last_selected_id isEqualToString:self.selectedPostID]) {
+		[self setSelected:NO withPostID:last_selected_id];
+	}
 }
 
 - (void) windowDidBecomeKey:(NSNotification *)notification
@@ -1215,15 +1220,21 @@ static NSInteger const kSelectionNotes = 11;
 
 - (NSString *) findSelectedPostID
 {
-	NSString* js = @"var div = document.querySelector('.post.is_selected');\
-		if (div) {\
-			div.id.split('_')[1];\
-		}\
-		else {\
-			"";\
-		}\
-	";
-	NSString* post_id = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	// get selection ignoring current selected post ID
+	NSString* js = [NSString stringWithFormat:@"var divs = document.querySelectorAll('div.post.is_selected');"
+		"if (divs.length > 0) {"
+		"	var result = Array.from(divs).find(post => post.id !== 'post_%@');"
+		"	if (result == null) {"
+		"		'%@';"
+		"	}"
+		"	else {"
+		"		result.id.split('_')[1];"
+		"	}"
+		"}"
+		"else {"
+		"	'%@';"
+		"}", self.selectedPostID, self.selectedPostID, self.selectedPostID];
+	NSString* post_id = [self.webView stringByEvaluatingJavaScriptFromString:js];
 	return post_id;
 }
 
