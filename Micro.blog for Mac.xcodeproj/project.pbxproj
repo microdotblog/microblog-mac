@@ -202,6 +202,7 @@
 		4BF1A1222BBEF57B00256D3C /* MBSimpleTimelineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */; };
 		4BF1A1252BBEF5CB00256D3C /* Simple.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF1A1232BBEF5CB00256D3C /* Simple.xib */; };
 		4BF1A1272BBF5BC200256D3C /* Posts.css in Resources */ = {isa = PBXBuildFile; fileRef = 4BF1A1262BBF5BC200256D3C /* Posts.css */; };
+		4BF1A12A2BC0328900256D3C /* NSObject+SharedTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF1A1292BC0328900256D3C /* NSObject+SharedTimeline.m */; };
 		4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF537272247341800CF9D66 /* RFAllPostsController.m */; };
 		4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF537292247345F00CF9D66 /* AllPosts.xib */; };
 		4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */; };
@@ -586,6 +587,8 @@
 		4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSimpleTimelineController.m; path = Source/MBSimpleTimelineController.m; sourceTree = "<group>"; };
 		4BF1A1242BBEF5CB00256D3C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Simple.xib; sourceTree = "<group>"; };
 		4BF1A1262BBF5BC200256D3C /* Posts.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = Posts.css; path = Resources/Posts.css; sourceTree = "<group>"; };
+		4BF1A1282BC0328900256D3C /* NSObject+SharedTimeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSObject+SharedTimeline.h"; path = "Source/NSObject+SharedTimeline.h"; sourceTree = "<group>"; };
+		4BF1A1292BC0328900256D3C /* NSObject+SharedTimeline.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSObject+SharedTimeline.m"; path = "Source/NSObject+SharedTimeline.m"; sourceTree = "<group>"; };
 		4BF537262247341800CF9D66 /* RFAllPostsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAllPostsController.h; path = Source/RFAllPostsController.h; sourceTree = "<group>"; };
 		4BF537272247341800CF9D66 /* RFAllPostsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAllPostsController.m; path = Source/RFAllPostsController.m; sourceTree = "<group>"; };
 		4BF5372A2247345F00CF9D66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/AllPosts.xib; sourceTree = "<group>"; };
@@ -1026,6 +1029,8 @@
 				4BB990662A86865B00C490E2 /* MBTagCell.m */,
 				4BD709022A754CCD00F154C6 /* MBTimelineBackgroundView.h */,
 				4BD709032A754CCD00F154C6 /* MBTimelineBackgroundView.m */,
+				4BF1A1282BC0328900256D3C /* NSObject+SharedTimeline.h */,
+				4BF1A1292BC0328900256D3C /* NSObject+SharedTimeline.m */,
 				4BB9905F2A857A8200C490E2 /* MBAllTagsController.h */,
 				4BB990602A857A8200C490E2 /* MBAllTagsController.m */,
 				4B001CE62B27AE2000BBF456 /* MBNotesKeyController.h */,
@@ -1364,6 +1369,7 @@
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
 				4B7CC9892B291B2E00AA8085 /* MBNoteCrypto.swift in Sources */,
+				4BF1A12A2BC0328900256D3C /* NSObject+SharedTimeline.m in Sources */,
 				4B5EF5EF1FA6120100CB7A02 /* NSImage+Extras.m in Sources */,
 				4BD709042A754CCD00F154C6 /* MBTimelineBackgroundView.m in Sources */,
 				4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */,

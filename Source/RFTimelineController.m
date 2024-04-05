@@ -34,6 +34,7 @@
 #import "RFPost.h"
 #import "RFStack.h"
 #import "RFBookshelf.h"
+#import "NSObject+SharedTimeline.h"
 #import "MBBooksWindowController.h"
 #import "MBNotesController.h"
 #import "NSImage+Extras.h"
@@ -242,9 +243,9 @@ static NSInteger const kSelectionNotes = 11;
 {
 	NSString* js;
 	
+	NSString* last_selected_id = nil;
 	if ([self.selectedPostID length] > 0) {
-		// deselect last
-		[self setSelected:NO withPostID:self.selectedPostID];
+		last_selected_id = self.selectedPostID;
 		
 		// select previous
 		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
@@ -256,11 +257,16 @@ static NSInteger const kSelectionNotes = 11;
 	else {
 		// select first
 		js = @"var div = document.querySelector('.post');\
-		div.classList.add('is_selected');";
+			div.classList.add('is_selected');";
 	}
-
-	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	
+	[self.webView stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
+	
+	// deselect last if changed
+	if (last_selected_id && ![last_selected_id isEqualToString:self.selectedPostID]) {
+		[self setSelected:NO withPostID:last_selected_id];
+	}
 }
 
 - (void) moveDown:(id)sender
@@ -1398,7 +1404,8 @@ static NSInteger const kSelectionNotes = 11;
 	NSScrollView* scrollview = webView.mainFrame.frameView.documentView.enclosingScrollView;
 	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
 	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
-	
+		
+	[self setupCSS:webView];
 	[self stopLoadingSidebarRow];
 }
 

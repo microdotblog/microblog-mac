@@ -10,8 +10,6 @@
 
 #import "NSAppearance+Extras.h"
 #import "RFConstants.h"
-#import "RFMacros.h"
-#import "NSColor+Extras.h"
 
 @implementation MBSimpleTimelineController
 
@@ -40,26 +38,6 @@
 	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
 	[[self.webView mainFrame] loadRequest:request];
-	
-	// testing...
-	RFDispatchSeconds(3, ^{
-		[self setupCSS];
-	});
-}
-
-- (void) setupCSS
-{
-	NSString* selected_hex = [NSColor.selectedContentBackgroundColor mb_hexString];
-	NSString* pressed_hex = @"#EFEFEF";
-
-	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Posts" ofType:@"css"];
-	NSString* template_css = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
-
-	NSString* s = template_css;
-	s = [s stringByReplacingOccurrencesOfString:@"[SELECTED_BACKGROUND]" withString:selected_hex];
-	s = [s stringByReplacingOccurrencesOfString:@"[PRESSED_BACKGROUND]" withString:pressed_hex];
-
-	[self injectCSS:s];
 }
 
 #pragma mark -
@@ -211,16 +189,6 @@
 	CGFloat width_f = self.webView.bounds.size.width;
 	
 	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
-}
-
-- (void) injectCSS:(NSString *)cssString
-{
-	// create new style element and add CSS
-	NSString* js = [NSString stringWithFormat:@"var style = document.createElement('style');"
-						"style.type = 'text/css';"
-						"style.innerHTML = `%@`;"
-						"document.getElementsByTagName('head')[0].appendChild(style);", cssString];
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 @end
