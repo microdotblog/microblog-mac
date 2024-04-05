@@ -6,6 +6,34 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new logs window to show current blog publishing status and other errors.</li>
+					<li>Added keyboard navigation for the timeline. Up and down arrows to select posts, return key to view conversation, and command-R to reply.</li>
+					<li>Added View menu → Go to @username command to show your profile.</li>
+					<li>Added keyboard shortcut command-[ for back button.</li>
+					<li>Added right-click option to delete selected upload.</li>
+					<li>Added "..." button for selected books in a bookshelf, same options as right-click.</li>
+					<li>Improved book cover caching.</li>
+					<li>Improved icons and other little layout fixes.</li>
+					<li>Fixed Markdown header color when writing a blog post.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 05 Apr 2024 10:15:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.2.zip" sparkle:shortVersionString="3.2" sparkle:version="147" length="4241817" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.1.3</title>
  			<description><![CDATA[
 				<style>
