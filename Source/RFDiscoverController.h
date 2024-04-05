@@ -8,10 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import "MBSimpleTimelineController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFDiscoverController : NSViewController
+@interface RFDiscoverController : MBSimpleTimelineController
 
 @property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSTextField* statusField;

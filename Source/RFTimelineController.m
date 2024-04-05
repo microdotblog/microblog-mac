@@ -260,7 +260,7 @@ static NSInteger const kSelectionNotes = 11;
 			div.classList.add('is_selected');";
 	}
 	
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
 	
 	// deselect last if changed
@@ -290,7 +290,7 @@ static NSInteger const kSelectionNotes = 11;
   div.classList.add('is_selected');";
 	}
 	
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
 	
 	// deselect last if changed
@@ -1234,7 +1234,7 @@ static NSInteger const kSelectionNotes = 11;
 		"else {"
 		"	'%@';"
 		"}", self.selectedPostID, self.selectedPostID, self.selectedPostID];
-	NSString* post_id = [self.webView stringByEvaluatingJavaScriptFromString:js];
+	NSString* post_id = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	return post_id;
 }
 
@@ -1266,7 +1266,7 @@ static NSInteger const kSelectionNotes = 11;
 {
 	self.selectedPostID = [self findSelectedPostID];
 	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@').scrollIntoView({ behavior: 'smooth', block: 'nearest' });", self.selectedPostID];
-	[self.webView stringByEvaluatingJavaScriptFromString:js];
+	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (NSRect) rectOfPostID:(NSString *)postID

@@ -8,10 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import "MBSimpleTimelineController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBBookmarksController : NSViewController
+@interface MBBookmarksController : MBSimpleTimelineController
 
 @property (strong, nonatomic) IBOutlet NSButton* highlightsCountButton;
 @property (strong, nonatomic) IBOutlet NSButton* currentTagCloseButton;
