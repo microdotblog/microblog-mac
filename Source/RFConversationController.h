@@ -8,8 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import "MBSimpleTimelineController.h"
 
-@interface RFConversationController : NSViewController
+@interface RFConversationController : MBSimpleTimelineController
 
 @property (strong, nonatomic) IBOutlet NSTextField* headerField;
 @property (strong, nonatomic) IBOutlet WebView* webView;
