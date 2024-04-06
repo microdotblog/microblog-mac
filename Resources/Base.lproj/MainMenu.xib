@@ -462,8 +462,7 @@ CA
                                     <action selector="showBookshelves:" target="-1" id="6vM-wd-pbi"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Notes" id="080-RH-df5">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Notes" keyEquivalent="0" id="080-RH-df5">
                                 <connections>
                                     <action selector="showNotes:" target="-1" id="Cw6-GR-lFy"/>
                                 </connections>
@@ -555,7 +554,7 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
-                            <menuItem title="Micro.blog" keyEquivalent="0" id="wQs-M9-Iha">
+                            <menuItem title="Micro.blog" keyEquivalent="O" id="wQs-M9-Iha">
                                 <connections>
                                     <action selector="showMainWindow:" target="Voe-Tx-rLC" id="i3H-VE-pjX"/>
                                 </connections>
