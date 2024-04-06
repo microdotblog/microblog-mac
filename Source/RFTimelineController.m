@@ -953,10 +953,11 @@ static NSInteger const kSelectionNotes = 11;
 		self.navigationPinnedConstraint.active = NO;
 	}
 
+	WebView* current_webview = [self currentWebView];
 	NSView* last_view = [self currentContainerView];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:self.webView];
+	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:current_webview];
 
 	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
