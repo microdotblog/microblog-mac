@@ -16,6 +16,7 @@
 		4B001CE82B27AE2000BBF456 /* MBNotesKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CE72B27AE2000BBF456 /* MBNotesKeyController.m */; };
 		4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; };
 		4B00B686255D842200CBE873 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */; };
 		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
 		4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1FA569269E0491006E0451 /* RFDiscoverController.m */; };
 		4B2A47C222579C58003AF2EC /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2A47C022579C58003AF2EC /* SDAVAssetExportSession.m */; };
@@ -256,6 +257,8 @@
 		4B001CE62B27AE2000BBF456 /* MBNotesKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesKeyController.h; path = Source/MBNotesKeyController.h; sourceTree = "<group>"; };
 		4B001CE72B27AE2000BBF456 /* MBNotesKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesKeyController.m; path = Source/MBNotesKeyController.m; sourceTree = "<group>"; };
 		4B00B678255D827800CBE873 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
+		4B1F2A242BC2219C00B52EAC /* MBTimelineWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineWindow.h; path = Source/MBTimelineWindow.h; sourceTree = "<group>"; };
+		4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTimelineWindow.m; path = Source/MBTimelineWindow.m; sourceTree = "<group>"; };
 		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
 		4B1FA568269E0491006E0451 /* RFDiscoverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFDiscoverController.h; path = Source/RFDiscoverController.h; sourceTree = "<group>"; };
 		4B1FA569269E0491006E0451 /* RFDiscoverController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFDiscoverController.m; path = Source/RFDiscoverController.m; sourceTree = "<group>"; };
@@ -856,6 +859,8 @@
 				4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */,
 				4B4DC4501BB04BD80095CCBB /* RFTimelineController.h */,
 				4B4DC4511BB04BD80095CCBB /* RFTimelineController.m */,
+				4B1F2A242BC2219C00B52EAC /* MBTimelineWindow.h */,
+				4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */,
 				4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */,
 				4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */,
 				4BF1A1202BBEF57B00256D3C /* MBSimpleTimelineController.h */,
@@ -1347,6 +1352,7 @@
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
+				4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */,
 				4BE23F8F2A70090D00E24718 /* MBHighlightsController.m in Sources */,
 				4B400D05201EC55B00C71AAF /* MMElement.m in Sources */,
 				4BEB08F32B79348C004082CB /* MBNotebook.m in Sources */,
