@@ -40,9 +40,13 @@
 	if ([self.superview isKindOfClass:[NSTableView class]]) {
 		NSTableView* table = (NSTableView *)self.superview;
 		if (![table.window isKeyWindow]) {
+			self.titleField.textColor = [NSColor colorNamed:@"color_date_text"];
+			self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
 			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
 		}
 		else if (table.window.firstResponder == table) {
+			self.titleField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
+			self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 			[[NSColor selectedContentBackgroundColor] set];
 		}
 		else {
@@ -51,6 +55,20 @@
 	}
 	
 	NSRectFill (r);
+}
+
+- (void) setSelected:(BOOL)selected
+{
+	[super setSelected:selected];
+
+	if (selected) {
+		self.titleField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
+		self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
+	}
+	else {
+		self.titleField.textColor = [NSColor colorNamed:@"color_date_text"];
+		self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
+	}
 }
 
 @end
