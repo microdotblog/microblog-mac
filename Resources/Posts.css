@@ -27,3 +27,28 @@
 .container.blur .is_selected a {
 	color: [UNFOCUSED_TEXT];
 }
+
+.more_container a {
+	border-radius: 8px;
+	box-shadow: 0px 0.5px 0.5px rgb(0 0 0 / 15%);
+	width: 120px;
+	border: 0.5px solid lightgray;
+	color: #151515;
+}
+
+.more_container a:hover {
+	cursor: default;
+}
+
+@media (prefers-color-scheme: dark) {
+	.more_container a {
+		background-color: #61676a;
+		border: 0.5px solid #61676a;
+		color: #FFFFFF;
+	}
+	
+	.more_container a:active {
+		background-color: #80878b;
+		border: 0.5px solid #80878b;
+	}
+}
