@@ -218,11 +218,7 @@ static NSInteger const kSelectionNotes = 11;
 	
 	[self.sidebarItems addObject:@(kSelectionReplies)];
 	[self.sidebarItems addObject:@(kSelectionBookshelves)];
-	
-	BOOL is_premium = [RFSettings boolForKey:kIsPremium];
-	if (is_premium) {
-		[self.sidebarItems addObject:@(kSelectionNotes)];
-	}
+	[self.sidebarItems addObject:@(kSelectionNotes)];
 }
 
 #pragma mark -
