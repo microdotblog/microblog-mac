@@ -450,6 +450,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	
 	item.url = up.url;
+	[item setupForURL];
 	
 	return item;
 }
@@ -506,7 +507,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
 	}
 	else if ([upload isAudio]) {
-		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\">", upload.url];
+		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", upload.url];
 	}
 	else {
 		s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];

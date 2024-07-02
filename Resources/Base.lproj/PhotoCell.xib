@@ -12,6 +12,7 @@
         <viewController id="na8-0v-oNY" customClass="RFPhotoCell">
             <connections>
                 <outlet property="browserMenuItem" destination="2cQ-VA-lrc" id="up2-5X-URU"/>
+                <outlet property="htmlWithoutPlayerItem" destination="xEJ-wV-pYm" id="Uj1-bR-9Mc"/>
                 <outlet property="iconView" destination="Hng-Eo-t8j" id="dUL-Jq-J64"/>
                 <outlet property="selectionOverlayView" destination="8e5-OI-o8O" id="QZr-21-MsR"/>
                 <outlet property="thumbnailImageView" destination="NIg-26-JBO" id="Q6i-Sv-jTx"/>
@@ -84,6 +85,12 @@
                     <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                     <connections>
                         <action selector="copyMarkdown:" target="na8-0v-oNY" id="Iho-G3-A3a"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy HTML and Hide Player" id="xEJ-wV-pYm">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyHTMLwithoutPlayer:" target="na8-0v-oNY" id="A3Q-lD-hLO"/>
                     </connections>
                 </menuItem>
             </items>
