@@ -12,6 +12,7 @@
                 <outlet property="browserMenuItem" destination="ttN-BC-piQ" id="Iga-IO-QSf"/>
                 <outlet property="progressSpinner" destination="0aW-jy-83j" id="m1G-nE-u0I"/>
                 <outlet property="searchField" destination="IrF-A6-KAh" id="kJG-Al-g8S"/>
+                <outlet property="segmentedControl" destination="PUH-Gq-2us" id="VRE-iZ-5Hp"/>
                 <outlet property="tableView" destination="bsE-aL-qyD" id="dKi-tp-6rf"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mh3-Lr-7UY"/>
             </connections>
@@ -98,8 +99,8 @@
                                 <rect key="frame" x="12" y="415" width="374" height="5"/>
                             </box>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9">
-                                <rect key="frame" x="12" y="425" width="132" height="32"/>
-                                <buttonCell key="cell" type="bevel" title="username.micro.blog" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">
+                                <rect key="frame" x="12" y="425" width="64" height="32"/>
+                                <buttonCell key="cell" type="bevel" title="hostname" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -110,6 +111,19 @@
                                     <action selector="blogNameClicked:" target="-2" id="7do-uH-82s"/>
                                 </connections>
                             </button>
+                            <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PUH-Gq-2us">
+                                <rect key="frame" x="83" y="428" width="145" height="24"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="VIK-jt-BUY">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment label="All Posts" width="68" selected="YES"/>
+                                        <segment label="Drafts" width="68" tag="1"/>
+                                    </segments>
+                                </segmentedCell>
+                                <connections>
+                                    <action selector="segmentChanged:" target="-2" id="8jt-op-4Zz"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="IrF-A6-KAh" secondAttribute="trailing" constant="12" id="18k-6L-48Y"/>
@@ -120,11 +134,13 @@
                             <constraint firstItem="HkM-wg-aGS" firstAttribute="top" secondItem="IrF-A6-KAh" secondAttribute="bottom" constant="11" id="G9f-Ne-Nkx"/>
                             <constraint firstItem="0aW-jy-83j" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="MXO-1Z-t2n"/>
                             <constraint firstItem="i0M-mM-qt9" firstAttribute="top" secondItem="3gb-cJ-31J" secondAttribute="top" constant="5" id="axK-4G-ejt"/>
+                            <constraint firstItem="PUH-Gq-2us" firstAttribute="bottom" secondItem="IrF-A6-KAh" secondAttribute="bottom" id="cmv-Sy-vyj"/>
                             <constraint firstItem="ElM-Ns-H7E" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" id="e9i-Of-BW1"/>
                             <constraint firstAttribute="trailing" secondItem="HkM-wg-aGS" secondAttribute="trailing" constant="12" id="eIl-Ym-2aZ"/>
                             <constraint firstItem="HkM-wg-aGS" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="tfQ-kU-0Rb"/>
                             <constraint firstItem="0aW-jy-83j" firstAttribute="top" secondItem="3gb-cJ-31J" secondAttribute="top" constant="15" id="tuK-xR-xbS"/>
                             <constraint firstItem="i0M-mM-qt9" firstAttribute="leading" secondItem="3gb-cJ-31J" secondAttribute="leading" constant="12" id="uK1-2e-ZsW"/>
+                            <constraint firstItem="IrF-A6-KAh" firstAttribute="leading" secondItem="PUH-Gq-2us" secondAttribute="trailing" constant="15" id="zKn-9W-ZbR"/>
                         </constraints>
                     </view>
                     <color key="borderColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>

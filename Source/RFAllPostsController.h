@@ -17,8 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 @property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
+@property (strong, nonatomic) IBOutlet NSSegmentedControl* segmentedControl;
 
 @property (assign, nonatomic) BOOL isShowingPages;
+@property (assign, nonatomic) BOOL isShowingDrafts;
 @property (strong, nonatomic) NSArray* allPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;

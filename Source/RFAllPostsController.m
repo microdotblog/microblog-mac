@@ -39,6 +39,7 @@
 	[self setupBlogName];
 	[self setupNotifications];
 	[self setupBrowser];
+	[self setupTabs];
 	
 	[self fetchPosts];
 }
@@ -67,6 +68,11 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:nil];
+}
+
+- (void) setupTabs
+{
+	self.segmentedControl.hidden = self.isShowingPages;
 }
 
 - (void) setupBrowser
@@ -363,6 +369,26 @@
 - (void) draftDidUpdateNotification:(NSNotification *)notification
 {
 	[self fetchPosts];
+}
+
+- (IBAction) segmentChanged:(NSSegmentedControl *)sender
+{
+	self.isShowingDrafts = (sender.selectedSegment == 1);
+	
+	if (self.isShowingDrafts) {
+		NSMutableArray* only_drafts = [NSMutableArray array];
+		for (RFPost* post in self.allPosts) {
+			if (post.isDraft) {
+				[only_drafts addObject:post];
+			}
+		}
+		self.currentPosts = only_drafts;
+	}
+	else {
+		self.currentPosts = self.allPosts;
+	}
+	
+	[self.tableView reloadData];
 }
 
 #pragma mark -
