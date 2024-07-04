@@ -87,7 +87,7 @@
                         <action selector="copyMarkdown:" target="na8-0v-oNY" id="Iho-G3-A3a"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Copy HTML and Hide Player" id="xEJ-wV-pYm">
+                <menuItem title="Copy HTML for Narration" id="xEJ-wV-pYm">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="copyHTMLwithoutPlayer:" target="na8-0v-oNY" id="A3Q-lD-hLO"/>
