@@ -59,6 +59,7 @@
 - (IBAction) sendPost:(id)sender;
 - (IBAction) save:(id)sender;
 - (NSString *) postButtonTitle;
+- (BOOL) isPage;
 
 - (NSString *) currentTitle;
 - (NSString *) currentText;

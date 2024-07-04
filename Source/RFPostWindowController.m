@@ -33,7 +33,7 @@
 	[self setupToolbar];
 	[self setupNotifications];
 	[self setupPreviewTimer];
-	[self setupAutosaveTimer];
+	[self setupAutosave];
 	
 	self.window.delegate = self;
 
@@ -89,7 +89,7 @@
 	}];
 }
 
-- (void) setupAutosaveTimer
+- (void) setupAutosave
 {
 	self.autosaveTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
 		NSString* s = [self.postController currentText];
@@ -98,6 +98,10 @@
 			[s writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 		}
 	}];
+	
+	if ([self.postController isPage]) {
+		self.windowFrameAutosaveName = @"NewPageWindow";
+	}
 }
 
 - (void) adjustWindowHeight
