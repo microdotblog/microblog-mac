@@ -1215,7 +1215,7 @@ static NSInteger const kSelectionNotes = 11;
 {
 	// class: "post post_1234"
 	NSString* js = @"$('.post')[0].id.split('_')[1]";
-	NSString* post_id = [self.webView stringByEvaluatingJavaScriptFromString:js];
+	NSString* post_id = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	return post_id;
 }
 
