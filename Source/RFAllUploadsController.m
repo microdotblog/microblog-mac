@@ -15,7 +15,6 @@
 #import "RFUpload.h"
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
-#import "RFPhotoZoomController.h"
 #import "UUDate.h"
 #import "RFMacros.h"
 #import "NSImage+Extras.h"
@@ -354,8 +353,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
 
 	if ([up isPhoto]) {
-		RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:up.url allowCopy:YES];
-		[controller showWindow:nil];
+		NSDictionary* info = @{
+			kOpenPhotoURLKey: [NSURL URLWithString:up.url],
+			kOpenPhotoAllowCopyKey: @(YES)
+		};
+		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPhotoURLNotification object:self userInfo:info];
 	}
 	else {
 		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:up.url]];

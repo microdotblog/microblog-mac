@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,7 +19,7 @@
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="PhotoZoomWindow" animationBehavior="default" tabbingMode="disallowed" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="62" y="248" width="480" height="480"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="200" height="200"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
@@ -44,17 +44,17 @@
                             <constraint firstAttribute="width" constant="16" id="amn-f5-g44"/>
                         </constraints>
                     </progressIndicator>
-                    <button wantsLayer="YES" verticalHuggingPriority="750" alphaValue="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="W4t-I4-aLm">
+                    <button wantsLayer="YES" alphaValue="0.69999999999999996" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W4t-I4-aLm">
                         <rect key="frame" x="349" y="13" width="118" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="104" id="8P2-Qt-QO3"/>
-                        </constraints>
                         <buttonCell key="cell" type="push" title="Copy HTML" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="akb-9l-yVV">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="104" id="8P2-Qt-QO3"/>
+                        </constraints>
                         <connections>
-                            <action selector="copyHTML:" target="-2" id="PQy-n9-yNB"/>
+                            <action selector="copyHTML:" target="-2" id="4hP-DN-Sh7"/>
                         </connections>
                     </button>
                 </subviews>

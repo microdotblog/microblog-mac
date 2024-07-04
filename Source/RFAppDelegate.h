@@ -34,6 +34,7 @@
 @property (strong, nonatomic) MBAllTagsController* allTagsController;
 @property (strong, nonatomic) MBLogsController* logsController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
+@property (strong, nonatomic) NSMutableArray* photoWindows; // RFPhotoZoomController
 
 @end
 

@@ -19,6 +19,7 @@ static NSString* const kRemoveAttachedPhotoNotification = @"RFRemoveAttachedPhot
 static NSString* const kRemoveAttachedPhotoIndexPath = @"index_path";
 
 static NSString* const kPostWindowDidCloseNotification = @"RFPostWindowDidClose";
+static NSString* const kPhotoWindowDidCloseNotification = @"MBPhotoWindowDidClose";
 
 static NSString* const kSwitchAccountNotification = @"RFSwitchAccount";
 static NSString* const kSwitchAccountUsernameKey = @"username";
@@ -53,6 +54,7 @@ static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
 
 #define kOpenPhotoURLNotification @"RFOpenPhotoURL"
 #define kOpenPhotoURLKey @"url" // NSURL
+#define kOpenPhotoAllowCopyKey @"allow_copy" // NSNumber
 
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"

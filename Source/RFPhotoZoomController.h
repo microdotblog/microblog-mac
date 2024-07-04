@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFPhotoZoomController : NSWindowController
+@interface RFPhotoZoomController : NSWindowController <NSWindowDelegate>
 
 @property (strong, nonatomic) IBOutlet NSImageView* imageView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* spinner;

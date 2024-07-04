@@ -11,6 +11,7 @@
 #import "UUHttpSession.h"
 #import "UUString.h"
 #import "RFMacros.h"
+#import "RFConstants.h"
 
 @implementation RFPhotoZoomController
 
@@ -28,12 +29,20 @@
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-
+	
 	[self updateTitle];
 	[self downloadPhoto];
 	
 	self.htmlCopyButton.hidden = !self.isAllowCopy;
 	self.htmlCopyButton.layer.opacity = 0.0;
+	
+	self.window.delegate = self;
+}
+
+- (BOOL) windowShouldClose:(NSWindow *)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPhotoWindowDidCloseNotification object:self];
+	return YES;
 }
 
 - (NSString *) extractPhotoURL:(NSString *)url

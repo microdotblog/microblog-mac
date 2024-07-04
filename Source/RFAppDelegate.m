@@ -51,6 +51,7 @@
 	[self setupFollowerAutoComplete];
 
 	self.postWindows = [NSMutableArray array];
+	self.photoWindows = [NSMutableArray array];
 
 	[self showTimelineOrWelcome];
 }
@@ -82,7 +83,7 @@
 	}
 	else if ([url.host isEqualToString:@"photo"]) {
 		NSString* photo_url = [url.path substringFromIndex:1];
-		[self showPhotoWithURL:photo_url];
+		[self showPhotoWithURL:photo_url allowCopy:NO];
 	}
 	else if ([url.host isEqualToString:@"user"]) {
 		[self showProfileWithUsername:param];
@@ -189,6 +190,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoWindowDidCloseNotification:) name:kPhotoWindowDidCloseNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAllTagsNotification:) name:kShowTagsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogsNotification:) name:kShowLogsNotification object:nil];
 }
@@ -529,6 +531,12 @@
 	[self.postWindows removeObject:controller];
 }
 
+- (void) photoWindowDidCloseNotification:(NSNotification *)notification
+{
+	NSWindowController* controller = notification.object;
+	[self.photoWindows removeObject:controller];
+}
+
 - (void) showAllTagsNotification:(NSNotification *)notification
 {
 	[self showAllTags:nil];
@@ -545,10 +553,11 @@
 //	[self.timelineController setSelected:NO withPostID:post_id];	
 }
 
-- (void) showPhotoWithURL:(NSString *)photoURL
+- (void) showPhotoWithURL:(NSString *)photoURL allowCopy:(BOOL)allowCopy
 {
-	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL allowCopy:NO];
+	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL allowCopy:allowCopy];
 	[controller showWindow:nil];
+	[self.photoWindows addObject:controller];
 }
 
 - (void) showReplyPostNotification:(NSNotification *)notification
@@ -573,7 +582,8 @@
 - (void) openPhotoURLNotification:(NSNotification *)notification
 {
 	NSURL* url = [notification.userInfo objectForKey:kOpenPhotoURLKey];
-	[self showPhotoWithURL:url.absoluteString];
+	BOOL allow_copy = [[notification.userInfo objectForKey:kOpenPhotoAllowCopyKey] boolValue];
+	[self showPhotoWithURL:url.absoluteString allowCopy:allow_copy];
 }
 
 - (void) showConversationWithPostID:(NSString *)postID
