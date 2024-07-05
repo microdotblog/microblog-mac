@@ -6,6 +6,31 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.2.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Enabled notes feature for all users. Set it up on the web first and then click Notes in the Mac sidebar.</li>
+					<li>Added tabs in Posts screen to show all posts or only drafts.</li>
+					<li>Added new "Copy HTML for Narration" right-click option for audio. This copies the <code>&lt;audio&gt;</code> tag but hides the browser audio player.</li>
+					<li>Updated saved window position to keep track of standalone pages separately from blog posts.</li>
+					<li>Fixed "Copy HTML" button in photo detail window.</li>
+					<li>Fixed showing publishing status and incorrect new posts message.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 05 Jul 2024 08:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.2.2.zip" sparkle:shortVersionString="3.2.2" sparkle:version="149" length="4246368" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.2.1</title>
  			<description><![CDATA[
 				<style>
