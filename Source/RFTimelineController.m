@@ -788,53 +788,57 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) checkPostsFromTimer:(NSTimer *)timer
 {
-//		[self showNotificationWithTitle:@"Some User (@manton)" text:@"@manton Hello hello"];
-
-	NSString* top_post_id = [self topPostID];
-	if (top_post_id.length > 0) {
-		RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
-		NSDictionary* args = @{ @"since_id": top_post_id };
-		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-			if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-				NSNumber* count = [response.parsedResponse objectForKey:@"count"];
-				NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
-				NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
-				if (is_publishing && [is_publishing boolValue]) {
-					RFDispatchMainAsync (^{
-						[self showPublishingStatus];
-					});
-				}
-				else if (count && count.integerValue > 0) {
-					NSString* msg;
-					if (count.integerValue == 1) {
-						msg = @"1 new post";
-					}
-					else {
-						msg = [NSString stringWithFormat:@"%@ new posts", count];
-					}
-
-					RFDispatchMainAsync (^{
-						[self showMessageField:msg];
-						[self hidePublishingStatus:YES];
-					});
+	// only check for new posts if timeline selected
+	NSMutableDictionary* args = [NSMutableDictionary dictionary];
+	if (self.selectedTimeline == kSelectionTimeline) {
+		NSString* top_post_id = [self topPostID];
+		if (top_post_id.length > 0) {
+			[args setObject:top_post_id forKey:@"since_id"];
+		}
+	}
+	
+	// always call to get publishing status, even if no new posts
+	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSNumber* count = [response.parsedResponse objectForKey:@"count"];
+			NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
+			NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
+			if (is_publishing && [is_publishing boolValue]) {
+				RFDispatchMainAsync (^{
+					[self showPublishingStatus];
+				});
+			}
+			else if (count && count.integerValue > 0) {
+				NSString* msg;
+				if (count.integerValue == 1) {
+					msg = @"1 new post";
 				}
 				else {
-					RFDispatchMainAsync (^{
-						[self hideMessageField];
-						[self hidePublishingStatus:YES];
-					});
-				}
-
-				if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
-					self.checkSeconds = check_seconds;
+					msg = [NSString stringWithFormat:@"%@ new posts", count];
 				}
 
 				RFDispatchMainAsync (^{
-					[self setupTimer];
+					[self showMessageField:msg];
+					[self hidePublishingStatus:YES];
 				});
 			}
-		}];
-	}
+			else {
+				RFDispatchMainAsync (^{
+					[self hideMessageField];
+					[self hidePublishingStatus:YES];
+				});
+			}
+
+			if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
+				self.checkSeconds = check_seconds;
+			}
+
+			RFDispatchMainAsync (^{
+				[self setupTimer];
+			});
+		}
+	}];
 
 	[self setupTimer];
 }
