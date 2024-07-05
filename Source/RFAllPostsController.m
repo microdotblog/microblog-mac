@@ -75,6 +75,12 @@
 	self.segmentedControl.hidden = self.isShowingPages;
 }
 
+- (void) disableTabs
+{
+	self.segmentedControl.enabled = NO;
+	[self.segmentedControl setSelectedSegment:0];
+}
+
 - (void) setupBrowser
 {
 	NSString* browser_s = @"Open in Browser";
@@ -291,6 +297,7 @@
 	if (s.length == 0) {
 		self.currentPosts = self.allPosts;
 		[self.tableView reloadData];
+		self.segmentedControl.enabled = YES;
 	}
 	else if (s.length < 4) {
 		// for short queries, just filter local recent posts
@@ -310,9 +317,11 @@
 		}
 	
 		[self.tableView reloadData];
+		[self disableTabs];
 	}
 	else {
 		[self fetchPostsForSearch:[sender stringValue]];
+		[self disableTabs];
 	}
 }
 
