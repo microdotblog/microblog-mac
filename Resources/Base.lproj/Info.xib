@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBInfoController">
             <connections>
+                <outlet property="textCopyButton" destination="xy8-eu-tlt" id="8LK-EK-zkt"/>
                 <outlet property="textField" destination="k1h-GP-V6V" id="X5M-jv-IwY"/>
                 <outlet property="urlField" destination="bPz-kz-Maa" id="aF0-Oq-Tys"/>
                 <outlet property="window" destination="BVz-db-yeu" id="bnf-9O-ppr"/>

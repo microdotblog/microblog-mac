@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTextField* urlField;
 @property (strong, nonatomic) IBOutlet NSTextField* textField;
+@property (strong, nonatomic) IBOutlet NSButton* textCopyButton;
 
 @property (strong, nonatomic) NSString* url;
 @property (strong, nonatomic) NSString* text;

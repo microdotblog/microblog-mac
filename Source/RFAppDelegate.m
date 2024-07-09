@@ -794,12 +794,10 @@
 {
 	if (self.infoController == nil) {
 		self.infoController = [[MBInfoController alloc] init];
-		[self.infoController setupWithURL:url text:text];
-		[self.infoController showWindow:nil];
 	}
-	else {
-		[self.infoController setupWithURL:url text:text];
-	}
+	
+	[self.infoController setupWithURL:url text:text];
+	[self.infoController showWindow:nil];
 }
 
 @end

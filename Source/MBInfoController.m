@@ -42,7 +42,14 @@
 - (void) setupFields
 {
 	self.urlField.stringValue = self.url;
-	self.textField.stringValue = [NSString stringWithFormat:@"🤖 %@", self.text];
+	if (self.text.length > 0) {
+		self.textField.stringValue = [NSString stringWithFormat:@"🤖 %@", self.text];
+	}
+	else {
+		self.textField.stringValue = @"";
+	}
+	
+	[self.textCopyButton setTitle:@"Copy Text"];
 }
 
 - (void) setupNotifications
@@ -60,6 +67,11 @@
 
 - (IBAction) copyText:(id)sender
 {
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:self.text forType:NSPasteboardTypeString];
+	
+	[self.textCopyButton setTitle:@"Copied"];
 }
 
 @end
