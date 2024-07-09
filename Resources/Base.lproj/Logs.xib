@@ -16,7 +16,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Logs" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" frameAutosaveName="LogsWindow" animationBehavior="default" id="O0B-gE-ko6" customClass="NSPanel">
+        <window title="Logs" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" frameAutosaveName="LogsWindow" animationBehavior="default" tabbingMode="disallowed" id="O0B-gE-ko6" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" nonactivatingPanel="YES"/>
             <rect key="contentRect" x="621" y="405" width="500" height="350"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
@@ -80,7 +80,7 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="UaX-V9-Yo1">
-                            <rect key="frame" x="1" y="335" width="350" height="16"/>
+                            <rect key="frame" x="1" y="288" width="500" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Aeq-aR-wtc">
@@ -91,7 +91,7 @@
                     <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FYh-xK-nsF">
                         <rect key="frame" x="10" y="315" width="121" height="24"/>
                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Oot-BQ-qCo">
-                            <font key="font" metaFont="system" size="12"/>
+                            <font key="font" metaFont="cellTitle"/>
                             <segments>
                                 <segment label="Logs" width="56" selected="YES"/>
                                 <segment label="Errors" width="56" tag="1"/>
