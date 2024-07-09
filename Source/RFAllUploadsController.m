@@ -133,6 +133,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self showBlogsMenu];
 }
 
+- (IBAction) showInfo:(id)sender
+{
+	NSSet* index_paths = [self.collectionView selectionIndexPaths];
+	NSIndexPath* index_path = [index_paths anyObject];
+	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
+		kInfoURLKey: up.url,
+		kInfoTextKey: up.alt
+	}];
+}
+
 - (void) showBlogsMenu
 {
     if (self.blogsMenuPopover) {
@@ -481,11 +493,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
 {
+	// update selection style
 	for (NSIndexPath* index_path in indexPaths) {
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
 		item.selectionOverlayView.layer.opacity = 0.4;
 		item.selectionOverlayView.layer.backgroundColor = [NSColor blackColor].CGColor;
 	}
+	
+	// also notify get info window
+	NSIndexPath* index_path = [indexPaths anyObject];
+	RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateInfoNotification object:self userInfo:@{
+		kInfoURLKey: item.url,
+		kInfoTextKey: item.alt
+	}];
 }
 
 - (void) collectionView:(NSCollectionView *)collectionView didDeselectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths

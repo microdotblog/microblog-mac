@@ -76,7 +76,12 @@
 	
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	if ([up isPhoto]) {
-		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
+		if (self.alt.length > 0) {
+			s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", self.url, self.alt];
+		}
+		else {
+			s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
+		}
 	}
 	else if ([up isVideo]) {
 		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", self.url];

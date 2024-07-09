@@ -31,8 +31,11 @@
 
 - (void) setupWithURL:(NSString *)url text:(NSString *)text
 {
+	// replace quotes to make alt text pasting easier
+	NSString* s = [text stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+	
 	self.url = url;
-	self.text = text;
+	self.text = s;
 	
 	if (self.window != nil) {
 		[self setupFields];
@@ -44,9 +47,11 @@
 	self.urlField.stringValue = self.url;
 	if (self.text.length > 0) {
 		self.textField.stringValue = [NSString stringWithFormat:@"🤖 %@", self.text];
+		self.textCopyButton.hidden = NO;
 	}
 	else {
 		self.textField.stringValue = @"";
+		self.textCopyButton.hidden = YES;
 	}
 	
 	[self.textCopyButton setTitle:@"Copy Text"];
@@ -59,10 +64,10 @@
 
 - (void) updateInfoNotification:(NSNotification *)notification
 {
-	self.url = [notification.userInfo objectForKey:kInfoURLKey];
-	self.text = [notification.userInfo objectForKey:kInfoTextKey];
+	NSString* url = [notification.userInfo objectForKey:kInfoURLKey];
+	NSString* text = [notification.userInfo objectForKey:kInfoTextKey];
 	
-	[self setupFields];
+	[self setupWithURL:url text:text];
 }
 
 - (IBAction) copyText:(id)sender
