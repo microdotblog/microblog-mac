@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet NSMenuItem* htmlWithoutPlayerItem;
 
 @property (strong, nonatomic) NSString* url;
+@property (strong, nonatomic) NSString* alt;
 
 - (void) setupForURL;
 - (void) disableMenu;

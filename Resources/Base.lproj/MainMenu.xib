@@ -240,6 +240,12 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="uyl-h8-XO2"/>
+                            <menuItem title="Get Info" keyEquivalent="I" id="YnS-kh-iVi">
+                                <connections>
+                                    <action selector="showInfo:" target="-1" id="1lA-Ng-okc"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="bA0-9I-9EJ"/>
                             <menuItem title="Find" id="4EN-yA-p0u">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Find" id="1b7-l0-nxx">

@@ -98,6 +98,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			for (NSDictionary* item in items) {
 				RFUpload* upload = [[RFUpload alloc] init];
 				upload.url = [item objectForKey:@"url"];
+				upload.alt = [item objectForKey:@"alt"];
 
 				upload.width = [[item objectForKey:@"width"] integerValue];
 				upload.height = [[item objectForKey:@"height"] integerValue];
@@ -452,6 +453,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	
 	item.url = up.url;
+	item.alt = up.alt;
 	[item setupForURL];
 	
 	return item;

@@ -93,6 +93,12 @@
                         <action selector="copyHTMLwithoutPlayer:" target="na8-0v-oNY" id="A3Q-lD-hLO"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Get Info" id="Ly2-yn-oGG">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="getInfo:" target="na8-0v-oNY" id="wA6-1N-Heg"/>
+                    </connections>
+                </menuItem>
             </items>
             <point key="canvasLocation" x="-94" y="-412"/>
         </menu>

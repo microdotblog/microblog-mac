@@ -119,4 +119,12 @@
 	[pb setString:s forType:NSPasteboardTypeString];
 }
 
+- (IBAction) getInfo:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
+		kInfoURLKey: self.url,
+		kInfoTextKey: self.alt
+	}];
+}
+
 @end

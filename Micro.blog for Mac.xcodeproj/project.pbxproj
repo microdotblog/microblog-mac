@@ -69,6 +69,8 @@
 		4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CAB411F93F00000D9B10E /* RFFriendsController.m */; };
 		4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */; };
 		4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B36915529A2BAD800561D9A /* CrosspostCell.xib */; };
+		4B37737D2C3DC451000495DF /* Info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B37737B2C3DC451000495DF /* Info.xib */; };
+		4B3773802C3DC4A5000495DF /* MBInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B37737F2C3DC4A5000495DF /* MBInfoController.m */; };
 		4B3840CB2692014000AD3781 /* RFExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840CA2692014000AD3781 /* RFExportController.m */; };
 		4B3840CE2692019B00AD3781 /* Export.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B3840CC2692019B00AD3781 /* Export.xib */; };
 		4B3840D12692038B00AD3781 /* RFMarkdownExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */; };
@@ -357,6 +359,9 @@
 		4B36915229A2BA8B00561D9A /* MBCrosspostCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCrosspostCell.h; path = Source/MBCrosspostCell.h; sourceTree = "<group>"; };
 		4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCrosspostCell.m; path = Source/MBCrosspostCell.m; sourceTree = "<group>"; };
 		4B36915629A2BAD800561D9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CrosspostCell.xib; sourceTree = "<group>"; };
+		4B37737C2C3DC451000495DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Info.xib; sourceTree = "<group>"; };
+		4B37737E2C3DC4A5000495DF /* MBInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBInfoController.h; path = Source/MBInfoController.h; sourceTree = "<group>"; };
+		4B37737F2C3DC4A5000495DF /* MBInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBInfoController.m; path = Source/MBInfoController.m; sourceTree = "<group>"; };
 		4B3840C92692014000AD3781 /* RFExportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFExportController.h; path = Source/RFExportController.h; sourceTree = "<group>"; };
 		4B3840CA2692014000AD3781 /* RFExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFExportController.m; path = Source/RFExportController.m; sourceTree = "<group>"; };
 		4B3840CD2692019B00AD3781 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Export.xib; sourceTree = "<group>"; };
@@ -1046,6 +1051,8 @@
 				4B88CFB42BBD95360091BB19 /* MBLogCell.m */,
 				4B88CFB92BBD9D3B0091BB19 /* MBLog.h */,
 				4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */,
+				4B37737E2C3DC4A5000495DF /* MBInfoController.h */,
+				4B37737F2C3DC4A5000495DF /* MBInfoController.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1098,6 +1105,7 @@
 				4B9F063E2767BC400007F21D /* Date.xib */,
 				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
 				4BDB3823278A838A00BD457C /* Preview.xib */,
+				4B37737B2C3DC451000495DF /* Info.xib */,
 				4BB9905C2A857A2000C490E2 /* AllTags.xib */,
 				4BB990622A86861A00C490E2 /* TagCell.xib */,
 				4BE23F8A2A7008C800E24718 /* Highlights.xib */,
@@ -1273,6 +1281,7 @@
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
 				4BB990642A86861A00C490E2 /* TagCell.xib in Resources */,
 				4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */,
+				4B37737D2C3DC451000495DF /* Info.xib in Resources */,
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
@@ -1393,6 +1402,7 @@
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
 				4BDB382D278B79EC00BD457C /* MBPostWindow.m in Sources */,
 				4B5EE2832063FC8400C87A78 /* RFSettings.m in Sources */,
+				4B3773802C3DC4A5000495DF /* MBInfoController.m in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
 				4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */,
 				4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */,
@@ -1580,6 +1590,14 @@
 				4B36915629A2BAD800561D9A /* Base */,
 			);
 			name = CrosspostCell.xib;
+			sourceTree = "<group>";
+		};
+		4B37737B2C3DC451000495DF /* Info.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B37737C2C3DC451000495DF /* Base */,
+			);
+			name = Info.xib;
 			sourceTree = "<group>";
 		};
 		4B3840CC2692019B00AD3781 /* Export.xib */ = {

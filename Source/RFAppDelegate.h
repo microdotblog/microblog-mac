@@ -19,6 +19,7 @@
 @class MBEditTagsController;
 @class MBAllTagsController;
 @class MBLogsController;
+@class MBInfoController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -33,6 +34,7 @@
 @property (strong, nonatomic) MBEditTagsController* editTagsController;
 @property (strong, nonatomic) MBAllTagsController* allTagsController;
 @property (strong, nonatomic) MBLogsController* logsController;
+@property (strong, nonatomic) MBInfoController* infoController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 @property (strong, nonatomic) NSMutableArray* photoWindows; // RFPhotoZoomController
 

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBInfoController">
+            <connections>
+                <outlet property="textField" destination="k1h-GP-V6V" id="X5M-jv-IwY"/>
+                <outlet property="urlField" destination="bPz-kz-Maa" id="aF0-Oq-Tys"/>
+                <outlet property="window" destination="BVz-db-yeu" id="bnf-9O-ppr"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Info" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" frameAutosaveName="InfoWindow" animationBehavior="default" tabbingMode="disallowed" titlebarAppearsTransparent="YES" id="BVz-db-yeu" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" nonactivatingPanel="YES"/>
+            <rect key="contentRect" x="173" y="115" width="284" height="131"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <view key="contentView" id="xUf-TW-Qby">
+                <rect key="frame" x="0.0" y="0.0" width="284" height="131"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bPz-kz-Maa">
+                        <rect key="frame" x="14" y="101" width="257" height="16"/>
+                        <textFieldCell key="cell" selectable="YES" title="https://..." id="fyk-a5-5Tv">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-GP-V6V">
+                        <rect key="frame" x="12" y="64" width="259" height="16"/>
+                        <textFieldCell key="cell" selectable="YES" title="🤖 Description..." id="FdX-kQ-0hs">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xy8-eu-tlt">
+                        <rect key="frame" x="9" y="14" width="87" height="32"/>
+                        <buttonCell key="cell" type="push" title="Copy Text" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9ng-Gh-Oxd">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="copyText:" target="-2" id="6Hm-3s-LIi"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="xy8-eu-tlt" firstAttribute="leading" secondItem="xUf-TW-Qby" secondAttribute="leading" constant="16" id="0vQ-Nb-r00"/>
+                    <constraint firstAttribute="trailing" secondItem="bPz-kz-Maa" secondAttribute="trailing" constant="15" id="NiR-hH-XbC"/>
+                    <constraint firstItem="k1h-GP-V6V" firstAttribute="leading" secondItem="xUf-TW-Qby" secondAttribute="leading" constant="14" id="O99-U3-7j3"/>
+                    <constraint firstItem="xy8-eu-tlt" firstAttribute="top" secondItem="k1h-GP-V6V" secondAttribute="bottom" constant="23" id="UBt-BM-j3o"/>
+                    <constraint firstItem="k1h-GP-V6V" firstAttribute="top" secondItem="bPz-kz-Maa" secondAttribute="bottom" constant="21" id="ZrD-l9-lFq"/>
+                    <constraint firstItem="bPz-kz-Maa" firstAttribute="leading" secondItem="xUf-TW-Qby" secondAttribute="leading" constant="16" id="euB-UK-QDW"/>
+                    <constraint firstAttribute="trailing" secondItem="k1h-GP-V6V" secondAttribute="trailing" constant="15" id="l7A-zv-BuP"/>
+                    <constraint firstAttribute="bottom" secondItem="xy8-eu-tlt" secondAttribute="bottom" constant="21" id="oJb-L1-KtH"/>
+                    <constraint firstItem="bPz-kz-Maa" firstAttribute="top" secondItem="xUf-TW-Qby" secondAttribute="top" constant="14" id="utm-mx-oB1"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="52" y="-363.5"/>
+        </window>
+    </objects>
+</document>

@@ -26,6 +26,7 @@
 #import "MBEditTagsController.h"
 #import "MBAllTagsController.h"
 #import "MBLogsController.h"
+#import "MBInfoController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -193,6 +194,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoWindowDidCloseNotification:) name:kPhotoWindowDidCloseNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAllTagsNotification:) name:kShowTagsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogsNotification:) name:kShowLogsNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showInfoNotification:) name:kShowInfoNotification object:nil];
 }
 
 - (void) setupAppearance
@@ -509,6 +511,11 @@
 	[self showLogs];
 }
 
+- (IBAction) showInfo:(id)sender
+{
+	[self showInfoWithURL:@"" text:@""];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -545,6 +552,14 @@
 - (void) showLogsNotification:(NSNotification *)notification
 {
 	[self showLogs];
+}
+
+- (void) showInfoNotification:(NSNotification *)notification
+{
+	NSString* url = [notification.userInfo objectForKey:kInfoURLKey];
+	NSString* text = [notification.userInfo objectForKey:kInfoTextKey];
+	
+	[self showInfoWithURL:url text:text];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification
@@ -772,6 +787,18 @@
 	else {
 		[self.logsController showWindow:nil];
 		[self.logsController refresh];
+	}
+}
+
+- (void) showInfoWithURL:(NSString *)url text:(NSString *)text
+{
+	if (self.infoController == nil) {
+		self.infoController = [[MBInfoController alloc] init];
+		[self.infoController setupWithURL:url text:text];
+		[self.infoController showWindow:nil];
+	}
+	else {
+		[self.infoController setupWithURL:url text:text];
 	}
 }
 
