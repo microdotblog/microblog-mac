@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.2.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added a new Get Info window for uploads, to show URL and auto-generated text for photos. The keyboard shortcut is ⌘-shift-I.</li>
+					<li>Fixed issue sometimes adding tab-related disabled menu items to View menu.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Wed, 10 Jul 2024 08:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.2.3.zip" sparkle:shortVersionString="3.2.3" sparkle:version="150" length="4257236" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.2.2</title>
  			<description><![CDATA[
 				<style>
