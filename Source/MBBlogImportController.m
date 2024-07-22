@@ -322,7 +322,7 @@
 			destination_uid = @"";
 		}
 		NSDictionary* args = @{
-			@"name": @"",
+			@"name": post.title,
 			@"content": post.text,
 			@"published": [post.postedAt uuRfc3339StringForUTCTimeZone],
 			@"mp-destination": destination_uid
@@ -346,7 +346,7 @@
 		RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
 		NSDictionary* args = @{
 			@"h": @"entry",
-			@"name": @"",
+			@"name": post.title,
 			@"content": post.text,
 			@"published": [post.postedAt uuRfc3339StringForUTCTimeZone]
 		};
@@ -385,7 +385,7 @@
 			NSMutableDictionary* content = [NSMutableDictionary dictionary];
 			
 			content[@"post_status"] = @"publish";
-			content[@"post_title"] = @"";
+			content[@"post_title"] = post.title;
 			content[@"post_content"] = post_text;
 			content[@"post_date"] = post.postedAt;
 			if (post_format.length > 0) {
