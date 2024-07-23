@@ -508,7 +508,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 	item.thumbnailImageView.image = nil;
-	
+	[item disableMenu];
+
 	return item;
 }
 
