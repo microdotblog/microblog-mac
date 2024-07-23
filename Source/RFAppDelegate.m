@@ -635,12 +635,12 @@
 		NSString* error = [response.parsedResponse objectForKey:@"error"];
 		if (response.parsedResponse == nil) {
 			RFDispatchMainAsync (^{
+				[self showSigninError:nil];
 			});
 		}
 		else if (error) {
 			RFDispatchMainAsync ((^{
-//				[Answers logLoginWithMethod:@"Token" success:@NO customAttributes:nil];
-//				[self showMessage:[NSString stringWithFormat:@"Error signing in: %@", error]];
+				[self showSigninError:error];
 			}));
 		}
 		else {
@@ -798,6 +798,22 @@
 	
 	[self.infoController setupWithURL:url text:text];
 	[self.infoController showWindow:nil];
+}
+
+- (void) showSigninError:(NSString *)message
+{
+	NSString* title = @"Error Signing In";
+	NSString* msg = @"If your session is no longer active, you may need to sign out of Micro.blog and sign back in.";
+	
+	if (message) {
+		msg = [msg stringByAppendingFormat:@" (%@)", message];
+	}
+
+	[NSAlert rf_showTwoButtonAlert:title message:msg okButton:@"Sign Out" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == 1000) {
+			[self signOut:nil];
+		}
+	}];
 }
 
 @end
