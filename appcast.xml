@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.2.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Fixed importing blog post titles from .bar archives.</li>
+					<li>Fixed not showing an error message with invalid session tokens. Now prompts to sign out and back in again.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Tue, 23 Jul 2024 15:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.2.4.zip" sparkle:shortVersionString="3.2.4" sparkle:version="151" length="4257959" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.2.3</title>
  			<description><![CDATA[
 				<style>
