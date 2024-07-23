@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* selectedTopic;
 @property (strong) NSMutableArray* tagmoji;
 
-- (IBAction) showSearch:(id)sender;
+- (IBAction) showSearch:(nullable id)sender;
 - (IBAction) hideSearch:(id)sender;
 
 @end

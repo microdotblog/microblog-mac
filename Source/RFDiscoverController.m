@@ -152,7 +152,7 @@ static NSString* const kDiscoverFeaturedEmojiPrefKey = @"FeaturedEmoji";
 	}
 }
 
-- (IBAction) showSearch:(id)sender
+- (IBAction) showSearch:(nullable id)sender
 {
 	if (self.searchView.superview != nil) {
 		[self.searchView removeFromSuperview];
