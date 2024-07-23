@@ -702,6 +702,10 @@ static NSInteger const kSelectionNotes = 11;
 	}
 }
 
+- (IBAction) toggleBookmarkSummaries:(id)sender
+{
+}
+
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
 	if (item.action == @selector(performFindPanelAction:)) {

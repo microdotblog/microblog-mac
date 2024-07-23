@@ -524,6 +524,12 @@ CA
                                     <action selector="showPreview:" target="-1" id="cYQ-Db-Ce2"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Bookmark Summaries" id="v46-lZ-DIc">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="toggleBookmarkSummaries:" target="-1" id="YiE-FG-VF3"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="ZZH-sJ-y5R"/>
                         </items>
                     </menu>
