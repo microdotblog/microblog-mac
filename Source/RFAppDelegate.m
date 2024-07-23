@@ -12,6 +12,7 @@
 #import "RFWelcomeController.h"
 #import "RFPreferencesController.h"
 #import "RFInstagramController.h"
+#import "MBGlassController.h"
 #import "RFExportController.h"
 #import "RFWordPressExportController.h"
 #import "RFBarExportController.h"
@@ -390,6 +391,27 @@
 		NSURL* url = panel.URL;
 		self.instagramController = [[RFInstagramController alloc] initWithFile:url.path];
 		[self.instagramController showWindow:nil];
+	}
+}
+
+- (IBAction) importGlass:(id)sender
+{
+	if (self.glassController) {
+		[self.glassController close];
+		self.glassController = nil;
+	}
+
+	NSOpenPanel* panel = [NSOpenPanel openPanel];
+	panel.message = @"Unzip your Glass archive download and select the un-zipped folder.";
+	[panel setCanChooseFiles:NO];
+	[panel setCanChooseDirectories:YES];
+	[panel setAllowsMultipleSelection:NO];
+
+	NSModalResponse response = [panel runModal];
+	if (response == NSModalResponseOK) {
+		NSURL* url = panel.URL;
+		self.glassController = [[MBGlassController alloc] initWithFile:url.path];
+		[self.glassController showWindow:nil];
 	}
 }
 

@@ -16,6 +16,7 @@
 		4B001CE82B27AE2000BBF456 /* MBNotesKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CE72B27AE2000BBF456 /* MBNotesKeyController.m */; };
 		4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; };
 		4B00B686255D842200CBE873 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B0881C42C505A3100BA513D /* MBGlassController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0881C32C505A3100BA513D /* MBGlassController.m */; };
 		4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */; };
 		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
 		4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1FA569269E0491006E0451 /* RFDiscoverController.m */; };
@@ -259,6 +260,8 @@
 		4B001CE62B27AE2000BBF456 /* MBNotesKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesKeyController.h; path = Source/MBNotesKeyController.h; sourceTree = "<group>"; };
 		4B001CE72B27AE2000BBF456 /* MBNotesKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesKeyController.m; path = Source/MBNotesKeyController.m; sourceTree = "<group>"; };
 		4B00B678255D827800CBE873 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
+		4B0881C22C505A3100BA513D /* MBGlassController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBGlassController.h; path = Source/MBGlassController.h; sourceTree = "<group>"; };
+		4B0881C32C505A3100BA513D /* MBGlassController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBGlassController.m; path = Source/MBGlassController.m; sourceTree = "<group>"; };
 		4B1F2A242BC2219C00B52EAC /* MBTimelineWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineWindow.h; path = Source/MBTimelineWindow.h; sourceTree = "<group>"; };
 		4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTimelineWindow.m; path = Source/MBTimelineWindow.m; sourceTree = "<group>"; };
 		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
@@ -836,6 +839,8 @@
 				4BD83399273C3DF3007350F2 /* RFGoToUserController.m */,
 				4BB69069209A123300CD5E1E /* RFInstagramController.h */,
 				4BB6906A209A123300CD5E1E /* RFInstagramController.m */,
+				4B0881C22C505A3100BA513D /* MBGlassController.h */,
+				4B0881C32C505A3100BA513D /* MBGlassController.m */,
 				4BDB783A2774E89400D7783C /* MBBlogImportController.h */,
 				4BDB783B2774E89400D7783C /* MBBlogImportController.m */,
 				4B3840C92692014000AD3781 /* RFExportController.h */,
@@ -1459,6 +1464,7 @@
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
 				4B5606D72A73F78700843D59 /* MBBookmark.m in Sources */,
+				4B0881C42C505A3100BA513D /* MBGlassController.m in Sources */,
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
 				4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */,

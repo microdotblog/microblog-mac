@@ -12,6 +12,7 @@
 @class RFWelcomeController;
 @class RFPreferencesController;
 @class RFInstagramController;
+@class MBGlassController;
 @class MBBlogImportController;
 @class RFExportController;
 @class RFBookmarkController;
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) RFWelcomeController* welcomeController;
 @property (strong, nonatomic) RFPreferencesController* prefsController;
 @property (strong, nonatomic) RFInstagramController* instagramController;
+@property (strong, nonatomic) MBGlassController* glassController;
 @property (strong, nonatomic) MBBlogImportController* blogImportController;
 @property (strong, nonatomic) RFExportController* exportController;
 @property (strong, nonatomic) RFBookmarkController* bookmarkController;

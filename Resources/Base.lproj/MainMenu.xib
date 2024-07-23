@@ -144,6 +144,12 @@ DQ
                                                 <action selector="importInstagram:" target="Voe-Tx-rLC" id="Rns-0v-mCA"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Glass..." id="1IL-b0-4GE">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="importGlass:" target="Voe-Tx-rLC" id="hlK-Lx-Vuo"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Visit Micro.blog for More Options" enabled="NO" id="3jj-r9-h0f">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
