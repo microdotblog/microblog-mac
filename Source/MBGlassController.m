@@ -41,16 +41,19 @@
 	NSArray* files = [fm contentsOfDirectoryAtPath:self.path error:NULL];
 	NSMutableArray* photos = [NSMutableArray array];
 
-//	NSDate* d = [NSDate dateWithTimeIntervalSince1970:[taken_at unsignedLongValue]];
-	NSDate* d = [NSDate date];
-
 	for (NSString* filename in files) {
+		// posted date is the file modification date
+		NSString* path = [self.path stringByAppendingPathComponent:filename];
+		NSDictionary* attrs = [fm attributesOfItemAtPath:path error:NULL];
+		NSDate* modified_date = [attrs objectForKey:NSFileModificationDate];
+
+		// put in structure that Instagram base importer understands
 		NSDictionary* info = @{
 			@"media": @[
 				@{
 					@"title": @"",
 					@"uri": filename,
-					@"creation_timestamp": @([d timeIntervalSince1970])
+					@"creation_timestamp": @([modified_date timeIntervalSince1970])
 				}
 			]
 		};
