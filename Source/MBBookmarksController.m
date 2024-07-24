@@ -11,6 +11,7 @@
 #import "RFClient.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
+#import "RFSettings.h"
 #import "NSString+Extras.h"
 #import "NSAppearance+Extras.h"
 
@@ -42,6 +43,7 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectTagNotification:) name:kSelectTagNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBookmarksNotification:) name:kRefreshBookmarksNotification object:nil];
 }
 
 - (void) setupWebView
@@ -51,6 +53,9 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 	}
 	
 	NSString* url = @"https://micro.blog/hybrid/bookmarks";
+	if ([RFSettings boolForKey:kIsShowingBookmarkSummaries]) {
+		url = [url stringByAppendingString:@"?show_summary=1"];
+	}
 	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
@@ -196,6 +201,11 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 {
 	NSString* t = [notification.userInfo objectForKey:kSelectTagNameKey];
 	[self selectTagWithName:t];
+}
+
+- (void) refreshBookmarksNotification:(NSNotification *)notification
+{
+	[self setupWebView];
 }
 
 @end

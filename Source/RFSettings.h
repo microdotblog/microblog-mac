@@ -37,6 +37,7 @@ static NSString* const kExternalBlogFormat = @"ExternalBlogFormat";
 static NSString* const kExternalBlogCategory = @"ExternalBlogCategory";
 static NSString* const kDayOneJournalName = @"DayOneJournalName";
 static NSString* const kTemporaryFoldersPrefKey = @"TemporaryFolders";
+static NSString* const kIsShowingBookmarkSummaries = @"IsShowingBookmarkSummaries";
 
 @interface RFSettings : NSObject
 

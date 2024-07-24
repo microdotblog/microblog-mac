@@ -704,6 +704,10 @@ static NSInteger const kSelectionNotes = 11;
 
 - (IBAction) toggleBookmarkSummaries:(id)sender
 {
+	BOOL was_showing = [RFSettings boolForKey:kIsShowingBookmarkSummaries];
+	[RFSettings setBool:!was_showing forKey:kIsShowingBookmarkSummaries];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshBookmarksNotification object:self];
 }
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
@@ -752,7 +756,19 @@ static NSInteger const kSelectionNotes = 11;
 			[item setTitle:s];
 		}
 	}
+	else if (item.action == @selector(toggleBookmarkSummaries:)) {
+		if ([RFSettings boolForKey:kIsShowingBookmarkSummaries]) {
+			[item setState:NSControlStateValueOn];
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+		}
 
+		if (self.selectedTimeline != kSelectionFavorites) {
+			return NO;
+		}
+	}
+	
 	return YES;
 }
 

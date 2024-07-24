@@ -152,4 +152,6 @@ static NSString* const kUpdateInfoNotification = @"MBUpdateInfoNotification";
 static NSString* const kInfoURLKey = @"url";
 static NSString* const kInfoTextKey = @"text";
 
+static NSString* const kRefreshBookmarksNotification = @"MBRefreshBookmarksNotification";
+
 #define APPSTORE 1
