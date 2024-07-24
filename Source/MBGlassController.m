@@ -47,18 +47,26 @@
 		NSDictionary* attrs = [fm attributesOfItemAtPath:path error:NULL];
 		NSDate* modified_date = [attrs objectForKey:NSFileModificationDate];
 
-		// put in structure that Instagram base importer understands
-		NSDictionary* info = @{
-			@"media": @[
-				@{
-					@"title": @"",
-					@"uri": filename,
-					@"creation_timestamp": @([modified_date timeIntervalSince1970])
-				}
-			]
-		};
+		// check if it's an image
+		NSURL* url = [NSURL fileURLWithPath:path];
+		NSString* uti = nil;
+		[url getResourceValue:&uti forKey:NSURLTypeIdentifierKey error:NULL];
+		BOOL is_image = uti && UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeImage);
 		
-		[photos addObject:info];
+		if (is_image) {
+			// put in structure that Instagram base importer understands
+			NSDictionary* info = @{
+				@"media": @[
+					@{
+						@"title": @"",
+						@"uri": filename,
+						@"creation_timestamp": @([modified_date timeIntervalSince1970])
+					}
+				]
+			};
+			
+			[photos addObject:info];
+		}
 	}
 	
 	self.photos = photos;
