@@ -188,7 +188,10 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 - (void) selectTagWithName:(NSString *)tagName
 {
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tagName rf_urlEncoded]];
-	
+	if ([RFSettings boolForKey:kIsShowingBookmarkSummaries]) {
+		url = [url stringByAppendingString:@"&show_summary=1"];
+	}
+
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 	
