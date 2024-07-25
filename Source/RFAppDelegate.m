@@ -61,6 +61,7 @@
 - (void) applicationDidBecomeActive:(NSNotification *)notification
 {
 	[self showMainWindow:nil];
+	[self setupBookmarks];
 }
 
 - (BOOL) applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
@@ -236,6 +237,18 @@
 			 }
 		 }
 	 }];
+}
+
+- (void) setupBookmarks
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/bookmarks/settings"];
+	[client getWithQueryArguments:nil completion:^(UUHttpResponse* response) {
+		NSDictionary* info = response.parsedResponse;
+		if (info && [info isKindOfClass:[NSDictionary class]]) {
+			NSNumber* is_showing_summaries = [info objectForKey:@"is_showing_summaries"];
+			[RFSettings setBool:[is_showing_summaries boolValue] forKey:kIsShowingBookmarkSummaries];
+		}
+	}];
 }
 
 - (void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context
@@ -688,6 +701,7 @@
 		
 			RFDispatchMainAsync (^{
 				[self loadTimelineWithToken:token account:a];
+				[self setupBookmarks];
 				[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 			});
 		}

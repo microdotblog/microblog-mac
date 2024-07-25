@@ -707,6 +707,14 @@ static NSInteger const kSelectionNotes = 11;
 	BOOL was_showing = [RFSettings boolForKey:kIsShowingBookmarkSummaries];
 	[RFSettings setBool:!was_showing forKey:kIsShowingBookmarkSummaries];
 	
+	NSDictionary* params = @{
+		@"summaries": @(!was_showing)
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/bookmarks/settings"];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+	}];
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshBookmarksNotification object:self];
 }
 
