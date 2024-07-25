@@ -6,6 +6,27 @@
 		<language>en</language>
 
 		<item>
+			<title>Version 3.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added import for Glass photo archives. Select File → Import → Glass and select the unzipped export folder from Glass.</li>
+					<li>Added showing auto-generated bookmarked web page summaries for Micro.blog Premium. Select View → Bookmark Summaries.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Thu, 25 Jul 2024 09:40:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.3.zip" sparkle:shortVersionString="3.3" sparkle:version="152" length="4262238" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.2.4</title>
  			<description><![CDATA[
 				<style>
