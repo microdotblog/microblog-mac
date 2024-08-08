@@ -387,8 +387,8 @@
 - (void) processTags
 {
 	NSColor* tag_c = [NSColor colorNamed:@"color_syntax_tags"];
-	NSColor* attr_c = [NSColor colorWithWhite:0.502 alpha:1.0];
-	NSColor* value_c = [NSColor colorWithRed:0.2 green:0.478 blue:0.718 alpha:1.0];
+	NSColor* attr_c = [NSColor colorNamed:@"color_syntax_attr_name"];
+	NSColor* value_c = [NSColor colorNamed:@"color_syntax_attr_value"];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_tag = NO;
 	BOOL is_attr = NO;
