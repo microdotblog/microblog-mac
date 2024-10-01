@@ -49,6 +49,10 @@
 		return @"";
 	}
 	
+	if ([text hasSuffix:@"\n"]) {
+		text = [text substringToIndex:[text length] - 1];
+	}
+	
 	NSData* key_data = [self dataFromHexString:key];
 	NSData* decoded_data = [[NSData alloc] initWithBase64EncodedString:text options:0];
 
