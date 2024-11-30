@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* importButton;
 
 @property (strong, nonatomic) NSString* path;
+@property (strong, nonatomic) NSString* threadsPath;
 @property (strong, nonatomic) NSString* folder;
 @property (strong, nonatomic) NSArray* photos; // NSDictionary
 @property (strong, nonatomic) NSMutableArray* queued; // NSDictionary

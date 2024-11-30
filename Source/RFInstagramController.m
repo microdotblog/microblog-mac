@@ -30,10 +30,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	self = [super initWithWindowNibName:@"Instagram"];
 	if (self) {
-		// content/posts_1.json
+		// your_instagram_activity/content/posts_1.json
+		// your_instagram_activity/threads/threads_and_replies.json
+		// media/path/photo.jpg
+
 		self.path = path;
-		self.folder = [[path stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-		
+		self.folder = [[[path stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+		self.threadsPath = [[[self.folder stringByAppendingPathComponent:@"your_instagram_activity"] stringByAppendingPathComponent:@"threads"] stringByAppendingPathComponent:@"threads_and_replies.json"];
+
 		[self setupPhotos];
 	}
 	
@@ -51,10 +55,33 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupPhotos
 {
-	NSData* d = [NSData dataWithContentsOfFile:self.path];
+	NSData* d = nil;
 	NSError* e = nil;
-	NSArray* photos = [NSJSONSerialization JSONObjectWithData:d options:0 error:&e];
-	self.photos = [photos sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* info1, NSDictionary* info2) {
+
+	// get Instagram photos
+	d = [NSData dataWithContentsOfFile:self.path];
+	NSArray* instagram_photos = [NSJSONSerialization JSONObjectWithData:d options:0 error:&e];
+	
+	// if there's a Threads file, gather photos that have a URI
+	if ([[NSFileManager defaultManager] fileExistsAtPath:self.threadsPath]) {
+		d = [NSData dataWithContentsOfFile:self.threadsPath];
+		NSDictionary* threads_info = [NSJSONSerialization JSONObjectWithData:d options:0 error:&e];
+		NSArray* threads_posts = [threads_info objectForKey:@"text_post_app_text_posts"];
+		NSMutableArray* threads_photos = [NSMutableArray array];
+		for (NSDictionary* threads_photo in threads_posts) {
+			NSDictionary* media = [[threads_photo objectForKey:@"media"] firstObject];
+			if ([[media objectForKey:@"uri"] length] > 0) {
+				[threads_photos addObject:media];
+			}
+		}
+		
+		self.photos = [instagram_photos arrayByAddingObjectsFromArray:threads_photos];
+	}
+	else {
+		self.photos = instagram_photos;
+	}
+	
+	self.photos = [self.photos sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* info1, NSDictionary* info2) {
 		NSArray* media1 = [info1 objectForKey:@"media"];
 		NSArray* media2 = [info2 objectForKey:@"media"];
 		NSDictionary* photo1 = [media1 firstObject];
