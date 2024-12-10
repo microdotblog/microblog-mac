@@ -28,6 +28,7 @@
 #import "MBAllTagsController.h"
 #import "MBLogsController.h"
 #import "MBInfoController.h"
+#import "MBCollectionsController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -551,6 +552,11 @@
 	[self showInfoWithURL:@"" text:@""];
 }
 
+- (IBAction) showCollections:(id)sender
+{
+	[self showCollections];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -834,6 +840,18 @@
 	
 	[self.infoController setupWithURL:url text:text];
 	[self.infoController showWindow:nil];
+}
+
+- (void) showCollections
+{
+	if (self.collectionsController == nil) {
+		self.collectionsController = [[MBCollectionsController alloc] init];
+		[self.collectionsController showWindow:nil];
+	}
+	else {
+		[self.collectionsController showWindow:nil];
+		[self.collectionsController refresh];
+	}
 }
 
 - (void) showSigninError:(NSString *)message

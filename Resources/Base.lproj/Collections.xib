@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBCollectionsController">
+            <connections>
+                <outlet property="progressSpinner" destination="eC1-Ct-iQB" id="mha-hI-YyX"/>
+                <outlet property="tableView" destination="1ia-yv-eLE" id="9wt-XI-gLB"/>
+                <outlet property="window" destination="X4L-Pf-0ib" id="TdN-xu-Mtz"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Collections" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" frameAutosaveName="" animationBehavior="default" id="X4L-Pf-0ib" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" nonactivatingPanel="YES"/>
+            <rect key="contentRect" x="173" y="115" width="250" height="300"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <value key="minSize" type="size" width="200" height="200"/>
+            <value key="maxSize" type="size" width="400" height="500"/>
+            <view key="contentView" id="z8K-61-LzY">
+                <rect key="frame" x="0.0" y="0.0" width="250" height="300"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="40" horizontalPageScroll="10" verticalLineScroll="40" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NSy-f9-peg">
+                        <rect key="frame" x="-1" y="-1" width="252" height="271"/>
+                        <clipView key="contentView" id="57F-i1-YRo">
+                            <rect key="frame" x="1" y="1" width="250" height="269"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" viewBased="YES" id="1ia-yv-eLE">
+                                    <rect key="frame" x="0.0" y="0.0" width="250" height="269"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <size key="intercellSpacing" width="17" height="0.0"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="238" minWidth="40" maxWidth="1000" id="Hgu-1t-ZJn">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="baD-qs-L4n">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <prototypeCellViews>
+                                                <tableCellView id="dEp-9E-CUq">
+                                                    <rect key="frame" x="8" y="0.0" width="233" height="24"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </tableCellView>
+                                            </prototypeCellViews>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-2" id="jnd-Rr-wlo"/>
+                                        <outlet property="delegate" destination="-2" id="MzW-2z-4pb"/>
+                                    </connections>
+                                </tableView>
+                            </subviews>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="jjp-Rc-VEZ">
+                            <rect key="frame" x="1" y="118" width="238" height="16"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="1RY-wG-6Ru">
+                            <rect key="frame" x="224" y="17" width="15" height="102"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="eC1-Ct-iQB">
+                        <rect key="frame" x="219" y="15" width="16" height="16"/>
+                    </progressIndicator>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SpM-BC-gcL">
+                        <rect key="frame" x="15" y="277" width="40" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Name" id="aGA-ca-WUk">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DxT-H3-2uP">
+                        <rect key="frame" x="214" y="272" width="20" height="26"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="XLt-FR-mOf"/>
+                            <constraint firstAttribute="height" constant="20" id="uY5-Ch-pOa"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="photo.on.rectangle" catalog="system" id="yx9-Wk-SHn"/>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="SpM-BC-gcL" firstAttribute="top" secondItem="z8K-61-LzY" secondAttribute="top" constant="7" id="18d-YH-f5K"/>
+                    <constraint firstAttribute="bottom" secondItem="eC1-Ct-iQB" secondAttribute="bottom" constant="15" id="ABk-sY-kRS"/>
+                    <constraint firstAttribute="trailing" secondItem="DxT-H3-2uP" secondAttribute="trailing" constant="16" id="JPc-Od-Dze"/>
+                    <constraint firstItem="NSy-f9-peg" firstAttribute="leading" secondItem="z8K-61-LzY" secondAttribute="leading" constant="-1" id="XMs-lR-uS0"/>
+                    <constraint firstAttribute="trailing" secondItem="NSy-f9-peg" secondAttribute="trailing" constant="-1" id="YfX-DE-F9K"/>
+                    <constraint firstItem="NSy-f9-peg" firstAttribute="top" secondItem="SpM-BC-gcL" secondAttribute="bottom" constant="7" id="Zyy-th-W3a"/>
+                    <constraint firstItem="DxT-H3-2uP" firstAttribute="top" secondItem="z8K-61-LzY" secondAttribute="top" constant="5" id="d9Q-Pb-Fjd"/>
+                    <constraint firstAttribute="trailing" secondItem="eC1-Ct-iQB" secondAttribute="trailing" constant="15" id="tWf-bc-yty"/>
+                    <constraint firstItem="SpM-BC-gcL" firstAttribute="leading" secondItem="z8K-61-LzY" secondAttribute="leading" constant="17" id="uU0-ed-KDF"/>
+                    <constraint firstAttribute="bottom" secondItem="NSy-f9-peg" secondAttribute="bottom" constant="-1" id="v52-Bs-77K"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="-25" y="91"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="photo.on.rectangle" catalog="system" width="19" height="15"/>
+    </resources>
+</document>

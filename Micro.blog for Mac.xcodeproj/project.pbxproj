@@ -132,6 +132,11 @@
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
 		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
+		4B79E2852D089BC500A22861 /* Collections.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B79E2832D089BC500A22861 /* Collections.xib */; };
+		4B79E28A2D089D2700A22861 /* MBCollectionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E2892D089D2700A22861 /* MBCollectionsController.m */; };
+		4B79E28D2D089D7600A22861 /* MBCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E28C2D089D7600A22861 /* MBCollection.m */; };
+		4B79E2902D089DC000A22861 /* MBCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E28F2D089DC000A22861 /* MBCollectionCell.m */; };
+		4B79E2932D089E0300A22861 /* CollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B79E2912D089E0300A22861 /* CollectionCell.xib */; };
 		4B7CC9892B291B2E00AA8085 /* MBNoteCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */; };
 		4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
@@ -470,6 +475,14 @@
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
+		4B79E2842D089BC500A22861 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Collections.xib; sourceTree = "<group>"; };
+		4B79E2882D089D2700A22861 /* MBCollectionsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCollectionsController.h; path = Source/MBCollectionsController.h; sourceTree = "<group>"; };
+		4B79E2892D089D2700A22861 /* MBCollectionsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCollectionsController.m; path = Source/MBCollectionsController.m; sourceTree = "<group>"; };
+		4B79E28B2D089D7600A22861 /* MBCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCollection.h; path = Source/MBCollection.h; sourceTree = "<group>"; };
+		4B79E28C2D089D7600A22861 /* MBCollection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCollection.m; path = Source/MBCollection.m; sourceTree = "<group>"; };
+		4B79E28E2D089DC000A22861 /* MBCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCollectionCell.h; path = Source/MBCollectionCell.h; sourceTree = "<group>"; };
+		4B79E28F2D089DC000A22861 /* MBCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCollectionCell.m; path = Source/MBCollectionCell.m; sourceTree = "<group>"; };
+		4B79E2922D089E0300A22861 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CollectionCell.xib; sourceTree = "<group>"; };
 		4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Micro.blog-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBNoteCrypto.swift; path = Source/MBNoteCrypto.swift; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1058,6 +1071,12 @@
 				4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */,
 				4B37737E2C3DC4A5000495DF /* MBInfoController.h */,
 				4B37737F2C3DC4A5000495DF /* MBInfoController.m */,
+				4B79E2882D089D2700A22861 /* MBCollectionsController.h */,
+				4B79E2892D089D2700A22861 /* MBCollectionsController.m */,
+				4B79E28B2D089D7600A22861 /* MBCollection.h */,
+				4B79E28C2D089D7600A22861 /* MBCollection.m */,
+				4B79E28E2D089DC000A22861 /* MBCollectionCell.h */,
+				4B79E28F2D089DC000A22861 /* MBCollectionCell.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1121,6 +1140,8 @@
 				4B001CE32B27AB1B00BBF456 /* NotesKeyWindow.xib */,
 				4B88CFAD2BBD92950091BB19 /* Logs.xib */,
 				4B88CFB62BBD954A0091BB19 /* LogCell.xib */,
+				4B79E2832D089BC500A22861 /* Collections.xib */,
+				4B79E2912D089E0300A22861 /* CollectionCell.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1290,6 +1311,7 @@
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
+				4B79E2852D089BC500A22861 /* Collections.xib in Resources */,
 				4B5606D42A73191800843D59 /* EditTags.xib in Resources */,
 				4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */,
 				4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */,
@@ -1301,6 +1323,7 @@
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */,
+				4B79E2932D089E0300A22861 /* CollectionCell.xib in Resources */,
 				4B3840CE2692019B00AD3781 /* Export.xib in Resources */,
 				4BE23F9B2A70110900E24718 /* Bookmarks.xib in Resources */,
 				4BF7E51828354F6900500C59 /* BookshelfCell.xib in Resources */,
@@ -1353,6 +1376,7 @@
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,
 				4B2CAB061F90667300D9B10E /* entities.c in Sources */,
 				4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */,
+				4B79E28A2D089D2700A22861 /* MBCollectionsController.m in Sources */,
 				4B2CAB151F90667300D9B10E /* win32tc.c in Sources */,
 				4B3840D12692038B00AD3781 /* RFMarkdownExportController.m in Sources */,
 				4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */,
@@ -1448,7 +1472,9 @@
 				4B5EE27D206330B800C87A78 /* RFBlogCell.m in Sources */,
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
 				4BF1A1222BBEF57B00256D3C /* MBSimpleTimelineController.m in Sources */,
+				4B79E28D2D089D7600A22861 /* MBCollection.m in Sources */,
 				4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */,
+				4B79E2902D089DC000A22861 /* MBCollectionCell.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
@@ -1700,6 +1726,22 @@
 				4B608B472003B86400589F77 /* Base */,
 			);
 			name = Topic.xib;
+			sourceTree = "<group>";
+		};
+		4B79E2832D089BC500A22861 /* Collections.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B79E2842D089BC500A22861 /* Base */,
+			);
+			name = Collections.xib;
+			sourceTree = "<group>";
+		};
+		4B79E2912D089E0300A22861 /* CollectionCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B79E2922D089E0300A22861 /* Base */,
+			);
+			name = CollectionCell.xib;
 			sourceTree = "<group>";
 		};
 		4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */ = {
@@ -2029,7 +2071,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 152;
+				CURRENT_PROJECT_VERSION = 153;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2046,7 +2088,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.3.1;
+				MARKETING_VERSION = 3.4;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2066,7 +2108,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 152;
+				CURRENT_PROJECT_VERSION = 153;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2083,7 +2125,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.3.1;
+				MARKETING_VERSION = 3.4;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
