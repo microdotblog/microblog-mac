@@ -587,12 +587,12 @@ CA
                                     <action selector="showLogs:" target="Voe-Tx-rLC" id="CO6-aF-tDj"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Collections" id="BmT-o4-f35">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Collections" keyEquivalent="K" id="BmT-o4-f35">
                                 <connections>
                                     <action selector="showCollections:" target="Voe-Tx-rLC" id="6KI-bM-rYh"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="QEd-zI-EHY"/>
                             <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
