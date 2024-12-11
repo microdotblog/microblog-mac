@@ -154,4 +154,7 @@ static NSString* const kInfoTextKey = @"text";
 
 static NSString* const kRefreshBookmarksNotification = @"MBRefreshBookmarksNotification";
 
+static NSString* const kShowCollectionNotification = @"MBShowCollectionNotification";
+static NSString* const kCollectionKey = @"collection";
+
 #define APPSTORE 1

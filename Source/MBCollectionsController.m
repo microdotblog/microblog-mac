@@ -41,6 +41,8 @@
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"CollectionCell" bundle:nil] forIdentifier:@"CollectionCell"];
 	[self.tableView registerForDraggedTypes:@[ NSPasteboardTypeFileURL, NSPasteboardTypeString ]];
+	[self.tableView setTarget:self];
+	[self.tableView setDoubleAction:@selector(openRow:)];
 }
 
 - (void) refresh
@@ -129,6 +131,21 @@
 	}
 	
 	return url;
+}
+
+- (void) openRow:(id)sender
+{
+	NSInteger row = [self.tableView clickedRow];
+	if (row < 0) {
+		row = [self.tableView selectedRow];
+	}
+		
+	if (row >= 0) {
+		MBCollection* c = [self.collections objectAtIndex:row];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kShowCollectionNotification object:self userInfo:@{
+			kCollectionKey: c
+		}];
+	}
 }
 
 #pragma mark -

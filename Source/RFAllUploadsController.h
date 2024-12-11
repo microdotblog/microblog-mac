@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MBCollection;
+
 @interface RFAllUploadsController : NSViewController <NSPopoverDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSCollectionView* collectionView;
@@ -20,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSArray* allPosts; // RFUpload
 @property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
+@property (strong, nonatomic, nullable) MBCollection* selectedCollection;
 
 - (void) openSelectedItem;
 

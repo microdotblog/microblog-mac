@@ -11,6 +11,7 @@
 #import "RFConstants.h"
 #import "RFSettings.h"
 #import "RFBlogsController.h"
+#import "MBCollection.h"
 #import "RFClient.h"
 #import "RFUpload.h"
 #import "RFPhoto.h"
@@ -40,10 +41,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     
     [self setupCollectionView];
     [self setupBlogName];
-	[self setupCollections];
     [self setupNotifications];
     
     [self fetchPosts];
+	[self fetchCollections];
 }
 
 - (void) setupCollectionView
@@ -65,39 +66,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     }
 }
 
-- (void) setupCollections
-{
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	if (destination_uid == nil) {
-		destination_uid = @"";
-	}
-	NSDictionary* args = @{
-		@"q": @"source",
-		@"mp-channel": @"collections",
-		@"mp-destination": destination_uid
-	};
-	
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if ([[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
-			NSArray* items = [[response parsedResponse] objectForKey:@"items"];
-			NSString* s = @"";
-			if (items.count > 0) {
-				if (items.count == 1) {
-					s = @"1 collection";
-				}
-				else {
-					s = [NSString stringWithFormat:@"%lu collections", (unsigned long)items.count];
-				}
-			}
-			RFDispatchMain(^{
-				[self.collectionsButton setTitle:s];
-				[self.collectionsButton setHidden:NO];
-			});
-		}
-	}];
-}
-
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
@@ -105,6 +73,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesNotification:) name:kUploadFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectPhotoCellNotification:) name:kSelectPhotoCellNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedPhotoNotification:) name:kDeleteSelectedPhotoNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCollectionNotification:) name:kShowCollectionNotification object:nil];
 }
 
 - (void) fetchPosts
@@ -122,6 +91,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		@"q": @"source",
 		@"mp-destination": destination_uid
 	};
+	
+	if (self.selectedCollection) {
+		NSMutableDictionary* new_args = [args mutableCopy];
+		[new_args setObject:self.selectedCollection.url forKey:@"microblog-collection"];
+		args = new_args;
+	}
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
@@ -150,6 +125,39 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				[self stopLoadingSidebarRow];
 				self.blogNameButton.hidden = NO;
 				self.collectionView.animator.alphaValue = 1.0;
+			});
+		}
+	}];
+}
+
+- (void) fetchCollections
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-channel": @"collections",
+		@"mp-destination": destination_uid
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
+			NSArray* items = [[response parsedResponse] objectForKey:@"items"];
+			NSString* s = @"";
+			if (items.count > 0) {
+				if (items.count == 1) {
+					s = @"1 collection";
+				}
+				else {
+					s = [NSString stringWithFormat:@"%lu collections", (unsigned long)items.count];
+				}
+			}
+			RFDispatchMain(^{
+				[self.collectionsButton setTitle:s];
+				[self.collectionsButton setHidden:NO];
 			});
 		}
 	}];
@@ -216,7 +224,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
     [self setupBlogName];
     [self hideBlogsMenu];
-    [self fetchPosts];
+
+	self.selectedCollection = nil;
+	
+	[self fetchPosts];
+	[self fetchCollections];
 }
 
 - (void) closePostingNotification:(NSNotification *)notification
@@ -280,6 +292,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) deleteSelectedPhotoNotification:(NSNotification *)notification
 {
 	[self delete:nil];
+}
+
+- (void) showCollectionNotification:(NSNotification *)notification
+{
+	MBCollection* c = [notification.userInfo objectForKey:kCollectionKey];
+	self.selectedCollection = c;
+	[self fetchPosts];
 }
 
 #pragma mark -
