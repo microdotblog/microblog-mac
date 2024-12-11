@@ -40,6 +40,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     
     [self setupCollectionView];
     [self setupBlogName];
+	[self setupCollections];
     [self setupNotifications];
     
     [self fetchPosts];
@@ -62,6 +63,39 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     else {
         self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
     }
+}
+
+- (void) setupCollections
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-channel": @"collections",
+		@"mp-destination": destination_uid
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
+			NSArray* items = [[response parsedResponse] objectForKey:@"items"];
+			NSString* s = @"";
+			if (items.count > 0) {
+				if (items.count == 1) {
+					s = @"1 collection";
+				}
+				else {
+					s = [NSString stringWithFormat:@"%lu collections", (unsigned long)items.count];
+				}
+			}
+			RFDispatchMain(^{
+				[self.collectionsButton setTitle:s];
+				[self.collectionsButton setHidden:NO];
+			});
+		}
+	}];
 }
 
 - (void) setupNotifications
@@ -429,6 +463,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			}
 		});
 	}];
+}
+
+- (IBAction) showOrResetCollections:(id)sender
+{
+	[[NSApplication sharedApplication] sendAction:@selector(showCollections:) to:nil from:self];
 }
 
 #pragma mark -

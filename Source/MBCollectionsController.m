@@ -113,7 +113,6 @@
 		RFDispatchMain(^{
 			[self refresh];
 		});
-
 	}];
 }
 
