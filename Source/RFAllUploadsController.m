@@ -156,8 +156,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				}
 			}
 			RFDispatchMain(^{
-				[self.collectionsButton setTitle:s];
-				[self.collectionsButton setHidden:NO];
+				[self setCollectionsTitle:s includeCancel:NO];
 			});
 		}
 	}];
@@ -166,6 +165,29 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) stopLoadingSidebarRow
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+}
+
+- (void) setCollectionsTitle:(NSString *)title includeCancel:(BOOL)includeCancel
+{
+	if (includeCancel) {
+		// create an NSTextAttachment for the SF Symbol
+		NSTextAttachment* attachment = [[NSTextAttachment alloc] init];
+		attachment.image = [NSImage imageWithSystemSymbolName:@"xmark.circle.fill" accessibilityDescription:@"Clear"];
+		attachment.image.size = NSMakeSize(16, 16);
+		
+		// create an attributed string with the SF Symbol and title
+		NSAttributedString* attachment_s = [NSAttributedString attributedStringWithAttachment:attachment];
+		NSMutableAttributedString* title_s = [[NSMutableAttributedString alloc] initWithAttributedString:attachment_s];
+		NSString* title_with_space = [NSString stringWithFormat:@" %@", title];
+		[title_s appendAttributedString:[[NSAttributedString alloc] initWithString:title_with_space]];
+		
+		self.collectionsButton.attributedTitle = title_s;
+	}
+	else {
+		self.collectionsButton.title = title;
+	}
+	
+	self.collectionsButton.hidden = NO;
 }
 
 #pragma mark -
@@ -298,6 +320,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	MBCollection* c = [notification.userInfo objectForKey:kCollectionKey];
 	self.selectedCollection = c;
+	[self setCollectionsTitle:c.name includeCancel:YES];
+
 	[self fetchPosts];
 }
 
@@ -486,7 +510,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (IBAction) showOrResetCollections:(id)sender
 {
-	[[NSApplication sharedApplication] sendAction:@selector(showCollections:) to:nil from:self];
+	if (self.selectedCollection) {
+		self.selectedCollection = nil;
+		[self fetchPosts];
+		[self fetchCollections];
+	}
+	else {
+		[[NSApplication sharedApplication] sendAction:@selector(showCollections:) to:nil from:self];
+	}
 }
 
 #pragma mark -
