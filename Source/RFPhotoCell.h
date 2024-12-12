@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class MBCollection;
+
 @interface RFPhotoCell : NSCollectionViewItem
 
 @property (strong, nonatomic) IBOutlet NSImageView* thumbnailImageView;
@@ -21,6 +23,7 @@
 @property (strong, nonatomic) NSString* alt;
 
 - (void) setupForURL;
+- (void) setupForCollection:(MBCollection *)collection;
 - (void) disableMenu;
 
 @end

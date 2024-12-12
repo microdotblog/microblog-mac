@@ -8,6 +8,8 @@
 
 #import "NSString+Extras.h"
 
+#import <Cocoa/Cocoa.h>
+
 @implementation NSString (Extras)
 
 - (NSNumber *) rf_numberValue
@@ -45,6 +47,32 @@
 	NSString* uti = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)e, NULL);
 	NSString* content_type = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)uti, kUTTagClassMIMEType);
 	return content_type;
+}
+
++ (NSString *) mb_openInBrowserString
+{
+	NSString* browser_s = @"Open in Browser";
+	
+	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
+	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
+
+	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
+		browser_s = @"Open in Chrome";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
+		browser_s = @"Open in Firefox";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
+		browser_s = @"Open in Safari";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Arc"]) {
+		browser_s = @"Open in Arc";
+	}
+	else if ([app_url.lastPathComponent containsString:@"Dia"]) {
+		browser_s = @"Open in Dia";
+	}
+
+	return browser_s;
 }
 
 @end

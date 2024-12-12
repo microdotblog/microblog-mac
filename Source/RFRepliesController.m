@@ -50,21 +50,7 @@
 
 - (void) setupBrowser
 {
-	NSString* browser_s = @"Open in Browser";
-	
-	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
-	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
-	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
-		browser_s = @"Open in Chrome";
-	}
-	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
-		browser_s = @"Open in Firefox";
-	}
-	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
-		browser_s = @"Open in Safari";
-	}
-
-	self.browserMenuItem.title = browser_s;
+	self.browserMenuItem.title = [NSString mb_openInBrowserString];
 }
 
 - (void) setupNotifications

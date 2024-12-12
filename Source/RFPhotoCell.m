@@ -9,7 +9,9 @@
 #import "RFPhotoCell.h"
 
 #import "RFUpload.h"
+#import "MBCollection.h"
 #import "RFConstants.h"
+#import "NSString+Extras.h"
 
 @implementation RFPhotoCell
 
@@ -22,21 +24,7 @@
 
 - (void) setupBrowser
 {
-	NSString* browser_s = @"Open in Browser";
-	
-	NSURL* example_url = [NSURL URLWithString:@"https://micro.blog/"];
-	NSURL* app_url = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:example_url];
-	if ([app_url.lastPathComponent containsString:@"Chrome"]) {
-		browser_s = @"Open in Chrome";
-	}
-	else if ([app_url.lastPathComponent containsString:@"Firefox"]) {
-		browser_s = @"Open in Firefox";
-	}
-	else if ([app_url.lastPathComponent containsString:@"Safari"]) {
-		browser_s = @"Open in Safari";
-	}
-
-	self.browserMenuItem.title = browser_s;
+	self.browserMenuItem.title = [NSString mb_openInBrowserString];
 }
 
 - (void) setupForURL
@@ -44,6 +32,15 @@
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	if (![up isAudio]) {
 		[[self.htmlWithoutPlayerItem menu] removeItem:self.htmlWithoutPlayerItem];
+	}
+}
+
+- (void) setupForCollection:(MBCollection *)collection
+{
+	if (collection == nil) {
+		[[self.removeFromCollectionItem menu] removeItem:self.removeFromCollectionItem];
+	}
+	else {
 	}
 }
 

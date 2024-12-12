@@ -600,6 +600,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	item.url = up.url;
 	item.alt = up.alt;
 	[item setupForURL];
+	[item setupForCollection:self.selectedCollection];
 	
 	return item;
 }
@@ -609,7 +610,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	if ([up isPhoto]) {
 		if (up.cachedImage == nil) {
-			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.url];
+			NSString* url = [NSString stringWithFormat:@"https://cdn.micro.blog/photos/200/%@", up.url];
 
 			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
 				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
