@@ -58,12 +58,12 @@
 
 - (void) updateCollectionsNotification:(NSNotification *)notification
 {
-	[self.tableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
 	[self refresh];
 }
 
 - (void) refresh
 {
+	[self.tableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
 	[self fetchCollections];
 }
 
@@ -197,6 +197,47 @@
 	RFDispatchSeconds(0.5, ^{
 		[[NSNotificationCenter defaultCenter] postNotificationName:kEditCollectionNotification object:self];
 	});
+}
+
+- (IBAction) deleteCollection:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	MBCollection* c = self.collections[row];
+	
+	[self.progressSpinner startAnimation:nil];
+	
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSDictionary* info = @{
+		@"mp-channel": @"collections",
+		@"mp-destination": destination_uid,
+		@"action": @"delete",
+		@"url": c.url
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client postWithObject:info completion:^(UUHttpResponse *response) {
+		if (![[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
+			NSLog(@"Error adding URL: %@", response.rawResponse);
+		}
+		
+		RFDispatchMain(^{
+			[self refresh];
+		});
+	}];
+}
+
+- (IBAction) copyShortcode:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	MBCollection* c = self.collections[row];
+	
+	NSString* s = [NSString stringWithFormat:@"{{< collection %@ >}}", c.name];
+	NSPasteboard* pb = [NSPasteboard generalPasteboard];
+	[pb clearContents];
+	[pb setString:s forType:NSPasteboardTypeString];
 }
 
 #pragma mark -

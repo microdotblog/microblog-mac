@@ -31,7 +31,7 @@
                             <rect key="frame" x="1" y="1" width="250" height="269"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" viewBased="YES" id="1ia-yv-eLE">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" viewBased="YES" id="1ia-yv-eLE" customClass="MBCollectionsTable">
                                     <rect key="frame" x="0.0" y="0.0" width="250" height="269"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
@@ -60,6 +60,7 @@
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="jnd-Rr-wlo"/>
                                         <outlet property="delegate" destination="-2" id="MzW-2z-4pb"/>
+                                        <outlet property="menu" destination="WXw-Zi-zOJ" id="3Sv-LB-0Vj"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -108,6 +109,23 @@
             </view>
             <point key="canvasLocation" x="-25" y="91"/>
         </window>
+        <menu id="WXw-Zi-zOJ">
+            <items>
+                <menuItem title="Delete" id="GXe-Or-h3K">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="deleteCollection:" target="-2" id="aJs-tO-QsC"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Shortcode" id="Rx4-xD-iQj">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyShortcode:" target="-2" id="pGh-RN-Tu7"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="248" y="11"/>
+        </menu>
     </objects>
     <resources>
         <image name="photo.on.rectangle" catalog="system" width="19" height="15"/>

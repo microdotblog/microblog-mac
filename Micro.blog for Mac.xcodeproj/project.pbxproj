@@ -139,6 +139,7 @@
 		4B79E2932D089E0300A22861 /* CollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B79E2912D089E0300A22861 /* CollectionCell.xib */; };
 		4B79E2962D0B56BE00A22861 /* EditCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B79E2942D0B56BE00A22861 /* EditCollectionCell.xib */; };
 		4B79E2992D0B571C00A22861 /* MBEditCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E2982D0B571C00A22861 /* MBEditCollectionCell.m */; };
+		4B79E29C2D0B93FA00A22861 /* MBCollectionsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */; };
 		4B7CC9892B291B2E00AA8085 /* MBNoteCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */; };
 		4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */; };
 		4B7F0AF21BAF4C27004553A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0AF01BAF4C27004553A6 /* main.m */; };
@@ -488,6 +489,8 @@
 		4B79E2952D0B56BE00A22861 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/EditCollectionCell.xib; sourceTree = "<group>"; };
 		4B79E2972D0B571C00A22861 /* MBEditCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBEditCollectionCell.h; path = Source/MBEditCollectionCell.h; sourceTree = "<group>"; };
 		4B79E2982D0B571C00A22861 /* MBEditCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBEditCollectionCell.m; path = Source/MBEditCollectionCell.m; sourceTree = "<group>"; };
+		4B79E29A2D0B93FA00A22861 /* MBCollectionsTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCollectionsTable.h; path = Source/MBCollectionsTable.h; sourceTree = "<group>"; };
+		4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCollectionsTable.m; path = Source/MBCollectionsTable.m; sourceTree = "<group>"; };
 		4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Micro.blog-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B7CC9882B291B2E00AA8085 /* MBNoteCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBNoteCrypto.swift; path = Source/MBNoteCrypto.swift; sourceTree = "<group>"; };
 		4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Micro.blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1084,6 +1087,8 @@
 				4B79E28F2D089DC000A22861 /* MBCollectionCell.m */,
 				4B79E2972D0B571C00A22861 /* MBEditCollectionCell.h */,
 				4B79E2982D0B571C00A22861 /* MBEditCollectionCell.m */,
+				4B79E29A2D0B93FA00A22861 /* MBCollectionsTable.h */,
+				4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1414,6 +1419,7 @@
 				4B2CAB111F90667300D9B10E /* tidylib.c in Sources */,
 				4B5EE2892064057F00C87A78 /* RFAccountCell.m in Sources */,
 				4BF7E53328394C5C00500C59 /* MBBooksTableView.m in Sources */,
+				4B79E29C2D0B93FA00A22861 /* MBCollectionsTable.m in Sources */,
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
@@ -2089,7 +2095,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 153;
+				CURRENT_PROJECT_VERSION = 154;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2126,7 +2132,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 153;
+				CURRENT_PROJECT_VERSION = 154;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
