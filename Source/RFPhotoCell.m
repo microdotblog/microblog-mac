@@ -38,9 +38,18 @@
 - (void) setupForCollection:(MBCollection *)collection
 {
 	if (collection == nil) {
+		// when we remove, save a copy to add back later
+		self.copiedRemoveItem = self.removeFromCollectionItem;
 		[[self.removeFromCollectionItem menu] removeItem:self.removeFromCollectionItem];
 	}
-	else {
+	else if (self.copiedRemoveItem != nil) {
+		// add saved item back to menu (if it's not in another menu)
+		if (self.copiedRemoveItem.menu == nil) {
+			[[self.browserMenuItem menu] insertItem:self.copiedRemoveItem atIndex:1];
+		}
+		
+		// always update menu title
+		self.copiedRemoveItem.title = [NSString stringWithFormat:@"Remove from %@", collection.name];
 	}
 }
 

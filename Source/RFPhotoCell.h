@@ -21,6 +21,7 @@
 
 @property (strong, nonatomic) NSString* url;
 @property (strong, nonatomic) NSString* alt;
+@property (copy, nonatomic) NSMenuItem* copiedRemoveItem;
 
 - (void) setupForURL;
 - (void) setupForCollection:(MBCollection *)collection;
