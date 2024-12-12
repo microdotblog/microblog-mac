@@ -84,6 +84,12 @@
                                     <action selector="newPage:" target="-1" id="cFO-oo-bGp"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="New Collection" id="KF6-ha-NaE">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newCollection:" target="-1" id="xuh-Yx-ZKL"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="New Bookmark" id="ILN-3z-6jt">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

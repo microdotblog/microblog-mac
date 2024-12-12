@@ -162,4 +162,6 @@ static NSString* const kCollectionKey = @"collection";
 
 static NSString* const kUpdateCollectionsNotification = @"MBUpdateCollectionsNotification";
 
+static NSString* const kEditCollectionNotification = @"MBEditCollectionNotification";
+
 #define APPSTORE 1

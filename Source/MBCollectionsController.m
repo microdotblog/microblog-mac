@@ -10,6 +10,7 @@
 
 #import "MBCollection.h"
 #import "MBCollectionCell.h"
+#import "MBEditCollectionCell.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -42,6 +43,7 @@
 - (void) setupTable
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"CollectionCell" bundle:nil] forIdentifier:@"CollectionCell"];
+	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"EditCollectionCell" bundle:nil] forIdentifier:@"EditCollectionCell"];
 	[self.tableView registerForDraggedTypes:@[ NSPasteboardTypeFileURL, NSPasteboardTypeString ]];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
@@ -56,6 +58,7 @@
 
 - (void) updateCollectionsNotification:(NSNotification *)notification
 {
+	[self.tableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
 	[self refresh];
 }
 
@@ -167,6 +170,35 @@
 	}
 }
 
+- (IBAction) newCollection:(id)sender
+{
+	// bail if we've already started a new collection
+	for (MBCollection* c in self.collections) {
+		if (c.url == nil) {
+			return;
+		}
+	}
+	
+	// make a new selection to prompt for name
+	MBCollection* c = [[MBCollection alloc] init];
+	c.name = @"";
+	
+	NSMutableArray* new_collections = [self.collections mutableCopy];
+	[new_collections insertObject:c atIndex:0];
+	
+	self.collections = new_collections;
+
+	// clear selection and reload
+	[self.tableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
+	[self.tableView reloadData];
+	
+	// select new item at top
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+	RFDispatchSeconds(0.5, ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:kEditCollectionNotification object:self];
+	});
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
@@ -176,14 +208,23 @@
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
-	MBCollectionCell* cell = [tableView makeViewWithIdentifier:@"CollectionCell" owner:self];
-
+	NSTableRowView* result = nil;
+	
 	if (row < self.collections.count) {
 		MBCollection* c = [self.collections objectAtIndex:row];
-		[cell setupWithCollection:c];
+
+		if (c.url == nil) {
+			MBEditCollectionCell* cell = [tableView makeViewWithIdentifier:@"EditCollectionCell" owner:self];
+			result = cell;
+		}
+		else {
+			MBCollectionCell* cell = [tableView makeViewWithIdentifier:@"CollectionCell" owner:self];
+			[cell setupWithCollection:c];
+			result = cell;
+		}
 	}
 
-	return cell;
+	return result;
 }
 
 - (NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
