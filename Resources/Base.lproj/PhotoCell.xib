@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,6 +14,7 @@
                 <outlet property="browserMenuItem" destination="2cQ-VA-lrc" id="up2-5X-URU"/>
                 <outlet property="htmlWithoutPlayerItem" destination="xEJ-wV-pYm" id="Uj1-bR-9Mc"/>
                 <outlet property="iconView" destination="Hng-Eo-t8j" id="dUL-Jq-J64"/>
+                <outlet property="removeFromCollectionItem" destination="VXF-B8-tF6" id="MG0-eD-gL9"/>
                 <outlet property="selectionOverlayView" destination="8e5-OI-o8O" id="QZr-21-MsR"/>
                 <outlet property="thumbnailImageView" destination="NIg-26-JBO" id="Q6i-Sv-jTx"/>
                 <outlet property="view" destination="uf0-7P-vkp" id="ENI-d0-vXu"/>
@@ -60,6 +61,12 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="deleteSelectedPhoto:" target="na8-0v-oNY" id="1IL-4c-aKM"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Remove from Collection" id="VXF-B8-tF6">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeFromCollection:" target="na8-0v-oNY" id="Rix-Ja-1VR"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="QEG-uN-E4D"/>

@@ -57,6 +57,13 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDeleteSelectedPhotoNotification object:self];
 }
 
+- (IBAction) removeFromCollection:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kRemoveFromCollectionNotification object:self userInfo:@{
+		kRemoveFromCollectionURLKey: self.url
+	}];
+}
+
 - (IBAction) openInBrowser:(id)sender
 {
 	NSURL* url = [NSURL URLWithString:self.url];

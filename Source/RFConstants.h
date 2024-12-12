@@ -152,9 +152,14 @@ static NSString* const kUpdateInfoNotification = @"MBUpdateInfoNotification";
 static NSString* const kInfoURLKey = @"url";
 static NSString* const kInfoTextKey = @"text";
 
+static NSString* const kRemoveFromCollectionNotification = @"MBRemoveFromCollectionNotification";
+static NSString* const kRemoveFromCollectionURLKey = @"url";
+
 static NSString* const kRefreshBookmarksNotification = @"MBRefreshBookmarksNotification";
 
 static NSString* const kShowCollectionNotification = @"MBShowCollectionNotification";
 static NSString* const kCollectionKey = @"collection";
+
+static NSString* const kUpdateCollectionsNotification = @"MBUpdateCollectionsNotification";
 
 #define APPSTORE 1

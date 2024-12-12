@@ -73,6 +73,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesNotification:) name:kUploadFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectPhotoCellNotification:) name:kSelectPhotoCellNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedPhotoNotification:) name:kDeleteSelectedPhotoNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFromCollectionNotification:) name:kRemoveFromCollectionNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCollectionNotification:) name:kShowCollectionNotification object:nil];
 }
 
@@ -316,6 +317,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self delete:nil];
 }
 
+- (void) deleteFromCollectionNotification:(NSNotification *)notification
+{
+	if (self.selectedCollection) {
+		NSString* url = [notification.userInfo objectForKey:kRemoveFromCollectionURLKey];
+		[self removePhotoURL:url fromCollection:self.selectedCollection];
+	}
+}
+
 - (void) showCollectionNotification:(NSNotification *)notification
 {
 	MBCollection* c = [notification.userInfo objectForKey:kCollectionKey];
@@ -510,6 +519,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (IBAction) showOrResetCollections:(id)sender
 {
+	if (self.collectionsButton.title.length == 0) {
+		return;
+	}
+	
 	if (self.selectedCollection) {
 		self.selectedCollection = nil;
 		[self fetchPosts];
@@ -518,6 +531,37 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	else {
 		[[NSApplication sharedApplication] sendAction:@selector(showCollections:) to:nil from:self];
 	}
+}
+
+- (void) removePhotoURL:(NSString *)url fromCollection:(MBCollection *)collection
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* info = @{
+		@"mp-channel": @"collections",
+		@"mp-destination": destination_uid,
+		@"action": @"update",
+		@"url": collection.url,
+		@"delete": @{
+			@"photo": @[ url ]
+		}
+	};
+
+	[client postWithObject:info completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self fetchPosts];
+			[self notifyCollections];
+		});
+	}];
+}
+
+- (void) notifyCollections
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateCollectionsNotification object:self];
 }
 
 #pragma mark -

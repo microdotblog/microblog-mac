@@ -34,6 +34,8 @@
 	[super windowDidLoad];
 	
 	[self setupTable];
+	[self setupNotifications];
+	
 	[self refresh];
 }
 
@@ -43,6 +45,18 @@
 	[self.tableView registerForDraggedTypes:@[ NSPasteboardTypeFileURL, NSPasteboardTypeString ]];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionsNotification:) name:kUpdateCollectionsNotification object:nil];
+}
+
+#pragma mark -
+
+- (void) updateCollectionsNotification:(NSNotification *)notification
+{
+	[self refresh];
 }
 
 - (void) refresh
@@ -79,8 +93,13 @@
 			}
 			
 			RFDispatchMain(^{
+				NSInteger selected_row = self.tableView.selectedRow;
 				self.collections = new_collections;
 				[self.tableView reloadData];
+				if ((selected_row >= 0) && (selected_row < self.collections.count)) {
+					[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:selected_row] byExtendingSelection:NO];
+				}
+				
 				[self.progressSpinner stopAnimation:nil];
 			});
 		}
