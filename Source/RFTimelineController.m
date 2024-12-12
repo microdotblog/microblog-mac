@@ -797,6 +797,11 @@ static NSInteger const kSelectionNotes = 11;
 			[(RFAllPostsController *)self.rootController focusSearch];
 		}
 	}
+	else if (self.selectedTimeline == kSelectionUploads) {
+		if ([self.rootController isKindOfClass:[RFAllUploadsController class]]) {
+			[(RFAllUploadsController *)self.rootController focusSearch];
+		}
+	}
 	else if (self.selectedTimeline == kSelectionNotes) {
 		if ([self.rootController isKindOfClass:[MBNotesController class]]) {
 			[(MBNotesController *)self.rootController focusSearch];

@@ -18,11 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 @property (strong, nonatomic) IBOutlet NSButton* collectionsButton;
+@property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
 @property (strong, nonatomic) NSArray* allPosts; // RFUpload
 @property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic, nullable) MBCollection* selectedCollection;
 
+- (void) focusSearch;
 - (void) openSelectedItem;
 
 @end

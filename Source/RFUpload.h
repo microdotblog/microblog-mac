@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong) NSImage* cachedImage;
 @property (strong) NSString* url;
+@property (strong) NSString* thumbnail_url;
 @property (strong) NSString* alt;
 @property (assign) NSInteger width;
 @property (assign) NSInteger height;

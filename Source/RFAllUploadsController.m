@@ -43,7 +43,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self setupBlogName];
     [self setupNotifications];
     
-    [self fetchPosts];
+    [self fetchUploads];
 	[self fetchCollections];
 }
 
@@ -77,7 +77,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCollectionNotification:) name:kShowCollectionNotification object:nil];
 }
 
-- (void) fetchPosts
+- (void) fetchUploads
+{
+	[self fetchUploadsForSearch:@""];
+}
+
+- (void) fetchUploadsForSearch:(NSString *)search
 {
 	self.allPosts = @[];
 	self.blogNameButton.hidden = YES;
@@ -92,6 +97,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		@"q": @"source",
 		@"mp-destination": destination_uid
 	};
+	
+	if (search.length > 0) {
+		NSMutableDictionary* new_args = [args mutableCopy];
+		[new_args setObject:search forKey:@"filter"];
+		args = new_args;
+	}
 	
 	if (self.selectedCollection) {
 		NSMutableDictionary* new_args = [args mutableCopy];
@@ -109,6 +120,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				RFUpload* upload = [[RFUpload alloc] init];
 				upload.url = [item objectForKey:@"url"];
 				upload.alt = [item objectForKey:@"alt"];
+				
+				NSDictionary* cdn = [item objectForKey:@"cdn"];
+				if (cdn) {
+					NSString* medium_url = [cdn objectForKey:@"medium"];
+					NSString* small_url = [cdn objectForKey:@"small"];
+					if (small_url) {
+						upload.thumbnail_url = small_url;
+					}
+					else if (medium_url) {
+						upload.thumbnail_url = medium_url;
+					}
+				}
 
 				upload.width = [[item objectForKey:@"width"] integerValue];
 				upload.height = [[item objectForKey:@"height"] integerValue];
@@ -121,6 +144,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			
 			RFDispatchMainAsync (^{
 				self.allPosts = new_posts;
+				[self.collectionView.collectionViewLayout invalidateLayout];
 				[self.collectionView reloadData];
 				[self setupBlogName];
 				[self stopLoadingSidebarRow];
@@ -250,13 +274,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	self.selectedCollection = nil;
 	
-	[self fetchPosts];
+	[self fetchUploads];
 	[self fetchCollections];
 }
 
 - (void) closePostingNotification:(NSNotification *)notification
 {
-	[self fetchPosts];
+	[self fetchUploads];
 }
 
 - (void) uploadFilesNotification:(NSNotification *)notification
@@ -322,7 +346,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	self.selectedCollection = c;
 	[self setCollectionsTitle:c.name includeCancel:YES];
 
-	[self fetchPosts];
+	[self fetchUploads];
+}
+
+- (IBAction) search:(id)sender
+{
+	NSString* s = [sender stringValue];
+	if (s.length == 0) {
+		[self fetchUploadsForSearch:s];
+	}
+	else if (s.length >= 4) {
+		[self fetchUploadsForSearch:s];
+	}
 }
 
 #pragma mark -
@@ -351,7 +386,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	else {
 		[self hideUploadProgress];
-		[self fetchPosts];
+		[self fetchUploads];
 	}
 }
 
@@ -431,6 +466,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self.progressSpinner stopAnimation:nil];
 }
 
+- (void) focusSearch
+{
+	[self.searchField becomeFirstResponder];
+}
+
 - (void) openSelectedItem
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
@@ -497,7 +537,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Upload" message:msg button:@"OK" completionHandler:NULL];
 			}
 			else {
-				[self fetchPosts];
+				[self fetchUploads];
 			}
 		});
 	}];
@@ -511,7 +551,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	if (self.selectedCollection) {
 		self.selectedCollection = nil;
-		[self fetchPosts];
+		[self fetchUploads];
 		[self fetchCollections];
 	}
 	else {
@@ -539,7 +579,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	[client postWithObject:info completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
-			[self fetchPosts];
+			[self fetchUploads];
 			[self notifyCollections];
 		});
 	}];
@@ -596,14 +636,21 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	if ([up isPhoto]) {
 		if (up.cachedImage == nil) {
-			NSString* url = [NSString stringWithFormat:@"https://cdn.micro.blog/photos/200/%@", up.url];
+			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.url];
+			if (up.thumbnail_url) {
+				url = up.thumbnail_url;
+			}
 
 			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
 				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
 					NSImage* img = response.parsedResponse;
 					RFDispatchMain(^{
 						up.cachedImage = img;
-						[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
+						@try {
+							[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
+						}
+						@catch (NSException* error) {
+						}
 					});
 				}
 			}];
