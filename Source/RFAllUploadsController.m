@@ -269,15 +269,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 
 	NSMutableArray* new_photos = [NSMutableArray array];
-
-	if ([paths count] > 1) {
-		[self.uploadProgressBar setIndeterminate:NO];
-		[self.uploadProgressBar setMinValue:1];
-		[self.uploadProgressBar setMaxValue:[paths count]];
-	}
-	else {
-		[self.uploadProgressBar setIndeterminate:YES];
-	}
 	
 	for (NSString* filepath in paths) {
 		[new_photos addObject:filepath];
@@ -341,10 +332,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSString* filepath = [paths lastObject];
 	if (filepath) {
 		[paths removeLastObject];
-
-		if (!self.uploadProgressBar.isIndeterminate) {
-			[self.uploadProgressBar setDoubleValue:(self.uploadProgressBar.maxValue - [paths count])];
-		}
 
 		NSString* e = [[filepath pathExtension] lowercaseString];
 		if ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"]) {
@@ -436,13 +423,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) showUploadProgress
 {
-	[self.uploadProgressBar startAnimation:nil];
-	self.uploadProgressBar.hidden = NO;}
+	[self.progressSpinner startAnimation:nil];
+}
 
 - (void) hideUploadProgress
 {
-	[self.uploadProgressBar stopAnimation:nil];
-	self.uploadProgressBar.hidden = YES;
+	[self.progressSpinner stopAnimation:nil];
 }
 
 - (void) openSelectedItem

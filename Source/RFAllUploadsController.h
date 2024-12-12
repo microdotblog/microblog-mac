@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSCollectionView* collectionView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* uploadProgressBar;
 @property (strong, nonatomic) IBOutlet NSButton* blogNameButton;
 @property (strong, nonatomic) IBOutlet NSButton* collectionsButton;
 
