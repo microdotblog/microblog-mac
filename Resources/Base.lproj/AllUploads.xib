@@ -12,6 +12,7 @@
                 <outlet property="collectionView" destination="WeF-Cq-XQj" id="X7u-Xt-YQl"/>
                 <outlet property="collectionsButton" destination="asa-Gr-Xxd" id="5r9-bZ-6LV"/>
                 <outlet property="progressSpinner" destination="0aW-jy-83j" id="m1G-nE-u0I"/>
+                <outlet property="searchField" destination="BHm-L9-coS" id="qgZ-Wo-5Op"/>
                 <outlet property="view" destination="c22-O7-iKe" id="mh3-Lr-7UY"/>
             </connections>
         </customObject>

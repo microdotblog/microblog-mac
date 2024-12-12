@@ -345,7 +345,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	MBCollection* c = [notification.userInfo objectForKey:kCollectionKey];
 	self.selectedCollection = c;
 	[self setCollectionsTitle:c.name includeCancel:YES];
-
+	self.searchField.enabled = NO;
+	
 	[self fetchUploads];
 }
 
@@ -551,6 +552,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	if (self.selectedCollection) {
 		self.selectedCollection = nil;
+		self.searchField.enabled = YES;
+		
 		[self fetchUploads];
 		[self fetchCollections];
 	}
