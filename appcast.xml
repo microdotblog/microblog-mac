@@ -4,7 +4,32 @@
 		<title>Micro.blog for Mac</title>
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
-
+		<item>
+			<title>Version 3.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new Collections window to show your photo collections for a blog. Show from the Window menu or from the "1 collections" button in Uploads when there is a collection.</li>
+					<li>Added drag and drop from Uploads to a collection. Also context menu on collections for copying the shortcode to use in a blog.</li>
+					<li>Added search field to Uploads.</li>
+					<li>Added Arc and Dia as recognized web browsers in context menus.</li>
+					<li>Updated photo thumbnails to load faster, use the CDN when it can.</li>
+					<li>Updated import for Instagram to support the latest Meta file format, which also includes Threads photos.</li>
+					<li>Fixed notes sync compatibility with some platforms.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 13 Dec 2024 14:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.zip" sparkle:shortVersionString="3.4" sparkle:version="155" length="4301932" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
 		<item>
 			<title>Version 3.3</title>
  			<description><![CDATA[
