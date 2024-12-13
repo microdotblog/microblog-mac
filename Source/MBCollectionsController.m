@@ -234,7 +234,7 @@
 	NSInteger row = self.tableView.selectedRow;
 	MBCollection* c = self.collections[row];
 	
-	NSString* s = [NSString stringWithFormat:@"{{< collection %@ >}}", c.name];
+	NSString* s = [NSString stringWithFormat:@"{{< collection \"%@\" >}}", c.name];
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	[pb clearContents];
 	[pb setString:s forType:NSPasteboardTypeString];

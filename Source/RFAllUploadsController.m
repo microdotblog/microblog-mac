@@ -113,7 +113,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			NSMutableArray* new_posts = [NSMutableArray array];
+			__block NSMutableArray* new_posts = [NSMutableArray array];
 
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
@@ -144,8 +144,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			
 			RFDispatchMainAsync (^{
 				self.allPosts = new_posts;
-				[self.collectionView.collectionViewLayout invalidateLayout];
 				[self.collectionView reloadData];
+//				[self.collectionView.collectionViewLayout invalidateLayout];
+//				[self.collectionView layoutSubtreeIfNeeded];
 				[self setupBlogName];
 				[self stopLoadingSidebarRow];
 				self.blogNameButton.hidden = NO;
@@ -356,10 +357,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSString* s = [sender stringValue];
 	if (s.length == 0) {
-		[self fetchUploadsForSearch:s];
+		// get everything
+		[self fetchUploads];
 	}
 	else if (s.length >= 4) {
+		// only to server if query not too short
 		[self fetchUploadsForSearch:s];
+	}
+	else {
+		// for short keywords we don't support, clear view
+		self.allPosts = @[];
+		[self.collectionView reloadData];
 	}
 }
 
