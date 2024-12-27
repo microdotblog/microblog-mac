@@ -102,6 +102,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if (search.length > 0) {
 		NSMutableDictionary* new_args = [args mutableCopy];
 		[new_args setObject:search forKey:@"filter"];
+		[new_args removeObjectForKey:@"limit"];
 		args = new_args;
 	}
 	
