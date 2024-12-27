@@ -237,10 +237,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					CGSize original_size = photo.thumbnailImage.size;
 					CGFloat width = 0;
 					CGFloat height = 0;
+					const CGFloat max_photo_size = 1200;
 
 					if (original_size.width > original_size.height) {
-						if (original_size.width > 600.0) {
-							width = 600.0;
+						if (original_size.width > max_photo_size) {
+							width = max_photo_size;
 						}
 						else {
 							width = original_size.width;
@@ -248,8 +249,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						height = width / original_size.width * original_size.height;
 					}
 					else {
-						if (original_size.height > 600.0) {
-							height = 600.0;
+						if (original_size.height > max_photo_size) {
+							height = max_photo_size;
 						}
 						else {
 							height = original_size.height;
