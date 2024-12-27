@@ -15,11 +15,12 @@
 
 @implementation RFPhotoZoomController
 
-- (id) initWithURL:(NSString *)photoURL allowCopy:(BOOL)allowCopy
+- (id) initWithURL:(NSString *)photoURL altText:(NSString *)photoAlt allowCopy:(BOOL)allowCopy
 {
 	self = [super initWithWindowNibName:@"PhotoZoom"];
 	if (self) {
 		self.photoURL = [self extractPhotoURL:photoURL];
+		self.photoAlt = photoAlt;
 		self.isAllowCopy = allowCopy;
 	}
 	
@@ -151,7 +152,16 @@
 
 - (IBAction) copyHTML:(id)sender
 {
-	NSString* s = [NSString stringWithFormat:@"<img src=\"%@\">", self.photoURL];
+	NSString* s;
+	if ([self.photoAlt length] > 0) {
+		NSString* new_alt = self.photoAlt;
+		new_alt = [new_alt stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+		new_alt = [new_alt stringByReplacingOccurrencesOfString:@"'" withString:@""];
+		s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", self.photoURL, new_alt];
+	}
+	else {
+		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.photoURL];
+	}
 
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	[pb clearContents];

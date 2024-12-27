@@ -54,6 +54,7 @@ static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
 
 #define kOpenPhotoURLNotification @"RFOpenPhotoURL"
 #define kOpenPhotoURLKey @"url" // NSURL
+#define kOpenPhotoAltKey @"alt" // NSString
 #define kOpenPhotoAllowCopyKey @"allow_copy" // NSNumber
 
 #define kShowConversationNotification @"RFShowConversationNotification"

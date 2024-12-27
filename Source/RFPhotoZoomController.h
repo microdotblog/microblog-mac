@@ -17,9 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* htmlCopyButton;
 
 @property (strong, nonatomic) NSString* photoURL;
+@property (strong, nonatomic) NSString* photoAlt;
 @property (assign, nonatomic) BOOL isAllowCopy;
 
-- (id) initWithURL:(NSString *)photoURL allowCopy:(BOOL)allowCopy;
+- (id) initWithURL:(NSString *)photoURL altText:(NSString *)photoAlt allowCopy:(BOOL)allowCopy;
 
 @end
 

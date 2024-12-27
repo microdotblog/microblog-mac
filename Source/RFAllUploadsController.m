@@ -492,6 +492,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if ([up isPhoto]) {
 		NSDictionary* info = @{
 			kOpenPhotoURLKey: [NSURL URLWithString:up.url],
+			kOpenPhotoAltKey: up.alt,
 			kOpenPhotoAllowCopyKey: @(YES)
 		};
 		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPhotoURLNotification object:self userInfo:info];

@@ -87,7 +87,7 @@
 	}
 	else if ([url.host isEqualToString:@"photo"]) {
 		NSString* photo_url = [url.path substringFromIndex:1];
-		[self showPhotoWithURL:photo_url allowCopy:NO];
+		[self showPhotoWithURL:photo_url altText:@"" allowCopy:NO];
 	}
 	else if ([url.host isEqualToString:@"user"]) {
 		[self showProfileWithUsername:param];
@@ -609,9 +609,9 @@
 //	[self.timelineController setSelected:NO withPostID:post_id];	
 }
 
-- (void) showPhotoWithURL:(NSString *)photoURL allowCopy:(BOOL)allowCopy
+- (void) showPhotoWithURL:(NSString *)photoURL altText:(NSString *)photoAlt allowCopy:(BOOL)allowCopy
 {
-	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL allowCopy:allowCopy];
+	RFPhotoZoomController* controller = [[RFPhotoZoomController alloc] initWithURL:photoURL altText:photoAlt allowCopy:allowCopy];
 	[controller showWindow:nil];
 	[self.photoWindows addObject:controller];
 }
@@ -638,8 +638,9 @@
 - (void) openPhotoURLNotification:(NSNotification *)notification
 {
 	NSURL* url = [notification.userInfo objectForKey:kOpenPhotoURLKey];
+	NSString* alt = [notification.userInfo objectForKey:kOpenPhotoAltKey];
 	BOOL allow_copy = [[notification.userInfo objectForKey:kOpenPhotoAllowCopyKey] boolValue];
-	[self showPhotoWithURL:url.absoluteString allowCopy:allow_copy];
+	[self showPhotoWithURL:url.absoluteString altText:alt allowCopy:allow_copy];
 }
 
 - (void) showConversationWithPostID:(NSString *)postID
