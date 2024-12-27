@@ -95,7 +95,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	NSDictionary* args = @{
 		@"q": @"source",
-		@"mp-destination": destination_uid
+		@"mp-destination": destination_uid,
+		@"limit": @200
 	};
 	
 	if (search.length > 0) {
