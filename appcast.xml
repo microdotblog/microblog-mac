@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.4.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Updated the photo size to a higher resolution when importing from an Instagram or Threads archive.</li>
+					<li>Updated the Uploads screen to the most recent 200 photos.</li>
+					<li>Added the auto-generated accessibility text to the Copy HTML button in the zoomed photo window.</li>
+					<li>Fixed date field color in posts list for selected rows.</li>
+					<li>Fixed logs date column to avoid wrapping.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Sat, 28 Dec 2024 09:45:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.1.zip" sparkle:shortVersionString="3.4.1" sparkle:version="156" length="4301932" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4</title>
  			<description><![CDATA[
 				<style>
