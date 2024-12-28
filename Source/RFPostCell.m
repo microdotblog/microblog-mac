@@ -95,9 +95,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if ([self.superview isKindOfClass:[NSTableView class]]) {
 		NSTableView* table = (NSTableView *)self.superview;
 		if (![table.window isKeyWindow]) {
+			self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
 			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
 		}
 		else if (table.window.firstResponder == table) {
+			self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 			[[NSColor selectedContentBackgroundColor] set];
 		}
 		else {
@@ -106,6 +108,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	
 	NSRectFill (r);
+}
+
+- (void) setSelected:(BOOL)selected
+{
+	[super setSelected:selected];
+
+	if (selected) {
+		self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
+	}
+	else {
+		self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
+	}
 }
 
 #pragma mark -

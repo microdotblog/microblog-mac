@@ -401,7 +401,7 @@
 		RFPost* post = [self.currentPosts objectAtIndex:row];
 		[cell setupWithPost:post];
 	}
-
+	
 	return cell;
 }
 
