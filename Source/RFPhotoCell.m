@@ -113,7 +113,7 @@
 
 - (IBAction) copyHTMLwithoutPlayer:(id)sender
 {
-	NSString* s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\" style=\"display: none\"></audio>", self.url];
+	NSString* s = [NSString stringWithFormat:@"<audio src=\"%@\" preload=\"metadata\" style=\"display: none\"></audio>", self.url];
 
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	[pb clearContents];
