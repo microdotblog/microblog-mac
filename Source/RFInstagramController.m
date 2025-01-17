@@ -71,7 +71,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		for (NSDictionary* threads_photo in threads_posts) {
 			NSDictionary* media = [[threads_photo objectForKey:@"media"] firstObject];
 			if ([[media objectForKey:@"uri"] length] > 0) {
-				[threads_photos addObject:media];
+				[threads_photos addObject:threads_photo];
 			}
 		}
 		
@@ -88,7 +88,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		NSDictionary* photo2 = [media2 firstObject];
 		NSNumber* num1 = [photo1 objectForKey:@"creation_timestamp"];
 		NSNumber* num2 = [photo2 objectForKey:@"creation_timestamp"];
-		return [num1 compare:num2];
+		if (num2 == nil) {
+			return false;
+		}
+		else {
+			return [num1 compare:num2];
+		}
 	}];
 }
 
