@@ -5,6 +5,27 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.4.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Fixed importing photos from Instagram and Threads archives.</li>
+					<li>Removed the "controls" attribute for "Copy HTML with Narration" for audio uploads.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Sat, 18 Jan 2025 08:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.2.zip" sparkle:shortVersionString="3.4.2" sparkle:version="159" length="4303422" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4.1</title>
  			<description><![CDATA[
 				<style>
