@@ -1134,6 +1134,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}];
 }
 
+- (IBAction) generateSummary:(id)sender
+{
+}
+
 - (void) uploadPost
 {
 	// update selected categories and cross-posting if visible

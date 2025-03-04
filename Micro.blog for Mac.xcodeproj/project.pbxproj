@@ -169,6 +169,7 @@
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
 		4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
+		4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
 		4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50721EE52140095F903 /* NSAppearance+Extras.m */; };
 		4BB69068209A113500CD5E1E /* Instagram.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB69066209A113500CD5E1E /* Instagram.xib */; };
@@ -545,6 +546,8 @@
 		4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extras.m"; path = "Source/NSColor+Extras.m"; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
+		4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSummaryBackgroundView.h; path = Source/MBSummaryBackgroundView.h; sourceTree = "<group>"; };
+		4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSummaryBackgroundView.m; path = Source/MBSummaryBackgroundView.m; sourceTree = "<group>"; };
 		4BB5B50321EE4F3C0095F903 /* RFButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFButton.h; path = Source/RFButton.h; sourceTree = "<group>"; };
 		4BB5B50421EE4F3C0095F903 /* RFButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFButton.m; path = Source/RFButton.m; sourceTree = "<group>"; };
 		4BB5B50621EE52140095F903 /* NSAppearance+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSAppearance+Extras.h"; path = "Source/NSAppearance+Extras.h"; sourceTree = "<group>"; };
@@ -1089,6 +1092,8 @@
 				4B79E2982D0B571C00A22861 /* MBEditCollectionCell.m */,
 				4B79E29A2D0B93FA00A22861 /* MBCollectionsTable.h */,
 				4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */,
+				4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */,
+				4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1535,6 +1540,7 @@
 				4BF7E51E2835850600500C59 /* RFBookshelf.m in Sources */,
 				4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
+				4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
 				4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */,
