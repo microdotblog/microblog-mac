@@ -8,6 +8,13 @@
 
 #import "MBCrosspostCell.h"
 
+#import "RFConstants.h"
+
 @implementation MBCrosspostCell
+
+- (IBAction) postingCheckboxChanged:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostingCheckboxChangedNotification object:self userInfo:@{}];
+}
 
 @end

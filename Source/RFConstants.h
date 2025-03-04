@@ -165,4 +165,6 @@ static NSString* const kUpdateCollectionsNotification = @"MBUpdateCollectionsNot
 
 static NSString* const kEditCollectionNotification = @"MBEditCollectionNotification";
 
+static NSString* const kPostingCheckboxChangedNotification = @"MBPostingCheckboxChangedNotification";
+
 #define APPSTORE 1

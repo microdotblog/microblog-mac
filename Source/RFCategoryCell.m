@@ -8,6 +8,13 @@
 
 #import "RFCategoryCell.h"
 
+#import "RFConstants.h"
+
 @implementation RFCategoryCell
+
+- (IBAction) postingCheckboxChanged:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostingCheckboxChangedNotification object:self userInfo:@{}];
+}
 
 @end
