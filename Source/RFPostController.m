@@ -136,6 +136,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupTitle];
 	[self setupText];
 	[self setupCollectionView];
+	[self setupSummary];
 	[self setupBlogName];
 	[self setupButtons];
 	[self setupNotifications];
@@ -242,6 +243,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CategoryCell" bundle:nil] forItemWithIdentifier:kCategoryCellIdentifier];
 	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CrosspostCell" bundle:nil] forItemWithIdentifier:kCrosspostCellIdentifier];
 	self.categoriesHeightConstraint.constant = 0;
+}
+
+- (void) setupSummary
+{
+	self.summaryTextView.font = [NSFont systemFontOfSize:14];
 }
 
 - (void) setupDragging
@@ -1136,6 +1142,47 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) generateSummary:(id)sender
 {
+	[self.summaryProgress startAnimation:nil];
+	
+	NSString* s = [self currentText];
+	
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSURL* url = [NSURL URLWithString:destination_uid];
+
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/account/posts/%@/summarize", url.host];
+	NSDictionary* args = @{
+		@"text": s,
+		@"id": @""
+	};
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self.summaryTimer invalidate];
+			self.summaryTimer = [NSTimer scheduledTimerWithTimeInterval:1.5 repeats:YES block:^(NSTimer* timer) {
+				[self checkSummary];
+			}];
+		});
+	}];
+}
+
+- (void) checkSummary
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSURL* url = [NSURL URLWithString:destination_uid];
+
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/account/posts/%@/summarize", url.host];
+	[client getWithQueryArguments:nil completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+				NSDictionary* latest = [response.parsedResponse objectForKey:@"latest"];
+				NSString* summary = [latest objectForKey:@"summary"];
+				if (summary.length > 0) {
+					[self.summaryTextView setString:summary];
+					[self.summaryTimer invalidate];
+					[self.summaryProgress stopAnimation:nil];
+				}
+			}
+		});
+	}];
 }
 
 - (void) uploadPost

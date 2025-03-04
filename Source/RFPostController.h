@@ -25,6 +25,9 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* photosHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* categoriesHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSTextView* summaryTextView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* summaryProgress;
 
 @property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;
@@ -50,6 +53,7 @@
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary
 @property (strong, nonatomic) NSDate* postedAt;
 @property (strong, nonatomic) MBDateController* dateController;
+@property (strong, nonatomic) NSTimer* summaryTimer;
 
 - (id) initWithPost:(RFPost *)post;
 - (id) initWithChannel:(NSString *)channel;

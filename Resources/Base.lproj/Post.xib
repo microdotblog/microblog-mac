@@ -16,6 +16,9 @@
                 <outlet property="photosCollectionView" destination="kw4-c5-1p5" id="lGQ-ZL-sHv"/>
                 <outlet property="photosHeightConstraint" destination="oNP-ay-KXG" id="YVn-30-3Fu"/>
                 <outlet property="remainingField" destination="lHJ-qQ-HDX" id="Kyq-Gn-u2C"/>
+                <outlet property="summaryHeightConstraint" destination="1bO-cV-2HW" id="7Ks-CS-dum"/>
+                <outlet property="summaryProgress" destination="aih-Ao-hmU" id="myc-LP-cck"/>
+                <outlet property="summaryTextView" destination="dSg-px-8oT" id="JuL-47-x7p"/>
                 <outlet property="textTopConstraint" destination="jYR-Km-b40" id="bif-X4-DJG"/>
                 <outlet property="textView" destination="NeT-rM-aUD" id="h36-Yq-1DK"/>
                 <outlet property="titleField" destination="bCl-6M-CkY" id="boP-oF-YCl"/>
@@ -201,6 +204,9 @@
                                 <autoresizingMask key="autoresizingMask"/>
                             </scroller>
                         </scrollView>
+                        <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aih-Ao-hmU">
+                            <rect key="frame" x="95" y="5" width="16" height="16"/>
+                        </progressIndicator>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="1bO-cV-2HW"/>
@@ -210,6 +216,8 @@
                         <constraint firstItem="hli-Rk-dfh" firstAttribute="top" secondItem="cFz-bY-efo" secondAttribute="top" constant="6" id="Zu6-ni-SC8"/>
                         <constraint firstItem="5Kl-7S-q4c" firstAttribute="top" secondItem="hli-Rk-dfh" secondAttribute="bottom" constant="2" id="kEj-Tg-e6D"/>
                         <constraint firstAttribute="bottom" secondItem="5Kl-7S-q4c" secondAttribute="bottom" constant="5" id="n3S-7S-si6"/>
+                        <constraint firstItem="aih-Ao-hmU" firstAttribute="leading" secondItem="5Kl-7S-q4c" secondAttribute="trailing" constant="8" symbolic="YES" id="w2I-pG-v7h"/>
+                        <constraint firstItem="aih-Ao-hmU" firstAttribute="centerY" secondItem="5Kl-7S-q4c" secondAttribute="centerY" id="yVv-bg-tyC"/>
                     </constraints>
                 </customView>
             </subviews>
