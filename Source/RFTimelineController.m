@@ -847,6 +847,9 @@ static NSInteger const kSelectionNotes = 11;
 				if (count.integerValue == 1) {
 					msg = @"1 new post";
 				}
+				else if (count.integerValue >= 40) {
+					msg = @"40+ new posts";
+				}
 				else {
 					msg = [NSString stringWithFormat:@"%@ new posts", count];
 				}
