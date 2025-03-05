@@ -26,8 +26,11 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* photosHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* categoriesHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryTextHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSView* summaryBackgroundView;
 @property (strong, nonatomic) IBOutlet NSTextView* summaryTextView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* summaryProgress;
+@property (strong, nonatomic) IBOutlet NSButton* generateSummaryButton;
 
 @property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;
@@ -35,6 +38,7 @@
 @property (assign, nonatomic) BOOL isShowingTitle;
 @property (assign, nonatomic) BOOL isShowingCategories;
 @property (assign, nonatomic) BOOL isShowingCrosspostServices;
+@property (assign, nonatomic) BOOL isShowingSummary;
 @property (strong, nonatomic) RFPost* editingPost;
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;

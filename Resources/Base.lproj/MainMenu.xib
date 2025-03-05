@@ -507,10 +507,16 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EhK-8W-xZb"/>
-                            <menuItem title="Title Field" id="yuR-L8-Vdb">
+                            <menuItem title="Title" id="yuR-L8-Vdb">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="toggleTitleField:" target="-1" id="jP8-dU-adg"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Summary" id="giq-ac-T3I">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="toggleSummary:" target="-1" id="9oh-3e-1QP"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Categories" id="QPg-0Y-Awf">

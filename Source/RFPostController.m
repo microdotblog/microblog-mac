@@ -248,6 +248,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) setupSummary
 {
 	self.summaryTextView.font = [NSFont systemFontOfSize:14];
+	self.summaryHeightConstraint.constant = 0;
+	self.summaryBackgroundView.hidden = YES;
 }
 
 - (void) setupDragging
@@ -359,6 +361,24 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			return YES;
 		}
 	}
+	else if (item.action == @selector(toggleSummary:)) {
+		if ([self isPage]) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isReply) {
+			[item setState:NSControlStateValueOff];
+			return NO;
+		}
+		else if (self.isShowingSummary) {
+			[item setState:NSControlStateValueOn];
+			return YES;
+		}
+		else {
+			[item setState:NSControlStateValueOff];
+			return YES;
+		}
+	}
 	else if (item.action == @selector(save:)) {
 		if ([self isPage]) {
 			return NO;
@@ -448,6 +468,25 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	}
 	else {
 		self.categoriesHeightConstraint.animator.constant = 0;
+	}
+}
+
+- (void) updateSummaryPane
+{
+	if (self.isShowingSummary) {
+		self.generateSummaryButton.alphaValue = 0;
+		self.summaryBackgroundView.hidden = NO;
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+			self.summaryHeightConstraint.constant = 75;
+		} completionHandler:^{
+			self.generateSummaryButton.animator.alphaValue = 1;
+			[self.view.window makeFirstResponder:self.summaryTextView];
+		}];
+	}
+	else {
+		self.summaryHeightConstraint.animator.constant = 0;
+		self.summaryBackgroundView.hidden = YES;
+		[self.view.window makeFirstResponder:self.textView];
 	}
 }
 
@@ -544,8 +583,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	self.isShowingCategories = !self.isShowingCategories;
 	self.isShowingCrosspostServices = NO;
+	self.isShowingSummary = NO;
 
 	[self updateCategoriesPane];
+	[self updateSummaryPane];
 	[self.categoriesCollectionView reloadData];
 }
 
@@ -555,8 +596,23 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
 	self.isShowingCategories = NO;
+	self.isShowingSummary = NO;
 
 	[self updateCategoriesPane];
+	[self updateSummaryPane];
+	[self.categoriesCollectionView reloadData];
+}
+
+- (IBAction) toggleSummary:(id)sender
+{
+	[self updateSelectedCheckboxes];
+
+	self.isShowingSummary = !self.isShowingSummary;
+	self.isShowingCategories = NO;
+	self.isShowingCrosspostServices = NO;
+
+	[self updateCategoriesPane];
+	[self updateSummaryPane];
 	[self.categoriesCollectionView reloadData];
 }
 
