@@ -427,9 +427,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	if (self.isShowingTitle) {
 		self.titleField.hidden = NO;
+		self.titleSeparatorLine.hidden = NO;
 
 		if (animate) {
 			self.titleField.animator.alphaValue = 1.0;
+			self.titleSeparatorLine.animator.alphaValue = 1.0;
 			self.textTopConstraint.animator.constant = kTextViewTitleShownTop;
 		}
 		else {
@@ -444,6 +446,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				self.textTopConstraint.animator.constant = kTextViewTitleHiddenTop;
 			} completionHandler:^{
 				self.titleField.hidden = YES;
+				self.titleSeparatorLine.hidden = YES;
 				self.titleField.stringValue = @"";
 			}];
 		}
@@ -451,6 +454,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			self.titleField.alphaValue = 0.0;
 			self.textTopConstraint.constant = kTextViewTitleHiddenTop;
 			self.titleField.hidden = YES;
+			self.titleSeparatorLine.hidden = YES;
 			self.titleField.stringValue = @"";
 		}
 	}

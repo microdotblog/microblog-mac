@@ -31,6 +31,7 @@
 @property (strong, nonatomic) IBOutlet NSTextView* summaryTextView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* summaryProgress;
 @property (strong, nonatomic) IBOutlet NSButton* generateSummaryButton;
+@property (strong, nonatomic) IBOutlet NSBox* titleSeparatorLine;
 
 @property (assign, nonatomic) BOOL isSent;
 @property (assign, nonatomic) BOOL isReply;
