@@ -13,7 +13,7 @@
 
 @implementation RFPost
 
-- (NSString *) summary
+- (NSString *) displaySummary
 {
 	NSString* s = @"";
 	NSError* error = nil;

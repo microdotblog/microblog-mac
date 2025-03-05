@@ -130,6 +130,7 @@
 				NSDictionary* props = [item objectForKey:@"properties"];
 				post.title = [[props objectForKey:@"name"] firstObject];
 				post.text = [[props objectForKey:@"content"] firstObject];
+				post.summary = [[props objectForKey:@"summary"] firstObject];
 				post.url = [[props objectForKey:@"url"] firstObject];
 
 				NSString* date_s = [[props objectForKey:@"published"] firstObject];
@@ -227,7 +228,7 @@
 		RFPost* post = [self.currentPosts objectAtIndex:row];
 		NSString* s = post.title;
 		if (s.length == 0) {
-			s = [post summary];
+			s = [post displaySummary];
 			if (s.length > 20) {
 				s = [s substringToIndex:20];
 				s = [s stringByAppendingString:@"..."];

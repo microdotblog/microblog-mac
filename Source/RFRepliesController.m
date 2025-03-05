@@ -156,7 +156,7 @@
 		RFPost* post = [self.allReplies objectAtIndex:row];
 		NSString* s = post.title;
 		if (s.length == 0) {
-			s = [post summary];
+			s = [post displaySummary];
 			if (s.length > 20) {
 				s = [s substringToIndex:20];
 				s = [s stringByAppendingString:@"..."];

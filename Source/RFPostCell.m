@@ -30,7 +30,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos
 {
 	self.titleField.stringValue = post.title;
-	self.textField.stringValue = [post summary];
+	self.textField.stringValue = [post displaySummary];
 	NSString* date_s = [post.postedAt uuIso8601DateString];
 	if (date_s) {		
 		self.dateField.stringValue = date_s;

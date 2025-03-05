@@ -250,6 +250,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.summaryTextView.font = [NSFont systemFontOfSize:14];
 	self.summaryHeightConstraint.constant = 0;
 	self.summaryBackgroundView.hidden = YES;
+	
+	if (self.editingPost && self.editingPost.summary) {
+		self.summaryTextView.string = self.editingPost.summary;
+		[self summaryTextDidChange:nil];
+	}
 }
 
 - (void) setupDragging
@@ -266,6 +271,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kFoundUserAutoCompleteNotification object:self.textView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postingCheckboxChangedNotification:) name:kPostingCheckboxChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(summaryTextDidChange:) name:NSTextDidChangeNotification object:self.summaryTextView];
 }
 
 #pragma mark -
@@ -725,6 +731,18 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 	[self updateTitleHeader];
 	[self updateEditedState];
+}
+
+- (void) summaryTextDidChange:(NSNotification *)notification
+{
+	if (self.summaryTextView.string.length > 0) {
+		self.generateSummaryButton.hidden = YES;
+		self.summaryTextHeightConstraint.constant = 60;
+	}
+	else {
+		self.generateSummaryButton.hidden = NO;
+		self.summaryTextHeightConstraint.constant = 38;
+	}
 }
 
 - (IBAction) titleFieldDidChange:(id)sender
@@ -1235,6 +1253,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					[self.summaryTextView setString:summary];
 					[self.summaryTimer invalidate];
 					[self.summaryProgress stopAnimation:nil];
+					[self summaryTextDidChange:nil];
 				}
 			}
 		});
@@ -1390,6 +1409,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 	}
 	else {
+		NSString* summary = self.summaryTextView.string;
+		
 		[self showProgressHeader:@"Now publishing to your microblog..."];
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
@@ -1429,6 +1450,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"replace": @{
 						@"name": [self currentTitle],
 						@"content": text,
+						@"summary": summary,
 						@"category": category_names,
 						@"post-status": [self currentStatus]
 					}
@@ -1468,6 +1490,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				NSDictionary* args = @{
 					@"name": [self currentTitle],
 					@"content": text,
+					@"summary": summary,
 					@"photo[]": photo_urls,
 					@"mp-photo-alt[]": photo_alts,
 					@"video[]": video_urls,
@@ -1536,6 +1559,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"h": @"entry",
 					@"name": [self currentTitle],
 					@"content": text,
+					@"summary": summary,
 					@"photo[]": photo_urls,
 					@"mp-photo-alt[]": photo_alts,
 					@"video[]": video_urls,
