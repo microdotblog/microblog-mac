@@ -21,6 +21,7 @@ static NSString* const kAccountEmail = @"AccountEmail";
 static NSString* const kAccountGravatarURL = @"AccountGravatarURL";
 static NSString* const kHasSnippetsBlog = @"HasSnippetsBlog";
 static NSString* const kIsPremium = @"IsPremium";
+static NSString* const kIsUsingAI = @"IsUsingAI";
 static NSString* const kExternalMicropubState = @"ExternalMicropubState";
 static NSString* const kExternalMicropubTokenEndpoint = @"ExternalMicropubTokenEndpoint";
 static NSString* const kExternalMicropubMe = @"ExternalMicropubMe";

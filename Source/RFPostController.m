@@ -743,7 +743,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) summaryTextDidChange:(NSNotification *)notification
 {
-	if (self.summaryTextView.string.length > 0) {
+	BOOL is_using_ai = [RFSettings boolForKey:kIsUsingAI];
+	if (!is_using_ai) {
+		// always hide Generate button if AI disabled
+		self.generateSummaryButton.hidden = YES;
+		self.summaryTextHeightConstraint.constant = 60;
+	}
+	else if (self.summaryTextView.string.length > 0) {
 		self.generateSummaryButton.hidden = YES;
 		self.summaryTextHeightConstraint.constant = 60;
 	}

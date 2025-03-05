@@ -692,6 +692,7 @@
 			NSString* gravatar_url = [response.parsedResponse objectForKey:@"gravatar_url"];
 			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
 			NSNumber* is_premium = [response.parsedResponse objectForKey:@"is_premium"];
+			NSNumber* is_using_ai = [response.parsedResponse objectForKey:@"is_using_ai"];
 			NSString* default_site = [response.parsedResponse objectForKey:@"default_site"];
 			
 			RFAccount* a = [[RFAccount alloc] init];
@@ -705,7 +706,8 @@
 			[RFSettings setString:gravatar_url forKey:kAccountGravatarURL account:a];
 			[RFSettings setBool:[has_site boolValue] forKey:kHasSnippetsBlog account:a];
 			[RFSettings setBool:[is_premium boolValue] forKey:kIsPremium account:a];
-		
+			[RFSettings setBool:[is_using_ai boolValue] forKey:kIsUsingAI account:a];
+
 			RFDispatchMainAsync (^{
 				[self loadTimelineWithToken:token account:a];
 				[self setupBookmarks];
