@@ -318,7 +318,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
 	if (item.action == @selector(toggleTitleField:)) {
-		if (self.isReply) {
+		if ([self isPage]) {
+			[item setState:NSControlStateValueOn];
+			return NO;
+		}
+		else if (self.isReply) {
 			[item setState:NSControlStateValueOff];
 			return NO;
 		}
@@ -578,7 +582,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	self.isShowingTitle = !self.isShowingTitle;
 	if (self.isShowingTitle) {
-		[self.titleField becomeFirstResponder];
+		[self.textView.window makeFirstResponder:self.titleField];
 	}
 	else {
 		[self.textView.window makeFirstResponder:self.textView];
