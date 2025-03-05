@@ -5,6 +5,28 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.4.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Added blog post summary field. Choose View menu → "Summary" to show it when writing a blog post. There's also a "Generate" button if you have AI enabled on your account.</li>
+					<li>Fixed the incorrect "41 new posts" message.</li>
+					<li>Fixed not remembering category and cross-posting checkboxes when they're not visible.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Wed, 05 Mar 2025 12:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.3.zip" sparkle:shortVersionString="3.4.3" sparkle:version="160" length="4312580" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4.2</title>
  			<description><![CDATA[
 				<style>
