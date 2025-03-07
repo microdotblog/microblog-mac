@@ -5,6 +5,27 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.4.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+	 				<li>Fixed showing new Generate button for summaries if AI is disabled for your account.</li>
+	 				<li>Fixed keeping Generate button enabled if there is no blog post text to summarize.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 07 Mar 2025 09:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.4.zip" sparkle:shortVersionString="3.4.4" sparkle:version="162" length="4313157" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4.3</title>
  			<description><![CDATA[
 				<style>
