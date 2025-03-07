@@ -502,6 +502,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		self.summaryBackgroundView.hidden = YES;
 		[self.view.window makeFirstResponder:self.textView];
 	}
+	
+	[self summaryTextDidChange:nil];
 }
 
 - (void) updateEditedState
