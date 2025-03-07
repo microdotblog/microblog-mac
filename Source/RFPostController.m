@@ -511,6 +511,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	self.view.window.documentEdited = YES;
 }
 
+- (void) updateGenerateEnabled
+{
+	self.generateSummaryButton.enabled = [[self currentText] length] > 0;
+}
+
 - (NSString *) postButtonTitle
 {
 	if (self.editingPost && self.editingPost.isDraft) {
@@ -741,6 +746,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 	[self updateTitleHeader];
 	[self updateEditedState];
+	[self updateGenerateEnabled];
 }
 
 - (void) summaryTextDidChange:(NSNotification *)notification
@@ -758,6 +764,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	else {
 		self.generateSummaryButton.hidden = NO;
 		self.summaryTextHeightConstraint.constant = 38;
+		[self updateGenerateEnabled];
 	}
 }
 
