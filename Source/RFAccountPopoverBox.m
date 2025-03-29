@@ -99,12 +99,7 @@
 - (void) mouseEntered:(NSEvent *)event
 {
 	if ([self hasMultipleAccounts]) {
-		if ([NSAppearance rf_isDarkMode]) {
-			self.fillColor = [NSColor colorWithWhite:0.1 alpha:1.0];
-		}
-		else {
-			self.fillColor = [NSColor colorWithWhite:0.9 alpha:1.0];
-		}
+		self.fillColor = [NSColor colorNamed:@"color_profile_hover_background"];
 	}
 }
 

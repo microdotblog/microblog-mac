@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="23504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -79,7 +79,7 @@
                                                                     <rect key="frame" x="2" y="1" width="226" height="20"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-Wk-RTO">
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-Wk-RTO">
                                                                             <rect key="frame" x="0.0" y="3" width="226" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="oKH-vH-pea">
@@ -137,7 +137,7 @@
                                             <rect key="frame" x="1" y="1" width="469" height="32"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjC-OC-Bf6">
                                                     <rect key="frame" x="7" y="2" width="429" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1 new post" id="NQ2-w9-WtX">
@@ -209,7 +209,7 @@
             </connections>
             <point key="canvasLocation" x="-32" y="257"/>
         </window>
-        <box boxType="custom" borderType="none" cornerRadius="4" titlePosition="noTitle" id="x3s-Em-Xy9" customClass="RFAccountPopoverBox">
+        <box boxType="custom" borderType="none" cornerRadius="6" titlePosition="noTitle" id="x3s-Em-Xy9" customClass="RFAccountPopoverBox">
             <rect key="frame" x="0.0" y="0.0" width="102" height="40"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView" id="kpY-A0-2Il">
@@ -217,15 +217,15 @@
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dzD-B1-h1U" customClass="RFRoundedImageView">
-                        <rect key="frame" x="8" y="7" width="26" height="26"/>
+                        <rect key="frame" x="8" y="10" width="20" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="26" id="jb2-S9-Fdg"/>
-                            <constraint firstAttribute="width" constant="26" id="ovd-h8-79L"/>
+                            <constraint firstAttribute="height" constant="20" id="jb2-S9-Fdg"/>
+                            <constraint firstAttribute="width" constant="20" id="ovd-h8-79L"/>
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="g0z-Ci-b4e"/>
                     </imageView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WA0-ys-uhG">
-                        <rect key="frame" x="37" y="12" width="44" height="16"/>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WA0-ys-uhG">
+                        <rect key="frame" x="31" y="12" width="50" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="@test" id="6S3-kn-cpb">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -244,7 +244,7 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="PlP-fQ-eu8" secondAttribute="trailing" constant="5" id="0iP-We-AYG"/>
                     <constraint firstItem="dzD-B1-h1U" firstAttribute="centerY" secondItem="kpY-A0-2Il" secondAttribute="centerY" id="GCN-gA-7V2"/>
-                    <constraint firstItem="WA0-ys-uhG" firstAttribute="centerY" secondItem="kpY-A0-2Il" secondAttribute="centerY" id="JSB-D9-ppJ"/>
+                    <constraint firstItem="WA0-ys-uhG" firstAttribute="centerY" secondItem="dzD-B1-h1U" secondAttribute="centerY" id="Lhe-pb-owf"/>
                     <constraint firstItem="PlP-fQ-eu8" firstAttribute="leading" secondItem="WA0-ys-uhG" secondAttribute="trailing" constant="2" id="SZ6-CB-IlV"/>
                     <constraint firstItem="dzD-B1-h1U" firstAttribute="leading" secondItem="kpY-A0-2Il" secondAttribute="leading" constant="8" id="fZ4-k4-bgK"/>
                     <constraint firstItem="PlP-fQ-eu8" firstAttribute="centerY" secondItem="kpY-A0-2Il" secondAttribute="centerY" id="ktb-kE-TzW"/>
@@ -260,7 +260,7 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="tLG-Iv-7Jr" customClass="MBStatusBubbleView">
                     <rect key="frame" x="0.0" y="0.0" width="280" height="104"/>
                     <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDV-JP-c4m">
+                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDV-JP-c4m">
                             <rect key="frame" x="13" y="45" width="231" height="15"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="230" id="O6L-Mk-Su9"/>
