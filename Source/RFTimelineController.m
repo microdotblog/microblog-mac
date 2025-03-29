@@ -1812,17 +1812,16 @@ static NSInteger const kSelectionNotes = 11;
         return item;
     }
     else if ([itemIdentifier isEqualToString:@"NewPost"]) {
-        NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-		if (@available(macOS 11.0, *)) {
-			item.image = [NSImage rf_imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
-			item.target = nil;
-			item.action = @selector(newDocument:);
-		}
-		else {
-			NSButton* b = [NSButton buttonWithTitle:@"+" target:nil action:@selector(newDocument:)];
-			b.bordered = NO;
-			item.view = b;
-		}
+		NSImage* button_img = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
+
+		NSButton* button = [[NSButton alloc] initWithFrame:NSMakeRect(0, 5, 35, 30)];
+		button.image = button_img;
+		button.imagePosition = NSImageOnly;
+		button.target = nil;
+		button.action = @selector(newDocument:);
+		
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.view = button;
         return item;
     }
 	else if ([itemIdentifier isEqualToString:@"UploadButton"]) {
