@@ -1205,6 +1205,8 @@ static NSInteger const kSelectionNotes = 11;
 			break;
 		}
 	}
+	
+	[self updateToolbarForSidebarSelection];
 }
 
 - (void) startLoadingSidebarRow:(NSInteger)sidebarRow
@@ -1447,6 +1449,41 @@ static NSInteger const kSelectionNotes = 11;
 - (BOOL) isSelectedFavorites
 {
 	return (self.selectedTimeline == kSelectionFavorites);
+}
+
+- (void) updateToolbarForSidebarSelection
+{
+	NSToolbar* toolbar = self.window.toolbar;
+	BOOL should_show_upload = self.selectedTimeline == kSelectionUploads;
+	BOOL upload_exists = NO;
+	
+	// check if the UploadButton already exists in the toolbar
+	for (NSToolbarItem* item in toolbar.items) {
+		if ([item.itemIdentifier isEqualToString:@"UploadButton"]) {
+			upload_exists = YES;
+			break;
+		}
+	}
+	
+	if (should_show_upload && !upload_exists) {
+		// insert the UploadButton at a desired index
+		NSInteger insert_index = toolbar.items.count - 2;
+		[toolbar insertItemWithItemIdentifier:@"UploadButton" atIndex:insert_index];
+	}
+	else if (!should_show_upload && upload_exists) {
+		// remove the UploadButton if it's there
+		NSInteger index_to_remove = NSNotFound;
+		for (NSInteger i = 0; i < toolbar.items.count; i++) {
+			NSToolbarItem* item = [toolbar.items objectAtIndex:i];
+			if ([item.itemIdentifier isEqualToString:@"UploadButton"]) {
+				index_to_remove = i;
+				break;
+			}
+		}
+		if (index_to_remove != NSNotFound) {
+			[toolbar removeItemAtIndex:index_to_remove];
+		}
+	}
 }
 
 #pragma mark -
@@ -1738,12 +1775,26 @@ static NSInteger const kSelectionNotes = 11;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+	NSMutableArray* items = [NSMutableArray array];
+	
+	[items addObject:@"StatusBubble"];
+	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
+	[items addObject:@"ProfileBox"];
+	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
+
+	if (self.selectedTimeline == kSelectionUploads) {
+		[items addObject:@"UploadButton"];
+		[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
+	}
+
+	[items addObject:@"NewPost"];
+	
+	return items;
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
@@ -1774,6 +1825,13 @@ static NSInteger const kSelectionNotes = 11;
 		}
         return item;
     }
+	else if ([itemIdentifier isEqualToString:@"UploadButton"]) {
+		NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		NSButton *uploadButton = [NSButton buttonWithTitle:@"Upload..." target:nil action:@selector(promptForUpload:)];
+		uploadButton.bordered = YES;
+		item.view = uploadButton;
+		return item;
+	}
     else {
         return nil;
     }

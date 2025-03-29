@@ -21,6 +21,7 @@
 #import "NSImage+Extras.h"
 #import "NSAlert+Extras.h"
 #import "NSString+Extras.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
@@ -375,6 +376,22 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 #pragma mark -
 
+- (IBAction) promptForUpload:(id)sender
+{
+	NSOpenPanel* panel = [NSOpenPanel openPanel];
+	panel.allowedContentTypes = @[UTTypeImage, UTTypeMovie];
+	panel.allowsMultipleSelection = YES;
+	NSModalResponse response = [panel runModal];
+	if (response == NSModalResponseOK) {
+		NSMutableArray* paths = [NSMutableArray array];
+		for (NSURL* url in panel.URLs) {
+			[paths addObject:url.path];
+		}
+
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
+	}
+}
+
 - (void) uploadNextPhoto:(NSMutableArray *)paths
 {
 	NSString* filepath = [paths lastObject];
@@ -471,12 +488,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) showUploadProgress
 {
+	self.blogNameButton.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 }
 
 - (void) hideUploadProgress
 {
 	[self.progressSpinner stopAnimation:nil];
+	self.blogNameButton.hidden = NO;
 }
 
 - (void) focusSearch
