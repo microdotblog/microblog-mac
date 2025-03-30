@@ -57,6 +57,12 @@
         </customView>
         <menu id="ILg-2w-hks">
             <items>
+                <menuItem title="New Post..." id="vYA-4T-ZTL">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="promptNewPostWithSelectedPhoto:" target="na8-0v-oNY" id="kg7-1N-ee6"/>
+                    </connections>
+                </menuItem>
                 <menuItem title="Delete" id="5cy-R7-Exy">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>

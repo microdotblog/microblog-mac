@@ -167,4 +167,8 @@ static NSString* const kEditCollectionNotification = @"MBEditCollectionNotificat
 
 static NSString* const kPostingCheckboxChangedNotification = @"MBPostingCheckboxChangedNotification";
 
+static NSString* const kNewPostWithPhotoNotification = @"MBNewPostWithPhotoNotification";
+static NSString* const kNewPostWithPhotoURLKey = @"url";
+static NSString* const kNewPostWithPhotoAltKey = @"alt";
+
 #define APPSTORE 1

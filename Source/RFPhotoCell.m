@@ -58,6 +58,15 @@
 	self.selectionOverlayView.menu = nil;
 }
 
+- (IBAction) promptNewPostWithSelectedPhoto:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kNewPostWithPhotoNotification object:self userInfo:@{
+		kNewPostWithPhotoURLKey: self.url,
+		kNewPostWithPhotoAltKey: self.alt
+		
+	}];
+}
+
 - (IBAction) deleteSelectedPhoto:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDeleteSelectedPhotoNotification object:self];

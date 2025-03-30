@@ -73,6 +73,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesNotification:) name:kUploadFilesNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectPhotoCellNotification:) name:kSelectPhotoCellNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(promptNewPostWithPhotoNotification:) name:kNewPostWithPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedPhotoNotification:) name:kDeleteSelectedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFromCollectionNotification:) name:kRemoveFromCollectionNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCollectionNotification:) name:kShowCollectionNotification object:nil];
@@ -331,6 +332,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 }
 
+- (void) promptNewPostWithPhotoNotification:(NSNotification *)notification
+{
+	NSString* url = [notification.userInfo objectForKey:kNewPostWithPhotoURLKey];
+	NSString* alt = [notification.userInfo objectForKey:kNewPostWithPhotoAltKey];
+	[self promptNewPostWithPhotoURL:url altText:alt];
+}
+
 - (void) deleteSelectedPhotoNotification:(NSNotification *)notification
 {
 	[self delete:nil];
@@ -520,6 +528,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	else {
 		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:up.url]];
 	}
+}
+
+- (void) promptNewPostWithPhotoURL:(NSString *)url altText:(NSString *)altText
+{
+	NSString* cleaned_alt = [altText stringByReplacingOccurrencesOfString:@"\"" withString:@""];
 }
 
 - (void) delete:(id)sender
