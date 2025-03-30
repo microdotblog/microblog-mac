@@ -728,7 +728,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	NSString* s;
 	if ([upload isPhoto]) {
-		s = [NSString stringWithFormat:@"<img src=\"%@\">", upload.url];
+		if (upload.alt.length > 0) {
+			NSString* alt_cleaned = [upload.alt stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+			s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", upload.url, alt_cleaned];
+		}
+		else {
+			s = [NSString stringWithFormat:@"<img src=\"%@\">", upload.url];
+		}
 	}
 	else if ([upload isVideo]) {
 		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
