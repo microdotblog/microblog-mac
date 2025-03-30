@@ -36,6 +36,8 @@
 	[self setupAutosave];
 	
 	self.window.delegate = self;
+	
+	[self adjustWindowHeight];
 }
 
 - (void) setupView
@@ -100,6 +102,15 @@
 	if ([self.postController isPage]) {
 		self.windowFrameAutosaveName = @"NewPageWindow";
 	}
+}
+
+- (void) adjustWindowHeight
+{
+	// window is restoring with too much height, try to adjust... but why?
+	NSRect r = self.window.frame;
+	r.size.height -= 14;
+	r.origin.y += 14;
+	[self.window setFrame:r display:NO];
 }
 
 - (void) clearAutosaveDraft
