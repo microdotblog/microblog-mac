@@ -50,6 +50,11 @@
 	return [RFSettings accounts].count > 1;
 }
 
+- (BOOL) mouseDownCanMoveWindow
+{
+	return NO;
+}
+
 - (void) mouseDown:(NSEvent *)event
 {
 	if ([self hasMultipleAccounts]) {
