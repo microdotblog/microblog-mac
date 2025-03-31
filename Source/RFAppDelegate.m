@@ -662,17 +662,7 @@
 		new_photo.publishedURL = url;
 		new_photo.altText = altText;
 		
-		// download thumbnail
-		RFClient* client = [[RFClient alloc] initWithURL:url];
-		[client getWithCompletion:^(UUHttpResponse* response) {
-			RFDispatchMainAsync (^{
-				if (response.httpError == nil) {
-					NSImage* img = [[NSImage alloc] initWithData:[response rawResponse]];
-					new_photo.thumbnailImage = img;
-					[self showPostWithPhoto:new_photo];
-				}
-			});
-		}];
+		[self showPostWithPhoto:new_photo];
 	}
 	else {
 		// if not a photo, use HTML tag

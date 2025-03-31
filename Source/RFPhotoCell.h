@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet NSMenuItem* removeFromCollectionItem;
 @property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 @property (strong, nonatomic) IBOutlet NSMenuItem* htmlWithoutPlayerItem;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSString* url;
 @property (strong, nonatomic) NSString* alt;

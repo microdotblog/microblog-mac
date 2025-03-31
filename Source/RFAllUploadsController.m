@@ -21,6 +21,7 @@
 #import "NSImage+Extras.h"
 #import "NSAlert+Extras.h"
 #import "NSString+Extras.h"
+#import "NSCollectionView+Extras.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
@@ -681,11 +682,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					NSImage* img = response.parsedResponse;
 					RFDispatchMain(^{
 						up.cachedImage = img;
-						@try {
-							[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
-						}
-						@catch (NSException* error) {
-						}
+						[collectionView mb_safeReloadAtIndexPath:indexPath];
 					});
 				}
 			}];

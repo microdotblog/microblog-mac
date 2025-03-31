@@ -15,6 +15,7 @@
 #import "UUHttpSession.h"
 #import "HTMLParser.h"
 #import "RFMacros.h"
+#import "NSCollectionView+Extras.h"
 
 // https://github.com/zootreeves/Objective-C-HMTL-Parser (comments say it's MIT)
 
@@ -154,11 +155,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSImage* img = response.parsedResponse;
 				RFDispatchMain(^{
 					photo.thumbnailImage = img;
-					@try {
-						[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
-					}
-					@catch (NSException* e) {
-					}
+					[collectionView mb_safeReloadAtIndexPath:indexPath];
 				});
 			}
 		}];

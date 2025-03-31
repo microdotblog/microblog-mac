@@ -72,6 +72,7 @@
 		4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B36915529A2BAD800561D9A /* CrosspostCell.xib */; };
 		4B37737D2C3DC451000495DF /* Info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B37737B2C3DC451000495DF /* Info.xib */; };
 		4B3773802C3DC4A5000495DF /* MBInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B37737F2C3DC4A5000495DF /* MBInfoController.m */; };
+		4B3796962D9B03F4008CE322 /* NSCollectionView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3796952D9B03F4008CE322 /* NSCollectionView+Extras.m */; };
 		4B3840CB2692014000AD3781 /* RFExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840CA2692014000AD3781 /* RFExportController.m */; };
 		4B3840CE2692019B00AD3781 /* Export.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B3840CC2692019B00AD3781 /* Export.xib */; };
 		4B3840D12692038B00AD3781 /* RFMarkdownExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */; };
@@ -374,6 +375,8 @@
 		4B37737C2C3DC451000495DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Info.xib; sourceTree = "<group>"; };
 		4B37737E2C3DC4A5000495DF /* MBInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBInfoController.h; path = Source/MBInfoController.h; sourceTree = "<group>"; };
 		4B37737F2C3DC4A5000495DF /* MBInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBInfoController.m; path = Source/MBInfoController.m; sourceTree = "<group>"; };
+		4B3796942D9B03F4008CE322 /* NSCollectionView+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSCollectionView+Extras.h"; path = "Source/NSCollectionView+Extras.h"; sourceTree = "<group>"; };
+		4B3796952D9B03F4008CE322 /* NSCollectionView+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSCollectionView+Extras.m"; path = "Source/NSCollectionView+Extras.m"; sourceTree = "<group>"; };
 		4B3840C92692014000AD3781 /* RFExportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFExportController.h; path = Source/RFExportController.h; sourceTree = "<group>"; };
 		4B3840CA2692014000AD3781 /* RFExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFExportController.m; path = Source/RFExportController.m; sourceTree = "<group>"; };
 		4B3840CD2692019B00AD3781 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Export.xib; sourceTree = "<group>"; };
@@ -1040,6 +1043,8 @@
 				4B2CAB3B1F93A04600D9B10E /* NSAlert+Extras.m */,
 				4BB5B50621EE52140095F903 /* NSAppearance+Extras.h */,
 				4BB5B50721EE52140095F903 /* NSAppearance+Extras.m */,
+				4B3796942D9B03F4008CE322 /* NSCollectionView+Extras.h */,
+				4B3796952D9B03F4008CE322 /* NSCollectionView+Extras.m */,
 				4B2CAABE1F90652700D9B10E /* RFStack.h */,
 				4B2CAAB91F90652600D9B10E /* RFStack.m */,
 				4B2CAABA1F90652700D9B10E /* RFXMLLinkParser.h */,
@@ -1383,6 +1388,7 @@
 			files = (
 				4B001CD32B27955900BBF456 /* MBNote.m in Sources */,
 				4B400D06201EC55B00C71AAF /* MMMarkdown.m in Sources */,
+				4B3796962D9B03F4008CE322 /* NSCollectionView+Extras.m in Sources */,
 				4B2CAB191F90667300D9B10E /* istack.c in Sources */,
 				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
 				4B001CE82B27AE2000BBF456 /* MBNotesKeyController.m in Sources */,

@@ -11,6 +11,8 @@
 #import "RFUpload.h"
 #import "MBCollection.h"
 #import "RFConstants.h"
+#import "RFClient.h"
+#import "RFMacros.h"
 #import "NSString+Extras.h"
 
 @implementation RFPhotoCell

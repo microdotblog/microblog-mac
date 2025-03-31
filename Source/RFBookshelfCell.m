@@ -14,6 +14,7 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "NSString+Extras.h"
+#import "NSCollectionView+Extras.h"
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
@@ -119,11 +120,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSImage* img = response.parsedResponse;
 				RFDispatchMain(^{
 					b.coverImage = img;
-					@try {
-						[collectionView reloadItemsAtIndexPaths:[NSSet setWithCollectionViewIndexPath:indexPath]];
-					}
-					@catch (NSException* e) {
-					}
+					[collectionView mb_safeReloadAtIndexPath:indexPath];
 				});
 			}
 		}];

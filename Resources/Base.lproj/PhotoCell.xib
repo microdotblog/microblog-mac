@@ -14,6 +14,7 @@
                 <outlet property="browserMenuItem" destination="2cQ-VA-lrc" id="up2-5X-URU"/>
                 <outlet property="htmlWithoutPlayerItem" destination="xEJ-wV-pYm" id="Uj1-bR-9Mc"/>
                 <outlet property="iconView" destination="Hng-Eo-t8j" id="dUL-Jq-J64"/>
+                <outlet property="progressSpinner" destination="NfY-U0-545" id="cUn-zL-cv5"/>
                 <outlet property="removeFromCollectionItem" destination="VXF-B8-tF6" id="MG0-eD-gL9"/>
                 <outlet property="selectionOverlayView" destination="8e5-OI-o8O" id="QZr-21-MsR"/>
                 <outlet property="thumbnailImageView" destination="NIg-26-JBO" id="Q6i-Sv-jTx"/>
@@ -44,14 +45,19 @@
                         <outlet property="photoCell" destination="na8-0v-oNY" id="Pwy-Po-EBe"/>
                     </connections>
                 </customView>
+                <progressIndicator hidden="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="NfY-U0-545">
+                    <rect key="frame" x="42" y="42" width="16" height="16"/>
+                </progressIndicator>
             </subviews>
             <constraints>
                 <constraint firstItem="Hng-Eo-t8j" firstAttribute="centerY" secondItem="uf0-7P-vkp" secondAttribute="centerY" id="2RU-e8-Ss4"/>
                 <constraint firstItem="NIg-26-JBO" firstAttribute="leading" secondItem="uf0-7P-vkp" secondAttribute="leading" id="3Pj-yr-LRv"/>
+                <constraint firstItem="NfY-U0-545" firstAttribute="centerX" secondItem="uf0-7P-vkp" secondAttribute="centerX" id="40d-M8-uB3"/>
                 <constraint firstItem="Hng-Eo-t8j" firstAttribute="centerX" secondItem="uf0-7P-vkp" secondAttribute="centerX" id="4K2-8s-Agd"/>
                 <constraint firstItem="NIg-26-JBO" firstAttribute="top" secondItem="uf0-7P-vkp" secondAttribute="top" id="B1T-xL-BZH"/>
                 <constraint firstAttribute="bottom" secondItem="NIg-26-JBO" secondAttribute="bottom" id="TF4-mN-v5w"/>
                 <constraint firstAttribute="trailing" secondItem="NIg-26-JBO" secondAttribute="trailing" id="px9-mB-9Tx"/>
+                <constraint firstItem="NfY-U0-545" firstAttribute="centerY" secondItem="uf0-7P-vkp" secondAttribute="centerY" id="x9x-pL-6of"/>
             </constraints>
             <point key="canvasLocation" x="-303" y="-314"/>
         </customView>
