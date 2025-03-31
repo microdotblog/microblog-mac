@@ -36,6 +36,8 @@
 #import "RFConstants.h"
 #import "RFSettings.h"
 #import "RFAccount.h"
+#import "RFPhoto.h"
+#import "RFUpload.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
 #import "NSAppearance+Extras.h"
@@ -653,28 +655,40 @@
 
 - (void) promptNewPostWithPhotoURL:(NSString *)url altText:(NSString *)altText
 {
-	NSString* s;
-	
-	if (YES) {
-		if (altText.length > 0) {
-			NSString* alt_cleaned = [altText stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-			s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", url, alt_cleaned];
+	RFUpload* upload = [[RFUpload alloc] initWithURL:url];
+	if ([upload isPhoto]) {
+		// make reference to already-uploaded photo
+		RFPhoto* new_photo = [[RFPhoto alloc] init];
+		new_photo.publishedURL = url;
+		new_photo.altText = altText;
+		
+		// download thumbnail
+		RFClient* client = [[RFClient alloc] initWithURL:url];
+		[client getWithCompletion:^(UUHttpResponse* response) {
+			RFDispatchMainAsync (^{
+				if (response.httpError == nil) {
+					NSImage* img = [[NSImage alloc] initWithData:[response rawResponse]];
+					new_photo.thumbnailImage = img;
+					[self showPostWithPhoto:new_photo];
+				}
+			});
+		}];
+	}
+	else {
+		// if not a photo, use HTML tag
+		NSString* s;
+		if ([upload isVideo]) {
+			s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
+		}
+		else if ([upload isAudio]) {
+			s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", upload.url];
 		}
 		else {
-			s = [NSString stringWithFormat:@"<img src=\"%@\">", url];
+			s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];
 		}
+		
+		[self showPostWithText:s];
 	}
-//	else if ([upload isVideo]) {
-//		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
-//	}
-//	else if ([upload isAudio]) {
-//		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", upload.url];
-//	}
-//	else {
-//		s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];
-//	}
-
-	[self showPostWithText:s];
 }
 
 - (void) showConversationWithPostID:(NSString *)postID
@@ -835,6 +849,12 @@
 - (void) showPostWithText:(NSString *)text
 {
 	RFPostController* controller = [[RFPostController alloc] initWithText:text];
+	[self showPostController:controller];
+}
+
+- (void) showPostWithPhoto:(RFPhoto *)photo
+{
+	RFPostController* controller = [[RFPostController alloc] initWithPhoto:photo];
 	[self showPostController:controller];
 }
 

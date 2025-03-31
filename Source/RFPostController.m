@@ -108,6 +108,16 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	return self;
 }
 
+- (id) initWithPhoto:(RFPhoto *)photo
+{
+	self = [self init];
+	if (self) {
+		self.attachedPhotos = @[ photo ];
+	}
+	
+	return self;
+}
+
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username
 {
 	self = [self init];
@@ -238,7 +248,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	
 	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
 
-	self.photosHeightConstraint.constant = 0;
+	if (self.attachedPhotos.count > 0) {
+		self.photosHeightConstraint.constant = 100;
+	}
+	else {
+		self.photosHeightConstraint.constant = 0;
+	}
 
 	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CategoryCell" bundle:nil] forItemWithIdentifier:kCategoryCellIdentifier];
 	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CrosspostCell" bundle:nil] forItemWithIdentifier:kCrosspostCellIdentifier];
@@ -641,6 +656,20 @@ static CGFloat const kTextViewTitleShownTop = 54;
 //{
 //	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 //}
+
+- (void) attachExternalPhoto:(NSString *)url altText:(NSString *)altText
+{
+	RFPhoto* new_photo = [[RFPhoto alloc] init];
+	new_photo.publishedURL = url;
+	new_photo.altText = altText;
+	
+	self.attachedPhotos = @[ new_photo ];
+	[self.photosCollectionView reloadData];
+
+	self.photosHeightConstraint.animator.constant = 100;
+
+	[self checkMediaEndpoint];
+}
 
 - (void) attachPhotos:(NSArray<NSURL*>*)photoURLs
 {

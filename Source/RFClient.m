@@ -17,6 +17,17 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 
 @implementation RFClient
 
+- (instancetype) initWithURL:(NSString *)url
+{
+	self = [super init];
+	if (self) {
+		self.path = nil;
+		self.url = url;
+	}
+	
+	return self;
+}
+
 - (instancetype) initWithPath:(NSString *)path
 {
 	self = [super init];
@@ -57,6 +68,11 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 }
 
 #pragma mark -
+
+- (UUHttpRequest *) getWithCompletion:(void (^)(UUHttpResponse* response))handler
+{
+	return [self getWithQueryArguments:nil completion:handler];
+}
 
 - (UUHttpRequest *) getWithQueryArguments:(NSDictionary *)args completion:(void (^)(UUHttpResponse* response))handler
 {

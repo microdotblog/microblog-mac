@@ -11,6 +11,7 @@
 @class RFHighlightingTextStorage;
 @class RFPhotoAltController;
 @class RFPost;
+@class RFPhoto;
 @class MBDateController;
 
 @interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
@@ -63,6 +64,7 @@
 - (id) initWithPost:(RFPost *)post;
 - (id) initWithChannel:(NSString *)channel;
 - (id) initWithText:(NSString *)text;
+- (id) initWithPhoto:(RFPhoto *)photo;
 - (id) initWithPostID:(NSString *)postID username:(NSString *)username;
 - (void) finishClose;
 - (IBAction) sendPost:(id)sender;

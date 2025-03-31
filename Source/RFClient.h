@@ -14,9 +14,11 @@
 @property (strong, nonatomic) NSString* path;
 @property (strong, nonatomic) NSString* url;
 
+- (instancetype) initWithURL:(NSString *)url;
 - (instancetype) initWithPath:(NSString *)path;
 - (instancetype) initWithFormat:(NSString *)path, ...;
 
+- (UUHttpRequest *) getWithCompletion:(void (^)(UUHttpResponse* response))handler;
 - (UUHttpRequest *) getWithQueryArguments:(NSDictionary *)args completion:(void (^)(UUHttpResponse* response))handler;
 
 - (UUHttpRequest *) postWithParams:(NSDictionary *)params completion:(void (^)(UUHttpResponse* response))handler;
