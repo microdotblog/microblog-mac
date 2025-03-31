@@ -103,7 +103,7 @@
 	}
 	else if ([url.host isEqualToString:@"post"]) {
 		NSString* text = [[[url absoluteString] uuFindQueryStringArg:@"text"] uuUrlDecoded];
-		[self showNewPostWithText:text];
+		[self showPostWithText:text];
 	}
 	else if ([url.host isEqualToString:@"reply"]) {
 		NSString* username = [self.timelineController usernameOfPostID:param];
@@ -192,6 +192,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(promptNewPostWithPhotoNotification:) name:kNewPostWithPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoWindowDidCloseNotification:) name:kPhotoWindowDidCloseNotification object:nil];
@@ -643,6 +644,39 @@
 	[self showPhotoWithURL:url.absoluteString altText:alt allowCopy:allow_copy];
 }
 
+- (void) promptNewPostWithPhotoNotification:(NSNotification *)notification
+{
+	NSString* url = [notification.userInfo objectForKey:kNewPostWithPhotoURLKey];
+	NSString* alt = [notification.userInfo objectForKey:kNewPostWithPhotoAltKey];
+	[self promptNewPostWithPhotoURL:url altText:alt];
+}
+
+- (void) promptNewPostWithPhotoURL:(NSString *)url altText:(NSString *)altText
+{
+	NSString* s;
+	
+	if (YES) {
+		if (altText.length > 0) {
+			NSString* alt_cleaned = [altText stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+			s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", url, alt_cleaned];
+		}
+		else {
+			s = [NSString stringWithFormat:@"<img src=\"%@\">", url];
+		}
+	}
+//	else if ([upload isVideo]) {
+//		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
+//	}
+//	else if ([upload isAudio]) {
+//		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", upload.url];
+//	}
+//	else {
+//		s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];
+//	}
+
+	[self showPostWithText:s];
+}
+
 - (void) showConversationWithPostID:(NSString *)postID
 {
 	[self.timelineController showConversationWithPostID:postID];
@@ -772,11 +806,6 @@
 			});
 		}];
 	}
-}
-
-- (void) showNewPostWithText:(NSString *)text
-{
-	[self showPostWithText:text];
 }
 
 - (void) showNewBookmarkWithURL:(NSString *)url
