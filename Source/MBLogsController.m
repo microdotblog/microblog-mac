@@ -48,7 +48,7 @@
 - (void) setupTimer
 {
 	[self.refreshTimer invalidate];
-	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
+	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 repeats:YES block:^(NSTimer* timer) {
 		[self fetchLogs];
 	}];
 }
@@ -87,7 +87,11 @@
 			RFDispatchMain(^{
 				self.allLogs = new_logs;
 				self.errorLogs = new_errors;
-				
+
+				if ([self checkNeedingReload]) {
+					[self reloadRestoringSelection];
+				}
+
 				[self fetchErrors];
 			});
 		}
@@ -110,9 +114,11 @@
 				
 			RFDispatchMain(^{
 				self.errorLogs = new_errors;
+				
 				if ([self checkNeedingReload]) {
 					[self reloadRestoringSelection];
 				}
+				
 				[self.progressSpinner stopAnimation:nil];
 			});
 		}
