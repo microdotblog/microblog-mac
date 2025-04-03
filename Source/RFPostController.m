@@ -1752,9 +1752,15 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[new_photos removeObjectAtIndex:0];
 		self.queuedPhotos = new_photos;
 		
-		[self uploadPhoto:photo completion:^{
+		// we only need to upload if no URL already
+		if (photo.publishedURL.length == 0) {
+			[self uploadPhoto:photo completion:^{
+				[self uploadNextPhoto];
+			}];
+		}
+		else {
 			[self uploadNextPhoto];
-		}];
+		}
 	}
 	else {
 		NSString* s = [self currentText];
