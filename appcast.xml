@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.4.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added "Upload" button to toolbar when Uploads sidebar item selected, to pick a new photo to upload.</li>
+					<li>Added "New Post..." button when right-clicking on an upload, to start a new post with that photo.</li>
+					<li>Fixed post window position not exactly matching last window.</li>
+					<li>Fixed toolbar item sizes, dragging inside profile popup menu, and other UI tweaks.</li>
+					<li>Improved more quickly updating Logs window.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Thu, 03 Apr 2025 12:20:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.5.zip" sparkle:shortVersionString="3.4.5" sparkle:version="164" length="4291422" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4.4</title>
  			<description><![CDATA[
 				<style>
