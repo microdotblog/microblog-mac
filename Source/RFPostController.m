@@ -1522,6 +1522,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"action": @"update",
 					@"url": self.editingPost.url,
 					@"mp-destination": destination_uid,
+					@"mp-syndicate-to[]": crosspost_uids,
 					@"replace": @{
 						@"name": [self currentTitle],
 						@"content": text,
