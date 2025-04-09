@@ -145,6 +145,11 @@
 					post.categories = [props objectForKey:@"category"];
 				}
 
+				post.syndication = @[];
+				if ([[props objectForKey:@"syndication"] count] > 0) {
+					post.syndication = [props objectForKey:@"syndication"];
+				}
+
 				[new_posts addObject:post];
 			}
 			

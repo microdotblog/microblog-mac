@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) BOOL isReply;
 @property (strong) NSString* channel;
 @property (strong) NSArray* categories;
+@property (strong) NSArray* syndication; // UIDs like "bluesky"
 
 - (NSString *) displaySummary;
 - (BOOL) isPage;

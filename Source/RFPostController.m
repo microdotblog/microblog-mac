@@ -83,6 +83,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 		self.channel = self.editingPost.channel;
 		self.selectedCategories = self.editingPost.categories;
+		self.selectedCrosspostUIDs = self.editingPost.syndication;
 	}
 	
 	return self;
@@ -1522,7 +1523,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					@"action": @"update",
 					@"url": self.editingPost.url,
 					@"mp-destination": destination_uid,
-					@"mp-syndicate-to[]": crosspost_uids,
+					@"mp-syndicate-to": crosspost_uids,
 					@"replace": @{
 						@"name": [self currentTitle],
 						@"content": text,
@@ -2047,12 +2048,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 			if (syndicate_to) {
 				self.crosspostServices = syndicate_to;
 
-				// select all cross-post options by default
-				NSMutableArray* selected_uids = [NSMutableArray array];
-				for (NSDictionary* info in self.crosspostServices) {
-					[selected_uids addObject:info[@"uid"]];
+				// select all cross-post options by default (if not editing)
+				if (self.editingPost == nil) {
+					NSMutableArray* selected_uids = [NSMutableArray array];
+					for (NSDictionary* info in self.crosspostServices) {
+						[selected_uids addObject:info[@"uid"]];
+					}
+					self.selectedCrosspostUIDs = selected_uids;
 				}
-				self.selectedCrosspostUIDs = selected_uids;
 			}
 		}
 	}];
