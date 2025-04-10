@@ -1237,6 +1237,12 @@ static NSInteger const kSelectionNotes = 11;
 	}];
 }
 
+- (void) updateCachedUsers
+{
+	NSArray* usernames = [self usernamesInCurrentView];
+	[self.cachedUsernames addObjectsFromArray:usernames];
+}
+
 - (void) selectSidebarRow:(NSInteger)sidebarRow
 {
 	for (NSInteger row = 0; row < self.sidebarItems.count; row++) {
@@ -1378,6 +1384,18 @@ static NSInteger const kSelectionNotes = 11;
 	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_username').text();", postID];
 	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (NSArray *) usernamesInCurrentView
+{
+	NSString* js = @"Array.from(document.querySelectorAll('.post_username'))\
+		.map(e => e.textContent.trim())\
+		.filter(u => u.length > 0)\
+		.join(',');";
+	
+	NSString* usernames_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
+	NSArray* usernames = [usernames_s componentsSeparatedByString:@","];
+	return usernames;
 }
 
 - (NSString *) linkOfPostID:(NSString *)postID
@@ -1537,6 +1555,7 @@ static NSInteger const kSelectionNotes = 11;
 		
 	[self setupCSS:webView];	
 	[self stopLoadingSidebarRow];
+	[self updateCachedUsers];
 }
 
 - (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
