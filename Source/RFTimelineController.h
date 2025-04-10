@@ -58,6 +58,7 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) NSMutableArray* booksWindowControllers; // MBBooksWindowController
 @property (strong, nonatomic) MBNotesController* notesController;
 @property (strong, nonatomic) NSString* selectedPostID;
+@property (strong, nonatomic) NSMutableSet* cachedUsernames;
 
 // NOTES:
 // have stack of NSViewControllers (use RFXMLElementStack, rename it)

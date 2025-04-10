@@ -64,6 +64,7 @@ static NSInteger const kSelectionNotes = 11;
 		self.navigationStack = [[RFStack alloc] init];
 		self.checkSeconds = @5;
 		self.booksWindowControllers = [NSMutableArray array];
+		self.cachedUsernames = [NSMutableSet set];
 	}
 	
 	return self;
@@ -1188,12 +1189,52 @@ static NSInteger const kSelectionNotes = 11;
 	if (self.selectedTimeline >= kSelectionPosts) {
 		[self showTimeline:nil];
 	}
-	
+
+	// check username cache first, then check server
+	if ([self.cachedUsernames containsObject:username]) {
+		// navigate to profile
+		[self showProfileWithExistingUsername:username];
+	}
+	else {
+		[self checkUsername:username completion:^(BOOL exists) {
+			if (exists) {
+				// cache our answer
+				[self.cachedUsernames addObject:username];
+				
+				// navigate to profile
+				[self showProfileWithExistingUsername:username];
+			}
+			else {
+				// no username, so visit that path on the web
+				NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"https://micro.blog/%@", username]];
+				[[NSWorkspace sharedWorkspace] openURL:url];
+			}
+		}];
+	}
+}
+
+- (void) showProfileWithExistingUsername:(NSString *)username
+{
 	RFUserController* controller = [[RFUserController alloc] initWithUsername:username];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
 
 	[self pushViewController:controller];
+}
+
+- (void) checkUsername:(NSString *)username completion:(void (^)(BOOL exists))handler
+{
+	// get the JSON Feed for the user, will be 404 if no username exists
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/%@", username];
+	[client getWithCompletion:^(UUHttpResponse* response) {
+		BOOL found_user = NO;
+		if (response.httpResponse.statusCode == 200) {
+			found_user = YES;
+		}
+		RFDispatchMain(^{
+			handler(found_user);
+		});
+	}];
 }
 
 - (void) selectSidebarRow:(NSInteger)sidebarRow
