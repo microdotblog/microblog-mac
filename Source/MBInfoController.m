@@ -70,6 +70,37 @@
 	[self setupWithURL:url text:text];
 }
 
+- (void) showEditing
+{
+	CGFloat extra_space = 10;
+	self.editableHeightConstant.constant = self.textField.bounds.size.height + extra_space;
+	
+	self.textEditButton.hidden = YES;
+	self.cancelButton.hidden = NO;
+	self.updateButton.hidden = NO;
+	
+	self.textField.hidden = YES;
+	self.editableTextField.hidden = NO;
+	[self.window makeFirstResponder:self.editableTextField];
+}
+
+- (void) hideEditing
+{
+	[self.editableTextField setStringValue:self.text];
+	
+	self.textEditButton.hidden = NO;
+	self.cancelButton.hidden = YES;
+	self.updateButton.hidden = YES;
+	
+	self.textField.hidden = NO;
+	self.editableTextField.hidden = YES;
+}
+
+- (BOOL) isEditing
+{
+	return self.updateButton.hidden == NO;
+}
+
 - (IBAction) copyText:(id)sender
 {
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
@@ -77,6 +108,25 @@
 	[pb setString:self.text forType:NSPasteboardTypeString];
 	
 	[self.textCopyButton setTitle:@"Copied"];
+}
+
+- (IBAction) editText:(id)sender
+{
+	[self showEditing];
+}
+
+- (IBAction) update:(id)sender
+{
+	[self.progressSpinner startAnimation:nil];
+	
+	
+	[self hideEditing];
+}
+
+- (IBAction) cancel:(id)sender
+{
+	[self.progressSpinner stopAnimation:nil];
+	[self hideEditing];
 }
 
 @end
