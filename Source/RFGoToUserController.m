@@ -39,7 +39,7 @@
 	if (username.length > 0) {
 		[self.progressSpinner startAnimation:nil];
 
-		RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/%@", username];
+		RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/%@?count=0", username];
 		NSDictionary* args = @{};
 		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 			RFDispatchMainAsync (^{

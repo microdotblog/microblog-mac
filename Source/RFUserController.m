@@ -66,7 +66,7 @@
 
 - (void) fetchUserInfo
 {
-    RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/posts/%@", self.username]];
+    RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/posts/%@?count=0", self.username]];
     [client getWithQueryArguments:nil completion:^(UUHttpResponse *response) {
 		if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
             NSDictionary* userInfo = response.parsedResponse;
