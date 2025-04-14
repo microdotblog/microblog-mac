@@ -24,9 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString* url;
 @property (strong, nonatomic) NSString* text;
+@property (assign, nonatomic) BOOL isAI;
 
 - (id) init;
-- (void) setupWithURL:(NSString *)url text:(NSString *)text;
+- (void) setupWithURL:(NSString *)url text:(NSString *)text isAI:(BOOL)isAI;
 
 @end
 

@@ -8,6 +8,9 @@
 
 #import "MBInfoController.h"
 
+#import "RFSettings.h"
+#import "RFClient.h"
+#import "RFMacros.h"
 #import "RFConstants.h"
 
 @implementation MBInfoController
@@ -29,13 +32,14 @@
 	[self setupNotifications];
 }
 
-- (void) setupWithURL:(NSString *)url text:(NSString *)text
+- (void) setupWithURL:(NSString *)url text:(NSString *)text isAI:(BOOL)isAI
 {
 	// replace quotes to make alt text pasting easier
 	NSString* s = [text stringByReplacingOccurrencesOfString:@"\"" withString:@""];
 	
 	self.url = url;
 	self.text = s;
+	self.isAI = isAI;
 	
 	if (self.window != nil) {
 		[self setupFields];
@@ -46,7 +50,12 @@
 {
 	self.urlField.stringValue = self.url;
 	if (self.text.length > 0) {
-		self.textField.stringValue = [NSString stringWithFormat:@"🤖 %@", self.text];
+		if (self.isAI) {
+			self.textField.stringValue = [NSString stringWithFormat:@"🤖 %@", self.text];
+		}
+		else {
+			self.textField.stringValue = self.text;
+		}
 		self.textCopyButton.hidden = NO;
 	}
 	else {
@@ -66,12 +75,16 @@
 {
 	NSString* url = [notification.userInfo objectForKey:kInfoURLKey];
 	NSString* text = [notification.userInfo objectForKey:kInfoTextKey];
+	NSNumber* is_ai = [notification.userInfo objectForKey:kInfoAIKey];
 	
-	[self setupWithURL:url text:text];
+	[self hideEditing];
+	[self setupWithURL:url text:text isAI:[is_ai boolValue]];
 }
 
 - (void) showEditing
 {
+	[self.editableTextField setStringValue:self.text];
+
 	CGFloat extra_space = 10;
 	self.editableHeightConstant.constant = self.textField.bounds.size.height + extra_space;
 	
@@ -86,8 +99,6 @@
 
 - (void) hideEditing
 {
-	[self.editableTextField setStringValue:self.text];
-	
 	self.textEditButton.hidden = NO;
 	self.cancelButton.hidden = YES;
 	self.updateButton.hidden = YES;
@@ -118,9 +129,31 @@
 - (IBAction) update:(id)sender
 {
 	[self.progressSpinner startAnimation:nil];
-	
-	
-	[self hideEditing];
+
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* params = @{
+		@"mp-destination": destination_uid,
+		@"action": @"update",
+		@"url": self.url,
+		@"alt": self.editableTextField.stringValue
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+		if (response.httpError == nil) {
+			self.text = self.editableTextField.stringValue;
+			self.isAI = NO;
+			
+			RFDispatchMainAsync (^{
+				[self setupFields];
+				[self hideEditing];
+			});
+		}
+	}];
 }
 
 - (IBAction) cancel:(id)sender

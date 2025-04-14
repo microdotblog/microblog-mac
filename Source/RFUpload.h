@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* url;
 @property (strong) NSString* thumbnail_url;
 @property (strong) NSString* alt;
+@property (assign) BOOL isAI;
 @property (assign) NSInteger width;
 @property (assign) NSInteger height;
 @property (strong) NSDate* createdAt;

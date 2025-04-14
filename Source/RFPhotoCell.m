@@ -152,7 +152,8 @@
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
 		kInfoURLKey: self.url,
-		kInfoTextKey: self.alt
+		kInfoTextKey: self.alt,
+		kInfoAIKey: @(self.isAI)
 	}];
 }
 

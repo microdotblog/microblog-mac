@@ -552,7 +552,7 @@
 
 - (IBAction) showInfo:(id)sender
 {
-	[self showInfoWithURL:@"" text:@""];
+	[self showInfoWithURL:@"" text:@"" isAI:NO];
 }
 
 - (IBAction) showCollections:(id)sender
@@ -602,8 +602,9 @@
 {
 	NSString* url = [notification.userInfo objectForKey:kInfoURLKey];
 	NSString* text = [notification.userInfo objectForKey:kInfoTextKey];
-	
-	[self showInfoWithURL:url text:text];
+	NSNumber* is_ai = [notification.userInfo objectForKey:kInfoAIKey];
+
+	[self showInfoWithURL:url text:text isAI:[is_ai boolValue]];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification
@@ -874,13 +875,13 @@
 	}
 }
 
-- (void) showInfoWithURL:(NSString *)url text:(NSString *)text
+- (void) showInfoWithURL:(NSString *)url text:(NSString *)text isAI:(BOOL)isAI
 {
 	if (self.infoController == nil) {
 		self.infoController = [[MBInfoController alloc] init];
 	}
 	
-	[self.infoController setupWithURL:url text:text];
+	[self.infoController setupWithURL:url text:text isAI:isAI];
 	[self.infoController showWindow:nil];
 }
 

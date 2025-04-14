@@ -152,6 +152,7 @@ static NSString* const kShowInfoNotification = @"MBShowInfoNotification";
 static NSString* const kUpdateInfoNotification = @"MBUpdateInfoNotification";
 static NSString* const kInfoURLKey = @"url";
 static NSString* const kInfoTextKey = @"text";
+static NSString* const kInfoAIKey = @"ai";
 
 static NSString* const kRemoveFromCollectionNotification = @"MBRemoveFromCollectionNotification";
 static NSString* const kRemoveFromCollectionURLKey = @"url";

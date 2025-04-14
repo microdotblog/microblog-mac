@@ -124,6 +124,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				RFUpload* upload = [[RFUpload alloc] init];
 				upload.url = [item objectForKey:@"url"];
 				upload.alt = [item objectForKey:@"alt"];
+				upload.isAI = [[item objectForKey:@"microblog-ai"] boolValue];
 				
 				NSDictionary* cdn = [item objectForKey:@"cdn"];
 				if (cdn) {
@@ -235,7 +236,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
 		kInfoURLKey: up.url,
-		kInfoTextKey: up.alt
+		kInfoTextKey: up.alt,
+		kInfoAIKey: @(up.isAI)
 	}];
 }
 
@@ -661,6 +663,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	item.url = up.url;
 	item.alt = up.alt;
+	item.isAI = up.isAI;
 	[item setupForURL];
 	[item setupForCollection:self.selectedCollection];
 	
@@ -704,7 +707,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateInfoNotification object:self userInfo:@{
 		kInfoURLKey: item.url,
-		kInfoTextKey: item.alt
+		kInfoTextKey: item.alt,
+		kInfoAIKey: @(item.isAI)
 	}];
 }
 

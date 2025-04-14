@@ -11,6 +11,7 @@
                 <outlet property="cancelButton" destination="OgM-UG-BDI" id="C57-aa-n5y"/>
                 <outlet property="editableHeightConstant" destination="3Sf-BX-gHh" id="AiB-b0-YW9"/>
                 <outlet property="editableTextField" destination="6YT-3I-Vmm" id="td1-bS-uVh"/>
+                <outlet property="progressSpinner" destination="Nfx-EO-LxJ" id="TTj-nB-Mhn"/>
                 <outlet property="textCopyButton" destination="xy8-eu-tlt" id="8LK-EK-zkt"/>
                 <outlet property="textEditButton" destination="qIM-ae-YJa" id="5ZO-LR-T81"/>
                 <outlet property="textField" destination="k1h-GP-V6V" id="X5M-jv-IwY"/>
@@ -38,7 +39,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-GP-V6V" customClass="MBUnselectedTextField">
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-GP-V6V">
                         <rect key="frame" x="12" y="64" width="295" height="16"/>
                         <textFieldCell key="cell" selectable="YES" title="🤖 Description..." id="FdX-kQ-0hs">
                             <font key="font" metaFont="system"/>

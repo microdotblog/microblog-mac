@@ -22,6 +22,7 @@
 
 @property (strong, nonatomic) NSString* url;
 @property (strong, nonatomic) NSString* alt;
+@property (assign, nonatomic) BOOL isAI;
 @property (copy, nonatomic) NSMenuItem* copiedRemoveItem;
 
 - (void) setupForURL;
