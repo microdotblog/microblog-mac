@@ -677,8 +677,8 @@ static NSInteger const kSelectionNotes = 11;
 		}
 	}
 	else if (self.selectedTimeline == kSelectionUploads) {
-		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.rootController fetchPosts];
+		if ([self.rootController isKindOfClass:[RFAllUploadsController class]]) {
+			[(RFAllUploadsController *)self.rootController fetchUploads];
 		}
 	}
 

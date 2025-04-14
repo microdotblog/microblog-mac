@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic, nullable) MBCollection* selectedCollection;
 
+- (void) fetchUploads;
 - (void) focusSearch;
 - (void) openSelectedItem;
 
