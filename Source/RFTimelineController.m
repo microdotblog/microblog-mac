@@ -1228,7 +1228,7 @@ static NSInteger const kSelectionNotes = 11;
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/%@", username];
 	[client getWithCompletion:^(UUHttpResponse* response) {
 		BOOL found_user = NO;
-		if (response.httpError != nil) {
+		if (response.httpError == nil) {
 			found_user = YES;
 		}
 		RFDispatchMain(^{
