@@ -77,6 +77,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedPhotoNotification:) name:kDeleteSelectedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFromCollectionNotification:) name:kRemoveFromCollectionNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCollectionNotification:) name:kShowCollectionNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadDidUpdateNotification:) name:kUploadDidUpdateNotification object:nil];
 }
 
 - (void) fetchUploads
@@ -356,6 +357,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	self.searchField.enabled = NO;
 	self.searchField.stringValue = @"";
 	
+	[self fetchUploads];
+}
+
+- (void) uploadDidUpdateNotification:(NSNotification *)notification
+{
 	[self fetchUploads];
 }
 

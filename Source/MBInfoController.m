@@ -81,6 +81,11 @@
 	[self setupWithURL:url text:text isAI:[is_ai boolValue]];
 }
 
+- (void) notifyUpload
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kUploadDidUpdateNotification object:self];
+}
+
 - (void) showEditing
 {
 	[self.editableTextField setStringValue:self.text];
@@ -144,13 +149,16 @@
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client postWithParams:params completion:^(UUHttpResponse* response) {
-		if (response.httpError == nil) {
-			self.text = self.editableTextField.stringValue;
-			self.isAI = NO;
-			
+		if (response.httpError == nil) {			
 			RFDispatchMainAsync (^{
+				self.text = self.editableTextField.stringValue;
+				self.isAI = NO;
+
+				[self.progressSpinner stopAnimation:nil];
+
 				[self setupFields];
 				[self hideEditing];
+				[self notifyUpload];
 			});
 		}
 	}];

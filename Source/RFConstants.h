@@ -17,6 +17,7 @@ static NSString* const kCheckTimelineNotification = @"RFCheckTimeline";
 static NSString* const kUpdatedBlogNotification = @"RFUpdatedBlog";
 static NSString* const kRemoveAttachedPhotoNotification = @"RFRemoveAttachedPhoto";
 static NSString* const kRemoveAttachedPhotoIndexPath = @"index_path";
+static NSString* const kUploadDidUpdateNotification = @"MBUploadDidUpdate";
 
 static NSString* const kPostWindowDidCloseNotification = @"RFPostWindowDidClose";
 static NSString* const kPhotoWindowDidCloseNotification = @"MBPhotoWindowDidClose";
