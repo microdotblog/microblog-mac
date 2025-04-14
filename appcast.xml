@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.4.6</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added editing the auto-generated accessibility text in the Edit menu → Get Info pane for uploads.</li>
+					<li>Fixed cross-posting checkboxes getting reset and not updating for saved draft posts.</li>
+					<li>Fixed View menu → Refresh for the uploads screen.</li>
+					<li>Fixed Micro.blog web links that accidentally opened a missing user profile.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Mon, 14 Apr 2025 10:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.4.6.zip" sparkle:shortVersionString="3.4.6" sparkle:version="168" length="4296815" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4.5</title>
  			<description><![CDATA[
 				<style>
