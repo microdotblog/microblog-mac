@@ -1060,7 +1060,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (NSString *) currentProcessedMarkup
 {
 	NSError* error = nil;
-	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] error:&error];
+	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 	if (html.length > 0) {
 		// Markdown processor adds a return at the end
 		html = [html substringToIndex:html.length - 1];
@@ -1073,7 +1073,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (NSString *) currentHTML
 {
 	NSError* error = nil;
-	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] error:&error];
+	NSString* html = [MMMarkdown HTMLStringWithMarkdown:[self currentText] extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 	return html;
 }
 

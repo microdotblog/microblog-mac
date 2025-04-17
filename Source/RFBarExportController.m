@@ -110,7 +110,7 @@
 		[info setValue:post.text forKey:@"content_text"];
 		
 		NSError* error = nil;
-		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text error:&error];
+		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 		[info setValue:post_html forKey:@"content_html"];
 
 		[info setValue:post.url forKey:@"url"];
@@ -137,7 +137,7 @@
 	
 	for (RFPost* post in self.posts) {
 		NSError* error = nil;
-		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text error:&error];
+		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 		NSString* post_placeholder = [self placeholderForPost:post];
 		html_s = [html_s stringByReplacingOccurrencesOfString:post_placeholder withString:post_html];
 	}

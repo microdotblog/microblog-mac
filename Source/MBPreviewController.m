@@ -57,7 +57,7 @@
 		NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
 		
 		NSError* error = nil;
-		NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown error:&error];
+		NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 		if (error == nil) {
 			NSString* html = template_html;
 			html = [html stringByReplacingOccurrencesOfString:@"[TITLE]" withString:title];

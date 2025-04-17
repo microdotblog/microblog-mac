@@ -71,7 +71,7 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 	// if contains Markdown, convert post text to HTML to find these URLs
 	if ([post_html containsString:@"]("]) {
 		NSError* error = nil;
-		post_html = [MMMarkdown HTMLStringWithMarkdown:post_html error:&error];
+		post_html = [MMMarkdown HTMLStringWithMarkdown:post_html extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 	}
 	
 	// parse for media tags
