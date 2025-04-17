@@ -1872,17 +1872,28 @@ static NSInteger const kSelectionNotes = 11;
         return item;
     }
     else if ([itemIdentifier isEqualToString:@"NewPost"]) {
-		NSImage* button_img = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
-
-		NSButton* button = [[NSButton alloc] initWithFrame:NSMakeRect(0, 5, 35, 30)];
-		button.image = button_img;
-		button.imagePosition = NSImageOnly;
-		button.target = nil;
-		button.action = @selector(newDocument:);
-		
-		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-		item.view = button;
-        return item;
+		// for newer macOS, position image more explicitly
+		if (@available(macOS 15.0, *)) {
+			NSImage* button_img = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
+			
+			NSButton* button = [[NSButton alloc] initWithFrame:NSMakeRect(0, 5, 35, 30)];
+			button.image = button_img;
+			button.imagePosition = NSImageOnly;
+			button.target = nil;
+			button.action = @selector(newDocument:);
+			
+			NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+			item.view = button;
+			return item;
+		}
+		else {
+			NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+			item.label = @"New Post";
+			item.image = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
+			item.target = nil;
+			item.action = @selector(newDocument:);
+			return item;
+		}
     }
 	else if ([itemIdentifier isEqualToString:@"UploadButton"]) {
 		NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
