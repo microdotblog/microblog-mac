@@ -241,12 +241,12 @@
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"SendPost" ];
+	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"Preview", @"SendPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
-	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"SendPost" ];
+	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"Preview", @"SendPost" ];
 }
 
 - ( NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
@@ -264,9 +264,18 @@
 		item.view = self.progressSpinner;
 		return item;
 	}
+	else if ([itemIdentifier isEqualToString:@"Preview"]) {
+		NSString* title = @"Preview";
+		NSButton* b = [NSButton buttonWithTitle:title target:nil action:@selector(showPreview:)];
+		[NSLayoutConstraint activateConstraints:@[ [b.widthAnchor constraintGreaterThanOrEqualToConstant:70] ]];
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.view = b;
+		return item;
+	}
 	else if ([itemIdentifier isEqualToString:@"SendPost"]) {
 		NSString* title = [self.postController postButtonTitle];
 		NSButton* b = [NSButton buttonWithTitle:title target:self.postController action:@selector(sendPost:)];
+		[NSLayoutConstraint activateConstraints:@[ [b.widthAnchor constraintGreaterThanOrEqualToConstant:50] ]];
 		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		item.view = b;
 		return item;
