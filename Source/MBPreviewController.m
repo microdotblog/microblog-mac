@@ -11,6 +11,10 @@
 #import "RFConstants.h"
 #import "MMMarkdown.h"
 
+// static storage for class-wide preview data
+static NSString* gCurrentPreviewTitle = nil;
+static NSString* gCurrentPreviewMarkdown = nil;
+
 @implementation MBPreviewController
 
 - (instancetype) init
@@ -29,6 +33,7 @@
 	[self setupWindow];
 	[self setupWebView];
 	[self setupNotifications];
+	[self setupInitialRender];
 }
 
 - (void) setupWindow
@@ -47,26 +52,44 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editorWindowTextDidChangeNotification:) name:kEditorWindowTextDidChangeNotification object:nil];
 }
 
+- (void) setupInitialRender
+{
+	if (gCurrentPreviewTitle && gCurrentPreviewMarkdown) {
+		[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown];
+	}
+}
+
++ (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown
+{
+	gCurrentPreviewTitle = [title copy];
+	gCurrentPreviewMarkdown = [markdown copy];
+}
+
 - (void) editorWindowTextDidChangeNotification:(NSNotification *)notification
 {
 	if ([self.window isVisible]) {
 		NSString* title = [notification.userInfo objectForKey:kEditorWindowTextTitleKey];
 		NSString* markdown = [notification.userInfo objectForKey:kEditorWindowTextMarkdownKey];
 		
-		NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
-		NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+		[self renderPreviewTitle:title markdown:markdown];
+	}
+}
+
+- (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown
+{
+	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
+	NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+	
+	NSError* error = nil;
+	NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
+	if (error == nil) {
+		NSString* html = template_html;
+		html = [html stringByReplacingOccurrencesOfString:@"[TITLE]" withString:title];
+		html = [html stringByReplacingOccurrencesOfString:@"[CONTENT]" withString:content_html];
 		
-		NSError* error = nil;
-		NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
-		if (error == nil) {
-			NSString* html = template_html;
-			html = [html stringByReplacingOccurrencesOfString:@"[TITLE]" withString:title];
-			html = [html stringByReplacingOccurrencesOfString:@"[CONTENT]" withString:content_html];
-			
-			if (![html isEqualToString:self.html]) {
-				self.html = html;
-				[self.webview loadHTMLString:html baseURL:nil];
-			}
+		if (![html isEqualToString:self.html]) {
+			self.html = html;
+			[self.webview loadHTMLString:html baseURL:nil];
 		}
 	}
 }

@@ -10,6 +10,7 @@
 
 #import "RFPostController.h"
 #import "MBPostWindow.h"
+#import "MBPreviewController.h"
 #import "RFAccount.h"
 #import "RFConstants.h"
 
@@ -81,6 +82,9 @@
 		if ([self isFrontPostWindow]) {
 			NSString* title = [self.postController currentTitle];
 			NSString* markdown = [self.postController currentText];
+			
+			[MBPreviewController setCurrentPreviewTitle:title markdown:markdown];
+			
 			[[NSNotificationCenter defaultCenter] postNotificationName:kEditorWindowTextDidChangeNotification object:self userInfo:@{
 				kEditorWindowTextTitleKey: title,
 				kEditorWindowTextMarkdownKey: markdown
