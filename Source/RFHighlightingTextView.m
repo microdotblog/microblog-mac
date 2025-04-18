@@ -56,6 +56,18 @@
 
 #pragma mark -
 
+- (NSArray *) readablePasteboardTypes
+{
+	// get default types for this view
+	NSMutableArray *types = [[super readablePasteboardTypes] mutableCopy];
+
+	// add PNG and TIFF
+	[types addObject:NSPasteboardTypePNG];
+	[types addObject:NSPasteboardTypeTIFF];
+	
+	return types;
+}
+
 - (void) paste:(id)sender
 {
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
