@@ -49,6 +49,16 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self fetchCollections];
 }
 
+- (void) viewDidAppear
+{
+	[super viewDidAppear];
+	
+	RFDispatchSeconds(0.5, ^{
+		// run in a bit to make sure resonder chain is set up
+		[self.view.window makeFirstResponder:self.collectionView];
+	});
+}
+
 - (void) setupCollectionView
 {
 	NSMutableArray* types = [[NSFilePromiseReceiver readableDraggedTypes] mutableCopy];
@@ -414,11 +424,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 
 			[self uploadPhoto:photo completion:^{
+				[self finishUpload:filepath];
 				[self uploadNextPhoto:paths];
 			}];
 		}
 		else {
 			[self uploadFile:filepath completion:^{
+				[self finishUpload:filepath];
 				[self uploadNextPhoto:paths];
 			}];
 		}
@@ -493,6 +505,22 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			}
 		}));
 	}];
+}
+
+- (void) finishUpload:(NSString *)path
+{
+	// clean up if a temp file
+	NSFileManager* fm = [NSFileManager defaultManager];
+	BOOL is_dir = NO;
+	if ([fm fileExistsAtPath:path isDirectory:&is_dir]) {
+		if (!is_dir) {
+			NSString* temp_folder = NSTemporaryDirectory();
+			if ([path hasPrefix:temp_folder]) {
+				NSError* error = nil;
+				[fm removeItemAtPath:path error:&error];
+			}
+		}
+	}
 }
 
 - (void) showUploadProgress
