@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added a Preview button to the new post toolbar.</li>
+					<li>Added pasting photos from the clipboard into the new post window or into the Uploads section.</li>
+					<li>Fixed the preview window rendering tables and code blocks, improved speed.</li>
+					<li>Fixed the new post button size for older versions of macOS.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 18 Apr 2025 10:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.5.zip" sparkle:shortVersionString="3.5" sparkle:version="170" length="4303095" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.4.6</title>
  			<description><![CDATA[
 				<style>
