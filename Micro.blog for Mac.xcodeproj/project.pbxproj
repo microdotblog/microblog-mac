@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 73;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -84,6 +84,7 @@
 		4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B332A4C72AA00CAACCD /* MBMessageBox.m */; };
 		4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */; };
 		4B3ADB2828494546003CD107 /* MBPhotoSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */; };
+		4B3BF7522DB3E31D00712D58 /* MBLlama.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3BF7512DB3E31D00712D58 /* MBLlama.m */; };
 		4B400D03201EC55B00C71AAF /* MMScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF3201EC55A00C71AAF /* MMScanner.m */; };
 		4B400D04201EC55B00C71AAF /* MMDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF7201EC55A00C71AAF /* MMDocument.m */; };
 		4B400D05201EC55B00C71AAF /* MMElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CF9201EC55A00C71AAF /* MMElement.m */; };
@@ -396,6 +397,8 @@
 		4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBUnacceptableToolbarItem.m; path = Source/MBUnacceptableToolbarItem.m; sourceTree = "<group>"; };
 		4B3ADB2628494546003CD107 /* MBPhotoSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBPhotoSelectionView.h; path = Source/MBPhotoSelectionView.h; sourceTree = "<group>"; };
 		4B3ADB2728494546003CD107 /* MBPhotoSelectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBPhotoSelectionView.m; path = Source/MBPhotoSelectionView.m; sourceTree = "<group>"; };
+		4B3BF7502DB3E31D00712D58 /* MBLlama.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLlama.h; path = Source/MBLlama.h; sourceTree = "<group>"; };
+		4B3BF7512DB3E31D00712D58 /* MBLlama.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLlama.m; path = Source/MBLlama.m; sourceTree = "<group>"; };
 		4B400CF2201EC55A00C71AAF /* MMElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMElement.h; path = Shared/MMMarkdown/Source/MMElement.h; sourceTree = "<group>"; };
 		4B400CF3201EC55A00C71AAF /* MMScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMScanner.m; path = Shared/MMMarkdown/Source/MMScanner.m; sourceTree = "<group>"; };
 		4B400CF4201EC55A00C71AAF /* MMScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMScanner.h; path = Shared/MMMarkdown/Source/MMScanner.h; sourceTree = "<group>"; };
@@ -670,6 +673,53 @@
 		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
 		C549E92321EEB75600730675 /* RFAutoCompleteCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAutoCompleteCache.m; path = Source/RFAutoCompleteCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		4B3BF7902DB542B500712D58 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			attributesByRelativePath = {
+				"libggml-base.dylib" = (
+					CodeSignOnCopy,
+				);
+				"libggml-blas.dylib" = (
+					CodeSignOnCopy,
+				);
+				"libggml-cpu.dylib" = (
+					CodeSignOnCopy,
+				);
+				"libggml-metal.dylib" = (
+					CodeSignOnCopy,
+				);
+				libggml.dylib = (
+					CodeSignOnCopy,
+				);
+				libllama.dylib = (
+					CodeSignOnCopy,
+				);
+				libllava_shared.dylib = (
+					CodeSignOnCopy,
+				);
+				libmtmd_shared.dylib = (
+					CodeSignOnCopy,
+				);
+			};
+			buildPhase = 4BE541211BDEA34800E1868B /* CopyFiles */;
+			membershipExceptions = (
+				"libggml-base.dylib",
+				"libggml-blas.dylib",
+				"libggml-cpu.dylib",
+				"libggml-metal.dylib",
+				libggml.dylib,
+				libllama.dylib,
+				libllava_shared.dylib,
+				libmtmd_shared.dylib,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4B3BF7772DB5424A00712D58 /* Llama.cpp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4B3BF7902DB542B500712D58 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); name = Llama.cpp; path = Shared/Llama.cpp; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4B7F0AD51BAF4B77004553A6 /* Frameworks */ = {
@@ -1099,6 +1149,8 @@
 				4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */,
 				4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */,
 				4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */,
+				4B3BF7502DB3E31D00712D58 /* MBLlama.h */,
+				4B3BF7512DB3E31D00712D58 /* MBLlama.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1183,6 +1235,7 @@
 		4B8FBDD71F867A1D00906C86 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4B3BF7772DB5424A00712D58 /* Llama.cpp */,
 				4B2A47BF22579C46003AF2EC /* SDAVAssetExport */,
 				4BC826CF1FAB663700A58AD4 /* SAMKeychain */,
 				4B2CAAC71F90655A00D9B10E /* CTidy */,
@@ -1243,6 +1296,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				4B3BF7772DB5424A00712D58 /* Llama.cpp */,
+			);
 			name = Micro.blog;
 			packageProductDependencies = (
 				4B3840DC26964F3B00AD3781 /* ZipArchive */,
@@ -1274,7 +1330,6 @@
 				};
 			};
 			buildConfigurationList = 4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Micro.blog for Mac" */;
-			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1285,6 +1340,7 @@
 			packageReferences = (
 				4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
+			preferredProjectObjectVersion = 46;
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1399,6 +1455,7 @@
 				4B8FBDED1F867B1F00906C86 /* UUString.m in Sources */,
 				4B5714CE224BD01D001F8E4F /* HTMLParser.m in Sources */,
 				4B2CAB171F90667300D9B10E /* charsets.c in Sources */,
+				4B3BF7522DB3E31D00712D58 /* MBLlama.m in Sources */,
 				4B2CAB061F90667300D9B10E /* entities.c in Sources */,
 				4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */,
 				4B79E28A2D089D2700A22861 /* MBCollectionsController.m in Sources */,
@@ -2123,6 +2180,11 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Llama.cpp",
+					"$(PROJECT_DIR)/Shared/Llama.cpp",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 3.5;
 				OTHER_LDFLAGS = "-ObjC";
@@ -2159,6 +2221,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Llama.cpp",
+					"$(PROJECT_DIR)/Shared/Llama.cpp",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 3.5;
