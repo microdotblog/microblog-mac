@@ -709,6 +709,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	if ([up isPhoto]) {
 		if (up.cachedImage == nil) {
+			// use photos proxy or CDN thumbnail URL
 			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.url];
 			if (up.thumbnail_url) {
 				url = up.thumbnail_url;
@@ -721,6 +722,18 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 						up.cachedImage = img;
 						[collectionView mb_safeReloadAtIndexPath:indexPath];
 					});
+				}
+				else {
+					// if thumbnail fails (not on CDN yet), fall back to blog URL
+					[UUHttpSession get:up.url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+						if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+							NSImage* img = response.parsedResponse;
+							RFDispatchMain(^{
+								up.cachedImage = img;
+								[collectionView mb_safeReloadAtIndexPath:indexPath];
+							});
+						}
+					}];
 				}
 			}];
 		}
