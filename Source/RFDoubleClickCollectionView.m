@@ -100,11 +100,12 @@
 		return YES;
 	}
 	else if ([pb.types containsObject:NSPasteboardTypeFileURL]) {
-		NSString* s = [pb propertyListForType:NSPasteboardTypeFileURL];
-		NSURL* url = [NSURL URLWithString:s];
-		NSArray* paths = @[ url.path ];
+		NSArray* file_urls = [pb readObjectsForClasses:@[ NSURL.class ] options:@{ NSPasteboardURLReadingFileURLsOnlyKey: @YES }];
+		NSMutableArray* paths = [NSMutableArray array];
+		for (NSURL* url in file_urls) {
+			[paths addObject:url.path];
+		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
-
 		return YES;
 	}
 	else {
