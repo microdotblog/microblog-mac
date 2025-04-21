@@ -825,6 +825,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupBlogName];
 	[self hideBlogsMenu];
 	[self downloadCategories];
+	[self downloadBlogs];
 }
 
 - (void) removeAttachedPhotoNotification:(NSNotification *)notification
@@ -2055,6 +2056,9 @@ static CGFloat const kTextViewTitleShownTop = 54;
 						[selected_uids addObject:info[@"uid"]];
 					}
 					self.selectedCrosspostUIDs = selected_uids;
+					RFDispatchMain (^{
+						[self.categoriesCollectionView reloadData];
+					});
 				}
 			}
 		}
