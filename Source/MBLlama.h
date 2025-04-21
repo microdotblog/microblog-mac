@@ -8,9 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+#include "llama.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MBLlama : NSObject
+
+@property (assign, nonatomic) struct llama_model* model;
+
+- (NSString *) runPrompt:(NSString *)prompt;
 
 @end
 
