@@ -30,7 +30,7 @@
 {
 	if ([[event characters] isEqualToString:@"\r"]) {
 		if ([self.delegate respondsToSelector:@selector(openSelectedItem)]) {
-			[self.delegate performSelector:@selector(openSelectedItem)];			
+			[self.delegate performSelector:@selector(openSelectedItem)];
 		}
 	}
 	else {
@@ -82,21 +82,36 @@
 	NSArray* types = [NSFilePromiseReceiver readableDraggedTypes];
 	NSPasteboardType best_type = [pb availableTypeFromArray:types];
 	if (best_type != nil) {
+		// temp folder for saving files
 		NSString* temp_filename = [NSString stringWithFormat:@"Micro.blog-%@", [[NSUUID UUID] UUIDString]];
 		NSString* temp_folder = [NSTemporaryDirectory() stringByAppendingPathComponent:temp_filename];
 		[RFSettings addTemporaryFolder:temp_folder];
 		[[NSFileManager defaultManager] createDirectoryAtPath:temp_folder withIntermediateDirectories:YES attributes:nil error:NULL];
 		NSURL* dest_url = [NSURL fileURLWithPath:temp_folder];
 
+		// get promised files
 		NSArray* promises = [pb readObjectsForClasses:@[[NSFilePromiseReceiver class]] options:nil];
-		for (NSFilePromiseReceiver* promise in promises) {
-			NSOperationQueue* queue = [NSOperationQueue mainQueue];
-			[promise receivePromisedFilesAtDestination:dest_url options:@{} operationQueue:queue reader:^(NSURL* file_url, NSError* error) {
-				NSArray* paths = @[ file_url.path ];
-				[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
+
+		// collect all promised file paths before notifying
+		NSMutableArray* paths = [NSMutableArray array];
+		dispatch_group_t group = dispatch_group_create();
+		for (NSFilePromiseReceiver *promise in promises) {
+			dispatch_group_enter(group);
+			NSOperationQueue *queue = [NSOperationQueue mainQueue];
+			[promise receivePromisedFilesAtDestination:dest_url options:@{} operationQueue:queue reader:^(NSURL *file_url, NSError *error) {
+				if (file_url) {
+					@synchronized(paths) {
+						[paths addObject:file_url.path];
+					}
+				}
+				dispatch_group_leave(group);
 			}];
 		}
-					 
+		
+		// notify only after we have everything
+		dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+			[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
+		});
 		return YES;
 	}
 	else if ([pb.types containsObject:NSPasteboardTypeFileURL]) {
