@@ -29,6 +29,7 @@
 #import "MBLogsController.h"
 #import "MBInfoController.h"
 #import "MBCollectionsController.h"
+#import "MBCategoriesController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -560,6 +561,11 @@
 	[self showCollections];
 }
 
+- (IBAction) showCategories:(id)sender
+{
+	[self showCategories];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -894,6 +900,18 @@
 	else {
 		[self.collectionsController showWindow:nil];
 		[self.collectionsController refresh];
+	}
+}
+
+- (void) showCategories
+{
+	if (self.categoriesController == nil) {
+		self.categoriesController = [[MBCategoriesController alloc] init];
+		[self.categoriesController showWindow:nil];
+	}
+	else {
+		[self.categoriesController showWindow:nil];
+//		[self.categoriesController refresh];
 	}
 }
 

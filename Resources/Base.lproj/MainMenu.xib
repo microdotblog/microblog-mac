@@ -589,6 +589,12 @@ CA
                                     <action selector="showMainWindow:" target="Voe-Tx-rLC" id="i3H-VE-pjX"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Categories" id="l00-qr-njG">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showCategories:" target="Voe-Tx-rLC" id="XWO-Pd-mPi"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Tags" keyEquivalent="T" id="RkD-fd-sCR">
                                 <connections>
                                     <action selector="showAllTags:" target="Voe-Tx-rLC" id="dzg-X9-5Qe"/>

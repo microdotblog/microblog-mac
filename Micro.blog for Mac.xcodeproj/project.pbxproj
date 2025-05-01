@@ -156,6 +156,8 @@
 		4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB42BBD95360091BB19 /* MBLogCell.m */; };
 		4B88CFB82BBD954A0091BB19 /* LogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFB62BBD954A0091BB19 /* LogCell.xib */; };
 		4B88CFBB2BBD9D3B0091BB19 /* MBLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */; };
+		4B8957FA2DC2C0C100EB57A9 /* MBCategoriesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8957F92DC2C0C100EB57A9 /* MBCategoriesController.m */; };
+		4B8957FD2DC2C0D600EB57A9 /* CategoriesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B8957FB2DC2C0D600EB57A9 /* CategoriesWindow.xib */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
 		4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDF1F867A3200906C86 /* UUDataCache.m */; };
 		4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD91F867A3200906C86 /* UUDate.m */; };
@@ -522,6 +524,9 @@
 		4B88CFB72BBD954A0091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/LogCell.xib; sourceTree = "<group>"; };
 		4B88CFB92BBD9D3B0091BB19 /* MBLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLog.h; path = Source/MBLog.h; sourceTree = "<group>"; };
 		4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLog.m; path = Source/MBLog.m; sourceTree = "<group>"; };
+		4B8957F82DC2C0C100EB57A9 /* MBCategoriesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategoriesController.h; path = Source/MBCategoriesController.h; sourceTree = "<group>"; };
+		4B8957F92DC2C0C100EB57A9 /* MBCategoriesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategoriesController.m; path = Source/MBCategoriesController.m; sourceTree = "<group>"; };
+		4B8957FC2DC2C0D600EB57A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CategoriesWindow.xib; sourceTree = "<group>"; };
 		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
 		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
 		4B8FBDD91F867A3200906C86 /* UUDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDate.m; path = Shared/UUToolbox/UUDate.m; sourceTree = "<group>"; };
@@ -1149,6 +1154,8 @@
 				4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */,
 				4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */,
 				4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */,
+				4B8957F82DC2C0C100EB57A9 /* MBCategoriesController.h */,
+				4B8957F92DC2C0C100EB57A9 /* MBCategoriesController.m */,
 				4B3BF7502DB3E31D00712D58 /* MBLlama.h */,
 				4B3BF7512DB3E31D00712D58 /* MBLlama.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
@@ -1217,6 +1224,7 @@
 				4B79E2832D089BC500A22861 /* Collections.xib */,
 				4B79E2912D089E0300A22861 /* CollectionCell.xib */,
 				4B79E2942D0B56BE00A22861 /* EditCollectionCell.xib */,
+				4B8957FB2DC2C0D600EB57A9 /* CategoriesWindow.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1392,6 +1400,7 @@
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
 				4BF5372B2247345F00CF9D66 /* AllPosts.xib in Resources */,
 				4B79E2852D089BC500A22861 /* Collections.xib in Resources */,
+				4B8957FD2DC2C0D600EB57A9 /* CategoriesWindow.xib in Resources */,
 				4B5606D42A73191800843D59 /* EditTags.xib in Resources */,
 				4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */,
 				4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */,
@@ -1490,6 +1499,7 @@
 				4B79E29C2D0B93FA00A22861 /* MBCollectionsTable.m in Sources */,
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
+				4B8957FA2DC2C0C100EB57A9 /* MBCategoriesController.m in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
@@ -1859,6 +1869,14 @@
 				4B88CFB72BBD954A0091BB19 /* Base */,
 			);
 			name = LogCell.xib;
+			sourceTree = "<group>";
+		};
+		4B8957FB2DC2C0D600EB57A9 /* CategoriesWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B8957FC2DC2C0D600EB57A9 /* Base */,
+			);
+			name = CategoriesWindow.xib;
 			sourceTree = "<group>";
 		};
 		4B9F063E2767BC400007F21D /* Date.xib */ = {

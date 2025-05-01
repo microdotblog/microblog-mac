@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBCategoriesController">
+            <connections>
+                <outlet property="downloadButton" destination="fz0-dr-Zkg" id="uF3-1K-cPg"/>
+                <outlet property="progressBar" destination="9js-uF-Qjs" id="I0L-uI-jZh"/>
+                <outlet property="sizeField" destination="7Mh-8Q-d12" id="HDK-TQ-W9i"/>
+                <outlet property="window" destination="P6V-fs-Rnj" id="jdJ-Ie-fSz"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Categories" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="CategoriesWindow" animationBehavior="default" id="P6V-fs-Rnj" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
+            <rect key="contentRect" x="657" y="527" width="557" height="378"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <value key="minSize" type="size" width="600" height="400"/>
+            <value key="maxSize" type="size" width="600" height="800"/>
+            <view key="contentView" id="IZq-bx-wTU">
+                <rect key="frame" x="0.0" y="0.0" width="557" height="378"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <box boxType="custom" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="0XD-Qb-DMg">
+                        <rect key="frame" x="-1" y="279" width="559" height="100"/>
+                        <view key="contentView" id="HGj-99-G6e">
+                            <rect key="frame" x="1" y="1" width="557" height="98"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dJB-pq-hey">
+                                    <rect key="frame" x="18" y="46" width="410" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="406" id="O2z-7r-gwg"/>
+                                        <constraint firstAttribute="height" constant="32" id="lt5-fU-CQD"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" title="Micro.blog can use artificial intelligence to help categorize your blog posts. Download the model to your Mac?" id="TqY-lM-JnR">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fz0-dr-Zkg">
+                                    <rect key="frame" x="449" y="51" width="95" height="32"/>
+                                    <buttonCell key="cell" type="push" title="Download" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9sR-Uq-h25">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="downloadModel:" target="-2" id="ht7-CE-zAz"/>
+                                    </connections>
+                                </button>
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Mh-8Q-d12">
+                                    <rect key="frame" x="18" y="16" width="43" height="16"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="1.2 GB" id="NFU-xy-VhU">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="color_date_text"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <progressIndicator hidden="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9js-uF-Qjs">
+                                    <rect key="frame" x="387" y="14" width="150" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="150" id="2LE-0z-Mig"/>
+                                    </constraints>
+                                </progressIndicator>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="7Mh-8Q-d12" firstAttribute="centerY" secondItem="9js-uF-Qjs" secondAttribute="centerY" id="9wT-2T-4U7"/>
+                                <constraint firstAttribute="trailing" secondItem="9js-uF-Qjs" secondAttribute="trailing" constant="20" symbolic="YES" id="Ev0-pH-iEO"/>
+                                <constraint firstItem="fz0-dr-Zkg" firstAttribute="top" secondItem="HGj-99-G6e" secondAttribute="top" constant="20" symbolic="YES" id="Jea-OU-msN"/>
+                                <constraint firstAttribute="trailing" secondItem="fz0-dr-Zkg" secondAttribute="trailing" constant="20" symbolic="YES" id="Q64-ci-qt9"/>
+                                <constraint firstAttribute="bottom" secondItem="9js-uF-Qjs" secondAttribute="bottom" constant="15" id="a1R-IQ-8PE"/>
+                                <constraint firstItem="dJB-pq-hey" firstAttribute="leading" secondItem="HGj-99-G6e" secondAttribute="leading" constant="20" symbolic="YES" id="c3K-QR-Bkz"/>
+                                <constraint firstItem="dJB-pq-hey" firstAttribute="top" secondItem="HGj-99-G6e" secondAttribute="top" constant="20" symbolic="YES" id="k4Y-Xi-Dmg"/>
+                                <constraint firstItem="7Mh-8Q-d12" firstAttribute="leading" secondItem="HGj-99-G6e" secondAttribute="leading" constant="20" symbolic="YES" id="olv-Js-3YQ"/>
+                            </constraints>
+                        </view>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="100" id="8Ak-Wl-HVG"/>
+                        </constraints>
+                        <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                        <color key="fillColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                    </box>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="0XD-Qb-DMg" secondAttribute="trailing" constant="-1" id="C6N-Sb-3hT"/>
+                    <constraint firstItem="0XD-Qb-DMg" firstAttribute="leading" secondItem="IZq-bx-wTU" secondAttribute="leading" constant="-1" id="G6z-fn-P8Z"/>
+                    <constraint firstItem="0XD-Qb-DMg" firstAttribute="top" secondItem="IZq-bx-wTU" secondAttribute="top" constant="-1" id="g1S-9T-SUk"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="93.5" y="118"/>
+        </window>
+    </objects>
+    <resources>
+        <namedColor name="color_date_text">
+            <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
