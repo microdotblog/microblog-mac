@@ -52,17 +52,15 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
 	
 	// build destination path in Application Support/Micro.blog/Models
-	NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
-																   inDomains:NSUserDomainMask] firstObject];
-	appSupportURL = [appSupportURL URLByAppendingPathComponent:@"Micro.blog" isDirectory:YES];
-	appSupportURL = [appSupportURL URLByAppendingPathComponent:@"Models" isDirectory:YES];
-	[[NSFileManager defaultManager] createDirectoryAtURL:appSupportURL
-							 withIntermediateDirectories:YES
-											  attributes:nil
-												   error:nil];
+	NSURL* folder_url = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
+
+	folder_url = [folder_url URLByAppendingPathComponent:@"Micro.blog" isDirectory:YES];
+	folder_url = [folder_url URLByAppendingPathComponent:@"Models" isDirectory:YES];
+
+	[[NSFileManager defaultManager] createDirectoryAtURL:folder_url withIntermediateDirectories:YES attributes:nil error:nil];
 	
-	NSURL *destURL = [appSupportURL URLByAppendingPathComponent:url.lastPathComponent];
-	self.modelDestinationPath = destURL.path;
+	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
+	self.modelDestinationPath = dest_url.path;
 	
 	// configure and show progress bar
 	self.progressBar.minValue = 0.0;
@@ -72,17 +70,11 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	[self.progressBar startAnimation:nil];
 	
 	// start a 1‑second timer for updating the size field
-	self.sizeUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-															target:self
-														  selector:@selector(updateSizeField:)
-														  userInfo:nil
-														   repeats:YES];
+	self.sizeUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSizeField:) userInfo:nil repeats:YES];
 	
 	// start the download
 	NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-	self.downloadSession = [NSURLSession sessionWithConfiguration:config
-														 delegate:self
-													delegateQueue:[NSOperationQueue mainQueue]];
+	self.downloadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:[NSOperationQueue mainQueue]];
 
 	self.downloadStartDate = [NSDate date];
 	self.expectedBytes = 0;
@@ -127,30 +119,31 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 {
 	NSTimeInterval s = self.remainingSeconds;
 
-	if (s <= 0)            return @"calculating…";
-	else if (s < 60.0)     return [NSString stringWithFormat:@"%d seconds remaining", (int)round(s)];
-	else if (s < 3600.0)   return [NSString stringWithFormat:@"%d minutes remaining", (int)round(s/60.0)];
-	else                   return [NSString stringWithFormat:@"%.1f hours remaining", s/3600.0];
+	if (s <= 0) {
+		return @"calculating…";
+	}
+	else if (s < 60.0) {
+		return [NSString stringWithFormat:@"%d seconds remaining", (int)round(s)];
+	}
+	else if (s < 3600.0) {
+		return [NSString stringWithFormat:@"%d minutes remaining", (int)round(s/60.0)];
+	}
+	else {
+		return [NSString stringWithFormat:@"%.1f hours remaining", s/3600.0];
+	}
 }
 
 - (void) updateSizeField:(NSTimer *)timer
 {
 	if (!self.latestDownloadedString) return;
 
-	NSString *timeStr = [self formattedRemainingTime];
-	self.sizeField.stringValue = [NSString stringWithFormat:@"%@ (%@, %@)",
-								  kModelDownloadSize,
-								  self.latestDownloadedString,
-								  timeStr];
+	NSString* time_s = [self formattedRemainingTime];
+	self.sizeField.stringValue = [NSString stringWithFormat:@"%@ (%@, %@)", kModelDownloadSize, self.latestDownloadedString, time_s];
 }
 
 #pragma mark -
 
-- (void)URLSession:(NSURLSession *)session
-	  downloadTask:(NSURLSessionDownloadTask *)downloadTask
-	  didWriteData:(int64_t)bytesWritten
- totalBytesWritten:(int64_t)totalBytesWritten
-totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
 	if (totalBytesExpectedToWrite <= 0) {
 		return;
@@ -159,32 +152,29 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 	double progress = ((double)totalBytesWritten / (double)totalBytesExpectedToWrite) * 100.0;
 	self.progressBar.doubleValue = progress;
 	
-	NSString *downloadedString = [NSByteCountFormatter stringFromByteCount:totalBytesWritten
-																countStyle:NSByteCountFormatterCountStyleFile];
-	self.latestDownloadedString = downloadedString;
+	NSString* downloaded_s = [NSByteCountFormatter stringFromByteCount:totalBytesWritten countStyle:NSByteCountFormatterCountStyleFile];
+	self.latestDownloadedString = downloaded_s;
 	
 	if (totalBytesExpectedToWrite > 0) {
 		if (self.expectedBytes == 0) self.expectedBytes = totalBytesExpectedToWrite;
 		
 		NSTimeInterval elapsed = [[NSDate date] timeIntervalSinceDate:self.downloadStartDate];
 		if (elapsed > 0) {
-			double bytesPerSec = (double)totalBytesWritten / elapsed;
-			if (bytesPerSec > 0) {
-				double remainingBytes  = totalBytesExpectedToWrite - totalBytesWritten;
-				self.remainingSeconds  = remainingBytes / bytesPerSec;
+			double bytes_per_second = (double)totalBytesWritten / elapsed;
+			if (bytes_per_second > 0) {
+				double remaining_bytes = totalBytesExpectedToWrite - totalBytesWritten;
+				self.remainingSeconds = remaining_bytes / bytes_per_second;
 			}
 		}
 	}
 }
 
-- (void)URLSession:(NSURLSession *)session
-	  downloadTask:(NSURLSessionDownloadTask *)downloadTask
-didFinishDownloadingToURL:(NSURL *)location
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
 {
 	if (self.modelDestinationPath) {
-		NSURL *destinationURL = [NSURL fileURLWithPath:self.modelDestinationPath];
-		[[NSFileManager defaultManager] removeItemAtURL:destinationURL error:nil];
-		[[NSFileManager defaultManager] moveItemAtURL:location toURL:destinationURL error:nil];
+		NSURL* dest_url = [NSURL fileURLWithPath:self.modelDestinationPath];
+		[[NSFileManager defaultManager] removeItemAtURL:dest_url error:nil];
+		[[NSFileManager defaultManager] moveItemAtURL:location toURL:dest_url error:nil];
 	}
 }
 
