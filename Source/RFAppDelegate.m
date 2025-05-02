@@ -719,7 +719,10 @@
 		@"token": token
 	};
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
-		NSString* error = [response.parsedResponse objectForKey:@"error"];
+		NSString* error = nil;
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			error = [response.parsedResponse objectForKey:@"error"];
+		}
 		if (response.parsedResponse == nil) {
 			RFDispatchMainAsync (^{
 				[self showSigninError:nil];
