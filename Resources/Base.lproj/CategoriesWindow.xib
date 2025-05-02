@@ -11,6 +11,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBCategoriesController">
             <connections>
                 <outlet property="downloadButton" destination="fz0-dr-Zkg" id="uF3-1K-cPg"/>
+                <outlet property="downloadTopConstrant" destination="g1S-9T-SUk" id="dcC-In-vLF"/>
                 <outlet property="progressBar" destination="9js-uF-Qjs" id="I0L-uI-jZh"/>
                 <outlet property="sizeField" destination="7Mh-8Q-d12" id="HDK-TQ-W9i"/>
                 <outlet property="window" destination="P6V-fs-Rnj" id="jdJ-Ie-fSz"/>

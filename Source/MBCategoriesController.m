@@ -8,6 +8,8 @@
 
 #import "MBCategoriesController.h"
 
+#import <sys/sysctl.h>
+
 static NSString* const kModelDownloadURL = @"https://s3.amazonaws.com/micro.blog/models/gemma-3-4b-it-Q4_K_M.gguf";
 static NSString* const kModelDownloadSize = @"2.5 GB";
 
@@ -32,6 +34,23 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 - (void) setupInfo
 {
 	self.sizeField.stringValue = kModelDownloadSize;
+	
+	if ([self hasModel]) {
+		// hide pane by moving it off the top
+		self.downloadTopConstrant.constant = -120;
+	}
+	else if (![self hasSupportedHardware]) {
+		self.downloadButton.enabled = NO;
+		self.sizeField.stringValue = @"Requires Apple M1 or later.";
+	}
+	else if (![self hasSupportedMemory]) {
+		self.downloadButton.enabled = NO;
+		self.sizeField.stringValue = @"Requires at least 16 GB of RAM.";
+	}
+	else if (![self hasAvailableSpace]) {
+		self.downloadButton.enabled = NO;
+		self.sizeField.stringValue = @"Requires 3 GB of available disk space.";
+	}
 }
 
 - (IBAction) downloadModel:(id)sender
@@ -47,10 +66,63 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	}
 }
 
-- (void) startDownload
+- (BOOL) hasModel
 {
 	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
+	NSURL* folder_url = [self modelsFolderURL];
+	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
+
+	NSFileManager* fm = [NSFileManager defaultManager];
+	return [fm fileExistsAtPath:dest_url.path];
+}
+
+- (BOOL) hasAvailableSpace
+{
+	NSURL* folder_url = [self modelsFolderURL];
+	NSError* error = nil;
+	NSDictionary* info = [folder_url resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
+	if (error) {
+		NSLog(@"Error retrieving resource values: %@", error);
+		return NO;
+	}
+
+	NSNumber* free_bytes = info[NSURLVolumeAvailableCapacityForImportantUsageKey];
+	NSDictionary* attrs_dict = [[NSFileManager defaultManager] attributesOfFileSystemForPath:folder_url.path error:&error];
+	if (error) {
+		NSLog(@"Error retrieving file system attributes: %@", error);
+		return NO;
+	}
+
+	NSNumber* bytes_required = attrs_dict[NSFileSystemFreeSize];
+	return free_bytes.unsignedLongLongValue > bytes_required.unsignedLongLongValue;
+}
+
+- (BOOL) hasSupportedMemory
+{
+	uint64_t memsize = 0;
+	size_t size = sizeof(memsize);
+	if (sysctlbyname("hw.memsize", &memsize, &size, NULL, 0) == 0) {
+		// 16 GB
+		const uint64_t required = 16ull * 1024 * 1024 * 1024;
+		return memsize >= required;
+	}
 	
+	return NO;
+}
+
+- (BOOL) hasSupportedHardware
+{
+	int is_arm64 = 0;
+	size_t size = sizeof(is_arm64);
+	if (sysctlbyname("hw.optional.arm64", &is_arm64, &size, NULL, 0) == 0) {
+		return (is_arm64 != 0);
+	}
+	
+	return NO;
+}
+
+- (NSURL *) modelsFolderURL
+{
 	// build destination path in Application Support/Micro.blog/Models
 	NSURL* folder_url = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
 
@@ -59,6 +131,13 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 	[[NSFileManager defaultManager] createDirectoryAtURL:folder_url withIntermediateDirectories:YES attributes:nil error:nil];
 	
+	return folder_url;
+}
+
+- (void) startDownload
+{
+	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
+	NSURL* folder_url = [self modelsFolderURL];
 	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
 	self.modelDestinationPath = dest_url.path;
 	
@@ -113,6 +192,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 - (void) finishedDownload
 {
 	self.sizeField.stringValue = [NSString stringWithFormat:@"%@ (%@)", kModelDownloadSize, kModelDownloadSize];
+	[self setupInfo];
 }
 
 - (NSString *) formattedRemainingTime
@@ -143,7 +223,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 #pragma mark -
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+- (void) URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
 	if (totalBytesExpectedToWrite <= 0) {
 		return;
@@ -169,7 +249,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	}
 }
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+- (void) URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
 {
 	if (self.modelDestinationPath) {
 		NSURL* dest_url = [NSURL fileURLWithPath:self.modelDestinationPath];
@@ -178,7 +258,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	}
 }
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+- (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
 	[self.progressBar stopAnimation:nil];
 

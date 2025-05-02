@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* downloadButton;
 @property (strong, nonatomic) IBOutlet NSTextField* sizeField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressBar;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* downloadTopConstrant;
 
 @property (strong, nullable) NSURLSession* downloadSession;
 @property (strong, nullable) NSURLSessionDownloadTask* downloadTask;
