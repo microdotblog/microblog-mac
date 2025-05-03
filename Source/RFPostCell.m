@@ -11,7 +11,6 @@
 #import "RFPhotoCell.h"
 #import "RFPhoto.h"
 #import "RFPost.h"
-#import "UUDate.h"
 #import "UUHttpSession.h"
 #import "HTMLParser.h"
 #import "RFMacros.h"
@@ -32,8 +31,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	self.titleField.stringValue = post.title;
 	self.textField.stringValue = [post displaySummary];
-	NSString* date_s = [post.postedAt uuIso8601DateString];
-	if (date_s) {		
+	NSString* date_s = [NSDateFormatter localizedStringFromDate:post.postedAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+	if (date_s) {
 		self.dateField.stringValue = date_s;
 	}
 	self.draftField.hidden = !post.isDraft;
