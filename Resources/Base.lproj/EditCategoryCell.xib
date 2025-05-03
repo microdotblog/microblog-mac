@@ -14,7 +14,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Nc2-ng-Xxd">
-                    <rect key="frame" x="18" y="28" width="40" height="16"/>
+                    <rect key="frame" x="8" y="28" width="40" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Name" id="t2u-ID-S2i">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -23,8 +23,8 @@
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="Nc2-ng-Xxd" firstAttribute="leading" secondItem="PhD-E5-oFK" secondAttribute="leading" constant="20" symbolic="YES" id="UW0-so-Tab"/>
-                <constraint firstItem="Nc2-ng-Xxd" firstAttribute="centerY" secondItem="PhD-E5-oFK" secondAttribute="centerY" id="wM2-7w-x3c"/>
+                <constraint firstItem="Nc2-ng-Xxd" firstAttribute="leading" secondItem="PhD-E5-oFK" secondAttribute="leading" constant="10" id="Z0B-nr-Fp9"/>
+                <constraint firstItem="Nc2-ng-Xxd" firstAttribute="centerY" secondItem="PhD-E5-oFK" secondAttribute="centerY" id="dOv-tm-bdo"/>
             </constraints>
             <connections>
                 <outlet property="nameField" destination="Nc2-ng-Xxd" id="TLA-xP-Vzf"/>

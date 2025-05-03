@@ -85,7 +85,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) drawBackgroundInRect:(NSRect)dirtyRect
 {
 	CGRect r = self.bounds;
-	[self.backgroundColor set];
+	if (self.backgroundColor) {
+		[self.backgroundColor set];
+	}
+	else {
+		[[NSColor clearColor] set];
+	}
 	NSRectFill (r);
 }
 

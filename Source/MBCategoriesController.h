@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* downloadTopConstrant;
 @property (strong, nonatomic) IBOutlet NSTableView* categoriesTable;
 @property (strong, nonatomic) IBOutlet NSTableView* postsTable;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSArray* categories; // MBCategory
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost

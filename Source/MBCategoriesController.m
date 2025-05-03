@@ -178,6 +178,8 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 - (void) fetchPosts
 {
+	[self.progressSpinner startAnimation:nil];
+
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub?q=source"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -206,6 +208,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 			RFDispatchMainAsync ((^{
 				self.currentPosts = new_posts;
 				[self.postsTable reloadData];
+				[self.progressSpinner stopAnimation:nil];
 			}));
 		}
 	}];
@@ -344,6 +347,10 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 		NSInteger row = self.categoriesTable.selectedRow;
 		if ((row >= 0) && (row < self.categories.count)) {
 			self.selectedCategory = [self.categories objectAtIndex:row];
+						
+			self.currentPosts = @[];
+			[self.postsTable reloadData];
+			
 			[self fetchPosts];
 		}
 	}
