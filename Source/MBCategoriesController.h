@@ -10,13 +10,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBCategoriesController : NSWindowController <NSURLSessionDownloadDelegate>
+@class MBCategory;
+
+@interface MBCategoriesController : NSWindowController <NSURLSessionDownloadDelegate, NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSButton* downloadButton;
 @property (strong, nonatomic) IBOutlet NSTextField* sizeField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressBar;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* downloadTopConstrant;
+@property (strong, nonatomic) IBOutlet NSTableView* categoriesTable;
+@property (strong, nonatomic) IBOutlet NSTableView* postsTable;
 
+@property (strong, nonatomic) NSArray* categories; // MBCategory
+@property (strong, nonatomic) NSArray* currentPosts; // RFPost
+@property (strong, nonatomic) MBCategory* selectedCategory;
 @property (strong, nullable) NSURLSession* downloadSession;
 @property (strong, nullable) NSURLSessionDownloadTask* downloadTask;
 @property (copy) NSString* modelDestinationPath;

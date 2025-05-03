@@ -8,6 +8,14 @@
 
 #import "MBCategoriesController.h"
 
+#import "MBEditCategoryCell.h"
+#import "RFPost.h"
+#import "RFPostCell.h"
+#import "MBCategory.h"
+#import "RFClient.h"
+#import "RFMacros.h"
+#import "UUDate.h"
+#import "NSString+Extras.h"
 #import <sys/sysctl.h>
 
 static NSString* const kModelDownloadURL = @"https://s3.amazonaws.com/micro.blog/models/gemma-3-4b-it-Q4_K_M.gguf";
@@ -19,6 +27,12 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 {
 	self = [super initWithWindowNibName:@"CategoriesWindow"];
 	if (self) {
+		self.categories = @[];
+		RFPost* p = [[RFPost alloc] init];
+		p.text = @"Hello world.";
+		p.title = @"";
+		p.postedAt = [NSDate date];
+		self.currentPosts = @[ p ];
 	}
 	
 	return self;
@@ -29,15 +43,18 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	[super windowDidLoad];
 	
 	[self setupInfo];
+	[self setupTable];
+	
+	[self fetchCategories];
 }
-
+ 
 - (void) setupInfo
 {
 	self.sizeField.stringValue = kModelDownloadSize;
 	
 	if ([self hasModel]) {
 		// hide pane by moving it off the top
-		self.downloadTopConstrant.constant = -120;
+		self.downloadTopConstrant.constant = -101;
 	}
 	else if (![self hasSupportedHardware]) {
 		self.downloadButton.enabled = NO;
@@ -51,6 +68,12 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 		self.downloadButton.enabled = NO;
 		self.sizeField.stringValue = @"Requires 3 GB of available disk space.";
 	}
+}
+
+- (void) setupTable
+{
+	[self.categoriesTable registerNib:[[NSNib alloc] initWithNibNamed:@"EditCategoryCell" bundle:nil] forIdentifier:@"EditCategoryCell"];
+	[self.postsTable registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
 }
 
 - (IBAction) downloadModel:(id)sender
@@ -134,6 +157,60 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	return folder_url;
 }
 
+- (void) fetchCategories
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub?q=category"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_categories = [NSMutableArray array];
+			for (NSString* name in [response.parsedResponse objectForKey:@"categories"]) {
+				MBCategory* c = [[MBCategory alloc] init];
+				c.name = name;
+				[new_categories addObject:c];
+			}
+			RFDispatchMainAsync ((^{
+				self.categories = new_categories;
+				[self.categoriesTable reloadData];
+			}));
+		}
+	}];
+}
+
+- (void) fetchPosts
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub?q=source"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_posts = [NSMutableArray array];
+			for (NSDictionary* item in [response.parsedResponse objectForKey:@"items"]) {
+				RFPost* post = [[RFPost alloc] init];
+				NSDictionary* props = [item objectForKey:@"properties"];
+				post.postID = [[props objectForKey:@"uid"] firstObject];
+				post.title = [[props objectForKey:@"name"] firstObject];
+				post.text = [[props objectForKey:@"content"] firstObject];
+				post.url = [[props objectForKey:@"url"] firstObject];
+
+				NSString* date_s = [[props objectForKey:@"published"] firstObject];
+				post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
+
+				NSString* status = [[props objectForKey:@"post-status"] firstObject];
+				post.isDraft = [status isEqualToString:@"draft"];
+				
+				post.categories = @[];
+				if ([[props objectForKey:@"category"] count] > 0) {
+					post.categories = [props objectForKey:@"category"];
+				}
+
+				[new_posts addObject:post];
+			}
+			RFDispatchMainAsync ((^{
+				self.currentPosts = new_posts;
+				[self.postsTable reloadData];
+			}));
+		}
+	}];
+}
+
 - (void) startDownload
 {
 	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
@@ -191,8 +268,9 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 - (void) finishedDownload
 {
-	self.sizeField.stringValue = [NSString stringWithFormat:@"%@ (%@)", kModelDownloadSize, kModelDownloadSize];
 	[self setupInfo];
+
+	[self fetchCategories];
 }
 
 - (NSString *) formattedRemainingTime
@@ -219,6 +297,56 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 	NSString* time_s = [self formattedRemainingTime];
 	self.sizeField.stringValue = [NSString stringWithFormat:@"%@ (%@, %@)", kModelDownloadSize, self.latestDownloadedString, time_s];
+}
+
+#pragma mark -
+
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
+{
+	if (tableView == self.categoriesTable) {
+		return self.categories.count;
+	}
+	else {
+		return self.currentPosts.count;
+	}
+}
+
+- (NSView *) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	if (tableView == self.categoriesTable) {
+		MBEditCategoryCell* cell = [tableView makeViewWithIdentifier:@"EditCategoryCell" owner:self];
+
+		if (row < self.categories.count) {
+			MBCategory* c = [self.categories objectAtIndex:row];
+			[cell setupWithCategory:c];
+		}
+		
+		return cell;
+	}
+	else if (tableView == self.postsTable) {
+		RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
+
+		if (row < self.currentPosts.count) {
+			RFPost* post = [self.currentPosts objectAtIndex:row];
+			[(RFPostCell *)cell setupWithPost:post];
+		}
+		
+		return cell;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (void) tableViewSelectionDidChange:(NSNotification *)notification
+{
+	if (notification.object == self.categoriesTable) {
+		NSInteger row = self.categoriesTable.selectedRow;
+		if ((row >= 0) && (row < self.categories.count)) {
+			self.selectedCategory = [self.categories objectAtIndex:row];
+			[self fetchPosts];
+		}
+	}
 }
 
 #pragma mark -
