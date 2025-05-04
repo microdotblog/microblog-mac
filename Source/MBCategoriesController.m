@@ -286,7 +286,7 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 				[self.postsTable reloadData];
 				[self updatePostsSummaryField];
 				
-				[self analyzePosts:self.allPosts];
+				[self performSelectorInBackground:@selector(analyzePosts:) withObject:self.allPosts];
 			}));
 		}
 	}];
@@ -294,6 +294,14 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 
 - (void) analyzePosts:(NSArray *)posts
 {
+	RFDispatchMain(^{
+		self.numPostsField.hidden = YES;
+		[self.workProgressBar setIndeterminate:NO];
+		self.workProgressBar.doubleValue = 0.0;
+		self.workProgressBar.maxValue = posts.count;
+	});
+	NSInteger i = 0;
+	
 	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
 	NSURL* folder_url = [self modelsFolderURL];
 	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
@@ -301,14 +309,18 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 	
 	for (RFPost* post in posts) {
 		NSMutableString* prompt = [[NSMutableString alloc] init];
-//		[prompt appendFormat:@"Does the following post text belong in the category %@? Respond with just yes or no.\n\n", self.selectedCategory.name];
 		[prompt appendString:@"You are a keyword extractor. You must only output comma-separated list of keywords about the following text. Output on a single line, no quotes, nothing else except the keywords and commas.\n\n"];
 		[prompt appendString:post.text];
 		
-//		NSLog(@"Post: %@", [post.text substringToIndex:30]);
 		NSString* answer = [llama runPrompt:prompt];
 		NSArray* keywords = [self lastLineKeywordsWithCommasFromText:answer];
 		NSLog(@"Answer: %@", keywords);
+		
+		i++;
+		RFDispatchMain(^{
+			self.workProgressBar.doubleValue = i;
+		});
+
 	}
 }
 
@@ -338,7 +350,11 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 				s = [s lowercaseString];
 				s = [s stringByReplacingOccurrencesOfString:@"keywords: " withString:@""];
 
-				[cleaned_values addObject:s];
+				// sometimes model has phrases, skip those if more than 3 words
+				NSUInteger num_spaces = [[s componentsSeparatedByString:@" "] count] - 1;
+				if (num_spaces <= 2) {
+					[cleaned_values addObject:s];
+				}
 			}
 			return cleaned_values;
 		}

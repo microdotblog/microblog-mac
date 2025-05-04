@@ -123,7 +123,7 @@ static int const kLlamaOutputTokens = 512;
 			break;
 		}
 		[answer appendFormat:@"%.*s", len, buf];
-		fflush(stdout);
+//		fflush(stdout);
 		
 		batch = llama_batch_get_one(&new_token, 1);
 	}
