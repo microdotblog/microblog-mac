@@ -19,8 +19,8 @@
 #import "NSString+Extras.h"
 #import <sys/sysctl.h>
 
-static NSString* const kModelDownloadURL = @"https://s3.amazonaws.com/micro.blog/models/gemma-3-4b-it-Q4_K_M.gguf";
-static NSString* const kModelDownloadSize = @"2.5 GB";
+static NSString* const kModelDownloadURL = @"https://s3.amazonaws.com/micro.blog/models/gemma-3-4b-it-Q5_K_M.gguf";
+static NSString* const kModelDownloadSize = @"2.8 GB";
 
 @implementation MBCategoriesController
 
@@ -294,20 +294,58 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 - (void) analyzePosts:(NSArray *)posts
 {
-	MBLlama* llama = [[MBLlama alloc] init];
+	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
+	NSURL* folder_url = [self modelsFolderURL];
+	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
+	MBLlama* llama = [[MBLlama alloc] initWithPath:dest_url.path];
 	
 	for (RFPost* post in posts) {
 		NSMutableString* prompt = [[NSMutableString alloc] init];
 //		[prompt appendFormat:@"Does the following post text belong in the category %@? Respond with just yes or no.\n\n", self.selectedCategory.name];
-		[prompt appendString:@"What are about 10 keywords that describe this post? Respond with just the keywords separated by commas."];
+		[prompt appendString:@"You are a keyword extractor. You must only output comma-separated list of keywords about the following text. Output on a single line, no quotes, nothing else except the keywords and commas.\n\n"];
 		[prompt appendString:post.text];
 		
-		NSLog(@"Post: %@", [post.text substringToIndex:30]);
+//		NSLog(@"Post: %@", [post.text substringToIndex:30]);
 		NSString* answer = [llama runPrompt:prompt];
-		NSLog(@"Answer: %@", answer);
+		NSArray* keywords = [self lastLineKeywordsWithCommasFromText:answer];
+		NSLog(@"Answer: %@", keywords);
 	}
 }
 
+- (NSArray *) lastLineKeywordsWithCommasFromText:(NSString *)text
+{
+	// break the string into lines
+	NSCharacterSet *newlineSet = [NSCharacterSet newlineCharacterSet];
+	NSArray<NSString *> *lines = [text componentsSeparatedByCharactersInSet:newlineSet];
+	
+	// walk backwards so we can stop at the first match.
+	for (NSInteger i = lines.count - 1; i >= 0; i--) {
+		NSString *line = [lines[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		
+		if ([line rangeOfString:@","].location != NSNotFound) {
+			// found the last comma‑containing line
+			NSMutableArray* cleaned_values = [[NSMutableArray alloc] init];
+			for (NSString* value in [line componentsSeparatedByString:@","]) {
+				// trip whitespace
+				NSString* s = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+				// trim leading "#" if present like a hashatg
+				if ([s hasPrefix:@"#"]) {
+					s = [s substringFromIndex:1];
+				}
+				
+				// sometimes model outputs keywords prefix for our answer
+				s = [s lowercaseString];
+				s = [s stringByReplacingOccurrencesOfString:@"keywords: " withString:@""];
+
+				[cleaned_values addObject:s];
+			}
+			return cleaned_values;
+		}
+	}
+
+	return @[];
+}
 - (void) startDownload
 {
 	NSURL* url = [NSURL URLWithString:kModelDownloadURL];

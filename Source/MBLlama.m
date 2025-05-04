@@ -8,19 +8,16 @@
 
 #import "MBLlama.h"
 
-static int const kLlamaOutputTokens = 1024;
+static int const kLlamaOutputTokens = 512;
 
 @implementation MBLlama
 
-- (instancetype) init
+- (instancetype) initWithPath:(NSString *)modelPath
 {
 	self = [super init];
 	if (self) {
+		self.path = modelPath;
 		[self setupLlama];
-		NSString* s = [self runPrompt:@"Why is the sky blue? Answer in one sentence."];
-		if (s) {
-			NSLog(@"Answer: %@", s);
-		}
 	}
 	
 	return self;
@@ -36,7 +33,7 @@ static int const kLlamaOutputTokens = 1024;
 - (void) setupLlama
 {
 	// hardcoded settings
-	const char* model_path = "/Users/manton/Downloads/gemma-3-4b-it-Q4_K_M.gguf";
+	const char* model_path = [self.path cStringUsingEncoding:NSUTF8StringEncoding];
 	int ngl = 99;
 	
 	// load dynamic backends
@@ -98,6 +95,8 @@ static int const kLlamaOutputTokens = 1024;
 	struct llama_sampler_chain_params sparams = llama_sampler_chain_default_params();
 	sparams.no_perf = false;
 	struct llama_sampler *smpl = llama_sampler_chain_init(sparams);
+	
+	llama_sampler_chain_add(smpl, llama_sampler_init_temp(0.0));
 	llama_sampler_chain_add(smpl, llama_sampler_init_greedy());
 		
 	llama_batch batch = llama_batch_get_one(prompt_tokens, n_prompt);
