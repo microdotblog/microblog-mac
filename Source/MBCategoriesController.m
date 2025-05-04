@@ -12,6 +12,7 @@
 #import "RFPost.h"
 #import "RFPostCell.h"
 #import "MBCategory.h"
+#import "MBLlama.h"
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "UUDate.h"
@@ -28,11 +29,8 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	self = [super initWithWindowNibName:@"CategoriesWindow"];
 	if (self) {
 		self.categories = @[];
-		RFPost* p = [[RFPost alloc] init];
-		p.text = @"Hello world.";
-		p.title = @"";
-		p.postedAt = [NSDate date];
-		self.currentPosts = @[ p ];
+		self.allPosts = @[];
+		self.currentPosts = @[];
 	}
 	
 	return self;
@@ -45,6 +43,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	[self setupInfo];
 	[self setupTable];
 	
+	[self updatePostsSummaryField];
 	[self fetchCategories];
 }
  
@@ -88,6 +87,22 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 		[self startDownload];
 	}
 }
+
+- (IBAction) autoCategorize:(id)sender
+{
+	self.numPostsField.hidden = YES;
+	[self.workProgressBar startAnimation:nil];
+	
+	[self fetchAllPosts];
+}
+
+- (IBAction) updatePosts:(id)sender
+{
+	self.numPostsField.hidden = YES;
+	[self.workProgressBar startAnimation:nil];
+}
+
+#pragma mark -
 
 - (BOOL) hasModel
 {
@@ -176,9 +191,10 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	}];
 }
 
-- (void) fetchPosts
+- (void) fetchPostsForCategory
 {
-	[self.progressSpinner startAnimation:nil];
+	self.numPostsField.hidden = YES;
+	[self.workProgressBar startAnimation:nil];
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub?q=source"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
@@ -208,10 +224,88 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 			RFDispatchMainAsync ((^{
 				self.currentPosts = new_posts;
 				[self.postsTable reloadData];
-				[self.progressSpinner stopAnimation:nil];
+				[self.workProgressBar stopAnimation:nil];
+				[self updatePostsSummaryField];
 			}));
 		}
 	}];
+}
+
+- (void) fetchAllPosts
+{
+	NSInteger offset = self.allPosts.count; // how many posts we already have
+	NSDictionary *args = @{
+		@"q": @"source",
+		@"offset" : @(offset),
+		@"limit" : @(100)
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			return;
+		}
+		
+		NSArray* items = response.parsedResponse[@"items"];
+		
+		NSMutableArray* collected = [NSMutableArray arrayWithArray:self.allPosts];
+		
+		for (NSDictionary* item in items) {
+			RFPost* post = [[RFPost alloc] init];
+			NSDictionary* props = item[@"properties"];
+			
+			post.postID = [props[@"uid"] firstObject];
+			post.title = [props[@"name"] firstObject];
+			post.text = [props[@"content"] firstObject];
+			post.url = [props[@"url"] firstObject];
+			
+			NSString *date_s = [props[@"published"] firstObject];
+			post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
+			
+			NSString *status = [props[@"post-status"] firstObject];
+			post.isDraft = [status isEqualToString:@"draft"];
+			
+			post.categories = @[];
+			if ([props[@"category"] count] > 0) {
+				post.categories = props[@"category"];
+			}
+			
+			[collected addObject:post];
+		}
+		
+		self.allPosts = [collected copy]; // assign when we've added this batch
+		
+		// if we got a full batch, keep paging, otherwise we're done
+		if (NO && items.count == 100) {
+			NSLog(@"Got posts: %lu", (unsigned long)items.count);
+			[self fetchAllPosts];
+		}
+		else {
+			// finished
+			RFDispatchMainAsync((^{
+				[self.postsTable reloadData];
+				[self updatePostsSummaryField];
+				
+				[self analyzePosts:self.allPosts];
+			}));
+		}
+	}];
+}
+
+- (void) analyzePosts:(NSArray *)posts
+{
+	MBLlama* llama = [[MBLlama alloc] init];
+	
+	for (RFPost* post in posts) {
+		NSMutableString* prompt = [[NSMutableString alloc] init];
+//		[prompt appendFormat:@"Does the following post text belong in the category %@? Respond with just yes or no.\n\n", self.selectedCategory.name];
+		[prompt appendString:@"What are about 10 keywords that describe this post? Respond with just the keywords separated by commas."];
+		[prompt appendString:post.text];
+		
+		NSLog(@"Post: %@", [post.text substringToIndex:30]);
+		NSString* answer = [llama runPrompt:prompt];
+		NSLog(@"Answer: %@", answer);
+	}
 }
 
 - (void) startDownload
@@ -222,11 +316,11 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	self.modelDestinationPath = dest_url.path;
 	
 	// configure and show progress bar
-	self.progressBar.minValue = 0.0;
-	self.progressBar.maxValue = 100.0;
-	self.progressBar.doubleValue = 0.0;
-	[self.progressBar setHidden:NO];
-	[self.progressBar startAnimation:nil];
+	self.modelProgressBar.minValue = 0.0;
+	self.modelProgressBar.maxValue = 100.0;
+	self.modelProgressBar.doubleValue = 0.0;
+	[self.modelProgressBar setHidden:NO];
+	[self.modelProgressBar startAnimation:nil];
 	
 	// start a 1‑second timer for updating the size field
 	self.sizeUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSizeField:) userInfo:nil repeats:YES];
@@ -257,9 +351,9 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	self.sizeUpdateTimer = nil;
 	self.latestDownloadedString = nil;
 	
-	[self.progressBar stopAnimation:nil];
-	self.progressBar.doubleValue = 0.0;
-	[self.progressBar setHidden:YES];
+	[self.modelProgressBar stopAnimation:nil];
+	self.modelProgressBar.doubleValue = 0.0;
+	[self.modelProgressBar setHidden:YES];
 	
 	self.sizeField.stringValue = kModelDownloadSize;
 	[self.downloadButton setTitle:@"Download"];
@@ -300,6 +394,25 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 	NSString* time_s = [self formattedRemainingTime];
 	self.sizeField.stringValue = [NSString stringWithFormat:@"%@ (%@, %@)", kModelDownloadSize, self.latestDownloadedString, time_s];
+}
+
+- (void) updatePostsSummaryField
+{
+	self.numPostsField.hidden = NO;
+	if (self.currentPosts.count == 1) {
+		self.numPostsField.stringValue = @"1 post";
+	}
+	else {
+		self.numPostsField.stringValue = [NSString stringWithFormat:@"%lu posts", (unsigned long)self.currentPosts.count];
+	}
+}
+
+- (void) updateCategorizeButton
+{
+	if (self.selectedCategory) {
+		NSString* s = [NSString stringWithFormat:@"🤖 Find Posts for ”%@“", self.selectedCategory.name];
+		[self.autoCategorizeButton setTitle:s];
+	}
 }
 
 #pragma mark -
@@ -350,8 +463,9 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 						
 			self.currentPosts = @[];
 			[self.postsTable reloadData];
+			[self updateCategorizeButton];
 			
-			[self fetchPosts];
+			[self fetchPostsForCategory];
 		}
 	}
 }
@@ -365,7 +479,7 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 	}
 	
 	double progress = ((double)totalBytesWritten / (double)totalBytesExpectedToWrite) * 100.0;
-	self.progressBar.doubleValue = progress;
+	self.modelProgressBar.doubleValue = progress;
 	
 	NSString* downloaded_s = [NSByteCountFormatter stringFromByteCount:totalBytesWritten countStyle:NSByteCountFormatterCountStyleFile];
 	self.latestDownloadedString = downloaded_s;
@@ -395,14 +509,14 @@ static NSString* const kModelDownloadSize = @"2.5 GB";
 
 - (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-	[self.progressBar stopAnimation:nil];
+	[self.modelProgressBar stopAnimation:nil];
 
 	if (error) {
 		NSLog(@"Model download failed: %@", error);
 		return;
 	}
 
-	self.progressBar.doubleValue = 100.0;
+	self.modelProgressBar.doubleValue = 100.0;
 
 	[self.sizeUpdateTimer invalidate];
 	self.sizeUpdateTimer = nil;

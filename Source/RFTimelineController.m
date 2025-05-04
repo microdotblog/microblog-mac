@@ -39,7 +39,6 @@
 #import "MBNotesController.h"
 #import "NSImage+Extras.h"
 #import "RFGoToUserController.h"
-#import "MBLlama.h"
 #import "NSAppearance+Extras.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -66,8 +65,6 @@ static NSInteger const kSelectionNotes = 11;
 		self.checkSeconds = @5;
 		self.booksWindowControllers = [NSMutableArray array];
 		self.cachedUsernames = [NSMutableSet set];
-		
-		[[MBLlama alloc] init];
 	}
 	
 	return self;

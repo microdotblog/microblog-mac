@@ -16,13 +16,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSButton* downloadButton;
 @property (strong, nonatomic) IBOutlet NSTextField* sizeField;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressBar;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* modelProgressBar;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* downloadTopConstrant;
 @property (strong, nonatomic) IBOutlet NSTableView* categoriesTable;
 @property (strong, nonatomic) IBOutlet NSTableView* postsTable;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* workProgressBar;
+@property (strong, nonatomic) IBOutlet NSTextField* numPostsField;
+@property (strong, nonatomic) IBOutlet NSButton* autoCategorizeButton;
+@property (strong, nonatomic) IBOutlet NSButton* updateCategoriesButton;
 
 @property (strong, nonatomic) NSArray* categories; // MBCategory
+@property (strong, nonatomic) NSArray* allPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
 @property (strong, nonatomic) MBCategory* selectedCategory;
 @property (strong, nullable) NSURLSession* downloadSession;
