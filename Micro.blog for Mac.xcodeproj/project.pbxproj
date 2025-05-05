@@ -161,6 +161,7 @@
 		4B8958002DC5215900EB57A9 /* EditCategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B8957FE2DC5215900EB57A9 /* EditCategoryCell.xib */; };
 		4B8958032DC5217C00EB57A9 /* MBEditCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8958022DC5217C00EB57A9 /* MBEditCategoryCell.m */; };
 		4B8958062DC68BB900EB57A9 /* MBCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8958052DC68BB900EB57A9 /* MBCategory.m */; };
+		4B8958362DC8605200EB57A9 /* MBRenamableTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8958352DC8605200EB57A9 /* MBRenamableTextField.m */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
 		4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDF1F867A3200906C86 /* UUDataCache.m */; };
 		4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD91F867A3200906C86 /* UUDate.m */; };
@@ -535,6 +536,8 @@
 		4B8958022DC5217C00EB57A9 /* MBEditCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBEditCategoryCell.m; path = Source/MBEditCategoryCell.m; sourceTree = "<group>"; };
 		4B8958042DC68BB900EB57A9 /* MBCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategory.h; path = Source/MBCategory.h; sourceTree = "<group>"; };
 		4B8958052DC68BB900EB57A9 /* MBCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategory.m; path = Source/MBCategory.m; sourceTree = "<group>"; };
+		4B8958342DC8605200EB57A9 /* MBRenamableTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRenamableTextField.h; path = Source/MBRenamableTextField.h; sourceTree = "<group>"; };
+		4B8958352DC8605200EB57A9 /* MBRenamableTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRenamableTextField.m; path = Source/MBRenamableTextField.m; sourceTree = "<group>"; };
 		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
 		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
 		4B8FBDD91F867A3200906C86 /* UUDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDate.m; path = Shared/UUToolbox/UUDate.m; sourceTree = "<group>"; };
@@ -1166,6 +1169,8 @@
 				4B8957F92DC2C0C100EB57A9 /* MBCategoriesController.m */,
 				4B8958012DC5217C00EB57A9 /* MBEditCategoryCell.h */,
 				4B8958022DC5217C00EB57A9 /* MBEditCategoryCell.m */,
+				4B8958342DC8605200EB57A9 /* MBRenamableTextField.h */,
+				4B8958352DC8605200EB57A9 /* MBRenamableTextField.m */,
 				4B8958042DC68BB900EB57A9 /* MBCategory.h */,
 				4B8958052DC68BB900EB57A9 /* MBCategory.m */,
 				4B3BF7502DB3E31D00712D58 /* MBLlama.h */,
@@ -1632,6 +1637,7 @@
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
 				4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */,
+				4B8958362DC8605200EB57A9 /* MBRenamableTextField.m in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
 				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
 				4BB9906A2A8694C900C490E2 /* MBTagsTableView.m in Sources */,

@@ -514,12 +514,23 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 		NSInteger row = self.categoriesTable.selectedRow;
 		if ((row >= 0) && (row < self.categories.count)) {
 			self.selectedCategory = [self.categories objectAtIndex:row];
-						
+									
 			self.currentPosts = @[];
 			[self.postsTable reloadData];
 			[self updateCategorizeButton];
 			
 			[self fetchPostsForCategory];
+
+			// enable editing on the selected category cell, disable for others
+			for (NSInteger i = 0; i < self.categories.count; i++) {
+				// get the cell view at column 0, row i
+				MBEditCategoryCell *cell = [self.categoriesTable viewAtColumn:0 row:i makeIfNecessary:NO];
+				if (cell) {
+					BOOL is_selected = (i == row);
+					[cell.nameField setEditable:is_selected];
+					[cell.nameField setEnabled:is_selected];
+				}
+			}
 		}
 	}
 }
