@@ -36,13 +36,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jpD-lD-Zng">
-                        <rect key="frame" x="-1" y="-1" width="559" height="143"/>
+                        <rect key="frame" x="-1" y="-1" width="559" height="126"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="8oR-NH-VMi">
-                            <rect key="frame" x="0.0" y="0.0" width="559" height="143"/>
+                            <rect key="frame" x="0.0" y="0.0" width="559" height="126"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="J8B-1e-XkY">
-                                    <rect key="frame" x="0.0" y="0.0" width="559" height="143"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="559" height="126"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -98,13 +98,13 @@
                         </scroller>
                     </scrollView>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="30" horizontalPageScroll="10" verticalLineScroll="30" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MF-IO-Oej">
-                        <rect key="frame" x="-1" y="186" width="559" height="115"/>
+                        <rect key="frame" x="-1" y="169" width="559" height="102"/>
                         <clipView key="contentView" id="Q1z-FT-hkM">
-                            <rect key="frame" x="0.0" y="0.0" width="559" height="115"/>
+                            <rect key="frame" x="0.0" y="0.0" width="559" height="102"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" viewBased="YES" id="hLt-rm-CxV">
-                                    <rect key="frame" x="0.0" y="0.0" width="559" height="115"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="559" height="102"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -220,7 +220,7 @@
                         <color key="fillColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
                     </box>
                     <box boxType="custom" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="NNT-7Z-hp4">
-                        <rect key="frame" x="-1" y="142" width="559" height="44"/>
+                        <rect key="frame" x="-1" y="125" width="559" height="44"/>
                         <view key="contentView" id="cPC-t9-Z1f">
                             <rect key="frame" x="1" y="1" width="557" height="42"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -277,6 +277,17 @@
                         <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                         <color key="fillColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
                     </box>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xuj-xz-mBw">
+                        <rect key="frame" x="529" y="277" width="22" height="22"/>
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="guZ-Ic-NLV">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="36q-jv-Yjz"/>
+                            <constraint firstAttribute="width" constant="22" id="eCd-0k-YCL"/>
+                        </constraints>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="NNT-7Z-hp4" firstAttribute="leading" secondItem="IZq-bx-wTU" secondAttribute="leading" constant="-1" id="4lz-sT-44O"/>
@@ -286,16 +297,18 @@
                     <constraint firstItem="NNT-7Z-hp4" firstAttribute="top" secondItem="0MF-IO-Oej" secondAttribute="bottom" id="L67-OR-q63"/>
                     <constraint firstItem="0MF-IO-Oej" firstAttribute="leading" secondItem="IZq-bx-wTU" secondAttribute="leading" constant="-1" id="OxO-eY-Wdk"/>
                     <constraint firstAttribute="bottom" secondItem="jpD-lD-Zng" secondAttribute="bottom" constant="-1" id="STI-Sv-Scz"/>
+                    <constraint firstItem="xuj-xz-mBw" firstAttribute="top" secondItem="0XD-Qb-DMg" secondAttribute="bottom" constant="2" id="Zkd-gZ-Lsa"/>
                     <constraint firstAttribute="trailing" secondItem="NNT-7Z-hp4" secondAttribute="trailing" constant="-1" id="a1O-88-JMy"/>
                     <constraint firstItem="0XD-Qb-DMg" firstAttribute="top" secondItem="IZq-bx-wTU" secondAttribute="top" constant="-1" id="g1S-9T-SUk"/>
-                    <constraint firstItem="0MF-IO-Oej" firstAttribute="top" secondItem="0XD-Qb-DMg" secondAttribute="bottom" id="jZj-Fu-O5R"/>
+                    <constraint firstAttribute="trailing" secondItem="xuj-xz-mBw" secondAttribute="trailing" constant="6" id="jS2-8Q-hev"/>
+                    <constraint firstItem="0MF-IO-Oej" firstAttribute="top" secondItem="0XD-Qb-DMg" secondAttribute="bottom" constant="30" id="jZj-Fu-O5R"/>
                     <constraint firstItem="jpD-lD-Zng" firstAttribute="top" secondItem="NNT-7Z-hp4" secondAttribute="bottom" id="joM-Pt-PMX"/>
                     <constraint firstAttribute="trailing" secondItem="0MF-IO-Oej" secondAttribute="trailing" constant="-1" id="le6-iO-o1Z"/>
                     <constraint firstItem="0MF-IO-Oej" firstAttribute="height" secondItem="jpD-lD-Zng" secondAttribute="height" multiplier="0.808383" id="sjs-4Q-Urx"/>
                     <constraint firstItem="jpD-lD-Zng" firstAttribute="leading" secondItem="IZq-bx-wTU" secondAttribute="leading" constant="-1" id="uDB-xj-vR3"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="93.5" y="117"/>
+            <point key="canvasLocation" x="-21" y="82"/>
         </window>
     </objects>
     <resources>
