@@ -29,6 +29,7 @@
 #import "MBLogsController.h"
 #import "MBInfoController.h"
 #import "MBCollectionsController.h"
+#import "MBBrowserWindowController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -560,6 +561,11 @@
 	[self showCollections];
 }
 
+- (IBAction) showBrowser:(id)sender
+{
+	[self showBrowser];
+}
+
 #pragma mark -
 
 - (void) signOutNotification:(NSNotification *)notification
@@ -897,6 +903,17 @@
 	else {
 		[self.collectionsController showWindow:nil];
 		[self.collectionsController refresh];
+	}
+}
+
+- (void) showBrowser
+{
+	if (self.browserController == nil) {
+		self.browserController = [[MBBrowserWindowController alloc] init];
+		[self.browserController showWindow:nil];
+	}
+	else {
+		[self.browserController showWindow:nil];
 	}
 }
 
