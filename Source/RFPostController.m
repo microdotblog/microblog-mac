@@ -583,6 +583,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 - (void) closeWithoutSaving
 {
 	self.isSent = YES;
+	self.isSending = NO;
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kCheckTimelineNotification object:self];
 
@@ -1263,10 +1264,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) sendPost:(id)sender
 {
-	// post button always publishes
-	self.isDraft = NO;
-	self.view.window.documentEdited = NO;
-	[self uploadPost];
+	if (!self.isSending) {
+		// post button always publishes
+		self.isDraft = NO;
+		self.isSending = YES;
+		self.view.window.documentEdited = NO;
+		[self uploadPost];
+	}
 }
 
 - (IBAction) save:(id)sender
@@ -1368,6 +1372,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) hideProgressHeader
 {
+	self.isSending = NO;
 	[self stopProgressAnimation];
 }
 

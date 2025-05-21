@@ -41,6 +41,7 @@
 @property (assign, nonatomic) BOOL isShowingCategories;
 @property (assign, nonatomic) BOOL isShowingCrosspostServices;
 @property (assign, nonatomic) BOOL isShowingSummary;
+@property (assign, nonatomic) BOOL isSending;
 @property (strong, nonatomic) RFPost* editingPost;
 @property (strong, nonatomic) NSString* replyPostID;
 @property (strong, nonatomic) NSString* replyUsername;
