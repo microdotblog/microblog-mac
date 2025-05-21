@@ -159,8 +159,11 @@
 				}
 				self.currentPosts = new_posts;
 				[self.tableView reloadData];
+
 				[self setupBlogName];
 				[self stopLoadingSidebarRow];
+
+				[self.progressSpinner stopAnimation:nil];
 				self.blogNameButton.hidden = NO;
 				self.tableView.animator.alphaValue = 1.0;
 
@@ -268,11 +271,13 @@
 	};
 
 	[self.progressSpinner startAnimation:nil];
-	
+	self.blogNameButton.hidden = YES;
+
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
 			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 				[self.progressSpinner stopAnimation:nil];
+				self.blogNameButton.hidden = NO;
 				NSString* msg = response.parsedResponse[@"error_description"];
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Post" message:msg button:@"OK" completionHandler:NULL];
 			}
