@@ -8,12 +8,14 @@
 
 #import "MBPreviewController.h"
 
+#import "RFPhoto.h"
 #import "RFConstants.h"
 #import "MMMarkdown.h"
 
 // static storage for class-wide preview data
 static NSString* gCurrentPreviewTitle = nil;
 static NSString* gCurrentPreviewMarkdown = nil;
+static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 @implementation MBPreviewController
 
@@ -54,15 +56,16 @@ static NSString* gCurrentPreviewMarkdown = nil;
 
 - (void) setupInitialRender
 {
-	if (gCurrentPreviewTitle && gCurrentPreviewMarkdown) {
-		[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown];
+	if (gCurrentPreviewTitle && gCurrentPreviewMarkdown && gCurrentPreviewPhotos) {
+		[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown photos:gCurrentPreviewPhotos];
 	}
 }
 
-+ (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown
++ (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
 	gCurrentPreviewTitle = [title copy];
 	gCurrentPreviewMarkdown = [markdown copy];
+	gCurrentPreviewPhotos = [photos copy];
 }
 
 - (void) editorWindowTextDidChangeNotification:(NSNotification *)notification
@@ -70,15 +73,23 @@ static NSString* gCurrentPreviewMarkdown = nil;
 	if ([self.window isVisible]) {
 		NSString* title = [notification.userInfo objectForKey:kEditorWindowTextTitleKey];
 		NSString* markdown = [notification.userInfo objectForKey:kEditorWindowTextMarkdownKey];
-		
-		[self renderPreviewTitle:title markdown:markdown];
+		NSArray* photos = [notification.userInfo objectForKey:kEditorWindowTextPhotosKey];
+
+		[self renderPreviewTitle:title markdown:markdown photos:photos];
 	}
 }
 
-- (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown
+- (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
 	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
 	NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+	
+	NSURL* base_url = nil;;
+	NSMutableString* photos_html = [[NSMutableString alloc] init];
+	for (RFPhoto* photo in photos) {
+		[photos_html appendFormat:@"<img src=\"%@\">", photo.fileURL];
+		base_url = [NSURL fileURLWithPath:[photo.fileURL.path stringByDeletingLastPathComponent] isDirectory:YES];
+	}
 	
 	NSError* error = nil;
 	NSString* content_html = [MMMarkdown HTMLStringWithMarkdown:markdown extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
@@ -86,10 +97,11 @@ static NSString* gCurrentPreviewMarkdown = nil;
 		NSString* html = template_html;
 		html = [html stringByReplacingOccurrencesOfString:@"[TITLE]" withString:title];
 		html = [html stringByReplacingOccurrencesOfString:@"[CONTENT]" withString:content_html];
-		
+		html = [html stringByReplacingOccurrencesOfString:@"[PHOTOS]" withString:photos_html];
+
 		if (![html isEqualToString:self.html]) {
 			self.html = html;
-			[self.webview loadHTMLString:html baseURL:nil];
+			[self.webview loadHTMLString:html baseURL:base_url];
 		}
 	}
 }

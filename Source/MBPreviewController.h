@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString* html;
 
-+ (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown;
++ (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos;
 
 @end
 

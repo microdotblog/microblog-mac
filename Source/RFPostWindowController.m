@@ -82,12 +82,14 @@
 		if ([self isFrontPostWindow]) {
 			NSString* title = [self.postController currentTitle];
 			NSString* markdown = [self.postController currentText];
+			NSArray* photos = [self.postController attachedPhotos];
 			
-			[MBPreviewController setCurrentPreviewTitle:title markdown:markdown];
+			[MBPreviewController setCurrentPreviewTitle:title markdown:markdown photos:photos];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:kEditorWindowTextDidChangeNotification object:self userInfo:@{
 				kEditorWindowTextTitleKey: title,
-				kEditorWindowTextMarkdownKey: markdown
+				kEditorWindowTextMarkdownKey: markdown,
+				kEditorWindowTextPhotosKey: photos
 			}];
 		}
 	}];

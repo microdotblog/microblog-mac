@@ -111,6 +111,7 @@ static NSString* const kDarkModeAppearanceDidChangeNotification = @"DarkModeAppe
 static NSString* const kEditorWindowTextDidChangeNotification = @"EditorWindowTextDidChange";
 static NSString* const kEditorWindowTextTitleKey = @"title";
 static NSString* const kEditorWindowTextMarkdownKey = @"markdown";
+static NSString* const kEditorWindowTextPhotosKey = @"photos";
 
 static NSString* const kAddBookNotification = @"AddBookNotification";
 static NSString* const kAddBookKey = @"book";
