@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 73;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -169,6 +169,7 @@
 		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
 		4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */; };
+		4BA4F5D62DDA3E6200B1992A /* Web Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4BA4F5BC2DDA3E6200B1992A /* Web Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
@@ -244,7 +245,37 @@
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4BA4F5D42DDA3E6200B1992A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B7F0AD01BAF4B77004553A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BA4F5BB2DDA3E6200B1992A;
+			remoteInfo = "Web Extension";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		4BA4F5D72DDA3E6200B1992A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4BA4F5D62DDA3E6200B1992A /* Web Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA4F5F42DDA447400B1992A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = icons;
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BE541211BDEA34800E1868B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -547,6 +578,7 @@
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
 		4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSColor+Extras.h"; path = "Source/NSColor+Extras.h"; sourceTree = "<group>"; };
 		4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extras.m"; path = "Source/NSColor+Extras.m"; sourceTree = "<group>"; };
+		4BA4F5BC2DDA3E6200B1992A /* Web Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Web Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSummaryBackgroundView.h; path = Source/MBSummaryBackgroundView.h; sourceTree = "<group>"; };
@@ -671,6 +703,39 @@
 		C549E92321EEB75600730675 /* RFAutoCompleteCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAutoCompleteCache.m; path = Source/RFAutoCompleteCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4BA4F5DA2DDA3E6200B1992A /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				"Resources/icons/icon-16.png",
+				"Resources/icons/icon-32.png",
+				"Resources/icons/icon-64.png",
+				"Resources/icons/icon-128.png",
+				Resources/LICENSE,
+				Resources/README.md,
+			);
+			target = 4BA4F5BB2DDA3E6200B1992A /* Web Extension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		4BA4F5F92DDA448200B1992A /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 4BA4F5F42DDA447400B1992A /* CopyFiles */;
+			membershipExceptions = (
+				"Resources/icons/icon-16.png",
+				"Resources/icons/icon-32.png",
+				"Resources/icons/icon-64.png",
+				"Resources/icons/icon-128.png",
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4BA4F5BD2DDA3E6200B1992A /* Web Extension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BA4F5DA2DDA3E6200B1992A /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4BA4F5F92DDA448200B1992A /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (Resources/_locales, Resources/images, ); path = "Web Extension"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		4B7F0AD51BAF4B77004553A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -681,6 +746,13 @@
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 				4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA4F5B92DDA3E6200B1992A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +905,7 @@
 				4B7F0AEC1BAF4C16004553A6 /* Source */,
 				4B8FBDD71F867A1D00906C86 /* Shared */,
 				4B7F0AED1BAF4C1A004553A6 /* Resources */,
+				4BA4F5BD2DDA3E6200B1992A /* Web Extension */,
 				4B7F0B031BAF4F7D004553A6 /* Frameworks */,
 				4B7F0AD91BAF4B78004553A6 /* Products */,
 			);
@@ -842,6 +915,7 @@
 			isa = PBXGroup;
 			children = (
 				4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */,
+				4BA4F5BC2DDA3E6200B1992A /* Web Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1238,10 +1312,12 @@
 				4B7F0AD61BAF4B77004553A6 /* Resources */,
 				4BE541211BDEA34800E1868B /* CopyFiles */,
 				4BA2FD0C234D4E4100D5F93C /* ShellScript */,
+				4BA4F5D72DDA3E6200B1992A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4BA4F5D52DDA3E6200B1992A /* PBXTargetDependency */,
 			);
 			name = Micro.blog;
 			packageProductDependencies = (
@@ -1250,6 +1326,29 @@
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
 			productType = "com.apple.product-type.application";
+		};
+		4BA4F5BB2DDA3E6200B1992A /* Web Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BA4F5DB2DDA3E6200B1992A /* Build configuration list for PBXNativeTarget "Web Extension" */;
+			buildPhases = (
+				4BA4F5B82DDA3E6200B1992A /* Sources */,
+				4BA4F5B92DDA3E6200B1992A /* Frameworks */,
+				4BA4F5BA2DDA3E6200B1992A /* Resources */,
+				4BA4F5F42DDA447400B1992A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4BA4F5BD2DDA3E6200B1992A /* Web Extension */,
+			);
+			name = "Web Extension";
+			packageProductDependencies = (
+			);
+			productName = "Web Extension";
+			productReference = 4BA4F5BC2DDA3E6200B1992A /* Web Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -1271,10 +1370,12 @@
 							};
 						};
 					};
+					4BA4F5BB2DDA3E6200B1992A = {
+						CreatedOnToolsVersion = 16.1;
+					};
 				};
 			};
 			buildConfigurationList = 4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Micro.blog for Mac" */;
-			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1285,11 +1386,13 @@
 			packageReferences = (
 				4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
+			preferredProjectObjectVersion = 46;
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				4B7F0AD71BAF4B77004553A6 /* Micro.blog */,
+				4BA4F5BB2DDA3E6200B1992A /* Web Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -1356,6 +1459,13 @@
 				4B7F0AF71BAF4C37004553A6 /* MainMenu.xib in Resources */,
 				4B5EE280206330D100C87A78 /* BlogCell.xib in Resources */,
 				4B001CE52B27AB1B00BBF456 /* NotesKeyWindow.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA4F5BA2DDA3E6200B1992A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1561,7 +1671,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4BA4F5B82DDA3E6200B1992A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4BA4F5D52DDA3E6200B1992A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BA4F5BB2DDA3E6200B1992A /* Web Extension */;
+			targetProxy = 4BA4F5D42DDA3E6200B1992A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4B001CDD2B2795F800BBF456 /* Notes.xib */ = {
@@ -2123,8 +2248,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.5.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 3.6;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2160,14 +2285,100 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.5.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 3.6;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Micro.blog-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4BA4F5D82DDA3E6200B1992A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Web Extension/Web_Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Web Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Bookmark in Micro.blog";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Micro.blog. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac.bookmarkextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4BA4F5D92DDA3E6200B1992A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Web Extension/Web_Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Web Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Bookmark in Micro.blog";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Micro.blog. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac.bookmarkextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -2188,6 +2399,15 @@
 			buildConfigurations = (
 				4B7F0AEA1BAF4B78004553A6 /* Debug */,
 				4B7F0AEB1BAF4B78004553A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4BA4F5DB2DDA3E6200B1992A /* Build configuration list for PBXNativeTarget "Web Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BA4F5D82DDA3E6200B1992A /* Debug */,
+				4BA4F5D92DDA3E6200B1992A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

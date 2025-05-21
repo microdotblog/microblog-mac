@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Micro.blog: Save Bookmark</title>
+	<style>
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			margin: 0;
+			background: #fff;
+		}
+		
+		.container {
+			max-width: 600px;
+			margin: 40px auto 0 auto;
+			padding: 0 24px;
+		}
+		
+		.header {
+			display: flex;
+			align-items: center;
+			margin-bottom: 36px;
+		}
+		
+		.header img {
+			width: 32px;
+			height: 32px;
+			margin-right: 8px;
+		}
+		
+		.header span {
+			font-size: 1.3rem;
+			font-weight: 500;
+			color: #ff9900;
+		}
+		
+		.save-label {
+			font-size: 1.1rem;
+			margin-bottom: 22px;
+			margin-top: 16px;
+		}
+		
+		.bookmark-url {
+			font-size: 1rem;
+			font-weight: bold;
+			margin-bottom: 32px;
+		}
+		
+		.save-btn {
+			font-size: 1rem;
+			padding: 8px 14px;
+			border-radius: 7px;
+			border: 1px solid #d4d4d4;
+			background: #f8f8f8;
+			cursor: pointer;
+		}
+		
+		.save-btn:hover {
+			background: #eaeaea;
+		}
+		
+		.spinner {
+			display: none;
+			width: 30px;
+			height: 30px;
+			vertical-align: middle;
+			margin-left: 5px;
+			margin-bottom: 5px;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			body {
+				background: #111;
+				color: #eee;
+			}
+			
+			.header span {
+				color: #ffb84d;
+			}
+			
+			.save-label {
+				color: #ccc;
+			}
+			
+			.bookmark-url {
+				color: #fff;
+			}
+			
+			.save-btn {
+				background: #222;
+				border-color: #444;
+				color: #eee;
+			}
+			
+			.save-btn:hover {
+				background: #333;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<img src="icons/icon-64.png" alt="Micro.blog icon">
+			<span>Micro.blog</span>
+		</div>
+		<div class="save-label">Save bookmark for:</div>
+		<div class="bookmark-url" id="bookmark-url"></div>
+
+		<form id="bookmark-form">
+			<input type="hidden" id="title" name="title">
+			<input type="hidden" id="url" name="url">
+			<input type="hidden" id="html" name="html">
+			<button type="submit" class="save-btn" id="save-btn">Save</button>
+			<img src="images/spinner.svg" alt="Progress spinner" id="spinner" class="spinner">
+		</form>
+		<script src="prompt.js"></script>
+	</div>
+</body>
+</html>
