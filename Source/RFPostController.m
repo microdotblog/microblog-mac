@@ -953,28 +953,26 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
 		
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
-		
-		if (item.thumbnailImageView.image == nil) {
-			if (photo.thumbnailImage != nil) {
-				item.thumbnailImageView.image = photo.thumbnailImage;
-			}
-			else {
-				item.progressSpinner.hidden = NO;
-				[item.progressSpinner startAnimation:nil];
-				
-				// download thumbnail
-				RFClient* client = [[RFClient alloc] initWithURL:photo.publishedURL];
-				[client getWithCompletion:^(UUHttpResponse* response) {
-					RFDispatchMainAsync (^{
-						[item.progressSpinner stopAnimation:nil];
-						if (response.httpError == nil) {
-							NSImage* img = [[NSImage alloc] initWithData:[response rawResponse]];
-							item.thumbnailImageView.image = img;
-							[collectionView mb_safeReloadAtIndexPath:indexPath];
-						}
-					});
-				}];
-			}
+
+		if (photo.thumbnailImage != nil) {
+			item.thumbnailImageView.image = photo.thumbnailImage;
+		}
+		else {
+			item.progressSpinner.hidden = NO;
+			[item.progressSpinner startAnimation:nil];
+			
+			// download thumbnail
+			RFClient* client = [[RFClient alloc] initWithURL:photo.publishedURL];
+			[client getWithCompletion:^(UUHttpResponse* response) {
+				RFDispatchMainAsync (^{
+					[item.progressSpinner stopAnimation:nil];
+					if (response.httpError == nil) {
+						NSImage* img = [[NSImage alloc] initWithData:[response rawResponse]];
+						item.thumbnailImageView.image = img;
+						[collectionView mb_safeReloadAtIndexPath:indexPath];
+					}
+				});
+			}];
 		}
 		
 		return item;
