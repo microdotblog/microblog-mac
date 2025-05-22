@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet WKWebView* webview;
 
 @property (strong, nonatomic) NSString* html;
+@property (strong, nonatomic) NSMutableDictionary* cachedPhotoPaths;
 
 + (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos;
 

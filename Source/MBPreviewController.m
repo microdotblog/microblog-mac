@@ -23,6 +23,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 {
 	self = [super initWithWindowNibName:@"Preview"];
 	if (self) {
+		self.cachedPhotoPaths = [NSMutableDictionary dictionary];
 	}
 	
 	return self;
@@ -52,6 +53,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editorWindowTextDidChangeNotification:) name:kEditorWindowTextDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillQuitNotification:) name:NSApplicationWillTerminateNotification object:nil];
 }
 
 - (void) setupInitialRender
@@ -68,6 +70,19 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	gCurrentPreviewPhotos = [photos copy];
 }
 
+- (void) cleanupTempFiles
+{
+	NSString* temp_folder = NSTemporaryDirectory();
+	for (NSString* path in self.cachedPhotoPaths) {
+		// sanity check we're in the temp folder, then delete
+		NSString* full_path = [self.cachedPhotoPaths objectForKey:path];
+		if ([full_path hasPrefix:temp_folder]) {
+			NSError* error = nil;
+			[[NSFileManager defaultManager] removeItemAtPath:full_path error:&error];
+		}
+	}
+}
+
 - (void) editorWindowTextDidChangeNotification:(NSNotification *)notification
 {
 	if ([self.window isVisible]) {
@@ -79,6 +94,11 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	}
 }
 
+- (void) appWillQuitNotification:(NSNotification *)notification
+{
+	[self cleanupTempFiles];
+}
+
 - (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
 	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
@@ -87,8 +107,21 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	NSURL* base_url = nil;;
 	NSMutableString* photos_html = [[NSMutableString alloc] init];
 	for (RFPhoto* photo in photos) {
-		[photos_html appendFormat:@"<img src=\"%@\">", photo.fileURL];
-		base_url = [NSURL fileURLWithPath:[photo.fileURL.path stringByDeletingLastPathComponent] isDirectory:YES];
+		if (photo.fileURL) {
+			[photos_html appendFormat:@"<img src=\"%@\">", photo.fileURL];
+			base_url = [NSURL fileURLWithPath:[photo.fileURL.path stringByDeletingLastPathComponent] isDirectory:YES];
+		}
+		else {
+			// to avoid re-saving the file, we'll cache a reference to the path
+			NSValue* pointer_key = [NSValue valueWithNonretainedObject:photo];
+			NSString* temp_path = [self.cachedPhotoPaths objectForKey:pointer_key];
+			if (temp_path == nil) {
+				temp_path = [self saveTemporaryPhoto:photo];
+				[self.cachedPhotoPaths setObject:temp_path forKey:pointer_key];
+			}
+			[photos_html appendFormat:@"<img src=\"%@\">", temp_path];
+			base_url = [NSURL fileURLWithPath:[temp_path stringByDeletingLastPathComponent] isDirectory:YES];
+		}
 	}
 	
 	NSError* error = nil;
@@ -104,6 +137,19 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 			[self.webview loadHTMLString:html baseURL:base_url];
 		}
 	}
+}
+
+- (NSString *) saveTemporaryPhoto:(RFPhoto *)photo
+{
+	// write image to temp file
+	NSString* filename = [NSString stringWithFormat:@"Preview-%@.jpg", [[NSUUID UUID] UUIDString]];
+	NSString* temp_folder = NSTemporaryDirectory();
+	NSString* path = [temp_folder stringByAppendingPathComponent:filename];
+	NSBitmapImageRep* img_rep = [[NSBitmapImageRep alloc] initWithData:[photo.thumbnailImage TIFFRepresentation]];
+	NSData* d = [img_rep representationUsingType:NSBitmapImageFileTypeJPEG properties:@{}];
+	[d writeToFile:path atomically:YES];
+
+	return path;
 }
 
 - (void) webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
