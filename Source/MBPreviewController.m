@@ -77,8 +77,12 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		// sanity check we're in the temp folder, then delete
 		NSString* full_path = [self.cachedPhotoPaths objectForKey:path];
 		if ([full_path hasPrefix:temp_folder]) {
-			NSError* error = nil;
-			[[NSFileManager defaultManager] removeItemAtPath:full_path error:&error];
+			// also make sure our file isn't accidentally a folder
+			BOOL is_dir = NO;
+			if ([[NSFileManager defaultManager] fileExistsAtPath:full_path isDirectory:&is_dir] && !is_dir) {
+				NSError* error = nil;
+				[[NSFileManager defaultManager] removeItemAtPath:full_path error:&error];
+			}
 		}
 	}
 }
