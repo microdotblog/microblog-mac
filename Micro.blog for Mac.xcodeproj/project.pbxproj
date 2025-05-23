@@ -133,6 +133,7 @@
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
 		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
+		4B71E6A32DE0C94D0097E1F3 /* HTMLNode+Mutating.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B71E6A22DE0C94D0097E1F3 /* HTMLNode+Mutating.m */; };
 		4B79E2852D089BC500A22861 /* Collections.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B79E2832D089BC500A22861 /* Collections.xib */; };
 		4B79E28A2D089D2700A22861 /* MBCollectionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E2892D089D2700A22861 /* MBCollectionsController.m */; };
 		4B79E28D2D089D7600A22861 /* MBCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E28C2D089D7600A22861 /* MBCollection.m */; };
@@ -482,6 +483,8 @@
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
+		4B71E6A12DE0C94D0097E1F3 /* HTMLNode+Mutating.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "HTMLNode+Mutating.h"; path = "Shared/HTMLParser/HTMLNode+Mutating.h"; sourceTree = "<group>"; };
+		4B71E6A22DE0C94D0097E1F3 /* HTMLNode+Mutating.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "HTMLNode+Mutating.m"; path = "Shared/HTMLParser/HTMLNode+Mutating.m"; sourceTree = "<group>"; };
 		4B79E2842D089BC500A22861 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Collections.xib; sourceTree = "<group>"; };
 		4B79E2882D089D2700A22861 /* MBCollectionsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCollectionsController.h; path = Source/MBCollectionsController.h; sourceTree = "<group>"; };
 		4B79E2892D089D2700A22861 /* MBCollectionsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCollectionsController.m; path = Source/MBCollectionsController.m; sourceTree = "<group>"; };
@@ -822,6 +825,8 @@
 				4B5714CB224BD01D001F8E4F /* HTMLNode.m */,
 				4B5714CD224BD01D001F8E4F /* HTMLParser.h */,
 				4B5714CA224BD01C001F8E4F /* HTMLParser.m */,
+				4B71E6A12DE0C94D0097E1F3 /* HTMLNode+Mutating.h */,
+				4B71E6A22DE0C94D0097E1F3 /* HTMLNode+Mutating.m */,
 			);
 			name = HTMLParser;
 			sourceTree = "<group>";
@@ -1503,6 +1508,7 @@
 				4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */,
 				4B79E2902D089DC000A22861 /* MBCollectionCell.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
+				4B71E6A32DE0C94D0097E1F3 /* HTMLNode+Mutating.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
 				4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */,

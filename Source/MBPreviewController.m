@@ -9,8 +9,13 @@
 #import "MBPreviewController.h"
 
 #import "RFPhoto.h"
+#import "RFSettings.h"
 #import "RFConstants.h"
 #import "MMMarkdown.h"
+#import "HTMLParser.h"
+#import "HTMLNode+Mutating.h"
+#import <dispatch/dispatch.h>
+#import <os/availability.h>
 
 // static storage for class-wide preview data
 static NSString* gCurrentPreviewTitle = nil;
@@ -63,6 +68,153 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	}
 }
 
+- (IBAction) useThemeChanged:(NSButton *)sender
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSURL* blog_url = [NSURL URLWithString:destination_uid];
+	
+	if (sender.state == NSControlStateValueOn) {
+		NSString* template_path = [self templatePathForHostname:blog_url.host];
+		NSFileManager* fm = [NSFileManager defaultManager];
+		
+		// download theme if template doesn't exist yet
+		if (![fm fileExistsAtPath:template_path]) {
+			[self.progressSpinner startAnimation:nil];
+			[self downloadHomePage:blog_url completion:^(NSString *updatedHTML, NSURL *baseURL) {
+				[self.progressSpinner stopAnimation:nil];
+				[self renderPreview];
+			}];
+		}
+		else {
+			[self renderPreview];
+		}
+	}
+	else {
+		[self renderPreview];
+
+		// remove the template too
+		NSString* template_path = [self templatePathForHostname:blog_url.host];
+		NSFileManager* fm = [NSFileManager defaultManager];
+		BOOL is_dir = NO;
+		if ([fm fileExistsAtPath:template_path isDirectory:&is_dir]) {
+			if (!is_dir) {
+				[fm removeItemAtPath:template_path error:NULL];
+			}
+		}
+	}
+}
+
+
+#pragma mark -
+
+- (void) downloadHomePage:(NSURL *)blogURL completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
+{
+	NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:blogURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+		if (error) {
+			NSLog(@"Error downloading %@: %@", blogURL, error);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(nil, nil);
+			});
+			return;
+		}
+		
+		NSString* htmlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		NSError *parseError = nil;
+		HTMLParser *parser1 = [[HTMLParser alloc] initWithString:htmlString error:&parseError];
+		HTMLNode *root1 = [parser1 body];
+		HTMLNode *entry1 = [root1 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+
+		// look for all <a> tags inside the entry element
+		NSArray<HTMLNode *> *links = [entry1 findChildTags:@"a"];
+		NSString *permalink = nil;
+		for (HTMLNode *linkNode in links) {
+			NSString *classAttr = [linkNode getAttributeNamed:@"class"];
+			if (classAttr && ([classAttr rangeOfString:@"u-url"].location != NSNotFound)) {
+				permalink = [linkNode getAttributeNamed:@"href"];
+				break;
+			}
+		}
+		if (permalink) {
+			NSURL *entryURL = [NSURL URLWithString:permalink];
+			[self downloadPermalink:entryURL originalHost:blogURL.host completion:completion];
+			return;
+		}
+
+		// no valid link found
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completion(nil, nil);
+		});
+	}];
+	[task resume];
+}
+
+-(NSString *) serializeDocument:(HTMLParser *)parser
+{
+	return [[parser doc] rawContents];
+}
+
+- (void) downloadPermalink:(NSURL *)entryURL originalHost:(NSString *)originalHost completion:(void (^)(NSString *updatedHTML, NSURL *baseURL))completion
+{
+	NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:entryURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+		if (error) {
+			NSLog(@"Error downloading %@: %@", entryURL, error);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(nil, nil);
+			});
+			return;
+		}
+		
+		NSString* entryHTML = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		NSError *parseError = nil;
+		HTMLParser *parser2 = [[HTMLParser alloc] initWithString:entryHTML error:&parseError];
+		HTMLNode *root2 = [parser2 body];
+		HTMLNode *entry2 = [root2 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+
+		// remove existing blog post children
+		for (HTMLNode* child in [entry2 children]) {
+			[child detach];
+		}
+
+		// add placeholder content
+		[entry2 setRawContents:@"<h1 class=\"p-name\">[TITLE]</h1>\n[CONTENT]\n[PHOTOS]"];
+
+		// serialize back to HTML
+		NSString *updatedHTML = [self serializeDocument:parser2];
+
+		// save theme HTML to app support templates
+		NSString* filePath = [self templatePathForHostname:originalHost];
+		NSError* writeError = nil;
+		[updatedHTML writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&writeError];
+		if (writeError) {
+			NSLog(@"Error writing template %@: %@", filePath, writeError);
+		}
+
+		// Return on main thread
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completion(updatedHTML, entryURL);
+		});
+	}];
+	[task resume];
+}
+
+- (NSString *) templatePathForHostname:(NSString *)host
+{
+	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	NSString* appSupport = paths.firstObject;
+	NSString* appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+	NSString* templatesDir = [appSupport stringByAppendingPathComponent:appName];
+	templatesDir = [templatesDir stringByAppendingPathComponent:@"Templates"];
+	NSError* dirError = nil;
+	[[NSFileManager defaultManager] createDirectoryAtPath:templatesDir
+							  withIntermediateDirectories:YES
+											   attributes:nil
+													error:&dirError];
+	NSString* fileName = [host stringByAppendingString:@".html"];
+	return [templatesDir stringByAppendingPathComponent:fileName];
+}
+
+#pragma mark -
+
 + (void) setCurrentPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
 	gCurrentPreviewTitle = [title copy];
@@ -103,12 +255,37 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	[self cleanupTempFiles];
 }
 
+- (void) renderPreview
+{
+	[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown photos:gCurrentPreviewPhotos];
+}
+
 - (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
-	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
-	NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+	NSString* template_html = nil;
+
+	// load theme template if enabled
+	if (self.useThemeCheckbox.state == NSControlStateValueOn) {
+		NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+		NSURL* blog_url = [NSURL URLWithString:destination_uid];
+		
+		NSString* filePath = [self templatePathForHostname:blog_url.host];
+		NSString* html = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+		if (html) {
+			template_html = html;
+			// insert base meta tag for root URL
+			NSString* baseURLString = [NSString stringWithFormat:@"https://%@/", blog_url.host];
+			NSString* metaTag = [NSString stringWithFormat:@"<base href=\"%@\">", baseURLString];
+			template_html = [template_html stringByReplacingOccurrencesOfString:@"<head>" withString:[@"<head>" stringByAppendingString:metaTag]];
+		}
+	}
 	
-	NSURL* base_url = nil;;
+	if (template_html == nil) {
+		NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Preview" ofType:@"html"];
+		template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+	}
+	
+	NSURL* base_url = nil;
 	NSMutableString* photos_html = [[NSMutableString alloc] init];
 	for (RFPhoto* photo in photos) {
 		if (photo.fileURL) {

@@ -4,11 +4,14 @@
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <plugIn identifier="com.apple.WebKit2IBPlugin" version="23504"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBPreviewController">
             <connections>
+                <outlet property="progressSpinner" destination="pld-DB-j1t" id="qFN-zY-5d8"/>
+                <outlet property="useThemeCheckbox" destination="Yez-md-DfY" id="crr-Ed-bOF"/>
                 <outlet property="webview" destination="QbJ-jW-Bvn" id="Q0e-I8-T08"/>
                 <outlet property="window" destination="qdV-91-J9a" id="78B-Yd-UVt"/>
             </connections>
@@ -24,8 +27,40 @@
                 <rect key="frame" x="0.0" y="0.0" width="506" height="465"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <box boxType="custom" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="TK3-Al-LTm">
+                        <rect key="frame" x="-1" y="426" width="508" height="40"/>
+                        <view key="contentView" id="EZ6-8o-AIi">
+                            <rect key="frame" x="1" y="1" width="506" height="38"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yez-md-DfY">
+                                    <rect key="frame" x="8" y="10" width="122" height="18"/>
+                                    <buttonCell key="cell" type="check" title="Use blog theme" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Ngr-zt-Nhc">
+                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="useThemeChanged:" target="-2" id="9xt-OD-OPA"/>
+                                    </connections>
+                                </button>
+                                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="pld-DB-j1t">
+                                    <rect key="frame" x="480" y="11" width="16" height="16"/>
+                                </progressIndicator>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="Yez-md-DfY" firstAttribute="centerY" secondItem="EZ6-8o-AIi" secondAttribute="centerY" id="U6q-tG-COP"/>
+                                <constraint firstAttribute="trailing" secondItem="pld-DB-j1t" secondAttribute="trailing" constant="10" id="dvf-7J-Kol"/>
+                                <constraint firstItem="pld-DB-j1t" firstAttribute="centerY" secondItem="EZ6-8o-AIi" secondAttribute="centerY" id="pVB-7H-agL"/>
+                                <constraint firstItem="Yez-md-DfY" firstAttribute="leading" secondItem="EZ6-8o-AIi" secondAttribute="leading" constant="10" id="yVr-iX-b5F"/>
+                            </constraints>
+                        </view>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="xMz-cE-DI6"/>
+                        </constraints>
+                        <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                    </box>
                     <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QbJ-jW-Bvn">
-                        <rect key="frame" x="0.0" y="0.0" width="506" height="465"/>
+                        <rect key="frame" x="0.0" y="0.0" width="506" height="426"/>
                         <wkWebViewConfiguration key="configuration">
                             <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                             <wkPreferences key="preferences"/>
@@ -34,8 +69,11 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="QbJ-jW-Bvn" firstAttribute="leading" secondItem="fJW-UJ-mdT" secondAttribute="leading" id="1lZ-pW-MAj"/>
-                    <constraint firstItem="QbJ-jW-Bvn" firstAttribute="top" secondItem="fJW-UJ-mdT" secondAttribute="top" id="B26-4c-K0h"/>
+                    <constraint firstItem="TK3-Al-LTm" firstAttribute="top" secondItem="fJW-UJ-mdT" secondAttribute="top" constant="-1" id="B43-fO-7pm"/>
+                    <constraint firstItem="QbJ-jW-Bvn" firstAttribute="top" secondItem="TK3-Al-LTm" secondAttribute="bottom" id="Cdm-3h-Z5H"/>
                     <constraint firstAttribute="trailing" secondItem="QbJ-jW-Bvn" secondAttribute="trailing" id="YNJ-E9-aDs"/>
+                    <constraint firstItem="TK3-Al-LTm" firstAttribute="leading" secondItem="fJW-UJ-mdT" secondAttribute="leading" constant="-1" id="j2t-FM-HCr"/>
+                    <constraint firstAttribute="trailing" secondItem="TK3-Al-LTm" secondAttribute="trailing" constant="-1" id="mJG-oK-H2Y"/>
                     <constraint firstAttribute="bottom" secondItem="QbJ-jW-Bvn" secondAttribute="bottom" id="rfF-EH-tt1"/>
                 </constraints>
             </view>

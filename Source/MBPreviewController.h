@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBPreviewController : NSWindowController <WKNavigationDelegate>
 
 @property (strong, nonatomic) IBOutlet WKWebView* webview;
+@property (strong, nonatomic) IBOutlet NSButton* useThemeCheckbox;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSString* html;
 @property (strong, nonatomic) NSMutableDictionary* cachedPhotoPaths;
