@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet WKWebView* webview;
 @property (strong, nonatomic) IBOutlet NSButton* useThemeCheckbox;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSTextField* warningField;
 
 @property (strong, nonatomic) NSString* html;
 @property (strong, nonatomic) NSMutableDictionary* cachedPhotoPaths;

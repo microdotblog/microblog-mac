@@ -92,6 +92,9 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	else {
 		[self renderPreview];
 
+		// reset if checkbox title changed
+		self.warningField.stringValue = @"";
+
 		// remove the template too
 		NSString* template_path = [self templatePathForHostname:blog_url.host];
 		NSFileManager* fm = [NSFileManager defaultManager];
@@ -109,7 +112,12 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) downloadHomePage:(NSURL *)blogURL completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
-	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithURL:blogURL completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+	// create request to ignore cache and always fetch latest page
+	NSURLRequest* request = [NSURLRequest requestWithURL:blogURL
+											 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+										 timeoutInterval:60.0];
+	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithRequest:request
+																completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
 		if (error) {
 			NSLog(@"Error downloading %@: %@", blogURL, error);
 			dispatch_async(dispatch_get_main_queue(), ^{
@@ -123,14 +131,24 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		HTMLParser* parser1 = [[HTMLParser alloc] initWithString:htmlString error:&parseError];
 		HTMLNode* root1 = [parser1 body];
 		HTMLNode* entry1 = [root1 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (entry1 == nil) {
+				self.warningField.hidden = NO;
+				self.warningField.attributedStringValue = [self makeString:@"This theme does not support previews" withIcon:@"exclamationmark.triangle"];
+			}
+			else {
+				self.warningField.hidden = YES;
+			}
+		});
 
 		// look for all <a> tags inside the entry element
-		NSArray* links = [entry1 findChildTags:@"a"];
+		NSArray* a_tags = [entry1 findChildTags:@"a"];
 		NSString* permalink = nil;
-		for (HTMLNode *linkNode in links) {
-			NSString *classAttr = [linkNode getAttributeNamed:@"class"];
-			if (classAttr && ([classAttr rangeOfString:@"u-url"].location != NSNotFound)) {
-				permalink = [linkNode getAttributeNamed:@"href"];
+		for (HTMLNode* link_node in a_tags) {
+			NSString* class_attr = [link_node getAttributeNamed:@"class"];
+			if (class_attr && ([class_attr rangeOfString:@"u-url"].location != NSNotFound)) {
+				permalink = [link_node getAttributeNamed:@"href"];
 				break;
 			}
 		}
@@ -155,7 +173,12 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) downloadPermalink:(NSURL *)entryURL originalHost:(NSString *)originalHost completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
-	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithURL:entryURL completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+	// create request to ignore cache and always fetch latest page
+	NSURLRequest* request = [NSURLRequest requestWithURL:entryURL
+											 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+										 timeoutInterval:60.0];
+	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithRequest:request
+																completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
 		if (error) {
 			NSLog(@"Error downloading %@: %@", entryURL, error);
 			dispatch_async(dispatch_get_main_queue(), ^{
@@ -164,9 +187,21 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 			return;
 		}
 		
+		// parse the page
 		NSString* entryHTML = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 		NSError* parseError = nil;
 		HTMLParser* parser2 = [[HTMLParser alloc] initWithString:entryHTML error:&parseError];
+		
+		// normalize link tags in head and body to absolute URLs
+		NSArray* link_tags = [[parser2 head] findChildTags:@"link"];
+		for (HTMLNode* link_node in link_tags) {
+			NSString* href = [link_node getAttributeNamed:@"href"];
+			if ([href hasPrefix:@"/"]) {
+				NSString* full_href = [NSString stringWithFormat:@"https://%@%@", originalHost, href];
+				[link_node setAttributeNamed:@"href" value:full_href];
+			}
+		}
+
 		HTMLNode* root2 = [parser2 body];
 		HTMLNode* entry2 = [root2 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
 
@@ -189,7 +224,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 			NSLog(@"Error writing template %@: %@", filePath, writeError);
 		}
 
-		// Return on main thread
+		// return on main thread
 		dispatch_async(dispatch_get_main_queue(), ^{
 			completion(updatedHTML, entryURL);
 		});
@@ -275,9 +310,9 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		if (html) {
 			template_html = html;
 			// insert base meta tag for root URL
-			NSString* baseURLString = [NSString stringWithFormat:@"https://%@/", blog_url.host];
-			NSString* metaTag = [NSString stringWithFormat:@"<base href=\"%@\">", baseURLString];
-			template_html = [template_html stringByReplacingOccurrencesOfString:@"<head>" withString:[@"<head>" stringByAppendingString:metaTag]];
+//			NSString* baseURLString = [NSString stringWithFormat:@"https://%@/", blog_url.host];
+//			NSString* metaTag = [NSString stringWithFormat:@"<base href=\"%@\">", baseURLString];
+//			template_html = [template_html stringByReplacingOccurrencesOfString:@"<head>" withString:[@"<head>" stringByAppendingString:metaTag]];
 		}
 	}
 	
@@ -333,6 +368,43 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 	return path;
 }
+
+- (NSAttributedString *) makeString:(NSString *)string withIcon:(NSString *)symbolName
+{
+	// get the SF Symbol image (macOS 11+)
+	NSImage *symbolImage = [NSImage imageWithSystemSymbolName:symbolName accessibilityDescription:nil];
+	if (!symbolImage) {
+ 		// fallback if symbol is invalid
+		return [[NSAttributedString alloc] initWithString:string];
+	}
+	// set size for icon
+	CGFloat iconSize = 16;
+	symbolImage.size = NSMakeSize(iconSize, iconSize);
+
+	// create the text attachment
+	NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+	attachment.image = symbolImage;
+	// Adjust baseline alignment
+	attachment.bounds = CGRectMake(0, -3, iconSize, iconSize);
+
+	// build the attributed string
+	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
+
+	// icon
+	NSAttributedString *iconString = [NSAttributedString attributedStringWithAttachment:attachment];
+	[result appendAttributedString:iconString];
+
+	// space
+	[result appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+
+	// text
+	NSAttributedString *textString = [[NSAttributedString alloc] initWithString:string attributes:@{ NSFontAttributeName: [NSFont systemFontOfSize:13] }];
+	[result appendAttributedString:textString];
+
+	return result;
+}
+
+#pragma mark -
 
 - (void) webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
 {
