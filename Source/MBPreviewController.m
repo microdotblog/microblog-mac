@@ -109,7 +109,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) downloadHomePage:(NSURL *)blogURL completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
-	NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:blogURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithURL:blogURL completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
 		if (error) {
 			NSLog(@"Error downloading %@: %@", blogURL, error);
 			dispatch_async(dispatch_get_main_queue(), ^{
@@ -119,14 +119,14 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		}
 		
 		NSString* htmlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-		NSError *parseError = nil;
-		HTMLParser *parser1 = [[HTMLParser alloc] initWithString:htmlString error:&parseError];
-		HTMLNode *root1 = [parser1 body];
-		HTMLNode *entry1 = [root1 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+		NSError* parseError = nil;
+		HTMLParser* parser1 = [[HTMLParser alloc] initWithString:htmlString error:&parseError];
+		HTMLNode* root1 = [parser1 body];
+		HTMLNode* entry1 = [root1 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
 
 		// look for all <a> tags inside the entry element
-		NSArray<HTMLNode *> *links = [entry1 findChildTags:@"a"];
-		NSString *permalink = nil;
+		NSArray* links = [entry1 findChildTags:@"a"];
+		NSString* permalink = nil;
 		for (HTMLNode *linkNode in links) {
 			NSString *classAttr = [linkNode getAttributeNamed:@"class"];
 			if (classAttr && ([classAttr rangeOfString:@"u-url"].location != NSNotFound)) {
@@ -135,7 +135,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 			}
 		}
 		if (permalink) {
-			NSURL *entryURL = [NSURL URLWithString:permalink];
+			NSURL* entryURL = [NSURL URLWithString:permalink];
 			[self downloadPermalink:entryURL originalHost:blogURL.host completion:completion];
 			return;
 		}
@@ -153,9 +153,9 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	return [[parser doc] rawContents];
 }
 
-- (void) downloadPermalink:(NSURL *)entryURL originalHost:(NSString *)originalHost completion:(void (^)(NSString *updatedHTML, NSURL *baseURL))completion
+- (void) downloadPermalink:(NSURL *)entryURL originalHost:(NSString *)originalHost completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
-	NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:entryURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithURL:entryURL completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
 		if (error) {
 			NSLog(@"Error downloading %@: %@", entryURL, error);
 			dispatch_async(dispatch_get_main_queue(), ^{
@@ -165,10 +165,10 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		}
 		
 		NSString* entryHTML = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-		NSError *parseError = nil;
-		HTMLParser *parser2 = [[HTMLParser alloc] initWithString:entryHTML error:&parseError];
-		HTMLNode *root2 = [parser2 body];
-		HTMLNode *entry2 = [root2 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+		NSError* parseError = nil;
+		HTMLParser* parser2 = [[HTMLParser alloc] initWithString:entryHTML error:&parseError];
+		HTMLNode* root2 = [parser2 body];
+		HTMLNode* entry2 = [root2 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
 
 		// remove existing blog post children
 		for (HTMLNode* child in [entry2 children]) {
@@ -200,17 +200,18 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 - (NSString *) templatePathForHostname:(NSString *)host
 {
 	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-	NSString* appSupport = paths.firstObject;
-	NSString* appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
-	NSString* templatesDir = [appSupport stringByAppendingPathComponent:appName];
-	templatesDir = [templatesDir stringByAppendingPathComponent:@"Templates"];
-	NSError* dirError = nil;
-	[[NSFileManager defaultManager] createDirectoryAtPath:templatesDir
-							  withIntermediateDirectories:YES
-											   attributes:nil
-													error:&dirError];
-	NSString* fileName = [host stringByAppendingString:@".html"];
-	return [templatesDir stringByAppendingPathComponent:fileName];
+	NSString* support_folder = paths.firstObject;
+	NSString* app_name = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+	NSString* templates_dir;
+	
+	templates_dir = [support_folder stringByAppendingPathComponent:app_name];
+	templates_dir = [templates_dir stringByAppendingPathComponent:@"Templates"];
+
+	NSError* error = nil;
+	[[NSFileManager defaultManager] createDirectoryAtPath:templates_dir withIntermediateDirectories:YES attributes:nil error:&error];
+
+	NSString* filename = [host stringByAppendingString:@".html"];
+	return [templates_dir stringByAppendingPathComponent:filename];
 }
 
 #pragma mark -
