@@ -45,7 +45,7 @@
                                     </connections>
                                 </button>
                                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="pld-DB-j1t">
-                                    <rect key="frame" x="480" y="11" width="16" height="16"/>
+                                    <rect key="frame" x="135" y="11" width="16" height="16"/>
                                 </progressIndicator>
                                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nxa-nZ-H35">
                                     <rect key="frame" x="444" y="11" width="54" height="16"/>
@@ -57,10 +57,10 @@
                                 </textField>
                             </subviews>
                             <constraints>
+                                <constraint firstItem="pld-DB-j1t" firstAttribute="leading" secondItem="Yez-md-DfY" secondAttribute="trailing" constant="5" id="Iwi-J7-0Mt"/>
                                 <constraint firstAttribute="trailing" secondItem="Nxa-nZ-H35" secondAttribute="trailing" constant="10" id="Rkv-0D-ztb"/>
                                 <constraint firstItem="Yez-md-DfY" firstAttribute="centerY" secondItem="EZ6-8o-AIi" secondAttribute="centerY" id="U6q-tG-COP"/>
                                 <constraint firstItem="Nxa-nZ-H35" firstAttribute="centerY" secondItem="EZ6-8o-AIi" secondAttribute="centerY" id="ZSX-cA-b1R"/>
-                                <constraint firstAttribute="trailing" secondItem="pld-DB-j1t" secondAttribute="trailing" constant="10" id="dvf-7J-Kol"/>
                                 <constraint firstItem="pld-DB-j1t" firstAttribute="centerY" secondItem="EZ6-8o-AIi" secondAttribute="centerY" id="pVB-7H-agL"/>
                                 <constraint firstItem="Yez-md-DfY" firstAttribute="leading" secondItem="EZ6-8o-AIi" secondAttribute="leading" constant="10" id="yVr-iX-b5F"/>
                             </constraints>

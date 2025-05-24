@@ -41,6 +41,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	[self setupWindow];
 	[self setupWebView];
 	[self setupNotifications];
+	[self setupUsingTheme];
 	[self setupInitialRender];
 }
 
@@ -61,6 +62,13 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillQuitNotification:) name:NSApplicationWillTerminateNotification object:nil];
 }
 
+- (void) setupUsingTheme
+{
+	if ([RFSettings boolForKey:kIsUsingBlogThemePreview]) {
+		[self.useThemeCheckbox setState:NSControlStateValueOn];
+	}
+}
+
 - (void) setupInitialRender
 {
 	if (gCurrentPreviewTitle && gCurrentPreviewMarkdown && gCurrentPreviewPhotos) {
@@ -74,6 +82,8 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	NSURL* blog_url = [NSURL URLWithString:destination_uid];
 	
 	if (sender.state == NSControlStateValueOn) {
+		[RFSettings setBool:YES forKey:kIsUsingBlogThemePreview];
+		
 		NSString* template_path = [self templatePathForHostname:blog_url.host];
 		NSFileManager* fm = [NSFileManager defaultManager];
 		
@@ -90,6 +100,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		}
 	}
 	else {
+		[RFSettings setBool:YES forKey:kIsUsingBlogThemePreview];
 		[self renderPreview];
 
 		// reset if checkbox title changed
@@ -300,6 +311,8 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 {
 	NSString* template_html = nil;
 
+	NSLog(@"render preview - start");
+	
 	// load theme template if enabled
 	if (self.useThemeCheckbox.state == NSControlStateValueOn) {
 		NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
@@ -350,6 +363,8 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 			[self.webview loadHTMLString:html baseURL:base_url];
 		}
 	}
+	
+	NSLog(@"render preview - done");
 }
 
 - (NSString *) saveTemporaryPhoto:(RFPhoto *)photo
