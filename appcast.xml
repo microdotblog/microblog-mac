@@ -5,6 +5,26 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.5.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new "Use blog theme" checkbox to preview window. When checked, it will try to download your blog's design and use that in the preview. Works with themes that have basic Microformats markup.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Sat, 24 May 2025 11:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.5.3.zip" sparkle:shortVersionString="3.5.3" sparkle:version="177" length="4320431" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.5.2</title>
  			<description><![CDATA[
 				<style>

@@ -101,7 +101,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		}
 	}
 	else {
-		[RFSettings setBool:YES forKey:kIsUsingBlogThemePreview];
+		[RFSettings setBool:NO forKey:kIsUsingBlogThemePreview];
 		[self renderPreview];
 
 		// reset if checkbox title changed
