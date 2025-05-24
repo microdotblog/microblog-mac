@@ -309,10 +309,6 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		NSString* html = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
 		if (html) {
 			template_html = html;
-			// insert base meta tag for root URL
-//			NSString* baseURLString = [NSString stringWithFormat:@"https://%@/", blog_url.host];
-//			NSString* metaTag = [NSString stringWithFormat:@"<base href=\"%@\">", baseURLString];
-//			template_html = [template_html stringByReplacingOccurrencesOfString:@"<head>" withString:[@"<head>" stringByAppendingString:metaTag]];
 		}
 	}
 	
