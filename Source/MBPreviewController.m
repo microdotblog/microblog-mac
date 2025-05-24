@@ -60,6 +60,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editorWindowTextDidChangeNotification:) name:kEditorWindowTextDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillQuitNotification:) name:NSApplicationWillTerminateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 }
 
 - (void) setupUsingTheme
@@ -300,6 +301,12 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 - (void) appWillQuitNotification:(NSNotification *)notification
 {
 	[self cleanupTempFiles];
+}
+
+- (void) updatedBlogNotification:(NSNotification *)notification
+{
+	// simulate checkbox to re-download theme if needed
+	[self useThemeChanged:self.useThemeCheckbox];
 }
 
 - (void) renderPreview
