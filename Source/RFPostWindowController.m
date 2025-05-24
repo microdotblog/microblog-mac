@@ -78,7 +78,7 @@
 
 - (void) setupPreviewTimer
 {
-	self.previewTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer) {
+	self.previewTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer* timer) {
 		if ([self isFrontPostWindow]) {
 			NSString* title = [self.postController currentTitle];
 			NSString* markdown = [self.postController currentText];

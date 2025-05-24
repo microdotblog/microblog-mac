@@ -310,8 +310,6 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 - (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
 	NSString* template_html = nil;
-
-	NSLog(@"render preview - start");
 	
 	// load theme template if enabled
 	if (self.useThemeCheckbox.state == NSControlStateValueOn) {
@@ -363,8 +361,6 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 			[self.webview loadHTMLString:html baseURL:base_url];
 		}
 	}
-	
-	NSLog(@"render preview - done");
 }
 
 - (NSString *) saveTemporaryPhoto:(RFPhoto *)photo
