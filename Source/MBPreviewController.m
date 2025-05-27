@@ -72,55 +72,84 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) setupInitialRender
 {
-	if (gCurrentPreviewTitle && gCurrentPreviewMarkdown && gCurrentPreviewPhotos) {
-		[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown photos:gCurrentPreviewPhotos];
+	if ([RFSettings boolForKey:kIsUsingBlogThemePreview]) {
+		// first clear template
+		NSString* template_path = [self currentTemplatePath];
+		[self removeTemplate:template_path];
+
+		// re-download
+		[self downloadTheme];
+	}
+	else {
+		[self renderPreview];
 	}
 }
 
 - (IBAction) useThemeChanged:(NSButton *)sender
 {
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	NSURL* blog_url = [NSURL URLWithString:destination_uid];
-	
 	if (sender.state == NSControlStateValueOn) {
 		[RFSettings setBool:YES forKey:kIsUsingBlogThemePreview];
-		
-		NSString* template_path = [self templatePathForHostname:blog_url.host];
-		NSFileManager* fm = [NSFileManager defaultManager];
-		
-		// download theme if template doesn't exist yet
-		if (![fm fileExistsAtPath:template_path]) {
-			[self.progressSpinner startAnimation:nil];
-			[self downloadHomePage:blog_url completion:^(NSString *updatedHTML, NSURL *baseURL) {
-				[self.progressSpinner stopAnimation:nil];
-				[self renderPreview];
-			}];
-		}
-		else {
-			[self renderPreview];
-		}
+		[self downloadTheme];
 	}
 	else {
 		[RFSettings setBool:NO forKey:kIsUsingBlogThemePreview];
-		[self renderPreview];
-
-		// reset if checkbox title changed
-		self.warningField.stringValue = @"";
-
-		// remove the template too
-		NSString* template_path = [self templatePathForHostname:blog_url.host];
-		NSFileManager* fm = [NSFileManager defaultManager];
-		BOOL is_dir = NO;
-		if ([fm fileExistsAtPath:template_path isDirectory:&is_dir]) {
-			if (!is_dir) {
-				[fm removeItemAtPath:template_path error:NULL];
-			}
-		}
+		[self clearTheme];
 	}
 }
 
 
 #pragma mark -
+
+- (void) downloadTheme
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSURL* blog_url = [NSURL URLWithString:destination_uid];
+	
+	NSString* template_path = [self currentTemplatePath];
+	NSFileManager* fm = [NSFileManager defaultManager];
+	
+	// download theme if template doesn't exist yet
+	if (![fm fileExistsAtPath:template_path]) {
+		[self.progressSpinner startAnimation:nil];
+		[self downloadHomePage:blog_url completion:^(NSString *updatedHTML, NSURL *baseURL) {
+			[self.progressSpinner stopAnimation:nil];
+			[self renderPreview];
+		}];
+	}
+	else {
+		[self renderPreview];
+	}
+}
+
+- (void) clearTheme
+{
+	[RFSettings setBool:NO forKey:kIsUsingBlogThemePreview];
+	[self renderPreview];
+
+	// reset if checkbox title changed
+	self.warningField.stringValue = @"";
+
+	// remove the template too
+	NSString* template_path = [self currentTemplatePath];
+	[self removeTemplate:template_path];
+}
+
+- (void) removeTemplate:(NSString *)path
+{
+	NSFileManager* fm = [NSFileManager defaultManager];
+	BOOL is_dir = NO;
+	if ([fm fileExistsAtPath:path isDirectory:&is_dir]) {
+		if (!is_dir) {
+			[fm removeItemAtPath:path error:NULL];
+		}
+	}
+}
+
+- (void) showWarning:(NSString *)text
+{
+	self.warningField.hidden = NO;
+	self.warningField.attributedStringValue = [self makeString:text withIcon:@"exclamationmark.triangle"];
+}
 
 - (void) downloadHomePage:(NSURL *)blogURL completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
@@ -133,6 +162,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		if (error) {
 			NSLog(@"Error downloading %@: %@", blogURL, error);
 			dispatch_async(dispatch_get_main_queue(), ^{
+				[self showWarning:@"Error downloading blog template"];
 				completion(nil, nil);
 			});
 			return;
@@ -147,7 +177,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (entry1 == nil) {
 				self.warningField.hidden = NO;
-				self.warningField.attributedStringValue = [self makeString:@"This theme does not support previews" withIcon:@"exclamationmark.triangle"];
+				[self showWarning:@"This theme does not support previews"];
 			}
 			else {
 				self.warningField.hidden = YES;
@@ -172,6 +202,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 		// no valid link found
 		dispatch_async(dispatch_get_main_queue(), ^{
+			[self showWarning:@"Error parsing permalink in template"];
 			completion(nil, nil);
 		});
 	}];
@@ -194,6 +225,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		if (error) {
 			NSLog(@"Error downloading %@: %@", entryURL, error);
 			dispatch_async(dispatch_get_main_queue(), ^{
+				[self showWarning:@"Error downloading permalink template"];
 				completion(nil, nil);
 			});
 			return;
@@ -233,6 +265,9 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		NSError* writeError = nil;
 		[updatedHTML writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&writeError];
 		if (writeError) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self showWarning:@"Error saving template HTML"];
+			});
 			NSLog(@"Error writing template %@: %@", filePath, writeError);
 		}
 
@@ -242,6 +277,13 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		});
 	}];
 	[task resume];
+}
+
+- (NSString *) currentTemplatePath
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSURL* blog_url = [NSURL URLWithString:destination_uid];
+	return [self templatePathForHostname:blog_url.host];
 }
 
 - (NSString *) templatePathForHostname:(NSString *)host
@@ -316,15 +358,16 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
 {
+	if ((title == nil) || (markdown == nil)) {
+		return;
+	}
+	
 	NSString* template_html = nil;
 	
 	// load theme template if enabled
 	if (self.useThemeCheckbox.state == NSControlStateValueOn) {
-		NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-		NSURL* blog_url = [NSURL URLWithString:destination_uid];
-		
-		NSString* filePath = [self templatePathForHostname:blog_url.host];
-		NSString* html = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+		NSString* template_path = [self currentTemplatePath];
+		NSString* html = [NSString stringWithContentsOfFile:template_path encoding:NSUTF8StringEncoding error:NULL];
 		if (html) {
 			template_html = html;
 		}
