@@ -38,11 +38,26 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 {
 	[super windowDidLoad];
 	
+	[self fixPreferences];
+	
 	[self setupWindow];
 	[self setupWebView];
 	[self setupNotifications];
 	[self setupUsingTheme];
 	[self setupInitialRender];
+}
+
+- (void) fixPreferences
+{
+	// if no destination yet, set an initial value based on default site
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if ((destination_uid == nil) || ([destination_uid length] == 0)) {
+		// usually this is custom domain, but okay to use subdomain here
+		NSString* hostname = [RFSettings stringForKey:kAccountDefaultSite];
+		destination_uid = [NSString stringWithFormat:@"https://%@/", hostname];
+		[RFSettings setString:destination_uid forKey:kCurrentDestinationUID];
+		[RFSettings setString:hostname forKey:kCurrentDestinationName];
+	}
 }
 
 - (void) setupWindow
