@@ -15,16 +15,26 @@
 
 - (BOOL) shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(nullable NSString *)replacementString
 {
+	// if the incoming range length is absurdly large, reject it
+	if (affectedCharRange.length > self.string.length) {
+		self.isIgnoringAutocomplete = YES;
+		return NO;
+	}
+
+	// also guard on location
+	if (affectedCharRange.location > self.string.length) {
+		return NO;
+	}
+
+	self.isIgnoringAutocomplete = NO;
 	self.restoredSelection = NSMakeRange (affectedCharRange.location + replacementString.length, 0);
-	
-	if (replacementString.length == 1)
-	{
+
+	if (replacementString.length == 1) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self findAutocomplete:affectedCharRange newString:replacementString];
 		});
 	}
 
-	//	NSLog (@"replacement = %@", replacementString);
 	return [super shouldChangeTextInRange:affectedCharRange replacementString:replacementString];
 }
 
@@ -185,8 +195,15 @@
 	// if we are in the midst of an edit that involves "marked" text, don't do anything. This
 	// avoids interfering with the state of the text and causing multi-keystroke edits such
 	// as accent-modified character input to fail.
-	if (self.markedRange.length > 0) { return; }
-
+	if (self.markedRange.length > 0) {
+		return;
+	}
+	
+	// avoid problems interfering with invalid ranges
+	if (self.isIgnoringAutocomplete) {
+		return;
+	}
+	
 	NSMutableString* username = [NSMutableString string];
 	
 	// work backwards from current point

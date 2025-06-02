@@ -11,5 +11,6 @@
 @interface RFHighlightingTextView : NSTextView <NSDraggingDestination>
 
 @property (assign, nonatomic) NSRange restoredSelection;
+@property (assign, nonatomic) BOOL isIgnoringAutocomplete;
 
 @end
