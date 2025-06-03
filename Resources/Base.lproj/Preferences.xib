@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -626,15 +627,90 @@
             <point key="canvasLocation" x="646" y="-255"/>
         </menu>
         <customView id="5Ww-w3-r1v">
-            <rect key="frame" x="0.0" y="0.0" width="409" height="457"/>
+            <rect key="frame" x="0.0" y="0.0" width="407" height="457"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="XDS-Sc-l7h">
-                    <rect key="frame" x="147" y="389" width="100" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yhP-VB-i5g">
+                    <rect key="frame" x="18" y="269" width="270" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="266" id="lhO-Bf-22o"/>
+                    </constraints>
+                    <textFieldCell key="cell" title="Micro.blog can run some AI tasks on your Mac. Download the local model?" id="Sfe-cs-90m">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eEZ-Jq-sos">
+                    <rect key="frame" x="299" y="268" width="95" height="32"/>
+                    <buttonCell key="cell" type="push" title="Download" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GFT-R4-NmO">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="81" id="hn7-lp-eYb"/>
+                    </constraints>
+                </button>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QOT-Q0-cfp">
+                    <rect key="frame" x="18" y="243" width="43" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="1.2 GB" id="FX9-hC-09t">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="color_date_text"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <progressIndicator hidden="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Hsn-Rv-xvr">
+                    <rect key="frame" x="266" y="241" width="121" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="5u1-oD-xJ1"/>
+                        <constraint firstAttribute="width" constant="121" id="Uxr-Td-Bwc"/>
+                    </constraints>
                 </progressIndicator>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="62V-Ib-05b">
+                    <rect key="frame" x="18" y="420" width="175" height="18"/>
+                    <buttonCell key="cell" type="check" title="Use artificial intelligence" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="h24-8U-lEI">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d56-yc-Cs9">
+                    <rect key="frame" x="18" y="342" width="371" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="367" id="5Ii-iS-Nvn"/>
+                    </constraints>
+                    <textFieldCell key="cell" id="cqL-RE-gCm">
+                        <font key="font" metaFont="system"/>
+                        <string key="title">Micro.blog will use its own servers, local models, or OpenAI to process some data, to help with automatic podcast transcripts, photo summaries, search, and other features. Micro.blog will never sell your data or use it for training.</string>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="8gg-Rq-iBz">
+                    <rect key="frame" x="20" y="319" width="367" height="5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="GeL-Xy-SRt"/>
+                    </constraints>
+                </box>
             </subviews>
-            <point key="canvasLocation" x="898" y="60"/>
+            <constraints>
+                <constraint firstItem="Hsn-Rv-xvr" firstAttribute="centerY" secondItem="QOT-Q0-cfp" secondAttribute="centerY" id="0tG-zh-BBY"/>
+                <constraint firstAttribute="trailing" secondItem="eEZ-Jq-sos" secondAttribute="trailing" constant="20" id="1ww-zk-euY"/>
+                <constraint firstItem="8gg-Rq-iBz" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" id="62W-Dj-6QJ"/>
+                <constraint firstItem="QOT-Q0-cfp" firstAttribute="top" secondItem="yhP-VB-i5g" secondAttribute="bottom" constant="10" id="C2K-rq-E5K"/>
+                <constraint firstAttribute="trailing" secondItem="Hsn-Rv-xvr" secondAttribute="trailing" constant="20" id="CiH-kv-swx"/>
+                <constraint firstItem="eEZ-Jq-sos" firstAttribute="centerY" secondItem="yhP-VB-i5g" secondAttribute="centerY" id="DW3-sT-J0C"/>
+                <constraint firstItem="yhP-VB-i5g" firstAttribute="top" secondItem="8gg-Rq-iBz" secondAttribute="bottom" constant="20" id="Sbo-TX-DW3"/>
+                <constraint firstItem="62V-Ib-05b" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" symbolic="YES" id="V5w-ps-rR4"/>
+                <constraint firstItem="QOT-Q0-cfp" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" id="daf-Ug-GM1"/>
+                <constraint firstItem="d56-yc-Cs9" firstAttribute="top" secondItem="62V-Ib-05b" secondAttribute="bottom" constant="15" id="g5w-Nr-dqQ"/>
+                <constraint firstItem="yhP-VB-i5g" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" id="ktL-dl-kwy"/>
+                <constraint firstItem="8gg-Rq-iBz" firstAttribute="top" secondItem="d56-yc-Cs9" secondAttribute="bottom" constant="20" id="oXw-vL-Myz"/>
+                <constraint firstItem="62V-Ib-05b" firstAttribute="top" secondItem="5Ww-w3-r1v" secondAttribute="top" constant="20" symbolic="YES" id="ohu-Nv-m4f"/>
+                <constraint firstAttribute="trailing" secondItem="d56-yc-Cs9" secondAttribute="trailing" constant="20" symbolic="YES" id="q9C-rv-C7N"/>
+                <constraint firstItem="d56-yc-Cs9" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" symbolic="YES" id="tFH-QS-sD2"/>
+                <constraint firstAttribute="trailing" secondItem="8gg-Rq-iBz" secondAttribute="trailing" constant="20" id="xQN-It-BGA"/>
+            </constraints>
+            <point key="canvasLocation" x="897" y="59.5"/>
         </customView>
     </objects>
     <resources>
@@ -642,5 +718,8 @@
         <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="note" catalog="system" width="16" height="14"/>
         <image name="robot_outline" width="50" height="50"/>
+        <namedColor name="color_date_text">
+            <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
