@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet NSToolbar* toolbar;
 @property (strong, nonatomic) IBOutlet NSView* generalPane;
 @property (strong, nonatomic) IBOutlet NSView* notesPane;
+@property (strong, nonatomic) IBOutlet NSView* robotsPane;
 
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
 @property (strong, nonatomic) IBOutlet NSBox* messageHeader;

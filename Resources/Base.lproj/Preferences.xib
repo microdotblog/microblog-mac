@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,6 +28,7 @@
                 <outlet property="qrCodeArrow" destination="PNT-6i-zu9" id="B8R-K7-gQc"/>
                 <outlet property="qrCodeInfo" destination="tuh-Zo-Onj" id="LAw-Jj-lWd"/>
                 <outlet property="qrCodeView" destination="QOm-co-d9F" id="qwG-Ud-Fyn"/>
+                <outlet property="robotsPane" destination="5Ww-w3-r1v" id="5LB-y1-afj"/>
                 <outlet property="showNotesKeyButton" destination="9i9-be-zbc" id="MDe-sb-53i"/>
                 <outlet property="textSizePopup" destination="W83-Xx-rHt" id="fZ5-0E-FFS"/>
                 <outlet property="toolbar" destination="0BJ-9c-nr7" id="hC5-j4-OnJ"/>
@@ -55,7 +56,7 @@
                             <rect key="frame" x="1" y="1" width="409" height="42"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UK6-9N-kOk">
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UK6-9N-kOk">
                                     <rect key="frame" x="18" y="12" width="372" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Message here." id="Vgn-fk-rMj">
@@ -79,7 +80,7 @@
                     <constraint firstItem="e0X-yV-XWC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="xBT-xn-WX9"/>
                 </constraints>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="0DFE76A8-CED5-4EF3-8A19-E8B54CF24807" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="0BJ-9c-nr7">
+            <toolbar key="toolbar" implicitIdentifier="0DFE76A8-CED5-4EF3-8A19-E8B54CF24807" autosavesConfiguration="NO" showsBaselineSeparator="NO" displayMode="iconAndLabel" sizeMode="regular" id="0BJ-9c-nr7">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="FB8B8808-76C4-408A-8CF7-A43150A7EFBF" explicitItemIdentifier="General" label="General" paletteLabel="General" tag="-1" image="gearshape" catalog="system" selectable="YES" id="K2G-iN-6st">
                         <size key="minSize" width="28" height="25"/>
@@ -95,10 +96,18 @@
                             <action selector="showNotesPane:" target="-2" id="jl0-Uo-DLQ"/>
                         </connections>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="D0C0804D-4CE7-4BFB-92B3-B0F51F198847" explicitItemIdentifier="Robots" label="AI" paletteLabel="AI" tag="-1" image="robot_outline" selectable="YES" id="oHA-3D-v4G">
+                        <size key="minSize" width="28" height="25"/>
+                        <size key="maxSize" width="28" height="25"/>
+                        <connections>
+                            <action selector="showRobotsPane:" target="-2" id="w0A-rB-kgX"/>
+                        </connections>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="K2G-iN-6st"/>
                     <toolbarItem reference="Zr9-2p-gjQ"/>
+                    <toolbarItem reference="oHA-3D-v4G"/>
                 </defaultToolbarItems>
             </toolbar>
             <point key="canvasLocation" x="-512.5" y="37.5"/>
@@ -117,7 +126,7 @@
                         <action selector="cloudCheckboxChanged:" target="-2" id="gju-a8-fec"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xT9-EZ-swE">
+                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xT9-EZ-swE">
                     <rect key="frame" x="18" y="373" width="373" height="64"/>
                     <textFieldCell key="cell" selectable="YES" id="mEM-79-LtA">
                         <font key="font" metaFont="system"/>
@@ -149,7 +158,7 @@
                         <action selector="saveSecretKey:" target="-2" id="ArC-OC-f6S"/>
                     </connections>
                 </button>
-                <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PpW-Zm-Vp1">
+                <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PpW-Zm-Vp1">
                     <rect key="frame" x="20" y="224" width="371" height="16"/>
                     <textFieldCell key="cell" selectable="YES" title="mkey123456789" id="8gd-1D-ici">
                         <font key="font" metaFont="system"/>
@@ -165,7 +174,7 @@
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="P4J-95-6hv"/>
                 </imageView>
-                <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Zo-Onj">
+                <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Zo-Onj">
                     <rect key="frame" x="240" y="99" width="130" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="126" id="ExI-gT-ECB"/>
@@ -177,7 +186,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNT-6i-zu9">
+                <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNT-6i-zu9">
                     <rect key="frame" x="205" y="114" width="24" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="H7f-1Y-mOc"/>
@@ -240,7 +249,7 @@
             <rect key="frame" x="0.0" y="0.0" width="409" height="457"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4SJ-Fv-70W">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4SJ-Fv-70W">
                     <rect key="frame" x="18" y="318" width="354" height="17"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="17" id="XpB-4n-j3x"/>
@@ -277,7 +286,7 @@
                         <action selector="setWordPressBlog:" target="-2" id="Sjo-Pc-TQ8"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ThW-eM-XLA">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ThW-eM-XLA">
                     <rect key="frame" x="14" y="202" width="95" height="24"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="QvC-H2-PBH"/>
@@ -289,7 +298,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eaN-LV-3cP">
+                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eaN-LV-3cP">
                     <rect key="frame" x="116" y="206" width="251" height="22"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="dKy-jq-e4o"/>
@@ -310,7 +319,7 @@
                         <constraint firstAttribute="height" constant="16" id="b3a-9x-V7n"/>
                     </constraints>
                 </progressIndicator>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fgW-ep-2gy">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fgW-ep-2gy">
                     <rect key="frame" x="14" y="160" width="95" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="91" id="4L5-ei-kkO"/>
@@ -326,7 +335,7 @@
                     <rect key="frame" x="112" y="161" width="260" height="26"/>
                     <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="7pf-nv-cYd" id="5vD-Ci-pFz">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" id="Tox-bs-ZFB">
                             <items>
                                 <menuItem title="Standard" state="on" id="7pf-nv-cYd">
@@ -369,7 +378,7 @@
                         <action selector="websiteReturnButtonPressed:" target="-2" id="5RB-8Z-9wV"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hqo-O7-Wox">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hqo-O7-Wox">
                     <rect key="frame" x="14" y="119" width="95" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="91" id="72i-Df-vdC"/>
@@ -385,7 +394,7 @@
                     <rect key="frame" x="112" y="120" width="260" height="26"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pBg-Bv-1VJ" id="Akz-U9-Jfl">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" id="l0j-U4-ASO">
                             <items>
                                 <menuItem state="on" id="pBg-Bv-1VJ">
@@ -401,7 +410,7 @@
                         <action selector="categoryChanged:" target="-2" id="BcZ-Oa-sJO"/>
                     </connections>
                 </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wjX-Sh-cc9">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wjX-Sh-cc9">
                     <rect key="frame" x="20" y="420" width="89" height="17"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="85" id="f9o-Gp-5FF"/>
@@ -417,7 +426,7 @@
                     <rect key="frame" x="112" y="414" width="260" height="26"/>
                     <popUpButtonCell key="cell" type="push" title="Tiny" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="7KB-Lf-qAC" id="pBj-OS-3c7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" id="6ir-95-rhC">
                             <items>
                                 <menuItem title="Tiny" state="on" id="7KB-Lf-qAC">
@@ -445,7 +454,7 @@
                         <constraint firstAttribute="height" constant="1" id="NqD-Tf-oZU"/>
                     </constraints>
                 </box>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7KU-A7-PmQ">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7KU-A7-PmQ">
                     <rect key="frame" x="14" y="372" width="95" height="17"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="17" id="2mk-qs-iRP"/>
@@ -492,7 +501,7 @@
                         <constraint firstAttribute="height" constant="1" id="cBg-AI-91Z"/>
                     </constraints>
                 </box>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-C6-Z1x" userLabel="Day On Descrription Label">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-C6-Z1x" userLabel="Day On Descrription Label">
                     <rect key="frame" x="18" y="62" width="373" height="17"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="17" id="bNB-fp-mFM"/>
@@ -503,7 +512,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4rz-Io-E7o" userLabel="Day One Journal Label">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4rz-Io-E7o" userLabel="Day One Journal Label">
                     <rect key="frame" x="14" y="18" width="95" height="24"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="DHq-KO-7d1"/>
@@ -515,7 +524,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uaa-gd-eFu" userLabel="Day One Journal">
+                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uaa-gd-eFu" userLabel="Day One Journal">
                     <rect key="frame" x="116" y="22" width="251" height="22"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="JHD-p6-bHc"/>
@@ -614,12 +623,24 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="774" y="-142"/>
+            <point key="canvasLocation" x="646" y="-255"/>
         </menu>
+        <customView id="5Ww-w3-r1v">
+            <rect key="frame" x="0.0" y="0.0" width="409" height="457"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="XDS-Sc-l7h">
+                    <rect key="frame" x="147" y="389" width="100" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </progressIndicator>
+            </subviews>
+            <point key="canvasLocation" x="898" y="60"/>
+        </customView>
     </objects>
     <resources>
         <image name="folder.fill" catalog="system" width="18" height="14"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="note" catalog="system" width="16" height="14"/>
+        <image name="robot_outline" width="50" height="50"/>
     </resources>
 </document>

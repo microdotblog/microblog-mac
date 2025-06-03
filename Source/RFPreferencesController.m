@@ -351,6 +351,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) showGeneralPane:(id)sender
 {
 	self.notesPane.hidden = YES;
+	self.robotsPane.hidden = YES;
 	[self.window.contentView addSubview:self.generalPane];
 	[self.generalPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.generalPane.hidden = NO;
@@ -359,9 +360,19 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) showNotesPane:(id)sender
 {
 	self.generalPane.hidden = YES;
+	self.robotsPane.hidden = YES;
 	[self.window.contentView addSubview:self.notesPane];
 	[self.notesPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.notesPane.hidden = NO;
+}
+
+- (IBAction) showRobotsPane:(id)sender
+{
+	self.generalPane.hidden = YES;
+	self.notesPane.hidden = YES;
+	[self.window.contentView addSubview:self.robotsPane];
+	[self.robotsPane setFrameOrigin:NSMakePoint(0, 0)];
+	self.robotsPane.hidden = NO;
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
