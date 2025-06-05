@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 73;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -677,8 +677,51 @@
 		C549E92321EEB75600730675 /* RFAutoCompleteCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAutoCompleteCache.m; path = Source/RFAutoCompleteCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		4BA452EC2DF1E66E002994C5 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			attributesByRelativePath = {
+				"libggml-base.dylib" = (
+					CodeSignOnCopy,
+				);
+				"libggml-blas.dylib" = (
+					CodeSignOnCopy,
+				);
+				"libggml-cpu.dylib" = (
+					CodeSignOnCopy,
+				);
+				"libggml-metal.dylib" = (
+					CodeSignOnCopy,
+				);
+				libggml.dylib = (
+					CodeSignOnCopy,
+				);
+				libllama.dylib = (
+					CodeSignOnCopy,
+				);
+				libllava_shared.dylib = (
+					CodeSignOnCopy,
+				);
+				libmtmd_shared.dylib = (
+					CodeSignOnCopy,
+				);
+			};
+			buildPhase = 4BE541211BDEA34800E1868B /* CopyFiles */;
+			membershipExceptions = (
+				"libggml-base.dylib",
+				"libggml-blas.dylib",
+				"libggml-cpu.dylib",
+				"libggml-metal.dylib",
+				libggml.dylib,
+				libllama.dylib,
+				libllava_shared.dylib,
+				libmtmd_shared.dylib,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4BA452DF2DF1DFE7002994C5 /* Llama.cpp */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = Llama.cpp; path = Shared/Llama.cpp; sourceTree = "<group>"; };
+		4BA452DF2DF1DFE7002994C5 /* Llama.cpp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BA452EC2DF1E66E002994C5 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); name = Llama.cpp; path = Shared/Llama.cpp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1292,7 +1335,6 @@
 				};
 			};
 			buildConfigurationList = 4B7F0AD31BAF4B77004553A6 /* Build configuration list for PBXProject "Micro.blog for Mac" */;
-			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1303,6 +1345,7 @@
 			packageReferences = (
 				4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
+			preferredProjectObjectVersion = 46;
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

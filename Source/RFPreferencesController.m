@@ -24,7 +24,6 @@
 #import "NSAlert+Extras.h"
 #import <CoreImage/CoreImage.h>
 #import <sys/sysctl.h>
-#import "MBLlama.h"
 
 static CGFloat const kWordPressMenusHeight = 100;
 static CGFloat const kDayOneSettingsPadding = 15;
@@ -40,8 +39,6 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 {
 	self = [super initWithWindowNibName:@"Preferences"];
 	if (self) {
-		MBLlama* llm = [[MBLlama alloc] initWithPath:@"/tmp/asdf"];
-		[llm runPrompt:@"hello are you there?"];
 	}
 	
 	return self;
