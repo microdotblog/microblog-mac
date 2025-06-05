@@ -691,6 +691,9 @@
                         <constraint firstAttribute="height" constant="1" id="GeL-Xy-SRt"/>
                     </constraints>
                 </box>
+                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="g7R-og-fSr">
+                    <rect key="frame" x="371" y="421" width="16" height="16"/>
+                </progressIndicator>
             </subviews>
             <constraints>
                 <constraint firstItem="Hsn-Rv-xvr" firstAttribute="centerY" secondItem="QOT-Q0-cfp" secondAttribute="centerY" id="0tG-zh-BBY"/>
@@ -699,10 +702,12 @@
                 <constraint firstItem="QOT-Q0-cfp" firstAttribute="top" secondItem="yhP-VB-i5g" secondAttribute="bottom" constant="10" id="C2K-rq-E5K"/>
                 <constraint firstAttribute="trailing" secondItem="Hsn-Rv-xvr" secondAttribute="trailing" constant="20" id="CiH-kv-swx"/>
                 <constraint firstItem="eEZ-Jq-sos" firstAttribute="centerY" secondItem="yhP-VB-i5g" secondAttribute="centerY" id="DW3-sT-J0C"/>
+                <constraint firstItem="g7R-og-fSr" firstAttribute="top" secondItem="5Ww-w3-r1v" secondAttribute="top" constant="20" symbolic="YES" id="Ejm-JJ-MUk"/>
                 <constraint firstItem="yhP-VB-i5g" firstAttribute="top" secondItem="8gg-Rq-iBz" secondAttribute="bottom" constant="20" id="Sbo-TX-DW3"/>
                 <constraint firstItem="62V-Ib-05b" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" symbolic="YES" id="V5w-ps-rR4"/>
                 <constraint firstItem="QOT-Q0-cfp" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" id="daf-Ug-GM1"/>
                 <constraint firstItem="d56-yc-Cs9" firstAttribute="top" secondItem="62V-Ib-05b" secondAttribute="bottom" constant="15" id="g5w-Nr-dqQ"/>
+                <constraint firstAttribute="trailing" secondItem="g7R-og-fSr" secondAttribute="trailing" constant="20" symbolic="YES" id="jDD-qz-qL6"/>
                 <constraint firstItem="yhP-VB-i5g" firstAttribute="leading" secondItem="5Ww-w3-r1v" secondAttribute="leading" constant="20" id="ktL-dl-kwy"/>
                 <constraint firstItem="8gg-Rq-iBz" firstAttribute="top" secondItem="d56-yc-Cs9" secondAttribute="bottom" constant="20" id="oXw-vL-Myz"/>
                 <constraint firstItem="62V-Ib-05b" firstAttribute="top" secondItem="5Ww-w3-r1v" secondAttribute="top" constant="20" symbolic="YES" id="ohu-Nv-m4f"/>
