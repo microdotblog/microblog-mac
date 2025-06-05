@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -170,14 +170,7 @@
 		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
 		4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */; };
-		4BA4528D2DF1DF7E002994C5 /* libggml-base.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA452852DF1DF7E002994C5 /* libggml-base.dylib */; };
-		4BA4528E2DF1DF7E002994C5 /* libmtmd_shared.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA4528B2DF1DF7E002994C5 /* libmtmd_shared.dylib */; };
-		4BA4528F2DF1DF7E002994C5 /* libllava_shared.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA4528A2DF1DF7E002994C5 /* libllava_shared.dylib */; };
-		4BA452902DF1DF7E002994C5 /* libggml-metal.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA452882DF1DF7E002994C5 /* libggml-metal.dylib */; };
-		4BA452912DF1DF7E002994C5 /* libggml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA452842DF1DF7E002994C5 /* libggml.dylib */; };
-		4BA452922DF1DF7E002994C5 /* libggml-cpu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA452872DF1DF7E002994C5 /* libggml-cpu.dylib */; };
-		4BA452932DF1DF7E002994C5 /* libggml-blas.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA452862DF1DF7E002994C5 /* libggml-blas.dylib */; };
-		4BA452942DF1DF7E002994C5 /* libllama.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA452892DF1DF7E002994C5 /* libllama.dylib */; };
+		4BA452EA2DF1E029002994C5 /* MBLlama.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA452E92DF1E029002994C5 /* MBLlama.m */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
@@ -558,32 +551,8 @@
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
 		4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSColor+Extras.h"; path = "Source/NSColor+Extras.h"; sourceTree = "<group>"; };
 		4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extras.m"; path = "Source/NSColor+Extras.m"; sourceTree = "<group>"; };
-		4BA4526F2DF1DF7E002994C5 /* ggml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ggml.h; sourceTree = "<group>"; };
-		4BA452702DF1DF7E002994C5 /* ggml-alloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-alloc.h"; sourceTree = "<group>"; };
-		4BA452712DF1DF7E002994C5 /* ggml-backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-backend.h"; sourceTree = "<group>"; };
-		4BA452722DF1DF7E002994C5 /* ggml-blas.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-blas.h"; sourceTree = "<group>"; };
-		4BA452732DF1DF7E002994C5 /* ggml-cann.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-cann.h"; sourceTree = "<group>"; };
-		4BA452742DF1DF7E002994C5 /* ggml-cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-cpp.h"; sourceTree = "<group>"; };
-		4BA452752DF1DF7E002994C5 /* ggml-cpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-cpu.h"; sourceTree = "<group>"; };
-		4BA452762DF1DF7E002994C5 /* ggml-cuda.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-cuda.h"; sourceTree = "<group>"; };
-		4BA452772DF1DF7E002994C5 /* ggml-kompute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-kompute.h"; sourceTree = "<group>"; };
-		4BA452782DF1DF7E002994C5 /* ggml-metal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-metal.h"; sourceTree = "<group>"; };
-		4BA452792DF1DF7E002994C5 /* ggml-opencl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-opencl.h"; sourceTree = "<group>"; };
-		4BA4527A2DF1DF7E002994C5 /* ggml-opt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-opt.h"; sourceTree = "<group>"; };
-		4BA4527B2DF1DF7E002994C5 /* ggml-rpc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-rpc.h"; sourceTree = "<group>"; };
-		4BA4527C2DF1DF7E002994C5 /* ggml-sycl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-sycl.h"; sourceTree = "<group>"; };
-		4BA4527D2DF1DF7E002994C5 /* ggml-vulkan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ggml-vulkan.h"; sourceTree = "<group>"; };
-		4BA4527E2DF1DF7E002994C5 /* gguf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gguf.h; sourceTree = "<group>"; };
-		4BA452812DF1DF7E002994C5 /* llama.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = llama.h; sourceTree = "<group>"; };
-		4BA452822DF1DF7E002994C5 /* llama-cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "llama-cpp.h"; sourceTree = "<group>"; };
-		4BA452842DF1DF7E002994C5 /* libggml.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libggml.dylib; sourceTree = "<group>"; };
-		4BA452852DF1DF7E002994C5 /* libggml-base.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libggml-base.dylib"; sourceTree = "<group>"; };
-		4BA452862DF1DF7E002994C5 /* libggml-blas.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libggml-blas.dylib"; sourceTree = "<group>"; };
-		4BA452872DF1DF7E002994C5 /* libggml-cpu.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libggml-cpu.dylib"; sourceTree = "<group>"; };
-		4BA452882DF1DF7E002994C5 /* libggml-metal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libggml-metal.dylib"; sourceTree = "<group>"; };
-		4BA452892DF1DF7E002994C5 /* libllama.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libllama.dylib; sourceTree = "<group>"; };
-		4BA4528A2DF1DF7E002994C5 /* libllava_shared.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libllava_shared.dylib; sourceTree = "<group>"; };
-		4BA4528B2DF1DF7E002994C5 /* libmtmd_shared.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmtmd_shared.dylib; sourceTree = "<group>"; };
+		4BA452E82DF1E029002994C5 /* MBLlama.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBLlama.h; sourceTree = "<group>"; };
+		4BA452E92DF1E029002994C5 /* MBLlama.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBLlama.m; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSummaryBackgroundView.h; path = Source/MBSummaryBackgroundView.h; sourceTree = "<group>"; };
@@ -708,19 +677,15 @@
 		C549E92321EEB75600730675 /* RFAutoCompleteCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAutoCompleteCache.m; path = Source/RFAutoCompleteCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4BA452DF2DF1DFE7002994C5 /* Llama.cpp */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = Llama.cpp; path = Shared/Llama.cpp; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		4B7F0AD51BAF4B77004553A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BA4528D2DF1DF7E002994C5 /* libggml-base.dylib in Frameworks */,
-				4BA4528E2DF1DF7E002994C5 /* libmtmd_shared.dylib in Frameworks */,
-				4BA4528F2DF1DF7E002994C5 /* libllava_shared.dylib in Frameworks */,
-				4BA452902DF1DF7E002994C5 /* libggml-metal.dylib in Frameworks */,
-				4BA452912DF1DF7E002994C5 /* libggml.dylib in Frameworks */,
-				4BA452922DF1DF7E002994C5 /* libggml-cpu.dylib in Frameworks */,
-				4BA452932DF1DF7E002994C5 /* libggml-blas.dylib in Frameworks */,
-				4BA452942DF1DF7E002994C5 /* libllama.dylib in Frameworks */,
 				4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */,
 				4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */,
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
@@ -1146,6 +1111,8 @@
 				4B79E29B2D0B93FA00A22861 /* MBCollectionsTable.m */,
 				4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */,
 				4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */,
+				4BA452E82DF1E029002994C5 /* MBLlama.h */,
+				4BA452E92DF1E029002994C5 /* MBLlama.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1230,7 +1197,7 @@
 		4B8FBDD71F867A1D00906C86 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				4BA4528C2DF1DF7E002994C5 /* Llama.cpp */,
+				4BA452DF2DF1DFE7002994C5 /* Llama.cpp */,
 				4B2A47BF22579C46003AF2EC /* SDAVAssetExport */,
 				4BC826CF1FAB663700A58AD4 /* SAMKeychain */,
 				4B2CAAC71F90655A00D9B10E /* CTidy */,
@@ -1262,64 +1229,6 @@
 			name = UUToolbox;
 			sourceTree = "<group>";
 		};
-		4BA4527F2DF1DF7E002994C5 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4BA4526F2DF1DF7E002994C5 /* ggml.h */,
-				4BA452702DF1DF7E002994C5 /* ggml-alloc.h */,
-				4BA452712DF1DF7E002994C5 /* ggml-backend.h */,
-				4BA452722DF1DF7E002994C5 /* ggml-blas.h */,
-				4BA452732DF1DF7E002994C5 /* ggml-cann.h */,
-				4BA452742DF1DF7E002994C5 /* ggml-cpp.h */,
-				4BA452752DF1DF7E002994C5 /* ggml-cpu.h */,
-				4BA452762DF1DF7E002994C5 /* ggml-cuda.h */,
-				4BA452772DF1DF7E002994C5 /* ggml-kompute.h */,
-				4BA452782DF1DF7E002994C5 /* ggml-metal.h */,
-				4BA452792DF1DF7E002994C5 /* ggml-opencl.h */,
-				4BA4527A2DF1DF7E002994C5 /* ggml-opt.h */,
-				4BA4527B2DF1DF7E002994C5 /* ggml-rpc.h */,
-				4BA4527C2DF1DF7E002994C5 /* ggml-sycl.h */,
-				4BA4527D2DF1DF7E002994C5 /* ggml-vulkan.h */,
-				4BA4527E2DF1DF7E002994C5 /* gguf.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		4BA452802DF1DF7E002994C5 /* ggml */ = {
-			isa = PBXGroup;
-			children = (
-				4BA4527F2DF1DF7E002994C5 /* include */,
-			);
-			path = ggml;
-			sourceTree = "<group>";
-		};
-		4BA452832DF1DF7E002994C5 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4BA452812DF1DF7E002994C5 /* llama.h */,
-				4BA452822DF1DF7E002994C5 /* llama-cpp.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		4BA4528C2DF1DF7E002994C5 /* Llama.cpp */ = {
-			isa = PBXGroup;
-			children = (
-				4BA452802DF1DF7E002994C5 /* ggml */,
-				4BA452832DF1DF7E002994C5 /* include */,
-				4BA452842DF1DF7E002994C5 /* libggml.dylib */,
-				4BA452852DF1DF7E002994C5 /* libggml-base.dylib */,
-				4BA452862DF1DF7E002994C5 /* libggml-blas.dylib */,
-				4BA452872DF1DF7E002994C5 /* libggml-cpu.dylib */,
-				4BA452882DF1DF7E002994C5 /* libggml-metal.dylib */,
-				4BA452892DF1DF7E002994C5 /* libllama.dylib */,
-				4BA4528A2DF1DF7E002994C5 /* libllava_shared.dylib */,
-				4BA4528B2DF1DF7E002994C5 /* libmtmd_shared.dylib */,
-			);
-			name = Llama.cpp;
-			path = Shared/Llama.cpp;
-			sourceTree = "<group>";
-		};
 		4BC826CF1FAB663700A58AD4 /* SAMKeychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -1348,6 +1257,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4BA452DF2DF1DFE7002994C5 /* Llama.cpp */,
 			);
 			name = Micro.blog;
 			packageProductDependencies = (
@@ -1584,6 +1496,7 @@
 				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
 				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
+				4BA452EA2DF1E029002994C5 /* MBLlama.m in Sources */,
 				4B3840D4269203B400AD3781 /* RFDayOneExportController.m in Sources */,
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
 				4B3840D72696223E00AD3781 /* RFWordPressExportController.m in Sources */,
