@@ -14,10 +14,12 @@
                 <outlet property="categoryPopup" destination="2AP-RA-v1x" id="Qbu-6k-Y0H"/>
                 <outlet property="dayOneJournalNameField" destination="Uaa-gd-eFu" id="Xdy-rG-Gb7"/>
                 <outlet property="dayOneReturnButton" destination="t95-rG-Mb1" id="oOE-FP-KA7"/>
+                <outlet property="downloadButton" destination="eEZ-Jq-sos" id="xBX-Ic-hjK"/>
                 <outlet property="generalPane" destination="aU5-ED-gYs" id="iJe-Cj-ASC"/>
                 <outlet property="messageField" destination="UK6-9N-kOk" id="6BJ-sH-62d"/>
                 <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
                 <outlet property="messageTopConstraint" destination="xBT-xn-WX9" id="drj-is-oYf"/>
+                <outlet property="modelProgressBar" destination="Hsn-Rv-xvr" id="GWF-6c-lPT"/>
                 <outlet property="notesCloudCheckbox" destination="lFS-tK-LeF" id="SLi-j5-MN3"/>
                 <outlet property="notesFolderCheckbox" destination="vbd-mb-sxh" id="kck-Ds-w6Z"/>
                 <outlet property="notesKeyField" destination="PpW-Zm-Vp1" id="fbV-fz-iwN"/>
@@ -31,6 +33,7 @@
                 <outlet property="qrCodeView" destination="QOm-co-d9F" id="qwG-Ud-Fyn"/>
                 <outlet property="robotsPane" destination="5Ww-w3-r1v" id="5LB-y1-afj"/>
                 <outlet property="showNotesKeyButton" destination="9i9-be-zbc" id="MDe-sb-53i"/>
+                <outlet property="sizeField" destination="QOT-Q0-cfp" id="0f7-hA-0mF"/>
                 <outlet property="textSizePopup" destination="W83-Xx-rHt" id="fZ5-0E-FFS"/>
                 <outlet property="toolbar" destination="0BJ-9c-nr7" id="hC5-j4-OnJ"/>
                 <outlet property="websiteField" destination="eaN-LV-3cP" id="s5B-46-EC1"/>
@@ -650,6 +653,9 @@
                     <constraints>
                         <constraint firstAttribute="width" constant="81" id="hn7-lp-eYb"/>
                     </constraints>
+                    <connections>
+                        <action selector="downloadModel:" target="-2" id="9nF-5N-4Ud"/>
+                    </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QOT-Q0-cfp">
                     <rect key="frame" x="18" y="243" width="43" height="16"/>

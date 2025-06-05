@@ -11,7 +11,7 @@
 @class RFAccount;
 @class RFWordpressController;
 
-@interface RFPreferencesController : NSWindowController <NSTextFieldDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
+@interface RFPreferencesController : NSWindowController <NSTextFieldDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSURLSessionDownloadDelegate>
 
 @property (strong, nonatomic) IBOutlet NSToolbar* toolbar;
 @property (strong, nonatomic) IBOutlet NSView* generalPane;
@@ -45,12 +45,25 @@
 @property (strong, nonatomic) IBOutlet NSTextField* qrCodeArrow;
 @property (strong, nonatomic) IBOutlet NSTextField* qrCodeInfo;
 
+@property (strong, nonatomic) IBOutlet NSButton* downloadButton;
+@property (strong, nonatomic) IBOutlet NSTextField* sizeField;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* modelProgressBar;
+
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;
 @property (assign, nonatomic) BOOL hasLoadedCategories;
 @property (assign, nonatomic) BOOL isShowingWordPressMenus;
 @property (strong, nonatomic) NSArray* accounts; // RFAccount
 @property (strong, nonatomic) RFAccount* selectedAccount;
+
+@property (strong, nullable) NSURLSession* downloadSession;
+@property (strong, nullable) NSURLSessionDownloadTask* downloadTask;
+@property (copy, nullable) NSString* modelDestinationPath;
+@property (strong, nullable) NSTimer* sizeUpdateTimer;
+@property (copy, nullable) NSString* latestDownloadedString;
+@property (strong, nullable) NSDate* downloadStartDate;
+@property (assign) int64_t expectedBytes;
+@property (assign) NSTimeInterval remainingSeconds;
 
 - (void) showMessage:(NSString *)message;
 
