@@ -194,19 +194,25 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 	self.sizeField.stringValue = kModelDownloadSize;
 	
 	if ([self hasModel]) {
-		// hide pane?
+		self.modelStatusField.stringValue = @"Micro.blog can run some AI tasks on your Mac. The model has been downloaded.";
+		[self.downloadButton setTitle:@"Delete"];
 	}
-	else if (![self hasSupportedHardware]) {
-		self.downloadButton.enabled = NO;
-		self.sizeField.stringValue = @"Requires Apple M1 or later.";
-	}
-	else if (![self hasSupportedMemory]) {
-		self.downloadButton.enabled = NO;
-		self.sizeField.stringValue = @"Requires at least 16 GB of RAM.";
-	}
-	else if (![self hasAvailableSpace]) {
-		self.downloadButton.enabled = NO;
-		self.sizeField.stringValue = @"Requires 3 GB of available disk space.";
+	else {
+		self.modelStatusField.stringValue = @"Micro.blog can run some AI tasks on your Mac. Download the local model?";
+		[self.downloadButton setTitle:@"Download"];
+
+		if (![self hasSupportedHardware]) {
+			self.downloadButton.enabled = NO;
+			self.sizeField.stringValue = @"Requires Apple M1 or later.";
+		}
+		else if (![self hasSupportedMemory]) {
+			self.downloadButton.enabled = NO;
+			self.sizeField.stringValue = @"Requires at least 16 GB of RAM.";
+		}
+		else if (![self hasAvailableSpace]) {
+			self.downloadButton.enabled = NO;
+			self.sizeField.stringValue = @"Requires 3 GB of available disk space.";
+		}
 	}
 }
 
@@ -787,6 +793,9 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 		[self.sizeUpdateTimer invalidate];
 		self.sizeUpdateTimer = nil;
 	}
+	else if ([self hasModel]) {
+		[self deleteModel];
+	}
 	else {
 		[self startDownload];
 	}
@@ -918,6 +927,21 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 - (void) finishedDownload
 {
 	[self setupModelInfo];
+}
+
+- (void) deleteModel
+{
+	[self.downloadButton setTitle:@"Download"];
+	
+	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
+	NSURL* folder_url = [self modelsFolderURL];
+	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
+	
+	NSFileManager* fm = [NSFileManager defaultManager];
+	BOOL is_dir = NO;
+	if ([fm fileExistsAtPath:dest_url.path isDirectory:&is_dir] && !is_dir) {
+		[fm removeItemAtPath:dest_url.path error:NULL];
+	}
 }
 
 - (NSString *) formattedRemainingTime

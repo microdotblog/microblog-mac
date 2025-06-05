@@ -20,6 +20,7 @@
                 <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
                 <outlet property="messageTopConstraint" destination="xBT-xn-WX9" id="drj-is-oYf"/>
                 <outlet property="modelProgressBar" destination="Hsn-Rv-xvr" id="GWF-6c-lPT"/>
+                <outlet property="modelStatusField" destination="yhP-VB-i5g" id="KFI-eh-lEe"/>
                 <outlet property="notesCloudCheckbox" destination="lFS-tK-LeF" id="SLi-j5-MN3"/>
                 <outlet property="notesFolderCheckbox" destination="vbd-mb-sxh" id="kck-Ds-w6Z"/>
                 <outlet property="notesKeyField" destination="PpW-Zm-Vp1" id="fbV-fz-iwN"/>
@@ -650,9 +651,6 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="81" id="hn7-lp-eYb"/>
-                    </constraints>
                     <connections>
                         <action selector="downloadModel:" target="-2" id="9nF-5N-4Ud"/>
                     </connections>

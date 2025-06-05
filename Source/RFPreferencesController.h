@@ -47,6 +47,7 @@
 
 @property (strong, nonatomic) IBOutlet NSButton* downloadButton;
 @property (strong, nonatomic) IBOutlet NSTextField* sizeField;
+@property (strong, nonatomic) IBOutlet NSTextField* modelStatusField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* modelProgressBar;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
