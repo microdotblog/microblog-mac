@@ -17,6 +17,7 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "RFWordpressController.h"
+#import "MBLlama.h"
 #import "NSString+Extras.h"
 #import "UUHttpSession.h"
 #import "UUString.h"
@@ -32,6 +33,10 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 static NSString* const kModelDownloadURL = @"https://s3.amazonaws.com/micro.blog/models/gemma-3-4b-it-Q5_K_M.gguf";
 static NSString* const kModelDownloadSize = @"2.8 GB";
+static NSString* const kMmprojDownloadURL = @"https://s3.amazonaws.com/micro.blog/models/gemma-3-4b-mmproj-F16.gguf";
+static NSString* const kMmprojDownloadSize = @"700 MB";
+
+// @"gemma-3-4b-mmproj-F16.gguf"
 
 @implementation RFPreferencesController
 
@@ -58,16 +63,22 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 	[self setupWebsiteField];
 	[self setupDayOneField];
 	[self setupNotesCheckboxes];
-		
+	
 	[self setupModelInfo];
-
+	
 	[self updateRadioButtons];
 	[self updateMenus];
-
+	
 	[self hideMessage];
 	[self hideWordPressMenus];
 	
 	[self showGeneralPane:nil];
+
+//	NSString* model_path = [self modelPath];
+//	NSString* mmproj_path = [self mmprojPath];
+//	MBLlama* llm = [[MBLlama alloc] initWithModelPath:model_path mmprojPath:mmproj_path];
+//	NSString* s = [llm runPrompt:@"Describe this image in one sentence. <image>" withImage:@"..."];
+//	NSLog(@"LLM output: %@", s);
 }
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
@@ -803,12 +814,9 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 
 - (BOOL) hasModel
 {
-	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
-	NSURL* folder_url = [self modelsFolderURL];
-	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
-
+	NSString* model_path = [self modelPath];
 	NSFileManager* fm = [NSFileManager defaultManager];
-	return [fm fileExistsAtPath:dest_url.path];
+	return [fm fileExistsAtPath:model_path];
 }
 
 - (BOOL) hasAvailableSpace
@@ -869,12 +877,28 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 	return folder_url;
 }
 
-- (void) startDownload
+- (NSString *) modelPath
 {
 	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
 	NSURL* folder_url = [self modelsFolderURL];
 	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
-	self.modelDestinationPath = dest_url.path;
+	
+	return dest_url.path;
+}
+
+- (NSString *) mmprojPath
+{
+	NSURL* url = [NSURL URLWithString:kMmprojDownloadURL];
+	NSURL* folder_url = [self modelsFolderURL];
+	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
+	
+	return dest_url.path;
+}
+
+- (void) startDownload
+{
+	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
+	self.modelDestinationPath = [self modelPath];
 	
 	// configure and show progress bar
 	self.modelProgressBar.minValue = 0.0;
@@ -932,15 +956,12 @@ static NSString* const kModelDownloadSize = @"2.8 GB";
 - (void) deleteModel
 {
 	[self.downloadButton setTitle:@"Download"];
-	
-	NSURL* url = [NSURL URLWithString:kModelDownloadURL];
-	NSURL* folder_url = [self modelsFolderURL];
-	NSURL* dest_url = [folder_url URLByAppendingPathComponent:url.lastPathComponent];
-	
+
+	NSString* model_path = [self modelPath];
 	NSFileManager* fm = [NSFileManager defaultManager];
 	BOOL is_dir = NO;
-	if ([fm fileExistsAtPath:dest_url.path isDirectory:&is_dir] && !is_dir) {
-		[fm removeItemAtPath:dest_url.path error:NULL];
+	if ([fm fileExistsAtPath:model_path isDirectory:&is_dir] && !is_dir) {
+		[fm removeItemAtPath:model_path error:NULL];
 	}
 }
 

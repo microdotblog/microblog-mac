@@ -107,7 +107,7 @@ extern "C" {
 
     // get parameters for an optimization context with defaults set where possible
     // parameters for which no sensible defaults exist are supplied as arguments to this function
-    GGML_API ggml_opt_params ggml_opt_default_params(
+GGML_API struct ggml_opt_params ggml_opt_default_params(
             ggml_backend_sched_t      backend_sched,
             struct ggml_context     * ctx_compute,
             struct ggml_tensor      * inputs,
@@ -200,9 +200,9 @@ extern "C" {
     // fit model defined by inputs and outputs to dataset
     GGML_API void ggml_opt_fit(
             ggml_backend_sched_t            backend_sched,  // backend scheduler for constructing the compute graphs
-            ggml_context                  * ctx_compute,    // context with temporarily allocated tensors to calculate the outputs
-            ggml_tensor                   * inputs,         // input tensor with shape [ne_datapoint, ndata_batch]
-            ggml_tensor                   * outputs,        // output tensor, must have shape [ne_label, ndata_batch] if labels are used
+							   struct ggml_context                  * ctx_compute,    // context with temporarily allocated tensors to calculate the outputs
+							   struct ggml_tensor                   * inputs,         // input tensor with shape [ne_datapoint, ndata_batch]
+							   struct ggml_tensor                   * outputs,        // output tensor, must have shape [ne_label, ndata_batch] if labels are used
             ggml_opt_dataset_t              dataset,        // dataset with data and optionally also labels
             enum ggml_opt_loss_type         loss_type,      // loss to minimize
             ggml_opt_get_optimizer_params   get_opt_pars,   // callback to get optimizer params, userdata is pointer to epoch (of type int64_t)

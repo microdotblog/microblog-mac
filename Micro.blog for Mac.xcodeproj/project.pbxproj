@@ -170,7 +170,7 @@
 		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
 		4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */; };
-		4BA452EA2DF1E029002994C5 /* MBLlama.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA452E92DF1E029002994C5 /* MBLlama.m */; };
+		4BA452EA2DF1E029002994C5 /* MBLlama.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BA452E92DF1E029002994C5 /* MBLlama.mm */; };
 		4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA983651FA21FF000E230CC /* RFPostContainerView.m */; };
 		4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */; };
 		4BB5B50521EE4F3C0095F903 /* RFButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50421EE4F3C0095F903 /* RFButton.m */; };
@@ -551,8 +551,8 @@
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
 		4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSColor+Extras.h"; path = "Source/NSColor+Extras.h"; sourceTree = "<group>"; };
 		4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extras.m"; path = "Source/NSColor+Extras.m"; sourceTree = "<group>"; };
-		4BA452E82DF1E029002994C5 /* MBLlama.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBLlama.h; sourceTree = "<group>"; };
-		4BA452E92DF1E029002994C5 /* MBLlama.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBLlama.m; sourceTree = "<group>"; };
+		4BA452E82DF1E029002994C5 /* MBLlama.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLlama.h; path = Source/MBLlama.h; sourceTree = "<group>"; };
+		4BA452E92DF1E029002994C5 /* MBLlama.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MBLlama.mm; path = Source/MBLlama.mm; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSummaryBackgroundView.h; path = Source/MBSummaryBackgroundView.h; sourceTree = "<group>"; };
@@ -677,36 +677,9 @@
 		C549E92321EEB75600730675 /* RFAutoCompleteCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAutoCompleteCache.m; path = Source/RFAutoCompleteCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		4BA452EC2DF1E66E002994C5 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			attributesByRelativePath = {
-				"libggml-base.dylib" = (
-					CodeSignOnCopy,
-				);
-				"libggml-blas.dylib" = (
-					CodeSignOnCopy,
-				);
-				"libggml-cpu.dylib" = (
-					CodeSignOnCopy,
-				);
-				"libggml-metal.dylib" = (
-					CodeSignOnCopy,
-				);
-				libggml.dylib = (
-					CodeSignOnCopy,
-				);
-				libllama.dylib = (
-					CodeSignOnCopy,
-				);
-				libllava_shared.dylib = (
-					CodeSignOnCopy,
-				);
-				libmtmd_shared.dylib = (
-					CodeSignOnCopy,
-				);
-			};
-			buildPhase = 4BE541211BDEA34800E1868B /* CopyFiles */;
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4BA453BD2DF396B5002994C5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"libggml-base.dylib",
 				"libggml-blas.dylib",
@@ -716,12 +689,32 @@
 				libllama.dylib,
 				libllava_shared.dylib,
 				libmtmd_shared.dylib,
+				"mtmd/deprecation-warning.cpp",
+				"mtmd/mtmd-cli.cpp",
+				"mtmd/mtmd-helper.cpp",
+			);
+			target = 4B7F0AD71BAF4B77004553A6 /* Micro.blog */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		4BA453632DF37EEA002994C5 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			attributesByRelativePath = {
+				framework/llama.xcframework = (
+					CodeSignOnCopy,
+					RemoveHeadersOnCopy,
+				);
+			};
+			buildPhase = 4BE541211BDEA34800E1868B /* CopyFiles */;
+			membershipExceptions = (
+				framework/llama.xcframework,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4BA452DF2DF1DFE7002994C5 /* Llama.cpp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BA452EC2DF1E66E002994C5 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); name = Llama.cpp; path = Shared/Llama.cpp; sourceTree = "<group>"; };
+		4BA452DF2DF1DFE7002994C5 /* Llama.cpp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BA453BD2DF396B5002994C5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4BA453632DF37EEA002994C5 /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); name = Llama.cpp; path = Shared/Llama.cpp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1155,7 +1148,7 @@
 				4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */,
 				4BABBF8A2D77983600919DEC /* MBSummaryBackgroundView.m */,
 				4BA452E82DF1E029002994C5 /* MBLlama.h */,
-				4BA452E92DF1E029002994C5 /* MBLlama.m */,
+				4BA452E92DF1E029002994C5 /* MBLlama.mm */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1539,7 +1532,7 @@
 				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
 				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,
 				4B608B401FFE7C1900589F77 /* RFNewPostAccessoryController.m in Sources */,
-				4BA452EA2DF1E029002994C5 /* MBLlama.m in Sources */,
+				4BA452EA2DF1E029002994C5 /* MBLlama.mm in Sources */,
 				4B3840D4269203B400AD3781 /* RFDayOneExportController.m in Sources */,
 				4B2CAB201F907E9C00D9B10E /* RFWordpressController.m in Sources */,
 				4B3840D72696223E00AD3781 /* RFWordPressExportController.m in Sources */,

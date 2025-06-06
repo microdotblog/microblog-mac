@@ -17,8 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) struct llama_model* model;
 @property (strong, nonatomic) NSString* path;
 
-- (instancetype) initWithPath:(NSString *)modelPath;
+- (instancetype) initWithModelPath:(NSString *)modelPath mmprojPath:(NSString *)mmprojPath;
 - (NSString *) runPrompt:(NSString *)prompt;
+- (NSString *) runPrompt:(NSString *)prompt withImage:(nullable NSString *)imagePath;
 
 @end
 
