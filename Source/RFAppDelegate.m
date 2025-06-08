@@ -667,17 +667,7 @@
 	}
 	else {
 		// if not a photo, use HTML tag
-		NSString* s;
-		if ([upload isVideo]) {
-			s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
-		}
-		else if ([upload isAudio]) {
-			s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", upload.url];
-		}
-		else {
-			s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];
-		}
-		
+		NSString* s = [upload htmlTag];
 		[self showPostWithText:s];
 	}
 }

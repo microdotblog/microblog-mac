@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSString* url;
+@property (strong, nonatomic) NSString* poster_url;
 @property (strong, nonatomic) NSString* alt;
 @property (assign, nonatomic) BOOL isAI;
 @property (copy, nonatomic) NSMenuItem* copiedRemoveItem;

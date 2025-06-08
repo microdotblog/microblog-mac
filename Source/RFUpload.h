@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSImage* cachedImage;
 @property (strong) NSString* url;
 @property (strong) NSString* thumbnail_url;
+@property (strong) NSString* poster_url;
 @property (strong) NSString* alt;
 @property (assign) BOOL isAI;
 @property (assign) NSInteger width;
@@ -27,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isPhoto;
 - (BOOL) isVideo;
 - (BOOL) isAudio;
+
+- (NSString *) htmlTag;
 
 @end
 

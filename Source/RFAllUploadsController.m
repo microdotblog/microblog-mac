@@ -134,6 +134,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			for (NSDictionary* item in items) {
 				RFUpload* upload = [[RFUpload alloc] init];
 				upload.url = [item objectForKey:@"url"];
+				upload.poster_url = [item objectForKey:@"poster"];
 				upload.alt = [item objectForKey:@"alt"];
 				upload.isAI = [[item objectForKey:@"microblog-ai"] boolValue];
 				
@@ -696,6 +697,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	
 	item.url = up.url;
+	item.poster_url = up.poster_url;
 	item.alt = up.alt;
 	item.isAI = up.isAI;
 	[item setupForURL];
@@ -773,28 +775,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (id<NSPasteboardWriting>) collectionView:(NSCollectionView *)collectionView pasteboardWriterForItemAtIndexPath:(NSIndexPath *)indexPath
 {
 	RFUpload* upload = [self.allPosts objectAtIndex:indexPath.item];
-
-	NSString* s;
-	if ([upload isPhoto]) {
-		if (upload.alt.length > 0) {
-			NSString* alt_cleaned = [upload.alt stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-			s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", upload.url, alt_cleaned];
-		}
-		else {
-			s = [NSString stringWithFormat:@"<img src=\"%@\">", upload.url];
-		}
-	}
-	else if ([upload isVideo]) {
-		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", upload.url];
-	}
-	else if ([upload isAudio]) {
-		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", upload.url];
-	}
-	else {
-		s = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", upload.url, [upload filename]];
-	}
-
-	return s;
+	return [upload htmlTag];
 }
 
 - (BOOL) collectionView:(NSCollectionView *)collectionView canDragItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event

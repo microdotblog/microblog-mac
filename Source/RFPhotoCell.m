@@ -32,6 +32,7 @@
 - (void) setupForURL
 {
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
+	up.poster_url = self.poster_url;
 	if (![up isAudio]) {
 		[[self.htmlWithoutPlayerItem menu] removeItem:self.htmlWithoutPlayerItem];
 	}
@@ -64,8 +65,8 @@
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kNewPostWithPhotoNotification object:self userInfo:@{
 		kNewPostWithPhotoURLKey: self.url,
+		kNewPostWithPhotoPosterKey: self.poster_url,
 		kNewPostWithPhotoAltKey: self.alt
-		
 	}];
 }
 
@@ -96,26 +97,9 @@
 
 - (IBAction) copyHTML:(id)sender
 {
-	NSString* s;
-	
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
-	if ([up isPhoto]) {
-		if (self.alt.length > 0) {
-			s = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\">", self.url, self.alt];
-		}
-		else {
-			s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
-		}
-	}
-	else if ([up isVideo]) {
-		s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"none\"></video>", self.url];
-	}
-	else if ([up isAudio]) {
-		s = [NSString stringWithFormat:@"<audio src=\"%@\" controls=\"controls\" preload=\"metadata\"></audio>", self.url];
-	}
-	else {
-		s = [NSString stringWithFormat:@"<img src=\"%@\">", self.url];
-	}
+	up.poster_url = self.poster_url;
+	NSString* s = [up htmlTag];
 	
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	[pb clearContents];
@@ -136,6 +120,7 @@
 	NSString* s;
 
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
+	up.poster_url = self.poster_url;
 	if ([up isPhoto]) {
 		s = [NSString stringWithFormat:@"![](%@)", self.url];
 	}
