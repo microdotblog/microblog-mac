@@ -650,13 +650,17 @@
 - (void) promptNewPostWithPhotoNotification:(NSNotification *)notification
 {
 	NSString* url = [notification.userInfo objectForKey:kNewPostWithPhotoURLKey];
+	NSString* poster_url = [notification.userInfo objectForKey:kNewPostWithPhotoPosterKey];
 	NSString* alt = [notification.userInfo objectForKey:kNewPostWithPhotoAltKey];
-	[self promptNewPostWithPhotoURL:url altText:alt];
+
+	[self promptNewPostWithPhotoURL:url poster:poster_url altText:alt];
 }
 
-- (void) promptNewPostWithPhotoURL:(NSString *)url altText:(NSString *)altText
+- (void) promptNewPostWithPhotoURL:(NSString *)url poster:(NSString *)posterURL altText:(NSString *)altText
 {
 	RFUpload* upload = [[RFUpload alloc] initWithURL:url];
+	upload.poster_url = posterURL;
+	
 	if ([upload isPhoto]) {
 		// make reference to already-uploaded photo
 		RFPhoto* new_photo = [[RFPhoto alloc] init];

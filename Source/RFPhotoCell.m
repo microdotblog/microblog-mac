@@ -63,11 +63,16 @@
 
 - (IBAction) promptNewPostWithSelectedPhoto:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kNewPostWithPhotoNotification object:self userInfo:@{
-		kNewPostWithPhotoURLKey: self.url,
-		kNewPostWithPhotoPosterKey: self.poster_url,
-		kNewPostWithPhotoAltKey: self.alt
-	}];
+	NSMutableDictionary* info = [NSMutableDictionary dictionary];
+	[info setObject:self.url forKey:kNewPostWithPhotoURLKey];
+	if (self.poster_url) {
+		[info setObject:self.poster_url forKey:kNewPostWithPhotoPosterKey];
+	}
+	if (self.alt) {
+		[info setObject:self.alt forKey:kNewPostWithPhotoAltKey];
+	}
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kNewPostWithPhotoNotification object:self userInfo:info];
 }
 
 - (IBAction) deleteSelectedPhoto:(id)sender
