@@ -396,21 +396,15 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	NSURL* base_url = nil;
 	NSMutableString* photos_html = [[NSMutableString alloc] init];
 	for (RFPhoto* photo in photos) {
-		if (photo.fileURL) {
-			[photos_html appendFormat:@"<img src=\"%@\">", photo.fileURL];
-			base_url = [NSURL fileURLWithPath:[photo.fileURL.path stringByDeletingLastPathComponent] isDirectory:YES];
+		// to avoid re-saving the file, we'll cache a reference to the path
+		NSValue* pointer_key = [NSValue valueWithNonretainedObject:photo];
+		NSString* temp_path = [self.cachedPhotoPaths objectForKey:pointer_key];
+		if (temp_path == nil) {
+			temp_path = [self saveTemporaryPhoto:photo];
+			[self.cachedPhotoPaths setObject:temp_path forKey:pointer_key];
 		}
-		else {
-			// to avoid re-saving the file, we'll cache a reference to the path
-			NSValue* pointer_key = [NSValue valueWithNonretainedObject:photo];
-			NSString* temp_path = [self.cachedPhotoPaths objectForKey:pointer_key];
-			if (temp_path == nil) {
-				temp_path = [self saveTemporaryPhoto:photo];
-				[self.cachedPhotoPaths setObject:temp_path forKey:pointer_key];
-			}
-			[photos_html appendFormat:@"<img src=\"%@\">", temp_path];
-			base_url = [NSURL fileURLWithPath:[temp_path stringByDeletingLastPathComponent] isDirectory:YES];
-		}
+		[photos_html appendFormat:@"<img src=\"%@\">", temp_path];
+		base_url = [NSURL fileURLWithPath:[temp_path stringByDeletingLastPathComponent] isDirectory:YES];
 	}
 	
 	NSError* error = nil;
