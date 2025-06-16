@@ -1907,4 +1907,9 @@ static NSInteger const kSelectionNotes = 11;
     }
 }
 
+- (NSArray<NSToolbarItemIdentifier> *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
+{
+	return @[ @"StatusBubble" ];
+}
+
 @end

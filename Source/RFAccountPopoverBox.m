@@ -19,6 +19,10 @@
 
 - (void) awakeFromNib
 {
+	if (YES) { // (isLiquidGlass) {
+		self.cornerRadius = 18;
+	}
+	
 	self.originalLightColor = self.fillColor;
 	[self updateBackground];
 }

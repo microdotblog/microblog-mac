@@ -255,7 +255,7 @@
 {
 	if ([itemIdentifier isEqualToString:@"Progress"]) {
 		NSRect r = NSMakeRect (0, 0, 30, 30);
-
+		
 		self.progressSpinner = [[NSProgressIndicator alloc] initWithFrame:r];
 		self.progressSpinner.indeterminate = YES;
 		self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
@@ -285,6 +285,11 @@
 	else {
 		return nil;
 	}
+}
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
+{
+	return @[ @"Progress" ];
 }
 
 @end
