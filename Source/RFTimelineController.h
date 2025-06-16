@@ -40,6 +40,9 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) IBOutlet NSView* statusBubble;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* statusProgressSpinner;
 
+@property (strong, nonatomic) NSSplitViewController* splitController;
+@property (strong, nonatomic) NSViewController* sidebarController;
+@property (strong, nonatomic) NSViewController* contentController;
 @property (strong, nonatomic) RFAccount* selectedAccount;
 @property (strong, nonatomic) RFPostController* postController;
 @property (strong, nonatomic) NSViewController* rootController;

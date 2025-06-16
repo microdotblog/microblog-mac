@@ -127,9 +127,24 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) setupSplitView
 {
-	[self.splitView setAutosaveName:@"TimelineSplitView"];
-	self.splitView.delegate = self;
-	[self.splitView setHoldingPriority:NSLayoutPriorityRequired forSubviewAtIndex:0];
+	if (NO) {
+		self.sidebarController = [[NSViewController alloc] init];
+		NSSplitViewItem* sidebar_item = [NSSplitViewItem sidebarWithViewController:self.sidebarController];
+		
+		self.contentController = [[NSViewController alloc] init];
+		NSSplitViewItem* content_item = [NSSplitViewItem contentListWithViewController:self.contentController];
+		
+		self.splitController = [[NSSplitViewController alloc] init];
+		[self.splitController addSplitViewItem:sidebar_item];
+		[self.splitController addSplitViewItem:content_item];
+		
+		self.window.contentViewController = self.splitController;
+	}
+	else {
+		[self.splitView setAutosaveName:@"TimelineSplitView"];
+		self.splitView.delegate = self;
+		[self.splitView setHoldingPriority:NSLayoutPriorityRequired forSubviewAtIndex:0];
+	}
 }
 
 - (void) setupWebView
