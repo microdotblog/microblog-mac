@@ -13,6 +13,7 @@
 @class RFPost;
 @class RFPhoto;
 @class MBDateController;
+@class MBSelectiveUsernamesController;
 
 @interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
 
@@ -23,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* photoButton;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
 @property (strong, nonatomic) IBOutlet NSCollectionView* categoriesCollectionView;
+@property (strong, nonatomic) IBOutlet NSCollectionView* usernamesCollectionView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* photosHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* categoriesHeightConstraint;
@@ -61,6 +63,7 @@
 @property (strong, nonatomic) NSDate* postedAt;
 @property (strong, nonatomic) MBDateController* dateController;
 @property (strong, nonatomic) NSTimer* summaryTimer;
+@property (strong, nonatomic) MBSelectiveUsernamesController* usernamesController;
 
 - (id) initWithPost:(RFPost *)post;
 - (id) initWithChannel:(NSString *)channel;

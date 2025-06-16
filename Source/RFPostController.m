@@ -35,6 +35,7 @@
 #import "MMMarkdown.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
+#import "MBSelectiveUsernamesController.h"
 #import "MBDateController.h"
 #import "SDAVAssetExportSession.h"
 #import <AVFoundation/AVFoundation.h>
@@ -151,6 +152,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self setupSummary];
 	[self setupBlogName];
 	[self setupButtons];
+	[self setupUsernames];
 	[self setupNotifications];
 
 	[self updateTitleHeaderWithAnimation:NO];
@@ -241,6 +243,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	NSImage* img = [NSImage rf_imageWithSystemSymbolName:@"photo" accessibilityDescription:@"photo"];
 	self.photoButton.image = img;
+}
+
+- (void) setupUsernames
+{
+//	self.usernamesController = [[MBSelectiveUsernamesController alloc] initWithCollectionView:self.usernamesCollectionView];
 }
 
 - (void) setupCollectionView
