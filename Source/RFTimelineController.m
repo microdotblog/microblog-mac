@@ -1491,12 +1491,22 @@ static NSInteger const kSelectionNotes = 11;
 
 - (void) showPublishingStatus
 {
+	if (@available(macOS 15.0, *)) {
+		if (![self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
+			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:0];
+		}
+	}
 	[self.statusProgressSpinner startAnimation:nil];
 	self.statusBubble.animator.alphaValue = 1.0;
 }
 
 - (void) hidePublishingStatus:(BOOL)animate
 {
+	if (@available(macOS 15.0, *)) {
+		if ([self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
+			[self.window.toolbar removeItemWithItemIdentifier:@"StatusBubble"];
+		}
+	}
 	[self.statusProgressSpinner stopAnimation:nil];
 	if (animate) {
 		self.statusBubble.animator.alphaValue = 0.0;
@@ -1857,7 +1867,7 @@ static NSInteger const kSelectionNotes = 11;
 {
 	NSMutableArray* items = [NSMutableArray array];
 	
-	[items addObject:@"StatusBubble"];
+//	[items addObject:@"StatusBubble"];
 	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 	[items addObject:@"ProfileBox"];
 	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
@@ -1920,11 +1930,6 @@ static NSInteger const kSelectionNotes = 11;
     else {
         return nil;
     }
-}
-
-- (NSArray<NSToolbarItemIdentifier> *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
-{
-	return @[ @"StatusBubble" ];
 }
 
 @end
