@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL) rf_isDarkMode;
 - (BOOL) rf_isDarkMode;
++ (BOOL) mb_isLiquidGlass;
 
 @end
 

@@ -19,7 +19,7 @@
 
 - (void) awakeFromNib
 {
-	if (YES) { // (isLiquidGlass) {
+	if ([NSAppearance mb_isLiquidGlass]) {
 		self.cornerRadius = 18;
 	}
 	

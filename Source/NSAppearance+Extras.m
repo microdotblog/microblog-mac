@@ -34,4 +34,14 @@
 	return is_dark;
 }
 
++ (BOOL) mb_isLiquidGlass
+{
+	if (@available(macOS 26.0, *)) {
+		return YES;
+	}
+	else {
+		return NO;
+	}
+}
+
 @end

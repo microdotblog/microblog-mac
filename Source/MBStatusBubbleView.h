@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSTrackingArea* customTrackingArea;
 @property (strong, nonatomic) NSColor* fillColor;
+@property (assign, nonatomic) CGFloat cornerRadius;
 @property (strong, nonatomic) IBOutlet NSTextField* statusMessageTextField;
 
 @end

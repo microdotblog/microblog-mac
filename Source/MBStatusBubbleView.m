@@ -9,11 +9,19 @@
 #import "MBStatusBubbleView.h"
 
 #import "RFConstants.h"
+#import "NSAppearance+Extras.h"
 
 @implementation MBStatusBubbleView
 
 - (void) awakeFromNib
 {
+	if ([NSAppearance mb_isLiquidGlass]) {
+		self.cornerRadius = 18;
+	}
+	else {
+		self.cornerRadius = 7;
+	}
+	
 	self.fillColor = [NSColor colorNamed:@"color_notification_background"];
 }
 
@@ -37,7 +45,7 @@
 
 	CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
 	
-	CGPathRef path = CGPathCreateWithRoundedRect(r, 7.0, 7.0, NULL);
+	CGPathRef path = CGPathCreateWithRoundedRect(r, self.cornerRadius, self.cornerRadius, NULL);
 
 	[self.fillColor set];
 	CGContextAddPath (context, path);
