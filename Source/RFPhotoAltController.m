@@ -202,7 +202,7 @@
 	self.cancelButton.enabled = NO;
 	self.removeButton.enabled = NO;
 
-	RFClient* client = [[RFClient alloc] initWithPath:url];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	NSMutableDictionary* args = [[RFSettings networkingArgsForDestination] mutableCopy];
 	[args setObject:@"delete" forKey:@"action"];
 	[args setObject:self.photo.publishedURL forKey:@"url"];
