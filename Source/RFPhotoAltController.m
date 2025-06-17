@@ -119,6 +119,7 @@
 	}
 	
 	[self.progressSpinner startAnimation:nil];
+	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Uploading...";
 
 	NSData* d = [self.photo jpegData];

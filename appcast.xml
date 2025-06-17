@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.5.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added text generation for photos (only if you have AI enabled) when you open the accessibility text window by clicking on an attached photo in a new post.</li>
+					<li>Updated some toolbar buttons for macOS 26 Tahoe.</li>
+					<li>Fixed some photos not loading in the preview window.</li>
+					<li>Fixed video dimensions in the preview window.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Tue, 17 Jun 2025 16:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.5.5.zip" sparkle:shortVersionString="3.5.5" sparkle:version="183" length="4330671" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.5.4</title>
  			<description><![CDATA[
 				<style>
