@@ -215,4 +215,17 @@
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kTemporaryFoldersPrefKey];
 }
 
++ (NSDictionary *) networkingArgsForDestination
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSDictionary* args = @{
+		@"mp-destination": destination_uid
+	};
+	
+	return args;
+}
+
 @end

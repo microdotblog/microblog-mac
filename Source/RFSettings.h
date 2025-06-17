@@ -70,4 +70,6 @@ static NSString* const kIsUsingBlogThemePreview = @"IsUsingBlogThemePreview";
 + (void) addTemporaryFolder:(NSString *)path;
 + (void) cleanupTemporaryFolders;
 
++ (NSDictionary *) networkingArgsForDestination;
+
 @end

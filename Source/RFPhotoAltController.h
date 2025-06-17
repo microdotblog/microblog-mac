@@ -17,9 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSImageView* imageView;
 @property (strong, nonatomic) IBOutlet NSTextView* descriptionField;
 @property (strong, nonatomic) IBOutlet NSButton* okButton;
+@property (strong, nonatomic) IBOutlet NSButton* cancelButton;
+@property (strong, nonatomic) IBOutlet NSButton* removeButton;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSTextField* progressStatusField;
 
 @property (strong, nonatomic) RFPhoto* photo;
 @property (strong, nonatomic) NSIndexPath* indexPath;
+@property (strong, nonatomic, nullable) NSTimer* altTextTimer;
+@property (assign) BOOL isCancelled;
 
 - (id) initWithPhoto:(RFPhoto *)photo atIndex:(NSIndexPath *)indexPath;
 
