@@ -147,7 +147,7 @@ Gw
                     <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="hUa-sM-toH">
                         <rect key="frame" x="459" y="172" width="16" height="16"/>
                     </progressIndicator>
-                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Pp-ny-1GC">
+                    <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Pp-ny-1GC">
                         <rect key="frame" x="373" y="172" width="78" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Uploading..." id="bWP-3b-tgx">
                             <font key="font" metaFont="system"/>

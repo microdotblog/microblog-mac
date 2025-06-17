@@ -42,7 +42,10 @@
 	[self setupText];
 	[self setupDefaultButton];
 	
-	[self startUpload];
+	BOOL is_using_ai = [RFSettings boolForKey:kIsUsingAI];
+	if (is_using_ai) {
+		[self startUpload];
+	}
 }
 
 - (void) setupPhotoThumbnail
