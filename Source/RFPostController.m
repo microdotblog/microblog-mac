@@ -1269,6 +1269,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (IBAction) sendPost:(id)sender
 {
+	// check if there's anything to send
+	NSString* s = [self currentText];
+	if ((s.length == 0) && (self.attachedPhotos.count == 0)) {
+		return;
+	}
+	
 	if (!self.isSending) {
 		// post button always publishes
 		self.isDraft = NO;
