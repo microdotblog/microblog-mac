@@ -746,6 +746,12 @@ static NSInteger const kSelectionNotes = 11;
 		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionPages)) {
 			return YES;
 		}
+		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionUploads)) {
+			return YES;
+		}
+		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionReplies)) {
+			return YES;
+		}
 		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionNotes)) {
 			return YES;
 		}
@@ -816,6 +822,11 @@ static NSInteger const kSelectionNotes = 11;
 	else if (self.selectedTimeline == kSelectionUploads) {
 		if ([self.rootController isKindOfClass:[RFAllUploadsController class]]) {
 			[(RFAllUploadsController *)self.rootController focusSearch];
+		}
+	}
+	else if (self.selectedTimeline == kSelectionReplies) {
+		if ([self.rootController isKindOfClass:[RFRepliesController class]]) {
+			[(RFRepliesController *)self.rootController focusSearch];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionNotes) {

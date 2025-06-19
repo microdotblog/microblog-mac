@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* allReplies; // RFPost
 @property (strong, nonatomic) NSArray* currentReplies; // RFPost
 
+- (void) focusSearch;
+
 @end
 
 NS_ASSUME_NONNULL_END
