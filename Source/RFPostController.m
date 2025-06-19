@@ -32,6 +32,7 @@
 #import "NSImage+Extras.h"
 #import "NSString+Extras.h"
 #import "NSCollectionView+Extras.h"
+#import "NSAppearance+Extras.h"
 #import "MMMarkdown.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
@@ -243,6 +244,12 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	NSImage* img = [NSImage rf_imageWithSystemSymbolName:@"photo" accessibilityDescription:@"photo"];
 	self.photoButton.image = img;
+	
+	if ([NSAppearance mb_isLiquidGlass]) {
+		// add more padding because rounded corners
+		self.photoButtonLeftConstraint.constant = 14;
+		self.characterCountRightConstraint.constant = 14;
+	}
 }
 
 - (void) setupUsernames

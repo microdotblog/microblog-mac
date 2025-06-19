@@ -30,6 +30,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* categoriesHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryTextHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* photoButtonLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* characterCountRightConstraint;
 @property (strong, nonatomic) IBOutlet NSView* summaryBackgroundView;
 @property (strong, nonatomic) IBOutlet NSTextView* summaryTextView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* summaryProgress;

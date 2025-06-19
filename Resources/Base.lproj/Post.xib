@@ -12,8 +12,10 @@
                 <outlet property="blognameField" destination="W2B-cl-D6d" id="9UM-bo-ohV"/>
                 <outlet property="categoriesCollectionView" destination="mhn-0e-lY7" id="ogJ-6t-I7D"/>
                 <outlet property="categoriesHeightConstraint" destination="DnR-yd-fi7" id="oUJ-H0-KbY"/>
+                <outlet property="characterCountRightConstraint" destination="675-D3-FdR" id="cP5-8t-TuC"/>
                 <outlet property="generateSummaryButton" destination="5Kl-7S-q4c" id="YRP-pp-wjR"/>
                 <outlet property="photoButton" destination="d95-L8-OAI" id="lUI-LJ-3FE"/>
+                <outlet property="photoButtonLeftConstraint" destination="ibf-pZ-fYx" id="r13-Vz-Bcr"/>
                 <outlet property="photosCollectionView" destination="kw4-c5-1p5" id="lGQ-ZL-sHv"/>
                 <outlet property="photosHeightConstraint" destination="oNP-ay-KXG" id="YVn-30-3Fu"/>
                 <outlet property="remainingField" destination="lHJ-qQ-HDX" id="Kyq-Gn-u2C"/>
@@ -240,8 +242,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView selectable="YES" allowsMultipleSelection="YES" id="zCT-jO-7mv">
-                                <rect key="frame" x="0.0" y="0.0" width="352" height="158"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <rect key="frame" x="0.0" y="0.0" width="352" height="34"/>
+                                <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="76u-lu-F2O">
                                     <size key="itemSize" width="50" height="50"/>
                                 </collectionViewFlowLayout>
@@ -253,7 +255,7 @@
                         <constraint firstAttribute="height" constant="34" id="M6Q-2b-A4m"/>
                     </constraints>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="lt8-wF-Pj4">
-                        <rect key="frame" x="-100" y="-100" width="341" height="17"/>
+                        <rect key="frame" x="-100" y="-100" width="342" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="ohi-Hg-YyK">
