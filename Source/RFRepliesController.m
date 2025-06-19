@@ -63,13 +63,26 @@
 - (void) fetchReplies
 {
 	self.allReplies = @[];
+	[self fetchRepliesWithSearch:@""];
+}
+
+- (void) fetchRepliesWithSearch:(NSString *)search
+{
+	self.currentReplies = @[];
 	self.tableView.animator.alphaValue = 0.0;
 
 	NSDictionary* args;
-	
-	args = @{
-		@"count": @50
-	};
+	if (search.length > 0) {
+		args = @{
+			@"count": @50,
+			@"q": search
+		};
+	}
+	else {
+		args = @{
+			@"count": @50
+		};
+	}
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/replies"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
@@ -96,10 +109,14 @@
 			}
 			
 			RFDispatchMainAsync (^{
-				self.allReplies = new_posts;
+				self.currentReplies = new_posts;
+				if (search.length == 0) {
+					self.allReplies = self.currentReplies;
+				}
 				[self.tableView reloadData];
 				self.tableView.animator.alphaValue = 1.0;
 				[self stopLoadingSidebarRow];
+				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
@@ -211,19 +228,37 @@
 	[self fetchReplies];
 }
 
+- (void) focusSearch
+{
+	[self.searchField becomeFirstResponder];
+}
+
+- (IBAction) search:(id)sender
+{
+	NSString* s = [sender stringValue];
+	if (s.length > 2) {
+		[self.progressSpinner startAnimation:nil];
+		[self fetchRepliesWithSearch:s];
+	}
+	else {
+		self.currentReplies = self.allReplies;
+		[self.tableView reloadData];
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return self.allReplies.count;
+	return self.currentReplies.count;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
 
-	if (row < self.allReplies.count) {
-		RFPost* post = [self.allReplies objectAtIndex:row];
+	if (row < self.currentReplies.count) {
+		RFPost* post = [self.currentReplies objectAtIndex:row];
 		[cell setupWithPost:post];
 	}
 
