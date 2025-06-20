@@ -23,9 +23,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* dateTopConstraint;
 
 @property (strong, nonatomic) NSArray* photos; // RFPhoto
+@property (strong, nonatomic) RFPost* post;
+@property (strong, nonatomic) NSString* search;
 
 - (void) setupWithPost:(RFPost *)post;
 - (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos;
+- (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos search:(NSString *)search;
 
 @end
 

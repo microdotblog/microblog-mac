@@ -15,6 +15,7 @@
 #import "HTMLParser.h"
 #import "RFMacros.h"
 #import "NSCollectionView+Extras.h"
+#import "NSAppearance+Extras.h"
 
 // https://github.com/zootreeves/Objective-C-HMTL-Parser (comments say it's MIT)
 
@@ -29,8 +30,24 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos
 {
+	[self setupWithPost:post skipPhotos:skipPhotos search:@""];
+}
+
+- (void) setupWithPost:(RFPost *)post skipPhotos:(BOOL)skipPhotos search:(NSString *)search
+{
+	self.post = post;
+	self.search = search;
+
 	self.titleField.stringValue = post.title;
-	self.textField.stringValue = [post displaySummary];
+
+	if (search.length > 0) {
+		NSAttributedString* attr_s = [self attributeStringForPost:post search:search];
+		self.textField.attributedStringValue = attr_s;
+	}
+	else {
+		self.textField.stringValue = [post displaySummary];
+	}
+	
 	NSString* date_s = [NSDateFormatter localizedStringFromDate:post.postedAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
 	if (date_s) {
 		self.dateField.stringValue = date_s;
@@ -120,6 +137,38 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	else {
 		self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
 	}
+	
+	// redo search highlight
+	if (self.search.length > 0) {
+		NSAttributedString* attr_s = [self attributeStringForPost:self.post search:self.search];
+		self.textField.attributedStringValue = attr_s;
+	}
+}
+
+- (NSAttributedString *) attributeStringForPost:(RFPost *)post search:(NSString *)search
+{
+	NSString* s = [post displaySummary];
+	NSMutableAttributedString* attr_s = [[NSMutableAttributedString alloc] initWithString:s];
+
+	// make a slightly lighter version of system find highlight color
+	NSColor* c = [NSColor findHighlightColor];
+	c = [c blendedColorWithFraction:0.8 ofColor:[NSColor whiteColor]];
+	
+	NSError* error = nil;
+	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:search options:NSRegularExpressionCaseInsensitive error:&error];
+	if (regex) {
+		[regex enumerateMatchesInString:s options:0 range:NSMakeRange(0, s.length) usingBlock:^(NSTextCheckingResult* result, NSMatchingFlags flags, BOOL* stop) {
+			NSRange r = result.range;
+			[attr_s addAttribute:NSBackgroundColorAttributeName value:c range:r];
+			
+			// if selected or dark mode, always use black text
+			if (self.selected || [NSAppearance rf_isDarkMode]) {
+				[attr_s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:r];
+			}
+		}];
+	}
+	
+	return attr_s;
 }
 
 #pragma mark -

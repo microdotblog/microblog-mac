@@ -259,7 +259,8 @@
 
 	if (row < self.currentReplies.count) {
 		RFPost* post = [self.currentReplies objectAtIndex:row];
-		[cell setupWithPost:post];
+		NSString* q = self.searchField.stringValue;
+		[cell setupWithPost:post skipPhotos:NO search:q];
 	}
 
 	return cell;
