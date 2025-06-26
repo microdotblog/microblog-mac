@@ -48,8 +48,11 @@ static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
 
 @interface RFPostController()
-	@property (nonatomic, strong) NSString* activeReplacementString;
-	@property (atomic, strong) NSMutableArray* autoCompleteData;
+
+@property (strong, nonatomic) NSString* activeReplacementString;
+@property (strong, atomic) NSMutableArray* autoCompleteData;
+@property (assign, nonatomic) BOOL resettingAutoComplete;
+
 @end
 
 @implementation RFPostController
@@ -301,6 +304,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kFoundUserAutoCompleteNotification object:self.textView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetAutoCompleteNotification:) name:kResetUserAutoCompleteNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postingCheckboxChangedNotification:) name:kPostingCheckboxChangedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(summaryTextDidChange:) name:NSTextDidChangeNotification object:self.summaryTextView];
 }
@@ -907,6 +911,21 @@ static CGFloat const kTextViewTitleShownTop = 54;
 	[self.textView complete:self];
 }
 
+- (void) resetAutoCompleteNotification:(NSNotification *)notification
+{
+	@synchronized(self.autoCompleteData) {
+		// clear some data
+		[self.autoCompleteData removeAllObjects];
+		self.activeReplacementString = @"";
+		self.resettingAutoComplete = YES;
+		
+		// wait a second and then allow auto-complete again
+		[NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer* _Nonnull timer) {
+			self.resettingAutoComplete = NO;
+		}];
+	}
+}
+
 - (void) postingCheckboxChangedNotification:(NSNotification *)notification
 {
 	[self updateSelectedCheckboxes];
@@ -914,8 +933,11 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (NSArray<NSString *> *)textView:(NSTextView *)textView completions:(NSArray<NSString *> *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(nullable NSInteger *)index
 {
-	if (self.autoCompleteData.count)
-	{
+	if (self.resettingAutoComplete) {
+		return nil;
+	}
+	
+	if (self.autoCompleteData.count > 0) {
 		NSMutableArray* array = [NSMutableArray array];
 		for (NSDictionary* dictionary in self.autoCompleteData)
 		{

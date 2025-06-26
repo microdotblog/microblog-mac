@@ -34,6 +34,8 @@ static NSString* const kPostStopProgressNotification = @"RFPostStopProgress";
 static NSString* const kFoundUserAutoCompleteNotification = @"RFFoundUserAutoCompleteNotification";
 static NSString* const kFoundUserAutoCompleteInfoKey = @"RFFoundUserAutoCompleteInfokey";
 
+static NSString* const kResetUserAutoCompleteNotification = @"MBResetUserAutoCompleteNotification";
+
 static NSString* const kOpenBookshelfNotification = @"MBOpenBookshelfNotification";
 static NSString* const kOpenBookshelfKey = @"bookshelf";
 

@@ -60,6 +60,10 @@
 			}
 		}
 
+		// tell post controller to reset current auto-complete list
+		[[NSNotificationCenter defaultCenter] postNotificationName:kResetUserAutoCompleteNotification object:self];
+		
+		// insert the full username
 		NSString* s = [NSString stringWithFormat:@"%@ ", word];
 		[super insertCompletion:s forPartialWordRange:fullRange movement:movement isFinal:isFinal];
 	}
@@ -203,7 +207,8 @@
 	}
 }
 
-- (void) findAutocomplete:(NSRange)range newString:(NSString*)incomingString{
+- (void) findAutocomplete:(NSRange)range newString:(NSString*)incomingString
+{
 	// if we are in the midst of an edit that involves "marked" text, don't do anything. This
 	// avoids interfering with the state of the text and causing multi-keystroke edits such
 	// as accent-modified character input to fail.
@@ -247,23 +252,19 @@
 	if (is_found && (username.length > 0)) {
 		[username appendString:incomingString];
 		
-		[RFAutoCompleteCache findAutoCompleteFor:username completion:^(NSArray * _Nonnull results)
-		 {
-			 dispatch_async(dispatch_get_main_queue(), ^
-							{
-								NSDictionary* dictionary = @{ @"string" : username, @"array" : results };
-				 [[NSNotificationCenter defaultCenter] postNotificationName:kFoundUserAutoCompleteNotification object:self userInfo:@{ kFoundUserAutoCompleteInfoKey: dictionary }];
-							});
-			 
-		 }];
+		[RFAutoCompleteCache findAutoCompleteFor:username completion:^(NSArray * _Nonnull results) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				NSDictionary* dictionary = @{ @"string" : username, @"array" : results };
+				[[NSNotificationCenter defaultCenter] postNotificationName:kFoundUserAutoCompleteNotification object:self userInfo:@{ kFoundUserAutoCompleteInfoKey: dictionary }];
+			});
+		}];
 	}
 	else
 	{
-		dispatch_async(dispatch_get_main_queue(), ^
-					   {
-						   NSDictionary* dictionary = @{ @"string" : @"", @"array" : @[] };
+		dispatch_async(dispatch_get_main_queue(), ^{
+		   NSDictionary* dictionary = @{ @"string" : @"", @"array" : @[] };
 			[[NSNotificationCenter defaultCenter] postNotificationName:kFoundUserAutoCompleteNotification object:self userInfo:@{ kFoundUserAutoCompleteInfoKey: dictionary }];
-					   });
+		});
 	}
 
 }
