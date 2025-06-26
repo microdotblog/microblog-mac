@@ -52,11 +52,18 @@
 		if ([word containsString:@"@"]) {
 			// if it's a Mastodon-style username, adjust the range if we're inside the domain already
 			NSString* text = self.string;
+			
 			NSUInteger replaceEnd = NSMaxRange(charRange);
 			NSRange uptoRange = NSMakeRange(0, charRange.location - 1);
 			NSRange atRange = [text rangeOfString:@"@" options:NSBackwardsSearch range:uptoRange];
 			if (atRange.location != NSNotFound) {
-				fullRange = NSMakeRange(atRange.location + 1, replaceEnd - atRange.location + 1);
+				// if char before first "@" is alpha-numeric, continue with offset adjustment
+				if (charRange.location > 2) {
+					unichar prev_char = [text characterAtIndex:charRange.location - 2];
+					if ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:prev_char]) {
+						fullRange = NSMakeRange(atRange.location + 1, replaceEnd - atRange.location + 1);
+					}
+				}
 			}
 		}
 
