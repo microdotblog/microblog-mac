@@ -48,13 +48,25 @@
 - (void) insertCompletion:(NSString *)word forPartialWordRange:(NSRange)charRange movement:(NSInteger)movement isFinal:(BOOL)isFinal
 {
 	if (isFinal && (movement == NSTextMovementReturn)) {
+		NSRange fullRange = charRange;
+		if ([word containsString:@"@"]) {
+			// if it's a Mastodon-style username, adjust the range if we're inside the domain already
+			NSString* text = self.string;
+			NSUInteger replaceEnd = NSMaxRange(charRange);
+			NSRange uptoRange = NSMakeRange(0, charRange.location - 1);
+			NSRange atRange = [text rangeOfString:@"@" options:NSBackwardsSearch range:uptoRange];
+			if (atRange.location != NSNotFound) {
+				fullRange = NSMakeRange(atRange.location + 1, replaceEnd - atRange.location + 1);
+			}
+		}
+
 		NSString* s = [NSString stringWithFormat:@"%@ ", word];
-		[super insertCompletion:s forPartialWordRange:charRange movement:movement isFinal:isFinal];
+		[super insertCompletion:s forPartialWordRange:fullRange movement:movement isFinal:isFinal];
 	}
 }
 
 - (NSPasteboardType) preferredPasteboardTypeFromArray:(NSArray<NSPasteboardType> *)availableTypes
-                          restrictedToTypesFromArray:(NSArray<NSPasteboardType> *)allowedTypes
+						  restrictedToTypesFromArray:(NSArray<NSPasteboardType> *)allowedTypes
 {
 	if ([availableTypes containsObject:NSPasteboardTypeString]) {
 		return NSPasteboardTypeString;
