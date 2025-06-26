@@ -135,7 +135,7 @@
 	}
 		
 	if (row >= 0) {
-		RFPost* post = [self.allReplies objectAtIndex:row];
+		RFPost* post = [self.currentReplies objectAtIndex:row];
 		[self openPost:post];
 	}
 }
@@ -144,7 +144,7 @@
 {
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
-		RFPost* post = [self.allReplies objectAtIndex:row];
+		RFPost* post = [self.currentReplies objectAtIndex:row];
 		NSURL* url = [NSURL URLWithString:post.url];
 		[[NSWorkspace sharedWorkspace] openURL:url];
 	}
@@ -154,7 +154,7 @@
 {
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
-		RFPost* post = [self.allReplies objectAtIndex:row];
+		RFPost* post = [self.currentReplies objectAtIndex:row];
 		NSPasteboard* pb = [NSPasteboard generalPasteboard];
 		[pb clearContents];
 		[pb setString:post.url forType:NSPasteboardTypeString];
@@ -170,7 +170,7 @@
 {
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
-		RFPost* post = [self.allReplies objectAtIndex:row];
+		RFPost* post = [self.currentReplies objectAtIndex:row];
 		NSString* s = post.title;
 		if (s.length == 0) {
 			s = [post displaySummary];
