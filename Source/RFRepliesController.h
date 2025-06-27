@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* currentReplies; // RFPost
 
 - (void) focusSearch;
+- (void) fetchReplies;
 
 @end
 

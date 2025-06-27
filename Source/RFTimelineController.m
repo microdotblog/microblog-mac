@@ -696,6 +696,11 @@ static NSInteger const kSelectionNotes = 11;
 			[(RFAllUploadsController *)self.rootController fetchUploads];
 		}
 	}
+	else if (self.selectedTimeline == kSelectionReplies) {
+		if ([self.rootController isKindOfClass:[RFRepliesController class]]) {
+			[(RFRepliesController *)self.rootController fetchReplies];
+		}
+	}
 
 	RFDispatchSeconds (1.5, ^{
 		[self hideMessageField];
