@@ -257,7 +257,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 				n.notebookID = notebookID;
 
 				// if selected note, update if sharing changed
-				if (self.selectedNote) {
+				if (self.selectedNote && self.selectedNote.noteID) {
 					if ([n.noteID isEqualToNumber:self.selectedNote.noteID]) {
 						self.selectedNote.sharedURL = n.sharedURL;
 					}
