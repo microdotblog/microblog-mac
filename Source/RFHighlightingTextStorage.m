@@ -86,7 +86,7 @@
 	return (isalnum (c) || (c == '_'));
 }
 
-- (BOOL) isValidMstodonChar:(unichar)c
+- (BOOL) isValidMastodonChar:(unichar)c
 {
 	return (isalnum (c) || (c == '_') || (c == '.') || (c == '-'));
 }
@@ -298,7 +298,7 @@
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_username = NO;
 	BOOL is_mastodon = NO;
-	
+
 	for (NSInteger i = 0; i < self.string.length; i++) {
 		unichar c = [self.string characterAtIndex:i];
 		unichar next_c = '\0';
@@ -317,8 +317,13 @@
 			}
 		}
 		else if (![self isValidUsernameChar:c]) {
-			if (is_mastodon) {
-				if (![self isValidMstodonChar:c]) {
+			// special check if it's a dot, allow if might be domain name
+			if ((c == '.') && isalpha(next_c)) {
+				// the TLD like .com will start with a letter
+				// don't do anything here
+			}
+			else if (is_mastodon) {
+				if (![self isValidMastodonChar:c]) {
 					is_username = NO;
 					is_mastodon = NO;
 					current_r.length = i - current_r.location;
