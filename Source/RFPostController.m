@@ -869,16 +869,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 				cleanUserName = [cleanUserName substringFromIndex:1];
 			}
 							   
-			NSString* path = [NSString stringWithFormat:@"/users/search?q=%@", cleanUserName];  //https://micro.blog/users/search?q=jon]
+			NSString* path = [NSString stringWithFormat:@"/users/search?q=%@", cleanUserName];
 			RFClient* client = [[RFClient alloc] initWithPath:path];
-			[client getWithQueryArguments:nil completion:^(UUHttpResponse *response)
-			{
-				if (response.parsedResponse)
-				{
+			[client getWithQueryArguments:nil completion:^(UUHttpResponse* response) {
+				if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSArray class]]) {
 					NSMutableArray* matchingUsernames = [NSMutableArray array];
 					NSArray* array = response.parsedResponse;
-					for (NSDictionary* userDictionary in array)
-					{
+					for (NSDictionary* userDictionary in array) {
 						NSString* userName = userDictionary[@"username"];
 						[matchingUsernames addObject:userName];
 					}
