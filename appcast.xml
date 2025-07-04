@@ -5,6 +5,28 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.5.8</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Updated username color highlighting in text editing to support Bluesky domain names.</li>
+					<li>Updated the published lines of the Logs window to show them in green.</li>
+					<li>Fixed potential crash while typing in a blog post.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 04 Jul 2025 11:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.5.8.zip" sparkle:shortVersionString="3.5.8" sparkle:version="187" length="4366433" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.5.7</title>
  			<description><![CDATA[
 				<style>
