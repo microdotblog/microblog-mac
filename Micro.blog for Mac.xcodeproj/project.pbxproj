@@ -95,6 +95,8 @@
 		4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400CFE201EC55A00C71AAF /* MMGenerator.m */; };
 		4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400D01201EC55A00C71AAF /* MMHTMLParser.m */; };
 		4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B400D02201EC55B00C71AAF /* MMSpanParser.m */; };
+		4B41CB452E22AFD4000C324F /* VersionsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B41CB432E22AFD4000C324F /* VersionsWindow.xib */; };
+		4B41CB482E22B07D000C324F /* MBVersionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB472E22B07D000C324F /* MBVersionsController.m */; };
 		4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */; };
 		4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */; };
 		4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */; };
@@ -422,6 +424,9 @@
 		4B400D00201EC55A00C71AAF /* MMHTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMHTMLParser.h; path = Shared/MMMarkdown/Source/MMHTMLParser.h; sourceTree = "<group>"; };
 		4B400D01201EC55A00C71AAF /* MMHTMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMHTMLParser.m; path = Shared/MMMarkdown/Source/MMHTMLParser.m; sourceTree = "<group>"; };
 		4B400D02201EC55B00C71AAF /* MMSpanParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMSpanParser.m; path = Shared/MMMarkdown/Source/MMSpanParser.m; sourceTree = "<group>"; };
+		4B41CB442E22AFD4000C324F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/VersionsWindow.xib; sourceTree = "<group>"; };
+		4B41CB462E22B07D000C324F /* MBVersionsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBVersionsController.h; path = Source/MBVersionsController.h; sourceTree = "<group>"; };
+		4B41CB472E22B07D000C324F /* MBVersionsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVersionsController.m; path = Source/MBVersionsController.m; sourceTree = "<group>"; };
 		4B4C7DBF24E1BC03000004E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookmark.xib; sourceTree = "<group>"; };
 		4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookmarkController.h; path = Source/RFBookmarkController.h; sourceTree = "<group>"; };
 		4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookmarkController.m; path = Source/RFBookmarkController.m; sourceTree = "<group>"; };
@@ -1116,6 +1121,8 @@
 				4B2F97212E00B76700A834C8 /* MBSelectiveUsernamesController.m */,
 				4B2F97232E00B79400A834C8 /* MBSelectiveUsernameCell.h */,
 				4B2F97242E00B79400A834C8 /* MBSelectiveUsernameCell.m */,
+				4B41CB462E22B07D000C324F /* MBVersionsController.h */,
+				4B41CB472E22B07D000C324F /* MBVersionsController.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1183,6 +1190,7 @@
 				4B79E2832D089BC500A22861 /* Collections.xib */,
 				4B79E2912D089E0300A22861 /* CollectionCell.xib */,
 				4B79E2942D0B56BE00A22861 /* EditCollectionCell.xib */,
+				4B41CB432E22AFD4000C324F /* VersionsWindow.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1324,6 +1332,7 @@
 				4BF1A1272BBF5BC200256D3C /* Posts.css in Resources */,
 				4B5EE28C206405AC00C87A78 /* AccountCell.xib in Resources */,
 				4B2CAAAB1F8FCB7100D9B10E /* PhotoCell.xib in Resources */,
+				4B41CB452E22AFD4000C324F /* VersionsWindow.xib in Resources */,
 				4BF7E51528343E3000500C59 /* Bookshelves.xib in Resources */,
 				4BED646624BD5AB80018644C /* AllUploads.xib in Resources */,
 				4BE23F952A700A9F00E24718 /* HighlightCell.xib in Resources */,
@@ -1482,6 +1491,7 @@
 				4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */,
 				4B2F97252E00B79400A834C8 /* MBSelectiveUsernameCell.m in Sources */,
 				4BA983661FA21FF000E230CC /* RFPostContainerView.m in Sources */,
+				4B41CB482E22B07D000C324F /* MBVersionsController.m in Sources */,
 				4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */,
 				4B3840CB2692014000AD3781 /* RFExportController.m in Sources */,
 				4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */,
@@ -1696,6 +1706,14 @@
 				4B3840CD2692019B00AD3781 /* Base */,
 			);
 			name = Export.xib;
+			sourceTree = "<group>";
+		};
+		4B41CB432E22AFD4000C324F /* VersionsWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B41CB442E22AFD4000C324F /* Base */,
+			);
+			name = VersionsWindow.xib;
 			sourceTree = "<group>";
 		};
 		4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */ = {
@@ -2137,7 +2155,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 187;
+				CURRENT_PROJECT_VERSION = 188;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2154,7 +2172,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.5.8;
+				MARKETING_VERSION = 3.6;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2174,7 +2192,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 187;
+				CURRENT_PROJECT_VERSION = 188;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2191,7 +2209,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.5.8;
+				MARKETING_VERSION = 3.6;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
