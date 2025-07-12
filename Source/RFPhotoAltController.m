@@ -118,6 +118,11 @@
 		return;
 	}
 	
+	// don't upload if we already have alt text
+	if (self.photo.altText.length > 0) {
+		return;
+	}
+	
 	[self.progressSpinner startAnimation:nil];
 	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Uploading...";
