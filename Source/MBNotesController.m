@@ -307,6 +307,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 					[self stopLoadingSidebarRow];
 				}
 				else {
+					// if this was the first page, show results right away
+					if (offset == 0) {
+						self.allNotes = array;
+						self.currentNotes = array;
+						[self.tableView reloadData];
+					}
+
+					// fetch another page
 					NSLog(@"Fetching another page of notes, offset: %ld", (long)offset);
 					NSInteger new_offset = offset + count;
 					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array completion:handler];
