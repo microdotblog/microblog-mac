@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,7 +27,7 @@
             <rect key="frame" x="0.0" y="0.0" width="486" height="596"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7S-Gl-bR0">
+                <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7S-Gl-bR0">
                     <rect key="frame" x="329" y="563" width="145" height="22"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="MJ3-8Y-ua3"/>
@@ -49,7 +49,7 @@
                     </constraints>
                 </box>
                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
-                    <rect key="frame" x="114" y="566" width="16" height="16"/>
+                    <rect key="frame" x="130" y="566" width="16" height="16"/>
                 </progressIndicator>
                 <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8i-KT-xcK">
                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
@@ -62,7 +62,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
                                     <clipView key="contentView" id="mfH-x6-gOa">
                                         <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="Sif-9p-2X2" customClass="RFPostTableView">
                                                 <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
@@ -123,7 +123,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="242" height="551"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
                                         <rect key="frame" x="0.0" y="0.0" width="242" height="551"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
                                                 <rect key="frame" x="0.0" y="0.0" width="222" height="541"/>
@@ -165,10 +165,10 @@
                     </holdingPriorities>
                 </splitView>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Shg-8z-gSu">
-                    <rect key="frame" x="9" y="560" width="99" height="25"/>
+                    <rect key="frame" x="12" y="564" width="108" height="20"/>
                     <popUpButtonCell key="cell" type="push" title="Notebook" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="k0r-Sd-GWc" id="jKc-n8-hQz">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" id="NEf-TZ-cwg">
                             <items>
                                 <menuItem title="Notebook" state="on" id="k0r-Sd-GWc"/>
@@ -206,6 +206,12 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="startNewPost:" target="-2" id="8GN-r1-SiG"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Versions..." id="tKG-T1-xCu">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="showVersions:" target="-2" id="6Lb-ht-gWg"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="SVD-Bs-fcY"/>

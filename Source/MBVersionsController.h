@@ -10,7 +10,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MBNote;
+
 @interface MBVersionsController : NSWindowController
+
+@property (strong, nonatomic) NSTableView* tableView;
+@property (strong, nonatomic) NSProgressIndicator* progressSpinner;
+
+@property (strong) MBNote* note;
+@property (strong) NSArray* versions; // MBVersion
+
+- (id) initWithNote:(MBNote *)note;
 
 @end
 

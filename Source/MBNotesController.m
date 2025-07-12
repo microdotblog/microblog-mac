@@ -12,6 +12,7 @@
 #import "MBNotebook.h"
 #import "MBNoteCell.h"
 #import "MBNotesKeyController.h"
+#import "MBVersionsController.h"
 #import "RFClient.h"
 #import "RFAccount.h"
 #import "RFSettings.h"
@@ -704,6 +705,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", [s rf_urlEncoded]]];
 		[[NSWorkspace sharedWorkspace] openURL:url];
 	}
+}
+
+- (IBAction) showVersions:(id)sender
+{
+	self.versionsController = [[MBVersionsController alloc] init];
+	[self.tableView.window beginSheet:self.versionsController.window completionHandler:^(NSModalResponse returnCode) {
+		self.versionsController = nil;
+	}];
 }
 
 - (IBAction) shareOrUnshare:(id)sender

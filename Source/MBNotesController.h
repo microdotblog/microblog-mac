@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBNote;
 @class MBNotebook;
 @class MBNotesKeyController;
+@class MBVersionsController;
 
 @interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSTextViewDelegate>
 
@@ -35,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) MBNotebook* currentNotebook; // MBNotebook
 @property (strong, nonatomic, nullable) MBNote* selectedNote;
 @property (strong, nonatomic, nullable) MBNotesKeyController* notesKeyController;
+@property (strong, nonatomic, nullable) MBVersionsController* versionsController;
 
 - (void) fetchNotes;
 - (void) focusSearch;
