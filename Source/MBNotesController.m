@@ -539,7 +539,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			}
 			
 			[self.progressSpinner stopAnimation:nil];
-			[self reloadRowForNote:note];
+			[self reloadRowForNote:note onlyRecentNotes:NO];
 			if (handler) {
 				handler();
 			}
@@ -560,9 +560,15 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
-- (void) reloadRowForNote:(MBNote *)note
+- (void) reloadRowForNote:(MBNote *)note onlyRecentNotes:(BOOL)onlyRecentNotes
 {
-	for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+	NSInteger recent_limit = 5;
+	NSInteger use_limit = self.currentNotes.count;
+	if (onlyRecentNotes && (use_limit > recent_limit)) {
+		use_limit = recent_limit;
+	}
+	
+	for (NSInteger i = 0; i < use_limit; i++) {
 		MBNote* n = [self.currentNotes objectAtIndex:i];
 		if (note.noteID && [n.noteID isEqualToNumber:note.noteID]) {
 			// copy the edited note and insert into array
@@ -849,6 +855,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 		n = [self findNote:self.selectedNote inArray:self.allNotes];
 		if (n) {
 			n.text = self.selectedNote.text;
+		}
+
+		// do a quick reload of the table row before it syncs
+		if (n) {
+			[self reloadRowForNote:n onlyRecentNotes:YES];
 		}
 	}
 }
