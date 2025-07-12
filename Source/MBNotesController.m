@@ -534,6 +534,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync(^{
+			if (note.noteID == nil) {
+				note.noteID = [response.parsedResponse objectForKey:@"id"];
+			}
+			
 			[self.progressSpinner stopAnimation:nil];
 			[self reloadRowForNote:note];
 			if (handler) {
@@ -635,15 +639,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self.tableView reloadData];
 	
 	[self syncNote:n completion:^{
-		// reload so we get new ID
-		[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-			// select new note
-			NSIndexSet* index = [NSIndexSet indexSetWithIndex:0];
-			[self.tableView selectRowIndexes:index byExtendingSelection:NO];
-			
-			// focus note editor
-			[self.view.window makeFirstResponder:self.detailTextView];
-		}];
+		// select new note
+		NSIndexSet* index = [NSIndexSet indexSetWithIndex:0];
+		[self.tableView selectRowIndexes:index byExtendingSelection:NO];
+		
+		// focus note editor
+		[self.view.window makeFirstResponder:self.detailTextView];
 	}];
 }
 
