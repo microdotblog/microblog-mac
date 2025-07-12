@@ -57,10 +57,12 @@
 			self.textField.stringValue = self.text;
 		}
 		self.textCopyButton.hidden = NO;
+		self.textEditButton.hidden = NO;
 	}
 	else {
 		self.textField.stringValue = @"";
 		self.textCopyButton.hidden = YES;
+		self.textEditButton.hidden = YES;
 	}
 	
 	[self.textCopyButton setTitle:@"Copy Text"];
