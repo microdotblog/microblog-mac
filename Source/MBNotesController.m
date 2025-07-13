@@ -106,6 +106,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startNewNoteNotification:) name:kNewNoteNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notesKeyUpdatedNotification:) name:kNotesKeyUpdatedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNotesNotification:) name:kRefreshNotesNotification object:nil];
 }
 
 - (void) setupTimer
@@ -658,6 +659,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) notesKeyUpdatedNotification:(NSNotification *)notification
 {
 	[self setupSecretKey];
+	[self fetchNotes];
+}
+
+- (void) refreshNotesNotification:(NSNotification *)notification
+{
+	[self.tableView deselectAll:nil];
 	[self fetchNotes];
 }
 

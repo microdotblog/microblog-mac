@@ -148,6 +148,7 @@ static NSString* const kSelectTagNameKey = @"name";
 
 static NSString* const kNewNoteNotification = @"MBNewNoteNotification";
 static NSString* const kNotesKeyUpdatedNotification = @"MBNotesKeyUpdatedNotification";
+static NSString* const kRefreshNotesNotification = @"MBRefreshNotesNotification";
 
 static NSString* const kShowLogsNotification = @"MBShowLogsNotification";
 static NSString* const kDeleteSelectedPhotoNotification = @"MBDeleteSelectedPhotoNotification";

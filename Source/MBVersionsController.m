@@ -13,6 +13,7 @@
 #import "MBVersionCell.h"
 #import "RFClient.h"
 #import "RFMacros.h"
+#import "RFConstants.h"
 #import "UUDate.h"
 
 @implementation MBVersionsController
@@ -45,6 +46,8 @@
 
 - (void) fetchVersions
 {
+	[self.progressSpinner startAnimation:nil];
+	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/%@/versions", self.note.noteID];
 	[client getWithCompletion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -54,7 +57,11 @@
  					MBVersion* v = [[MBVersion alloc] init];
 
  					v.versionID = [info objectForKey:@"id"];
- 					v.text = [MBNote decryptText:[info objectForKey:@"content_text"] withKey:self.secretKey];
+					NSString* s = [info objectForKey:@"content_text"];
+					if (self.note.isEncrypted) {
+						s = [MBNote decryptText:s withKey:self.secretKey];
+					}
+					v.text = s;
 
 					NSString* date_s = [info objectForKey:@"date_published"];
 					v.createdAt = [NSDate uuDateFromRfc3339String:date_s];
@@ -69,6 +76,7 @@
 			RFDispatchMain(^{
 				self.versions = new_versions;
 				[self.tableView reloadData];
+				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
@@ -81,7 +89,32 @@
 
 - (IBAction) restore:(id)sender
 {
-	[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+	[self.progressSpinner startAnimation:nil];
+
+	NSInteger row = self.tableView.selectedRow;
+	MBVersion* v = [self.versions objectAtIndex:row];
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/notes"];
+	NSString* s = v.text;
+	
+	if (self.note.isEncrypted) {
+		s = [MBNote encryptText:s withKey:self.secretKey];
+	}
+	
+	NSDictionary* args = @{
+		@"id": self.note.noteID,
+		@"text": s,
+		@"is_encrypted": [NSNumber numberWithBool:self.note.isEncrypted],
+		@"notebook_id": self.note.notebookID
+	};
+		
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			[self.progressSpinner stopAnimation:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshNotesNotification object:self];
+			[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+		});
+	}];
 }
 
 #pragma mark -

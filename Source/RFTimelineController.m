@@ -701,6 +701,11 @@ static NSInteger const kSelectionNotes = 11;
 			[(RFRepliesController *)self.rootController fetchReplies];
 		}
 	}
+	else if (self.selectedTimeline == kSelectionNotes) {
+		if ([self.rootController isKindOfClass:[MBNotesController class]]) {
+			[(MBNotesController *)self.rootController fetchNotes];
+		}
+	}
 
 	RFDispatchSeconds (1.5, ^{
 		[self hideMessageField];
