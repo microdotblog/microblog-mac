@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="MN4-ci-EFe" customClass="MBVersionCell">
+            <rect key="frame" x="0.0" y="0.0" width="493" height="92"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9e1-3Q-YtX">
+                    <rect key="frame" x="18" y="56" width="457" height="16"/>
+                    <textFieldCell key="cell" title="Text" id="Qyr-0N-67d">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d8F-Cm-ecY">
+                    <rect key="frame" x="18" y="20" width="457" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Date" id="sJc-bm-LBS">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="color_date_text"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="9e1-3Q-YtX" firstAttribute="top" secondItem="MN4-ci-EFe" secondAttribute="top" constant="20" symbolic="YES" id="2Fm-dS-KDL"/>
+                <constraint firstAttribute="trailing" secondItem="9e1-3Q-YtX" secondAttribute="trailing" constant="20" symbolic="YES" id="JdT-7p-Zbn"/>
+                <constraint firstAttribute="trailing" secondItem="d8F-Cm-ecY" secondAttribute="trailing" constant="20" symbolic="YES" id="SfT-vz-lnI"/>
+                <constraint firstItem="d8F-Cm-ecY" firstAttribute="top" secondItem="9e1-3Q-YtX" secondAttribute="bottom" constant="20" id="ctn-lh-vfh"/>
+                <constraint firstAttribute="bottom" secondItem="d8F-Cm-ecY" secondAttribute="bottom" constant="20" symbolic="YES" id="cvb-WZ-BFc"/>
+                <constraint firstItem="9e1-3Q-YtX" firstAttribute="leading" secondItem="MN4-ci-EFe" secondAttribute="leading" constant="20" symbolic="YES" id="k5X-mY-tgt"/>
+                <constraint firstItem="d8F-Cm-ecY" firstAttribute="leading" secondItem="MN4-ci-EFe" secondAttribute="leading" constant="20" symbolic="YES" id="tlC-ky-O9S"/>
+            </constraints>
+            <connections>
+                <outlet property="dateField" destination="d8F-Cm-ecY" id="kkt-Ic-9e6"/>
+                <outlet property="textField" destination="9e1-3Q-YtX" id="coU-AT-PdL"/>
+            </connections>
+            <point key="canvasLocation" x="31.5" y="-99"/>
+        </customView>
+    </objects>
+    <resources>
+        <namedColor name="color_date_text">
+            <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

@@ -709,10 +709,15 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (IBAction) showVersions:(id)sender
 {
-	self.versionsController = [[MBVersionsController alloc] init];
-	[self.tableView.window beginSheet:self.versionsController.window completionHandler:^(NSModalResponse returnCode) {
-		self.versionsController = nil;
-	}];
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBNote* n = [self.currentNotes objectAtIndex:row];
+		self.versionsController = [[MBVersionsController alloc] initWithNote:n secretKey:self.secretKey];
+		NSWindow* win = self.versionsController.window;
+		[self.tableView.window beginSheet:win completionHandler:^(NSModalResponse returnCode) {
+			self.versionsController = nil;
+		}];
+	}
 }
 
 - (IBAction) shareOrUnshare:(id)sender

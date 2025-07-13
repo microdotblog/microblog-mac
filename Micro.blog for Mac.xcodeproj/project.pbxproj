@@ -98,6 +98,8 @@
 		4B41CB452E22AFD4000C324F /* VersionsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B41CB432E22AFD4000C324F /* VersionsWindow.xib */; };
 		4B41CB482E22B07D000C324F /* MBVersionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB472E22B07D000C324F /* MBVersionsController.m */; };
 		4B41CB4B2E22BA98000C324F /* MBVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB4A2E22BA98000C324F /* MBVersion.m */; };
+		4B41CB4E2E22DB30000C324F /* MBVersionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB4D2E22DB30000C324F /* MBVersionCell.m */; };
+		4B41CB512E22DB55000C324F /* VersionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B41CB4F2E22DB55000C324F /* VersionCell.xib */; };
 		4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */; };
 		4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */; };
 		4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */; };
@@ -430,6 +432,9 @@
 		4B41CB472E22B07D000C324F /* MBVersionsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVersionsController.m; path = Source/MBVersionsController.m; sourceTree = "<group>"; };
 		4B41CB492E22BA98000C324F /* MBVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBVersion.h; path = Source/MBVersion.h; sourceTree = "<group>"; };
 		4B41CB4A2E22BA98000C324F /* MBVersion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVersion.m; path = Source/MBVersion.m; sourceTree = "<group>"; };
+		4B41CB4C2E22DB30000C324F /* MBVersionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBVersionCell.h; path = Source/MBVersionCell.h; sourceTree = "<group>"; };
+		4B41CB4D2E22DB30000C324F /* MBVersionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVersionCell.m; path = Source/MBVersionCell.m; sourceTree = "<group>"; };
+		4B41CB502E22DB55000C324F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/VersionCell.xib; sourceTree = "<group>"; };
 		4B4C7DBF24E1BC03000004E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookmark.xib; sourceTree = "<group>"; };
 		4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookmarkController.h; path = Source/RFBookmarkController.h; sourceTree = "<group>"; };
 		4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookmarkController.m; path = Source/RFBookmarkController.m; sourceTree = "<group>"; };
@@ -1128,6 +1133,8 @@
 				4B41CB472E22B07D000C324F /* MBVersionsController.m */,
 				4B41CB492E22BA98000C324F /* MBVersion.h */,
 				4B41CB4A2E22BA98000C324F /* MBVersion.m */,
+				4B41CB4C2E22DB30000C324F /* MBVersionCell.h */,
+				4B41CB4D2E22DB30000C324F /* MBVersionCell.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1196,6 +1203,7 @@
 				4B79E2912D089E0300A22861 /* CollectionCell.xib */,
 				4B79E2942D0B56BE00A22861 /* EditCollectionCell.xib */,
 				4B41CB432E22AFD4000C324F /* VersionsWindow.xib */,
+				4B41CB4F2E22DB55000C324F /* VersionCell.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1372,6 +1380,7 @@
 				4B5606D42A73191800843D59 /* EditTags.xib in Resources */,
 				4BD833A0273C3FF0007350F2 /* GoToUser.xib in Resources */,
 				4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */,
+				4B41CB512E22DB55000C324F /* VersionCell.xib in Resources */,
 				4BDB382A278A8FE200BD457C /* Preview.html in Resources */,
 				4BF537312247BDCD00CF9D66 /* PostCell.xib in Resources */,
 				4B4DC44F1BB04B970095CCBB /* Timeline.xib in Resources */,
@@ -1438,6 +1447,7 @@
 				4B2CAB151F90667300D9B10E /* win32tc.c in Sources */,
 				4B3840D12692038B00AD3781 /* RFMarkdownExportController.m in Sources */,
 				4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */,
+				4B41CB4E2E22DB30000C324F /* MBVersionCell.m in Sources */,
 				C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */,
 				4B5A25071F83FE37007C548F /* RFWelcomeController.m in Sources */,
 				4B400D08201EC55B00C71AAF /* MMGenerator.m in Sources */,
@@ -1720,6 +1730,14 @@
 				4B41CB442E22AFD4000C324F /* Base */,
 			);
 			name = VersionsWindow.xib;
+			sourceTree = "<group>";
+		};
+		4B41CB4F2E22DB55000C324F /* VersionCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B41CB502E22DB55000C324F /* Base */,
+			);
+			name = VersionCell.xib;
 			sourceTree = "<group>";
 		};
 		4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */ = {

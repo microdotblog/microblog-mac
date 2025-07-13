@@ -12,15 +12,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class MBNote;
 
-@interface MBVersionsController : NSWindowController
+@interface MBVersionsController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource>
 
-@property (strong, nonatomic) NSTableView* tableView;
-@property (strong, nonatomic) NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong) MBNote* note;
 @property (strong) NSArray* versions; // MBVersion
+@property (strong) NSString* secretKey;
 
-- (id) initWithNote:(MBNote *)note;
+- (id) initWithNote:(MBNote *)note secretKey:(NSString *)secretKey;
 
 @end
 
