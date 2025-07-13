@@ -14,7 +14,13 @@
 
 - (void) setupWithVersion:(MBVersion *)version
 {
-	self.textField.stringValue = version.text;
+	NSString* s = version.text;
+	if (s.length > 300) {
+		s = [s substringToIndex:300];
+		s = [s stringByAppendingString:@"..."];
+	}
+	self.textField.stringValue = s;
+	
 	NSString* date_s = [NSDateFormatter localizedStringFromDate:version.createdAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
 	if (date_s) {
 		self.dateField.stringValue = date_s;

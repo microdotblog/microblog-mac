@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) IBOutlet NSButton* restoreButton;
 
 @property (strong) MBNote* note;
 @property (strong) NSArray* versions; // MBVersion

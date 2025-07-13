@@ -32,6 +32,8 @@
 {
 	[super windowDidLoad];
 	
+	self.restoreButton.enabled = NO;
+
 	[self setupTable];
 	[self fetchVersions];
 }
@@ -99,6 +101,17 @@
 	}
 
 	return cell;
+}
+
+- (void) tableViewSelectionDidChange:(NSNotification *)notification
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		self.restoreButton.enabled = YES;
+	}
+	else {
+		self.restoreButton.enabled = NO;
+	}
 }
 
 @end

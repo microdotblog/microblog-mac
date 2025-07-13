@@ -10,6 +10,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBVersionsController">
             <connections>
                 <outlet property="progressSpinner" destination="Riw-4M-ITS" id="cGj-aK-kfz"/>
+                <outlet property="restoreButton" destination="1cv-na-w1Y" id="x0Q-Fp-XcM"/>
                 <outlet property="tableView" destination="aRb-f8-Mdf" id="Lwo-hf-eNB"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="lRA-Dl-fE2"/>
             </connections>
