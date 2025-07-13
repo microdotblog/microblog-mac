@@ -58,7 +58,7 @@
 
  					v.versionID = [info objectForKey:@"id"];
 					NSString* s = [info objectForKey:@"content_text"];
-					if (self.note.isEncrypted) {
+					if ([MBNote isProbablyEncrypted:s]) {
 						s = [MBNote decryptText:s withKey:self.secretKey];
 					}
 					v.text = s;

@@ -10,13 +10,15 @@
 
 #import "MBVersion.h"
 
+static NSInteger const kVersionTextMaxLength = 400;
+
 @implementation MBVersionCell
 
 - (void) setupWithVersion:(MBVersion *)version
 {
 	NSString* s = version.text;
-	if (s.length > 300) {
-		s = [s substringToIndex:300];
+	if (s.length > kVersionTextMaxLength) {
+		s = [s substringToIndex:kVersionTextMaxLength];
 		s = [s stringByAppendingString:@"..."];
 	}
 	self.textField.stringValue = s;

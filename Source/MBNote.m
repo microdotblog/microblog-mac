@@ -89,4 +89,17 @@
 	return result;
 }
 
++ (BOOL) isProbablyEncrypted:(NSString *)text
+{
+	BOOL result = NO;
+	
+	if (text.length > 30) {
+		// if there are no spaces, probably encrypted
+		NSString* s = [text substringToIndex:30];
+		result = ![s containsString:@" "];
+	}
+		
+	return result;
+}
+
 @end

@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key;
 + (NSString *) decryptText:(NSString *)text withKey:(NSString *)key;
 
++ (BOOL) isProbablyEncrypted:(NSString *)text;
+
 @end
 
 NS_ASSUME_NONNULL_END
