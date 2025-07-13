@@ -29,4 +29,16 @@ static NSInteger const kVersionTextMaxLength = 400;
 	}
 }
 
+- (void) setSelected:(BOOL)selected
+{
+	[super setSelected:selected];
+	
+	if (selected) {
+		self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
+	}
+	else {
+		self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
+	}
+}
+
 @end

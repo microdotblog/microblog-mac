@@ -107,6 +107,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startNewNoteNotification:) name:kNewNoteNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notesKeyUpdatedNotification:) name:kNotesKeyUpdatedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNotesNotification:) name:kRefreshNotesNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
 }
 
 - (void) setupTimer
@@ -666,6 +667,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	[self.tableView deselectAll:nil];
 	[self fetchNotes];
+}
+
+- (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
+{
+	[self updateDetailsColor];
 }
 
 - (void) focusSearch

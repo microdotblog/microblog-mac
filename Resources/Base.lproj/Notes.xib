@@ -62,7 +62,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
                                     <clipView key="contentView" id="mfH-x6-gOa">
                                         <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="Sif-9p-2X2" customClass="RFPostTableView">
                                                 <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
@@ -123,7 +123,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="242" height="551"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
                                         <rect key="frame" x="0.0" y="0.0" width="242" height="551"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
                                                 <rect key="frame" x="0.0" y="0.0" width="222" height="541"/>
@@ -146,7 +146,7 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2ER-EO-y0M">
-                                        <rect key="frame" x="226" y="10" width="16" height="541"/>
+                                        <rect key="frame" x="225" y="10" width="17" height="541"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
