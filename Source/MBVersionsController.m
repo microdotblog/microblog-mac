@@ -66,7 +66,10 @@
 					NSString* date_s = [info objectForKey:@"date_published"];
 					v.createdAt = [NSDate uuDateFromRfc3339String:date_s];
 
- 					[new_versions addObject:v];
+					// only use the version if there's text in it
+					if (v.text.length > 0) {
+						[new_versions addObject:v];
+					}
  				}
 
 				// sort by newest first
