@@ -51,6 +51,7 @@ static NSInteger const kMaxCharsBlockquote = 600;
 
 static NSString* const kSaveNotesToFolderPrefKey = @"SaveNotesToFolder";
 static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
+static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url" // NSURL

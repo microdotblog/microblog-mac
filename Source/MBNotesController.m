@@ -187,7 +187,15 @@ static NSString* const kNotesSettingsType = @"Setting";
 				nb.darkColor = [NSColor mb_colorFromString:dark_color];
 				[new_notebooks addObject:nb];
 				
+				// assume first notebook
 				if (self.currentNotebook == nil) {
+					self.currentNotebook = nb;
+					[self updateDetailsColor];
+				}
+				
+				// if saved notebook, use that
+				NSNumber* saved_notebook_id = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentNotebookIDPrefKey];
+				if (saved_notebook_id && [saved_notebook_id isEqualToNumber:nb.notebookID]) {
 					self.currentNotebook = nb;
 					[self updateDetailsColor];
 				}
@@ -621,6 +629,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	for (MBNotebook* nb in self.notebooks) {
 		if (nb.notebookID.integerValue == notebook_id) {
 			self.currentNotebook = nb;
+			[[NSUserDefaults standardUserDefaults] setObject:nb.notebookID forKey:kCurrentNotebookIDPrefKey];
 			[self updateDetailsColor];
 			break;
 		}
