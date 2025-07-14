@@ -217,6 +217,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotesWithNotebookID:(NSNumber *)notebookID completion:(void (^)(void))handler
 {
+	// if multiple notebooks, disable until we're done loading
+	if (self.notebooks.count > 1) {
+		self.notebooksPopup.enabled = NO;
+	}
+
+	// start fetching
 	NSMutableArray* new_notes = [NSMutableArray array];
 	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:new_notes completion:handler];
 }
@@ -306,6 +312,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 						}
 					}
 
+					self.notebooksPopup.enabled = YES;
 					[self.progressSpinner stopAnimation:nil];
 					[self stopLoadingSidebarRow];
 				}
