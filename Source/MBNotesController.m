@@ -225,12 +225,6 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotesWithNotebookID:(NSNumber *)notebookID completion:(void (^)(void))handler
 {
-	// if multiple notebooks, disable until we're done loading
-	if (self.notebooks.count > 1) {
-		self.notebooksPopup.enabled = NO;
-	}
-
-	// start fetching
 	NSMutableArray* new_notes = [NSMutableArray array];
 	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:new_notes completion:handler];
 }
@@ -240,7 +234,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (self.secretKey == nil) {
 		return;
 	}
-	
+
+	// if multiple notebooks, disable until we're done loading (and only on 2nd or later request)
+	if ((self.notebooks.count > 1) && (offset > 0)) {
+		self.notebooksPopup.enabled = NO;
+	}
+
 	NSInteger count = 100;
 	
 	// remember selection if there is one
