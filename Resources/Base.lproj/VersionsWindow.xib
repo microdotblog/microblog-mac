@@ -11,7 +11,7 @@
             <connections>
                 <outlet property="progressSpinner" destination="Riw-4M-ITS" id="cGj-aK-kfz"/>
                 <outlet property="restoreButton" destination="1cv-na-w1Y" id="x0Q-Fp-XcM"/>
-                <outlet property="tableView" destination="aRb-f8-Mdf" id="Lwo-hf-eNB"/>
+                <outlet property="tableView" destination="nm2-28-rAc" id="nGB-ty-3bf"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="lRA-Dl-fE2"/>
             </connections>
         </customObject>
@@ -54,72 +54,72 @@ Gw
                             <action selector="cancel:" target="-2" id="nMU-zW-gQn"/>
                         </connections>
                     </button>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x9c-VZ-bfw">
-                        <rect key="frame" x="-1" y="64" width="602" height="537"/>
-                        <clipView key="contentView" id="wEi-V6-kxt">
-                            <rect key="frame" x="1" y="1" width="600" height="535"/>
+                    <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Riw-4M-ITS">
+                        <rect key="frame" x="20" y="24" width="16" height="16"/>
+                    </progressIndicator>
+                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ELW-hd-Cec">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <clipView key="contentView" id="bh0-VA-WPr">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="aRb-f8-Mdf">
-                                    <rect key="frame" x="0.0" y="0.0" width="737" height="535"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="fullWidth" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="nm2-28-rAc">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="725" minWidth="10" maxWidth="3.4028234663852886e+38" id="51J-SL-sq0">
+                                        <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="588" minWidth="40" maxWidth="1000" id="AyR-PR-hUl">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="XKV-ag-vaa">
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="dS7-7x-5LY">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="Nfc-th-J3L">
-                                                    <rect key="frame" x="8" y="0.0" width="720" height="17"/>
+                                                <tableCellView id="6Y8-bR-SqR">
+                                                    <rect key="frame" x="8" y="0.0" width="583" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <outlet property="dataSource" destination="-2" id="bHA-nT-UfR"/>
-                                        <outlet property="delegate" destination="-2" id="AG2-lr-uTn"/>
+                                        <outlet property="dataSource" destination="-2" id="rK7-Uw-9PF"/>
+                                        <outlet property="delegate" destination="-2" id="jsv-ZF-EvZ"/>
                                     </connections>
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="oHS-8r-uDd">
-                            <rect key="frame" x="-100" y="-100" width="600" height="17"/>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="tJn-5s-2Xc">
+                            <rect key="frame" x="0.0" y="519" width="600" height="17"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="beB-jB-R8S">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="ZPV-Lg-Yt8">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Riw-4M-ITS">
-                        <rect key="frame" x="20" y="24" width="16" height="16"/>
-                    </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="qsn-JG-cP6" secondAttribute="bottom" constant="20" symbolic="YES" id="6LX-n6-jtC"/>
                     <constraint firstItem="1cv-na-w1Y" firstAttribute="leading" secondItem="qsn-JG-cP6" secondAttribute="trailing" constant="12" symbolic="YES" id="BXp-ke-s4K"/>
-                    <constraint firstItem="x9c-VZ-bfw" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="FhD-Fr-RGb"/>
+                    <constraint firstItem="ELW-hd-Cec" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="EfX-k0-wP7"/>
+                    <constraint firstItem="ELW-hd-Cec" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="Gd1-R5-ygz"/>
                     <constraint firstAttribute="bottom" secondItem="1cv-na-w1Y" secondAttribute="bottom" constant="20" symbolic="YES" id="GdD-Kw-xza"/>
-                    <constraint firstItem="x9c-VZ-bfw" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="Sre-6z-XaN"/>
+                    <constraint firstAttribute="trailing" secondItem="ELW-hd-Cec" secondAttribute="trailing" id="QB8-ue-6pz"/>
                     <constraint firstItem="Riw-4M-ITS" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="b4t-nA-SOO"/>
                     <constraint firstItem="Riw-4M-ITS" firstAttribute="centerY" secondItem="qsn-JG-cP6" secondAttribute="centerY" id="cVC-43-jpO"/>
-                    <constraint firstItem="1cv-na-w1Y" firstAttribute="top" secondItem="x9c-VZ-bfw" secondAttribute="bottom" constant="20" symbolic="YES" id="mSB-ho-UNK"/>
+                    <constraint firstItem="1cv-na-w1Y" firstAttribute="top" secondItem="ELW-hd-Cec" secondAttribute="bottom" constant="20" symbolic="YES" id="jBG-hD-Jvj"/>
                     <constraint firstAttribute="trailing" secondItem="1cv-na-w1Y" secondAttribute="trailing" constant="20" symbolic="YES" id="q3u-GZ-RGK"/>
-                    <constraint firstAttribute="trailing" secondItem="x9c-VZ-bfw" secondAttribute="trailing" constant="-1" id="yYv-7p-o4d"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="267.5" y="246.5"/>
+            <point key="canvasLocation" x="249" y="235"/>
         </window>
     </objects>
 </document>

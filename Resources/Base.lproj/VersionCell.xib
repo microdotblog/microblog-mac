@@ -17,7 +17,7 @@
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9e1-3Q-YtX">
                     <rect key="frame" x="18" y="51" width="564" height="16"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="560" id="EVU-Tu-OXa"/>
+                        <constraint firstAttribute="width" constant="560" id="slR-nH-uwa"/>
                     </constraints>
                     <textFieldCell key="cell" alignment="left" title="Text" id="Qyr-0N-67d">
                         <font key="font" usesAppearanceFont="YES"/>
@@ -36,6 +36,7 @@
             </subviews>
             <constraints>
                 <constraint firstItem="9e1-3Q-YtX" firstAttribute="top" secondItem="MN4-ci-EFe" secondAttribute="top" constant="20" symbolic="YES" id="2Fm-dS-KDL"/>
+                <constraint firstAttribute="trailing" secondItem="9e1-3Q-YtX" secondAttribute="trailing" constant="20" symbolic="YES" id="Gxf-Dh-Ty2"/>
                 <constraint firstItem="d8F-Cm-ecY" firstAttribute="top" secondItem="9e1-3Q-YtX" secondAttribute="bottom" constant="15" id="ctn-lh-vfh"/>
                 <constraint firstAttribute="bottom" secondItem="d8F-Cm-ecY" secondAttribute="bottom" constant="20" symbolic="YES" id="cvb-WZ-BFc"/>
                 <constraint firstItem="9e1-3Q-YtX" firstAttribute="leading" secondItem="MN4-ci-EFe" secondAttribute="leading" constant="20" symbolic="YES" id="k5X-mY-tgt"/>
