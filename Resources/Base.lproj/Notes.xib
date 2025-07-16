@@ -17,6 +17,9 @@
                 <outlet property="searchField" destination="a7S-Gl-bR0" id="RwR-wZ-VwR"/>
                 <outlet property="separatorMenuItem" destination="dwN-O2-xzr" id="yfh-Qp-CC0"/>
                 <outlet property="shareMenuItem" destination="qMi-ma-aFq" id="yB0-u4-Lta"/>
+                <outlet property="sharedFooter" destination="Ewj-oD-DPE" id="Zin-NC-Fb1"/>
+                <outlet property="sharedHeightConstraint" destination="24s-ro-UIV" id="al3-rZ-OZS"/>
+                <outlet property="sharedLinkButton" destination="30J-es-qW3" id="Zs1-wo-82o"/>
                 <outlet property="tableView" destination="Sif-9p-2X2" id="n5n-9F-Djv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="q4Y-Df-f8v"/>
             </connections>
@@ -120,17 +123,17 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTw-b5-rHj">
-                                    <rect key="frame" x="0.0" y="0.0" width="242" height="551"/>
+                                    <rect key="frame" x="0.0" y="40" width="242" height="511"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="242" height="551"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="242" height="511"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
-                                                <rect key="frame" x="0.0" y="0.0" width="222" height="541"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="222" height="501"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="color_highlight_background"/>
-                                                <size key="minSize" width="222" height="541"/>
+                                                <size key="minSize" width="232" height="501"/>
                                                 <size key="maxSize" width="242" height="10000000"/>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
@@ -146,14 +149,36 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2ER-EO-y0M">
-                                        <rect key="frame" x="225" y="10" width="17" height="541"/>
+                                        <rect key="frame" x="225" y="10" width="17" height="501"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
+                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Ewj-oD-DPE">
+                                    <rect key="frame" x="0.0" y="0.0" width="242" height="40"/>
+                                    <subviews>
+                                        <button translatesAutoresizingMaskIntoConstraints="NO" id="30J-es-qW3">
+                                            <rect key="frame" x="10" y="8" width="222" height="24"/>
+                                            <buttonCell key="cell" type="square" title="example.com/abcdef..." bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="TZ1-XB-upB">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="24s-ro-UIV"/>
+                                        <constraint firstItem="30J-es-qW3" firstAttribute="top" secondItem="Ewj-oD-DPE" secondAttribute="top" constant="8" id="94V-X8-hjA"/>
+                                        <constraint firstItem="30J-es-qW3" firstAttribute="leading" secondItem="Ewj-oD-DPE" secondAttribute="leading" constant="10" id="Z6m-f8-gYm"/>
+                                        <constraint firstAttribute="bottom" secondItem="30J-es-qW3" secondAttribute="bottom" constant="8" id="ezc-CX-Nwv"/>
+                                        <constraint firstAttribute="trailing" secondItem="30J-es-qW3" secondAttribute="trailing" constant="10" id="sxO-ut-Tuu"/>
+                                    </constraints>
+                                </customView>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="bottom" secondItem="pTw-b5-rHj" secondAttribute="bottom" id="9a1-TY-YCp"/>
+                                <constraint firstItem="Ewj-oD-DPE" firstAttribute="top" secondItem="pTw-b5-rHj" secondAttribute="bottom" id="ca5-cv-TgA"/>
+                                <constraint firstItem="Ewj-oD-DPE" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" id="ghz-lE-5GV"/>
                                 <constraint firstAttribute="trailing" secondItem="pTw-b5-rHj" secondAttribute="trailing" id="lZu-V8-z9P"/>
+                                <constraint firstAttribute="bottom" secondItem="Ewj-oD-DPE" secondAttribute="bottom" id="mn7-1n-p5m"/>
+                                <constraint firstAttribute="trailing" secondItem="Ewj-oD-DPE" secondAttribute="trailing" id="sUp-9X-KQa"/>
                                 <constraint firstItem="pTw-b5-rHj" firstAttribute="top" secondItem="rkn-Eu-2Kj" secondAttribute="top" id="xn9-RH-3Kk"/>
                                 <constraint firstItem="pTw-b5-rHj" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" id="zXo-Jh-eYj"/>
                             </constraints>

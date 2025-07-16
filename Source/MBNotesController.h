@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSMenuItem* separatorMenuItem;
 @property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 @property (strong, nonatomic) IBOutlet NSMenuItem* linkMenuItem;
+@property (strong, nonatomic) IBOutlet NSView* sharedFooter;
+@property (strong, nonatomic) IBOutlet NSButton* sharedLinkButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* sharedHeightConstraint;
 
 @property (strong, nonatomic) NSString* secretKey;
 @property (strong, nonatomic) NSArray* allNotes; // MBNote

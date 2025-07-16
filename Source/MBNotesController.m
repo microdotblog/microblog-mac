@@ -302,7 +302,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 				if (items.count < count) {
 					self.allNotes = array;
 					self.currentNotes = array;
-					[self.tableView reloadData];
+					if (self.searchField.stringValue.length > 0) {
+						[self runSearch:self.searchField.stringValue];
+					}
+					else {
+						[self.tableView reloadData];
+					}
 					if (handler) {
 						handler();
 					}
@@ -444,6 +449,26 @@ static NSString* const kNotesSettingsType = @"Setting";
 			self.detailTextView.backgroundColor = self.currentNotebook.lightColor;
 		}
 	});
+}
+
+- (void) runSearch:(NSString *)search
+{
+	NSString* s = [search lowercaseString];
+	if (s.length == 0) {
+		self.currentNotes = self.allNotes;
+		[self.tableView reloadData];
+	}
+	else {
+		NSMutableArray* filtered_notes = [NSMutableArray array];
+		for (MBNote* n in self.allNotes) {
+			if ([[n.text lowercaseString] containsString:s]) {
+				[filtered_notes addObject:n];
+			}
+		}
+
+		self.currentNotes = filtered_notes;
+		[self.tableView reloadData];
+	}
 }
 
 #pragma mark -
@@ -698,28 +723,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	[self.tableView deselectAll:nil];
 
-	[self.detailTextView setString:@""];
+	[self setDetailText:@"" forNote:nil];
 	self.selectedNote = nil;
 }
 
 - (IBAction) search:(id)sender
 {
 	NSString* s = [sender stringValue];
-	if (s.length == 0) {
-		self.currentNotes = self.allNotes;
-		[self.tableView reloadData];
-	}
-	else {
-		NSMutableArray* filtered_notes = [NSMutableArray array];
-		for (MBNote* n in self.allNotes) {
-			if ([[n.text lowercaseString] containsString:s]) {
-				[filtered_notes addObject:n];
-			}
-		}
-
-		self.currentNotes = filtered_notes;
-		[self.tableView reloadData];
-	}
+	[self runSearch:s];
 }
 
 - (IBAction) startNewPost:(id)sender
@@ -841,6 +852,17 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (void) setDetailText:(NSString *)text forNote:(MBNote *)note
+{
+	[self.detailTextView setString:text];
+	if (note && note.isShared) {
+		self.sharedHeightConstraint.constant = 40;
+	}
+	else {
+		self.sharedHeightConstraint.constant = 0;
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
@@ -870,12 +892,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (row >= 0) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
 		self.selectedNote = [n copy];
-		[self.detailTextView setString:self.selectedNote.text];
+		[self setDetailText:self.selectedNote.text forNote:self.selectedNote];
 		[self setupMenuForNote:self.selectedNote];
 	}
 	else {
 		self.selectedNote = nil;
-		[self.detailTextView setString:@""];
+		[self setDetailText:@"" forNote:nil];
 	}
 }
 
