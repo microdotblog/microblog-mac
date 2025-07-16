@@ -166,6 +166,9 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="sharedLinkClicked:" target="-2" id="X9y-EK-HlE"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -178,7 +181,6 @@
                                         <constraint firstAttribute="height" constant="40" id="hcM-rT-u18"/>
                                     </constraints>
                                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="fillColor" name="color_highlight_line"/>
                                 </box>
                             </subviews>
                             <constraints>
@@ -280,9 +282,6 @@
     <resources>
         <namedColor name="color_highlight_background">
             <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="color_highlight_line">
-            <color red="0.94499999284744263" green="0.92900002002716064" blue="0.82400000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="color_table_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

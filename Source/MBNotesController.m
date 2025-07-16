@@ -443,12 +443,18 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) updateDetailsColor
 {
 	RFDispatchMainAsync(^{
+		// adjust text background to notebook color
+		NSColor* base_color;
 		if ([NSAppearance rf_isDarkMode]) {
-			self.detailTextView.backgroundColor = self.currentNotebook.darkColor;
+			base_color = self.currentNotebook.darkColor;
+		} else {
+			base_color = self.currentNotebook.lightColor;
 		}
-		else {
-			self.detailTextView.backgroundColor = self.currentNotebook.lightColor;
-		}
+		self.detailTextView.backgroundColor = base_color;
+
+		// darken the base color for the shared footer
+		NSColor* darker_color = [base_color blendedColorWithFraction:0.05 ofColor:[NSColor blackColor]];
+		self.sharedFooter.fillColor = darker_color;
 	});
 }
 
