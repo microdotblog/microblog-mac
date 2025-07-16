@@ -447,7 +447,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 		NSColor* base_color;
 		if ([NSAppearance rf_isDarkMode]) {
 			base_color = self.currentNotebook.darkColor;
-		} else {
+		}
+		else {
 			base_color = self.currentNotebook.lightColor;
 		}
 		self.detailTextView.backgroundColor = base_color;
