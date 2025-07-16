@@ -118,6 +118,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) setupDetail
 {
 	[self.detailTextView setFont:[NSFont systemFontOfSize:14]];
+	[self setDetailText:@"" forNote:nil];
 }
 
 - (void) setupBrowser
@@ -832,6 +833,16 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (IBAction) sharedLinkClicked:(id)sender
+{
+	if (self.selectedNote && self.selectedNote.isShared) {
+		NSURL* url = [NSURL URLWithString:self.selectedNote.sharedURL];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
+
+#pragma mark -
+
 - (void) replaceSelectionBySurrounding:(NSArray *)markup
 {
 	NSRange r = self.detailTextView.selectedRange;
@@ -856,6 +867,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	[self.detailTextView setString:text];
 	if (note && note.isShared) {
+		[self.sharedLinkButton setTitle:note.sharedURL];
 		self.sharedHeightConstraint.constant = 40;
 	}
 	else {

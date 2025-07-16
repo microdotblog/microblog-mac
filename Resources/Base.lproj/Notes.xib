@@ -4,6 +4,7 @@
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,9 +18,9 @@
                 <outlet property="searchField" destination="a7S-Gl-bR0" id="RwR-wZ-VwR"/>
                 <outlet property="separatorMenuItem" destination="dwN-O2-xzr" id="yfh-Qp-CC0"/>
                 <outlet property="shareMenuItem" destination="qMi-ma-aFq" id="yB0-u4-Lta"/>
-                <outlet property="sharedFooter" destination="Ewj-oD-DPE" id="Zin-NC-Fb1"/>
-                <outlet property="sharedHeightConstraint" destination="24s-ro-UIV" id="al3-rZ-OZS"/>
-                <outlet property="sharedLinkButton" destination="30J-es-qW3" id="Zs1-wo-82o"/>
+                <outlet property="sharedFooter" destination="Wmy-sy-ayo" id="gao-Sg-bj9"/>
+                <outlet property="sharedHeightConstraint" destination="hcM-rT-u18" id="IwW-m6-Ltb"/>
+                <outlet property="sharedLinkButton" destination="kRT-cP-h9u" id="8I4-A0-sod"/>
                 <outlet property="tableView" destination="Sif-9p-2X2" id="n5n-9F-Djv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="q4Y-Df-f8v"/>
             </connections>
@@ -87,7 +88,7 @@
                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         <prototypeCellViews>
                                                             <tableCellView id="Vr0-d4-L3L">
-                                                                <rect key="frame" x="8" y="0.0" width="226" height="24"/>
+                                                                <rect key="frame" x="8" y="0.0" width="288" height="24"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             </tableCellView>
                                                         </prototypeCellViews>
@@ -123,17 +124,17 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTw-b5-rHj">
-                                    <rect key="frame" x="0.0" y="40" width="242" height="511"/>
+                                    <rect key="frame" x="0.0" y="39" width="242" height="512"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="242" height="511"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="242" height="512"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
-                                                <rect key="frame" x="0.0" y="0.0" width="222" height="501"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="222" height="502"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="color_highlight_background"/>
-                                                <size key="minSize" width="232" height="501"/>
+                                                <size key="minSize" width="232" height="502"/>
                                                 <size key="maxSize" width="242" height="10000000"/>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
@@ -149,38 +150,45 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2ER-EO-y0M">
-                                        <rect key="frame" x="225" y="10" width="17" height="501"/>
+                                        <rect key="frame" x="225" y="10" width="17" height="502"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
-                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Ewj-oD-DPE">
-                                    <rect key="frame" x="0.0" y="0.0" width="242" height="40"/>
-                                    <subviews>
-                                        <button translatesAutoresizingMaskIntoConstraints="NO" id="30J-es-qW3">
-                                            <rect key="frame" x="10" y="8" width="222" height="24"/>
-                                            <buttonCell key="cell" type="square" title="example.com/abcdef..." bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="TZ1-XB-upB">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                        </button>
-                                    </subviews>
+                                <box boxType="custom" translatesAutoresizingMaskIntoConstraints="NO" id="Wmy-sy-ayo">
+                                    <rect key="frame" x="-1" y="-1" width="244" height="40"/>
+                                    <view key="contentView" id="XQX-CL-zI0">
+                                        <rect key="frame" x="1" y="1" width="242" height="38"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <button horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="kRT-cP-h9u">
+                                                <rect key="frame" x="13" y="11" width="216" height="16"/>
+                                                <buttonCell key="cell" type="square" title="https://example.com/abc.html" bezelStyle="shadowlessSquare" alignment="left" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" id="EAG-qX-lds">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="kRT-cP-h9u" firstAttribute="leading" secondItem="XQX-CL-zI0" secondAttribute="leading" constant="13" id="6kg-ma-a86"/>
+                                            <constraint firstAttribute="trailing" secondItem="kRT-cP-h9u" secondAttribute="trailing" constant="13" id="nTW-2X-OTj"/>
+                                            <constraint firstItem="kRT-cP-h9u" firstAttribute="centerY" secondItem="XQX-CL-zI0" secondAttribute="centerY" id="vgu-l6-3Tb"/>
+                                        </constraints>
+                                    </view>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="40" id="24s-ro-UIV"/>
-                                        <constraint firstItem="30J-es-qW3" firstAttribute="top" secondItem="Ewj-oD-DPE" secondAttribute="top" constant="8" id="94V-X8-hjA"/>
-                                        <constraint firstItem="30J-es-qW3" firstAttribute="leading" secondItem="Ewj-oD-DPE" secondAttribute="leading" constant="10" id="Z6m-f8-gYm"/>
-                                        <constraint firstAttribute="bottom" secondItem="30J-es-qW3" secondAttribute="bottom" constant="8" id="ezc-CX-Nwv"/>
-                                        <constraint firstAttribute="trailing" secondItem="30J-es-qW3" secondAttribute="trailing" constant="10" id="sxO-ut-Tuu"/>
+                                        <constraint firstAttribute="height" constant="40" id="hcM-rT-u18"/>
                                     </constraints>
-                                </customView>
+                                    <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="fillColor" name="color_highlight_line"/>
+                                </box>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="Ewj-oD-DPE" firstAttribute="top" secondItem="pTw-b5-rHj" secondAttribute="bottom" id="ca5-cv-TgA"/>
-                                <constraint firstItem="Ewj-oD-DPE" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" id="ghz-lE-5GV"/>
+                                <constraint firstItem="Wmy-sy-ayo" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" constant="-1" id="3CZ-lR-KAd"/>
+                                <constraint firstAttribute="bottom" secondItem="Wmy-sy-ayo" secondAttribute="bottom" constant="-1" id="cII-0x-Vjt"/>
+                                <constraint firstAttribute="trailing" secondItem="Wmy-sy-ayo" secondAttribute="trailing" constant="-1" id="cK0-7L-Gup"/>
                                 <constraint firstAttribute="trailing" secondItem="pTw-b5-rHj" secondAttribute="trailing" id="lZu-V8-z9P"/>
-                                <constraint firstAttribute="bottom" secondItem="Ewj-oD-DPE" secondAttribute="bottom" id="mn7-1n-p5m"/>
-                                <constraint firstAttribute="trailing" secondItem="Ewj-oD-DPE" secondAttribute="trailing" id="sUp-9X-KQa"/>
                                 <constraint firstItem="pTw-b5-rHj" firstAttribute="top" secondItem="rkn-Eu-2Kj" secondAttribute="top" id="xn9-RH-3Kk"/>
                                 <constraint firstItem="pTw-b5-rHj" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" id="zXo-Jh-eYj"/>
+                                <constraint firstItem="Wmy-sy-ayo" firstAttribute="top" secondItem="pTw-b5-rHj" secondAttribute="bottom" id="zdI-1R-rlm"/>
                             </constraints>
                         </customView>
                     </subviews>
@@ -272,6 +280,9 @@
     <resources>
         <namedColor name="color_highlight_background">
             <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="color_highlight_line">
+            <color red="0.94499999284744263" green="0.92900002002716064" blue="0.82400000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="color_table_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
