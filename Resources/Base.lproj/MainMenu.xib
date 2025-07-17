@@ -228,6 +228,11 @@ DQ
                                     <action selector="copy:" target="-1" id="G1f-GL-Joy"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Copy Link" keyEquivalent="C" id="bEv-aa-QhO">
+                                <connections>
+                                    <action selector="copyLinkOrHTML:" target="-1" id="y6g-E2-YyJ"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
                                 <connections>
                                     <action selector="paste:" target="-1" id="UvS-8e-Qdg"/>

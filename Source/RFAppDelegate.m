@@ -43,6 +43,7 @@
 #import "NSAppearance+Extras.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
+#import "MBMenus.h"
 
 @implementation RFAppDelegate
 
@@ -292,6 +293,10 @@
 	}
 	else if (item.action == @selector(newDocument:)) {
 		[item setTitle:@"New Post"];
+	}
+	else if (item.action == @selector(copyLinkOrHTML:)) {
+		[item setTitle:@"Copy Link"];
+		return NO;
 	}
 
 	return YES;

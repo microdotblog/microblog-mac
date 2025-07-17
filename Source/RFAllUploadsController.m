@@ -253,6 +253,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}];
 }
 
+- (IBAction) copyLinkOrHTML:(id)sender
+{
+	NSSet* index_paths = [self.collectionView selectionIndexPaths];
+	NSIndexPath* index_path = [index_paths anyObject];
+	RFPhotoCell* cell = (RFPhotoCell *)[self collectionView:self.collectionView itemForRepresentedObjectAtIndexPath:index_path];
+	[cell copyHTML:sender];
+}
+
 - (void) showBlogsMenu
 {
     if (self.blogsMenuPopover) {
@@ -392,6 +400,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.allPosts = @[];
 		[self.collectionView reloadData];
 	}
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(copyLinkOrHTML:)) {
+		[item setTitle:@"Copy HTML"];
+		NSSet* index_paths = [self.collectionView selectionIndexPaths];
+		return ([index_paths count] > 0);
+	}
+	
+	return YES;
 }
 
 #pragma mark -

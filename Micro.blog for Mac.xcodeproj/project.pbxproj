@@ -571,6 +571,7 @@
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
 		4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSColor+Extras.h"; path = "Source/NSColor+Extras.h"; sourceTree = "<group>"; };
 		4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extras.m"; path = "Source/NSColor+Extras.m"; sourceTree = "<group>"; };
+		4BA88AC72E296F8900EAE0A0 /* MBMenus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMenus.h; path = Source/MBMenus.h; sourceTree = "<group>"; };
 		4BA983641FA21FF000E230CC /* RFPostContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPostContainerView.h; path = Source/RFPostContainerView.h; sourceTree = "<group>"; };
 		4BA983651FA21FF000E230CC /* RFPostContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPostContainerView.m; path = Source/RFPostContainerView.m; sourceTree = "<group>"; };
 		4BABBF892D77983600919DEC /* MBSummaryBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSummaryBackgroundView.h; path = Source/MBSummaryBackgroundView.h; sourceTree = "<group>"; };
@@ -878,6 +879,7 @@
 				4B7F0AF01BAF4C27004553A6 /* main.m */,
 				4B8FBDFF1F86F5F700906C86 /* RFConstants.h */,
 				4B8FBDF01F8681D000906C86 /* RFMacros.h */,
+				4BA88AC72E296F8900EAE0A0 /* MBMenus.h */,
 				4B8FBDEF1F8681D000906C86 /* RFClient.h */,
 				4B8FBDEE1F8681D000906C86 /* RFClient.m */,
 				4B7F0AEE1BAF4C27004553A6 /* RFAppDelegate.h */,

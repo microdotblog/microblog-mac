@@ -30,4 +30,6 @@
 - (void) setupForCollection:(MBCollection *)collection;
 - (void) disableMenu;
 
+- (IBAction) copyHTML:(id)sender;
+
 @end

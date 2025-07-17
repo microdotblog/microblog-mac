@@ -15,6 +15,7 @@
 #import "RFSettings.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
+#import "MBMenus.h"
 #import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
@@ -219,6 +220,11 @@
 	}
 }
 
+- (IBAction) copyLinkOrHTML:(id)sender
+{
+	[self copyLink:sender];
+}
+
 - (void) openPost:(RFPost *)post
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
@@ -395,6 +401,17 @@
 	}
 	
 	[self.tableView reloadData];
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(copyLinkOrHTML:)) {
+		[item setTitle:@"Copy Link"];
+		NSInteger row = self.tableView.selectedRow;
+		return (row >= 0);
+	}
+	
+	return YES;
 }
 
 #pragma mark -

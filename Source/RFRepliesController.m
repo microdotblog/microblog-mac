@@ -17,6 +17,7 @@
 #import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
+#import "MBMenus.h"
 
 @implementation RFRepliesController
 
@@ -161,6 +162,11 @@
 	}
 }
 
+- (IBAction) copyLinkOrHTML:(id)sender
+{
+	[self copyLink:sender];
+}
+
 - (void) openPost:(RFPost *)post
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
@@ -244,6 +250,17 @@
 		self.currentReplies = self.allReplies;
 		[self.tableView reloadData];
 	}
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(copyLinkOrHTML:)) {
+		[item setTitle:@"Copy Link"];
+		NSInteger row = self.tableView.selectedRow;
+		return (row >= 0);
+	}
+	
+	return YES;
 }
 
 #pragma mark -
