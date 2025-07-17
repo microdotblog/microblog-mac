@@ -104,6 +104,7 @@
 {
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	up.poster_url = self.poster_url;
+	up.alt = self.alt;
 	NSString* s = [up htmlTag];
 	
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
@@ -126,6 +127,7 @@
 
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	up.poster_url = self.poster_url;
+	up.alt = self.alt;
 	if ([up isPhoto]) {
 		s = [NSString stringWithFormat:@"![](%@)", self.url];
 	}
