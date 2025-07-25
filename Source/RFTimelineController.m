@@ -1915,6 +1915,7 @@ static NSInteger const kSelectionNotes = 11;
     else if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
         NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
         item.view = self.profileBox;
+		item.bordered = NO;
         return item;
     }
     else if ([itemIdentifier isEqualToString:@"NewPost"]) {

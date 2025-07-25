@@ -22,6 +22,10 @@
 	if ([NSAppearance mb_isLiquidGlass]) {
 		self.cornerRadius = 18;
 	}
+
+	if (![self hasMultipleAccounts]) {
+		self.triangleWidthConstraint.constant = 0;
+	}
 	
 	self.originalLightColor = self.fillColor;
 	[self updateBackground];

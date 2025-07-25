@@ -10,6 +10,8 @@
 
 @interface RFAccountPopoverBox : NSBox
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* triangleWidthConstraint;
+
 @property (strong, nonatomic) NSTrackingArea* customTrackingArea;
 @property (strong, nonatomic) NSColor* originalLightColor;
 @property (strong, nonatomic) NSColor* savedFillColor;

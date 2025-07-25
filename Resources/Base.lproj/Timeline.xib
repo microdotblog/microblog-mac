@@ -54,7 +54,7 @@
                                         <rect key="frame" x="-1" y="-1" width="233" height="602"/>
                                         <clipView key="contentView" id="ZGH-vB-5eE">
                                             <rect key="frame" x="1" y="1" width="231" height="600"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="fullWidth" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="34" viewBased="YES" id="8Jx-Dq-dhg">
                                                     <rect key="frame" x="0.0" y="0.0" width="231" height="600"/>
@@ -251,6 +251,9 @@
                     <constraint firstItem="WA0-ys-uhG" firstAttribute="leading" secondItem="dzD-B1-h1U" secondAttribute="trailing" constant="5" id="w8f-Ef-QXN"/>
                 </constraints>
             </view>
+            <connections>
+                <outlet property="triangleWidthConstraint" destination="bsw-qD-jJH" id="vzT-1Y-jn3"/>
+            </connections>
             <point key="canvasLocation" x="-306" y="-180"/>
         </box>
         <customView id="G22-WN-mnh">
