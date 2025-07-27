@@ -60,7 +60,7 @@
 
 - (BOOL) mouseDownCanMoveWindow
 {
-	return NO;
+	return ![self hasMultipleAccounts];
 }
 
 - (void) mouseDown:(NSEvent *)event

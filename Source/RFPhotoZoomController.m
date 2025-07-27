@@ -31,12 +31,10 @@
 {
 	[super windowDidLoad];
 	
+	[self updateButton];
 	[self updateTitle];
 	[self downloadPhoto];
-	
-	self.htmlCopyButton.hidden = !self.isAllowCopy;
-	self.htmlCopyButton.layer.opacity = 0.0;
-	
+
 	self.window.delegate = self;
 }
 
@@ -83,6 +81,14 @@
 	}];
 }
 
+- (void) updateButton
+{
+	self.htmlCopyButton.hidden = !self.isAllowCopy;
+	self.htmlCopyButton.layer.opacity = 0.0;
+	self.htmlCopyButton.layer.backgroundColor = [NSColor colorNamed:@"color_photo_button_background"].CGColor;
+	self.htmlCopyButton.layer.cornerRadius = self.htmlCopyButton.bounds.size.height / 2.0;
+}
+
 - (void) updateTitle
 {
 	NSURL* url = [NSURL URLWithString:self.photoURL];
@@ -96,6 +102,8 @@
 	self.imageView.hidden = YES;
 	self.imageView.image = image;
 	self.window.contentAspectRatio = image.size;
+	
+	[self updateButton];
 	
 	// sometimes NSImage.size is too small, check representations
 	NSArray* reps = image.representations;
@@ -134,7 +142,7 @@
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		context.duration = 0.3;
 		[self.imageView animator].hidden = NO;
-		self.htmlCopyButton.layer.opacity = 0.7;
+		self.htmlCopyButton.layer.opacity = 1.0;
 	}];
 	
 	[self.window saveFrameUsingName:self.window.frameAutosaveName];
