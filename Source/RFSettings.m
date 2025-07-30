@@ -127,6 +127,11 @@
 	return [self hasSnippetsBlog] && ![self prefersExternalBlog];
 }
 
++ (BOOL) isPremium
+{
+	return [self boolForKey:kIsPremium];
+}
+
 #pragma mark -
 
 + (BOOL) boolForKey:(NSString *)prefKey

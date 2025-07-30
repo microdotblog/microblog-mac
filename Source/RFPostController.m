@@ -750,7 +750,13 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		}
 		else {
 			NSImage* img = [[NSImage alloc] initWithContentsOfURL:file_url];
-			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
+			NSImage* scaled_img;
+			if ([RFSettings isPremium]) {
+				scaled_img = [img rf_scaleToSmallestDimension:3000];
+			}
+			else {
+				scaled_img = [img rf_scaleToSmallestDimension:1800];
+			}
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 			[new_photos addObject:photo];
 		}

@@ -53,6 +53,7 @@ static NSString* const kIsUsingBlogThemePreview = @"IsUsingBlogThemePreview";
 + (BOOL) hasMicropubBlog;
 + (BOOL) prefersExternalBlog;
 + (BOOL) isUsingMicroblog;
++ (BOOL) isPremium;
 
 + (BOOL) boolForKey:(NSString *)prefKey;
 + (BOOL) boolForKey:(NSString *)prefKey account:(RFAccount *)account;

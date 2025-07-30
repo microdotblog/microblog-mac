@@ -440,7 +440,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		NSString* e = [[filepath pathExtension] lowercaseString];
 		if ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"]) {
 			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
-			NSImage* scaled_img = [img rf_scaleToSmallestDimension:1800];
+			NSImage* scaled_img;
+			if ([RFSettings isPremium]) {
+				scaled_img = [img rf_scaleToSmallestDimension:3000];
+			}
+			else {
+				scaled_img = [img rf_scaleToSmallestDimension:1800];
+			}
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 
 			[self uploadPhoto:photo completion:^{
