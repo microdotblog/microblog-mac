@@ -118,6 +118,12 @@
 		return;
 	}
 	
+	// don't upload if already uploaded
+	if ([self.photo.publishedURL length] > 0) {
+		[self waitForAltText];
+		return;
+	}
+	
 	// don't upload if we already have alt text
 	if (self.photo.altText.length > 0) {
 		return;
@@ -159,7 +165,10 @@
 
 - (void) waitForAltText
 {
+	[self.progressSpinner startAnimation:nil];
+	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Generating text...";
+	
 	self.altTextTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 repeats:NO block:^(NSTimer* timer) {
 		if (self.isCancelled) {
 			return;
