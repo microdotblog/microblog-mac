@@ -25,6 +25,7 @@ static NSString* const kAttachPhotoKey = @"photo";
 @property (assign) BOOL isVideo;
 @property (assign) BOOL isGIF;
 @property (assign) BOOL isPNG;
+@property (assign) BOOL isUndeletable; // a photo already published that we shouldn't touch
 @property (strong) NSString* tempVideoPath;
 
 //- (id) initWithAsset:(PHAsset *)asset;

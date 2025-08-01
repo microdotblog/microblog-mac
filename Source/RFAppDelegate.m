@@ -671,6 +671,7 @@
 		RFPhoto* new_photo = [[RFPhoto alloc] init];
 		new_photo.publishedURL = url;
 		new_photo.altText = altText;
+		new_photo.isUndeletable = YES;
 		
 		[self showPostWithPhoto:new_photo];
 	}

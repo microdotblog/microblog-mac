@@ -87,7 +87,7 @@
 - (IBAction) removePressed:(id)sender
 {
 	self.isCancelled = YES;
-	if (self.photo.publishedURL) {
+	if (self.photo.publishedURL && !self.photo.isUndeletable) {
 		// if already uploaded, we need to also delete it
 		[self removeUpload:self.photo.publishedURL completion:^{
 			[[NSNotificationCenter defaultCenter] postNotificationName:kRemoveAttachedPhotoNotification object:self userInfo:@{ kRemoveAttachedPhotoIndexPath: self.indexPath }];
@@ -181,10 +181,17 @@
 		[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 			if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 				NSArray* items = response.parsedResponse[@"items"];
-				NSDictionary* latest = [items firstObject];
-				NSString* alt_text = [latest objectForKey:@"alt"];
+				NSDictionary* latest = [self findInfoWithItems:items forURL:self.photo.publishedURL];
+				if (latest == nil) {
+					RFDispatchMainAsync(^{
+						[self.progressSpinner stopAnimation:nil];
+						self.progressStatusField.stringValue = @"";
+					});
+					return;
+				}
 				
 				// we always prefer no quotes
+				NSString* alt_text = [latest objectForKey:@"alt"];
 				alt_text = [alt_text stringByReplacingOccurrencesOfString:@"\"" withString:@""];
 				
 				RFDispatchMainAsync(^{
@@ -209,6 +216,20 @@
 			}
 		}];
 	}];
+}
+
+- (NSDictionary *) findInfoWithItems:(NSArray *)items forURL:(NSString *)url
+{
+	NSDictionary* result = nil;
+
+	for (NSDictionary* item in items) {
+		if ([[item objectForKey:@"url"] isEqualToString:url]) {
+			result = item;
+			break;
+		}
+	}
+	
+	return result;
 }
 
 - (void) removeUpload:(NSString *)url completion:(void (^)(void))handler
