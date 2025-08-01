@@ -117,18 +117,18 @@
 	if (self.photo.isVideo) {
 		return;
 	}
-	
+		
+	// don't upload if we already have alt text
+	if (self.photo.altText.length > 0) {
+		return;
+	}
+
 	// don't upload if already uploaded
 	if ([self.photo.publishedURL length] > 0) {
 		[self waitForAltText];
 		return;
 	}
-	
-	// don't upload if we already have alt text
-	if (self.photo.altText.length > 0) {
-		return;
-	}
-	
+
 	[self.progressSpinner startAnimation:nil];
 	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Uploading...";

@@ -995,6 +995,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 		if (photo.thumbnailImage != nil) {
 			item.thumbnailImageView.image = photo.thumbnailImage;
+			item.progressSpinner.hidden = NO;
 		}
 		else {
 			item.progressSpinner.hidden = NO;
@@ -1008,6 +1009,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 					if (response.httpError == nil) {
 						NSImage* img = [[NSImage alloc] initWithData:[response rawResponse]];
 						item.thumbnailImageView.image = img;
+						photo.thumbnailImage = img;
 						[collectionView mb_safeReloadAtIndexPath:indexPath];
 					}
 				});
