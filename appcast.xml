@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.6.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Fixed uploading duplicate photos when opening the accessibility description window multiple times.</li>
+					<li>Fixed finding the right auto-generated accessibility description for older photos.</li>
+					<li>Fixed waiting forever to generate the accessibility description.</li>
+					<li>Fixed accidentally deleting existing photos used in previous blog posts when re-using them in a new post.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Sat, 02 Aug 2025 11:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.6.4.zip" sparkle:shortVersionString="3.6.4" sparkle:version="194" length="4393217" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.6.3</title>
  			<description><![CDATA[
 				<style>
