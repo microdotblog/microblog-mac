@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSIndexPath* indexPath;
 @property (strong, nonatomic, nullable) NSTimer* altTextTimer;
 @property (assign) BOOL isCancelled;
+@property (assign) NSInteger numAltChecks;
 
 - (id) initWithPhoto:(RFPhoto *)photo atIndex:(NSIndexPath *)indexPath;
 

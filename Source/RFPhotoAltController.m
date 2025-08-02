@@ -15,6 +15,8 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 
+static NSInteger const kMaxAltTextChecks = 20;
+
 @implementation RFPhotoAltController
 
 - (id) initWithPhoto:(RFPhoto *)photo atIndex:(NSIndexPath *)indexPath
@@ -23,6 +25,7 @@
 	if (self) {
 		self.photo = photo;
 		self.indexPath = indexPath;
+		self.numAltChecks = 0;
 	}
 	
 	return self;
@@ -171,6 +174,15 @@
 	
 	self.altTextTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 repeats:NO block:^(NSTimer* timer) {
 		if (self.isCancelled) {
+			return;
+		}
+		
+		self.numAltChecks += 1;
+		
+		// give up eventually
+		if (self.numAltChecks > kMaxAltTextChecks) {
+			[self.progressSpinner stopAnimation:nil];
+			self.progressStatusField.stringValue = @"";
 			return;
 		}
 		
