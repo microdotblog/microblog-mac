@@ -13,8 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RFBookshelvesController : NSViewController
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
+@property (strong, nonatomic) IBOutlet NSPopUpButton* goalsPopup;
 
 @property (strong, nonatomic) NSArray* bookshelves; // RFBookshelf
+@property (strong, nonatomic) NSArray* goals; // MBGoal
 
 @end
 

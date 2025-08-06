@@ -71,6 +71,7 @@
 		4B2F97222E00B76700A834C8 /* MBSelectiveUsernamesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2F97212E00B76700A834C8 /* MBSelectiveUsernamesController.m */; };
 		4B2F97252E00B79400A834C8 /* MBSelectiveUsernameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2F97242E00B79400A834C8 /* MBSelectiveUsernameCell.m */; };
 		4B2F97282E00B97B00A834C8 /* SelectiveUsernameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2F97262E00B97B00A834C8 /* SelectiveUsernameCell.xib */; };
+		4B32DD1E2E43E11F003313B3 /* MBGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B32DD1D2E43E11F003313B3 /* MBGoal.m */; };
 		4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */; };
 		4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B36915529A2BAD800561D9A /* CrosspostCell.xib */; };
 		4B37737D2C3DC451000495DF /* Info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B37737B2C3DC451000495DF /* Info.xib */; };
@@ -383,6 +384,8 @@
 		4B2F97232E00B79400A834C8 /* MBSelectiveUsernameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSelectiveUsernameCell.h; path = Source/MBSelectiveUsernameCell.h; sourceTree = "<group>"; };
 		4B2F97242E00B79400A834C8 /* MBSelectiveUsernameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSelectiveUsernameCell.m; path = Source/MBSelectiveUsernameCell.m; sourceTree = "<group>"; };
 		4B2F97272E00B97B00A834C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/SelectiveUsernameCell.xib; sourceTree = "<group>"; };
+		4B32DD1C2E43E11F003313B3 /* MBGoal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBGoal.h; path = Source/MBGoal.h; sourceTree = "<group>"; };
+		4B32DD1D2E43E11F003313B3 /* MBGoal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBGoal.m; path = Source/MBGoal.m; sourceTree = "<group>"; };
 		4B36915229A2BA8B00561D9A /* MBCrosspostCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCrosspostCell.h; path = Source/MBCrosspostCell.h; sourceTree = "<group>"; };
 		4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCrosspostCell.m; path = Source/MBCrosspostCell.m; sourceTree = "<group>"; };
 		4B36915629A2BAD800561D9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CrosspostCell.xib; sourceTree = "<group>"; };
@@ -942,6 +945,8 @@
 				4BF7E51A28354F9500500C59 /* RFBookshelfCell.m */,
 				4BF7E51C2835850600500C59 /* RFBookshelf.h */,
 				4BF7E51D2835850600500C59 /* RFBookshelf.m */,
+				4B32DD1C2E43E11F003313B3 /* MBGoal.h */,
+				4B32DD1D2E43E11F003313B3 /* MBGoal.m */,
 				4BF7E51F283597DC00500C59 /* MBBook.h */,
 				4BF7E520283597DC00500C59 /* MBBook.m */,
 				4BF7E5252836CAC400500C59 /* MBBooksWindowController.h */,
@@ -1559,6 +1564,7 @@
 				4B2CAB051F90667300D9B10E /* streamio.c in Sources */,
 				4BB990612A857A8200C490E2 /* MBAllTagsController.m in Sources */,
 				4BF7E51B28354F9500500C59 /* RFBookshelfCell.m in Sources */,
+				4B32DD1E2E43E11F003313B3 /* MBGoal.m in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
 				4BF7E5272836CAC400500C59 /* MBBooksWindowController.m in Sources */,
 				4B5EE2862063FD9300C87A78 /* RFAccount.m in Sources */,
