@@ -16,6 +16,56 @@
 #import "RFMacros.h"
 #import "RFConstants.h"
 
+@interface MBGoalPopUpButtonCell : NSPopUpButtonCell
+
+@property (nonatomic, strong) NSAttributedString *overrideTitle;
+
+@end
+
+@implementation MBGoalPopUpButtonCell
+
+- (CGRect) drawTitle:(NSAttributedString *)title withFrame:(NSRect)frame inView:(NSView *)controlView
+{
+	// get attributed string for text and progress
+	NSMenuItem* item = [self selectedItem];
+	MBGoal* g = item.representedObject;
+	if (!g) {
+		return frame;
+	}
+	NSAttributedString* s = [RFBookshelvesController attributedTitleForGoal:g];
+	
+	// draw custom rounded rect background
+	CGFloat corner_radius = 6;
+	NSRect bg_r = controlView.bounds;
+	NSBezierPath* bg_path = [NSBezierPath bezierPathWithRoundedRect:bg_r xRadius:corner_radius yRadius:corner_radius];
+	[[NSColor colorWithCalibratedWhite:0.9 alpha:1.0] setFill];
+	[bg_path fill];
+	
+	// draw disclosure arrows
+	NSImage* disclosure_img = [NSImage imageWithSystemSymbolName:@"chevron.up.chevron.down" accessibilityDescription:@"popup disclosure arrows"];
+	CGFloat side = 10;
+	NSRect icon_r = NSMakeRect(
+		NSMaxX(controlView.bounds) - side - 8,
+		NSMidY(controlView.bounds) - (side / 2),
+		side, side
+	);
+	[disclosure_img drawInRect:icon_r fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
+
+	// use TextKit to make sure attachments draw
+	NSTextStorage* storage = [[NSTextStorage alloc] initWithAttributedString:s];
+	NSTextContainer* container = [[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, frame.size.height)];
+	container.lineFragmentPadding = 0;
+	NSLayoutManager* manager = [[NSLayoutManager alloc] init];
+	[manager addTextContainer:container];
+	[storage addLayoutManager:manager];
+	[manager glyphRangeForTextContainer:container];
+	[manager drawGlyphsForGlyphRange:[manager glyphRangeForTextContainer:container] atPoint:frame.origin];
+	
+	return frame;
+}
+
+@end
+
 @implementation RFBookshelvesController
 
 - (id) init
@@ -97,9 +147,15 @@
 {
 	NSDictionary* args = @{};
 	
+	// placeholder for current year while loading
+	self.goalsPopup.title = @"Reading 2025";
+	self.goalsPopup.enabled = NO;
+	self.goalsPopup.hidden = NO;
+	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books/goals"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			__block BOOL is_first = YES;
 			NSMutableArray* new_goals = [NSMutableArray array];
 
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
@@ -112,11 +168,21 @@
 				g.goalProgress = [[item objectForKey:@"_microblog"] objectForKey:@"goal_progress"];
 
 				[new_goals addObject:g];
+				
+				RFDispatchMainAsync (^{
+					if (is_first) {
+						self.goalSummaryField.stringValue = g.text;
+						self.goalSummaryField.hidden = NO;
+						is_first = NO;
+					}
+				});
 			}
 			
 			RFDispatchMainAsync (^{
 				self.goals = new_goals;
 				[self populatePopup:self.goalsPopup withGoals:self.goals];
+				self.goalsPopup.enabled = YES;
+				self.editButton.enabled = YES;
 			});
 		}
 	}];
@@ -189,7 +255,8 @@
 
 	for (MBGoal* g in goals) {
 		NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"" action:NULL keyEquivalent:@""];
-		item.attributedTitle = [self attributedTitleForGoal:g];
+		item.attributedTitle = [[self class] attributedTitleForGoal:g];
+		item.representedObject = g;
 		item.enabled = YES;
 		[popup.menu addItem:item];
 	}
@@ -197,7 +264,7 @@
 	[popup selectItemAtIndex:0];
 }
 
-- (NSAttributedString *) attributedTitleForGoal:(MBGoal *)goal
++ (NSAttributedString *) attributedTitleForGoal:(MBGoal *)goal
 {
 	NSImage* bar_img = [self imageForProgress:goal.goalProgress.doubleValue max:goal.goalValue.doubleValue size:NSMakeSize(60, 10)];
 
@@ -217,11 +284,12 @@
 	return title_attr;
 }
 
-- (NSImage*) imageForProgress:(CGFloat)progress max:(CGFloat)maxSize size:(NSSize)size
++ (NSImage*) imageForProgress:(CGFloat)progress max:(CGFloat)maxSize size:(NSSize)size
 {
 	NSImage* img = [[NSImage alloc] initWithSize:size];
 	[img lockFocus];
 	
+	// inset a little on the left for spacing
 	CGFloat inset = 5;
 	CGFloat corner_radius = 3;
 	
@@ -244,8 +312,12 @@
 
 - (IBAction) goalsPopupChanged:(NSPopUpButton *)sender
 {
-	MBGoal* g = [self.goals objectAtIndex:sender.indexOfSelectedItem];
-	self.goalsPopup.attributedTitle = [self attributedTitleForGoal:g];
+	self.selectedGoal = [self.goals objectAtIndex:sender.indexOfSelectedItem];
+	self.goalSummaryField.stringValue = self.selectedGoal.text;
+}
+
+- (IBAction) editGoal:(id)sender
+{
 }
 
 #pragma mark -
