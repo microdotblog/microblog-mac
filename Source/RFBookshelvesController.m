@@ -85,6 +85,7 @@
 	
 	[self setupTable];
 	[self setupNotifications];
+	[self setupPlaceholder];
 	
 	[self fetchBookshelves];
 	[self fetchGoals];
@@ -103,6 +104,14 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasAddedNotification:) name:kBookWasAddedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasRemovedNotification:) name:kBookWasRemovedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bookWasAssignedNotification:) name:kBookWasAssignedNotification object:nil];
+}
+
+- (void) setupPlaceholder
+{
+	// placeholder for current year while loading
+	self.goalsPopup.title = @"Reading 2025";
+	self.goalsPopup.enabled = NO;
+	self.goalsPopup.hidden = NO;
 }
 
 #pragma mark -
@@ -148,12 +157,7 @@
 - (void) fetchGoals
 {
 	NSDictionary* args = @{};
-	
-	// placeholder for current year while loading
-	self.goalsPopup.title = @"Reading 2025";
-	self.goalsPopup.enabled = NO;
-	self.goalsPopup.hidden = NO;
-	
+		
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books/goals"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -173,6 +177,7 @@
 				
 				RFDispatchMainAsync (^{
 					if (is_first) {
+						self.selectedGoal = g;
 						self.goalSummaryField.stringValue = g.text;
 						self.goalSummaryField.hidden = NO;
 						is_first = NO;
@@ -187,6 +192,21 @@
 				self.editButton.enabled = YES;
 			});
 		}
+	}];
+}
+
+- (void) sendGoal:(MBGoal *)goal
+{
+	goal.goalValue = [NSNumber numberWithInt:self.editGoalField.intValue];
+	
+	NSMutableDictionary* info = [NSMutableDictionary dictionary];
+	[info setObject:goal.goalValue forKey:@"value"];
+
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/books/goals/%@", goal.goalID];
+	[client postWithParams:info completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self fetchGoals];
+		});
 	}];
 }
 
@@ -320,9 +340,26 @@
 
 - (IBAction) editGoal:(id)sender
 {
-	[self.view.window beginSheet:self.editSheet completionHandler:^(NSModalResponse returnCode) {
+	self.editTitleField.stringValue = self.selectedGoal.title;
+	self.editGoalField.stringValue = [self.selectedGoal.goalValue stringValue];
 	
+	[self.editSheet makeFirstResponder:self.editGoalField];
+
+	[self.view.window beginSheet:self.editSheet completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSModalResponseOK) {
+			[self sendGoal:self.selectedGoal];
+		}
 	}];
+}
+
+- (IBAction) updateGoal:(id)sender
+{
+	[self.view.window endSheet:self.editSheet returnCode:NSModalResponseOK];
+}
+
+- (IBAction) cancelGoal:(id)sender
+{
+	[self.view.window endSheet:self.editSheet returnCode:NSModalResponseCancel];
 }
 
 #pragma mark -

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,20 +25,20 @@
         <window title="Books" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="BooksWindow" animationBehavior="default" tabbingMode="disallowed" id="vBW-a4-Woh">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="594" y="443" width="491" height="439"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
             <value key="minSize" type="size" width="400" height="300"/>
             <view key="contentView" id="aGr-C3-8Q9">
                 <rect key="frame" x="0.0" y="0.0" width="491" height="439"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="80" horizontalPageScroll="10" verticalLineScroll="80" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-aR-LlJ">
-                        <rect key="frame" x="-1" y="-1" width="493" height="387"/>
+                        <rect key="frame" x="-1" y="-1" width="493" height="385"/>
                         <clipView key="contentView" drawsBackground="NO" id="h4R-hn-ZUu">
-                            <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
+                            <rect key="frame" x="0.0" y="0.0" width="493" height="385"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj" customClass="MBBooksTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="493" height="387"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="493" height="385"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="color_table_background"/>
@@ -81,7 +81,7 @@
                         </scroller>
                     </scrollView>
                     <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNA-3l-ASe">
-                        <rect key="frame" x="221" y="402" width="250" height="22"/>
+                        <rect key="frame" x="221" y="400" width="250" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="250" id="YBH-fe-BOp"/>
                         </constraints>
@@ -95,16 +95,16 @@
                         </connections>
                     </searchField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="rdo-mY-zgu">
-                        <rect key="frame" x="0.0" y="384" width="491" height="5"/>
+                        <rect key="frame" x="0.0" y="382" width="491" height="5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="8e0-Sz-SnC"/>
                         </constraints>
                     </box>
                     <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-qI-4Gk">
-                        <rect key="frame" x="20" y="405" width="16" height="16"/>
+                        <rect key="frame" x="20" y="404" width="16" height="16"/>
                     </progressIndicator>
                     <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dI4-c7-XjA">
-                        <rect key="frame" x="18" y="405" width="52" height="16"/>
+                        <rect key="frame" x="18" y="404" width="52" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="2 books" id="6dC-yU-5lh">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

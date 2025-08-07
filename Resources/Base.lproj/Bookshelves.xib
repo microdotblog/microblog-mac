@@ -111,7 +111,7 @@
                                 <rect key="frame" x="59" y="462" width="190" height="24"/>
                                 <popUpButtonCell key="cell" type="push" title="Reading 2025 [progress]" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1pd-m4-A8q" id="IOZ-Eg-7Fl" customClass="MBGoalPopUpButtonCell">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" id="r33-TG-uy4">
                                         <items>
                                             <menuItem title="Reading 2025 [progress]" state="on" id="1pd-m4-A8q"/>
@@ -174,17 +174,17 @@
             </constraints>
             <point key="canvasLocation" x="171" y="70.5"/>
         </customView>
-        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mbg-Ev-fgM">
+        <window title="Edit Goal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mbg-Ev-fgM">
+            <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="170" y="214" width="366" height="152"/>
+            <rect key="contentRect" x="170" y="214" width="366" height="144"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
             <view key="contentView" id="Db6-fF-KG3">
-                <rect key="frame" x="0.0" y="0.0" width="366" height="152"/>
+                <rect key="frame" x="0.0" y="0.0" width="366" height="144"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ogu-KV-Mk3">
-                        <rect key="frame" x="18" y="116" width="91" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ogu-KV-Mk3">
+                        <rect key="frame" x="18" y="106" width="91" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Reading 2025" id="udz-Jy-dch">
                             <font key="font" metaFont="systemMedium" size="13"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -203,6 +203,9 @@ DQ
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="jWB-za-9Dk"/>
                         </constraints>
+                        <connections>
+                            <action selector="updateGoal:" target="-2" id="6VH-tS-s07"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5jK-wa-rNT">
                         <rect key="frame" x="194" y="20" width="70" height="24"/>
@@ -216,19 +219,24 @@ Gw
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="yN6-NZ-eWl"/>
                         </constraints>
+                        <connections>
+                            <action selector="cancelGoal:" target="-2" id="1JI-5d-ZqT"/>
+                        </connections>
                     </button>
-                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ekU-Mk-Nhw">
-                        <rect key="frame" x="18" y="75" width="165" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ekU-Mk-Nhw">
+                        <rect key="frame" x="18" y="72" width="159" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Number of books to read:" id="YRu-s8-CpV">
                             <font key="font" usesAppearanceFont="YES"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GSf-YU-ECJ">
-                        <rect key="frame" x="189" y="71" width="96" height="24"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GSf-YU-ECJ">
+                        <rect key="frame" x="189" y="68" width="96" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="96" id="cWd-lR-XGK"/>
+                            <constraint firstAttribute="height" constant="24" id="yKf-oS-9cH"/>
+                        </constraints>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Pii-Wl-DIW">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -239,12 +247,18 @@ Gw
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="5jK-wa-rNT" secondAttribute="bottom" constant="20" symbolic="YES" id="21T-2s-BI1"/>
                     <constraint firstAttribute="trailing" secondItem="WE0-co-pK2" secondAttribute="trailing" constant="20" symbolic="YES" id="3L1-Z9-hgQ"/>
+                    <constraint firstItem="ekU-Mk-Nhw" firstAttribute="leading" secondItem="Db6-fF-KG3" secondAttribute="leading" constant="20" symbolic="YES" id="6Dh-w5-SIp"/>
                     <constraint firstAttribute="bottom" secondItem="WE0-co-pK2" secondAttribute="bottom" constant="20" symbolic="YES" id="80b-NI-uGP"/>
                     <constraint firstItem="WE0-co-pK2" firstAttribute="leading" secondItem="5jK-wa-rNT" secondAttribute="trailing" constant="12" symbolic="YES" id="C0W-Xj-Jsp"/>
+                    <constraint firstItem="ekU-Mk-Nhw" firstAttribute="top" secondItem="Ogu-KV-Mk3" secondAttribute="bottom" constant="18" id="GXZ-fq-f9x"/>
+                    <constraint firstItem="Ogu-KV-Mk3" firstAttribute="leading" secondItem="Db6-fF-KG3" secondAttribute="leading" constant="20" symbolic="YES" id="MOK-HL-PTc"/>
+                    <constraint firstItem="GSf-YU-ECJ" firstAttribute="leading" secondItem="ekU-Mk-Nhw" secondAttribute="trailing" constant="14" id="V0u-yl-RlO"/>
+                    <constraint firstItem="GSf-YU-ECJ" firstAttribute="centerY" secondItem="ekU-Mk-Nhw" secondAttribute="centerY" id="Wh9-M9-SHy"/>
+                    <constraint firstItem="Ogu-KV-Mk3" firstAttribute="top" secondItem="Db6-fF-KG3" secondAttribute="top" constant="22" id="YQ7-fl-ASg"/>
                     <constraint firstAttribute="bottom" secondItem="5jK-wa-rNT" secondAttribute="bottom" constant="20" symbolic="YES" id="t9D-g2-ekC"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="682" y="-101"/>
+            <point key="canvasLocation" x="682" y="-105"/>
         </window>
     </objects>
     <resources>
