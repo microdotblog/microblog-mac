@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSPopUpButton* goalsPopup;
 @property (strong, nonatomic) IBOutlet NSTextField* goalSummaryField;
 @property (strong, nonatomic) IBOutlet NSButton* editButton;
+@property (strong, nonatomic) IBOutlet NSWindow* editSheet;
+@property (strong, nonatomic) IBOutlet NSTextField* editTitleField;
+@property (strong, nonatomic) IBOutlet NSTextField* editGoalField;
 
 @property (strong, nonatomic) NSArray* bookshelves; // RFBookshelf
 @property (strong, nonatomic) NSArray* goals; // MBGoal

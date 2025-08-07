@@ -38,7 +38,7 @@
 	CGFloat corner_radius = 6;
 	NSRect bg_r = controlView.bounds;
 	NSBezierPath* bg_path = [NSBezierPath bezierPathWithRoundedRect:bg_r xRadius:corner_radius yRadius:corner_radius];
-	[[NSColor colorWithCalibratedWhite:0.9 alpha:1.0] setFill];
+	[[NSColor colorNamed:@"color_popup_background"] setFill];
 	[bg_path fill];
 	
 	// draw disclosure arrows
@@ -52,7 +52,9 @@
 	[disclosure_img drawInRect:icon_r fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
 
 	// use TextKit to make sure attachments draw
-	NSTextStorage* storage = [[NSTextStorage alloc] initWithAttributedString:s];
+	NSMutableAttributedString* label_s = [[NSMutableAttributedString alloc] initWithAttributedString:s];
+	[label_s addAttribute:NSForegroundColorAttributeName value:[NSColor labelColor] range:NSMakeRange(0, label_s.length)];
+	NSTextStorage* storage = [[NSTextStorage alloc] initWithAttributedString:label_s];
 	NSTextContainer* container = [[NSTextContainer alloc] initWithContainerSize:NSMakeSize(CGFLOAT_MAX, frame.size.height)];
 	container.lineFragmentPadding = 0;
 	NSLayoutManager* manager = [[NSLayoutManager alloc] init];
@@ -318,6 +320,9 @@
 
 - (IBAction) editGoal:(id)sender
 {
+	[self.view.window beginSheet:self.editSheet completionHandler:^(NSModalResponse returnCode) {
+	
+	}];
 }
 
 #pragma mark -

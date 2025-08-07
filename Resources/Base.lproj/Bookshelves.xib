@@ -10,6 +10,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RFBookshelvesController">
             <connections>
                 <outlet property="editButton" destination="7Mx-iY-OHb" id="BLZ-NM-ADM"/>
+                <outlet property="editGoalField" destination="GSf-YU-ECJ" id="jcA-G5-n7a"/>
+                <outlet property="editSheet" destination="mbg-Ev-fgM" id="qa5-N0-V6g"/>
+                <outlet property="editTitleField" destination="Ogu-KV-Mk3" id="T3F-L5-Tj9"/>
                 <outlet property="goalSummaryField" destination="Ytt-Lj-Xoq" id="doA-cR-Uoa"/>
                 <outlet property="goalsPopup" destination="wee-hs-BYT" id="rWg-cb-ckj"/>
                 <outlet property="tableView" destination="44d-ci-2fS" id="tck-GC-NPH"/>
@@ -171,6 +174,78 @@
             </constraints>
             <point key="canvasLocation" x="171" y="70.5"/>
         </customView>
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mbg-Ev-fgM">
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="170" y="214" width="366" height="152"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
+            <view key="contentView" id="Db6-fF-KG3">
+                <rect key="frame" x="0.0" y="0.0" width="366" height="152"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ogu-KV-Mk3">
+                        <rect key="frame" x="18" y="116" width="91" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Reading 2025" id="udz-Jy-dch">
+                            <font key="font" metaFont="systemMedium" size="13"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WE0-co-pK2">
+                        <rect key="frame" x="276" y="20" width="70" height="24"/>
+                        <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fsX-EE-hx6">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="jWB-za-9Dk"/>
+                        </constraints>
+                    </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5jK-wa-rNT">
+                        <rect key="frame" x="194" y="20" width="70" height="24"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gy7-fe-1pL">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="yN6-NZ-eWl"/>
+                        </constraints>
+                    </button>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ekU-Mk-Nhw">
+                        <rect key="frame" x="18" y="75" width="165" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Number of books to read:" id="YRu-s8-CpV">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GSf-YU-ECJ">
+                        <rect key="frame" x="189" y="71" width="96" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Pii-Wl-DIW">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="5jK-wa-rNT" secondAttribute="bottom" constant="20" symbolic="YES" id="21T-2s-BI1"/>
+                    <constraint firstAttribute="trailing" secondItem="WE0-co-pK2" secondAttribute="trailing" constant="20" symbolic="YES" id="3L1-Z9-hgQ"/>
+                    <constraint firstAttribute="bottom" secondItem="WE0-co-pK2" secondAttribute="bottom" constant="20" symbolic="YES" id="80b-NI-uGP"/>
+                    <constraint firstItem="WE0-co-pK2" firstAttribute="leading" secondItem="5jK-wa-rNT" secondAttribute="trailing" constant="12" symbolic="YES" id="C0W-Xj-Jsp"/>
+                    <constraint firstAttribute="bottom" secondItem="5jK-wa-rNT" secondAttribute="bottom" constant="20" symbolic="YES" id="t9D-g2-ekC"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="682" y="-101"/>
+        </window>
     </objects>
     <resources>
         <namedColor name="color_table_background">
