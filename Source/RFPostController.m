@@ -992,6 +992,7 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
 		
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+		[item disableMenu];
 
 		if (photo.thumbnailImage != nil) {
 			item.thumbnailImageView.image = photo.thumbnailImage;
