@@ -120,6 +120,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			[[NSColor selectedContentBackgroundColor] set];
 		}
 		else {
+			self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
 			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
 		}
 	}
