@@ -906,13 +906,15 @@ static NSString* const kNotesSettingsType = @"Setting";
 	// force a sync if selection is changing
 	[self syncFromTimer:nil];
 	
-	// update current edited note text
+	// update current edited note text (if not already being edited)
 	NSInteger row = self.tableView.selectedRow;
 	if (row >= 0) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
-		self.selectedNote = [n copy];
-		[self setDetailText:self.selectedNote.text forNote:self.selectedNote];
-		[self setupMenuForNote:self.selectedNote];
+		if (![self.selectedNote.noteID isEqualToNumber:n.noteID]) {
+			self.selectedNote = [n copy];
+			[self setDetailText:self.selectedNote.text forNote:self.selectedNote];
+			[self setupMenuForNote:self.selectedNote];
+		}
 	}
 	else {
 		self.selectedNote = nil;
