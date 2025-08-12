@@ -45,7 +45,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.textField.attributedStringValue = attr_s;
 	}
 	else {
-		self.textField.stringValue = [post displaySummary];
+		NSString* s = [post displaySummary];
+		if ([s characterAtIndex:0] == '@') {
+			NSAttributedString* attr_s = [self attributeStringForReply:post];
+			self.textField.attributedStringValue = attr_s;
+		}
+		else {
+			self.textField.stringValue = s;
+		}
 	}
 	
 	NSString* date_s = [NSDateFormatter localizedStringFromDate:post.postedAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
@@ -167,6 +174,26 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				[attr_s addAttribute:NSForegroundColorAttributeName value:[NSColor blackColor] range:r];
 			}
 		}];
+	}
+	
+	return attr_s;
+}
+
+- (NSAttributedString *) attributeStringForReply:(RFPost *)post
+{
+	NSString* s = [post displaySummary];
+	NSMutableAttributedString* attr_s = [[NSMutableAttributedString alloc] initWithString:s];
+	
+	// look for a leading @username and color it gray
+	if (s.length > 0) {
+		NSError* error = nil;
+		NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"^@[A-Za-z0-9_@.]+" options:0 error:&error];
+		if (regex && (error == nil)) {
+			NSTextCheckingResult* match = [regex firstMatchInString:s options:0 range:NSMakeRange(0, s.length)];
+			if (match && (match.range.location != NSNotFound) && (match.range.length > 0)) {
+				[attr_s addAttribute:NSForegroundColorAttributeName value:[NSColor secondaryLabelColor] range:match.range];
+			}
+		}
 	}
 	
 	return attr_s;
