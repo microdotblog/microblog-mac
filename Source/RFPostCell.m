@@ -46,7 +46,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	else {
 		NSString* s = [post displaySummary];
-		if ([s characterAtIndex:0] == '@') {
+		if ((s.length > 0) && [s hasPrefix:@"@"]) {
 			NSAttributedString* attr_s = [self attributeStringForReply:post];
 			self.textField.attributedStringValue = attr_s;
 		}

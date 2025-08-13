@@ -5,7 +5,7 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
-			<title>Version 3.6.5</title>
+			<title>Version 3.6.6</title>
  			<description><![CDATA[
 				<style>
 					ul {
@@ -23,8 +23,8 @@
 					<li>Fixed losing the current selection when typing in a note while it is syncing in the background.</li>
 				</ul>
  			]]></description>
-			<pubDate>Tue, 12 Aug 2025 14:45:00 -0500</pubDate>
-			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.6.6.zip" sparkle:shortVersionString="3.6.6" sparkle:version="196" length="4380809" type="application/octet-stream" />
+			<pubDate>Tue, 12 Aug 2025 15:15:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.6.6.zip" sparkle:shortVersionString="3.6.6" sparkle:version="197" length="4380805" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
 		</item>
 		<item>
