@@ -41,6 +41,7 @@
 #import "UUString.h"
 #import "NSAlert+Extras.h"
 #import "NSAppearance+Extras.h"
+#import "NSLocale+Format.h"
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
 #import "MBMenus.h"
@@ -254,6 +255,13 @@
 			[RFSettings setBool:[is_showing_summaries boolValue] forKey:kIsShowingBookmarkSummaries];
 		}
 	}];
+}
+
+- (void) setupTimezone
+{
+	NSDictionary* info = [NSLocale mb_localeInfoAutoupdating];
+	NSLog(@"** hour=%@ order=%@ sep=%@ locale=%@", info[@"hourCycle"], info[@"dateOrder"], info[@"separator"], info[@"locale"]);
+
 }
 
 - (void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context
@@ -753,6 +761,7 @@
 			RFDispatchMainAsync (^{
 				[self loadTimelineWithToken:token account:a];
 				[self setupBookmarks];
+				[self setupTimezone];
 				[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 			});
 		}

@@ -120,6 +120,7 @@
 		4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A25081F83FE4D007C548F /* Welcome.xib */; };
 		4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5A250B1F8497B1007C548F /* MenuCell.xib */; };
 		4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5A250F1F849AF2007C548F /* RFMenuCell.m */; };
+		4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5B00A62E4D473400D4362A /* NSLocale+Format.m */; };
 		4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */; };
 		4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
@@ -469,6 +470,8 @@
 		4B5A250C1F8497B1007C548F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MenuCell.xib; sourceTree = "<group>"; };
 		4B5A250E1F849AF2007C548F /* RFMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMenuCell.h; path = Source/RFMenuCell.h; sourceTree = "<group>"; };
 		4B5A250F1F849AF2007C548F /* RFMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMenuCell.m; path = Source/RFMenuCell.m; sourceTree = "<group>"; };
+		4B5B00A52E4D473400D4362A /* NSLocale+Format.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSLocale+Format.h"; path = "Source/NSLocale+Format.h"; sourceTree = "<group>"; };
+		4B5B00A62E4D473400D4362A /* NSLocale+Format.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+Format.m"; path = "Source/NSLocale+Format.m"; sourceTree = "<group>"; };
 		4B5D5D8F2066A160007ED186 /* RFAccountPopoverBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountPopoverBox.h; path = Source/RFAccountPopoverBox.h; sourceTree = "<group>"; };
 		4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountPopoverBox.m; path = Source/RFAccountPopoverBox.m; sourceTree = "<group>"; };
 		4B5D5D9520675EB9007ED186 /* RFAccountsCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountsCollectionView.h; path = Source/RFAccountsCollectionView.h; sourceTree = "<group>"; };
@@ -1142,6 +1145,8 @@
 				4B41CB4A2E22BA98000C324F /* MBVersion.m */,
 				4B41CB4C2E22DB30000C324F /* MBVersionCell.h */,
 				4B41CB4D2E22DB30000C324F /* MBVersionCell.m */,
+				4B5B00A52E4D473400D4362A /* NSLocale+Format.h */,
+				4B5B00A62E4D473400D4362A /* NSLocale+Format.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1588,6 +1593,7 @@
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
 				4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */,
 				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
+				4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B9F06432767BCE60007F21D /* MBDateController.m in Sources */,
