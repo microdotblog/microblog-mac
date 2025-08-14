@@ -260,8 +260,22 @@
 - (void) setupTimezone
 {
 	NSDictionary* info = [NSLocale mb_localeInfoAutoupdating];
-	NSLog(@"** hour=%@ order=%@ sep=%@ lang=%@", info[@"time_format"], info[@"date_order"], info[@"date_separator"], info[@"language"]);
-
+	
+	NSString* time_format = info[@"time_format"];
+	NSString* date_order = info[@"date_order"];
+	NSString* date_separator = info[@"date_separator"];
+	
+	NSInteger offset_minutes = [[NSTimeZone localTimeZone] secondsFromGMTForDate:[NSDate date]] / 60;
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/account/timezone"];
+	NSDictionary* args = @{
+		@"minutes": @(offset_minutes),
+		@"format": time_format,
+		@"order": date_order,
+		@"separator": date_separator
+	};
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+	}];
 }
 
 - (void) observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context
