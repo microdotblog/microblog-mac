@@ -260,7 +260,7 @@
 - (void) setupTimezone
 {
 	NSDictionary* info = [NSLocale mb_localeInfoAutoupdating];
-	NSLog(@"** hour=%@ order=%@ sep=%@ locale=%@", info[@"hourCycle"], info[@"dateOrder"], info[@"separator"], info[@"locale"]);
+	NSLog(@"** hour=%@ order=%@ sep=%@ lang=%@", info[@"time_format"], info[@"date_order"], info[@"date_separator"], info[@"language"]);
 
 }
 

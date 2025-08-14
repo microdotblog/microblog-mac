@@ -51,25 +51,38 @@ static NSString * MBNormalizeDateSeparator(NSString* raw)
 	NSString* sep = [self mb_dateSeparator];
 
 	return @{
-		@"hourCycle": hour,
-		@"dateOrder": order,
-		@"separator": sep,
-		@"locale": self.localeIdentifier ?: @""
+		@"language": self.localeIdentifier ?: @"",
+		@"time_format": hour,
+		@"date_order": order,
+		@"date_separator": sep
 	};
 }
 
 - (NSString *) mb_hourCycle
 {
-	// expand "j" skeleton to see whether this locale prefers h/K (12h) or H/k (24h)
-	NSString* timePattern = [NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:self];
-	BOOL is_12h = ([timePattern rangeOfString:@"h"].location != NSNotFound || [timePattern rangeOfString:@"K"].location != NSNotFound);
-	return is_12h ? @"h12" : @"h24";
+	// use a real formatter with the user's settings (respects 12/24‑hour toggle)
+	NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
+	fmt.locale = self;
+	fmt.dateStyle = NSDateFormatterNoStyle;
+	fmt.timeStyle = NSDateFormatterShortStyle;
+	NSString* pattern = fmt.dateFormat; // pattern backing localizedStringFromDate
+
+	// detect cycle by inspecting hour symbol in the resolved pattern
+	BOOL has_24 = ([pattern rangeOfString:@"H"].location != NSNotFound ||
+				  [pattern rangeOfString:@"k"].location != NSNotFound);
+	BOOL has_12 = ([pattern rangeOfString:@"h"].location != NSNotFound ||
+				  [pattern rangeOfString:@"K"].location != NSNotFound ||
+				  [pattern rangeOfString:@"a"].location != NSNotFound);
+	return (has_24 && !has_12) ? @"h24" : @"h12";
 }
 
 - (NSString *) mb_dateOrder
 {
-	// use canonical short date pattern
-	NSString* date_pattern = [NSDateFormatter dateFormatFromTemplate:@"yMd" options:0 locale:self];
+	NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+	fmt.locale = self;
+	fmt.dateStyle = NSDateFormatterShortStyle;
+	fmt.timeStyle = NSDateFormatterNoStyle;
+	NSString* date_pattern = fmt.dateFormat;
 
 	NSError* err = nil;
 	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"y+|M+|d+" options:0 error:&err];
@@ -99,7 +112,11 @@ static NSString * MBNormalizeDateSeparator(NSString* raw)
 
 - (NSString *) mb_dateSeparator
 {
-	NSString* date_pattern = [NSDateFormatter dateFormatFromTemplate:@"yMd" options:0 locale:self];
+	NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+	fmt.locale = self;
+	fmt.dateStyle = NSDateFormatterShortStyle;
+	fmt.timeStyle = NSDateFormatterNoStyle;
+	NSString *date_pattern = fmt.dateFormat;
 
 	NSError* err = nil;
 	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"y+|M+|d+" options:0 error:&err];
@@ -114,6 +131,7 @@ static NSString * MBNormalizeDateSeparator(NSString* raw)
 			return MBNormalizeDateSeparator(raw_sep);
 		}
 	}
+	
 	return @"/"; // fallback
 }
 
