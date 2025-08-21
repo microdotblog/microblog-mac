@@ -861,6 +861,10 @@ static CGFloat const kTextViewTitleShownTop = 54;
 
 - (void) handleAutoCompleteNotification:(NSNotification *)notification
 {
+	if (self.textView.hasMarkedText) {
+		return;
+	}
+
 	NSDictionary* dictionary = [notification.userInfo objectForKey:kFoundUserAutoCompleteInfoKey];
 	NSArray* array = dictionary[@"array"];
 	self.activeReplacementString = dictionary[@"string"];
