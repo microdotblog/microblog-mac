@@ -203,6 +203,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAllTagsNotification:) name:kShowTagsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogsNotification:) name:kShowLogsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showInfoNotification:) name:kShowInfoNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timezoneDidChangeNotification:) name:NSSystemTimeZoneDidChangeNotification object:nil];
 }
 
 - (void) setupAppearance
@@ -264,8 +265,10 @@
 	NSString* time_format = info[@"time_format"];
 	NSString* date_order = info[@"date_order"];
 	NSString* date_separator = info[@"date_separator"];
-	
-	NSInteger offset_minutes = [[NSTimeZone localTimeZone] secondsFromGMTForDate:[NSDate date]] / 60;
+
+	// we want reverse offset from GMT to match JS
+	NSTimeZone* tz = [NSTimeZone localTimeZone];
+	NSInteger offset_minutes = -([tz secondsFromGMTForDate:[NSDate date]] / 60);
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/account/timezone"];
 	NSDictionary* args = @{
@@ -632,6 +635,11 @@
 	NSNumber* is_ai = [notification.userInfo objectForKey:kInfoAIKey];
 
 	[self showInfoWithURL:url text:text isAI:[is_ai boolValue]];
+}
+
+- (void) timezoneDidChangeNotification:(NSNotification *)notification
+{
+	[self setupTimezone];
 }
 
 - (void) postWasUnselectedNotification:(NSNotification *)notification
