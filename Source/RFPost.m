@@ -20,6 +20,9 @@
 	NSString* html = [MMMarkdown HTMLStringWithMarkdown:self.text error:&error];
 	if (html.length > 0) {
 		s = [html rf_stripHTML];
+		
+		// special case to fix shortcodes
+		s = [s stringByReplacingOccurrencesOfString:@"{{&lt; " withString:@"{{< "];
 
 		if (s.length > 300) {
 			s = [s substringToIndex:300];
