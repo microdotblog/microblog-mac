@@ -119,6 +119,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	[self.detailTextView setFont:[NSFont systemFontOfSize:14]];
 	[self setDetailText:@"" forNote:nil];
+	[self setDetailBook:@"" title:@""];
 }
 
 - (void) setupBrowser
@@ -732,6 +733,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self.tableView deselectAll:nil];
 
 	[self setDetailText:@"" forNote:nil];
+	[self setDetailBook:@"" title:@""];
 	self.selectedNote = nil;
 }
 
@@ -882,6 +884,18 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (void) setDetailBook:(NSString *)isbn title:(NSString *)title
+{
+	if ([isbn length] > 0) {
+		// ...
+		[self.bookTitleField setStringValue:title];
+		self.bookHeightConstraint.constant = 40;
+	}
+	else {
+		self.bookHeightConstraint.constant = 0;
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
@@ -913,12 +927,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 		if (![self.selectedNote.noteID isEqualToNumber:n.noteID]) {
 			self.selectedNote = [n copy];
 			[self setDetailText:self.selectedNote.text forNote:self.selectedNote];
+			[self setDetailBook:self.selectedNote.attachedBookISBN title:self.selectedNote.attachedBookTitle];
 			[self setupMenuForNote:self.selectedNote];
 		}
 	}
 	else {
 		self.selectedNote = nil;
 		[self setDetailText:@"" forNote:nil];
+		[self setDetailBook:@"" title:@""];
 	}
 }
 

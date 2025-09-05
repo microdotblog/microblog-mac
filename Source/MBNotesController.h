@@ -29,7 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSMenuItem* linkMenuItem;
 @property (strong, nonatomic) IBOutlet NSBox* sharedFooter;
 @property (strong, nonatomic) IBOutlet NSButton* sharedLinkButton;
+@property (strong, nonatomic) IBOutlet NSImageView* bookImageView;
+@property (strong, nonatomic) IBOutlet NSTextField* bookTitleField;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* sharedHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* bookHeightConstraint;
 
 @property (strong, nonatomic) NSString* secretKey;
 @property (strong, nonatomic) NSArray* allNotes; // MBNote

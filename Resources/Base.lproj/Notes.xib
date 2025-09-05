@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,6 +10,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBNotesController">
             <connections>
+                <outlet property="bookHeightConstraint" destination="aKx-FB-5Bi" id="lVp-1f-pA1"/>
+                <outlet property="bookImageView" destination="1nN-1i-0wo" id="6bT-Ro-RgV"/>
+                <outlet property="bookTitleField" destination="BGU-z6-Myp" id="lve-jN-eoD"/>
                 <outlet property="browserMenuItem" destination="8k0-Rv-YZk" id="pNH-Gn-pgQ"/>
                 <outlet property="detailTextView" destination="YbT-7i-Zi1" id="n0v-Vp-3BM"/>
                 <outlet property="linkMenuItem" destination="ume-WW-KAY" id="NCe-Yi-hmW"/>
@@ -53,7 +56,7 @@
                     </constraints>
                 </box>
                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
-                    <rect key="frame" x="130" y="566" width="16" height="16"/>
+                    <rect key="frame" x="127" y="566" width="16" height="16"/>
                 </progressIndicator>
                 <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8i-KT-xcK">
                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
@@ -88,7 +91,7 @@
                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         <prototypeCellViews>
                                                             <tableCellView id="Vr0-d4-L3L">
-                                                                <rect key="frame" x="8" y="0.0" width="288" height="24"/>
+                                                                <rect key="frame" x="8" y="0.0" width="226" height="24"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             </tableCellView>
                                                         </prototypeCellViews>
@@ -124,17 +127,17 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTw-b5-rHj">
-                                    <rect key="frame" x="0.0" y="39" width="242" height="512"/>
+                                    <rect key="frame" x="0.0" y="39" width="242" height="473"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="242" height="512"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="242" height="473"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
-                                                <rect key="frame" x="0.0" y="0.0" width="222" height="502"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="232" height="463"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="color_highlight_background"/>
-                                                <size key="minSize" width="232" height="502"/>
+                                                <size key="minSize" width="232" height="463"/>
                                                 <size key="maxSize" width="242" height="10000000"/>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
@@ -150,7 +153,7 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2ER-EO-y0M">
-                                        <rect key="frame" x="225" y="10" width="17" height="502"/>
+                                        <rect key="frame" x="225" y="10" width="17" height="463"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
@@ -182,13 +185,52 @@
                                     </constraints>
                                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                                 </box>
+                                <box boxType="custom" translatesAutoresizingMaskIntoConstraints="NO" id="mWC-E9-E7s">
+                                    <rect key="frame" x="-1" y="512" width="244" height="40"/>
+                                    <view key="contentView" id="vDL-1M-ge6">
+                                        <rect key="frame" x="1" y="1" width="242" height="38"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1nN-1i-0wo">
+                                                <rect key="frame" x="6" y="4" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="Dyp-10-A2a"/>
+                                                    <constraint firstAttribute="width" constant="30" id="xw2-Og-fIg"/>
+                                                </constraints>
+                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="dqH-s0-CcE"/>
+                                            </imageView>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BGU-z6-Myp">
+                                                <rect key="frame" x="42" y="11" width="62" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Book title" id="G8A-pv-Ycp">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="BGU-z6-Myp" firstAttribute="centerY" secondItem="vDL-1M-ge6" secondAttribute="centerY" id="5tr-er-aDL"/>
+                                            <constraint firstAttribute="trailing" secondItem="BGU-z6-Myp" secondAttribute="trailing" priority="250" constant="20" symbolic="YES" id="60o-zq-ti6"/>
+                                            <constraint firstItem="1nN-1i-0wo" firstAttribute="leading" secondItem="vDL-1M-ge6" secondAttribute="leading" constant="6" id="KXY-rA-dAD"/>
+                                            <constraint firstItem="BGU-z6-Myp" firstAttribute="leading" secondItem="1nN-1i-0wo" secondAttribute="trailing" constant="8" symbolic="YES" id="OiV-Kg-pkW"/>
+                                            <constraint firstItem="1nN-1i-0wo" firstAttribute="centerY" secondItem="vDL-1M-ge6" secondAttribute="centerY" id="u89-hB-mMX"/>
+                                        </constraints>
+                                    </view>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="aKx-FB-5Bi"/>
+                                    </constraints>
+                                    <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                                </box>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="Wmy-sy-ayo" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" constant="-1" id="3CZ-lR-KAd"/>
+                                <constraint firstItem="mWC-E9-E7s" firstAttribute="top" secondItem="rkn-Eu-2Kj" secondAttribute="top" constant="-1" id="BHA-yF-hh9"/>
+                                <constraint firstAttribute="trailing" secondItem="mWC-E9-E7s" secondAttribute="trailing" constant="-1" id="V2z-vt-2Or"/>
                                 <constraint firstAttribute="bottom" secondItem="Wmy-sy-ayo" secondAttribute="bottom" constant="-1" id="cII-0x-Vjt"/>
                                 <constraint firstAttribute="trailing" secondItem="Wmy-sy-ayo" secondAttribute="trailing" constant="-1" id="cK0-7L-Gup"/>
+                                <constraint firstItem="pTw-b5-rHj" firstAttribute="top" secondItem="mWC-E9-E7s" secondAttribute="bottom" id="con-j9-T6z"/>
                                 <constraint firstAttribute="trailing" secondItem="pTw-b5-rHj" secondAttribute="trailing" id="lZu-V8-z9P"/>
-                                <constraint firstItem="pTw-b5-rHj" firstAttribute="top" secondItem="rkn-Eu-2Kj" secondAttribute="top" id="xn9-RH-3Kk"/>
+                                <constraint firstItem="mWC-E9-E7s" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" constant="-1" id="yiL-Fb-bRE"/>
                                 <constraint firstItem="pTw-b5-rHj" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" id="zXo-Jh-eYj"/>
                                 <constraint firstItem="Wmy-sy-ayo" firstAttribute="top" secondItem="pTw-b5-rHj" secondAttribute="bottom" id="zdI-1R-rlm"/>
                             </constraints>
@@ -200,7 +242,7 @@
                     </holdingPriorities>
                 </splitView>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Shg-8z-gSu">
-                    <rect key="frame" x="12" y="564" width="108" height="20"/>
+                    <rect key="frame" x="12" y="564" width="105" height="20"/>
                     <popUpButtonCell key="cell" type="push" title="Notebook" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="k0r-Sd-GWc" id="jKc-n8-hQz">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="message"/>

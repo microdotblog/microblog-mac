@@ -24,6 +24,8 @@
 	new_note.isShared = self.isShared;
 	new_note.isSharing = self.isSharing;
 	new_note.isUnsharing = self.isUnsharing;
+	new_note.attachedBookISBN = [self.attachedBookISBN copyWithZone:zone];
+	new_note.attachedBookTitle = [self.attachedBookTitle copyWithZone:zone];
 	new_note.createdAt = [self.createdAt copyWithZone:zone];
 	new_note.updatedAt = [self.updatedAt copyWithZone:zone];
 	
