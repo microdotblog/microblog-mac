@@ -123,6 +123,7 @@
 		4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5B00A62E4D473400D4362A /* NSLocale+Format.m */; };
 		4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */; };
 		4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */; };
+		4B5D86722E6B6F0600697E41 /* MBBookCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
 		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB424E44853007674FF /* PostWindow.xib */; };
@@ -476,6 +477,8 @@
 		4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountPopoverBox.m; path = Source/RFAccountPopoverBox.m; sourceTree = "<group>"; };
 		4B5D5D9520675EB9007ED186 /* RFAccountsCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountsCollectionView.h; path = Source/RFAccountsCollectionView.h; sourceTree = "<group>"; };
 		4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountsCollectionView.m; path = Source/RFAccountsCollectionView.m; sourceTree = "<group>"; };
+		4B5D86702E6B6F0600697E41 /* MBBookCoverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookCoverView.h; path = Source/MBBookCoverView.h; sourceTree = "<group>"; };
+		4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookCoverView.m; path = Source/MBBookCoverView.m; sourceTree = "<group>"; };
 		4B5DDAAE24E2ECD6007674FF /* RFUploadsScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUploadsScrollView.h; path = Source/RFUploadsScrollView.h; sourceTree = "<group>"; };
 		4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUploadsScrollView.m; path = Source/RFUploadsScrollView.m; sourceTree = "<group>"; };
 		4B5DDAB124E2F03D007674FF /* RFPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoImageView.h; path = Source/RFPhotoImageView.h; sourceTree = "<group>"; };
@@ -1013,6 +1016,8 @@
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
 				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
+				4B5D86702E6B6F0600697E41 /* MBBookCoverView.h */,
+				4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */,
 				4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */,
 				4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */,
 				4BB990682A8694C900C490E2 /* MBTagsTableView.h */,
@@ -1533,6 +1538,7 @@
 				4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
+				4B5D86722E6B6F0600697E41 /* MBBookCoverView.m in Sources */,
 				4BF612BB2B1EF89800F415AA /* MBDraftLabel.m in Sources */,
 				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
 				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,

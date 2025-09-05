@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBNotebook;
 @class MBNotesKeyController;
 @class MBVersionsController;
+@class MBBookCoverView;
 
 @interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSTextViewDelegate>
 
@@ -29,7 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSMenuItem* linkMenuItem;
 @property (strong, nonatomic) IBOutlet NSBox* sharedFooter;
 @property (strong, nonatomic) IBOutlet NSButton* sharedLinkButton;
-@property (strong, nonatomic) IBOutlet NSImageView* bookImageView;
+@property (strong, nonatomic) IBOutlet NSBox* bookHeader;
+@property (strong, nonatomic) IBOutlet MBBookCoverView* bookImageView;
 @property (strong, nonatomic) IBOutlet NSTextField* bookTitleField;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* sharedHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* bookHeightConstraint;

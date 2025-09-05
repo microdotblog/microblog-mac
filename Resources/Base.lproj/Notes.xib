@@ -10,6 +10,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBNotesController">
             <connections>
+                <outlet property="bookHeader" destination="mWC-E9-E7s" id="s53-fA-ZfF"/>
                 <outlet property="bookHeightConstraint" destination="aKx-FB-5Bi" id="lVp-1f-pA1"/>
                 <outlet property="bookImageView" destination="1nN-1i-0wo" id="6bT-Ro-RgV"/>
                 <outlet property="bookTitleField" destination="BGU-z6-Myp" id="lve-jN-eoD"/>
@@ -191,16 +192,16 @@
                                         <rect key="frame" x="1" y="1" width="242" height="38"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1nN-1i-0wo">
-                                                <rect key="frame" x="6" y="4" width="30" height="30"/>
+                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1nN-1i-0wo" customClass="MBBookCoverView">
+                                                <rect key="frame" x="12" y="4" width="20" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="Dyp-10-A2a"/>
-                                                    <constraint firstAttribute="width" constant="30" id="xw2-Og-fIg"/>
+                                                    <constraint firstAttribute="width" constant="20" id="xw2-Og-fIg"/>
                                                 </constraints>
                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="dqH-s0-CcE"/>
                                             </imageView>
                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BGU-z6-Myp">
-                                                <rect key="frame" x="42" y="11" width="62" height="16"/>
+                                                <rect key="frame" x="38" y="11" width="62" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Book title" id="G8A-pv-Ycp">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -211,7 +212,7 @@
                                         <constraints>
                                             <constraint firstItem="BGU-z6-Myp" firstAttribute="centerY" secondItem="vDL-1M-ge6" secondAttribute="centerY" id="5tr-er-aDL"/>
                                             <constraint firstAttribute="trailing" secondItem="BGU-z6-Myp" secondAttribute="trailing" priority="250" constant="20" symbolic="YES" id="60o-zq-ti6"/>
-                                            <constraint firstItem="1nN-1i-0wo" firstAttribute="leading" secondItem="vDL-1M-ge6" secondAttribute="leading" constant="6" id="KXY-rA-dAD"/>
+                                            <constraint firstItem="1nN-1i-0wo" firstAttribute="leading" secondItem="vDL-1M-ge6" secondAttribute="leading" constant="12" id="KXY-rA-dAD"/>
                                             <constraint firstItem="BGU-z6-Myp" firstAttribute="leading" secondItem="1nN-1i-0wo" secondAttribute="trailing" constant="8" symbolic="YES" id="OiV-Kg-pkW"/>
                                             <constraint firstItem="1nN-1i-0wo" firstAttribute="centerY" secondItem="vDL-1M-ge6" secondAttribute="centerY" id="u89-hB-mMX"/>
                                         </constraints>
