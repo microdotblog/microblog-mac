@@ -10,8 +10,38 @@
 
 #import "NSString+Extras.h"
 #import "MMMarkdown.h"
+#import "UUDate.h"
 
 @implementation RFPost
+
+- (id) initFromProperties:(NSDictionary *)props
+{
+	self = [super init];
+	if (self) {
+		self.title = [[props objectForKey:@"name"] firstObject];
+		self.text = [[props objectForKey:@"content"] firstObject];
+		self.summary = [[props objectForKey:@"summary"] firstObject];
+		self.url = [[props objectForKey:@"url"] firstObject];
+
+		NSString* date_s = [[props objectForKey:@"published"] firstObject];
+		self.postedAt = [NSDate uuDateFromRfc3339String:date_s];
+
+		NSString* status = [[props objectForKey:@"post-status"] firstObject];
+		self.isDraft = [status isEqualToString:@"draft"];
+		
+		self.categories = @[];
+		if ([[props objectForKey:@"category"] count] > 0) {
+			self.categories = [props objectForKey:@"category"];
+		}
+
+		self.syndication = @[];
+		if ([[props objectForKey:@"syndication"] count] > 0) {
+			self.syndication = [props objectForKey:@"syndication"];
+		}
+	}
+	
+	return self;
+}
 
 - (NSString *) displaySummary
 {

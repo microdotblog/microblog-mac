@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSArray* categories;
 @property (strong) NSArray* syndication; // UIDs like "bluesky"
 
+- (id) initFromProperties:(NSDictionary *)props;
+
 - (NSString *) displaySummary;
 - (BOOL) isPage;
 

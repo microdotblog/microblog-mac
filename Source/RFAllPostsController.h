@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) BOOL isShowingPages;
 @property (assign, nonatomic) BOOL isShowingDrafts;
 @property (strong, nonatomic) NSArray* allPosts; // RFPost
+@property (strong, nonatomic) NSArray* draftPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
 @property (strong, nonatomic) NSPopover* blogsMenuPopover;
 

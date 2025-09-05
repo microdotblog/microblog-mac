@@ -43,6 +43,7 @@
 	[self setupTabs];
 	
 	[self fetchPosts];
+	[self fetchDrafts];
 }
 
 - (void) setupTable
@@ -127,30 +128,9 @@
 
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
-				RFPost* post = [[RFPost alloc] init];
 				NSDictionary* props = [item objectForKey:@"properties"];
-				post.title = [[props objectForKey:@"name"] firstObject];
-				post.text = [[props objectForKey:@"content"] firstObject];
-				post.summary = [[props objectForKey:@"summary"] firstObject];
-				post.url = [[props objectForKey:@"url"] firstObject];
-
-				NSString* date_s = [[props objectForKey:@"published"] firstObject];
-				post.postedAt = [NSDate uuDateFromRfc3339String:date_s];
-
-				NSString* status = [[props objectForKey:@"post-status"] firstObject];
-				post.isDraft = [status isEqualToString:@"draft"];
+				RFPost* post = [[RFPost alloc] initFromProperties:props];
 				post.channel = channel;
-				
-				post.categories = @[];
-				if ([[props objectForKey:@"category"] count] > 0) {
-					post.categories = [props objectForKey:@"category"];
-				}
-
-				post.syndication = @[];
-				if ([[props objectForKey:@"syndication"] count] > 0) {
-					post.syndication = [props objectForKey:@"syndication"];
-				}
-
 				[new_posts addObject:post];
 			}
 			
@@ -174,6 +154,42 @@
 //				if (selection.count > 0) {
 //					[self.tableView selectRowIndexes:selection byExtendingSelection:NO];
 //				}
+			});
+		}
+	}];
+}
+
+- (void) fetchDrafts
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSString* channel = @"default";
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid,
+		@"mp-channel": channel,
+		@"post-status": @"draft"
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_posts = [NSMutableArray array];
+
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				NSDictionary* props = [item objectForKey:@"properties"];
+				RFPost* post = [[RFPost alloc] initFromProperties:props];
+				post.channel = channel;
+				[new_posts addObject:post];
+			}
+			
+			RFDispatchMainAsync (^{
+				self.draftPosts = new_posts;
 			});
 		}
 	}];
@@ -388,13 +404,7 @@
 	self.isShowingDrafts = (sender.selectedSegment == 1);
 	
 	if (self.isShowingDrafts) {
-		NSMutableArray* only_drafts = [NSMutableArray array];
-		for (RFPost* post in self.allPosts) {
-			if (post.isDraft) {
-				[only_drafts addObject:post];
-			}
-		}
-		self.currentPosts = only_drafts;
+		self.currentPosts = self.draftPosts;
 	}
 	else {
 		self.currentPosts = self.allPosts;
