@@ -60,6 +60,7 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addBookNotification:) name:kAddBookNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNoteNotification:) name:kAddNoteNotification object:nil];
 }
 
 - (void) setupBooksCount
@@ -387,6 +388,12 @@
 	if ([shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
 		[self addBook:b toBookshelf:self.bookshelf];
 	}
+}
+
+- (void) addNoteNotification:(NSNotification *)notification
+{
+	MBBook* b = [[notification userInfo] objectForKey:kAddNoteBookKey];
+	// ...
 }
 
 - (IBAction) delete:(id)sender

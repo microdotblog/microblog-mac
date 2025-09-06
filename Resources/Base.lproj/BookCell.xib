@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -10,7 +10,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="8aQ-ai-odG" customClass="MBBookCell">
-            <rect key="frame" x="0.0" y="0.0" width="422" height="80"/>
+            <rect key="frame" x="0.0" y="0.0" width="423" height="80"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jfM-zl-gja">
@@ -21,16 +21,16 @@
                     </constraints>
                     <imageCell key="cell" alignment="left" imageScaling="proportionallyDown" id="mac-vZ-Nz6"/>
                 </imageView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEf-d8-CX8">
-                    <rect key="frame" x="89" y="44" width="265" height="16"/>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEf-d8-CX8">
+                    <rect key="frame" x="89" y="44" width="191" height="16"/>
                     <textFieldCell key="cell" title="Book title" id="9BU-PD-BCF">
                         <font key="font" metaFont="systemMedium" size="13"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bm2-WP-3ly">
-                    <rect key="frame" x="89" y="20" width="265" height="16"/>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bm2-WP-3ly">
+                    <rect key="frame" x="89" y="20" width="191" height="16"/>
                     <textFieldCell key="cell" title="Author" id="WFu-Pv-JwR">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -38,7 +38,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UYg-Yw-FIb">
-                    <rect key="frame" x="372" y="21.5" width="25" height="36.5"/>
+                    <rect key="frame" x="373" y="21.5" width="25" height="36.5"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="plus.circle.fill" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" id="jCW-kh-u2q">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system" size="16"/>
@@ -51,8 +51,8 @@
                         <action selector="addBook:" target="8aQ-ai-odG" id="jRa-D3-HFy"/>
                     </connections>
                 </button>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="uv3-5k-eaU">
-                    <rect key="frame" x="372" y="21.5" width="25" height="36.5"/>
+                <button alphaValue="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="uv3-5k-eaU">
+                    <rect key="frame" x="373" y="21.5" width="25" height="36.5"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="ellipsis.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Q2K-Wq-5sg">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system" size="16"/>
@@ -65,24 +65,40 @@
                         <action selector="showOptionsMenu:" target="8aQ-ai-odG" id="mxA-0l-IGe"/>
                     </connections>
                 </button>
+                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="7Bj-GZ-e5c">
+                    <rect key="frame" x="286" y="30" width="79" height="20"/>
+                    <buttonCell key="cell" type="push" title="Add Note..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TCK-AP-gte">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="79" id="Jbv-5N-39a"/>
+                    </constraints>
+                    <connections>
+                        <action selector="addNote:" target="8aQ-ai-odG" id="taw-QO-FJF"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
-                <constraint firstItem="UYg-Yw-FIb" firstAttribute="leading" secondItem="bm2-WP-3ly" secondAttribute="trailing" constant="20" id="7jk-7k-JJd"/>
+                <constraint firstItem="7Bj-GZ-e5c" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="9Bz-Um-oOL"/>
                 <constraint firstAttribute="trailing" secondItem="uv3-5k-eaU" secondAttribute="trailing" constant="25" id="GpK-BX-ol2"/>
                 <constraint firstItem="bm2-WP-3ly" firstAttribute="top" secondItem="DEf-d8-CX8" secondAttribute="bottom" constant="8" symbolic="YES" id="Hcs-eb-OUn"/>
                 <constraint firstItem="bm2-WP-3ly" firstAttribute="leading" secondItem="jfM-zl-gja" secondAttribute="trailing" constant="16" id="Mq1-A2-lOO"/>
-                <constraint firstItem="UYg-Yw-FIb" firstAttribute="leading" secondItem="DEf-d8-CX8" secondAttribute="trailing" constant="20" id="SEc-Eg-Xxw"/>
+                <constraint firstItem="7Bj-GZ-e5c" firstAttribute="leading" secondItem="DEf-d8-CX8" secondAttribute="trailing" priority="750" constant="8" symbolic="YES" id="NGv-lc-B5m"/>
                 <constraint firstItem="DEf-d8-CX8" firstAttribute="top" secondItem="8aQ-ai-odG" secondAttribute="top" constant="20" symbolic="YES" id="Vo2-b5-tk1"/>
                 <constraint firstAttribute="bottom" secondItem="bm2-WP-3ly" secondAttribute="bottom" constant="20" symbolic="YES" id="bf6-ll-bTe"/>
                 <constraint firstItem="uv3-5k-eaU" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="diY-dP-Juz"/>
                 <constraint firstItem="UYg-Yw-FIb" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="l4N-tT-wuu"/>
+                <constraint firstItem="UYg-Yw-FIb" firstAttribute="leading" secondItem="7Bj-GZ-e5c" secondAttribute="trailing" constant="8" symbolic="YES" id="nn8-Nv-4Ng"/>
                 <constraint firstAttribute="trailing" secondItem="UYg-Yw-FIb" secondAttribute="trailing" constant="25" id="nwr-DY-buI"/>
                 <constraint firstItem="jfM-zl-gja" firstAttribute="centerY" secondItem="8aQ-ai-odG" secondAttribute="centerY" id="rGW-D9-qff"/>
                 <constraint firstItem="jfM-zl-gja" firstAttribute="leading" secondItem="8aQ-ai-odG" secondAttribute="leading" constant="15" id="ryA-hz-dZT"/>
-                <constraint firstItem="DEf-d8-CX8" firstAttribute="leading" secondItem="jfM-zl-gja" secondAttribute="trailing" constant="16" id="yel-BT-hPT"/>
+                <constraint firstItem="DEf-d8-CX8" firstAttribute="leading" secondItem="jfM-zl-gja" secondAttribute="trailing" priority="750" constant="16" id="yel-BT-hPT"/>
+                <constraint firstItem="7Bj-GZ-e5c" firstAttribute="leading" secondItem="bm2-WP-3ly" secondAttribute="trailing" priority="750" constant="8" symbolic="YES" id="ziW-wD-QQQ"/>
             </constraints>
             <connections>
                 <outlet property="addButton" destination="UYg-Yw-FIb" id="9dJ-Qq-SGO"/>
+                <outlet property="addNoteButton" destination="7Bj-GZ-e5c" id="I8c-GF-0VT"/>
                 <outlet property="authorField" destination="bm2-WP-3ly" id="LSW-Qj-gwq"/>
                 <outlet property="coverImageView" destination="jfM-zl-gja" id="gdj-5O-CcR"/>
                 <outlet property="optionsButton" destination="uv3-5k-eaU" id="cRA-o1-0gr"/>

@@ -68,6 +68,7 @@
 	[super setSelected:selected];
 	
 	self.optionsButton.hidden = !selected;
+	self.addNoteButton.hidden = !selected;
 }
 
 - (IBAction) addBook:(id)sender
@@ -83,6 +84,14 @@
 	NSTableView* table = (NSTableView *)[self superview];
 	NSMenu* menu = table.menu;
 	[menu popUpMenuPositioningItem:nil atLocation:[NSEvent mouseLocation] inView:nil];
+}
+
+- (IBAction) addNote:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kAddNoteNotification object:self userInfo:@{
+		kAddNoteBookKey: self.book,
+		kAddNoteBookshelfKey: self.bookshelf
+	}];
 }
 
 @end
