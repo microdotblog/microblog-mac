@@ -400,7 +400,7 @@
 - (void) addNoteNotification:(NSNotification *)notification
 {
     MBBook* b = [[notification userInfo] objectForKey:kAddNoteBookKey];
-	RFBookshelf* shelf = [[notification userInfo] objectForKey:kAddBookBookshelfKey];
+	RFBookshelf* shelf = [[notification userInfo] objectForKey:kAddNoteBookshelfKey];
 	if (![shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
 		// ignore notification if not this bookshelf
 		return;
