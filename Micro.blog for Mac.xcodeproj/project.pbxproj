@@ -2240,7 +2240,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.6.9;
+				MARKETING_VERSION = 3.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2277,7 +2277,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.6.9;
+				MARKETING_VERSION = 3.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
