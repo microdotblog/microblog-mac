@@ -393,6 +393,7 @@
 - (void) addNoteNotification:(NSNotification *)notification
 {
 	MBBook* b = [[notification userInfo] objectForKey:kAddNoteBookKey];
+	
 	// ...
 }
 

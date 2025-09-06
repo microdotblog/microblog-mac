@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBBookNoteController">
+            <connections>
+                <outlet property="addButton" destination="g1J-HR-m1Z" id="2N2-vJ-cCq"/>
+                <outlet property="cancelButton" destination="uOw-Xh-8uy" id="fR7-oe-8yU"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="FIP-m1-0nk"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="g1J-HR-m1Z">
+                        <rect key="frame" x="379" y="20" width="81" height="24"/>
+                        <buttonCell key="cell" type="push" title="Add Note" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kMH-fo-AUm">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="addBook:" target="-2" id="hBs-2l-aoh"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uOw-Xh-8uy">
+                        <rect key="frame" x="302" y="20" width="66" height="24"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ial-Jk-3Yf">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancel:" target="-2" id="iMn-kO-kZe"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="uOw-Xh-8uy" secondAttribute="bottom" constant="20" symbolic="YES" id="2rZ-75-vPH"/>
+                    <constraint firstItem="g1J-HR-m1Z" firstAttribute="leading" secondItem="uOw-Xh-8uy" secondAttribute="trailing" constant="11" id="AQF-Es-p2U"/>
+                    <constraint firstAttribute="bottom" secondItem="g1J-HR-m1Z" secondAttribute="bottom" constant="20" symbolic="YES" id="L29-nm-6Xc"/>
+                    <constraint firstAttribute="trailing" secondItem="g1J-HR-m1Z" secondAttribute="trailing" constant="20" symbolic="YES" id="o7C-zT-PnQ"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="172" y="106"/>
+        </window>
+    </objects>
+</document>
