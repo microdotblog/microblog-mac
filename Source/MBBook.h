@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* bookDescription;
 
 - (NSString *) microblogURL;
+- (NSString *) pathForCachedCover;
 - (NSImage *) cachedCover;
 - (void) setCachedCover:(NSImage *)image;
 

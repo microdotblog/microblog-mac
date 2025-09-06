@@ -35,7 +35,7 @@
 
 - (void) setupBook
 {
-	[self.bookCoverView setupWithISBN:self.book.isbn];
+	[self.bookCoverView setupWithBook:self.book];
 	[self.bookTitleField setStringValue:self.book.title];
 }
 

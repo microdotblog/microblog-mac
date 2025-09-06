@@ -10,8 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MBBook;
+
 @interface MBBookCoverView : NSImageView
 
+- (void) setupWithBook:(MBBook *)book;
 - (void) setupWithISBN:(NSString *)isbn;
 
 @end

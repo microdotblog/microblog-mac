@@ -15,6 +15,19 @@
 
 @implementation MBBookCoverView
 
+- (void) setupWithBook:(MBBook *)book
+{
+	NSString* path = [book pathForCachedCover];
+	NSFileManager* fm = [NSFileManager defaultManager];
+	if ([fm fileExistsAtPath:path]) {
+		NSImage* img = [book cachedCover];
+		self.image = img;
+	}
+	else {
+		[self setupWithISBN:book.isbn];
+	}
+}
+
 - (void) setupWithISBN:(NSString *)isbn
 {
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/books/%@/cover.jpg", isbn];
