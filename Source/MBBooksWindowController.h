@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class RFBookshelf;
+@class MBBookNoteController;
 
 @interface MBBooksWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate>
 
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSMutableSet* coversQueue; // MBBook
 @property (strong) NSTimer* coversTimer;
 @property (assign) NSInteger coverDownloadsCount;
+@property (strong, nonatomic, nullable) MBBookNoteController* noteController;
 
 - (instancetype) initWithBookshelf:(RFBookshelf *)bookshelf;
 - (void) fetchBooks;

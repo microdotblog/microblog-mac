@@ -3,13 +3,17 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBBookNoteController">
             <connections>
                 <outlet property="addButton" destination="g1J-HR-m1Z" id="2N2-vJ-cCq"/>
+                <outlet property="bookHeader" destination="7GG-WO-itK" id="AxD-RC-6Z4"/>
+                <outlet property="bookTitleField" destination="kdR-Au-hUO" id="IX8-vj-h5k"/>
                 <outlet property="cancelButton" destination="uOw-Xh-8uy" id="fR7-oe-8yU"/>
+                <outlet property="noteTextField" destination="9PK-CQ-hI7" id="Cmw-QZ-hsd"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="FIP-m1-0nk"/>
             </connections>
         </customObject>
@@ -50,12 +54,65 @@ Gw
                             <action selector="cancel:" target="-2" id="iMn-kO-kZe"/>
                         </connections>
                     </button>
+                    <box boxType="custom" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="7GG-WO-itK">
+                        <rect key="frame" x="0.0" y="226" width="480" height="44"/>
+                        <view key="contentView" id="54p-HE-N7g">
+                            <rect key="frame" x="1" y="1" width="478" height="42"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kdR-Au-hUO">
+                                    <rect key="frame" x="44" y="13" width="416" height="16"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Book title" id="Wm0-DL-q3x">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="glA-6y-mYP">
+                                    <rect key="frame" x="9" y="6" width="20" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="20" id="5lz-Ty-sa9"/>
+                                        <constraint firstAttribute="height" constant="30" id="AK7-2a-8t1"/>
+                                    </constraints>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="unG-Lg-CbF"/>
+                                </imageView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="glA-6y-mYP" firstAttribute="centerY" secondItem="54p-HE-N7g" secondAttribute="centerY" id="9lV-Pv-Y5Z"/>
+                                <constraint firstAttribute="trailing" secondItem="kdR-Au-hUO" secondAttribute="trailing" constant="20" symbolic="YES" id="DA0-L9-z4n"/>
+                                <constraint firstItem="kdR-Au-hUO" firstAttribute="centerY" secondItem="54p-HE-N7g" secondAttribute="centerY" id="RxW-N3-0CJ"/>
+                                <constraint firstItem="glA-6y-mYP" firstAttribute="leading" secondItem="54p-HE-N7g" secondAttribute="leading" constant="9" id="Soj-FR-bcf"/>
+                                <constraint firstItem="kdR-Au-hUO" firstAttribute="leading" secondItem="glA-6y-mYP" secondAttribute="trailing" constant="17" id="esT-n0-Ynd"/>
+                            </constraints>
+                        </view>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="yHf-8u-Fuo"/>
+                        </constraints>
+                        <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                    </box>
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9PK-CQ-hI7">
+                        <rect key="frame" x="0.0" y="66" width="480" height="160"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="160" id="8rW-3f-Siv"/>
+                        </constraints>
+                        <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" drawsBackground="YES" id="NO6-qR-G7A">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="9PK-CQ-hI7" firstAttribute="top" secondItem="7GG-WO-itK" secondAttribute="bottom" id="2eb-ZO-BSx"/>
                     <constraint firstAttribute="bottom" secondItem="uOw-Xh-8uy" secondAttribute="bottom" constant="20" symbolic="YES" id="2rZ-75-vPH"/>
+                    <constraint firstAttribute="trailing" secondItem="9PK-CQ-hI7" secondAttribute="trailing" id="8qT-4t-5Ud"/>
                     <constraint firstItem="g1J-HR-m1Z" firstAttribute="leading" secondItem="uOw-Xh-8uy" secondAttribute="trailing" constant="11" id="AQF-Es-p2U"/>
                     <constraint firstAttribute="bottom" secondItem="g1J-HR-m1Z" secondAttribute="bottom" constant="20" symbolic="YES" id="L29-nm-6Xc"/>
+                    <constraint firstItem="7GG-WO-itK" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="LbZ-Qm-Ccd"/>
+                    <constraint firstAttribute="trailing" secondItem="7GG-WO-itK" secondAttribute="trailing" id="Pfn-O2-K5F"/>
                     <constraint firstAttribute="trailing" secondItem="g1J-HR-m1Z" secondAttribute="trailing" constant="20" symbolic="YES" id="o7C-zT-PnQ"/>
+                    <constraint firstItem="9PK-CQ-hI7" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="uiB-5n-YHu"/>
+                    <constraint firstItem="7GG-WO-itK" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="wXs-QB-zuH"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="172" y="106"/>
