@@ -101,7 +101,7 @@
                         </constraints>
                     </box>
                     <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-qI-4Gk">
-                        <rect key="frame" x="20" y="404" width="16" height="16"/>
+                        <rect key="frame" x="197" y="404" width="16" height="16"/>
                     </progressIndicator>
                     <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dI4-c7-XjA">
                         <rect key="frame" x="18" y="404" width="52" height="16"/>
@@ -115,7 +115,6 @@
                 <constraints>
                     <constraint firstItem="dI4-c7-XjA" firstAttribute="centerY" secondItem="uNA-3l-ASe" secondAttribute="centerY" id="1Zu-8C-CxN"/>
                     <constraint firstAttribute="bottom" secondItem="Ieq-aR-LlJ" secondAttribute="bottom" constant="-1" id="DvA-jJ-leq"/>
-                    <constraint firstItem="6R6-qI-4Gk" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" constant="20" id="Mru-Pm-lHe"/>
                     <constraint firstAttribute="trailing" secondItem="uNA-3l-ASe" secondAttribute="trailing" constant="20" id="S7u-HL-IIF"/>
                     <constraint firstItem="Ieq-aR-LlJ" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" constant="-1" id="Urf-ua-5P0"/>
                     <constraint firstItem="rdo-mY-zgu" firstAttribute="top" secondItem="uNA-3l-ASe" secondAttribute="bottom" constant="15" id="Wh6-Qj-jEf"/>
@@ -123,6 +122,7 @@
                     <constraint firstAttribute="trailing" secondItem="Ieq-aR-LlJ" secondAttribute="trailing" constant="-1" id="aZA-l5-8za"/>
                     <constraint firstItem="Ieq-aR-LlJ" firstAttribute="top" secondItem="rdo-mY-zgu" secondAttribute="bottom" id="ban-Bp-GTb"/>
                     <constraint firstAttribute="trailing" secondItem="rdo-mY-zgu" secondAttribute="trailing" id="eW1-JO-Pk1"/>
+                    <constraint firstItem="uNA-3l-ASe" firstAttribute="leading" secondItem="6R6-qI-4Gk" secondAttribute="trailing" constant="8" symbolic="YES" id="eXs-U0-vGe"/>
                     <constraint firstItem="dI4-c7-XjA" firstAttribute="leading" secondItem="aGr-C3-8Q9" secondAttribute="leading" constant="20" id="t6l-VU-Ip3"/>
                     <constraint firstItem="6R6-qI-4Gk" firstAttribute="centerY" secondItem="uNA-3l-ASe" secondAttribute="centerY" id="usj-Wc-GSg"/>
                     <constraint firstItem="uNA-3l-ASe" firstAttribute="top" secondItem="aGr-C3-8Q9" secondAttribute="top" constant="15" id="yae-dk-xgE"/>

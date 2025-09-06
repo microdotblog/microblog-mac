@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSBox* bookHeader;
 @property (strong, nonatomic) IBOutlet MBBookCoverView* bookCoverView;
 @property (strong, nonatomic) IBOutlet NSTextField* bookTitleField;
-@property (strong, nonatomic) IBOutlet NSTextField* noteTextField;
+@property (strong, nonatomic) IBOutlet NSTextView* noteTextView;
 @property (strong, nonatomic) IBOutlet NSButton* addButton;
 @property (strong, nonatomic) IBOutlet NSButton* cancelButton;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;

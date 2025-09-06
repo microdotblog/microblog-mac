@@ -11,6 +11,7 @@
 #import "MBBook.h"
 #import "MBNotebook.h"
 #import "MBBookCoverView.h"
+#import "NSAppearance+Extras.h"
 
 @implementation MBBookNoteController
 
@@ -27,8 +28,41 @@
 
 - (void) awakeFromNib
 {
+	[self setupBook];
+	[self setupColors];
+	[self setupText];
+}
+
+- (void) setupBook
+{
+	[self.bookCoverView setupWithISBN:self.book.isbn];
 	[self.bookTitleField setStringValue:self.book.title];
 }
+
+- (void) setupColors
+{
+	// adjust text background to notebook color
+	NSColor* base_color;
+	if ([NSAppearance rf_isDarkMode]) {
+		base_color = self.notebook.darkColor;
+	}
+	else {
+		base_color = self.notebook.lightColor;
+	}
+	self.noteTextView.backgroundColor = base_color;
+
+	// darken the base color for the book header and shared footer
+	NSColor* darker_color = [base_color blendedColorWithFraction:0.05 ofColor:[NSColor blackColor]];
+	self.bookHeader.fillColor = darker_color;
+}
+
+- (void) setupText
+{
+	[self.noteTextView setFont:[NSFont systemFontOfSize:16]];
+	[self.noteTextView setTextContainerInset:NSMakeSize(10, 10)];
+}
+
+#pragma mark -
 
 - (IBAction) addBook:(id)sender
 {

@@ -112,6 +112,8 @@
 
 - (void) fetchBooks
 {
+	[self.progressSpinner startAnimation:nil];
+
 	NSDictionary* args = @{};
 	
 	RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/books/bookshelves/%@", self.bookshelf.bookshelfID]];
@@ -144,6 +146,8 @@
 					[self.tableView reloadData];
 					[self setupBooksCount];
 				}
+				
+				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
@@ -396,6 +400,13 @@
 - (void) addNoteNotification:(NSNotification *)notification
 {
     MBBook* b = [[notification userInfo] objectForKey:kAddNoteBookKey];
+	RFBookshelf* shelf = [[notification userInfo] objectForKey:kAddBookBookshelfKey];
+	if (![shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
+		// ignore notification if not this bookshelf
+		return;
+	}
+
+	[self.progressSpinner startAnimation:nil];
 
 	// get the reading notebook
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
@@ -427,6 +438,10 @@
 				}
 			}
 		}
+		
+		RFDispatchMain(^{
+			[self.progressSpinner stopAnimation:nil];
+		});
 	}];
 }
 
