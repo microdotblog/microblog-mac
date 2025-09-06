@@ -10,6 +10,7 @@
 
 #import "MBBook.h"
 #import "RFBookshelf.h"
+#import "MBNote.h"
 #import "RFConstants.h"
 
 @implementation MBBookCell
@@ -35,6 +36,8 @@
 	
 	// search results don't have a book ID, show the add button
 	self.addButton.hidden = (book.bookID != nil);
+	
+	self.addNoteButton.hidden = ![MBNote hasSecretKey];
 }
 
 - (void) drawBackgroundInRect:(NSRect)dirtyRect
@@ -68,7 +71,9 @@
 	[super setSelected:selected];
 	
 	self.optionsButton.hidden = !selected;
-	self.addNoteButton.hidden = !selected;
+	if ([MBNote hasSecretKey]) {
+		self.addNoteButton.hidden = !selected;
+	}
 }
 
 - (IBAction) addBook:(id)sender

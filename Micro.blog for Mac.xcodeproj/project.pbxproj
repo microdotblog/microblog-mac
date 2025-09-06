@@ -126,6 +126,7 @@
 		4B5D86722E6B6F0600697E41 /* MBBookCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */; };
 		4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86742E6CB16500697E41 /* MBBookNoteController.m */; };
 		4B5D867B2E6CB1DE00697E41 /* BookNoteWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */; };
+		4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
 		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB424E44853007674FF /* PostWindow.xib */; };
@@ -484,6 +485,8 @@
 		4B5D86732E6CB16500697E41 /* MBBookNoteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookNoteController.h; path = Source/MBBookNoteController.h; sourceTree = "<group>"; };
 		4B5D86742E6CB16500697E41 /* MBBookNoteController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookNoteController.m; path = Source/MBBookNoteController.m; sourceTree = "<group>"; };
 		4B5D867A2E6CB1DE00697E41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BookNoteWindow.xib; sourceTree = "<group>"; };
+		4B5D867C2E6CC74A00697E41 /* SAMKeychain+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SAMKeychain+Helper.h"; path = "Source/SAMKeychain+Helper.h"; sourceTree = "<group>"; };
+		4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "SAMKeychain+Helper.m"; path = "Source/SAMKeychain+Helper.m"; sourceTree = "<group>"; };
 		4B5DDAAE24E2ECD6007674FF /* RFUploadsScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUploadsScrollView.h; path = Source/RFUploadsScrollView.h; sourceTree = "<group>"; };
 		4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUploadsScrollView.m; path = Source/RFUploadsScrollView.m; sourceTree = "<group>"; };
 		4B5DDAB124E2F03D007674FF /* RFPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoImageView.h; path = Source/RFPhotoImageView.h; sourceTree = "<group>"; };
@@ -1159,6 +1162,8 @@
 				4B41CB4D2E22DB30000C324F /* MBVersionCell.m */,
 				4B5B00A52E4D473400D4362A /* NSLocale+Format.h */,
 				4B5B00A62E4D473400D4362A /* NSLocale+Format.m */,
+				4B5D867C2E6CC74A00697E41 /* SAMKeychain+Helper.h */,
+				4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1503,6 +1508,7 @@
 				4B79E29C2D0B93FA00A22861 /* MBCollectionsTable.m in Sources */,
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
+				4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,

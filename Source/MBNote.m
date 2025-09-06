@@ -8,6 +8,8 @@
 
 #import "MBNote.h"
 
+#import "SAMKeychain.h"
+#import "SAMKeychain+Helper.h"
 #import "Micro_blog-Swift.h"
 
 @implementation MBNote
@@ -30,6 +32,12 @@
 	new_note.updatedAt = [self.updatedAt copyWithZone:zone];
 	
 	return new_note;
+}
+
++ (BOOL) hasSecretKey
+{
+	NSString* s = [SAMKeychain mb_passwordForService:@"Micro.blog Notes" account:@""];
+	return (s != nil);
 }
 
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key
