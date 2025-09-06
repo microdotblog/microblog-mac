@@ -40,6 +40,16 @@
 	return (s != nil);
 }
 
++ (NSString *) cleanKey:(NSString *)key
+{
+	if ([key hasPrefix:@"mkey"]) {
+		return [key substringFromIndex:4];
+	}
+	else {
+		return key;
+	}
+}
+
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key
 {
 	NSData* key_data = [self dataFromHexString:key];

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBBookCoverView;
 @class MBNotebook;
 
-@interface MBBookNoteController : NSWindowController
+@interface MBBookNoteController : NSWindowController <NSTextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet NSBox* bookHeader;
 @property (strong, nonatomic) IBOutlet MBBookCoverView* bookCoverView;

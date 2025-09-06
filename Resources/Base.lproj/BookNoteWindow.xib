@@ -15,6 +15,7 @@
                 <outlet property="bookTitleField" destination="kdR-Au-hUO" id="IX8-vj-h5k"/>
                 <outlet property="cancelButton" destination="uOw-Xh-8uy" id="fR7-oe-8yU"/>
                 <outlet property="noteTextView" destination="TUj-iH-LOJ" id="L8x-0a-Opd"/>
+                <outlet property="progressSpinner" destination="MsQ-SP-hgL" id="5lQ-tG-px9"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="FIP-m1-0nk"/>
             </connections>
         </customObject>
@@ -63,7 +64,7 @@ Gw
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kdR-Au-hUO">
-                                    <rect key="frame" x="45" y="16" width="417" height="17"/>
+                                    <rect key="frame" x="43" y="16" width="389" height="17"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Book title" id="Wm0-DL-q3x">
                                         <font key="font" metaFont="system" size="14"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -78,13 +79,18 @@ Gw
                                     </constraints>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="unG-Lg-CbF"/>
                                 </imageView>
+                                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="MsQ-SP-hgL">
+                                    <rect key="frame" x="444" y="16" width="16" height="16"/>
+                                </progressIndicator>
                             </subviews>
                             <constraints>
+                                <constraint firstItem="MsQ-SP-hgL" firstAttribute="centerY" secondItem="54p-HE-N7g" secondAttribute="centerY" id="7sO-hZ-i2b"/>
                                 <constraint firstItem="glA-6y-mYP" firstAttribute="centerY" secondItem="54p-HE-N7g" secondAttribute="centerY" id="9lV-Pv-Y5Z"/>
-                                <constraint firstAttribute="trailing" secondItem="kdR-Au-hUO" secondAttribute="trailing" constant="20" symbolic="YES" id="DA0-L9-z4n"/>
+                                <constraint firstAttribute="trailing" secondItem="MsQ-SP-hgL" secondAttribute="trailing" constant="20" symbolic="YES" id="GVj-M8-ED9"/>
+                                <constraint firstAttribute="trailing" secondItem="kdR-Au-hUO" secondAttribute="trailing" constant="50" id="JOX-9A-jge"/>
                                 <constraint firstItem="kdR-Au-hUO" firstAttribute="centerY" secondItem="54p-HE-N7g" secondAttribute="centerY" id="RxW-N3-0CJ"/>
                                 <constraint firstItem="glA-6y-mYP" firstAttribute="leading" secondItem="54p-HE-N7g" secondAttribute="leading" constant="15" id="Soj-FR-bcf"/>
-                                <constraint firstItem="kdR-Au-hUO" firstAttribute="leading" secondItem="glA-6y-mYP" secondAttribute="trailing" constant="12" id="esT-n0-Ynd"/>
+                                <constraint firstItem="kdR-Au-hUO" firstAttribute="leading" secondItem="glA-6y-mYP" secondAttribute="trailing" constant="10" id="esT-n0-Ynd"/>
                             </constraints>
                         </view>
                         <constraints>

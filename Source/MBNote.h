@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate* updatedAt;
 
 + (BOOL) hasSecretKey;
++ (NSString *) cleanKey:(NSString *)key;
 
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key;
 + (NSString *) decryptText:(NSString *)text withKey:(NSString *)key;

@@ -11,6 +11,7 @@
 #import "MBNote.h"
 #import "MBNotebook.h"
 #import "MBNoteCell.h"
+#import "MBBook.h"
 #import "MBNotesKeyController.h"
 #import "MBVersionsController.h"
 #import "MBBookCoverView.h"
@@ -893,9 +894,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) setDetailBook:(NSString *)isbn title:(NSString *)title
 {
 	if ([isbn length] > 0) {
-		[self.bookImageView setupWithISBN:isbn];
+		// make temp book object
+		MBBook* b = [[MBBook alloc] init];
+		b.isbn = isbn;
+		b.title = title;
+
+		[self.bookImageView setupWithBook:b];
 		[self.bookTitleField setStringValue:title];
-		self.bookHeightConstraint.constant = 40;
+		self.bookHeightConstraint.constant = 44;
 	}
 	else {
 		self.bookHeightConstraint.constant = 0;
