@@ -123,6 +123,10 @@
 		4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5B00A62E4D473400D4362A /* NSLocale+Format.m */; };
 		4B5D5D912066A160007ED186 /* RFAccountPopoverBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */; };
 		4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */; };
+		4B5D86722E6B6F0600697E41 /* MBBookCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */; };
+		4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86742E6CB16500697E41 /* MBBookNoteController.m */; };
+		4B5D867B2E6CB1DE00697E41 /* BookNoteWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */; };
+		4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
 		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB424E44853007674FF /* PostWindow.xib */; };
@@ -476,6 +480,13 @@
 		4B5D5D902066A160007ED186 /* RFAccountPopoverBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountPopoverBox.m; path = Source/RFAccountPopoverBox.m; sourceTree = "<group>"; };
 		4B5D5D9520675EB9007ED186 /* RFAccountsCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAccountsCollectionView.h; path = Source/RFAccountsCollectionView.h; sourceTree = "<group>"; };
 		4B5D5D9620675EBA007ED186 /* RFAccountsCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFAccountsCollectionView.m; path = Source/RFAccountsCollectionView.m; sourceTree = "<group>"; };
+		4B5D86702E6B6F0600697E41 /* MBBookCoverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookCoverView.h; path = Source/MBBookCoverView.h; sourceTree = "<group>"; };
+		4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookCoverView.m; path = Source/MBBookCoverView.m; sourceTree = "<group>"; };
+		4B5D86732E6CB16500697E41 /* MBBookNoteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookNoteController.h; path = Source/MBBookNoteController.h; sourceTree = "<group>"; };
+		4B5D86742E6CB16500697E41 /* MBBookNoteController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookNoteController.m; path = Source/MBBookNoteController.m; sourceTree = "<group>"; };
+		4B5D867A2E6CB1DE00697E41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BookNoteWindow.xib; sourceTree = "<group>"; };
+		4B5D867C2E6CC74A00697E41 /* SAMKeychain+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SAMKeychain+Helper.h"; path = "Source/SAMKeychain+Helper.h"; sourceTree = "<group>"; };
+		4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "SAMKeychain+Helper.m"; path = "Source/SAMKeychain+Helper.m"; sourceTree = "<group>"; };
 		4B5DDAAE24E2ECD6007674FF /* RFUploadsScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUploadsScrollView.h; path = Source/RFUploadsScrollView.h; sourceTree = "<group>"; };
 		4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUploadsScrollView.m; path = Source/RFUploadsScrollView.m; sourceTree = "<group>"; };
 		4B5DDAB124E2F03D007674FF /* RFPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoImageView.h; path = Source/RFPhotoImageView.h; sourceTree = "<group>"; };
@@ -1005,6 +1016,8 @@
 				4B5EE27C206330B800C87A78 /* RFBlogCell.m */,
 				4BF5372C2247BD8D00CF9D66 /* RFPostCell.h */,
 				4BF5372D2247BD8D00CF9D66 /* RFPostCell.m */,
+				4B5D86732E6CB16500697E41 /* MBBookNoteController.h */,
+				4B5D86742E6CB16500697E41 /* MBBookNoteController.m */,
 				4BF612B92B1EF89800F415AA /* MBDraftLabel.h */,
 				4BF612BA2B1EF89800F415AA /* MBDraftLabel.m */,
 				4BD833A1273C60A5007350F2 /* RFPostTableView.h */,
@@ -1013,6 +1026,8 @@
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
 				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
+				4B5D86702E6B6F0600697E41 /* MBBookCoverView.h */,
+				4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */,
 				4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */,
 				4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */,
 				4BB990682A8694C900C490E2 /* MBTagsTableView.h */,
@@ -1147,6 +1162,8 @@
 				4B41CB4D2E22DB30000C324F /* MBVersionCell.m */,
 				4B5B00A52E4D473400D4362A /* NSLocale+Format.h */,
 				4B5B00A62E4D473400D4362A /* NSLocale+Format.m */,
+				4B5D867C2E6CC74A00697E41 /* SAMKeychain+Helper.h */,
+				4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */,
 				4B7CC9872B291B2E00AA8085 /* Micro.blog-Bridging-Header.h */,
 			);
 			name = Source;
@@ -1181,6 +1198,7 @@
 				4BF7E51628354F6900500C59 /* BookshelfCell.xib */,
 				4BF7E5282836CB1000500C59 /* BooksWindow.xib */,
 				4BF7E52E2836CE4700500C59 /* BookCell.xib */,
+				4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */,
 				4B5650591F85619100B03FFD /* Post.xib */,
 				4B5DDAB424E44853007674FF /* PostWindow.xib */,
 				4B608B411FFE7C6D00589F77 /* NewPostAccessory.xib */,
@@ -1371,6 +1389,7 @@
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */,
 				4B001CE22B27962800BBF456 /* NoteCell.xib in Resources */,
+				4B5D867B2E6CB1DE00697E41 /* BookNoteWindow.xib in Resources */,
 				4B2CAB3F1F93EFBD00D9B10E /* Friends.xib in Resources */,
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */,
@@ -1489,6 +1508,7 @@
 				4B79E29C2D0B93FA00A22861 /* MBCollectionsTable.m in Sources */,
 				4B5DDAB924E44892007674FF /* RFPostWindowController.m in Sources */,
 				4B2CAB041F90667300D9B10E /* localize.c in Sources */,
+				4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
@@ -1513,6 +1533,7 @@
 				4B5D5D9720675EBA007ED186 /* RFAccountsCollectionView.m in Sources */,
 				4B2CAB0C1F90667300D9B10E /* access.c in Sources */,
 				4BDB382D278B79EC00BD457C /* MBPostWindow.m in Sources */,
+				4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */,
 				4B5EE2832063FC8400C87A78 /* RFSettings.m in Sources */,
 				4B3773802C3DC4A5000495DF /* MBInfoController.m in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
@@ -1533,6 +1554,7 @@
 				4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */,
 				4B2CAB1C1F90667300D9B10E /* mappedio.c in Sources */,
 				4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */,
+				4B5D86722E6B6F0600697E41 /* MBBookCoverView.m in Sources */,
 				4BF612BB2B1EF89800F415AA /* MBDraftLabel.m in Sources */,
 				4BF7E521283597DC00500C59 /* MBBook.m in Sources */,
 				4BDB3830278CDC2B00BD457C /* MBRestoreCursorView.m in Sources */,
@@ -1800,6 +1822,14 @@
 				4B5A250C1F8497B1007C548F /* Base */,
 			);
 			name = MenuCell.xib;
+			sourceTree = "<group>";
+		};
+		4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B5D867A2E6CB1DE00697E41 /* Base */,
+			);
+			name = BookNoteWindow.xib;
 			sourceTree = "<group>";
 		};
 		4B5DDAB424E44853007674FF /* PostWindow.xib */ = {
@@ -2210,7 +2240,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.6.9;
+				MARKETING_VERSION = 3.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2247,7 +2277,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.6.9;
+				MARKETING_VERSION = 3.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;

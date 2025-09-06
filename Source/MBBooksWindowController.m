@@ -10,11 +10,14 @@
 
 #import "RFBookshelf.h"
 #import "MBBook.h"
+#import "MBNotebook.h"
 #import "MBBookCell.h"
+#import "MBBookNoteController.h"
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "RFConstants.h"
 #import "NSString+Extras.h"
+#import "NSColor+Extras.h"
 
 @implementation MBBooksWindowController
 
@@ -60,6 +63,7 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addBookNotification:) name:kAddBookNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNoteNotification:) name:kAddNoteNotification object:nil];
 }
 
 - (void) setupBooksCount
@@ -108,6 +112,8 @@
 
 - (void) fetchBooks
 {
+	[self.progressSpinner startAnimation:nil];
+
 	NSDictionary* args = @{};
 	
 	RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/books/bookshelves/%@", self.bookshelf.bookshelfID]];
@@ -140,6 +146,8 @@
 					[self.tableView reloadData];
 					[self setupBooksCount];
 				}
+				
+				[self.progressSpinner stopAnimation:nil];
 			});
 		}
 	}];
@@ -387,6 +395,54 @@
 	if ([shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
 		[self addBook:b toBookshelf:self.bookshelf];
 	}
+}
+
+- (void) addNoteNotification:(NSNotification *)notification
+{
+    MBBook* b = [[notification userInfo] objectForKey:kAddNoteBookKey];
+	RFBookshelf* shelf = [[notification userInfo] objectForKey:kAddNoteBookshelfKey];
+	if (![shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
+		// ignore notification if not this bookshelf
+		return;
+	}
+
+	[self.progressSpinner startAnimation:nil];
+
+	// get the reading notebook
+	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				NSDictionary* mb = [item objectForKey:@"_microblog"];
+				NSNumber* notebook_id = [item objectForKey:@"id"];
+				NSString* notebook_name = [item objectForKey:@"title"];
+				NSString* light_color = [[mb objectForKey:@"colors"] objectForKey:@"light"];
+				NSString* dark_color = [[mb objectForKey:@"colors"] objectForKey:@"dark"];
+				NSString* type = [mb objectForKey:@"type"];
+
+				if ([type isEqualToString:@"reading"] || [notebook_name isEqualToString:@"Reading"]) {
+					MBNotebook* nb = [[MBNotebook alloc] init];
+					nb.notebookID = notebook_id;
+					nb.name = notebook_name;
+					nb.lightColor = [NSColor mb_colorFromString:light_color];
+					nb.darkColor = [NSColor mb_colorFromString:dark_color];
+
+					RFDispatchMain(^{
+						// show note sheet
+						self.noteController = [[MBBookNoteController alloc] initWithBook:b readingNotebook:nb];
+						[self.window beginSheet:self.noteController.window completionHandler:^(NSModalResponse returnCode) {
+							self.noteController = nil;
+						}];
+					});
+				}
+			}
+		}
+		
+		RFDispatchMain(^{
+			[self.progressSpinner stopAnimation:nil];
+		});
+	}];
 }
 
 - (IBAction) delete:(id)sender

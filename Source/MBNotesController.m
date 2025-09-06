@@ -11,8 +11,10 @@
 #import "MBNote.h"
 #import "MBNotebook.h"
 #import "MBNoteCell.h"
+#import "MBBook.h"
 #import "MBNotesKeyController.h"
 #import "MBVersionsController.h"
+#import "MBBookCoverView.h"
 #import "RFClient.h"
 #import "RFAccount.h"
 #import "RFSettings.h"
@@ -119,6 +121,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	[self.detailTextView setFont:[NSFont systemFontOfSize:14]];
 	[self setDetailText:@"" forNote:nil];
+	[self setDetailBook:@"" title:@""];
 }
 
 - (void) setupBrowser
@@ -271,6 +274,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
 				n.isShared = [[mb objectForKey:@"is_shared"] boolValue];
 				n.sharedURL = [mb objectForKey:@"shared_url"];
+				n.attachedBookISBN = [mb objectForKey:@"attached_book_isbn"];
+				n.attachedBookTitle = [mb objectForKey:@"attached_book_title"];
 				n.notebookID = notebookID;
 
 				// if selected note, update if sharing changed
@@ -453,8 +458,9 @@ static NSString* const kNotesSettingsType = @"Setting";
 		}
 		self.detailTextView.backgroundColor = base_color;
 
-		// darken the base color for the shared footer
+		// darken the base color for the book header and shared footer
 		NSColor* darker_color = [base_color blendedColorWithFraction:0.05 ofColor:[NSColor blackColor]];
+		self.bookHeader.fillColor = darker_color;
 		self.sharedFooter.fillColor = darker_color;
 	});
 }
@@ -538,6 +544,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			
 			self.detailTextView.string = @"";
 			self.selectedNote = nil;
+			[self setDetailBook:@"" title:@""];
 		});
 	}];
 }
@@ -674,6 +681,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	self.detailTextView.string = @"";
 	self.selectedNote = nil;
+	[self setDetailBook:@"" title:@""];
 }
 
 - (void) startNewNoteNotification:(NSNotification *)notification
@@ -732,6 +740,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self.tableView deselectAll:nil];
 
 	[self setDetailText:@"" forNote:nil];
+	[self setDetailBook:@"" title:@""];
 	self.selectedNote = nil;
 }
 
@@ -882,6 +891,23 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
+- (void) setDetailBook:(NSString *)isbn title:(NSString *)title
+{
+	if ([isbn length] > 0) {
+		// make temp book object
+		MBBook* b = [[MBBook alloc] init];
+		b.isbn = isbn;
+		b.title = title;
+
+		[self.bookImageView setupWithBook:b];
+		[self.bookTitleField setStringValue:title];
+		self.bookHeightConstraint.constant = 44;
+	}
+	else {
+		self.bookHeightConstraint.constant = 0;
+	}
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
@@ -913,12 +939,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 		if (![self.selectedNote.noteID isEqualToNumber:n.noteID]) {
 			self.selectedNote = [n copy];
 			[self setDetailText:self.selectedNote.text forNote:self.selectedNote];
+			[self setDetailBook:self.selectedNote.attachedBookISBN title:self.selectedNote.attachedBookTitle];
 			[self setupMenuForNote:self.selectedNote];
 		}
 	}
 	else {
 		self.selectedNote = nil;
 		[self setDetailText:@"" forNote:nil];
+		[self setDetailBook:@"" title:@""];
 	}
 }
 

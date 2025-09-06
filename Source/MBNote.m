@@ -8,6 +8,8 @@
 
 #import "MBNote.h"
 
+#import "SAMKeychain.h"
+#import "SAMKeychain+Helper.h"
 #import "Micro_blog-Swift.h"
 
 @implementation MBNote
@@ -24,10 +26,28 @@
 	new_note.isShared = self.isShared;
 	new_note.isSharing = self.isSharing;
 	new_note.isUnsharing = self.isUnsharing;
+	new_note.attachedBookISBN = [self.attachedBookISBN copyWithZone:zone];
+	new_note.attachedBookTitle = [self.attachedBookTitle copyWithZone:zone];
 	new_note.createdAt = [self.createdAt copyWithZone:zone];
 	new_note.updatedAt = [self.updatedAt copyWithZone:zone];
 	
 	return new_note;
+}
+
++ (BOOL) hasSecretKey
+{
+	NSString* s = [SAMKeychain mb_passwordForService:@"Micro.blog Notes" account:@""];
+	return (s != nil);
+}
+
++ (NSString *) cleanKey:(NSString *)key
+{
+	if ([key hasPrefix:@"mkey"]) {
+		return [key substringFromIndex:4];
+	}
+	else {
+		return key;
+	}
 }
 
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key

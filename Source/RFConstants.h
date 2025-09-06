@@ -120,6 +120,10 @@ static NSString* const kAddBookNotification = @"AddBookNotification";
 static NSString* const kAddBookKey = @"book";
 static NSString* const kAddBookBookshelfKey = @"bookshelf";
 
+static NSString* const kAddNoteNotification = @"AddNoteNotification";
+static NSString* const kAddNoteBookKey = @"book";
+static NSString* const kAddNoteBookshelfKey = @"bookshelf";
+
 static NSString* const kBookWasAddedNotification = @"BookWasAddedNotification";
 static NSString* const kBookWasAddedBookshelfKey = @"bookshelf";
 

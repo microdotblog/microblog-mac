@@ -20,8 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) BOOL isShared;
 @property (assign) BOOL isSharing;
 @property (assign) BOOL isUnsharing;
+@property (copy) NSString* attachedBookISBN;
+@property (copy) NSString* attachedBookTitle;
 @property (strong) NSDate* createdAt;
 @property (strong) NSDate* updatedAt;
+
++ (BOOL) hasSecretKey;
++ (NSString *) cleanKey:(NSString *)key;
 
 + (NSString *) encryptText:(NSString *)text withKey:(NSString *)key;
 + (NSString *) decryptText:(NSString *)text withKey:(NSString *)key;
