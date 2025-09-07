@@ -19,6 +19,7 @@
  				<ul>
 					<li>Added private notes for books. In a bookshelf window, there’s a new “Add Note…” button. This button will appear if you have notes sync enabled.</li>
 					<li>Updated the notes detail pane to show the book cover and title if the note is associated with a book.</li>
+					<li>Updated some buttons for Liquid Glass on macOS 26.</li>
 					<li>Fixed the Drafts tab to load older drafts from Micro.blog.</li>
 					<li>Fixed shortcodes display in Posts list.</li>
 				</ul>
