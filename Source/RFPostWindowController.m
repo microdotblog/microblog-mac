@@ -218,6 +218,29 @@
 
 - (void) postStartProgressNotification:(NSNotification *)notification
 {
+	// insert the Progress toolbar item when starting
+	NSToolbar* toolbar = self.window.toolbar;
+	BOOL progress_exists = NO;
+	for (NSToolbarItem* item in toolbar.items) {
+		if ([item.itemIdentifier isEqualToString:@"Progress"]) {
+			progress_exists = YES;
+			break;
+		}
+	}
+
+	if (!progress_exists) {
+		// insert Progress before the Preview button if present
+		NSInteger insert_index = toolbar.items.count;
+		for (NSInteger i = 0; i < toolbar.items.count; i++) {
+			NSToolbarItem* item = [toolbar.items objectAtIndex:i];
+			if ([item.itemIdentifier isEqualToString:@"Preview"]) {
+				insert_index = i;
+				break;
+			}
+		}
+		[toolbar insertItemWithItemIdentifier:@"Progress" atIndex:insert_index];
+	}
+	
 	[self.progressSpinner startAnimation:nil];
 	self.progressSpinner.hidden = NO;
 }
@@ -226,6 +249,20 @@
 {
 	[self.progressSpinner stopAnimation:nil];
 	self.progressSpinner.hidden = YES;
+
+	// remove the Progress toolbar item so it doesn't leave artifacts
+	NSToolbar* toolbar = self.window.toolbar;
+	NSInteger index_to_remove = NSNotFound;
+	for (NSInteger i = 0; i < toolbar.items.count; i++) {
+		NSToolbarItem* item = [toolbar.items objectAtIndex:i];
+		if ([item.itemIdentifier isEqualToString:@"Progress"]) {
+			index_to_remove = i;
+			break;
+		}
+	}
+	if (index_to_remove != NSNotFound) {
+		[toolbar removeItemAtIndex:index_to_remove];
+	}
 }
 
 - (void) draftDidUpdateNotification:(NSNotification *)notification
@@ -248,7 +285,7 @@
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
-	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"Preview", @"SendPost" ];
+	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Preview", @"SendPost" ];
 }
 
 - ( NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag

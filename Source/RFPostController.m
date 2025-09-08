@@ -602,6 +602,8 @@ static CGFloat const kTextViewTitleShownTop = 54;
 {
 	self.isSent = YES;
 	self.isSending = NO;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kPostStopProgressNotification object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kCheckTimelineNotification object:self];
 
