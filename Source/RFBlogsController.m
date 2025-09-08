@@ -13,6 +13,7 @@
 #import "RFMacros.h"
 #import "RFConstants.h"
 #import "RFSettings.h"
+#import "RFAccount.h"
 
 @implementation RFBlogsController
 
@@ -30,7 +31,17 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
-	[self fetchBlogs];
+
+	// try cached destinations first, refresh in background
+	NSArray* cached = [self loadCachedDestinations];
+	if (cached.count > 0) {
+		self.destinations = cached;
+		[self.tableView reloadData];
+		[self fetchBlogsShowProgress:NO];
+	}
+	else {
+		[self fetchBlogsShowProgress:YES];
+	}
 }
 
 - (void) setupTable
@@ -38,17 +49,47 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BlogCell" bundle:nil] forIdentifier:@"BlogCell"];
 }
 
-- (void) fetchBlogs
+- (NSString *) cachedDestinationsPrefKey
 {
-	self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer* timer) {
-		// only show progress if download is taking longer than 1 second
-		[self.progressSpinner startAnimation:nil];
-	}];
+	NSString* username = [RFSettings defaultAccount].username;
+	return [NSString stringWithFormat:@"%@_%@", username, @"Destinations"];
+}
+
+- (NSArray *) loadCachedDestinations
+{
+	NSArray* cached = [[NSUserDefaults standardUserDefaults] arrayForKey:[self cachedDestinationsPrefKey]];
+	return cached;
+}
+
+- (void) saveCachedDestinationsFrom:(NSArray *)destinations
+{
+	NSMutableArray* pruned = [NSMutableArray array];
+	for (NSDictionary* d in destinations) {
+		NSString* uid = d[@"uid"] ?: @"";
+		NSString* name = d[@"name"] ?: @"";
+		[pruned addObject:@{
+			@"uid": uid,
+			@"name": name
+		}];
+	}
+	[[NSUserDefaults standardUserDefaults] setObject:pruned forKey:[self cachedDestinationsPrefKey]];
+}
+
+- (void) fetchBlogsShowProgress:(BOOL)showProgress
+{
+	if (showProgress) {
+		self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer* timer) {
+			// only show progress if download is taking longer than 1 second
+			[self.progressSpinner startAnimation:nil];
+		}];
+	}
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			self.destinations = [response.parsedResponse objectForKey:@"destination"];
+			NSArray* destinations = [response.parsedResponse objectForKey:@"destination"];
+			[self saveCachedDestinationsFrom:destinations];
+			self.destinations = [[NSUserDefaults standardUserDefaults] arrayForKey:[self cachedDestinationsPrefKey]];
 			RFDispatchMainAsync (^{
 				[self.progressTimer invalidate];
 				[self.progressSpinner stopAnimation:nil];
@@ -56,6 +97,11 @@
 			});
 		}
 	}];
+}
+
+- (void) fetchBlogs
+{
+	[self fetchBlogsShowProgress:YES];
 }
 
 #pragma mark -
