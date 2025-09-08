@@ -131,12 +131,25 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) setupMenuForNote:(MBNote *)note
 {
-	if (note.isShared) {
-		[self.shareMenuItem setTitle:@"Unshare"];
-	}
-	else {
-		[self.shareMenuItem setTitle:@"Share"];
-	}
+    if (note.isShared) {
+        [self.shareMenuItem setTitle:@"Unshare"];
+    }
+    else {
+        [self.shareMenuItem setTitle:@"Share"];
+    }
+}
+
+- (void) updateDetailSharingFooter
+{
+    if (self.selectedNote && self.selectedNote.isShared) {
+        [self.sharedLinkButton setTitle:self.selectedNote.sharedURL ?: @""];
+        self.sharedHeightConstraint.constant = 40;
+    }
+    else {
+        self.sharedHeightConstraint.constant = 0;
+    }
+
+    [self.view layoutSubtreeIfNeeded];
 }
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
@@ -278,12 +291,16 @@ static NSString* const kNotesSettingsType = @"Setting";
 				n.attachedBookTitle = [mb objectForKey:@"attached_book_title"];
 				n.notebookID = notebookID;
 
-				// if selected note, update if sharing changed
-				if (self.selectedNote && self.selectedNote.noteID) {
-					if ([n.noteID isEqualToNumber:self.selectedNote.noteID]) {
-						self.selectedNote.sharedURL = n.sharedURL;
-					}
-				}
+                // if selected note, update if sharing changed
+                if (self.selectedNote && self.selectedNote.noteID) {
+                    if ([n.noteID isEqualToNumber:self.selectedNote.noteID]) {
+                        self.selectedNote.sharedURL = n.sharedURL;
+                        RFDispatchMainAsync(^{
+                            [self updateDetailSharingFooter];
+                            [self setupMenuForNote:self.selectedNote];
+                        });
+                    }
+                }
 				
 				if (n.isEncrypted) {
 					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
@@ -778,31 +795,35 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (IBAction) shareOrUnshare:(id)sender
 {
-	[self.progressSpinner startAnimation:nil];
-	
-	if (self.selectedNote.isShared) {
-		self.selectedNote.isUnsharing = YES;
-		[self syncNote:self.selectedNote completion:^{
-			self.selectedNote.isShared = NO;
-			self.selectedNote.isUnsharing = NO;
+    [self.progressSpinner startAnimation:nil];
+    
+    if (self.selectedNote.isShared) {
+        self.selectedNote.isUnsharing = YES;
+        [self syncNote:self.selectedNote completion:^{
+            self.selectedNote.isShared = NO;
+            self.selectedNote.isUnsharing = NO;
 
-			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-				[self.progressSpinner stopAnimation:nil];
-			}];
-		}];
-	}
-	else {
-		self.selectedNote.isSharing = YES;
-		self.selectedNote.isEncrypted = NO;
-		[self syncNote:self.selectedNote completion:^{
-			self.selectedNote.isShared = YES;
-			self.selectedNote.isSharing = NO;
+            [self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+                [self.progressSpinner stopAnimation:nil];
+                [self updateDetailSharingFooter];
+                [self setupMenuForNote:self.selectedNote];
+            }];
+        }];
+    }
+    else {
+        self.selectedNote.isSharing = YES;
+        self.selectedNote.isEncrypted = NO;
+        [self syncNote:self.selectedNote completion:^{
+            self.selectedNote.isShared = YES;
+            self.selectedNote.isSharing = NO;
 
-			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-				[self.progressSpinner stopAnimation:nil];
-			}];
-		}];
-	}
+            [self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+                [self.progressSpinner stopAnimation:nil];
+                [self updateDetailSharingFooter];
+                [self setupMenuForNote:self.selectedNote];
+            }];
+        }];
+    }
 }
 
 - (IBAction) openInBrowser:(id)sender
