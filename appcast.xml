@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.7.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Improved blogs popover to open list of blogs immediately if cached.</li>
+					<li>Fixed invisible toolbar button in post window.</li>
+					<li>Fixed top line of note details pane.</li>
+					<li>Fixed notes sharing pane visibility when note is shared or unshared.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Mon, 08 Sep 2025 16:00:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.7.1.zip" sparkle:shortVersionString="3.7.1" sparkle:version="216" length="4469176" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.7</title>
  			<description><![CDATA[
 				<style>
@@ -24,7 +47,7 @@
 					<li>Fixed shortcodes display in Posts list.</li>
 				</ul>
  			]]></description>
-			<pubDate>Sun, 06 Sep 2025 09:00:00 -0500</pubDate>
+			<pubDate>Sun, 07 Sep 2025 09:00:00 -0500</pubDate>
 			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.7.zip" sparkle:shortVersionString="3.7" sparkle:version="213" length="4465527" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
 		</item>
