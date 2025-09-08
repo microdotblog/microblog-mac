@@ -92,7 +92,7 @@
                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         <prototypeCellViews>
                                                             <tableCellView id="Vr0-d4-L3L">
-                                                                <rect key="frame" x="8" y="0.0" width="358" height="24"/>
+                                                                <rect key="frame" x="8" y="0.0" width="226" height="24"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             </tableCellView>
                                                         </prototypeCellViews>
@@ -128,17 +128,17 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTw-b5-rHj">
-                                    <rect key="frame" x="0.0" y="43" width="242" height="465"/>
+                                    <rect key="frame" x="0.0" y="43" width="242" height="466"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="242" height="465"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="242" height="466"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
-                                                <rect key="frame" x="0.0" y="0.0" width="232" height="455"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="232" height="456"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="color_highlight_background"/>
-                                                <size key="minSize" width="232" height="455"/>
+                                                <size key="minSize" width="232" height="456"/>
                                                 <size key="maxSize" width="242" height="10000000"/>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
@@ -154,7 +154,7 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2ER-EO-y0M">
-                                        <rect key="frame" x="225" y="10" width="17" height="455"/>
+                                        <rect key="frame" x="225" y="10" width="17" height="456"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
@@ -187,7 +187,7 @@
                                     <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                                 </box>
                                 <box boxType="custom" translatesAutoresizingMaskIntoConstraints="NO" id="mWC-E9-E7s">
-                                    <rect key="frame" x="-1" y="508" width="244" height="44"/>
+                                    <rect key="frame" x="-1" y="509" width="244" height="44"/>
                                     <view key="contentView" id="vDL-1M-ge6">
                                         <rect key="frame" x="1" y="1" width="242" height="42"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -225,7 +225,7 @@
                             </subviews>
                             <constraints>
                                 <constraint firstItem="Wmy-sy-ayo" firstAttribute="leading" secondItem="rkn-Eu-2Kj" secondAttribute="leading" constant="-1" id="3CZ-lR-KAd"/>
-                                <constraint firstItem="mWC-E9-E7s" firstAttribute="top" secondItem="rkn-Eu-2Kj" secondAttribute="top" constant="-1" id="BHA-yF-hh9"/>
+                                <constraint firstItem="mWC-E9-E7s" firstAttribute="top" secondItem="rkn-Eu-2Kj" secondAttribute="top" constant="-2" id="BHA-yF-hh9"/>
                                 <constraint firstAttribute="trailing" secondItem="mWC-E9-E7s" secondAttribute="trailing" constant="-1" id="V2z-vt-2Or"/>
                                 <constraint firstAttribute="bottom" secondItem="Wmy-sy-ayo" secondAttribute="bottom" constant="-1" id="cII-0x-Vjt"/>
                                 <constraint firstAttribute="trailing" secondItem="Wmy-sy-ayo" secondAttribute="trailing" constant="-1" id="cK0-7L-Gup"/>
