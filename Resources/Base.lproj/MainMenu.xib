@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -74,29 +74,29 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="File" id="bib-Uj-vzu">
                         <items>
-                            <menuItem title="New Post" keyEquivalent="n" id="Was-JA-tGl">
+                            <menuItem title="New Post" image="square.and.pencil" catalog="system" keyEquivalent="n" id="Was-JA-tGl">
                                 <connections>
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Page" keyEquivalent="N" id="YGy-f8-9ba">
+                            <menuItem title="New Page" image="square.stack" catalog="system" keyEquivalent="N" id="YGy-f8-9ba">
                                 <connections>
                                     <action selector="newPage:" target="-1" id="cFO-oo-bGp"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Collection" id="KF6-ha-NaE">
+                            <menuItem title="New Collection" image="photo" catalog="system" id="KF6-ha-NaE">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newCollection:" target="-1" id="xuh-Yx-ZKL"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Bookmark" id="ILN-3z-6jt">
+                            <menuItem title="New Bookmark" image="plus" catalog="system" id="ILN-3z-6jt">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newBookmark:" target="Voe-Tx-rLC" id="GIh-25-pmA"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Note" keyEquivalent="n" id="pAK-jG-U2O">
+                            <menuItem title="New Note" image="note" catalog="system" keyEquivalent="n" id="pAK-jG-U2O">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="newNote:" target="-1" id="7Ka-v1-QNo"/>
@@ -228,7 +228,7 @@ DQ
                                     <action selector="copy:" target="-1" id="G1f-GL-Joy"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Copy Link" keyEquivalent="C" id="bEv-aa-QhO">
+                            <menuItem title="Copy Link" image="link" catalog="system" keyEquivalent="C" id="bEv-aa-QhO">
                                 <connections>
                                     <action selector="copyLinkOrHTML:" target="-1" id="y6g-E2-YyJ"/>
                                 </connections>
@@ -257,7 +257,7 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="uyl-h8-XO2"/>
-                            <menuItem title="Get Info" keyEquivalent="I" id="YnS-kh-iVi">
+                            <menuItem title="Get Info" image="info.circle" catalog="system" keyEquivalent="I" id="YnS-kh-iVi">
                                 <connections>
                                     <action selector="showInfo:" target="-1" id="1lA-Ng-okc"/>
                                 </connections>
@@ -589,22 +589,22 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
-                            <menuItem title="Micro.blog" keyEquivalent="O" id="wQs-M9-Iha">
+                            <menuItem title="Micro.blog" image="macwindow" catalog="system" keyEquivalent="O" id="wQs-M9-Iha">
                                 <connections>
                                     <action selector="showMainWindow:" target="Voe-Tx-rLC" id="i3H-VE-pjX"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Tags" keyEquivalent="T" id="RkD-fd-sCR">
+                            <menuItem title="Tags" image="tag" catalog="system" keyEquivalent="T" id="RkD-fd-sCR">
                                 <connections>
                                     <action selector="showAllTags:" target="Voe-Tx-rLC" id="dzg-X9-5Qe"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Logs" keyEquivalent="L" id="TI6-7r-cwf">
+                            <menuItem title="Logs" image="terminal" catalog="system" keyEquivalent="L" id="TI6-7r-cwf">
                                 <connections>
                                     <action selector="showLogs:" target="Voe-Tx-rLC" id="CO6-aF-tDj"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Collections" keyEquivalent="K" id="BmT-o4-f35">
+                            <menuItem title="Collections" image="photo" catalog="system" keyEquivalent="K" id="BmT-o4-f35">
                                 <connections>
                                     <action selector="showCollections:" target="Voe-Tx-rLC" id="6KI-bM-rYh"/>
                                 </connections>
@@ -636,4 +636,16 @@ CA
         </menu>
         <customObject id="CPI-xk-PdH" customClass="SUUpdater"/>
     </objects>
+    <resources>
+        <image name="info.circle" catalog="system" width="15" height="15"/>
+        <image name="link" catalog="system" width="17" height="17"/>
+        <image name="macwindow" catalog="system" width="18" height="14"/>
+        <image name="note" catalog="system" width="16" height="14"/>
+        <image name="photo" catalog="system" width="18" height="14"/>
+        <image name="plus" catalog="system" width="14" height="13"/>
+        <image name="square.and.pencil" catalog="system" width="17" height="16"/>
+        <image name="square.stack" catalog="system" width="15" height="18"/>
+        <image name="tag" catalog="system" width="17" height="17"/>
+        <image name="terminal" catalog="system" width="18" height="14"/>
+    </resources>
 </document>
