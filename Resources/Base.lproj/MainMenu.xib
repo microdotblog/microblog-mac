@@ -26,14 +26,14 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Check for Updates..." id="14a-Kc-p1s">
+                            <menuItem title="Check for Updates..." image="arrow.clockwise" catalog="system" id="14a-Kc-p1s">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="checkForUpdates:" target="CPI-xk-PdH" id="keM-16-UBu"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                            <menuItem title="Preferences…" image="gearshape" catalog="system" keyEquivalent="," id="BOF-NM-1cW">
                                 <connections>
                                     <action selector="showPreferences:" target="-1" id="ogV-sN-xDJ"/>
                                 </connections>
@@ -648,6 +648,7 @@ CA
         <image name="checkmark.icloud" catalog="system" width="18" height="14"/>
         <image name="cloud" catalog="system" width="18" height="13"/>
         <image name="doc" catalog="system" width="14" height="16"/>
+        <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="icloud.and.arrow.up" catalog="system" width="18" height="17"/>
         <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="link" catalog="system" width="17" height="17"/>
