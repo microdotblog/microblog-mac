@@ -120,7 +120,7 @@
 		cell.nameField.stringValue = destination[@"name"];
 	}
 	else {
-		cell.nameField.stringValue = @"New Microblog...";
+		cell.nameField.stringValue = @"New Blog...";
 	}
 
 	return cell;
