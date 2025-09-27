@@ -12,7 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBUploadProgress : NSObject
 
+@property (strong, nonatomic, nullable) NSString* currentFileID;
+
 - (void) uploadFileInBackground:(NSString *)path completion:(void (^)(CGFloat))handler;
+- (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat))handler;
+- (void) uploadFinished:(void (^)(BOOL))handler;
 
 @end
 
