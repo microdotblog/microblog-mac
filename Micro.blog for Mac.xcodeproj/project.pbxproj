@@ -71,6 +71,7 @@
 		4B2F97222E00B76700A834C8 /* MBSelectiveUsernamesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2F97212E00B76700A834C8 /* MBSelectiveUsernamesController.m */; };
 		4B2F97252E00B79400A834C8 /* MBSelectiveUsernameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2F97242E00B79400A834C8 /* MBSelectiveUsernameCell.m */; };
 		4B2F97282E00B97B00A834C8 /* SelectiveUsernameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2F97262E00B97B00A834C8 /* SelectiveUsernameCell.xib */; };
+		4B2FAB232E87567200F725D4 /* MBUploadProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2FAB222E87567200F725D4 /* MBUploadProgress.m */; };
 		4B32DD1E2E43E11F003313B3 /* MBGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B32DD1D2E43E11F003313B3 /* MBGoal.m */; };
 		4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */; };
 		4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B36915529A2BAD800561D9A /* CrosspostCell.xib */; };
@@ -389,6 +390,8 @@
 		4B2F97232E00B79400A834C8 /* MBSelectiveUsernameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSelectiveUsernameCell.h; path = Source/MBSelectiveUsernameCell.h; sourceTree = "<group>"; };
 		4B2F97242E00B79400A834C8 /* MBSelectiveUsernameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSelectiveUsernameCell.m; path = Source/MBSelectiveUsernameCell.m; sourceTree = "<group>"; };
 		4B2F97272E00B97B00A834C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/SelectiveUsernameCell.xib; sourceTree = "<group>"; };
+		4B2FAB212E87567200F725D4 /* MBUploadProgress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBUploadProgress.h; path = Source/MBUploadProgress.h; sourceTree = "<group>"; };
+		4B2FAB222E87567200F725D4 /* MBUploadProgress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBUploadProgress.m; path = Source/MBUploadProgress.m; sourceTree = "<group>"; };
 		4B32DD1C2E43E11F003313B3 /* MBGoal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBGoal.h; path = Source/MBGoal.h; sourceTree = "<group>"; };
 		4B32DD1D2E43E11F003313B3 /* MBGoal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBGoal.m; path = Source/MBGoal.m; sourceTree = "<group>"; };
 		4B36915229A2BA8B00561D9A /* MBCrosspostCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCrosspostCell.h; path = Source/MBCrosspostCell.h; sourceTree = "<group>"; };
@@ -1036,6 +1039,8 @@
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
 				4BED646824BDF29A0018644C /* RFUpload.m */,
+				4B2FAB212E87567200F725D4 /* MBUploadProgress.h */,
+				4B2FAB222E87567200F725D4 /* MBUploadProgress.m */,
 				4BA983641FA21FF000E230CC /* RFPostContainerView.h */,
 				4BA983651FA21FF000E230CC /* RFPostContainerView.m */,
 				4B6AE7741F8B336600CB7950 /* RFPhoto.h */,
@@ -1633,6 +1638,7 @@
 				4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
+				4B2FAB232E87567200F725D4 /* MBUploadProgress.m in Sources */,
 				4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */,
 				4B2CAB131F90667300D9B10E /* buffio.c in Sources */,
 				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
@@ -2240,7 +2246,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.7.2;
+				MARKETING_VERSION = 3.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2277,7 +2283,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.7.2;
+				MARKETING_VERSION = 3.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
