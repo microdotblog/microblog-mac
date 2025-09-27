@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MBCollection;
+@class MBUploadProgress;
 
 @interface RFAllUploadsController : NSViewController <NSPopoverDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
 
@@ -23,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* allPosts; // RFUpload
 @property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic, nullable) MBCollection* selectedCollection;
+@property (strong, nonatomic, nullable) MBUploadProgress* uploader;
 
 - (void) fetchUploads;
 - (void) focusSearch;

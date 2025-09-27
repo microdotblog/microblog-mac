@@ -12,7 +12,7 @@
 #import "RFMacros.h"
 #import "RFSettings.h"
 
-const NSUInteger kUploadChunkSize = 3 * 1024 * 1024; // 3 MB chunks
+const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 
 @implementation MBUploadProgress
 
@@ -87,6 +87,9 @@ const NSUInteger kUploadChunkSize = 3 * 1024 * 1024; // 3 MB chunks
 				@"file_data": fileData,
 				@"mp-destination": destination_uid
 			};
+			
+			NSLog(@"Upload chunk: %lu, file: %@", (unsigned long)chunkData.length, fileID);
+			
 			[client postWithParams:params completion:^(UUHttpResponse* response) {
 				bytesUploaded += bytesThisChunk;
 				CGFloat percent = (CGFloat)bytesUploaded / (CGFloat)fileSize;
@@ -104,6 +107,8 @@ const NSUInteger kUploadChunkSize = 3 * 1024 * 1024; // 3 MB chunks
 
 - (void) uploadFinished:(void (^)(BOOL))handler
 {
+	NSLog(@"Upload finished");
+	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media/finished"];
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {

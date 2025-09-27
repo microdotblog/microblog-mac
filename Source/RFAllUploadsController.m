@@ -14,6 +14,7 @@
 #import "MBCollection.h"
 #import "RFClient.h"
 #import "RFUpload.h"
+#import "MBUploadProgress.h"
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
 #import "UUDate.h"
@@ -422,13 +423,153 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	panel.allowsMultipleSelection = YES;
 	NSModalResponse response = [panel runModal];
 	if (response == NSModalResponseOK) {
-		NSMutableArray* paths = [NSMutableArray array];
+		NSMutableArray* regular_paths = [NSMutableArray array];
+		NSMutableArray<NSURL *>* video_urls = [NSMutableArray array];
 		for (NSURL* url in panel.URLs) {
-			[paths addObject:url.path];
+			if ([self isVideoFileURL:url]) {
+				[video_urls addObject:url];
+			}
+			else {
+				[regular_paths addObject:url.path];
+			}
 		}
 
-		[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
+		if (video_urls.count > 0) {
+			[self uploadVideoURLs:video_urls];
+		}
+
+		if (regular_paths.count > 0) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: regular_paths }];
+		}
 	}
+}
+
+- (void) uploadVideoURLs:(NSArray<NSURL *> *)urls
+{
+	NSMutableArray<NSURL *>* queue = [urls mutableCopy];
+	[self uploadNextVideoURL:queue];
+}
+
+- (void) uploadNextVideoURL:(NSMutableArray<NSURL *> *)queue
+{
+	NSURL* url = [queue lastObject];
+	if (url == nil) {
+		return;
+	}
+
+	[queue removeLastObject];
+	__weak typeof(self) weakSelf = self;
+	[self uploadVideoAtURL:url completion:^{
+		[weakSelf uploadNextVideoURL:queue];
+	}];
+}
+
+- (void) uploadVideoAtURL:(NSURL *)url completion:(void (^)(void))handler
+{
+	[self configureProgressSpinnerForVideoUpload];
+	self.blogNameButton.hidden = YES;
+
+	MBUploadProgress* uploader = [[MBUploadProgress alloc] init];
+	self.uploader = uploader;
+
+	NSString* path = url.path;
+	__weak typeof(self) weakSelf = self;
+	__block BOOL didCompleteUpload = NO;
+	__block BOOL reportedFailure = NO;
+
+	[uploader uploadFileInBackground:path completion:^(CGFloat percent) {
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) {
+			return;
+		}
+
+		if (!didCompleteUpload && percent <= 0.0 && uploader.currentFileID == nil && !reportedFailure) {
+			reportedFailure = YES;
+			[strongSelf restoreProgressSpinnerAfterVideoUpload];
+			strongSelf.uploader = nil;
+			[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video file could not be opened." button:@"OK" completionHandler:NULL];
+			if (handler) {
+				handler();
+			}
+			return;
+		}
+
+		strongSelf.progressSpinner.doubleValue = percent;
+
+		if (!didCompleteUpload && percent >= 1.0) {
+			didCompleteUpload = YES;
+			[uploader uploadFinished:^(BOOL success) {
+				__strong typeof(self) innerSelf = weakSelf;
+				if (!innerSelf) {
+					return;
+				}
+
+				if (!success) {
+					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video upload failed. Please try again." button:@"OK" completionHandler:NULL];
+				}
+				else {
+					[innerSelf fetchUploads];
+				}
+
+				[innerSelf restoreProgressSpinnerAfterVideoUpload];
+				innerSelf.uploader = nil;
+
+				if (handler) {
+					handler();
+				}
+			}];
+		}
+	}];
+}
+
+- (void) configureProgressSpinnerForVideoUpload
+{
+	[self.progressSpinner stopAnimation:nil];
+	self.progressSpinner.indeterminate = NO;
+	self.progressSpinner.style = NSProgressIndicatorStyleBar;
+	self.progressSpinner.displayedWhenStopped = YES;
+	self.progressSpinner.minValue = 0.0;
+	self.progressSpinner.maxValue = 1.0;
+	self.progressSpinner.doubleValue = 0.0;
+	self.progressSpinner.hidden = NO;
+}
+
+- (void) restoreProgressSpinnerAfterVideoUpload
+{
+	self.progressSpinner.doubleValue = 0.0;
+	self.progressSpinner.indeterminate = YES;
+	self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
+	self.progressSpinner.displayedWhenStopped = NO;
+	[self.progressSpinner stopAnimation:nil];
+	self.blogNameButton.hidden = NO;
+}
+
+- (BOOL) isVideoFileURL:(NSURL *)url
+{
+	if (@available(macOS 11.0, *)) {
+		NSError* error = nil;
+		NSDictionary<NSURLResourceKey, id>* resource_values = [url resourceValuesForKeys:@[NSURLContentTypeKey] error:&error];
+		UTType* content_type = resource_values[NSURLContentTypeKey];
+		if (content_type == nil) {
+			content_type = [UTType typeWithFilenameExtension:url.pathExtension.lowercaseString];
+		}
+		if (content_type && [content_type conformsToType:UTTypeMovie]) {
+			return YES;
+		}
+	}
+	else {
+		static NSSet<NSString *>* video_extensions;
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			video_extensions = [NSSet setWithArray:@[@"mp4", @"m4v", @"mov", @"avi", @"mpg", @"mpeg", @"mp2", @"mpe", @"mpv", @"mkv", @"wmv"]];
+		});
+		NSString* extension = url.pathExtension.lowercaseString;
+		if (extension.length > 0 && [video_extensions containsObject:extension]) {
+			return YES;
+		}
+	}
+
+	return NO;
 }
 
 - (void) uploadNextPhoto:(NSMutableArray *)paths

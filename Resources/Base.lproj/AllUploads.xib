@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,8 +28,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="398" height="462"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="0aW-jy-83j">
-                                <rect key="frame" x="12" y="431" width="16" height="16"/>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="0aW-jy-83j">
+                                <rect key="frame" x="12" y="435" width="100" height="12"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="3Rn-2I-fPz"/>
+                                </constraints>
                             </progressIndicator>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="HkM-wg-aGS">
                                 <rect key="frame" x="12" y="415" width="374" height="5"/>
@@ -91,7 +94,7 @@
                                 </connections>
                             </button>
                             <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHm-L9-coS">
-                                <rect key="frame" x="241" y="430" width="145" height="22"/>
+                                <rect key="frame" x="241" y="428" width="145" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="145" id="IZY-K5-JZR"/>
                                 </constraints>
