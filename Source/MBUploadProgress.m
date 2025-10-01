@@ -28,7 +28,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 	NSString* fileID = [NSString stringWithFormat:@"%06u", arc4random_uniform(900000) + 100000];
 	self.currentFileID = fileID;
 
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media/part"];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media/append"];
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
