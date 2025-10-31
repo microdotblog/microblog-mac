@@ -431,7 +431,7 @@
 	}
 
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
-	panel.message = @"Unzip your Instagram archive download, open the \"your_instagram_activity\" → \"content\" folder, and select the posts_1.json file.";
+	panel.message = @"Unzip your Instagram \"JSON\" archive download, open the \"your_instagram_activity\" → \"media\" folder, and select the posts_1.json file.";
 	panel.allowedFileTypes = @[ @"json" ];
 	NSModalResponse response = [panel runModal];
 	if (response == NSModalResponseOK) {
