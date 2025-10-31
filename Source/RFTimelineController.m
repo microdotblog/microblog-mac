@@ -17,6 +17,7 @@
 #import "RFAllUploadsController.h"
 #import "RFRepliesController.h"
 #import "RFBookshelvesController.h"
+#import "MBMoviesController.h"
 #import "RFConversationController.h"
 #import "RFFriendsController.h"
 #import "RFTopicController.h"
@@ -53,7 +54,8 @@ static NSInteger const kSelectionUploads = 7;
 static NSInteger const kSelectionDivider2 = 8;
 static NSInteger const kSelectionReplies = 9;
 static NSInteger const kSelectionBookshelves = 10;
-static NSInteger const kSelectionNotes = 11;
+static NSInteger const kSelectionMovies = 11;
+static NSInteger const kSelectionNotes = 12;
 
 @implementation RFTimelineController
 
@@ -234,6 +236,7 @@ static NSInteger const kSelectionNotes = 11;
 	
 	[self.sidebarItems addObject:@(kSelectionReplies)];
 	[self.sidebarItems addObject:@(kSelectionBookshelves)];
+	[self.sidebarItems addObject:@(kSelectionMovies)];
 	[self.sidebarItems addObject:@(kSelectionNotes)];
 }
 
@@ -643,6 +646,20 @@ static NSInteger const kSelectionNotes = 11;
 
 	[self selectSidebarRow:kSelectionBookshelves];
 	[self startLoadingSidebarRow:kSelectionBookshelves];
+}
+
+- (IBAction) showMovies:(id)sender
+{
+	self.selectedTimeline = kSelectionMovies;
+
+	[self closeOverlays];
+
+	MBMoviesController* controller = [[MBMoviesController alloc] init];
+	[self showRootController:controller];
+	
+	[self selectSidebarRow:kSelectionMovies];
+	[self startLoadingSidebarRow:kSelectionMovies];
+//	[self stopLoadingSidebarRow];
 }
 
 - (IBAction) showNotes:(id)sender
@@ -1783,6 +1800,16 @@ static NSInteger const kSelectionNotes = 11;
 			cell.iconView.alphaValue = 0.5;
 		}
 	}
+	else if (sidebar_row == kSelectionMovies) {
+		cell.titleField.stringValue = @"Movies";
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"movieclapper" accessibilityDescription:@"Movies"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
+		}
+		else {
+			cell.iconView.alphaValue = 0.5;
+		}
+	}
 	else if (sidebar_row == kSelectionNotes) {
 		cell.titleField.stringValue = @"Notes";
 		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"note" accessibilityDescription:@"Notes"];
@@ -1835,6 +1862,9 @@ static NSInteger const kSelectionNotes = 11;
 	}
 	else if (sidebar_row == kSelectionBookshelves) {
 		[self showBookshelves:nil];
+	}
+	else if (sidebar_row == kSelectionMovies) {
+		[self showMovies:nil];
 	}
 	else if (sidebar_row == kSelectionNotes) {
 		[self showNotes:nil];

@@ -17,6 +17,11 @@
 		4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; };
 		4B00B686255D842200CBE873 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B0881C42C505A3100BA513D /* MBGlassController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0881C32C505A3100BA513D /* MBGlassController.m */; };
+		4B1970702EB54AA500BFFD8E /* MBMoviesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */; };
+		4B1970732EB54B0700BFFD8E /* Movies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970712EB54B0700BFFD8E /* Movies.xib */; };
+		4B1970762EB553BD00BFFD8E /* MovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970742EB553BD00BFFD8E /* MovieCell.xib */; };
+		4B1970792EB5541300BFFD8E /* MBMovieCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1970782EB5541300BFFD8E /* MBMovieCell.m */; };
+		4B19707C2EB5555300BFFD8E /* MBMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19707B2EB5555300BFFD8E /* MBMovie.m */; };
 		4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */; };
 		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
 		4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1FA569269E0491006E0451 /* RFDiscoverController.m */; };
@@ -288,6 +293,14 @@
 		4B00B678255D827800CBE873 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		4B0881C22C505A3100BA513D /* MBGlassController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBGlassController.h; path = Source/MBGlassController.h; sourceTree = "<group>"; };
 		4B0881C32C505A3100BA513D /* MBGlassController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBGlassController.m; path = Source/MBGlassController.m; sourceTree = "<group>"; };
+		4B19706E2EB54AA500BFFD8E /* MBMoviesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMoviesController.h; path = Source/MBMoviesController.h; sourceTree = "<group>"; };
+		4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMoviesController.m; path = Source/MBMoviesController.m; sourceTree = "<group>"; };
+		4B1970722EB54B0700BFFD8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Movies.xib; sourceTree = "<group>"; };
+		4B1970752EB553BD00BFFD8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MovieCell.xib; sourceTree = "<group>"; };
+		4B1970772EB5541300BFFD8E /* MBMovieCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMovieCell.h; path = Source/MBMovieCell.h; sourceTree = "<group>"; };
+		4B1970782EB5541300BFFD8E /* MBMovieCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMovieCell.m; path = Source/MBMovieCell.m; sourceTree = "<group>"; };
+		4B19707A2EB5555300BFFD8E /* MBMovie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMovie.h; path = Source/MBMovie.h; sourceTree = "<group>"; };
+		4B19707B2EB5555300BFFD8E /* MBMovie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMovie.m; path = Source/MBMovie.m; sourceTree = "<group>"; };
 		4B1F2A242BC2219C00B52EAC /* MBTimelineWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineWindow.h; path = Source/MBTimelineWindow.h; sourceTree = "<group>"; };
 		4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTimelineWindow.m; path = Source/MBTimelineWindow.m; sourceTree = "<group>"; };
 		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
@@ -1029,6 +1042,12 @@
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
 				4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */,
+				4B19706E2EB54AA500BFFD8E /* MBMoviesController.h */,
+				4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */,
+				4B1970772EB5541300BFFD8E /* MBMovieCell.h */,
+				4B1970782EB5541300BFFD8E /* MBMovieCell.m */,
+				4B19707A2EB5555300BFFD8E /* MBMovie.h */,
+				4B19707B2EB5555300BFFD8E /* MBMovie.m */,
 				4B5D86702E6B6F0600697E41 /* MBBookCoverView.h */,
 				4B5D86712E6B6F0600697E41 /* MBBookCoverView.m */,
 				4BBB74062A71AF4A00479BCB /* MBHighlightsTableView.h */,
@@ -1239,6 +1258,8 @@
 				4B79E2942D0B56BE00A22861 /* EditCollectionCell.xib */,
 				4B41CB432E22AFD4000C324F /* VersionsWindow.xib */,
 				4B41CB4F2E22DB55000C324F /* VersionCell.xib */,
+				4B1970712EB54B0700BFFD8E /* Movies.xib */,
+				4B1970742EB553BD00BFFD8E /* MovieCell.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1388,6 +1409,7 @@
 				4B5EE27A20632C6800C87A78 /* Blogs.xib in Resources */,
 				4BF1A1252BBEF5CB00256D3C /* Simple.xib in Resources */,
 				4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */,
+				4B1970762EB553BD00BFFD8E /* MovieCell.xib in Resources */,
 				4B79E2962D0B56BE00A22861 /* EditCollectionCell.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
 				4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */,
@@ -1399,6 +1421,7 @@
 				4B56505B1F85619100B03FFD /* Post.xib in Resources */,
 				4BDB783F2774E8F100D7783C /* BlogImport.xib in Resources */,
 				4BDB3825278A838A00BD457C /* Preview.xib in Resources */,
+				4B1970732EB54B0700BFFD8E /* Movies.xib in Resources */,
 				4B2CAB381F924CA200D9B10E /* User.xib in Resources */,
 				4B9F06402767BC400007F21D /* Date.xib in Resources */,
 				4B608B421FFE7C6D00589F77 /* NewPostAccessory.xib in Resources */,
@@ -1468,6 +1491,7 @@
 				4B400D06201EC55B00C71AAF /* MMMarkdown.m in Sources */,
 				4B3796962D9B03F4008CE322 /* NSCollectionView+Extras.m in Sources */,
 				4B2CAB191F90667300D9B10E /* istack.c in Sources */,
+				4B19707C2EB5555300BFFD8E /* MBMovie.m in Sources */,
 				4B400D0A201EC55B00C71AAF /* MMSpanParser.m in Sources */,
 				4B001CE82B27AE2000BBF456 /* MBNotesKeyController.m in Sources */,
 				4B2CAB141F90667300D9B10E /* utf8.c in Sources */,
@@ -1578,6 +1602,7 @@
 				4B2CAB1A1F90667300D9B10E /* config.c in Sources */,
 				4B7F0AF21BAF4C27004553A6 /* main.m in Sources */,
 				4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */,
+				4B1970702EB54AA500BFFD8E /* MBMoviesController.m in Sources */,
 				4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */,
 				4B2CAAC21F90652800D9B10E /* RFXMLRSDParser.m in Sources */,
 				4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */,
@@ -1590,6 +1615,7 @@
 				4B79E2902D089DC000A22861 /* MBCollectionCell.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
 				4B71E6A32DE0C94D0097E1F3 /* HTMLNode+Mutating.m in Sources */,
+				4B1970792EB5541300BFFD8E /* MBMovieCell.m in Sources */,
 				4B2CAB2F1F912EAF00D9B10E /* RFConversationController.m in Sources */,
 				4B2CAB0F1F90667300D9B10E /* tmbstr.c in Sources */,
 				4BEFA48521EFE799006B1691 /* RFHeaderBox.m in Sources */,
@@ -1676,6 +1702,22 @@
 				4B001CE42B27AB1B00BBF456 /* Base */,
 			);
 			name = NotesKeyWindow.xib;
+			sourceTree = "<group>";
+		};
+		4B1970712EB54B0700BFFD8E /* Movies.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B1970722EB54B0700BFFD8E /* Base */,
+			);
+			name = Movies.xib;
+			sourceTree = "<group>";
+		};
+		4B1970742EB553BD00BFFD8E /* MovieCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B1970752EB553BD00BFFD8E /* Base */,
+			);
+			name = MovieCell.xib;
 			sourceTree = "<group>";
 		};
 		4B1FA565269E0434006E0451 /* Discover.xib */ = {
