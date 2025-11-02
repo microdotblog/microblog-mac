@@ -659,7 +659,6 @@ static NSInteger const kSelectionNotes = 12;
 	
 	[self selectSidebarRow:kSelectionMovies];
 	[self startLoadingSidebarRow:kSelectionMovies];
-//	[self stopLoadingSidebarRow];
 }
 
 - (IBAction) showNotes:(id)sender
@@ -779,6 +778,9 @@ static NSInteger const kSelectionNotes = 12;
 		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionReplies)) {
 			return YES;
 		}
+		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionMovies)) {
+			return YES;
+		}
 		else if ((item.tag == NSTextFinderActionShowFindInterface) && (self.selectedTimeline == kSelectionNotes)) {
 			return YES;
 		}
@@ -831,35 +833,11 @@ static NSInteger const kSelectionNotes = 12;
 
 - (void) performFindPanelAction:(id)sender
 {
-	if (self.selectedTimeline == kSelectionDiscover) {
-		if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
-			[(RFDiscoverController *)self.rootController showSearch:nil];
-		}
+	if ([self.rootController respondsToSelector:@selector(showSearch:)]) {
+		[self.rootController performSelector:@selector(showSearch:) withObject:nil];
 	}
-	else if (self.selectedTimeline == kSelectionPosts) {
-		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.rootController focusSearch];
-		}
-	}
-	else if (self.selectedTimeline == kSelectionPages) {
-		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.rootController focusSearch];
-		}
-	}
-	else if (self.selectedTimeline == kSelectionUploads) {
-		if ([self.rootController isKindOfClass:[RFAllUploadsController class]]) {
-			[(RFAllUploadsController *)self.rootController focusSearch];
-		}
-	}
-	else if (self.selectedTimeline == kSelectionReplies) {
-		if ([self.rootController isKindOfClass:[RFRepliesController class]]) {
-			[(RFRepliesController *)self.rootController focusSearch];
-		}
-	}
-	else if (self.selectedTimeline == kSelectionNotes) {
-		if ([self.rootController isKindOfClass:[MBNotesController class]]) {
-			[(MBNotesController *)self.rootController focusSearch];
-		}
+	else if ([self.rootController respondsToSelector:@selector(focusSearch)]) {
+		[self.rootController performSelector:@selector(focusSearch)];
 	}
 }
 
