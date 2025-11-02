@@ -19,10 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* year;
 @property (strong) NSString* director;
 @property (assign) NSInteger seasonsCount;
+@property (assign) NSInteger episodesCount;
 
 - (NSString *) displayUsername;
 - (NSString *) displayYearDirector;
 - (NSString *) displayYearSeasons;
+- (BOOL) hasSeasons;
+- (BOOL) hasEpisodes;
 
 @end
 

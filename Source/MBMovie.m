@@ -30,4 +30,14 @@
 	}
 }
 
+- (BOOL) hasSeasons
+{
+	return (self.seasonsCount > 0);
+}
+
+- (BOOL) hasEpisodes
+{
+	return (self.episodesCount > 0);
+}
+
 @end

@@ -48,9 +48,7 @@
 }
 
 - (IBAction) search:(id)sender
-{
-	NSLog(@"Search: %@", [sender stringValue]);
-	
+{	
 	NSString* s = [sender stringValue];
 	if (s.length > 2) {
 		[self.progressSpinner startAnimation:nil];
@@ -70,8 +68,44 @@
 	}
 		
 	if (row >= 0) {
-		// ...
+		MBMovie* m = [self.movies objectAtIndex:row];
+		if ([m hasSeasons]) {
+			[self expandSeasons:row];
+		}
+		else if ([m hasEpisodes]) {
+			[self expandEpisodes:row];
+		}
 	}
+}
+
+- (void) moveLeft
+{
+	NSInteger row = [self.tableView selectedRow];
+	[self collapseRow:row];
+}
+
+- (void) moveRight
+{
+	NSInteger row = [self.tableView selectedRow];
+	MBMovie* m = [self.movies objectAtIndex:row];
+	if ([m hasSeasons]) {
+		[self expandSeasons:row];
+	}
+	else if ([m hasEpisodes]) {
+		[self expandEpisodes:row];
+	}
+}
+
+- (void) expandSeasons:(NSInteger)row
+{
+}
+
+- (void) expandEpisodes:(NSInteger)row
+{
+}
+
+- (void) collapseRow:(NSInteger)row
+{
 }
 
 #pragma mark -
