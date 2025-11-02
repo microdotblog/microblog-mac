@@ -30,6 +30,8 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
+	
+	[self fetchDiscover];
 }
 
 - (void) setupTable
@@ -74,6 +76,37 @@
 
 #pragma mark -
 
+- (void) fetchDiscover
+{
+	self.movies = @[];
+	self.tableView.animator.alphaValue = 0.0;
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/movies/discover"];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_movies = [NSMutableArray array];
+
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				MBMovie* m = [[MBMovie alloc] init];
+				m.posterURL = [item objectForKey:@"image"];
+				m.title = [item objectForKey:@"title"];
+				m.username = [[[[item objectForKey:@"authors"] firstObject] objectForKey:@"_microblog"] objectForKey:@"username"];
+
+				[new_movies addObject:m];
+			}
+			
+			RFDispatchMainAsync (^{
+				self.movies = new_movies;
+				[self.tableView reloadData];
+				self.tableView.animator.alphaValue = 1.0;
+				[self stopLoadingSidebarRow];
+				[self.progressSpinner stopAnimation:nil];
+			});
+		}
+	}];
+}
+
 - (void) fetchMoviesWithSearch:(NSString *)search
 {
 	self.movies = @[];
@@ -81,7 +114,7 @@
 
 	NSDictionary* args = @{ @"q": search };
 
-	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/movies"];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/movies/search"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_movies = [NSMutableArray array];
@@ -89,7 +122,9 @@
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
+				m.posterURL = [item objectForKey:@"image"];
 				m.title = [item objectForKey:@"title"];
+				m.year = [[item objectForKey:@"_microblog"] objectForKey:@"year"];
 
 				[new_movies addObject:m];
 			}
@@ -124,6 +159,19 @@
 	if (row < self.movies.count) {
 		MBMovie* m = [self.movies objectAtIndex:row];
 		[cell setupWithMovie:m];
+
+		if (m.posterImage == nil) {
+			[UUHttpSession get:m.posterURL queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+					NSImage* img = response.parsedResponse;
+					RFDispatchMain(^{
+						m.posterImage = img;
+						cell.posterImageView.image = img;
+					});
+				}
+			}];
+		}
+
 	}
 
 	return cell;

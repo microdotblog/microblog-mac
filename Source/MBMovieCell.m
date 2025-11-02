@@ -8,10 +8,24 @@
 
 #import "MBMovieCell.h"
 
+#import "MBMovie.h"
+
 @implementation MBMovieCell
 
-- (void) setupWithMovie:(id)movie
+- (void) setupWithMovie:(MBMovie *)movie
 {
+	self.titleField.stringValue = movie.title;
+	if (movie.username.length > 0) {
+		self.subtitleField.stringValue = [movie displayUsername];
+	}
+	else if (movie.year.length > 0) {
+		self.subtitleField.stringValue = movie.year;
+	}
+	else {
+		self.subtitleField.stringValue = @"";
+	}
+	
+	self.posterImageView.image = movie.posterImage;
 }
 
 @end

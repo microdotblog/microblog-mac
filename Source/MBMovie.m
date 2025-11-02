@@ -10,4 +10,9 @@
 
 @implementation MBMovie
 
+- (NSString *) displayUsername
+{
+	return [NSString stringWithFormat:@"@%@", self.username];
+}
+
 @end

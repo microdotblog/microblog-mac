@@ -10,9 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MBMovie;
+
 @interface MBMovieCell : NSTableRowView
 
-- (void) setupWithMovie:(id)movie;
+@property (strong, nonatomic) IBOutlet NSImageView* posterImageView;
+@property (strong, nonatomic) IBOutlet NSTextField* titleField;
+@property (strong, nonatomic) IBOutlet NSTextField* subtitleField;
+
+- (void) setupWithMovie:(MBMovie *)movie;
 
 @end
 
