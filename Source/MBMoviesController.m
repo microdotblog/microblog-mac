@@ -125,6 +125,8 @@
 				m.posterURL = [item objectForKey:@"image"];
 				m.title = [item objectForKey:@"title"];
 				m.year = [[item objectForKey:@"_microblog"] objectForKey:@"year"];
+				m.director = [[item objectForKey:@"_microblog"] objectForKey:@"director"];
+				m.seasonsCount = [[[item objectForKey:@"_microblog"] objectForKey:@"seasons_count"] integerValue];
 
 				[new_movies addObject:m];
 			}

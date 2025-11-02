@@ -18,8 +18,11 @@
 	if (movie.username.length > 0) {
 		self.subtitleField.stringValue = [movie displayUsername];
 	}
+	else if (movie.seasonsCount > 0) {
+		self.subtitleField.stringValue = [movie displayYearSeasons];
+	}
 	else if (movie.year.length > 0) {
-		self.subtitleField.stringValue = movie.year;
+		self.subtitleField.stringValue = [movie displayYearDirector];
 	}
 	else {
 		self.subtitleField.stringValue = @"";
