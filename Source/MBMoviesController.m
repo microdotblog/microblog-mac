@@ -48,7 +48,7 @@
 }
 
 - (IBAction) search:(id)sender
-{	
+{
 	NSString* s = [sender stringValue];
 	if (s.length > 2) {
 		[self.progressSpinner startAnimation:nil];
@@ -70,10 +70,13 @@
 	if (row >= 0) {
 		MBMovie* m = [self.movies objectAtIndex:row];
 		if ([m hasSeasons]) {
-			[self expandSeasons:row];
+			[self expandSeasons:m forRow:row];
 		}
 		else if ([m hasEpisodes]) {
-			[self expandEpisodes:row];
+			[self expandEpisodes:m forRow:row];
+		}
+		else if (m.url.length > 0) {
+			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:m.url]];
 		}
 	}
 }
@@ -89,20 +92,43 @@
 	NSInteger row = [self.tableView selectedRow];
 	MBMovie* m = [self.movies objectAtIndex:row];
 	if ([m hasSeasons]) {
-		[self expandSeasons:row];
+		[self expandSeasons:m forRow:row];
 	}
 	else if ([m hasEpisodes]) {
-		[self expandEpisodes:row];
+		[self expandEpisodes:m forRow:row];
 	}
 }
 
-- (void) expandSeasons:(NSInteger)row
+- (void) expandSeasons:(MBMovie *)movie forRow:(NSInteger)row
 {
+	[self.progressSpinner startAnimation:nil];
+	
+	// ...
 }
 
-- (void) expandEpisodes:(NSInteger)row
+- (void) expandEpisodes:(MBMovie *)movie forRow:(NSInteger)row
 {
-}
+	[self.progressSpinner startAnimation:nil];
+	
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/movies/discover/%@/seasons/1", movie.tmdbID];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_episodes = [NSMutableArray array];
+
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				MBMovie* m = [[MBMovie alloc] init];
+				m.posterURL = [item objectForKey:@"image"];
+				m.title = [item objectForKey:@"title"];
+
+				[new_episodes addObject:m];
+			}
+			
+			RFDispatchMainAsync (^{
+				[self.progressSpinner stopAnimation:nil];
+			});
+		}
+	}];}
 
 - (void) collapseRow:(NSInteger)row
 {
@@ -124,6 +150,7 @@
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
 				m.posterURL = [item objectForKey:@"image"];
+				m.url = [item objectForKey:@"url"];
 				m.title = [item objectForKey:@"title"];
 				m.username = [[[[item objectForKey:@"authors"] firstObject] objectForKey:@"_microblog"] objectForKey:@"username"];
 
@@ -161,6 +188,7 @@
 				m.year = [[item objectForKey:@"_microblog"] objectForKey:@"year"];
 				m.director = [[item objectForKey:@"_microblog"] objectForKey:@"director"];
 				m.seasonsCount = [[[item objectForKey:@"_microblog"] objectForKey:@"seasons_count"] integerValue];
+				m.tmdbID = [[item objectForKey:@"_microblog"] objectForKey:@"tmdb_id"];
 
 				[new_movies addObject:m];
 			}

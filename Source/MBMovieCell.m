@@ -18,7 +18,7 @@
 	if (movie.username.length > 0) {
 		self.subtitleField.stringValue = [movie displayUsername];
 		self.leftConstraint.constant = 12;
-		self.disclosureTriangle.hidden = NO;
+		self.disclosureTriangle.hidden = YES;
 	}
 	else if (movie.seasonsCount > 0) {
 		self.subtitleField.stringValue = [movie displayYearSeasons];

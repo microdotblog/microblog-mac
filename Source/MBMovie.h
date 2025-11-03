@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBMovie : NSObject
 
+@property (strong) NSString* tmdbID;
+@property (strong) NSString* url;
 @property (strong) NSString* title;
 @property (strong) NSString* username;
 @property (strong) NSString* posterURL;
