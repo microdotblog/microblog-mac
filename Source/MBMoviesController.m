@@ -324,28 +324,30 @@
 	NSMutableArray* updatedMovies = [self.movies mutableCopy];
 	NSMutableIndexSet* rowsToRemove = [NSMutableIndexSet indexSet];
 
-	NSArray* openSeasonsForMovie = [self.openSeasons objectForKey:movie.tmdbID];
-	if (openSeasonsForMovie != nil) {
-		if (openSeasonsForMovie.count > 0) {
-			for (MBMovie* season in openSeasonsForMovie) {
-				NSArray* openEpisodesForSeason = [self.openEpisodes objectForKey:season.tmdbID];
-				if (openEpisodesForSeason.count > 0) {
-					for (MBMovie* episode in openEpisodesForSeason) {
-						NSUInteger episodeIndex = [updatedMovies indexOfObjectIdenticalTo:episode];
-						if (episodeIndex != NSNotFound) {
-							[rowsToRemove addIndex:episodeIndex];
+	if ([movie hasSeasons]) {
+		NSArray* openSeasonsForMovie = [self.openSeasons objectForKey:movie.tmdbID];
+		if (openSeasonsForMovie != nil) {
+			if (openSeasonsForMovie.count > 0) {
+				for (MBMovie* season in openSeasonsForMovie) {
+					NSArray* openEpisodesForSeason = [self.openEpisodes objectForKey:season.tmdbID];
+					if (openEpisodesForSeason.count > 0) {
+						for (MBMovie* episode in openEpisodesForSeason) {
+							NSUInteger episodeIndex = [updatedMovies indexOfObjectIdenticalTo:episode];
+							if (episodeIndex != NSNotFound) {
+								[rowsToRemove addIndex:episodeIndex];
+							}
 						}
+						[self.openEpisodes removeObjectForKey:season.tmdbID];
 					}
-					[self.openEpisodes removeObjectForKey:season.tmdbID];
-				}
 
-				NSUInteger seasonIndex = [updatedMovies indexOfObjectIdenticalTo:season];
-				if (seasonIndex != NSNotFound) {
-					[rowsToRemove addIndex:seasonIndex];
+					NSUInteger seasonIndex = [updatedMovies indexOfObjectIdenticalTo:season];
+					if (seasonIndex != NSNotFound) {
+						[rowsToRemove addIndex:seasonIndex];
+					}
 				}
 			}
+			[self.openSeasons removeObjectForKey:movie.tmdbID];
 		}
-		[self.openSeasons removeObjectForKey:movie.tmdbID];
 	}
 
 	NSArray* openEpisodesForMovie = [self.openEpisodes objectForKey:movie.tmdbID];
