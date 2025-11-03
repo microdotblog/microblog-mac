@@ -17,15 +17,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* title;
 @property (strong) NSString* username;
 @property (strong) NSString* posterURL;
+@property (strong) NSString* airDate;
 @property (strong) NSImage* posterImage;
 @property (strong) NSString* year;
 @property (strong) NSString* director;
 @property (assign) NSInteger seasonsCount;
 @property (assign) NSInteger episodesCount;
+@property (assign) NSInteger seasonNumber;
+@property (assign) BOOL isSearchedEpisode;
 
 - (NSString *) displayUsername;
 - (NSString *) displayYearDirector;
 - (NSString *) displayYearSeasons;
+- (NSString *) displayEpisodes;
+
 - (BOOL) hasSeasons;
 - (BOOL) hasEpisodes;
 

@@ -62,6 +62,7 @@
                 <constraint firstItem="egf-Hs-gWE" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="unN-bC-3ov"/>
             </constraints>
             <connections>
+                <outlet property="disclosureInsetConstraint" destination="top-vz-FXC" id="V4Q-0n-49o"/>
                 <outlet property="disclosureTriangle" destination="ICa-aB-Kyx" id="cgS-CC-pIj"/>
                 <outlet property="leftConstraint" destination="fXG-1N-jll" id="4C4-IQ-ghi"/>
                 <outlet property="posterImageView" destination="wFV-JM-ycp" id="jjm-yp-NuG"/>

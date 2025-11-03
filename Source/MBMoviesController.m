@@ -75,9 +75,11 @@
 	if (row >= 0) {
 		MBMovie* m = [self.movies objectAtIndex:row];
 		if ([m hasSeasons]) {
+			[self toggleDisclosureAtRow:row];
 			[self expandSeasons:m forRow:row];
 		}
 		else if ([m hasEpisodes]) {
+			[self toggleDisclosureAtRow:row];
 			[self expandEpisodes:m forRow:row];
 		}
 		else if (m.url.length > 0) {
@@ -89,6 +91,7 @@
 - (void) moveLeft
 {
 	NSInteger row = [self.tableView selectedRow];
+	[self toggleDisclosureAtRow:row];
 	[self collapseRow:row];
 }
 
@@ -97,9 +100,11 @@
 	NSInteger row = [self.tableView selectedRow];
 	MBMovie* m = [self.movies objectAtIndex:row];
 	if ([m hasSeasons]) {
+		[self toggleDisclosureAtRow:row];
 		[self expandSeasons:m forRow:row];
 	}
 	else if ([m hasEpisodes]) {
+		[self toggleDisclosureAtRow:row];
 		[self expandEpisodes:m forRow:row];
 	}
 }
@@ -115,6 +120,7 @@
 		if (alreadyOpen.count > 0) {
 			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
 			if (movieIndex != NSNotFound) {
+				[self toggleDisclosureAtRow:movieIndex];
 				[self collapseRow:(NSInteger)movieIndex];
 			}
 		}
@@ -138,8 +144,9 @@
 				NSDictionary* metadata = [item objectForKey:@"_microblog"];
 				if ([metadata isKindOfClass:[NSDictionary class]]) {
 					m.tmdbID = [metadata objectForKey:@"tmdb_id"];
-					m.episodesCount = [[metadata objectForKey:@"episodes_count"] integerValue];
+					m.episodesCount = [[metadata objectForKey:@"episode_count"] integerValue];
 					m.year = [metadata objectForKey:@"year"] ?: @"";
+					m.seasonNumber = [[metadata objectForKey:@"season_number"] integerValue];
 				}
 				
 				[new_seasons addObject:m];
@@ -202,6 +209,7 @@
 		if (alreadyOpen.count > 0) {
 			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
 			if (movieIndex != NSNotFound) {
+				[self toggleDisclosureAtRow:movieIndex];
 				[self collapseRow:(NSInteger)movieIndex];
 			}
 		}
@@ -212,7 +220,7 @@
 
 	[self.progressSpinner startAnimation:nil];
 	
-	RFClient* client = [[RFClient alloc] initWithFormat:@"/movies/discover/%@/seasons/1", movie.tmdbID];
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/movies/discover/%@/seasons/%d", movie.tmdbID, movie.seasonNumber];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_episodes = [NSMutableArray array];
@@ -220,12 +228,14 @@
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
+				m.isSearchedEpisode = YES;
 				m.posterURL = [item objectForKey:@"image"];
 				m.title = [item objectForKey:@"title"];
 				NSDictionary* metadata = [item objectForKey:@"_microblog"];
 				if ([metadata isKindOfClass:[NSDictionary class]]) {
 					m.tmdbID = [metadata objectForKey:@"tmdb_id"];
 					m.url = [metadata objectForKey:@"url"];
+					m.airDate = [metadata objectForKey:@"air_date"];
 				}
 				
 				[new_episodes addObject:m];
@@ -331,6 +341,14 @@
 	[updatedMovies removeObjectsAtIndexes:rowsToRemove];
 	self.movies = updatedMovies;
 	[self.tableView removeRowsAtIndexes:rowsToRemove withAnimation:NSTableViewAnimationSlideUp];
+}
+
+- (void) toggleDisclosureAtRow:(NSInteger)row
+{
+	MBMovieCell* cell = (MBMovieCell *)[self tableView:self.tableView rowViewForRow:row];
+	if (cell) {
+		[cell toggleDisclosure];
+	}
 }
 
 #pragma mark -

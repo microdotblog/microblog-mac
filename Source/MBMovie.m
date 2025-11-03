@@ -30,6 +30,18 @@
 	}
 }
 
+- (NSString *) displayEpisodes
+{
+	if (self.episodesCount == 1) {
+		return @"1 episode";
+	}
+	else {
+		return [NSString stringWithFormat:@"%ld episodes", (long)self.episodesCount];
+	}
+}
+
+#pragma mark -
+
 - (BOOL) hasSeasons
 {
 	return (self.seasonsCount > 0);

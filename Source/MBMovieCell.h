@@ -18,9 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextField* subtitleField;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* leftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* disclosureInsetConstraint;
 @property (strong, nonatomic) IBOutlet NSButton* disclosureTriangle;
 
 - (void) setupWithMovie:(MBMovie *)movie;
+- (void) toggleDisclosure;
 
 @end
 
