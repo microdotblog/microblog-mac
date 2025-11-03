@@ -430,6 +430,20 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
 }
 
+- (BOOL) currentMoviesNeedInset
+{
+	BOOL result = NO;
+	
+	for (MBMovie* m in self.movies) {
+		if (m.seasonsCount > 0) {
+			result = YES;
+			break;
+		}
+	}
+	
+	return result;
+}
+
 #pragma mark -
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
@@ -443,6 +457,7 @@
 
 	if (row < self.movies.count) {
 		MBMovie* m = [self.movies objectAtIndex:row];
+		cell.needsInset = [self currentMoviesNeedInset];
 		[cell setupWithMovie:m];
 
 		if (m.posterImage == nil) {

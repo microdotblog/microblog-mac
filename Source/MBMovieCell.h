@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* disclosureInsetConstraint;
 @property (strong, nonatomic) IBOutlet NSButton* disclosureTriangle;
 
+@property (assign, nonatomic) BOOL needsInset;
+
 - (void) setupWithMovie:(MBMovie *)movie;
 - (void) toggleDisclosure;
 

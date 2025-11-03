@@ -35,7 +35,7 @@
 	}
 	else if (movie.year.length > 0) {
 		self.subtitleField.stringValue = [movie displayYearDirector];
-		self.leftConstraint.constant = 12;
+		self.leftConstraint.constant = self.needsInset ? 40 : 12;
 		self.disclosureInsetConstraint.constant = 12;
 		self.disclosureTriangle.hidden = YES;
 	}
@@ -47,7 +47,7 @@
 	}
 	else {
 		self.subtitleField.stringValue = @"";
-		self.leftConstraint.constant = 12;
+		self.leftConstraint.constant = self.needsInset ? 40 : 12;
 		self.disclosureInsetConstraint.constant = 12;
 		self.disclosureTriangle.hidden = YES;
 	}
