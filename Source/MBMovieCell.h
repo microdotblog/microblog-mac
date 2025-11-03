@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) BOOL needsInset;
 
 - (void) setupWithMovie:(MBMovie *)movie;
-- (void) toggleDisclosure;
+- (void) setDisclosureOpen:(BOOL)isOpen;
 
 @end
 

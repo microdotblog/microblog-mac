@@ -55,14 +55,9 @@
 	self.posterImageView.image = movie.posterImage;
 }
 
-- (void) toggleDisclosure
+- (void) setDisclosureOpen:(BOOL)isOpen
 {
-	if (self.disclosureTriangle.state == NSControlStateValueOff) {
-		self.disclosureTriangle.state = NSControlStateValueOn;
-	}
-	else if (self.disclosureTriangle.state == NSControlStateValueOn) {
-		self.disclosureTriangle.state = NSControlStateValueOff;
-	}
+	self.disclosureTriangle.state = isOpen ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
 - (IBAction) toggleDisclosure:(id)sender

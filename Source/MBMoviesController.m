@@ -73,13 +73,14 @@
 	}
 		
 	if (row >= 0) {
+		if (row >= (NSInteger)self.movies.count) {
+			return;
+		}
 		MBMovie* m = [self.movies objectAtIndex:row];
 		if ([m hasSeasons]) {
-			[self toggleDisclosureAtRow:row];
 			[self expandSeasons:m forRow:row];
 		}
 		else if ([m hasEpisodes]) {
-			[self toggleDisclosureAtRow:row];
 			[self expandEpisodes:m forRow:row];
 		}
 		else if (m.url.length > 0) {
@@ -91,20 +92,22 @@
 - (void) moveLeft
 {
 	NSInteger row = [self.tableView selectedRow];
-	[self toggleDisclosureAtRow:row];
+	[self toggleDisclosureOpen:NO atRow:row];
 	[self collapseRow:row];
 }
 
 - (void) moveRight
 {
 	NSInteger row = [self.tableView selectedRow];
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
+
 	MBMovie* m = [self.movies objectAtIndex:row];
 	if ([m hasSeasons]) {
-		[self toggleDisclosureAtRow:row];
 		[self expandSeasons:m forRow:row];
 	}
 	else if ([m hasEpisodes]) {
-		[self toggleDisclosureAtRow:row];
 		[self expandEpisodes:m forRow:row];
 	}
 }
@@ -114,19 +117,23 @@
 	if (movie.tmdbID.length == 0) {
 		return;
 	}
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
 
 	NSArray* alreadyOpen = [self.openSeasons objectForKey:movie.tmdbID];
 	if (alreadyOpen != nil) {
 		if (alreadyOpen.count > 0) {
 			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
 			if (movieIndex != NSNotFound) {
-				[self toggleDisclosureAtRow:movieIndex];
+				[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
 				[self collapseRow:(NSInteger)movieIndex];
 			}
 		}
 		return;
 	}
 
+	[self toggleDisclosureOpen:YES atRow:row];
 	[self.openSeasons setObject:@[] forKey:movie.tmdbID];
 
 	[self.progressSpinner startAnimation:nil];
@@ -160,6 +167,10 @@
 				}
 
 				if (new_seasons.count == 0) {
+					NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+					if (movieIndex != NSNotFound) {
+						[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
+					}
 					[self.openSeasons removeObjectForKey:movie.tmdbID];
 					[self.progressSpinner stopAnimation:nil];
 					return;
@@ -191,6 +202,10 @@
 		}
 		else {
 			RFDispatchMainAsync (^{
+				NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+				if (movieIndex != NSNotFound) {
+					[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
+				}
 				[self.openSeasons removeObjectForKey:movie.tmdbID];
 				[self.progressSpinner stopAnimation:nil];
 			});
@@ -203,19 +218,23 @@
 	if (movie.tmdbID.length == 0) {
 		return;
 	}
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
 
 	NSArray* alreadyOpen = [self.openEpisodes objectForKey:movie.tmdbID];
 	if (alreadyOpen != nil) {
 		if (alreadyOpen.count > 0) {
 			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
 			if (movieIndex != NSNotFound) {
-				[self toggleDisclosureAtRow:movieIndex];
+				[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
 				[self collapseRow:(NSInteger)movieIndex];
 			}
 		}
 		return;
 	}
 
+	[self toggleDisclosureOpen:YES atRow:row];
 	[self.openEpisodes setObject:@[] forKey:movie.tmdbID];
 
 	[self.progressSpinner startAnimation:nil];
@@ -249,6 +268,10 @@
 				}
 
 				if (new_episodes.count == 0) {
+					NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+					if (movieIndex != NSNotFound) {
+						[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
+					}
 					[self.openEpisodes removeObjectForKey:movie.tmdbID];
 					[self.progressSpinner stopAnimation:nil];
 					return;
@@ -280,6 +303,10 @@
 		}
 		else {
 			RFDispatchMainAsync (^{
+				NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+				if (movieIndex != NSNotFound) {
+					[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
+				}
 				[self.openEpisodes removeObjectForKey:movie.tmdbID];
 				[self.progressSpinner stopAnimation:nil];
 			});
@@ -343,11 +370,15 @@
 	[self.tableView removeRowsAtIndexes:rowsToRemove withAnimation:NSTableViewAnimationSlideUp];
 }
 
-- (void) toggleDisclosureAtRow:(NSInteger)row
+- (void) toggleDisclosureOpen:(BOOL)isOpen atRow:(NSInteger)row
 {
-	MBMovieCell* cell = (MBMovieCell *)[self tableView:self.tableView rowViewForRow:row];
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
+
+	MBMovieCell* cell = (MBMovieCell *)[self.tableView rowViewAtRow:row makeIfNecessary:NO];
 	if (cell) {
-		[cell toggleDisclosure];
+		[cell setDisclosureOpen:isOpen];
 	}
 }
 
