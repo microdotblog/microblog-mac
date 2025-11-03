@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MBMovie;
+
 @interface MBMoviesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
@@ -17,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
 @property (strong, nonatomic) NSArray* movies; // MBMovie
+@property (strong, nonatomic) NSMutableDictionary<NSString *, NSArray<MBMovie *> *> *openSeasons; // tmdb_id -> seasons
+@property (strong, nonatomic) NSMutableDictionary<NSString *, NSArray<MBMovie *> *> *openEpisodes; // tmdb_id -> episodes
 
 - (void) focusSearch;
 

@@ -20,8 +20,11 @@
 {
 	self = [super initWithNibName:@"Movies" bundle:nil];
 	if (self) {
+		self.movies = @[];
+		self.openSeasons = [NSMutableDictionary dictionary];
+		self.openEpisodes = [NSMutableDictionary dictionary];
 	}
-	
+
 	return self;
 }
 
@@ -56,6 +59,8 @@
 	}
 	else {
 		self.movies = @[];
+		[self.openSeasons removeAllObjects];
+		[self.openEpisodes removeAllObjects];
 		[self.tableView reloadData];
 	}
 }
@@ -101,37 +106,231 @@
 
 - (void) expandSeasons:(MBMovie *)movie forRow:(NSInteger)row
 {
+	if (movie.tmdbID.length == 0) {
+		return;
+	}
+
+	NSArray* alreadyOpen = [self.openSeasons objectForKey:movie.tmdbID];
+	if (alreadyOpen != nil) {
+		if (alreadyOpen.count > 0) {
+			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+			if (movieIndex != NSNotFound) {
+				[self collapseRow:(NSInteger)movieIndex];
+			}
+		}
+		return;
+	}
+
+	[self.openSeasons setObject:@[] forKey:movie.tmdbID];
+
 	[self.progressSpinner startAnimation:nil];
-	
-	// ...
+
+	RFClient* client = [[RFClient alloc] initWithFormat:@"/movies/discover/%@", movie.tmdbID];
+	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_seasons = [NSMutableArray array];
+			
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				MBMovie* m = [[MBMovie alloc] init];
+				m.posterURL = [item objectForKey:@"image"];
+				m.title = [item objectForKey:@"title"];
+				NSDictionary* metadata = [item objectForKey:@"_microblog"];
+				if ([metadata isKindOfClass:[NSDictionary class]]) {
+					m.tmdbID = [metadata objectForKey:@"tmdb_id"];
+					m.episodesCount = [[metadata objectForKey:@"episodes_count"] integerValue];
+					m.year = [metadata objectForKey:@"year"] ?: @"";
+				}
+				
+				[new_seasons addObject:m];
+			}
+			
+			RFDispatchMainAsync (^{
+				NSArray* storedValue = [self.openSeasons objectForKey:movie.tmdbID];
+				if (storedValue == nil) {
+					[self.progressSpinner stopAnimation:nil];
+					return;
+				}
+
+				if (new_seasons.count == 0) {
+					[self.openSeasons removeObjectForKey:movie.tmdbID];
+					[self.progressSpinner stopAnimation:nil];
+					return;
+				}
+
+				NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+				if (movieIndex == NSNotFound) {
+					[self.openSeasons removeObjectForKey:movie.tmdbID];
+					[self.progressSpinner stopAnimation:nil];
+					return;
+				}
+
+				[self.openSeasons setObject:new_seasons forKey:movie.tmdbID];
+				NSMutableArray* updatedMovies = [self.movies mutableCopy];
+				if (updatedMovies == nil) {
+					updatedMovies = [NSMutableArray array];
+				}
+				NSMutableIndexSet* insertIndexes = [NSMutableIndexSet indexSet];
+				NSUInteger insertIndex = movieIndex + 1;
+				for (NSUInteger i = 0; i < new_seasons.count; i++) {
+					[updatedMovies insertObject:[new_seasons objectAtIndex:i] atIndex:insertIndex + i];
+					[insertIndexes addIndex:insertIndex + i];
+				}
+				self.movies = updatedMovies;
+				[self.tableView insertRowsAtIndexes:insertIndexes withAnimation:NSTableViewAnimationSlideDown];
+
+				[self.progressSpinner stopAnimation:nil];
+			});
+		}
+		else {
+			RFDispatchMainAsync (^{
+				[self.openSeasons removeObjectForKey:movie.tmdbID];
+				[self.progressSpinner stopAnimation:nil];
+			});
+		}
+	}];
 }
 
 - (void) expandEpisodes:(MBMovie *)movie forRow:(NSInteger)row
 {
+	if (movie.tmdbID.length == 0) {
+		return;
+	}
+
+	NSArray* alreadyOpen = [self.openEpisodes objectForKey:movie.tmdbID];
+	if (alreadyOpen != nil) {
+		if (alreadyOpen.count > 0) {
+			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
+			if (movieIndex != NSNotFound) {
+				[self collapseRow:(NSInteger)movieIndex];
+			}
+		}
+		return;
+	}
+
+	[self.openEpisodes setObject:@[] forKey:movie.tmdbID];
+
 	[self.progressSpinner startAnimation:nil];
 	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/movies/discover/%@/seasons/1", movie.tmdbID];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_episodes = [NSMutableArray array];
-
+			
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
 				m.posterURL = [item objectForKey:@"image"];
 				m.title = [item objectForKey:@"title"];
-
+				NSDictionary* metadata = [item objectForKey:@"_microblog"];
+				if ([metadata isKindOfClass:[NSDictionary class]]) {
+					m.tmdbID = [metadata objectForKey:@"tmdb_id"];
+					m.url = [metadata objectForKey:@"url"];
+				}
+				
 				[new_episodes addObject:m];
 			}
 			
 			RFDispatchMainAsync (^{
+				NSArray* storedValue = [self.openEpisodes objectForKey:movie.tmdbID];
+				if (storedValue == nil) {
+					[self.progressSpinner stopAnimation:nil];
+					return;
+				}
+
+				if (new_episodes.count == 0) {
+					[self.openEpisodes removeObjectForKey:movie.tmdbID];
+					[self.progressSpinner stopAnimation:nil];
+					return;
+				}
+
+				NSUInteger seasonIndex = [self.movies indexOfObjectIdenticalTo:movie];
+				if (seasonIndex == NSNotFound) {
+					[self.openEpisodes removeObjectForKey:movie.tmdbID];
+					[self.progressSpinner stopAnimation:nil];
+					return;
+				}
+
+				[self.openEpisodes setObject:new_episodes forKey:movie.tmdbID];
+				NSMutableArray* updatedMovies = [self.movies mutableCopy];
+				if (updatedMovies == nil) {
+					updatedMovies = [NSMutableArray array];
+				}
+				NSMutableIndexSet* insertIndexes = [NSMutableIndexSet indexSet];
+				NSUInteger insertIndex = seasonIndex + 1;
+				for (NSUInteger i = 0; i < new_episodes.count; i++) {
+					[updatedMovies insertObject:[new_episodes objectAtIndex:i] atIndex:insertIndex + i];
+					[insertIndexes addIndex:insertIndex + i];
+				}
+				self.movies = updatedMovies;
+				[self.tableView insertRowsAtIndexes:insertIndexes withAnimation:NSTableViewAnimationSlideDown];
+
 				[self.progressSpinner stopAnimation:nil];
 			});
 		}
-	}];}
+		else {
+			RFDispatchMainAsync (^{
+				[self.openEpisodes removeObjectForKey:movie.tmdbID];
+				[self.progressSpinner stopAnimation:nil];
+			});
+		}
+	}];
+}
 
 - (void) collapseRow:(NSInteger)row
 {
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
+
+	MBMovie* movie = [self.movies objectAtIndex:row];
+	NSMutableArray* updatedMovies = [self.movies mutableCopy];
+	NSMutableIndexSet* rowsToRemove = [NSMutableIndexSet indexSet];
+
+	NSArray* openSeasonsForMovie = [self.openSeasons objectForKey:movie.tmdbID];
+	if (openSeasonsForMovie != nil) {
+		if (openSeasonsForMovie.count > 0) {
+			for (MBMovie* season in openSeasonsForMovie) {
+				NSArray* openEpisodesForSeason = [self.openEpisodes objectForKey:season.tmdbID];
+				if (openEpisodesForSeason.count > 0) {
+					for (MBMovie* episode in openEpisodesForSeason) {
+						NSUInteger episodeIndex = [updatedMovies indexOfObjectIdenticalTo:episode];
+						if (episodeIndex != NSNotFound) {
+							[rowsToRemove addIndex:episodeIndex];
+						}
+					}
+					[self.openEpisodes removeObjectForKey:season.tmdbID];
+				}
+
+				NSUInteger seasonIndex = [updatedMovies indexOfObjectIdenticalTo:season];
+				if (seasonIndex != NSNotFound) {
+					[rowsToRemove addIndex:seasonIndex];
+				}
+			}
+		}
+		[self.openSeasons removeObjectForKey:movie.tmdbID];
+	}
+
+	NSArray* openEpisodesForMovie = [self.openEpisodes objectForKey:movie.tmdbID];
+	if (openEpisodesForMovie != nil) {
+		if (openEpisodesForMovie.count > 0) {
+			for (MBMovie* episode in openEpisodesForMovie) {
+				NSUInteger episodeIndex = [updatedMovies indexOfObjectIdenticalTo:episode];
+				if (episodeIndex != NSNotFound) {
+					[rowsToRemove addIndex:episodeIndex];
+				}
+			}
+		}
+		[self.openEpisodes removeObjectForKey:movie.tmdbID];
+	}
+
+	if (rowsToRemove.count == 0) {
+		return;
+	}
+
+	[updatedMovies removeObjectsAtIndexes:rowsToRemove];
+	self.movies = updatedMovies;
+	[self.tableView removeRowsAtIndexes:rowsToRemove withAnimation:NSTableViewAnimationSlideUp];
 }
 
 #pragma mark -
@@ -139,6 +338,8 @@
 - (void) fetchDiscover
 {
 	self.movies = @[];
+	[self.openSeasons removeAllObjects];
+	[self.openEpisodes removeAllObjects];
 	self.tableView.animator.alphaValue = 0.0;
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/movies/discover"];
@@ -171,6 +372,8 @@
 - (void) fetchMoviesWithSearch:(NSString *)search
 {
 	self.movies = @[];
+	[self.openSeasons removeAllObjects];
+	[self.openEpisodes removeAllObjects];
 	self.tableView.animator.alphaValue = 0.0;
 
 	NSDictionary* args = @{ @"q": search };
