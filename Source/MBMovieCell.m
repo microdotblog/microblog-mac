@@ -9,6 +9,7 @@
 #import "MBMovieCell.h"
 
 #import "MBMovie.h"
+#import "RFConstants.h"
 
 @implementation MBMovieCell
 
@@ -70,9 +71,28 @@
 
 #pragma mark -
 
+- (NSTableView *) findTableView
+{
+	NSView* view = self.superview;
+	while (view != nil && ![view isKindOfClass:[NSTableView class]]) {
+		view = view.superview;
+	}
+
+	return (NSTableView *)view;
+}
+
 - (IBAction) toggleDisclosure:(id)sender
 {
-	NSLog(@"click");
+	NSTableView* table = [self findTableView];
+	NSInteger row = -1;
+
+	if (table != nil) {
+		row = [table rowForView:self];
+	}
+	if (row >= 0) {
+		NSDictionary* info = (row >= 0) ? @{ kToggleMovieDisclosureRowKey: @(row) } : nil;
+		[[NSNotificationCenter defaultCenter] postNotificationName:kToggleMovieDisclosureNotification object:self userInfo:info];
+	}
 }
 
 - (IBAction) startPost:(id)sender

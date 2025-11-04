@@ -34,6 +34,8 @@
 	
 	[self setupTable];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(movieCellDidToggleDisclosure:) name:kToggleMovieDisclosureNotification object:nil];
+	
 	[self fetchDiscover];
 }
 
@@ -86,6 +88,30 @@
 		else if (m.url.length > 0) {
 			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:m.url]];
 		}
+	}
+}
+
+- (void) movieCellDidToggleDisclosure:(NSNotification *)notification
+{
+	NSNumber* num = [notification.userInfo objectForKey:kToggleMovieDisclosureRowKey];
+	if (num == nil) {
+		return;
+	}
+
+	NSInteger row = [num integerValue];
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
+
+	MBMovie* movie = [self.movies objectAtIndex:row];
+	if ([movie hasSeasons]) {
+		[self expandSeasons:movie forRow:row];
+	}
+	else if ([movie hasEpisodes]) {
+		[self expandEpisodes:movie forRow:row];
+	}
+	else {
+		[self toggleDisclosureOpen:NO atRow:row];
 	}
 }
 
@@ -508,6 +534,11 @@
 	}
 
 	return cell;
+}
+
+- (void) dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

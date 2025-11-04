@@ -183,4 +183,7 @@ static NSString* const kNewPostWithPhotoURLKey = @"url";
 static NSString* const kNewPostWithPhotoPosterKey = @"poster";
 static NSString* const kNewPostWithPhotoAltKey = @"alt";
 
+static NSString* const kToggleMovieDisclosureNotification = @"MBToggleMovieDisclosureNotification";
+static NSString* const kToggleMovieDisclosureRowKey = @"row";
+
 #define APPSTORE 1
