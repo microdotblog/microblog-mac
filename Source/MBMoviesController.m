@@ -91,6 +91,20 @@
 	}
 }
 
+- (NSString *) episodeDictionaryKeyForMovie:(MBMovie *)movie
+{
+	if (movie == nil) {
+		return nil;
+	}
+
+	NSString* baseIdentifier = movie.tmdbID;
+	if (baseIdentifier.length == 0) {
+		baseIdentifier = [NSString stringWithFormat:@"%p", movie];
+	}
+
+	return [NSString stringWithFormat:@"%@-%ld", baseIdentifier, (long)movie.seasonNumber];
+}
+
 - (void) movieCellDidToggleDisclosure:(NSNotification *)notification
 {
 	NSNumber* num = [notification.userInfo objectForKey:kToggleMovieDisclosureRowKey];
@@ -256,7 +270,12 @@
 		return;
 	}
 
-	NSArray* alreadyOpen = [self.openEpisodes objectForKey:movie.tmdbID];
+	NSString* episodeKey = [self episodeDictionaryKeyForMovie:movie];
+	if (episodeKey.length == 0) {
+		return;
+	}
+
+	NSArray* alreadyOpen = [self.openEpisodes objectForKey:episodeKey];
 	if (alreadyOpen != nil) {
 		if (alreadyOpen.count > 0) {
 			NSUInteger movieIndex = [self.movies indexOfObjectIdenticalTo:movie];
@@ -269,7 +288,7 @@
 	}
 
 	[self toggleDisclosureOpen:YES atRow:row];
-	[self.openEpisodes setObject:@[] forKey:movie.tmdbID];
+	[self.openEpisodes setObject:@[] forKey:episodeKey];
 
 	[self.progressSpinner startAnimation:nil];
 	
@@ -296,7 +315,7 @@
 			}
 			
 			RFDispatchMainAsync (^{
-				NSArray* storedValue = [self.openEpisodes objectForKey:movie.tmdbID];
+				NSArray* storedValue = [self.openEpisodes objectForKey:episodeKey];
 				if (storedValue == nil) {
 					[self.progressSpinner stopAnimation:nil];
 					return;
@@ -307,19 +326,19 @@
 					if (movieIndex != NSNotFound) {
 						[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
 					}
-					[self.openEpisodes removeObjectForKey:movie.tmdbID];
+					[self.openEpisodes removeObjectForKey:episodeKey];
 					[self.progressSpinner stopAnimation:nil];
 					return;
 				}
 
 				NSUInteger seasonIndex = [self.movies indexOfObjectIdenticalTo:movie];
 				if (seasonIndex == NSNotFound) {
-					[self.openEpisodes removeObjectForKey:movie.tmdbID];
+					[self.openEpisodes removeObjectForKey:episodeKey];
 					[self.progressSpinner stopAnimation:nil];
 					return;
 				}
 
-				[self.openEpisodes setObject:new_episodes forKey:movie.tmdbID];
+				[self.openEpisodes setObject:new_episodes forKey:episodeKey];
 				NSMutableArray* updatedMovies = [self.movies mutableCopy];
 				if (updatedMovies == nil) {
 					updatedMovies = [NSMutableArray array];
@@ -342,7 +361,7 @@
 				if (movieIndex != NSNotFound) {
 					[self toggleDisclosureOpen:NO atRow:(NSInteger)movieIndex];
 				}
-				[self.openEpisodes removeObjectForKey:movie.tmdbID];
+				[self.openEpisodes removeObjectForKey:episodeKey];
 				[self.progressSpinner stopAnimation:nil];
 			});
 		}
@@ -364,7 +383,8 @@
 		if (openSeasonsForMovie != nil) {
 			if (openSeasonsForMovie.count > 0) {
 				for (MBMovie* season in openSeasonsForMovie) {
-					NSArray* openEpisodesForSeason = [self.openEpisodes objectForKey:season.tmdbID];
+					NSString* seasonEpisodeKey = [self episodeDictionaryKeyForMovie:season];
+					NSArray* openEpisodesForSeason = [self.openEpisodes objectForKey:seasonEpisodeKey];
 					if (openEpisodesForSeason.count > 0) {
 						for (MBMovie* episode in openEpisodesForSeason) {
 							NSUInteger episodeIndex = [updatedMovies indexOfObjectIdenticalTo:episode];
@@ -372,7 +392,7 @@
 								[rowsToRemove addIndex:episodeIndex];
 							}
 						}
-						[self.openEpisodes removeObjectForKey:season.tmdbID];
+						[self.openEpisodes removeObjectForKey:seasonEpisodeKey];
 					}
 
 					NSUInteger seasonIndex = [updatedMovies indexOfObjectIdenticalTo:season];
@@ -385,7 +405,8 @@
 		}
 	}
 
-	NSArray* openEpisodesForMovie = [self.openEpisodes objectForKey:movie.tmdbID];
+	NSString* episodeKeyForMovie = [self episodeDictionaryKeyForMovie:movie];
+	NSArray* openEpisodesForMovie = [self.openEpisodes objectForKey:episodeKeyForMovie];
 	if (openEpisodesForMovie != nil) {
 		if (openEpisodesForMovie.count > 0) {
 			for (MBMovie* episode in openEpisodesForMovie) {
@@ -395,7 +416,7 @@
 				}
 			}
 		}
-		[self.openEpisodes removeObjectForKey:movie.tmdbID];
+		[self.openEpisodes removeObjectForKey:episodeKeyForMovie];
 	}
 
 	if (rowsToRemove.count == 0) {
@@ -405,6 +426,30 @@
 	[updatedMovies removeObjectsAtIndexes:rowsToRemove];
 	self.movies = updatedMovies;
 	[self.tableView removeRowsAtIndexes:rowsToRemove withAnimation:NSTableViewAnimationSlideUp];
+}
+
+- (BOOL) isMovieOpen:(MBMovie *)movie
+{
+	if (movie == nil) {
+		return NO;
+	}
+
+	if ([movie hasSeasons]) {
+		if (movie.tmdbID.length == 0) {
+			return NO;
+		}
+		return ([self.openSeasons objectForKey:movie.tmdbID] != nil);
+	}
+
+	if ([movie hasEpisodes]) {
+		NSString* episodeKey = [self episodeDictionaryKeyForMovie:movie];
+		if (episodeKey.length == 0) {
+			return NO;
+		}
+		return ([self.openEpisodes objectForKey:episodeKey] != nil);
+	}
+
+	return NO;
 }
 
 - (void) toggleDisclosureOpen:(BOOL)isOpen atRow:(NSInteger)row
@@ -528,6 +573,7 @@
 		MBMovie* m = [self.movies objectAtIndex:row];
 		cell.needsInset = [self currentMoviesNeedInset];
 		[cell setupWithMovie:m];
+		[cell setDisclosureOpen:[self isMovieOpen:m]];
 
 		if (m.posterImage == nil) {
 			[UUHttpSession get:m.posterURL queryArguments:nil completionHandler:^(UUHttpResponse* response) {

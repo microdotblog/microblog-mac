@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSArray* movies; // MBMovie
 @property (strong, nonatomic) NSMutableDictionary<NSString *, NSArray<MBMovie *> *> *openSeasons; // tmdb_id -> seasons
-@property (strong, nonatomic) NSMutableDictionary<NSString *, NSArray<MBMovie *> *> *openEpisodes; // tmdb_id -> episodes
+@property (strong, nonatomic) NSMutableDictionary<NSString *, NSArray<MBMovie *> *> *openEpisodes; // tmdb_id-season_number -> episodes
 
 - (void) focusSearch;
 
