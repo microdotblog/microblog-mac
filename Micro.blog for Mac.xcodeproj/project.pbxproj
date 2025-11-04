@@ -23,6 +23,7 @@
 		4B1970792EB5541300BFFD8E /* MBMovieCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1970782EB5541300BFFD8E /* MBMovieCell.m */; };
 		4B19707C2EB5555300BFFD8E /* MBMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19707B2EB5555300BFFD8E /* MBMovie.m */; };
 		4B19707F2EB7F26500BFFD8E /* MBMoviesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19707E2EB7F26500BFFD8E /* MBMoviesTableView.m */; };
+		4B1970822EBA3BAF00BFFD8E /* MBResponderExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1970812EBA3BAF00BFFD8E /* MBResponderExtras.m */; };
 		4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */; };
 		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
 		4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1FA569269E0491006E0451 /* RFDiscoverController.m */; };
@@ -304,6 +305,8 @@
 		4B19707B2EB5555300BFFD8E /* MBMovie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMovie.m; path = Source/MBMovie.m; sourceTree = "<group>"; };
 		4B19707D2EB7F26500BFFD8E /* MBMoviesTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMoviesTableView.h; path = Source/MBMoviesTableView.h; sourceTree = "<group>"; };
 		4B19707E2EB7F26500BFFD8E /* MBMoviesTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMoviesTableView.m; path = Source/MBMoviesTableView.m; sourceTree = "<group>"; };
+		4B1970802EBA3BAF00BFFD8E /* MBResponderExtras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBResponderExtras.h; path = Source/MBResponderExtras.h; sourceTree = "<group>"; };
+		4B1970812EBA3BAF00BFFD8E /* MBResponderExtras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBResponderExtras.m; path = Source/MBResponderExtras.m; sourceTree = "<group>"; };
 		4B1F2A242BC2219C00B52EAC /* MBTimelineWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineWindow.h; path = Source/MBTimelineWindow.h; sourceTree = "<group>"; };
 		4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTimelineWindow.m; path = Source/MBTimelineWindow.m; sourceTree = "<group>"; };
 		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
@@ -1059,6 +1062,8 @@
 				4BB990692A8694C900C490E2 /* MBTagsTableView.m */,
 				4B19707D2EB7F26500BFFD8E /* MBMoviesTableView.h */,
 				4B19707E2EB7F26500BFFD8E /* MBMoviesTableView.m */,
+				4B1970802EBA3BAF00BFFD8E /* MBResponderExtras.h */,
+				4B1970812EBA3BAF00BFFD8E /* MBResponderExtras.m */,
 				4BF537322247CD1D00CF9D66 /* RFPost.h */,
 				4BF537332247CD1D00CF9D66 /* RFPost.m */,
 				4BED646724BDF29A0018644C /* RFUpload.h */,
@@ -1570,6 +1575,7 @@
 				4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */,
 				4B5EE2832063FC8400C87A78 /* RFSettings.m in Sources */,
 				4B3773802C3DC4A5000495DF /* MBInfoController.m in Sources */,
+				4B1970822EBA3BAF00BFFD8E /* MBResponderExtras.m in Sources */,
 				4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */,
 				4B400D09201EC55B00C71AAF /* MMHTMLParser.m in Sources */,
 				4B2F97252E00B79400A834C8 /* MBSelectiveUsernameCell.m in Sources */,

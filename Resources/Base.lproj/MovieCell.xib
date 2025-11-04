@@ -48,16 +48,28 @@
                         <action selector="toggleDisclosure:" target="Ilv-VD-qwE" id="eVc-Se-HKz"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QqF-NT-Vak">
+                    <rect key="frame" x="354" y="38" width="80" height="20"/>
+                    <buttonCell key="cell" type="push" title="New Post..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i11-oT-YYa">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="startPost:" target="Ilv-VD-qwE" id="Vjm-Gm-KgY"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="dtO-rB-w9P" firstAttribute="top" secondItem="Ilv-VD-qwE" secondAttribute="top" constant="30" id="0lT-rn-UI3"/>
                 <constraint firstItem="egf-Hs-gWE" firstAttribute="top" secondItem="dtO-rB-w9P" secondAttribute="bottom" constant="5" id="1EU-4y-cm3"/>
                 <constraint firstItem="wFV-JM-ycp" firstAttribute="top" secondItem="Ilv-VD-qwE" secondAttribute="top" constant="14" id="2Et-SO-TMQ"/>
                 <constraint firstAttribute="bottom" secondItem="wFV-JM-ycp" secondAttribute="bottom" constant="14" id="5kn-DU-lKS"/>
+                <constraint firstItem="QqF-NT-Vak" firstAttribute="centerY" secondItem="Ilv-VD-qwE" secondAttribute="centerY" id="92n-hi-Zct"/>
                 <constraint firstItem="ICa-aB-Kyx" firstAttribute="centerY" secondItem="Ilv-VD-qwE" secondAttribute="centerY" id="bOa-A6-Qzn"/>
                 <constraint firstItem="dtO-rB-w9P" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="btK-ke-qut"/>
                 <constraint firstItem="wFV-JM-ycp" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="40" id="fXG-1N-jll"/>
                 <constraint firstAttribute="bottom" secondItem="dtO-rB-w9P" secondAttribute="bottom" constant="50" id="ftX-4D-Z2h"/>
+                <constraint firstAttribute="trailing" secondItem="QqF-NT-Vak" secondAttribute="trailing" constant="12" id="mfz-Dz-BwI"/>
                 <constraint firstItem="ICa-aB-Kyx" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="12" id="top-vz-FXC"/>
                 <constraint firstItem="egf-Hs-gWE" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="unN-bC-3ov"/>
             </constraints>
@@ -65,6 +77,7 @@
                 <outlet property="disclosureInsetConstraint" destination="top-vz-FXC" id="V4Q-0n-49o"/>
                 <outlet property="disclosureTriangle" destination="ICa-aB-Kyx" id="cgS-CC-pIj"/>
                 <outlet property="leftConstraint" destination="fXG-1N-jll" id="4C4-IQ-ghi"/>
+                <outlet property="postButton" destination="QqF-NT-Vak" id="MuD-Ed-zz5"/>
                 <outlet property="posterImageView" destination="wFV-JM-ycp" id="jjm-yp-NuG"/>
                 <outlet property="subtitleField" destination="egf-Hs-gWE" id="eVr-EO-wb5"/>
                 <outlet property="titleField" destination="dtO-rB-w9P" id="XaC-b4-EL8"/>

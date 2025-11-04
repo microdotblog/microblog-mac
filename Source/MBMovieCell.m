@@ -14,7 +14,10 @@
 
 - (void) setupWithMovie:(MBMovie *)movie
 {
+	self.movie = movie;
 	self.titleField.stringValue = movie.title;
+	self.posterImageView.image = movie.posterImage;
+
 	if (movie.username.length > 0) {
 		self.subtitleField.stringValue = [movie displayUsername];
 		self.leftConstraint.constant = 12;
@@ -51,8 +54,6 @@
 		self.disclosureInsetConstraint.constant = 12;
 		self.disclosureTriangle.hidden = YES;
 	}
-	
-	self.posterImageView.image = movie.posterImage;
 }
 
 - (void) setDisclosureOpen:(BOOL)isOpen
@@ -60,9 +61,23 @@
 	self.disclosureTriangle.state = isOpen ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
+- (void) setSelected:(BOOL)selected
+{
+	[super setSelected:selected];
+	
+	self.postButton.hidden = !selected || (self.movie.username.length > 0);
+}
+
+#pragma mark -
+
 - (IBAction) toggleDisclosure:(id)sender
 {
 	NSLog(@"click");
+}
+
+- (IBAction) startPost:(id)sender
+{
+	NSLog(@"new post");
 }
 
 @end

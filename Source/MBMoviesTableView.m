@@ -8,6 +8,8 @@
 
 #import "MBMoviesTableView.h"
 
+#import "MBResponderExtras.h"
+
 @implementation MBMoviesTableView
 
 - (void) keyDown:(NSEvent *)event
@@ -30,6 +32,17 @@
 	else {
 		[super keyDown:event];
 	}
+}
+
+- (BOOL) validateProposedFirstResponder:(NSResponder *)responder forEvent:(NSEvent *)event
+{
+	// for right-clicks, we let the table handle it
+	if (([event modifierFlags] & NSEventModifierFlagControl) || ([event type] == NSEventTypeRightMouseDown)) {
+		return [super validateProposedFirstResponder:responder forEvent:event];
+	}
+	
+	// allow clicks in buttons no matter the selection style
+	return YES;
 }
 
 @end
