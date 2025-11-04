@@ -17,7 +17,7 @@
 
 - (NSString *) displayYearDirector
 {
-	return [NSString stringWithFormat:@"%@ • %@", self.year, self.director];
+	return [NSString stringWithFormat:@"%@ • Directed by %@", self.year, self.director];
 }
 
 - (NSString *) displayYearSeasons
