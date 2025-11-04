@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBAboutController">
             <connections>
+                <outlet property="versionField" destination="r5R-08-HJv" id="xBt-zJ-TUc"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="OXm-J6-kE6"/>
             </connections>
         </customObject>
@@ -15,7 +16,6 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="About" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="449" height="219"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
@@ -23,15 +23,15 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AT4-s8-XYf">
-                        <rect key="frame" x="20" y="118" width="79" height="81"/>
+                        <rect key="frame" x="105" y="119" width="80" height="80"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="79" id="8A5-Ru-6Ij"/>
-                            <constraint firstAttribute="height" constant="81" id="kfA-ZB-3Ea"/>
+                            <constraint firstAttribute="width" constant="80" id="8A5-Ru-6Ij"/>
+                            <constraint firstAttribute="height" constant="80" id="kfA-ZB-3Ea"/>
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WelcomeIcon" id="lqa-LO-GcM"/>
                     </imageView>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wTN-Qj-cDX">
-                        <rect key="frame" x="113" y="165" width="74" height="16"/>
+                        <rect key="frame" x="195" y="165" width="74" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Micro.blog" id="qiT-gi-IyU">
                             <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -39,8 +39,8 @@
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r5R-08-HJv">
-                        <rect key="frame" x="113" y="141" width="57" height="16"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="1.0 (100)" id="pxZ-hi-kTk">
+                        <rect key="frame" x="195" y="141" width="106" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Version 1.0 (100)" id="pxZ-hi-kTk">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -66,18 +66,18 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="4e2-Bv-A5P">
-                        <rect key="frame" x="0.0" y="90" width="449" height="5"/>
+                        <rect key="frame" x="0.0" y="91" width="449" height="5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="U5b-As-0bL"/>
                         </constraints>
                     </box>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="AT4-s8-XYf" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="1Qd-SA-rY9"/>
-                    <constraint firstItem="r5R-08-HJv" firstAttribute="leading" secondItem="AT4-s8-XYf" secondAttribute="trailing" constant="16" id="CbW-Vp-s7f"/>
+                    <constraint firstItem="AT4-s8-XYf" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="105" id="1Qd-SA-rY9"/>
+                    <constraint firstItem="r5R-08-HJv" firstAttribute="leading" secondItem="AT4-s8-XYf" secondAttribute="trailing" constant="12" id="CbW-Vp-s7f"/>
                     <constraint firstItem="4e2-Bv-A5P" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="JKx-Db-h0q"/>
                     <constraint firstItem="r5R-08-HJv" firstAttribute="top" secondItem="wTN-Qj-cDX" secondAttribute="bottom" constant="8" symbolic="YES" id="Lgb-Ri-cNh"/>
-                    <constraint firstItem="wTN-Qj-cDX" firstAttribute="leading" secondItem="AT4-s8-XYf" secondAttribute="trailing" constant="16" id="QmV-PW-Ula"/>
+                    <constraint firstItem="wTN-Qj-cDX" firstAttribute="leading" secondItem="AT4-s8-XYf" secondAttribute="trailing" constant="12" id="QmV-PW-Ula"/>
                     <constraint firstItem="wTN-Qj-cDX" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="38" id="cap-ff-kE5"/>
                     <constraint firstItem="AT4-s8-XYf" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="cfm-iD-M7U"/>
                     <constraint firstItem="h3c-4k-QWj" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="27" id="f4N-lO-8wy"/>

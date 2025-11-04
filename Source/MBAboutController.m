@@ -28,7 +28,16 @@
 
 - (void) setupVersion
 {
-	self.versionField.stringValue = @"1.0 (100)";
+	NSBundle* bundle = [NSBundle mainBundle];
+	NSString* version = [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+	NSString* build = [bundle objectForInfoDictionaryKey:@"CFBundleVersion"];
+
+	if ((version.length > 0) && (build.length > 0)) {
+		self.versionField.stringValue = [NSString stringWithFormat:@"Version %@ (%@)", version, build];
+	}
+	else {
+		self.versionField.stringValue = @"";
+	}
 }
 
 @end
