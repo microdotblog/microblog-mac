@@ -920,9 +920,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	// also notify get info window
 	NSIndexPath* index_path = [indexPaths anyObject];
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+	NSString* alt = item.alt;
+	if (alt == nil) {
+		alt = @"";
+	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateInfoNotification object:self userInfo:@{
 		kInfoURLKey: item.url,
-		kInfoTextKey: item.alt,
+		kInfoTextKey: alt,
 		kInfoAIKey: @(item.isAI)
 	}];
 }
