@@ -247,9 +247,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSIndexPath* index_path = [index_paths anyObject];
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
 	
+	NSString* alt = up.alt;
+	if (alt == nil) {
+		alt = @"";
+	}
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
 		kInfoURLKey: up.url,
-		kInfoTextKey: up.alt,
+		kInfoTextKey: alt,
 		kInfoAIKey: @(up.isAI)
 	}];
 }
