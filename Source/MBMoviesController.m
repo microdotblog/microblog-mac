@@ -118,8 +118,15 @@
 - (void) moveLeft
 {
 	NSInteger row = [self.tableView selectedRow];
-	[self toggleDisclosureOpen:NO atRow:row];
-	[self collapseRow:row];
+	if (row < 0 || row >= (NSInteger)self.movies.count) {
+		return;
+	}
+
+	MBMovie* m = [self.movies objectAtIndex:row];
+	if ([m hasSeasons] || [m hasEpisodes]) {
+		[self toggleDisclosureOpen:NO atRow:row];
+		[self collapseRow:row];
+	}
 }
 
 - (void) moveRight
