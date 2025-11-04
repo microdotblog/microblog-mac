@@ -23,7 +23,7 @@
                             <menuItem title="About Micro.blog" id="5kV-Vb-QxS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
+                                    <action selector="showAbout:" target="Voe-Tx-rLC" id="W9I-jh-vua"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Check for Updates..." image="arrow.clockwise" catalog="system" id="14a-Kc-p1s">

@@ -24,6 +24,8 @@
 		4B19707C2EB5555300BFFD8E /* MBMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19707B2EB5555300BFFD8E /* MBMovie.m */; };
 		4B19707F2EB7F26500BFFD8E /* MBMoviesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19707E2EB7F26500BFFD8E /* MBMoviesTableView.m */; };
 		4B1970822EBA3BAF00BFFD8E /* MBResponderExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1970812EBA3BAF00BFFD8E /* MBResponderExtras.m */; };
+		4B1970852EBA4CEE00BFFD8E /* MBAboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1970842EBA4CEE00BFFD8E /* MBAboutController.m */; };
+		4B1970882EBA4D1300BFFD8E /* About.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970862EBA4D1300BFFD8E /* About.xib */; };
 		4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */; };
 		4B1FA567269E0434006E0451 /* Discover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1FA565269E0434006E0451 /* Discover.xib */; };
 		4B1FA56A269E0491006E0451 /* RFDiscoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1FA569269E0491006E0451 /* RFDiscoverController.m */; };
@@ -307,6 +309,9 @@
 		4B19707E2EB7F26500BFFD8E /* MBMoviesTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMoviesTableView.m; path = Source/MBMoviesTableView.m; sourceTree = "<group>"; };
 		4B1970802EBA3BAF00BFFD8E /* MBResponderExtras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBResponderExtras.h; path = Source/MBResponderExtras.h; sourceTree = "<group>"; };
 		4B1970812EBA3BAF00BFFD8E /* MBResponderExtras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBResponderExtras.m; path = Source/MBResponderExtras.m; sourceTree = "<group>"; };
+		4B1970832EBA4CEE00BFFD8E /* MBAboutController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBAboutController.h; path = Source/MBAboutController.h; sourceTree = "<group>"; };
+		4B1970842EBA4CEE00BFFD8E /* MBAboutController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBAboutController.m; path = Source/MBAboutController.m; sourceTree = "<group>"; };
+		4B1970872EBA4D1300BFFD8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/About.xib; sourceTree = "<group>"; };
 		4B1F2A242BC2219C00B52EAC /* MBTimelineWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineWindow.h; path = Source/MBTimelineWindow.h; sourceTree = "<group>"; };
 		4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBTimelineWindow.m; path = Source/MBTimelineWindow.m; sourceTree = "<group>"; };
 		4B1FA566269E0434006E0451 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Discover.xib; sourceTree = "<group>"; };
@@ -921,6 +926,8 @@
 				4BA88AC72E296F8900EAE0A0 /* MBMenus.h */,
 				4B8FBDEF1F8681D000906C86 /* RFClient.h */,
 				4B8FBDEE1F8681D000906C86 /* RFClient.m */,
+				4B1970832EBA4CEE00BFFD8E /* MBAboutController.h */,
+				4B1970842EBA4CEE00BFFD8E /* MBAboutController.m */,
 				4B7F0AEE1BAF4C27004553A6 /* RFAppDelegate.h */,
 				4B7F0AEF1BAF4C27004553A6 /* RFAppDelegate.m */,
 				4B2CAAB51F90002500D9B10E /* RFMacApplication.h */,
@@ -1270,6 +1277,7 @@
 				4B41CB4F2E22DB55000C324F /* VersionCell.xib */,
 				4B1970712EB54B0700BFFD8E /* Movies.xib */,
 				4B1970742EB553BD00BFFD8E /* MovieCell.xib */,
+				4B1970862EBA4D1300BFFD8E /* About.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1457,6 +1465,7 @@
 				4BB9905E2A857A2000C490E2 /* AllTags.xib in Resources */,
 				4B5A250D1F8497B1007C548F /* MenuCell.xib in Resources */,
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
+				4B1970882EBA4D1300BFFD8E /* About.xib in Resources */,
 				4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */,
 				4B79E2932D089E0300A22861 /* CollectionCell.xib in Resources */,
 				4B3840CE2692019B00AD3781 /* Export.xib in Resources */,
@@ -1635,6 +1644,7 @@
 				4BF7E51B28354F9500500C59 /* RFBookshelfCell.m in Sources */,
 				4B32DD1E2E43E11F003313B3 /* MBGoal.m in Sources */,
 				4B2CAB081F90667300D9B10E /* tags.c in Sources */,
+				4B1970852EBA4CEE00BFFD8E /* MBAboutController.m in Sources */,
 				4BF7E5272836CAC400500C59 /* MBBooksWindowController.m in Sources */,
 				4B5EE2862063FD9300C87A78 /* RFAccount.m in Sources */,
 				4BE23F9E2A70117F00E24718 /* MBBookmarksController.m in Sources */,
@@ -1730,6 +1740,14 @@
 				4B1970752EB553BD00BFFD8E /* Base */,
 			);
 			name = MovieCell.xib;
+			sourceTree = "<group>";
+		};
+		4B1970862EBA4D1300BFFD8E /* About.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B1970872EBA4D1300BFFD8E /* Base */,
+			);
+			name = About.xib;
 			sourceTree = "<group>";
 		};
 		4B1FA565269E0434006E0451 /* Discover.xib */ = {

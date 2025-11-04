@@ -22,6 +22,7 @@
 @class MBLogsController;
 @class MBInfoController;
 @class MBCollectionsController;
+@class MBAboutController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -39,6 +40,7 @@
 @property (strong, nonatomic) MBLogsController* logsController;
 @property (strong, nonatomic) MBInfoController* infoController;
 @property (strong, nonatomic) MBCollectionsController* collectionsController;
+@property (strong, nonatomic) MBAboutController* aboutController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 @property (strong, nonatomic) NSMutableArray* photoWindows; // RFPhotoZoomController
 

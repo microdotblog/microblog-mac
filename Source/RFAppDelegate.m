@@ -29,6 +29,7 @@
 #import "MBLogsController.h"
 #import "MBInfoController.h"
 #import "MBCollectionsController.h"
+#import "MBAboutController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -945,6 +946,15 @@
 			[self signOut:nil];
 		}
 	}];
+}
+
+- (IBAction) showAbout:(id)sender
+{
+	if (self.aboutController == nil) {
+		self.aboutController = [[MBAboutController alloc] init];
+	}
+	
+	[self.aboutController showWindow:nil];
 }
 
 @end

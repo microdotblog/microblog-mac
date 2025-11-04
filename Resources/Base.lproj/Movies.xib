@@ -43,7 +43,7 @@
                         <action selector="search:" target="-2" id="MM5-jD-f9j"/>
                     </connections>
                 </searchField>
-                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="B4V-OG-cnp">
+                <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="B4V-OG-cnp">
                     <rect key="frame" x="294" y="390" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="16" id="53a-Ab-NLM"/>
