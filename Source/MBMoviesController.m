@@ -187,6 +187,7 @@
 					m.episodesCount = [[metadata objectForKey:@"episode_count"] integerValue];
 					m.year = [metadata objectForKey:@"year"] ?: @"";
 					m.seasonNumber = [[metadata objectForKey:@"season_number"] integerValue];
+					m.postText = [metadata objectForKey:@"post_text"];
 				}
 				
 				[new_seasons addObject:m];
@@ -288,6 +289,7 @@
 					m.tmdbID = [metadata objectForKey:@"tmdb_id"];
 					m.url = [metadata objectForKey:@"url"];
 					m.airDate = [metadata objectForKey:@"air_date"];
+					m.postText = [metadata objectForKey:@"post_text"];
 				}
 				
 				[new_episodes addObject:m];
@@ -476,6 +478,7 @@
 				m.director = [[item objectForKey:@"_microblog"] objectForKey:@"director"];
 				m.seasonsCount = [[[item objectForKey:@"_microblog"] objectForKey:@"seasons_count"] integerValue];
 				m.tmdbID = [[item objectForKey:@"_microblog"] objectForKey:@"tmdb_id"];
+				m.postText = [[item objectForKey:@"_microblog"] objectForKey:@"post_text"];
 
 				[new_movies addObject:m];
 			}

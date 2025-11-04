@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSImage* posterImage;
 @property (strong) NSString* year;
 @property (strong) NSString* director;
+@property (strong) NSString* postText;
 @property (assign) NSInteger seasonsCount;
 @property (assign) NSInteger episodesCount;
 @property (assign) NSInteger seasonNumber;

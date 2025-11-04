@@ -10,6 +10,7 @@
 
 #import "MBMovie.h"
 #import "RFConstants.h"
+#import "NSString+Extras.h"
 
 @implementation MBMovieCell
 
@@ -97,7 +98,15 @@
 
 - (IBAction) startPost:(id)sender
 {
-	NSLog(@"new post");
+	NSString* text = self.movie.postText;
+	if (text.length == 0) {
+		return;
+	}
+
+	NSString* encoded = [text rf_urlEncoded];
+	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", encoded]];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenMicroblogURLNotification object:self userInfo:@{ kOpenMicroblogURLKey: url }];
 }
 
 @end
