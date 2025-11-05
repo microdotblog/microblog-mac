@@ -325,14 +325,66 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		return;
 	}
 
-	NSMutableArray* new_photos = [NSMutableArray array];
-	
-	for (NSString* filepath in paths) {
-		[new_photos addObject:filepath];
+	NSMutableArray<NSURL *>* video_urls = [NSMutableArray array];
+	NSMutableArray<NSString *>* regular_paths = [NSMutableArray array];
+
+	for (id path in paths) {
+		NSURL* file_url = nil;
+		NSString* path_string = nil;
+
+		if ([path isKindOfClass:[NSURL class]]) {
+			file_url = (NSURL *)path;
+			if (file_url.isFileURL) {
+				path_string = file_url.path;
+			}
+		}
+		else if ([path isKindOfClass:[NSString class]]) {
+			path_string = (NSString *)path;
+			file_url = [NSURL fileURLWithPath:path_string];
+		}
+
+		if (file_url == nil) {
+			continue;
+		}
+
+		if ([self isVideoFileURL:file_url]) {
+			[video_urls addObject:file_url];
+		}
+		else if (path_string) {
+			[regular_paths addObject:path_string];
+		}
 	}
 
-	[self uploadNextPhoto:new_photos];
-	[self showUploadProgress];
+	void (^startPhotoUploads)(void) = ^{
+		if ([regular_paths count] == 0) {
+			return;
+		}
+
+		NSMutableArray* new_photos = [regular_paths mutableCopy];
+		[self uploadNextPhoto:new_photos];
+		[self showUploadProgress];
+	};
+
+	if ([video_urls count] > 0) {
+		__weak typeof(self) weakSelf = self;
+		[self uploadVideoURLs:video_urls completion:^{
+			__strong typeof(self) strongSelf = weakSelf;
+			if (!strongSelf) {
+				return;
+			}
+			if ([regular_paths count] == 0) {
+				return;
+			}
+
+			RFDispatchMainAsync(^{
+				startPhotoUploads();
+			});
+		}];
+	}
+
+	if ([video_urls count] == 0) {
+		startPhotoUploads();
+	}
 }
 
 - (void) selectPhotoCellNotification:(NSNotification *)notification
@@ -428,44 +480,52 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	panel.allowsMultipleSelection = YES;
 	NSModalResponse response = [panel runModal];
 	if (response == NSModalResponseOK) {
-		NSMutableArray* regular_paths = [NSMutableArray array];
-		NSMutableArray<NSURL *>* video_urls = [NSMutableArray array];
+		NSMutableArray* selected_paths = [NSMutableArray array];
 		for (NSURL* url in panel.URLs) {
-			if ([self isVideoFileURL:url]) {
-				[video_urls addObject:url];
-			}
-			else {
-				[regular_paths addObject:url.path];
+			NSString* path = url.path;
+			if (path.length > 0) {
+				[selected_paths addObject:path];
 			}
 		}
-
-		if (video_urls.count > 0) {
-			[self uploadVideoURLs:video_urls];
-		}
-
-		if (regular_paths.count > 0) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: regular_paths }];
+		if ([selected_paths count] > 0) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: selected_paths }];
 		}
 	}
 }
 
 - (void) uploadVideoURLs:(NSArray<NSURL *> *)urls
 {
-	NSMutableArray<NSURL *>* queue = [urls mutableCopy];
-	[self uploadNextVideoURL:queue];
+	[self uploadVideoURLs:urls completion:nil];
 }
 
-- (void) uploadNextVideoURL:(NSMutableArray<NSURL *> *)queue
+- (void) uploadVideoURLs:(NSArray<NSURL *> *)urls completion:(void (^)(void))handler
+{
+	NSMutableArray<NSURL *>* queue = [urls mutableCopy];
+	[self uploadNextVideoURL:queue completion:handler];
+}
+
+- (void) uploadNextVideoURL:(NSMutableArray<NSURL *> *)queue completion:(void (^)(void))handler
 {
 	NSURL* url = [queue lastObject];
 	if (url == nil) {
+		if (handler) {
+			handler();
+		}
 		return;
 	}
 
 	[queue removeLastObject];
 	__weak typeof(self) weakSelf = self;
 	[self uploadVideoAtURL:url completion:^{
-		[weakSelf uploadNextVideoURL:queue];
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) {
+			if (handler) {
+				handler();
+			}
+			return;
+		}
+
+		[strongSelf uploadNextVideoURL:queue completion:handler];
 	}];
 }
 
