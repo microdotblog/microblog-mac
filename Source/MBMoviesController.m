@@ -136,10 +136,21 @@
 		return;
 	}
 
-	MBMovie* m = [self.movies objectAtIndex:row];
-	if ([m hasSeasons] || [m hasEpisodes]) {
+	MBMovie* movie = [self.movies objectAtIndex:row];
+	BOOL hasChildren = ([movie hasSeasons] || [movie hasEpisodes]);
+	BOOL isOpen = [self isMovieOpen:movie];
+
+	if (hasChildren && isOpen) {
 		[self toggleDisclosureOpen:NO atRow:row];
 		[self collapseRow:row];
+		return;
+	}
+
+	NSInteger parentRow = [self parentRowForRow:row];
+	if (parentRow != NSNotFound) {
+		NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:parentRow];
+		[self.tableView selectRowIndexes:indexSet byExtendingSelection:NO];
+		[self.tableView scrollRowToVisible:parentRow];
 	}
 }
 
@@ -426,6 +437,67 @@
 	[updatedMovies removeObjectsAtIndexes:rowsToRemove];
 	self.movies = updatedMovies;
 	[self.tableView removeRowsAtIndexes:rowsToRemove withAnimation:NSTableViewAnimationSlideUp];
+}
+
+- (NSInteger) parentRowForRow:(NSInteger)row
+{
+	if (row <= 0 || row >= (NSInteger)self.movies.count) {
+		return NSNotFound;
+	}
+
+	MBMovie* movie = [self.movies objectAtIndex:row];
+
+	for (NSString* episodeKey in self.openEpisodes) {
+		NSArray* episodes = [self.openEpisodes objectForKey:episodeKey];
+		if ([episodes containsObject:movie]) {
+			NSUInteger parentIndex = [self.movies indexOfObjectPassingTest:^BOOL(MBMovie* candidate, NSUInteger idx, BOOL* stop) {
+				NSString* candidateKey = [self episodeDictionaryKeyForMovie:candidate];
+				if (candidateKey.length > 0 && [candidateKey isEqualToString:episodeKey]) {
+					*stop = YES;
+					return YES;
+				}
+				return NO;
+			}];
+			if (parentIndex != NSNotFound) {
+				return (NSInteger)parentIndex;
+			}
+		}
+	}
+
+	for (NSString* showID in self.openSeasons) {
+		NSArray* seasons = [self.openSeasons objectForKey:showID];
+		if ([seasons containsObject:movie]) {
+			NSUInteger parentIndex = [self.movies indexOfObjectPassingTest:^BOOL(MBMovie* candidate, NSUInteger idx, BOOL* stop) {
+				if ([candidate.tmdbID isEqualToString:showID] && [candidate hasSeasons]) {
+					*stop = YES;
+					return YES;
+				}
+				return NO;
+			}];
+			if (parentIndex != NSNotFound) {
+				return (NSInteger)parentIndex;
+			}
+		}
+	}
+
+	if (movie.isSearchedEpisode) {
+		for (NSInteger i = row - 1; i >= 0; i--) {
+			MBMovie* candidate = [self.movies objectAtIndex:i];
+			if ([candidate hasEpisodes]) {
+				return i;
+			}
+		}
+	}
+	else if (movie.seasonNumber > 0) {
+		for (NSInteger i = row - 1; i >= 0; i--) {
+			MBMovie* candidate = [self.movies objectAtIndex:i];
+			if ([candidate hasSeasons]) {
+				return i;
+			}
+		}
+	}
+
+	return NSNotFound;
 }
 
 - (BOOL) isMovieOpen:(MBMovie *)movie
