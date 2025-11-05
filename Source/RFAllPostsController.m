@@ -161,6 +161,8 @@
 
 - (void) fetchDrafts
 {
+	self.isDownloadingDrafts = YES;
+	
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
@@ -190,6 +192,7 @@
 			
 			RFDispatchMainAsync (^{
 				self.draftPosts = new_posts;
+				self.isDownloadingDrafts = NO;
 			});
 		}
 	}];
@@ -305,6 +308,7 @@
 			}
 			else {
 				[self fetchPosts];
+				[self fetchDrafts];
 			}
 		});
 	}];
@@ -384,19 +388,26 @@
 
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
+	// reset to all posts
+	[self.segmentedControl setSelectedSegment:0];
+	
 	[self setupBlogName];
 	[self hideBlogsMenu];
+	
 	[self fetchPosts];
+	[self fetchDrafts];
 }
 
 - (void) closePostingNotification:(NSNotification *)notification
 {
+	[self fetchPosts];
 	[self fetchPosts];
 }
 
 - (void) draftDidUpdateNotification:(NSNotification *)notification
 {
 	[self fetchPosts];
+	[self fetchDrafts];
 }
 
 - (IBAction) segmentChanged:(NSSegmentedControl *)sender
@@ -404,7 +415,21 @@
 	self.isShowingDrafts = (sender.selectedSegment == 1);
 	
 	if (self.isShowingDrafts) {
-		self.currentPosts = self.draftPosts;
+		// if still downloading, wait
+		if (self.isDownloadingDrafts) {
+			RFDispatchSeconds(2.0, ^{
+				if (!self.isShowingDrafts) {
+					return;
+				}
+				
+				self.currentPosts = self.draftPosts;
+				[self.tableView reloadData];
+			});
+			return;
+		}
+		else {
+			self.currentPosts = self.draftPosts;
+		}
 	}
 	else {
 		self.currentPosts = self.allPosts;
