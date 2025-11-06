@@ -30,18 +30,23 @@
 	[super drawRect:dirtyRect];
 
 	CGRect r = NSRectToCGRect (self.bounds);
-	if (r.size.width < 180) {
-		self.statusMessageTextField.cell.title = @"Publishing...";
-	}
-    else if (r.size.width < 210) {
-        self.statusMessageTextField.cell.title = @"Publishing changes...";
-    }
-	else if (r.size.width < 280) {
-		self.statusMessageTextField.cell.title = @"Publishing latest changes...";
+	if (self.isProcessingVideo) {
+		self.statusMessageTextField.cell.title = @"Processing video... 🍿";
 	}
 	else {
-        self.statusMessageTextField.cell.title = @"Publishing latest changes to your blog...";
-    }
+		if (r.size.width < 180) {
+			self.statusMessageTextField.cell.title = @"Publishing...";
+		}
+		else if (r.size.width < 210) {
+			self.statusMessageTextField.cell.title = @"Publishing changes...";
+		}
+		else if (r.size.width < 280) {
+			self.statusMessageTextField.cell.title = @"Publishing latest changes...";
+		}
+		else {
+			self.statusMessageTextField.cell.title = @"Publishing latest changes to your blog...";
+		}
+	}
 
 	CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
 	
