@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.8</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new Movies sidebar item to search for movies and TV shows to blog about.</li>
+					<li>Fixed Uploads screen to refresh with new uploads automatically.</li>
+					<li>Fixed Drafts tab not reflecting latest posts.</li>
+					<li>Updated Day One export for latest Day One version.</li>
+					<li>Updated for upcoming new video hosting.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Thu, 06 Nov 2025 12:45:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.8.zip" sparkle:shortVersionString="3.8" sparkle:version="221" length="4572921" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.7.2</title>
  			<description><![CDATA[
 				<style>
