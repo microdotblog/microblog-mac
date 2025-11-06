@@ -1521,7 +1521,7 @@ static NSInteger const kSelectionNotes = 12;
 	}
 
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
-	bubble.isProcessingVideo = NO;
+	[bubble setProcessing:NO];
 
 	[self.statusProgressSpinner startAnimation:nil];
 	self.statusBubble.animator.alphaValue = 1.0;
@@ -1536,7 +1536,7 @@ static NSInteger const kSelectionNotes = 12;
 	}
 
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
-	bubble.isProcessingVideo = YES;
+	[bubble setProcessing:YES];
 
 	[self.statusProgressSpinner startAnimation:nil];
 	self.statusBubble.animator.alphaValue = 1.0;

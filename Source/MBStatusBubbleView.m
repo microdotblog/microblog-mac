@@ -72,6 +72,12 @@
 	CGPathRelease (path);
 }
 
+- (void) setProcessing:(BOOL)isProcessing
+{
+	self.isProcessingVideo = isProcessing;
+	[self setNeedsDisplay:YES];
+}
+
 - (void) updateTrackingAreas
 {
 	if (self.customTrackingArea) {

@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) CGFloat cornerRadius;
 @property (assign, nonatomic) BOOL isProcessingVideo;
 
+- (void) setProcessing:(BOOL)isProcessing;
+
 @end
 
 NS_ASSUME_NONNULL_END
