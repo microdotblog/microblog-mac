@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic, nullable) MBCollection* selectedCollection;
 @property (strong, nonatomic, nullable) MBUploadProgress* uploader;
+@property (strong, nonatomic, nullable) NSTimer* uploadsTimer;
 
 - (void) fetchUploads;
 - (void) focusSearch;

@@ -45,7 +45,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self setupCollectionView];
     [self setupBlogName];
     [self setupNotifications];
-    
+	
     [self fetchUploads];
 	[self fetchCollections];
 }
@@ -58,6 +58,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		// run in a bit to make sure resonder chain is set up
 		[self.view.window makeFirstResponder:self.collectionView];
 	});
+	
+	[self startUploadsTimer];
+}
+
+- (void) viewDidDisappear
+{
+	[super viewDidDisappear];
+	
+	[self invalidateUploadsTimer];
+}
+
+- (void) dealloc
+{
+	[self invalidateUploadsTimer];
 }
 
 - (void) setupCollectionView
@@ -171,6 +185,55 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				self.collectionView.animator.alphaValue = 1.0;
 			});
 		}
+	}];
+}
+
+- (void) startUploadsTimer
+{
+	[self invalidateUploadsTimer];
+	
+	self.uploadsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(checkForNewUploads:) userInfo:nil repeats:YES];
+}
+
+- (void) invalidateUploadsTimer
+{
+	[self.uploadsTimer invalidate];
+	self.uploadsTimer = nil;
+}
+
+- (void) checkForNewUploads:(NSTimer *)timer
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid,
+		@"limit": @1
+	};
+	
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			return;
+		}
+		
+		NSArray* items = [response.parsedResponse objectForKey:@"items"];
+		NSDictionary* first_item = [items firstObject];
+		NSString* latest_url = [first_item objectForKey:@"url"];
+		if (latest_url.length == 0) {
+			return;
+		}
+		
+		RFDispatchMainAsync(^{
+			RFUpload* first_upload = [self.allPosts firstObject];
+			NSString* current_url = first_upload.url;
+			if (![latest_url isEqualToString:current_url]) {
+				[self fetchUploads];
+			}
+		});
 	}];
 }
 

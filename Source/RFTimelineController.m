@@ -35,6 +35,7 @@
 #import "RFPost.h"
 #import "RFStack.h"
 #import "RFBookshelf.h"
+#import "MBStatusBubbleView.h"
 #import "NSObject+SharedTimeline.h"
 #import "MBBooksWindowController.h"
 #import "MBNotesController.h"
@@ -869,7 +870,13 @@ static NSInteger const kSelectionNotes = 12;
 			NSNumber* count = [response.parsedResponse objectForKey:@"count"];
 			NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
 			NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
-			if (is_publishing && [is_publishing boolValue]) {
+			NSNumber* is_processing = [response.parsedResponse objectForKey:@"is_processing"];
+			if (is_processing && [is_processing boolValue]) {
+				RFDispatchMainAsync (^{
+					[self showProcessingStatus];
+				});
+			}
+			else if (is_publishing && [is_publishing boolValue]) {
 				RFDispatchMainAsync (^{
 					[self showPublishingStatus];
 				});
@@ -1512,6 +1519,25 @@ static NSInteger const kSelectionNotes = 12;
 			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:0];
 		}
 	}
+
+	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
+	[bubble setProcessing:NO];
+
+	[self.statusProgressSpinner startAnimation:nil];
+	self.statusBubble.animator.alphaValue = 1.0;
+}
+
+- (void) showProcessingStatus
+{
+	if (@available(macOS 15.0, *)) {
+		if (![self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
+			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:0];
+		}
+	}
+
+	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
+	[bubble setProcessing:YES];
+
 	[self.statusProgressSpinner startAnimation:nil];
 	self.statusBubble.animator.alphaValue = 1.0;
 }

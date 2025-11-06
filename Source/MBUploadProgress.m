@@ -27,6 +27,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 {
 	NSString* fileID = [NSString stringWithFormat:@"%06u", arc4random_uniform(900000) + 100000];
 	self.currentFileID = fileID;
+	self.currentFilename = [path lastPathComponent];
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media/append"];
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
@@ -37,6 +38,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 	NSFileHandle* fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
 	if (fileHandle == nil) {
 		self.currentFileID = nil;
+		self.currentFilename = nil;
 		RFDispatchMainAsync (^{
 			handler(0.0);
 		});
@@ -47,6 +49,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 	if (fileAttributes == nil) {
 		[fileHandle closeFile];
 		self.currentFileID = nil;
+		self.currentFilename = nil;
 		RFDispatchMainAsync (^{
 			handler(0.0);
 		});
@@ -58,6 +61,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 
 	__block unsigned long long bytesUploaded = 0;
 	__block void (^uploadNextChunk)(void) = nil;
+	__weak typeof(uploadNextChunk) weakUploadNextChunk = nil;
 
 	RFDispatchMainAsync (^{
 		handler(0.0);
@@ -75,6 +79,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 			if (fileData == nil) {
 				[fileHandle closeFile];
 				self.currentFileID = nil;
+				self.currentFilename = nil;
 				RFDispatchMainAsync (^{
 					handler(0.0);
 				});
@@ -98,17 +103,19 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 				});
 
 				uploadNextChunk();
+//				if (weakUploadNextChunk) {
+//					weakUploadNextChunk();
+//				}
 			}];
 		}
 	};
 
+	weakUploadNextChunk = uploadNextChunk;
 	uploadNextChunk();
 }
 
 - (void) uploadFinished:(void (^)(BOOL))handler
 {
-	NSLog(@"Upload finished");
-	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media/finished"];
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
@@ -117,6 +124,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 	NSMutableDictionary* params = [NSMutableDictionary dictionary];
 	params[@"mp-destination"] = destination_uid;
 	params[@"file_id"] = self.currentFileID;
+	params[@"file_name"] = self.currentFilename;
 
 	[client postWithParams:params completion:^(UUHttpResponse* response) {
 		NSHTTPURLResponse* httpResponse = response.httpResponse;
@@ -129,6 +137,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 		}
 
 		self.currentFileID = nil;
+		self.currentFilename = nil;
 
 		RFDispatchMainAsync (^{
 			handler(success);
