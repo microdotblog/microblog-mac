@@ -102,9 +102,10 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 					handler(MIN(percent, 1.0));
 				});
 
-				if (weakUploadNextChunk) {
-					weakUploadNextChunk();
-				}
+				uploadNextChunk();
+//				if (weakUploadNextChunk) {
+//					weakUploadNextChunk();
+//				}
 			}];
 		}
 	};
