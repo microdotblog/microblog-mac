@@ -61,6 +61,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 
 	__block unsigned long long bytesUploaded = 0;
 	__block void (^uploadNextChunk)(void) = nil;
+	__weak typeof(uploadNextChunk) weakUploadNextChunk = nil;
 
 	RFDispatchMainAsync (^{
 		handler(0.0);
@@ -101,11 +102,14 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 					handler(MIN(percent, 1.0));
 				});
 
-				uploadNextChunk();
+				if (weakUploadNextChunk) {
+					weakUploadNextChunk();
+				}
 			}];
 		}
 	};
 
+	weakUploadNextChunk = uploadNextChunk;
 	uploadNextChunk();
 }
 
