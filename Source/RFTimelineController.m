@@ -873,7 +873,7 @@ static NSInteger const kSelectionNotes = 12;
 			NSNumber* is_processing = [response.parsedResponse objectForKey:@"is_processing"];
 			if (is_processing && [is_processing boolValue]) {
 				RFDispatchMainAsync (^{
-					[self showPublishingStatus];
+					[self showProcessingStatus];
 				});
 			}
 			else if (is_publishing && [is_publishing boolValue]) {

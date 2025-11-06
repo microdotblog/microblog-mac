@@ -31,7 +31,15 @@
 
 	CGRect r = NSRectToCGRect (self.bounds);
 	if (self.isProcessingVideo) {
-		self.statusMessageTextField.cell.title = @"Processing video... 🍿";
+		if (r.size.width < 180) {
+			self.statusMessageTextField.cell.title = @"Processing... 🍿";
+		}
+		else if (r.size.width < 210) {
+			self.statusMessageTextField.cell.title = @"Processing video... 🍿";
+		}
+		else if (r.size.width < 280) {
+			self.statusMessageTextField.cell.title = @"Processing uploaded video... 🍿";
+		}
 	}
 	else {
 		if (r.size.width < 180) {
