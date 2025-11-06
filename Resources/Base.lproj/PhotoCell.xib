@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,6 +25,13 @@
             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
+                <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="NfY-U0-545">
+                    <rect key="frame" x="42" y="42" width="16" height="16"/>
+                </progressIndicator>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NIg-26-JBO" customClass="RFPhotoImageView">
+                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="xLA-JS-1DO"/>
+                </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-Eo-t8j" customClass="MBDisableDragImageView">
                     <rect key="frame" x="30" y="30" width="40" height="40"/>
                     <constraints>
@@ -32,10 +39,6 @@
                         <constraint firstAttribute="height" constant="40" id="qNA-sc-2NV"/>
                     </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="NNs-RX-BR7"/>
-                </imageView>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NIg-26-JBO" customClass="RFPhotoImageView">
-                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="xLA-JS-1DO"/>
                 </imageView>
                 <customView wantsLayer="YES" fixedFrame="YES" alphaValue="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="8e5-OI-o8O" customClass="MBPhotoSelectionView">
                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
@@ -45,9 +48,6 @@
                         <outlet property="photoCell" destination="na8-0v-oNY" id="Pwy-Po-EBe"/>
                     </connections>
                 </customView>
-                <progressIndicator hidden="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="NfY-U0-545">
-                    <rect key="frame" x="42" y="42" width="16" height="16"/>
-                </progressIndicator>
             </subviews>
             <constraints>
                 <constraint firstItem="Hng-Eo-t8j" firstAttribute="centerY" secondItem="uf0-7P-vkp" secondAttribute="centerY" id="2RU-e8-Ss4"/>

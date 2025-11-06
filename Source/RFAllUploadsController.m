@@ -908,12 +908,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 	if ([up isPhoto]) {
 		item.thumbnailImageView.image = up.cachedImage;
+		item.thumbnailImageView.alphaValue = 1.0;
 		item.iconView.hidden = YES;
 	}
 	else if (@available(macOS 11.0, *)) {
 		item.thumbnailImageView.image = nil;
 		item.iconView.hidden = NO;
 		if ([up isVideo]) {
+			item.thumbnailImageView.image = up.cachedPoster;
+			item.thumbnailImageView.alphaValue = 0.3;
 			item.iconView.image = [NSImage imageWithSystemSymbolName:@"film" accessibilityDescription:@""];
 		}
 		else if ([up isAudio]) {
@@ -967,6 +970,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 							});
 						}
 					}];
+				}
+			}];
+		}
+	}
+	else if ([up isVideo]) {
+		if ((up.cachedPoster == nil) && (up.poster_url.length > 0)) {
+			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.poster_url];
+			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+					NSImage* img = response.parsedResponse;
+					RFDispatchMain(^{
+						up.cachedPoster = img;
+						[collectionView mb_safeReloadAtIndexPath:indexPath];
+					});
 				}
 			}];
 		}

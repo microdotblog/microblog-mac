@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RFUpload : NSObject
 
 @property (strong) NSImage* cachedImage;
+@property (strong) NSImage* cachedPoster;
 @property (strong) NSString* url;
 @property (strong) NSString* thumbnail_url;
 @property (strong) NSString* poster_url;
