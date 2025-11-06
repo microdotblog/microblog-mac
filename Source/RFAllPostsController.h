@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (assign, nonatomic) BOOL isShowingPages;
 @property (assign, nonatomic) BOOL isShowingDrafts;
+@property (assign, nonatomic) BOOL isDownloadingDrafts;
 @property (strong, nonatomic) NSArray* allPosts; // RFPost
 @property (strong, nonatomic) NSArray* draftPosts; // RFPost
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost

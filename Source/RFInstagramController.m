@@ -30,7 +30,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	self = [super initWithWindowNibName:@"Instagram"];
 	if (self) {
-		// your_instagram_activity/content/posts_1.json
+		// your_instagram_activity/media/posts_1.json
 		// your_instagram_activity/threads/threads_and_replies.json
 		// media/path/photo.jpg
 

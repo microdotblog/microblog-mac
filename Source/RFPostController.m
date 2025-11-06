@@ -23,6 +23,7 @@
 #import "RFAccount.h"
 #import "RFHighlightingTextStorage.h"
 #import "MBPostWindow.h"
+#import "MBUploadProgress.h"
 #import "UUString.h"
 #import "UUDate.h"
 #import "RFXMLRPCRequest.h"
@@ -46,12 +47,15 @@ static NSString* const kCategoryCellIdentifier = @"CategoryCell";
 static NSString* const kCrosspostCellIdentifier = @"CrosspostCell";
 static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
+static const NSInteger kVideoProcessingMaxAttempts = 30;
+static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 @interface RFPostController()
 
 @property (strong, nonatomic) NSString* activeReplacementString;
 @property (strong, atomic) NSMutableArray* autoCompleteData;
 @property (assign, nonatomic) BOOL resettingAutoComplete;
+@property (strong, nonatomic, nullable) MBUploadProgress* videoUploader;
 
 @end
 
@@ -1879,13 +1883,14 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[self showProgressHeader:@"Uploading photo..."];
 	}
 	
-	NSData* d;
-	
 	if (photo.isVideo) {
-		d = [NSData dataWithContentsOfURL:photo.videoAsset.URL];
-		[photo removeTemporaryVideo];
+		[self uploadVideoPhoto:photo completion:handler];
+		return;
 	}
-	else if (photo.isGIF) {
+
+	NSData* d;
+
+	if (photo.isGIF) {
 		d = [NSData dataWithContentsOfURL:photo.fileURL];
 	}
 	else if (photo.isPNG) {
@@ -1997,6 +2002,185 @@ static CGFloat const kTextViewTitleShownTop = 54;
 		[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Could not load photo data." button:@"OK" completionHandler:NULL];
 		[self hideProgressHeader];
 	}
+}
+
+- (void) uploadVideoPhoto:(RFPhoto *)photo completion:(void (^)(void))handler
+{
+	NSString* video_path = photo.videoAsset.URL.path;
+	if (video_path.length == 0) {
+		video_path = photo.tempVideoPath;
+	}
+	if (video_path.length == 0) {
+		[self handleVideoUploadFailureWithMessage:@"The video file could not be opened." photo:photo];
+		return;
+	}
+
+	MBUploadProgress* uploader = [[MBUploadProgress alloc] init];
+	self.videoUploader = uploader;
+
+	__weak typeof(self) weakSelf = self;
+	__block BOOL didCompleteUpload = NO;
+	__block BOOL reportedFailure = NO;
+
+	[uploader uploadFileInBackground:video_path completion:^(CGFloat percent) {
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) {
+			return;
+		}
+
+		NSLog(@"Uploading video: %f", percent);
+
+		if (!didCompleteUpload && percent <= 0.0 && uploader.currentFileID == nil && !reportedFailure) {
+			reportedFailure = YES;
+			[strongSelf handleVideoUploadFailureWithMessage:@"The video file could not be opened." photo:photo];
+			return;
+		}
+
+		if (!didCompleteUpload && percent >= 1.0) {
+			didCompleteUpload = YES;
+
+			[uploader uploadFinished:^(BOOL success) {
+				__strong typeof(self) innerSelf = weakSelf;
+				if (!innerSelf) {
+					return;
+				}
+
+				innerSelf.videoUploader = nil;
+
+				if (!success) {
+					[innerSelf handleVideoUploadFailureWithMessage:@"The video upload failed. Please try again." photo:photo];
+					return;
+				}
+
+				[innerSelf pollForProcessedVideoAttempt:0 completion:^(NSString * _Nullable movieURL) {
+					if (movieURL.length == 0) {
+						[innerSelf handleVideoUploadFailureWithMessage:@"The video upload finished but no URL was returned." photo:photo];
+						return;
+					}
+
+					photo.publishedURL = movieURL;
+					[photo removeTemporaryVideo];
+
+					if (handler) {
+						handler();
+					}
+				}];
+			}];
+		}
+	}];
+}
+
+- (void) handleVideoUploadFailureWithMessage:(NSString *)message photo:(RFPhoto *)photo
+{
+	[NSAlert rf_showOneButtonAlert:@"Error Uploading Video" message:message button:@"OK" completionHandler:NULL];
+	[self hideProgressHeader];
+	[photo removeTemporaryVideo];
+	self.videoUploader = nil;
+}
+
+- (void) pollForProcessedVideoAttempt:(NSInteger)attempt completion:(void (^)(NSString * _Nullable movieURL))handler
+{
+	if (attempt >= kVideoProcessingMaxAttempts) {
+		RFDispatchMainAsync (^{
+			if (handler) {
+				handler(nil);
+			}
+		});
+		return;
+	}
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
+	[client getWithCompletion:^(UUHttpResponse* response) {
+		NSDictionary* json = nil;
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			json = (NSDictionary *)response.parsedResponse;
+		}
+
+		if (json == nil) {
+			if (attempt + 1 >= kVideoProcessingMaxAttempts) {
+				RFDispatchMainAsync (^{
+					if (handler) {
+						handler(nil);
+					}
+				});
+			}
+			else {
+				RFDispatchSeconds(kVideoProcessingPollInterval, ^{
+					[self pollForProcessedVideoAttempt:(attempt + 1) completion:handler];
+				});
+			}
+			return;
+		}
+
+		BOOL is_processing = YES;
+		id processing_value = [json objectForKey:@"is_processing"];
+		if ([processing_value isKindOfClass:[NSNumber class]]) {
+			is_processing = [processing_value boolValue];
+		}
+		else if ([processing_value isKindOfClass:[NSString class]]) {
+			is_processing = [processing_value boolValue];
+		}
+		else {
+			is_processing = NO;
+		}
+
+		if (!is_processing) {
+			[self fetchLatestUploadURLWithCompletion:^(NSString * _Nullable url) {
+				if (handler) {
+					handler(url);
+				}
+			}];
+		}
+		else {
+			RFDispatchSeconds(kVideoProcessingPollInterval, ^{
+				[self pollForProcessedVideoAttempt:(attempt + 1) completion:handler];
+			});
+		}
+	}];
+}
+
+- (void) fetchLatestUploadURLWithCompletion:(void (^)(NSString * _Nullable url))handler
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSString* movie_url = nil;
+
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				id url_value = [item objectForKey:@"url"];
+				if ([url_value isKindOfClass:[NSArray class]]) {
+					id first_url = [url_value firstObject];
+					if ([first_url isKindOfClass:[NSString class]]) {
+						movie_url = first_url;
+					}
+				}
+				else if ([url_value isKindOfClass:[NSString class]]) {
+					movie_url = url_value;
+				}
+				
+				if ([movie_url.pathExtension isEqualToString:@"m3u8"]) {
+					break;
+				}
+			}
+		}
+
+		RFDispatchMainAsync (^{
+			if (handler) {
+				handler(movie_url);
+			}
+		});
+	}];
 }
 
 - (void) clickedPhotoAtIndex:(NSIndexPath *)indexPath

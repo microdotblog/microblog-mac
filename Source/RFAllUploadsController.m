@@ -14,6 +14,7 @@
 #import "MBCollection.h"
 #import "RFClient.h"
 #import "RFUpload.h"
+#import "MBUploadProgress.h"
 #import "RFPhoto.h"
 #import "RFPhotoCell.h"
 #import "UUDate.h"
@@ -246,9 +247,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSIndexPath* index_path = [index_paths anyObject];
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
 	
+	NSString* alt = up.alt;
+	if (alt == nil) {
+		alt = @"";
+	}
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
 		kInfoURLKey: up.url,
-		kInfoTextKey: up.alt,
+		kInfoTextKey: alt,
 		kInfoAIKey: @(up.isAI)
 	}];
 }
@@ -319,14 +325,66 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		return;
 	}
 
-	NSMutableArray* new_photos = [NSMutableArray array];
-	
-	for (NSString* filepath in paths) {
-		[new_photos addObject:filepath];
+	NSMutableArray<NSURL *>* video_urls = [NSMutableArray array];
+	NSMutableArray<NSString *>* regular_paths = [NSMutableArray array];
+
+	for (id path in paths) {
+		NSURL* file_url = nil;
+		NSString* path_string = nil;
+
+		if ([path isKindOfClass:[NSURL class]]) {
+			file_url = (NSURL *)path;
+			if (file_url.isFileURL) {
+				path_string = file_url.path;
+			}
+		}
+		else if ([path isKindOfClass:[NSString class]]) {
+			path_string = (NSString *)path;
+			file_url = [NSURL fileURLWithPath:path_string];
+		}
+
+		if (file_url == nil) {
+			continue;
+		}
+
+		if ([self isVideoFileURL:file_url]) {
+			[video_urls addObject:file_url];
+		}
+		else if (path_string) {
+			[regular_paths addObject:path_string];
+		}
 	}
 
-	[self uploadNextPhoto:new_photos];
-	[self showUploadProgress];
+	void (^startPhotoUploads)(void) = ^{
+		if ([regular_paths count] == 0) {
+			return;
+		}
+
+		NSMutableArray* new_photos = [regular_paths mutableCopy];
+		[self uploadNextPhoto:new_photos];
+		[self showUploadProgress];
+	};
+
+	if ([video_urls count] > 0) {
+		__weak typeof(self) weakSelf = self;
+		[self uploadVideoURLs:video_urls completion:^{
+			__strong typeof(self) strongSelf = weakSelf;
+			if (!strongSelf) {
+				return;
+			}
+			if ([regular_paths count] == 0) {
+				return;
+			}
+
+			RFDispatchMainAsync(^{
+				startPhotoUploads();
+			});
+		}];
+	}
+
+	if ([video_urls count] == 0) {
+		startPhotoUploads();
+	}
 }
 
 - (void) selectPhotoCellNotification:(NSNotification *)notification
@@ -422,13 +480,161 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	panel.allowsMultipleSelection = YES;
 	NSModalResponse response = [panel runModal];
 	if (response == NSModalResponseOK) {
-		NSMutableArray* paths = [NSMutableArray array];
+		NSMutableArray* selected_paths = [NSMutableArray array];
 		for (NSURL* url in panel.URLs) {
-			[paths addObject:url.path];
+			NSString* path = url.path;
+			if (path.length > 0) {
+				[selected_paths addObject:path];
+			}
+		}
+		if ([selected_paths count] > 0) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: selected_paths }];
+		}
+	}
+}
+
+- (void) uploadVideoURLs:(NSArray<NSURL *> *)urls
+{
+	[self uploadVideoURLs:urls completion:nil];
+}
+
+- (void) uploadVideoURLs:(NSArray<NSURL *> *)urls completion:(void (^)(void))handler
+{
+	NSMutableArray<NSURL *>* queue = [urls mutableCopy];
+	[self uploadNextVideoURL:queue completion:handler];
+}
+
+- (void) uploadNextVideoURL:(NSMutableArray<NSURL *> *)queue completion:(void (^)(void))handler
+{
+	NSURL* url = [queue lastObject];
+	if (url == nil) {
+		if (handler) {
+			handler();
+		}
+		return;
+	}
+
+	[queue removeLastObject];
+	__weak typeof(self) weakSelf = self;
+	[self uploadVideoAtURL:url completion:^{
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) {
+			if (handler) {
+				handler();
+			}
+			return;
 		}
 
-		[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
+		[strongSelf uploadNextVideoURL:queue completion:handler];
+	}];
+}
+
+- (void) uploadVideoAtURL:(NSURL *)url completion:(void (^)(void))handler
+{
+	[self configureProgressSpinnerForVideoUpload];
+	self.blogNameButton.hidden = YES;
+
+	MBUploadProgress* uploader = [[MBUploadProgress alloc] init];
+	self.uploader = uploader;
+
+	NSString* path = url.path;
+	__weak typeof(self) weakSelf = self;
+	__block BOOL didCompleteUpload = NO;
+	__block BOOL reportedFailure = NO;
+
+	[uploader uploadFileInBackground:path completion:^(CGFloat percent) {
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) {
+			return;
+		}
+
+		if (!didCompleteUpload && percent <= 0.0 && uploader.currentFileID == nil && !reportedFailure) {
+			reportedFailure = YES;
+			[strongSelf restoreProgressSpinnerAfterVideoUpload];
+			strongSelf.uploader = nil;
+			[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video file could not be opened." button:@"OK" completionHandler:NULL];
+			if (handler) {
+				handler();
+			}
+			return;
+		}
+
+		strongSelf.progressSpinner.doubleValue = percent;
+
+		if (!didCompleteUpload && percent >= 1.0) {
+			didCompleteUpload = YES;
+			[uploader uploadFinished:^(BOOL success) {
+				__strong typeof(self) innerSelf = weakSelf;
+				if (!innerSelf) {
+					return;
+				}
+
+				if (!success) {
+					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video upload failed. Please try again." button:@"OK" completionHandler:NULL];
+				}
+				else {
+					[innerSelf fetchUploads];
+				}
+
+				[innerSelf restoreProgressSpinnerAfterVideoUpload];
+				innerSelf.uploader = nil;
+
+				if (handler) {
+					handler();
+				}
+			}];
+		}
+	}];
+}
+
+- (void) configureProgressSpinnerForVideoUpload
+{
+	[self.progressSpinner stopAnimation:nil];
+	self.progressSpinner.indeterminate = NO;
+	self.progressSpinner.style = NSProgressIndicatorStyleBar;
+	self.progressSpinner.displayedWhenStopped = YES;
+	self.progressSpinner.minValue = 0.0;
+	self.progressSpinner.maxValue = 1.0;
+	self.progressSpinner.doubleValue = 0.0;
+	self.progressSpinner.hidden = NO;
+}
+
+- (void) restoreProgressSpinnerAfterVideoUpload
+{
+	self.progressSpinner.doubleValue = 0.0;
+	self.progressSpinner.indeterminate = YES;
+	self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
+	self.progressSpinner.displayedWhenStopped = NO;
+	[self.progressSpinner stopAnimation:nil];
+	self.blogNameButton.hidden = NO;
+}
+
+- (BOOL) isVideoFileURL:(NSURL *)url
+{
+	if (@available(macOS 11.0, *)) {
+		NSError* error = nil;
+		NSDictionary<NSURLResourceKey, id>* resource_values = [url resourceValuesForKeys:@[NSURLContentTypeKey] error:&error];
+		UTType* content_type = resource_values[NSURLContentTypeKey];
+		if (content_type == nil) {
+			content_type = [UTType typeWithFilenameExtension:url.pathExtension.lowercaseString];
+		}
+		if (content_type && [content_type conformsToType:UTTypeMovie]) {
+			return YES;
+		}
 	}
+	else {
+		static NSSet<NSString *>* video_extensions;
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			video_extensions = [NSSet setWithArray:@[@"mp4", @"m4v", @"mov", @"avi", @"mpg", @"mpeg", @"mp2", @"mpe", @"mpv", @"mkv", @"wmv"]];
+		});
+		NSString* extension = url.pathExtension.lowercaseString;
+		if (extension.length > 0 && [video_extensions containsObject:extension]) {
+			return YES;
+		}
+	}
+
+	return NO;
 }
 
 - (void) uploadNextPhoto:(NSMutableArray *)paths
@@ -702,12 +908,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 	if ([up isPhoto]) {
 		item.thumbnailImageView.image = up.cachedImage;
+		item.thumbnailImageView.alphaValue = 1.0;
 		item.iconView.hidden = YES;
 	}
 	else if (@available(macOS 11.0, *)) {
 		item.thumbnailImageView.image = nil;
 		item.iconView.hidden = NO;
 		if ([up isVideo]) {
+			item.thumbnailImageView.image = up.cachedPoster;
+			item.thumbnailImageView.alphaValue = 0.3;
 			item.iconView.image = [NSImage imageWithSystemSymbolName:@"film" accessibilityDescription:@""];
 		}
 		else if ([up isAudio]) {
@@ -765,6 +974,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			}];
 		}
 	}
+	else if ([up isVideo]) {
+		if ((up.cachedPoster == nil) && (up.poster_url.length > 0)) {
+			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/200/%@", up.poster_url];
+			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+					NSImage* img = response.parsedResponse;
+					RFDispatchMain(^{
+						up.cachedPoster = img;
+						[collectionView mb_safeReloadAtIndexPath:indexPath];
+					});
+				}
+			}];
+		}
+	}
 }
 
 - (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
@@ -779,9 +1002,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	// also notify get info window
 	NSIndexPath* index_path = [indexPaths anyObject];
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+	NSString* alt = item.alt;
+	if (alt == nil) {
+		alt = @"";
+	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateInfoNotification object:self userInfo:@{
 		kInfoURLKey: item.url,
-		kInfoTextKey: item.alt,
+		kInfoTextKey: alt,
 		kInfoAIKey: @(item.isAI)
 	}];
 }

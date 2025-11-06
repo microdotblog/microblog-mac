@@ -14,7 +14,8 @@
 #import "HTMLParser.h"
 #import "MMMarkdown.h"
 
-static NSString* const kDayOneCommandLinePath = @"/usr/local/bin/dayone2";
+static NSString* const kDayOneCommandLinePath = @"/usr/local/bin/dayone";
+static NSString* const kDayOneCommandLinePathOld = @"/usr/local/bin/dayone2";
 static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/articles/435871-command-line-interface-cli";
 
 @interface RFDayOneExportController ()
@@ -41,25 +42,47 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 	[super windowDidLoad];
 }
 
++ (NSString *) dayOneCommandLinePath
+{
+	NSFileManager* fm = [NSFileManager defaultManager];
+
+	if ([fm fileExistsAtPath:kDayOneCommandLinePath]) {
+		return kDayOneCommandLinePath;
+	}
+	else if ([fm fileExistsAtPath:kDayOneCommandLinePathOld]) {
+		return kDayOneCommandLinePathOld;
+	}
+
+	return nil;
+}
+
 + (BOOL) checkForDayOne
 {
 	BOOL found = YES;
-	
-	// see if "dayone2" command line tool is installed
+	NSString* command_path = [self dayOneCommandLinePath];
+
+	// see if the Day One command line tool is installed
 	// otherwise direct user to the Day One help page
-	
-	@try {
-		[NSTask launchedTaskWithLaunchPath:kDayOneCommandLinePath arguments:@[]];
-	}
-	@catch (NSException* e) {
+
+	if (command_path == nil) {
 		found = NO;
-		[NSAlert rf_showTwoButtonAlert:@"Day One Not Found" message:@"Micro.blog could not locate the dayone2 command-line tool, which is required for exporting to Day One. See the Day One help for details." okButton:@"Show Help" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+	} else {
+		@try {
+			[NSTask launchedTaskWithLaunchPath:command_path arguments:@[]];
+		}
+		@catch (NSException* e) {
+			found = NO;
+		}
+	}
+
+	if (!found) {
+		[NSAlert rf_showTwoButtonAlert:@"Day One Not Found" message:@"Micro.blog could not locate the Day One command-line tool, which is required for exporting to Day One. See the Day One help for details." okButton:@"Show Help" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
 			if (returnCode == 1000) {
 				[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kDayOneHelpPageURL]];
 			}
 		}];
 	}
-	
+
 	return found;
 }
 
@@ -122,7 +145,7 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 - (void) runDayOneForPost:(RFPost *)post withPath:(NSString *)path
 {
 	// NSTask with standard input of Markdown text
-	// dayone2 -j "Test" -d "2021-05-01 14:00:00" -a "/path/to/upload.jpg" -- new
+	// dayone -j "Test" -d "2021-05-01 14:00:00" -a "/path/to/upload.jpg" -- new
 		
 	NSError* error = nil;
 
@@ -152,6 +175,11 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 		[new_text writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 	}
 
+	NSString* commandPath = [[self class] dayOneCommandLinePath];
+	if (commandPath == nil) {
+		return;
+	}
+
 	NSFileHandle* f = [NSFileHandle fileHandleForReadingAtPath:path];
 	NSString* d = [post.postedAt description];
 
@@ -162,7 +190,7 @@ static NSString* const kDayOneHelpPageURL = @"https://help.dayoneapp.com/en/arti
 	[args addObjectsFromArray:@[@"-d", d, @"--", @"new"]];
 	
 	NSTask* t = [[NSTask alloc] init];
-	t.launchPath = kDayOneCommandLinePath;
+	t.launchPath = commandPath;
 	t.arguments = args;
 	t.standardInput = f;
 	

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MBAboutController">
+            <connections>
+                <outlet property="versionField" destination="r5R-08-HJv" id="xBt-zJ-TUc"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="OXm-J6-kE6"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="About" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+            <rect key="contentRect" x="196" y="240" width="449" height="219"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="449" height="219"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AT4-s8-XYf">
+                        <rect key="frame" x="105" y="119" width="80" height="80"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="8A5-Ru-6Ij"/>
+                            <constraint firstAttribute="height" constant="80" id="kfA-ZB-3Ea"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WelcomeIcon" id="lqa-LO-GcM"/>
+                    </imageView>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wTN-Qj-cDX">
+                        <rect key="frame" x="195" y="165" width="74" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Micro.blog" id="qiT-gi-IyU">
+                            <font key="font" metaFont="systemBold"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r5R-08-HJv">
+                        <rect key="frame" x="195" y="141" width="106" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Version 1.0 (100)" id="pxZ-hi-kTk">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="h3c-4k-QWj">
+                        <rect key="frame" x="27" y="20" width="93" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="93" id="BFX-jT-wCR"/>
+                            <constraint firstAttribute="height" constant="48" id="xHq-KX-Xda"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="tmdb" id="iGa-er-Tyd"/>
+                    </imageView>
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="kJg-AO-LvE">
+                        <rect key="frame" x="138" y="22" width="293" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="rbN-HK-JOs"/>
+                        </constraints>
+                        <textFieldCell key="cell" title="Micro.blog uses TMDB but is not endorsed, certified, or otherwise approved by TMDB." id="4cA-ru-hNL">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="4e2-Bv-A5P">
+                        <rect key="frame" x="0.0" y="91" width="449" height="5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="U5b-As-0bL"/>
+                        </constraints>
+                    </box>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="AT4-s8-XYf" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="105" id="1Qd-SA-rY9"/>
+                    <constraint firstItem="r5R-08-HJv" firstAttribute="leading" secondItem="AT4-s8-XYf" secondAttribute="trailing" constant="12" id="CbW-Vp-s7f"/>
+                    <constraint firstItem="4e2-Bv-A5P" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="JKx-Db-h0q"/>
+                    <constraint firstItem="r5R-08-HJv" firstAttribute="top" secondItem="wTN-Qj-cDX" secondAttribute="bottom" constant="8" symbolic="YES" id="Lgb-Ri-cNh"/>
+                    <constraint firstItem="wTN-Qj-cDX" firstAttribute="leading" secondItem="AT4-s8-XYf" secondAttribute="trailing" constant="12" id="QmV-PW-Ula"/>
+                    <constraint firstItem="wTN-Qj-cDX" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="38" id="cap-ff-kE5"/>
+                    <constraint firstItem="AT4-s8-XYf" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="cfm-iD-M7U"/>
+                    <constraint firstItem="h3c-4k-QWj" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="27" id="f4N-lO-8wy"/>
+                    <constraint firstAttribute="bottom" secondItem="h3c-4k-QWj" secondAttribute="bottom" constant="20" symbolic="YES" id="fbc-qR-gg0"/>
+                    <constraint firstAttribute="trailing" secondItem="4e2-Bv-A5P" secondAttribute="trailing" id="gB0-OM-JL2"/>
+                    <constraint firstItem="kJg-AO-LvE" firstAttribute="leading" secondItem="h3c-4k-QWj" secondAttribute="trailing" constant="20" id="lHh-kp-6KC"/>
+                    <constraint firstItem="4e2-Bv-A5P" firstAttribute="top" secondItem="AT4-s8-XYf" secondAttribute="bottom" constant="25" id="n7L-4j-71Q"/>
+                    <constraint firstAttribute="trailing" secondItem="kJg-AO-LvE" secondAttribute="trailing" constant="20" symbolic="YES" id="t76-Ll-JPc"/>
+                    <constraint firstAttribute="bottom" secondItem="kJg-AO-LvE" secondAttribute="bottom" constant="22" id="xiR-3t-qDJ"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="123.5" y="116.5"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="WelcomeIcon" width="256" height="256"/>
+        <image name="tmdb" width="273.42001342773438" height="35.520000457763672"/>
+    </resources>
+</document>

@@ -34,7 +34,7 @@
 - (BOOL) isVideo
 {
 	NSString* e = [[[self filename] pathExtension] lowercaseString];
-	return ([e isEqualToString:@"mov"] || [e isEqualToString:@"m4v"] || [e isEqualToString:@"mp4"]);
+	return ([e isEqualToString:@"mov"] || [e isEqualToString:@"m4v"] || [e isEqualToString:@"mp4"] || [e isEqualToString:@"m3u8"]);
 }
 
 - (BOOL) isAudio
