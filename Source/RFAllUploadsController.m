@@ -306,6 +306,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (IBAction) cancelUpload:(id)sender
 {
+	MBUploadProgress* uploader = self.uploader;
+	if (!uploader) {
+		[self restoreProgressSpinnerAfterVideoUpload];
+		return;
+	}
+
+	[uploader cancelUpload];
+	self.uploader = nil;
+	[self restoreProgressSpinnerAfterVideoUpload];
 }
 
 - (IBAction) showInfo:(id)sender
@@ -614,24 +623,40 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			return;
 		}
 
+		if (uploader.cancelRequested) {
+			return;
+		}
+
 		if (!didCompleteUpload && percent <= 0.0 && uploader.currentFileID == nil && !reportedFailure) {
 			reportedFailure = YES;
 			[strongSelf restoreProgressSpinnerAfterVideoUpload];
 			strongSelf.uploader = nil;
 			[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video file could not be opened." button:@"OK" completionHandler:NULL];
-			if (handler) {
+			if (handler && !uploader.cancelRequested) {
 				handler();
 			}
+			return;
+		}
+
+		if (uploader.cancelRequested) {
 			return;
 		}
 
 		strongSelf.progressSpinner.doubleValue = percent;
 
 		if (!didCompleteUpload && percent >= 1.0) {
+			if (uploader.cancelRequested) {
+				return;
+			}
+
 			didCompleteUpload = YES;
 			[uploader uploadFinished:^(BOOL success) {
 				__strong typeof(self) innerSelf = weakSelf;
 				if (!innerSelf) {
+					return;
+				}
+
+				if (uploader.cancelRequested) {
 					return;
 				}
 
@@ -645,7 +670,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				[innerSelf restoreProgressSpinnerAfterVideoUpload];
 				innerSelf.uploader = nil;
 
-				if (handler) {
+				if (handler && !uploader.cancelRequested) {
 					handler();
 				}
 			}];

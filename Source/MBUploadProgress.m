@@ -25,6 +25,10 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 
 - (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat))handler
 {
+	if (self.cancelRequested) {
+		return;
+	}
+
 	NSString* fileID = [NSString stringWithFormat:@"%06u", arc4random_uniform(900000) + 100000];
 	self.currentFileID = fileID;
 	self.currentFilename = [path lastPathComponent];
@@ -36,9 +40,11 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 	}
 
 	NSFileHandle* fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
+	self.fileHandle = fileHandle;
 	if (fileHandle == nil) {
 		self.currentFileID = nil;
 		self.currentFilename = nil;
+		[self closeFileHandle];
 		RFDispatchMainAsync (^{
 			handler(0.0);
 		});
@@ -47,7 +53,7 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 
 	NSDictionary* fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL];
 	if (fileAttributes == nil) {
-		[fileHandle closeFile];
+		[self closeFileHandle];
 		self.currentFileID = nil;
 		self.currentFilename = nil;
 		RFDispatchMainAsync (^{
@@ -69,15 +75,20 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 
 	uploadNextChunk = ^{
 		@autoreleasepool {
+			if (self.cancelRequested) {
+				[self closeFileHandle];
+				return;
+			}
+
 			NSData* chunkData = [fileHandle readDataOfLength:kUploadChunkSize];
 			if (chunkData.length == 0) {
-				[fileHandle closeFile];
+				[self closeFileHandle];
 				return;
 			}
 
 			NSString* fileData = [chunkData base64EncodedStringWithOptions:0];
 			if (fileData == nil) {
-				[fileHandle closeFile];
+				[self closeFileHandle];
 				self.currentFileID = nil;
 				self.currentFilename = nil;
 				RFDispatchMainAsync (^{
@@ -96,13 +107,22 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 			NSLog(@"Upload chunk: %lu, file: %@", (unsigned long)chunkData.length, fileID);
 			
 			[client postWithParams:params completion:^(UUHttpResponse* response) {
+				if (self.cancelRequested) {
+					[self closeFileHandle];
+					return;
+				}
+
 				bytesUploaded += bytesThisChunk;
 				CGFloat percent = (CGFloat)bytesUploaded / (CGFloat)fileSize;
 				RFDispatchMainAsync (^{
-					handler(MIN(percent, 1.0));
+					if (!self.cancelRequested) {
+						handler(MIN(percent, 1.0));
+					}
 				});
 
-				uploadNextChunk();
+				if (!self.cancelRequested) {
+					uploadNextChunk();
+				}
 //				if (weakUploadNextChunk) {
 //					weakUploadNextChunk();
 //				}
@@ -143,6 +163,26 @@ const NSUInteger kUploadChunkSize = 1 * 1024 * 1024; // 1 MB chunks
 			handler(success);
 		});
 	}];
+}
+
+- (void) cancelUpload
+{
+	if (self.cancelRequested) {
+		return;
+	}
+
+	self.cancelRequested = YES;
+	[self closeFileHandle];
+	self.currentFileID = nil;
+	self.currentFilename = nil;
+}
+
+- (void) closeFileHandle
+{
+	if (self.fileHandle) {
+		[self.fileHandle closeFile];
+		self.fileHandle = nil;
+	}
 }
 
 @end

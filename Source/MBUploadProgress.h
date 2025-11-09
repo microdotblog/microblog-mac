@@ -14,10 +14,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic, nullable) NSString* currentFileID;
 @property (strong, nonatomic, nullable) NSString* currentFilename;
+@property (assign, nonatomic) BOOL cancelRequested;
+@property (strong, nonatomic, nullable) NSFileHandle* fileHandle;
 
 - (void) uploadFileInBackground:(NSString *)path completion:(void (^)(CGFloat))handler;
 - (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat))handler;
 - (void) uploadFinished:(void (^)(BOOL))handler;
+- (void) cancelUpload;
 
 @end
 
