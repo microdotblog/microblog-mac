@@ -37,7 +37,7 @@
 		else if (r.size.width < 210) {
 			self.statusMessageTextField.cell.title = @"Processing video... 🍿";
 		}
-		else if (r.size.width < 280) {
+		else {
 			self.statusMessageTextField.cell.title = @"Processing uploaded video... 🍿";
 		}
 	}
