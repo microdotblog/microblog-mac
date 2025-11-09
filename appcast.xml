@@ -5,6 +5,27 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.8.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added cancel button when uploading videos in Uploads pane.</li>
+					<li>Fixed video processing status message.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Sun, 09 Nov 2025 16:50:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.8.1.zip" sparkle:shortVersionString="3.8.1" sparkle:version="223" length="4575488" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.8</title>
  			<description><![CDATA[
 				<style>
