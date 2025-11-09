@@ -304,6 +304,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self showBlogsMenu];
 }
 
+- (IBAction) cancelUpload:(id)sender
+{
+}
+
 - (IBAction) showInfo:(id)sender
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
@@ -595,7 +599,6 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) uploadVideoAtURL:(NSURL *)url completion:(void (^)(void))handler
 {
 	[self configureProgressSpinnerForVideoUpload];
-	self.blogNameButton.hidden = YES;
 
 	MBUploadProgress* uploader = [[MBUploadProgress alloc] init];
 	self.uploader = uploader;
@@ -660,6 +663,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	self.progressSpinner.maxValue = 1.0;
 	self.progressSpinner.doubleValue = 0.0;
 	self.progressSpinner.hidden = NO;
+	self.progressCancelButton.hidden = NO;
+	self.blogNameButton.hidden = YES;
 }
 
 - (void) restoreProgressSpinnerAfterVideoUpload
@@ -669,6 +674,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
 	self.progressSpinner.displayedWhenStopped = NO;
 	[self.progressSpinner stopAnimation:nil];
+	self.progressCancelButton.hidden = YES;
 	self.blogNameButton.hidden = NO;
 }
 
