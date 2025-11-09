@@ -67,11 +67,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[super viewDidDisappear];
 	
 	[self invalidateUploadsTimer];
+	[self.uploader cancelUpload];
+	self.uploader = nil;
 }
 
 - (void) dealloc
 {
 	[self invalidateUploadsTimer];
+	[self.uploader cancelUpload];
+	self.uploader = nil;
 }
 
 - (void) setupCollectionView
