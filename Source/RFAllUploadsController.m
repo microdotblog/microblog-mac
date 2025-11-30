@@ -84,6 +84,35 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[types addObject:NSPasteboardTypeFileURL];
 	[self.collectionView registerForDraggedTypes:types];
 	[self.collectionView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
+
+	[self registerPhotoCellIfNeededForSearch:@""];
+}
+
+- (void) registerPhotoCellIfNeededForSearch:(NSString *)search
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSString* collection_key = self.selectedCollection.url;
+	if (collection_key == nil) {
+		collection_key = @"";
+	}
+
+	NSString* search_key = @"all";
+	if (search.length > 0) {
+		search_key = @"search";
+	}
+	NSUserInterfaceItemIdentifier identifier = [NSString stringWithFormat:@"%@-%@-%@-%@", kPhotoCellIdentifier, destination_uid, collection_key, search_key];
+	if ([self.photoCellIdentifier isEqualToString:identifier]) {
+		return;
+	}
+
+	self.photoCellIdentifier = identifier;
+
+	NSNib* nib = [[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil];
+	[self.collectionView registerNib:nib forItemWithIdentifier:identifier];
 }
 
 - (void) setupBlogName
@@ -116,6 +145,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) fetchUploadsForSearch:(NSString *)search
 {
+	[self registerPhotoCellIfNeededForSearch:search];
+
 	self.allPosts = @[];
 	self.blogNameButton.hidden = YES;
 	self.collectionView.animator.alphaValue = 0.0;
@@ -1003,7 +1034,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	
-	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
+	NSUserInterfaceItemIdentifier identifier = self.photoCellIdentifier ?: kPhotoCellIdentifier;
+	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:identifier forIndexPath:indexPath];
 	if ([up isPhoto]) {
 		item.thumbnailImageView.image = up.cachedImage;
 		item.thumbnailImageView.alphaValue = 1.0;
