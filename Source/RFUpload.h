@@ -6,7 +6,7 @@
 //  Copyright © 2020 Riverfold Software. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isAudio;
 
 - (NSString *) htmlTag;
+- (void) ensureDimensionsWithCompletion:(void (^)(void))handler;
 
 @end
 

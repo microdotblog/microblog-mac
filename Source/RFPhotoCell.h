@@ -24,6 +24,8 @@
 @property (strong, nonatomic) NSString* poster_url;
 @property (strong, nonatomic) NSString* alt;
 @property (assign, nonatomic) BOOL isAI;
+@property (assign, nonatomic) NSInteger width;
+@property (assign, nonatomic) NSInteger height;
 @property (copy, nonatomic) NSMenuItem* copiedRemoveItem;
 
 - (void) setupForURL;

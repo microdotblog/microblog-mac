@@ -105,11 +105,16 @@
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	up.poster_url = self.poster_url;
 	up.alt = self.alt;
-	NSString* s = [up htmlTag];
-	
-	NSPasteboard* pb = [NSPasteboard generalPasteboard];
-	[pb clearContents];
-	[pb setString:s forType:NSPasteboardTypeString];
+	up.width = self.width;
+	up.height = self.height;
+
+	[up ensureDimensionsWithCompletion:^{
+		NSString* s = [up htmlTag];
+
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:s forType:NSPasteboardTypeString];
+	}];
 }
 
 - (IBAction) copyHTMLwithoutPlayer:(id)sender

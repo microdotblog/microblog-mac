@@ -1064,6 +1064,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	item.poster_url = up.poster_url;
 	item.alt = up.alt;
 	item.isAI = up.isAI;
+	item.width = up.width;
+	item.height = up.height;
 	[item setupForURL];
 	[item setupForCollection:self.selectedCollection];
 	
