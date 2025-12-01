@@ -19,6 +19,7 @@
 #import "RFMarkdownExportController.h"
 #import "RFDayOneExportController.h"
 #import "RFPhotoZoomController.h"
+#import "MBVideoZoomController.h"
 #import "RFBookmarkController.h"
 #import "RFPostWindowController.h"
 #import "RFPostController.h"
@@ -197,6 +198,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openVideoURLNotification:) name:kOpenVideoURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(promptNewPostWithPhotoNotification:) name:kNewPostWithPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
@@ -656,6 +658,13 @@
 	[self.photoWindows addObject:controller];
 }
 
+- (void) showVideoWithURL:(NSString *)videoURL
+{
+	MBVideoZoomController* controller = [[MBVideoZoomController alloc] initWithURL:videoURL];
+	[controller showWindow:nil];
+	[self.photoWindows addObject:controller];
+}
+
 - (void) showReplyPostNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
@@ -681,6 +690,12 @@
 	NSString* alt = [notification.userInfo objectForKey:kOpenPhotoAltKey];
 	BOOL allow_copy = [[notification.userInfo objectForKey:kOpenPhotoAllowCopyKey] boolValue];
 	[self showPhotoWithURL:url.absoluteString altText:alt allowCopy:allow_copy];
+}
+
+- (void) openVideoURLNotification:(NSNotification *)notification
+{
+	NSURL* url = [notification.userInfo objectForKey:kOpenVideoURLKey];
+	[self showVideoWithURL:url.absoluteString];
 }
 
 - (void) promptNewPostWithPhotoNotification:(NSNotification *)notification

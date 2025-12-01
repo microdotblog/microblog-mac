@@ -61,6 +61,9 @@ static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 #define kOpenPhotoAltKey @"alt" // NSString
 #define kOpenPhotoAllowCopyKey @"allow_copy" // NSNumber
 
+#define kOpenVideoURLNotification @"RFOpenVideoURL"
+#define kOpenVideoURLKey @"url" // NSURL
+
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
 

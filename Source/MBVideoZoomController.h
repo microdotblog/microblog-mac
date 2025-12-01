@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet WKWebView* webView;
 
-- (id) initWithURL:(NSString *)photoURL altText:(NSString *)photoAlt allowCopy:(BOOL)allowCopy;
+@property (strong, nonatomic) NSString* videoURL;
+
+- (id) initWithURL:(NSString *)videoURL;
 
 @end
 

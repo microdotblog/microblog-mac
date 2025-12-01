@@ -10,6 +10,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBVideoZoomController">
             <connections>
                 <outlet property="webView" destination="Pim-h6-WFy" id="gpv-ob-n7C"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="bUT-NY-SgZ"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>

@@ -916,7 +916,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPhotoURLNotification object:self userInfo:info];
 	}
 	else {
-		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:up.url]];
+		NSDictionary* info = @{
+			kOpenVideoURLKey: [NSURL URLWithString:up.url]
+		};
+		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenVideoURLNotification object:self userInfo:info];
 	}
 }
 

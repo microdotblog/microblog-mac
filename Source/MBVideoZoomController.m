@@ -10,10 +10,11 @@
 
 @implementation MBVideoZoomController
 
-- (id) initWithURL:(NSString *)photoURL altText:(NSString *)photoAlt allowCopy:(BOOL)allowCopy
+- (id) initWithURL:(NSString *)videoURL
 {
 	self = [super initWithWindowNibName:@"VideoZoom"];
 	if (self) {
+		self.videoURL = videoURL;
 	}
 	
 	return self;
@@ -22,6 +23,17 @@
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
+	
+	NSURL* url = [NSURL URLWithString:self.videoURL];
+	if (url) {
+		NSURLRequest* request = [NSURLRequest requestWithURL:url];
+		[self.webView loadRequest:request];
+	}
+}
+
+- (void) downloadPhoto
+{
+	// override parent behavior to avoid trying to download the video
 }
 
 @end
