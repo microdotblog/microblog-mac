@@ -18,14 +18,15 @@
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="PhotoZoomWindow" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="432"/>
+            <rect key="contentRect" x="196" y="240" width="700" height="400"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
+            <value key="minSize" type="size" width="700" height="400"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="432"/>
+                <rect key="frame" x="0.0" y="0.0" width="700" height="400"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pim-h6-WFy">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="432"/>
+                        <rect key="frame" x="0.0" y="0.0" width="700" height="400"/>
                         <wkWebViewConfiguration key="configuration">
                             <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                             <wkPreferences key="preferences"/>
