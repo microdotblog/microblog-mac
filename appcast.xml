@@ -5,6 +5,28 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.8.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added video window when double-clicking on uploads to open them.</li>
+					<li>Added width and height attributes to copied video tags.</li>
+					<li>Fixed updating Uploads pane when switching photo collections or current search.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Mon, 01 Dec 2025 09:45:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.8.2.zip" sparkle:shortVersionString="3.8.2" sparkle:version="225" length="4583426" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.8.1</title>
  			<description><![CDATA[
 				<style>
