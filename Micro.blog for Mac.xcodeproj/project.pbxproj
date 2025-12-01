@@ -17,6 +17,8 @@
 		4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; };
 		4B00B686255D842200CBE873 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4B00B678255D827800CBE873 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B0881C42C505A3100BA513D /* MBGlassController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0881C32C505A3100BA513D /* MBGlassController.m */; };
+		4B0E6A062EDD21F000946A13 /* VideoZoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B0E6A042EDD21F000946A13 /* VideoZoom.xib */; };
+		4B0E6A092EDD229C00946A13 /* MBVideoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0E6A082EDD229C00946A13 /* MBVideoZoomController.m */; };
 		4B1970702EB54AA500BFFD8E /* MBMoviesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */; };
 		4B1970732EB54B0700BFFD8E /* Movies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970712EB54B0700BFFD8E /* Movies.xib */; };
 		4B1970762EB553BD00BFFD8E /* MovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970742EB553BD00BFFD8E /* MovieCell.xib */; };
@@ -297,6 +299,9 @@
 		4B00B678255D827800CBE873 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Shared/Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		4B0881C22C505A3100BA513D /* MBGlassController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBGlassController.h; path = Source/MBGlassController.h; sourceTree = "<group>"; };
 		4B0881C32C505A3100BA513D /* MBGlassController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBGlassController.m; path = Source/MBGlassController.m; sourceTree = "<group>"; };
+		4B0E6A052EDD21F000946A13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/VideoZoom.xib; sourceTree = "<group>"; };
+		4B0E6A072EDD229C00946A13 /* MBVideoZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBVideoZoomController.h; path = Source/MBVideoZoomController.h; sourceTree = "<group>"; };
+		4B0E6A082EDD229C00946A13 /* MBVideoZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVideoZoomController.m; path = Source/MBVideoZoomController.m; sourceTree = "<group>"; };
 		4B19706E2EB54AA500BFFD8E /* MBMoviesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMoviesController.h; path = Source/MBMoviesController.h; sourceTree = "<group>"; };
 		4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMoviesController.m; path = Source/MBMoviesController.m; sourceTree = "<group>"; };
 		4B1970722EB54B0700BFFD8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Movies.xib; sourceTree = "<group>"; };
@@ -1023,6 +1028,8 @@
 				4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */,
 				4BB7449021E84AC500371388 /* RFPhotoZoomController.h */,
 				4BB7449121E84AC500371388 /* RFPhotoZoomController.m */,
+				4B0E6A072EDD229C00946A13 /* MBVideoZoomController.h */,
+				4B0E6A082EDD229C00946A13 /* MBVideoZoomController.m */,
 				4BB744A021EA4E1800371388 /* RFPhotoAltController.h */,
 				4BB744A121EA4E1800371388 /* RFPhotoAltController.m */,
 				4B608B3E1FFE7C1900589F77 /* RFNewPostAccessoryController.h */,
@@ -1256,6 +1263,7 @@
 				4BF5372F2247BDCD00CF9D66 /* PostCell.xib */,
 				4B2F97262E00B97B00A834C8 /* SelectiveUsernameCell.xib */,
 				4BB7448D21E84A4400371388 /* PhotoZoom.xib */,
+				4B0E6A042EDD21F000946A13 /* VideoZoom.xib */,
 				4B9F063E2767BC400007F21D /* Date.xib */,
 				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
 				4BDB3823278A838A00BD457C /* Preview.xib */,
@@ -1448,6 +1456,7 @@
 				4BB69068209A113500CD5E1E /* Instagram.xib in Resources */,
 				4BB990642A86861A00C490E2 /* TagCell.xib in Resources */,
 				4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */,
+				4B0E6A062EDD21F000946A13 /* VideoZoom.xib in Resources */,
 				4B37737D2C3DC451000495DF /* Info.xib in Resources */,
 				4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */,
 				4B1FA567269E0434006E0451 /* Discover.xib in Resources */,
@@ -1534,6 +1543,7 @@
 				4B2A47C222579C58003AF2EC /* SDAVAssetExportSession.m in Sources */,
 				4B2CAAC41F90652800D9B10E /* RFXMLRPCRequest.m in Sources */,
 				4B88CFBB2BBD9D3B0091BB19 /* MBLog.m in Sources */,
+				4B0E6A092EDD229C00946A13 /* MBVideoZoomController.m in Sources */,
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
@@ -1724,6 +1734,14 @@
 				4B001CE42B27AB1B00BBF456 /* Base */,
 			);
 			name = NotesKeyWindow.xib;
+			sourceTree = "<group>";
+		};
+		4B0E6A042EDD21F000946A13 /* VideoZoom.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B0E6A052EDD21F000946A13 /* Base */,
+			);
+			name = VideoZoom.xib;
 			sourceTree = "<group>";
 		};
 		4B1970712EB54B0700BFFD8E /* Movies.xib */ = {
