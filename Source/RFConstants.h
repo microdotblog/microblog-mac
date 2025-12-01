@@ -61,6 +61,9 @@ static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 #define kOpenPhotoAltKey @"alt" // NSString
 #define kOpenPhotoAllowCopyKey @"allow_copy" // NSNumber
 
+#define kOpenVideoURLNotification @"RFOpenVideoURL"
+#define kOpenVideoURLKey @"url" // NSURL
+
 #define kShowConversationNotification @"RFShowConversationNotification"
 #define kShowConversationPostIDKey @"post_id"
 
@@ -182,6 +185,8 @@ static NSString* const kNewPostWithPhotoNotification = @"MBNewPostWithPhotoNotif
 static NSString* const kNewPostWithPhotoURLKey = @"url";
 static NSString* const kNewPostWithPhotoPosterKey = @"poster";
 static NSString* const kNewPostWithPhotoAltKey = @"alt";
+static NSString* const kNewPostWithPhotoWidthKey = @"width";
+static NSString* const kNewPostWithPhotoHeightKey = @"height";
 
 static NSString* const kToggleMovieDisclosureNotification = @"MBToggleMovieDisclosureNotification";
 static NSString* const kToggleMovieDisclosureRowKey = @"row";

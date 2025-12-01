@@ -71,6 +71,12 @@
 	if (self.alt) {
 		[info setObject:self.alt forKey:kNewPostWithPhotoAltKey];
 	}
+	if (self.width > 0) {
+		[info setObject:@(self.width) forKey:kNewPostWithPhotoWidthKey];
+	}
+	if (self.height > 0) {
+		[info setObject:@(self.height) forKey:kNewPostWithPhotoHeightKey];
+	}
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:kNewPostWithPhotoNotification object:self userInfo:info];
 }
@@ -105,11 +111,16 @@
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	up.poster_url = self.poster_url;
 	up.alt = self.alt;
-	NSString* s = [up htmlTag];
-	
-	NSPasteboard* pb = [NSPasteboard generalPasteboard];
-	[pb clearContents];
-	[pb setString:s forType:NSPasteboardTypeString];
+	up.width = self.width;
+	up.height = self.height;
+
+	[up ensureDimensionsWithCompletion:^{
+		NSString* s = [up htmlTag];
+
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:s forType:NSPasteboardTypeString];
+	}];
 }
 
 - (IBAction) copyHTMLwithoutPlayer:(id)sender

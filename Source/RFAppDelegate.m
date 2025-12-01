@@ -19,6 +19,7 @@
 #import "RFMarkdownExportController.h"
 #import "RFDayOneExportController.h"
 #import "RFPhotoZoomController.h"
+#import "MBVideoZoomController.h"
 #import "RFBookmarkController.h"
 #import "RFPostWindowController.h"
 #import "RFPostController.h"
@@ -197,6 +198,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openMicroblogURLNotification:) name:kOpenMicroblogURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPhotoURLNotification:) name:kOpenPhotoURLNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openVideoURLNotification:) name:kOpenVideoURLNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(promptNewPostWithPhotoNotification:) name:kNewPostWithPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openPostingNotification:) name:kOpenPostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWindowDidCloseNotification:) name:kPostWindowDidCloseNotification object:nil];
@@ -656,6 +658,13 @@
 	[self.photoWindows addObject:controller];
 }
 
+- (void) showVideoWithURL:(NSString *)videoURL
+{
+	MBVideoZoomController* controller = [[MBVideoZoomController alloc] initWithURL:videoURL];
+	[controller showWindow:nil];
+	[self.photoWindows addObject:controller];
+}
+
 - (void) showReplyPostNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
@@ -683,19 +692,29 @@
 	[self showPhotoWithURL:url.absoluteString altText:alt allowCopy:allow_copy];
 }
 
+- (void) openVideoURLNotification:(NSNotification *)notification
+{
+	NSURL* url = [notification.userInfo objectForKey:kOpenVideoURLKey];
+	[self showVideoWithURL:url.absoluteString];
+}
+
 - (void) promptNewPostWithPhotoNotification:(NSNotification *)notification
 {
 	NSString* url = [notification.userInfo objectForKey:kNewPostWithPhotoURLKey];
 	NSString* poster_url = [notification.userInfo objectForKey:kNewPostWithPhotoPosterKey];
 	NSString* alt = [notification.userInfo objectForKey:kNewPostWithPhotoAltKey];
+	NSInteger width = [[notification.userInfo objectForKey:kNewPostWithPhotoWidthKey] integerValue];
+	NSInteger height = [[notification.userInfo objectForKey:kNewPostWithPhotoHeightKey] integerValue];
 
-	[self promptNewPostWithPhotoURL:url poster:poster_url altText:alt];
+	[self promptNewPostWithPhotoURL:url poster:poster_url altText:alt width:width height:height];
 }
 
-- (void) promptNewPostWithPhotoURL:(NSString *)url poster:(NSString *)posterURL altText:(NSString *)altText
+- (void) promptNewPostWithPhotoURL:(NSString *)url poster:(NSString *)posterURL altText:(NSString *)altText width:(NSInteger)width height:(NSInteger)height
 {
 	RFUpload* upload = [[RFUpload alloc] initWithURL:url];
 	upload.poster_url = posterURL;
+	upload.width = width;
+	upload.height = height;
 	
 	if ([upload isPhoto]) {
 		// make reference to already-uploaded photo
@@ -708,8 +727,10 @@
 	}
 	else {
 		// if not a photo, use HTML tag
-		NSString* s = [upload htmlTag];
-		[self showPostWithText:s];
+		[upload ensureDimensionsWithCompletion:^{
+			NSString* s = [upload htmlTag];
+			[self showPostWithText:s];
+		}];
 	}
 }
 

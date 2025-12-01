@@ -7,6 +7,8 @@
 //
 
 #import "RFUpload.h"
+#import "RFMacros.h"
+#import "UUHttpSession.h"
 
 @implementation RFUpload
 
@@ -46,13 +48,17 @@
 - (NSString *) htmlTag
 {
 	NSString* s;
+	NSString* size_attributes = @"";
+	if ((self.width > 0) && (self.height > 0)) {
+		size_attributes = [NSString stringWithFormat:@" width=\"%ld\" height=\"%ld\"", (long)self.width, (long)self.height];
+	}
 
 	if ([self isVideo]) {
 		if (self.poster_url.length > 0) {
-			s = [NSString stringWithFormat:@"<video src=\"%@\" poster=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"metadata\"></video>", self.url, self.poster_url];
+			s = [NSString stringWithFormat:@"<video src=\"%@\" poster=\"%@\"%@ controls=\"controls\" playsinline=\"playsinline\" preload=\"metadata\"></video>", self.url, self.poster_url, size_attributes];
 		}
 		else {
-			s = [NSString stringWithFormat:@"<video src=\"%@\" controls=\"controls\" playsinline=\"playsinline\" preload=\"metadata\"></video>", self.url];
+			s = [NSString stringWithFormat:@"<video src=\"%@\"%@ controls=\"controls\" playsinline=\"playsinline\" preload=\"metadata\"></video>", self.url, size_attributes];
 		}
 	}
 	else if ([self isAudio]) {
@@ -72,6 +78,66 @@
 	}
 
 	return s;
+}
+
+- (void) ensureDimensionsWithCompletion:(void (^)(void))handler
+{
+	if (![self isVideo]) {
+		RFDispatchMainAsync(^{
+			if (handler) {
+				handler();
+			}
+		});
+		return;
+	}
+
+	if ((self.width > 0) && (self.height > 0)) {
+		RFDispatchMainAsync(^{
+			if (handler) {
+				handler();
+			}
+		});
+		return;
+	}
+
+	if (self.poster_url.length == 0) {
+		RFDispatchMainAsync(^{
+			if (handler) {
+				handler();
+			}
+		});
+		return;
+	}
+
+	[UUHttpSession get:self.poster_url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
+		NSImage* img = nil;
+		if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+			img = response.parsedResponse;
+		}
+		else if (response.rawResponse) {
+			img = [[NSImage alloc] initWithData:response.rawResponse];
+		}
+
+		if (img) {
+			NSSize img_size = img.size;
+			for (NSImageRep* rep in img.representations) {
+				if ((rep.pixelsWide > img_size.width) && (rep.pixelsHigh > img_size.height)) {
+					img_size.width = rep.pixelsWide;
+					img_size.height = rep.pixelsHigh;
+					break;
+				}
+			}
+
+			self.width = img_size.width;
+			self.height = img_size.height;
+		}
+
+		RFDispatchMainAsync(^{
+			if (handler) {
+				handler();
+			}
+		});
+	}];
 }
 
 @end
