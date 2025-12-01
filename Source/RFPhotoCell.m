@@ -71,6 +71,12 @@
 	if (self.alt) {
 		[info setObject:self.alt forKey:kNewPostWithPhotoAltKey];
 	}
+	if (self.width > 0) {
+		[info setObject:@(self.width) forKey:kNewPostWithPhotoWidthKey];
+	}
+	if (self.height > 0) {
+		[info setObject:@(self.height) forKey:kNewPostWithPhotoHeightKey];
+	}
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:kNewPostWithPhotoNotification object:self userInfo:info];
 }

@@ -182,6 +182,8 @@ static NSString* const kNewPostWithPhotoNotification = @"MBNewPostWithPhotoNotif
 static NSString* const kNewPostWithPhotoURLKey = @"url";
 static NSString* const kNewPostWithPhotoPosterKey = @"poster";
 static NSString* const kNewPostWithPhotoAltKey = @"alt";
+static NSString* const kNewPostWithPhotoWidthKey = @"width";
+static NSString* const kNewPostWithPhotoHeightKey = @"height";
 
 static NSString* const kToggleMovieDisclosureNotification = @"MBToggleMovieDisclosureNotification";
 static NSString* const kToggleMovieDisclosureRowKey = @"row";

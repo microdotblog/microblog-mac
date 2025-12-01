@@ -688,14 +688,18 @@
 	NSString* url = [notification.userInfo objectForKey:kNewPostWithPhotoURLKey];
 	NSString* poster_url = [notification.userInfo objectForKey:kNewPostWithPhotoPosterKey];
 	NSString* alt = [notification.userInfo objectForKey:kNewPostWithPhotoAltKey];
+	NSInteger width = [[notification.userInfo objectForKey:kNewPostWithPhotoWidthKey] integerValue];
+	NSInteger height = [[notification.userInfo objectForKey:kNewPostWithPhotoHeightKey] integerValue];
 
-	[self promptNewPostWithPhotoURL:url poster:poster_url altText:alt];
+	[self promptNewPostWithPhotoURL:url poster:poster_url altText:alt width:width height:height];
 }
 
-- (void) promptNewPostWithPhotoURL:(NSString *)url poster:(NSString *)posterURL altText:(NSString *)altText
+- (void) promptNewPostWithPhotoURL:(NSString *)url poster:(NSString *)posterURL altText:(NSString *)altText width:(NSInteger)width height:(NSInteger)height
 {
 	RFUpload* upload = [[RFUpload alloc] initWithURL:url];
 	upload.poster_url = posterURL;
+	upload.width = width;
+	upload.height = height;
 	
 	if ([upload isPhoto]) {
 		// make reference to already-uploaded photo
@@ -708,8 +712,10 @@
 	}
 	else {
 		// if not a photo, use HTML tag
-		NSString* s = [upload htmlTag];
-		[self showPostWithText:s];
+		[upload ensureDimensionsWithCompletion:^{
+			NSString* s = [upload htmlTag];
+			[self showPostWithText:s];
+		}];
 	}
 }
 
