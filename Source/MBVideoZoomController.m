@@ -34,11 +34,12 @@
 
 - (void) setupVideo
 {
-	NSURL* url = [NSURL URLWithString:self.videoURL];
-	if (url) {
-		NSURLRequest* request = [NSURLRequest requestWithURL:url];
-		[self.webView loadRequest:request];
-	}
+	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Video" ofType:@"html"];
+	NSString* template_html = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
+	
+	NSString* html = [template_html stringByReplacingOccurrencesOfString:@"[URL]" withString:self.videoURL];
+
+	[self.webView loadHTMLString:html baseURL:nil];
 }
 
 - (void) updateTitle

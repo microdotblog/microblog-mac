@@ -19,6 +19,7 @@
 		4B0881C42C505A3100BA513D /* MBGlassController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0881C32C505A3100BA513D /* MBGlassController.m */; };
 		4B0E6A062EDD21F000946A13 /* VideoZoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B0E6A042EDD21F000946A13 /* VideoZoom.xib */; };
 		4B0E6A092EDD229C00946A13 /* MBVideoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0E6A082EDD229C00946A13 /* MBVideoZoomController.m */; };
+		4B0E6A0B2EDDE35B00946A13 /* Video.html in Resources */ = {isa = PBXBuildFile; fileRef = 4B0E6A0A2EDDE35B00946A13 /* Video.html */; };
 		4B1970702EB54AA500BFFD8E /* MBMoviesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */; };
 		4B1970732EB54B0700BFFD8E /* Movies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970712EB54B0700BFFD8E /* Movies.xib */; };
 		4B1970762EB553BD00BFFD8E /* MovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1970742EB553BD00BFFD8E /* MovieCell.xib */; };
@@ -302,6 +303,7 @@
 		4B0E6A052EDD21F000946A13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/VideoZoom.xib; sourceTree = "<group>"; };
 		4B0E6A072EDD229C00946A13 /* MBVideoZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBVideoZoomController.h; path = Source/MBVideoZoomController.h; sourceTree = "<group>"; };
 		4B0E6A082EDD229C00946A13 /* MBVideoZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVideoZoomController.m; path = Source/MBVideoZoomController.m; sourceTree = "<group>"; };
+		4B0E6A0A2EDDE35B00946A13 /* Video.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Video.html; path = Resources/Video.html; sourceTree = "<group>"; };
 		4B19706E2EB54AA500BFFD8E /* MBMoviesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMoviesController.h; path = Source/MBMoviesController.h; sourceTree = "<group>"; };
 		4B19706F2EB54AA500BFFD8E /* MBMoviesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMoviesController.m; path = Source/MBMoviesController.m; sourceTree = "<group>"; };
 		4B1970722EB54B0700BFFD8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Movies.xib; sourceTree = "<group>"; };
@@ -1223,6 +1225,7 @@
 				4B7F0AFB1BAF4C67004553A6 /* Info.plist */,
 				4B7F0AFF1BAF4CE7004553A6 /* Images.xcassets */,
 				4BDB3829278A8FE200BD457C /* Preview.html */,
+				4B0E6A0A2EDDE35B00946A13 /* Video.html */,
 				4BF1A1262BBF5BC200256D3C /* Posts.css */,
 				4B7F0AF51BAF4C37004553A6 /* MainMenu.xib */,
 				4B4DC44D1BB04B970095CCBB /* Timeline.xib */,
@@ -1476,6 +1479,7 @@
 				4B7F0B001BAF4CE7004553A6 /* Images.xcassets in Resources */,
 				4B1970882EBA4D1300BFFD8E /* About.xib in Resources */,
 				4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */,
+				4B0E6A0B2EDDE35B00946A13 /* Video.html in Resources */,
 				4B79E2932D089E0300A22861 /* CollectionCell.xib in Resources */,
 				4B3840CE2692019B00AD3781 /* Export.xib in Resources */,
 				4BE23F9B2A70110900E24718 /* Bookmarks.xib in Resources */,
