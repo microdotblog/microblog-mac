@@ -12,6 +12,11 @@
 
 @implementation MBMoviesTableView
 
+- (void) drawContextMenuHighlightForRow:(NSInteger)row
+{
+	// override to avoid the focus highlight rectangle
+}
+
 - (void) keyDown:(NSEvent *)event
 {
 	if ([[event characters] isEqualToString:@"\r"]) {
@@ -31,6 +36,15 @@
 	}
 	else {
 		[super keyDown:event];
+	}
+}
+
+- (void) willOpenMenu:(NSMenu *)menu withEvent:(NSEvent *)event
+{
+	NSInteger row = [self clickedRow];
+	if (row >= 0) {
+		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
+		[self selectRowIndexes:index_set byExtendingSelection:NO];
 	}
 }
 

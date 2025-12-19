@@ -91,6 +91,18 @@
 	}
 }
 
+- (IBAction) openInBrowser:(id)sender
+{
+}
+
+- (IBAction) copyLink:(id)sender
+{
+}
+
+- (IBAction) copyMarkdown:(id)sender
+{
+}
+
 - (NSString *) episodeDictionaryKeyForMovie:(MBMovie *)movie
 {
 	if (movie == nil) {
