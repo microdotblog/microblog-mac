@@ -149,7 +149,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="obO-bv-N1F"/>
-                <menuItem title="Open in Safari" id="VDp-cZ-9mK">
+                <menuItem title="Open in Safari" image="safari" catalog="system" id="VDp-cZ-9mK">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="-2" id="5Jd-Ue-7RC"/>
@@ -173,6 +173,7 @@
         </menu>
     </objects>
     <resources>
+        <image name="safari" catalog="system" width="15" height="15"/>
         <image name="text.page" catalog="system" width="14" height="16"/>
         <namedColor name="color_table_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

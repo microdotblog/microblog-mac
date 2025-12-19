@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,7 +33,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
                                 <clipView key="contentView" id="8G5-yN-Md5">
                                     <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" usesAutomaticRowHeights="YES" viewBased="YES" id="bsE-aL-qyD" customClass="RFPostTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="398" height="417"/>
@@ -112,7 +112,7 @@
                                 </connections>
                             </button>
                             <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PUH-Gq-2us">
-                                <rect key="frame" x="73" y="429" width="153" height="24"/>
+                                <rect key="frame" x="89" y="429" width="137" height="24"/>
                                 <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="VIK-jt-BUY">
                                     <font key="font" metaFont="system"/>
                                     <segments>
@@ -170,7 +170,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="jGG-Zb-2rI"/>
-                <menuItem title="Open in Browser" id="ttN-BC-piQ">
+                <menuItem title="Open in Browser" image="safari" catalog="system" id="ttN-BC-piQ">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="-1" id="dj9-N5-7N3"/>
@@ -186,4 +186,7 @@
             <point key="canvasLocation" x="330" y="-40"/>
         </menu>
     </objects>
+    <resources>
+        <image name="safari" catalog="system" width="15" height="15"/>
+    </resources>
 </document>

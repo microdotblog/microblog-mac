@@ -127,7 +127,7 @@
         </customView>
         <menu id="59v-IZ-1jn">
             <items>
-                <menuItem title="Open in Safari..." id="ZoC-Pe-9Pr">
+                <menuItem title="Open in Safari..." image="safari" catalog="system" id="ZoC-Pe-9Pr">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="-2" id="Pkx-PV-Iza"/>
@@ -151,6 +151,7 @@
     </objects>
     <resources>
         <image name="link" catalog="system" width="17" height="17"/>
+        <image name="safari" catalog="system" width="15" height="15"/>
         <image name="text.page" catalog="system" width="14" height="16"/>
     </resources>
 </document>
