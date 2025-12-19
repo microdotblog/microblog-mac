@@ -146,9 +146,9 @@
 	}
 	[self setupRequest:request];
 	
-	NSString* content_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+	NSString* multipart_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
 	NSMutableDictionary* headers = [request.headerFields mutableCopy];
-	[headers setObject:content_type forKey:@"Content-Type"];
+	[headers setObject:multipart_type forKey:@"Content-Type"];
 	request.headerFields = headers;
 
 	return [UUHttpSession executeRequest:request completionHandler:handler];
@@ -219,9 +219,9 @@
 	}
 	[self setupRequest:request];
 	
-//	NSString* content_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+	NSString* multipart_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
 	NSMutableDictionary* headers = [request.headerFields mutableCopy];
-	[headers setObject:content_type forKey:@"Content-Type"];
+	[headers setObject:multipart_type forKey:@"Content-Type"];
 	request.headerFields = headers;
 
 	return [UUHttpSession executeRequest:request completionHandler:handler];
