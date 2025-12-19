@@ -5,6 +5,28 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.8.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added right-click context menu to Movies pane, to open or copy the URL for a movie.</li>
+					<li>Added more context menu icons for macOS 26.</li>
+					<li>Fixed uploading image formats for some photos and screenshots.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 19 Dec 2025 11:45:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.8.3.zip" sparkle:shortVersionString="3.8.3" sparkle:version="228" length="4574708" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.8.2</title>
  			<description><![CDATA[
 				<style>
