@@ -45,7 +45,7 @@
 	NSString* filename;
 	NSBitmapImageFileType img_type;
 	NSString* shorter_uuid = [[[NSUUID UUID].UUIDString substringToIndex:8] lowercaseString];
-	if (type == NSPasteboardTypePNG) {
+	if ([type isEqualToString:NSPasteboardTypePNG]) {
 		filename = [NSString stringWithFormat:@"Paste-%@.png", shorter_uuid];
 		img_type = NSBitmapImageFileTypePNG;
 	}
