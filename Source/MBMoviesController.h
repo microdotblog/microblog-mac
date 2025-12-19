@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
+@property (strong, nonatomic) IBOutlet NSMenu* contextMenu;
+@property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
 
 @property (strong, nonatomic) NSArray* movies; // MBMovie
 @property (strong, nonatomic) NSMutableDictionary<NSString *, NSArray<MBMovie *> *> *openSeasons; // tmdb_id -> seasons

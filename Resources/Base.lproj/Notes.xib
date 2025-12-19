@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -56,8 +56,8 @@
                         <constraint firstAttribute="height" constant="1" id="ycX-9v-Sws"/>
                     </constraints>
                 </box>
-                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
-                    <rect key="frame" x="127" y="566" width="16" height="16"/>
+                <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
+                    <rect key="frame" x="129" y="566" width="16" height="16"/>
                 </progressIndicator>
                 <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8i-KT-xcK">
                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
@@ -70,7 +70,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
                                     <clipView key="contentView" id="mfH-x6-gOa">
                                         <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="Sif-9p-2X2" customClass="RFPostTableView">
                                                 <rect key="frame" x="0.0" y="0.0" width="243" height="551"/>
@@ -131,7 +131,7 @@
                                     <rect key="frame" x="0.0" y="43" width="242" height="466"/>
                                     <clipView key="contentView" drawsBackground="NO" id="HuO-TF-xiJ">
                                         <rect key="frame" x="0.0" y="0.0" width="242" height="466"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
                                                 <rect key="frame" x="0.0" y="0.0" width="232" height="456"/>
@@ -243,7 +243,7 @@
                     </holdingPriorities>
                 </splitView>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Shg-8z-gSu">
-                    <rect key="frame" x="12" y="564" width="105" height="20"/>
+                    <rect key="frame" x="12" y="564" width="107" height="20"/>
                     <popUpButtonCell key="cell" type="push" title="Notebook" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="k0r-Sd-GWc" id="jKc-n8-hQz">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="message"/>
@@ -306,7 +306,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="dwN-O2-xzr"/>
-                <menuItem title="Open in Safari" id="8k0-Rv-YZk">
+                <menuItem title="Open in Safari" image="safari" catalog="system" id="8k0-Rv-YZk">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="-2" id="Leu-ru-ILL"/>
@@ -323,6 +323,7 @@
         </menu>
     </objects>
     <resources>
+        <image name="safari" catalog="system" width="15" height="15"/>
         <namedColor name="color_highlight_background">
             <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

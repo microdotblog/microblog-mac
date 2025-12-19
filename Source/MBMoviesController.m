@@ -13,6 +13,7 @@
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "RFConstants.h"
+#import "NSString+Extras.h"
 
 @implementation MBMoviesController
 
@@ -33,6 +34,7 @@
 	[super viewDidLoad];
 	
 	[self setupTable];
+	[self setupBrowser];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(movieCellDidToggleDisclosure:) name:kToggleMovieDisclosureNotification object:nil];
 	
@@ -45,6 +47,11 @@
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
 	self.tableView.alphaValue = 0.0;
+}
+
+- (void) setupBrowser
+{
+	self.browserMenuItem.title = [NSString mb_openInBrowserString];
 }
 
 - (void) focusSearch
@@ -87,6 +94,45 @@
 		}
 		else if (m.url.length > 0) {
 			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:m.url]];
+		}
+	}
+}
+
+- (IBAction) openInBrowser:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBMovie* m = [self.movies objectAtIndex:row];
+		if (m.url.length > 0) {
+			NSURL* url = [NSURL URLWithString:m.url];
+			[[NSWorkspace sharedWorkspace] openURL:url];
+		}
+	}
+}
+
+- (IBAction) copyLink:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBMovie* m = [self.movies objectAtIndex:row];
+		if (m.url.length > 0) {
+			NSPasteboard* pb = [NSPasteboard generalPasteboard];
+			[pb clearContents];
+			[pb setString:m.url forType:NSPasteboardTypeString];
+		}
+	}
+}
+
+- (IBAction) copyMarkdown:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0) {
+		MBMovie* m = [self.movies objectAtIndex:row];
+		if (m.url.length > 0) {
+			NSPasteboard* pb = [NSPasteboard generalPasteboard];
+			[pb clearContents];
+			NSString* s = [NSString stringWithFormat:@"[%@](%@)", m.title, m.url];
+			[pb setString:s forType:NSPasteboardTypeString];
 		}
 	}
 }
@@ -205,6 +251,7 @@
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
 				m.posterURL = [item objectForKey:@"image"];
+				m.url = [item objectForKey:@"url"];
 				m.title = [item objectForKey:@"title"];
 				NSDictionary* metadata = [item objectForKey:@"_microblog"];
 				if ([metadata isKindOfClass:[NSDictionary class]]) {
@@ -313,11 +360,11 @@
 				MBMovie* m = [[MBMovie alloc] init];
 				m.isSearchedEpisode = YES;
 				m.posterURL = [item objectForKey:@"image"];
+				m.url = [item objectForKey:@"url"];
 				m.title = [item objectForKey:@"title"];
 				NSDictionary* metadata = [item objectForKey:@"_microblog"];
 				if ([metadata isKindOfClass:[NSDictionary class]]) {
 					m.tmdbID = [metadata objectForKey:@"tmdb_id"];
-					m.url = [metadata objectForKey:@"url"];
 					m.airDate = [metadata objectForKey:@"air_date"];
 					m.postText = [metadata objectForKey:@"post_text"];
 				}
@@ -590,6 +637,7 @@
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
 				m.posterURL = [item objectForKey:@"image"];
+				m.url = [item objectForKey:@"url"];
 				m.title = [item objectForKey:@"title"];
 				m.year = [[item objectForKey:@"_microblog"] objectForKey:@"year"];
 				m.director = [[item objectForKey:@"_microblog"] objectForKey:@"director"];

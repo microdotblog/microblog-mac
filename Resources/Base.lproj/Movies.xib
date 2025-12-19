@@ -9,6 +9,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBMoviesController">
             <connections>
+                <outlet property="browserMenuItem" destination="ZoC-Pe-9Pr" id="cVm-VJ-bWt"/>
+                <outlet property="contextMenu" destination="59v-IZ-1jn" id="yoQ-eP-DNI"/>
                 <outlet property="progressSpinner" destination="B4V-OG-cnp" id="7Hu-aa-5gI"/>
                 <outlet property="searchField" destination="lML-7D-4aS" id="z8f-Kh-Ojy"/>
                 <outlet property="tableView" destination="pJt-zO-Y8o" id="fMI-rc-3QI"/>
@@ -91,6 +93,7 @@
                                 <connections>
                                     <outlet property="dataSource" destination="-2" id="mPX-CJ-vV3"/>
                                     <outlet property="delegate" destination="-2" id="VTr-kd-HkM"/>
+                                    <outlet property="menu" destination="59v-IZ-1jn" id="rCh-Ot-JQn"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -122,5 +125,33 @@
             </constraints>
             <point key="canvasLocation" x="139" y="228"/>
         </customView>
+        <menu id="59v-IZ-1jn">
+            <items>
+                <menuItem title="Open in Safari..." image="safari" catalog="system" id="ZoC-Pe-9Pr">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="openInBrowser:" target="-2" id="Pkx-PV-Iza"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Link" image="link" catalog="system" id="pnl-Oc-xKB">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="copyLink:" target="-2" id="FG9-wH-b1a"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Copy Markdown" image="text.page" catalog="system" alternate="YES" id="aGZ-E4-JPL">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="copyMarkdown:" target="-2" id="t0J-0d-ekJ"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="-193" y="562"/>
+        </menu>
     </objects>
+    <resources>
+        <image name="link" catalog="system" width="17" height="17"/>
+        <image name="safari" catalog="system" width="15" height="15"/>
+        <image name="text.page" catalog="system" width="14" height="16"/>
+    </resources>
 </document>

@@ -82,7 +82,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="QEG-uN-E4D"/>
-                <menuItem title="Open in Browser" id="2cQ-VA-lrc">
+                <menuItem title="Open in Browser" image="safari" catalog="system" id="2cQ-VA-lrc">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="na8-0v-oNY" id="7Ry-WW-OFL"/>
@@ -94,25 +94,25 @@
                         <action selector="copyLink:" target="na8-0v-oNY" id="wZX-0v-2m4"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Copy HTML" id="5yO-zj-zj0">
+                <menuItem title="Copy HTML" image="text.page" catalog="system" id="5yO-zj-zj0">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="copyHTML:" target="na8-0v-oNY" id="PeO-9W-3XC"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Copy Markdown" alternate="YES" id="yKk-oV-Zk3">
+                <menuItem title="Copy Markdown" image="text.page" catalog="system" alternate="YES" id="yKk-oV-Zk3">
                     <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                     <connections>
                         <action selector="copyMarkdown:" target="na8-0v-oNY" id="Iho-G3-A3a"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Copy HTML for Narration" id="xEJ-wV-pYm">
+                <menuItem title="Copy HTML for Narration" image="waveform" catalog="system" id="xEJ-wV-pYm">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="copyHTMLwithoutPlayer:" target="na8-0v-oNY" id="A3Q-lD-hLO"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Get Info" id="Ly2-yn-oGG">
+                <menuItem title="Get Info" image="info.circle" catalog="system" id="Ly2-yn-oGG">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="getInfo:" target="na8-0v-oNY" id="wA6-1N-Heg"/>
@@ -122,4 +122,10 @@
             <point key="canvasLocation" x="-94" y="-412"/>
         </menu>
     </objects>
+    <resources>
+        <image name="info.circle" catalog="system" width="15" height="15"/>
+        <image name="safari" catalog="system" width="15" height="15"/>
+        <image name="text.page" catalog="system" width="14" height="16"/>
+        <image name="waveform" catalog="system" width="15" height="16"/>
+    </resources>
 </document>

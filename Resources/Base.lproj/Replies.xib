@@ -45,7 +45,7 @@
                                 <rect key="frame" x="-1" y="-1" width="468" height="358"/>
                                 <clipView key="contentView" id="YzZ-5e-l05">
                                     <rect key="frame" x="0.0" y="0.0" width="468" height="358"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="KFU-m9-WQE" customClass="RFPostTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="468" height="358"/>
@@ -169,7 +169,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="7hz-VC-ewq"/>
-                <menuItem title="Open in Browser" id="luX-bu-V6z">
+                <menuItem title="Open in Browser" image="safari" catalog="system" id="luX-bu-V6z">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="openInBrowser:" target="-2" id="g7E-lh-ffK"/>
@@ -185,4 +185,7 @@
             <point key="canvasLocation" x="608" y="16.5"/>
         </menu>
     </objects>
+    <resources>
+        <image name="safari" catalog="system" width="15" height="15"/>
+    </resources>
 </document>
