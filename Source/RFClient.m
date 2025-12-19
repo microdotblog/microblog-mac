@@ -169,10 +169,27 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	return [UUHttpSession executeRequest:request completionHandler:handler];
 }
 
-- (UUHttpRequest *) uploadImageData:(NSData *)imageData named:(NSString *)imageName httpMethod:(NSString *)method queryArguments:(NSDictionary *)args isVideo:(BOOL)isVideo isGIF:(BOOL)isGIF isPNG:(BOOL)isPNG completion:(void (^)(UUHttpResponse* response))handler
+- (UUHttpRequest *) uploadImageData:(NSData *)imageData named:(NSString *)imageName filename:(NSString *)filename httpMethod:(NSString *)method queryArguments:(NSDictionary *)args isVideo:(BOOL)isVideo isGIF:(BOOL)isGIF isPNG:(BOOL)isPNG completion:(void (^)(UUHttpResponse* response))handler
 {
 	NSString* boundary = [[NSProcessInfo processInfo] globallyUniqueString];
 	NSMutableData* d = [NSMutableData data];
+	NSString* ext = filename.pathExtension.lowercaseString;
+	BOOL is_png = isPNG || [ext isEqualToString:@"png"];
+	BOOL is_gif = isGIF || [ext isEqualToString:@"gif"];
+	BOOL is_jpeg = [ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"];
+	NSString* content_type = @"image/jpeg";
+	if (isVideo) {
+		content_type = @"video/quicktime";
+	}
+	else if (is_gif) {
+		content_type = @"image/gif";
+	}
+	else if (is_png) {
+		content_type = @"image/png";
+	}
+	else if (is_jpeg) {
+		content_type = @"image/jpeg";
+	}
 
 	for (NSString* k in [args allKeys]) {
 		NSString* val = [args objectForKey:k];
@@ -182,23 +199,25 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	}
 
 	if (imageData) {
-		NSString* filename;
-		if (isVideo) {
-			filename = @"video.mov";
-		}
-		else if (isGIF) {
-			filename = @"image.gif";
-		}
-		else if (isPNG) {
-			filename = @"image.png";
-		}
-		else {
-			filename = @"image.jpg";
+		NSString* actual_filename = filename;
+		if (actual_filename.length == 0) {
+			if (isVideo) {
+				actual_filename = @"video.mov";
+			}
+			else if (is_gif) {
+				actual_filename = @"image.gif";
+			}
+			else if (is_png) {
+				actual_filename = @"image.png";
+			}
+			else {
+				actual_filename = @"image.jpg";
+			}
 		}
 
 		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, filename] dataUsingEncoding:NSUTF8StringEncoding]];
-		[d appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, actual_filename] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", content_type] dataUsingEncoding:NSUTF8StringEncoding]];
 		[d appendData:imageData];
 		[d appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 	}
@@ -215,7 +234,7 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	}
 	[self setupRequest:request];
 	
-	NSString* content_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+//	NSString* content_type = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
 	NSMutableDictionary* headers = [request.headerFields mutableCopy];
 	[headers setObject:content_type forKey:@"Content-Type"];
 	request.headerFields = headers;

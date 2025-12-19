@@ -1901,6 +1901,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 	
 	if (d) {
+		NSString* filename = photo.fileURL.lastPathComponent;
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
@@ -1910,7 +1911,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			NSDictionary* args = @{
 				@"mp-destination": destination_uid
 			};
-			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF isPNG:photo.isPNG completion:^(UUHttpResponse* response) {
+			[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF isPNG:photo.isPNG completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{
@@ -1930,7 +1931,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			RFMicropub* client = [[RFMicropub alloc] initWithURL:micropub_endpoint];
 			NSDictionary* args = @{
 			};
-			[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo completion:^(UUHttpResponse* response) {
+			[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF isPNG:photo.isPNG completion:^(UUHttpResponse* response) {
 				NSDictionary* headers = response.httpResponse.allHeaderFields;
 				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{

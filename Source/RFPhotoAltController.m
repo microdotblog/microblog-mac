@@ -136,7 +136,14 @@ static NSInteger const kMaxAltTextChecks = 20;
 	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Uploading...";
 
-	NSData* d = [self.photo jpegData];
+	NSData* d = nil;
+	NSString* filename = self.photo.fileURL.lastPathComponent;
+	if (self.photo.isGIF || self.photo.isPNG) {
+		d = [NSData dataWithContentsOfURL:self.photo.fileURL];
+	}
+	if (!d) {
+		d = [self.photo jpegData];
+	}
 	if (!d) {
 		[self.progressSpinner stopAnimation:nil];
 		self.progressStatusField.stringValue = @"Failed to load image";
@@ -146,7 +153,7 @@ static NSInteger const kMaxAltTextChecks = 20;
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	NSDictionary* args = [RFSettings networkingArgsForDestination];
 
-	[client uploadImageData:d named:@"file" httpMethod:@"POST" queryArguments:args isVideo:self.photo.isVideo isGIF:self.photo.isGIF isPNG:self.photo.isPNG completion:^(UUHttpResponse* response) {
+	[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:self.photo.isVideo isGIF:self.photo.isGIF isPNG:self.photo.isPNG completion:^(UUHttpResponse* response) {
 		if (self.isCancelled) {
 			return;
 		}
