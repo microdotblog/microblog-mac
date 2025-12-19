@@ -9,6 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MBMoviesController">
             <connections>
+                <outlet property="browserMenuItem" destination="ZoC-Pe-9Pr" id="cVm-VJ-bWt"/>
                 <outlet property="contextMenu" destination="59v-IZ-1jn" id="yoQ-eP-DNI"/>
                 <outlet property="progressSpinner" destination="B4V-OG-cnp" id="7Hu-aa-5gI"/>
                 <outlet property="searchField" destination="lML-7D-4aS" id="z8f-Kh-Ojy"/>
