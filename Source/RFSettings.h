@@ -40,6 +40,8 @@ static NSString* const kDayOneJournalName = @"DayOneJournalName";
 static NSString* const kTemporaryFoldersPrefKey = @"TemporaryFolders";
 static NSString* const kIsShowingBookmarkSummaries = @"IsShowingBookmarkSummaries";
 static NSString* const kIsUsingBlogThemePreview = @"IsUsingBlogThemePreview";
+static NSString* const kIsShowingCategories = @"IsShowingCategories";
+static NSString* const kIsShowingCrosspostServices = @"IsShowingCrosspostServices";
 
 @interface RFSettings : NSObject
 
