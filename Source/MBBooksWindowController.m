@@ -157,57 +157,33 @@
 {
 	self.booksCountField.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
-
-	NSString* url = @"https://www.googleapis.com/books/v1/volumes";
 	
 	NSDictionary* args = @{
-		@"q": search
+		@"q": search,
+		@"format": @"jsonfeed"
 	};
 	
-	UUHttpRequest* request = [UUHttpRequest getRequest:url queryArguments:args];
-	[UUHttpSession executeRequest:request completionHandler:^(UUHttpResponse* response) {
+	RFClient* client = [[RFClient alloc] initWithPath:@"/books/search"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_books = [NSMutableArray array];
 			
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
-				NSDictionary* volume_info = [item objectForKey:@"volumeInfo"];
-
-				NSString* title = [volume_info objectForKey:@"title"];
-				NSArray* authors = [volume_info objectForKey:@"authors"];
-				if (authors.count == 0) {
-					authors = @[];
-				}
-				NSString* description = [volume_info objectForKey:@"description"];
-
-				NSString* cover_url = @"";
-				if ([volume_info objectForKey:@"imageLinks"] != nil) {
-					cover_url = [[volume_info objectForKey:@"imageLinks"] objectForKey:@"smallThumbnail"];
-					if ([cover_url containsString:@"http://"]) {
-						cover_url = [cover_url stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
-					}
-				}
-
-				NSString* best_isbn = @"";
-				NSMutableArray* isbns = [volume_info objectForKey:@"industryIdentifiers"];
-				if (isbns != nil) {
-					for (NSDictionary* isbn in isbns) {
-						if ([[isbn objectForKey:@"type"] isEqualToString:@"ISBN_13"]) {
-							best_isbn = [isbn objectForKey:@"identifier"];
-							break;
-						}
-						else if ([[isbn objectForKey:@"type"] isEqualToString:@"ISBN_10"]) {
-							best_isbn = [isbn objectForKey:@"identifier"];
-						}
+				NSMutableArray* author_names = [NSMutableArray array];
+				for (NSDictionary* info in [item objectForKey:@"authors"]) {
+					NSString* author_name = [info objectForKey:@"name"];
+					if (author_name) {
+						[author_names addObject:author_name];
 					}
 				}
 
 				MBBook* b = [[MBBook alloc] init];
-				b.title = title;
-				b.authors = authors;
-				b.coverURL = cover_url;
-				b.isbn = best_isbn;
-				b.bookDescription = description;
+				b.title = [item objectForKey:@"title"];
+				b.authors = author_names;
+				b.coverURL = [item objectForKey:@"image"];
+				b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
+				b.bookDescription = [item objectForKey:@"content_text"];
 
 				[new_books addObject:b];
 			}
