@@ -5,6 +5,26 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.8.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Fixed books search to use a more reliable source for book data.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Thu, 05 Mar 2026 16:35:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.8.4.zip" sparkle:shortVersionString="3.8.4" sparkle:version="231" length="4574708" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.8.3</title>
  			<description><![CDATA[
 				<style>
