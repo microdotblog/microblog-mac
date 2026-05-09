@@ -107,7 +107,7 @@ static NSString* const RFDestinationsCacheFilename = @"Destinations.json";
 
 @interface RFHostnameField ()
 
-@property (strong, nonatomic) NSImage* chevronImage;
+@property (strong, nonatomic) NSImageView* chevronView;
 @property (strong, nonatomic) NSTrackingArea* trackingArea;
 @property (assign, nonatomic) BOOL isHovering;
 @property (copy, nonatomic) NSString* displayString;
@@ -138,12 +138,23 @@ static NSString* const RFDestinationsCacheFilename = @"Destinations.json";
 
 - (void) setupChevron
 {
-	if (self.chevronImage != nil) {
+	if (self.chevronView != nil) {
 		return;
 	}
 
-	self.chevronImage = [NSImage imageWithSystemSymbolName:@"chevron.down" accessibilityDescription:@"Show Blogs"];
+	NSImage* chevron_image = [NSImage imageWithSystemSymbolName:@"chevron.down" accessibilityDescription:@"Show Blogs"];
+	self.chevronView = [[NSImageView alloc] initWithFrame:NSZeroRect];
+	self.chevronView.image = chevron_image;
+	self.chevronView.imageScaling = NSImageScaleProportionallyDown;
+	self.chevronView.hidden = YES;
+	[self addSubview:self.chevronView];
 	self.displayString = self.stringValue ?: @"";
+}
+
+- (void) layout
+{
+	[super layout];
+	[self updateChevronFrame];
 }
 
 - (void) setStringValue:(NSString *)stringValue
@@ -151,6 +162,26 @@ static NSString* const RFDestinationsCacheFilename = @"Destinations.json";
 	self.displayString = stringValue ?: @"";
 	[super setStringValue:self.displayString];
 	[self updateChevronVisibility];
+}
+
+- (void) updateChevronFrame
+{
+	CGFloat size = 10.0;
+	CGFloat spacing = 6.0;
+	NSFont* font = self.font ?: [NSFont systemFontOfSize:[NSFont systemFontSize]];
+	CGFloat text_width = ceil([self.displayString ?: @"" sizeWithAttributes:@{ NSFontAttributeName: font }].width);
+	CGFloat text_x = 0.0;
+
+	if (self.alignment == NSTextAlignmentCenter) {
+		text_x = floor((NSWidth(self.bounds) - text_width) / 2.0);
+	}
+	else if (self.alignment == NSTextAlignmentRight) {
+		text_x = NSWidth(self.bounds) - text_width;
+	}
+
+	CGFloat x = text_x + text_width + spacing;
+	CGFloat y = floor(NSMidY(self.bounds) - (size / 2.0));
+	self.chevronView.frame = NSMakeRect(x, y, size, size);
 }
 
 - (void) updateTrackingAreas
@@ -196,22 +227,8 @@ static NSString* const RFDestinationsCacheFilename = @"Destinations.json";
 
 - (void) updateChevronVisibility
 {
-	if (!(self.showsChevron && self.isHovering)) {
-		[super setStringValue:self.displayString ?: @""];
-		return;
-	}
-
-	NSMutableAttributedString* title = [[NSMutableAttributedString alloc] initWithString:self.displayString ?: @"" attributes:@{
-		NSFontAttributeName: self.font ?: [NSFont systemFontOfSize:[NSFont systemFontSize]],
-		NSForegroundColorAttributeName: self.textColor ?: [NSColor labelColor]
-	}];
-	[title appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-
-	NSTextAttachment* attachment = [[NSTextAttachment alloc] init];
-	attachment.image = self.chevronImage;
-	attachment.bounds = NSMakeRect(0.0, -1.0, 10.0, 10.0);
-	[title appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-	self.attributedStringValue = title;
+	[self updateChevronFrame];
+	self.chevronView.hidden = !(self.showsChevron && self.isHovering);
 }
 
 @end
