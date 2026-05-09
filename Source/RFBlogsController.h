@@ -16,4 +16,24 @@
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary (uid, name)
 @property (strong, nonatomic) NSTimer* progressTimer;
 
++ (NSArray *) cachedDestinations;
++ (void) saveCachedDestinationsFrom:(NSArray *)destinations;
++ (void) fetchDestinationsInBackgroundWithCompletion:(void (^)(NSArray* destinations))completion;
++ (NSMenu *) blogsMenuWithTarget:(id)target action:(SEL)action;
++ (void) selectDestinationMenuItem:(NSMenuItem *)menuItem;
++ (BOOL) hasMultipleCachedDestinations;
+
+@end
+
+@interface RFHostnameButton : NSButton
+
+@property (assign, nonatomic) BOOL showsChevron;
+
+@end
+
+@interface RFHostnameField : NSTextField
+
+@property (assign, nonatomic) BOOL showsChevron;
+@property (copy, nonatomic) void (^mouseDownHandler)(RFHostnameField* field, NSEvent* event);
+
 @end

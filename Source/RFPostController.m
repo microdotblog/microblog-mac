@@ -162,6 +162,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self setupButtons];
 	[self setupUsernames];
 	[self setupNotifications];
+	[self refreshDestinationsFromCache];
 
 	[self updateTitleHeaderWithAnimation:NO];
 
@@ -248,8 +249,22 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			self.blognameField.stringValue = endpoint_url.host;
 		}
 
-		NSGestureRecognizer* click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(blogNameClicked:)];
-		[self.blognameField addGestureRecognizer:click];
+		if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
+			__weak RFPostController* weak_self = self;
+			((RFHostnameField*) self.blognameField).mouseDownHandler = ^(RFHostnameField* field, NSEvent* event) {
+				#pragma unused(field)
+				#pragma unused(event)
+				[weak_self showBlogsMenu];
+			};
+		}
+		else {
+			NSGestureRecognizer* click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(blogNameClicked:)];
+			[self.blognameField addGestureRecognizer:click];
+		}
+	}
+
+	if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
+		((RFHostnameField*) self.blognameField).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
 	}
 }
 
@@ -410,6 +425,32 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) blogNameClicked:(NSGestureRecognizer *)gesture
 {
 	[self showBlogsMenu];
+}
+
+- (void) refreshDestinationsFromCache
+{
+	NSArray* cached_destinations = [RFBlogsController cachedDestinations];
+	if (cached_destinations.count > 0) {
+		self.destinations = cached_destinations;
+	}
+
+	if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
+		((RFHostnameField*) self.blognameField).showsChevron = (cached_destinations.count > 1);
+	}
+}
+
+- (void) refreshDestinationsCache
+{
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
+	}
+
+	[RFBlogsController fetchDestinationsInBackgroundWithCompletion:^(NSArray* destinations) {
+		if (destinations.count > 0) {
+			self.destinations = destinations;
+		}
+		[self setupBlogName];
+	}];
 }
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
@@ -940,7 +981,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
 	[self setupBlogName];
-	[self hideBlogsMenu];
 	[self downloadCategories];
 	[self downloadBlogs];
 }
@@ -1323,35 +1363,17 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) showBlogsMenu
 {
-	if (self.blogsMenuPopover) {
-		[self hideBlogsMenu];
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
 	}
-	else {
-		if (![RFSettings boolForKey:kExternalBlogIsPreferred]) {
-			RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
-			
-			self.blogsMenuPopover = [[NSPopover alloc] init];
-			self.blogsMenuPopover.contentViewController = blogs_controller;
-			self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
-			self.blogsMenuPopover.delegate = self;
 
-			NSRect r = self.blognameField.bounds;
-			[self.blogsMenuPopover showRelativeToRect:r ofView:self.blognameField preferredEdge:NSRectEdgeMaxY];
-		}
+	NSMenu* menu = [RFBlogsController blogsMenuWithTarget:[RFBlogsController class] action:@selector(selectDestinationMenuItem:)];
+	if (menu.numberOfItems == 0) {
+		return;
 	}
-}
 
-- (void) hideBlogsMenu
-{
-	if (self.blogsMenuPopover) {
-		[self.blogsMenuPopover performClose:nil];
-		self.blogsMenuPopover = nil;
-	}
-}
-
-- (void) popoverDidClose:(NSNotification *)notification
-{
-	self.blogsMenuPopover = nil;
+	NSPoint menu_point = NSMakePoint(0.0, NSMinY(self.blognameField.bounds));
+	[menu popUpMenuPositioningItem:nil atLocation:menu_point inView:self.blognameField];
 }
 
 #pragma mark -
@@ -2381,6 +2403,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			self.destinations = [response.parsedResponse objectForKey:@"destination"];
+			[RFBlogsController saveCachedDestinationsFrom:self.destinations];
 
 			NSArray* syndicate_to = [response.parsedResponse objectForKey:@"syndicate-to"];
 			if (syndicate_to) {

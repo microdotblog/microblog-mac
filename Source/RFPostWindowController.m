@@ -212,6 +212,7 @@
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
 {
 	[self.postController becomeFirstResponder];
+	[self.postController refreshDestinationsCache];
 }
 
 #pragma mark -

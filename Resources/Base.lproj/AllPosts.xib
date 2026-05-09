@@ -98,7 +98,7 @@
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="HkM-wg-aGS">
                                 <rect key="frame" x="12" y="415" width="374" height="5"/>
                             </box>
-                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9">
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9" customClass="RFHostnameButton">
                                 <rect key="frame" x="12" y="425" width="64" height="32"/>
                                 <buttonCell key="cell" type="bevel" title="hostname" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

@@ -89,7 +89,7 @@
                         <action selector="choosePhoto:" target="-2" id="XS9-GS-Voh"/>
                     </connections>
                 </button>
-                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W2B-cl-D6d">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W2B-cl-D6d" customClass="RFHostnameField">
                     <rect key="frame" x="81" y="10" width="240" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="test.micro.blog" id="LEY-Rx-Gzi">
                         <font key="font" metaFont="menu" size="14"/>

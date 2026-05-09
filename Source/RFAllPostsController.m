@@ -20,6 +20,12 @@
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
 
+@interface RFAllPostsController ()
+
+@property (assign, nonatomic) BOOL isObservingWindowNotifications;
+
+@end
+
 @implementation RFAllPostsController
 
 - (id) initShowingPages:(BOOL)isShowingPages
@@ -46,6 +52,35 @@
 	[self fetchDrafts];
 }
 
+- (void) viewDidAppear
+{
+	[super viewDidAppear];
+
+	if (!self.isObservingWindowNotifications && self.view.window != nil) {
+		self.isObservingWindowNotifications = YES;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
+	}
+
+	[self refreshDestinationsCache];
+}
+
+- (void) dealloc
+{
+	if (self.isObservingWindowNotifications) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+	}
+}
+
+- (void) viewDidDisappear
+{
+	[super viewDidDisappear];
+
+	if (self.isObservingWindowNotifications) {
+		self.isObservingWindowNotifications = NO;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+	}
+}
+
 - (void) setupTable
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
@@ -62,6 +97,10 @@
 	}
 	else {
 		self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+
+	if ([self.blogNameButton isKindOfClass:[RFHostnameButton class]]) {
+		((RFHostnameButton*) self.blogNameButton).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
 	}
 }
 
@@ -353,37 +392,36 @@
 	[self showBlogsMenu];
 }
 
+- (void) windowDidBecomeKeyNotification:(NSNotification *)notification
+{
+	[self refreshDestinationsCache];
+}
+
+- (void) refreshDestinationsCache
+{
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
+	}
+
+	[RFBlogsController fetchDestinationsInBackgroundWithCompletion:^(NSArray* destinations) {
+		#pragma unused(destinations)
+		[self setupBlogName];
+	}];
+}
+
 - (void) showBlogsMenu
 {
-	if (self.blogsMenuPopover) {
-		[self hideBlogsMenu];
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
 	}
-	else {
-		if (![RFSettings boolForKey:kExternalBlogIsPreferred]) {
-			RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
-			
-			self.blogsMenuPopover = [[NSPopover alloc] init];
-			self.blogsMenuPopover.contentViewController = blogs_controller;
-			self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
-			self.blogsMenuPopover.delegate = self;
 
-			NSRect r = self.blogNameButton.bounds;
-			[self.blogsMenuPopover showRelativeToRect:r ofView:self.blogNameButton preferredEdge:NSRectEdgeMaxY];
-		}
+	NSMenu* menu = [RFBlogsController blogsMenuWithTarget:[RFBlogsController class] action:@selector(selectDestinationMenuItem:)];
+	if (menu.numberOfItems == 0) {
+		return;
 	}
-}
 
-- (void) hideBlogsMenu
-{
-	if (self.blogsMenuPopover) {
-		[self.blogsMenuPopover performClose:nil];
-		self.blogsMenuPopover = nil;
-	}
-}
-
-- (void) popoverDidClose:(NSNotification *)notification
-{
-	self.blogsMenuPopover = nil;
+	NSPoint menu_point = NSMakePoint(0.0, NSMinY(self.blogNameButton.bounds));
+	[menu popUpMenuPositioningItem:nil atLocation:menu_point inView:self.blogNameButton];
 }
 
 - (void) updatedBlogNotification:(NSNotification *)notification
@@ -392,7 +430,6 @@
 	[self.segmentedControl setSelectedSegment:0];
 	
 	[self setupBlogName];
-	[self hideBlogsMenu];
 	
 	[self fetchPosts];
 	[self fetchDrafts];

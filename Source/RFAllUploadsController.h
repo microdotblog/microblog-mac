@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBCollection;
 @class MBUploadProgress;
 
-@interface RFAllUploadsController : NSViewController <NSPopoverDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource>
+@interface RFAllUploadsController : NSViewController <NSCollectionViewDelegate, NSCollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSCollectionView* collectionView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
 
 @property (strong, nonatomic) NSArray* allPosts; // RFUpload
-@property (strong, nonatomic, nullable) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic, nullable) MBCollection* selectedCollection;
 @property (strong, nonatomic, nullable) MBUploadProgress* uploader;
 @property (strong, nonatomic, nullable) NSTimer* uploadsTimer;

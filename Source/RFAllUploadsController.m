@@ -27,6 +27,12 @@
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
+@interface RFAllUploadsController ()
+
+@property (assign, nonatomic) BOOL isObservingWindowNotifications;
+
+@end
+
 @implementation RFAllUploadsController
 
 - (id) init
@@ -53,6 +59,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) viewDidAppear
 {
 	[super viewDidAppear];
+
+	if (!self.isObservingWindowNotifications && self.view.window != nil) {
+		self.isObservingWindowNotifications = YES;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
+	}
 	
 	RFDispatchSeconds(0.5, ^{
 		// run in a bit to make sure resonder chain is set up
@@ -60,11 +71,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	});
 	
 	[self startUploadsTimer];
+	[self refreshDestinationsCache];
 }
 
 - (void) viewDidDisappear
 {
 	[super viewDidDisappear];
+
+	if (self.isObservingWindowNotifications) {
+		self.isObservingWindowNotifications = NO;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+	}
 	
 	[self invalidateUploadsTimer];
 	[self.uploader cancelUpload];
@@ -73,6 +90,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) dealloc
 {
+	if (self.isObservingWindowNotifications) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+	}
+
 	[self invalidateUploadsTimer];
 	[self.uploader cancelUpload];
 	self.uploader = nil;
@@ -124,6 +145,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     else {
         self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
     }
+
+	if ([self.blogNameButton isKindOfClass:[RFHostnameButton class]]) {
+		((RFHostnameButton*) self.blogNameButton).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
+	}
 }
 
 - (void) setupNotifications
@@ -339,6 +364,23 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self showBlogsMenu];
 }
 
+- (void) windowDidBecomeKeyNotification:(NSNotification *)notification
+{
+	[self refreshDestinationsCache];
+}
+
+- (void) refreshDestinationsCache
+{
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
+	}
+
+	[RFBlogsController fetchDestinationsInBackgroundWithCompletion:^(NSArray* destinations) {
+		#pragma unused(destinations)
+		[self setupBlogName];
+	}];
+}
+
 - (IBAction) cancelUpload:(id)sender
 {
 	MBUploadProgress* uploader = self.uploader;
@@ -380,41 +422,22 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) showBlogsMenu
 {
-    if (self.blogsMenuPopover) {
-        [self hideBlogsMenu];
-    }
-    else {
-        if (![RFSettings boolForKey:kExternalBlogIsPreferred]) {
-            RFBlogsController* blogs_controller = [[RFBlogsController alloc] init];
-            
-            self.blogsMenuPopover = [[NSPopover alloc] init];
-            self.blogsMenuPopover.contentViewController = blogs_controller;
-            self.blogsMenuPopover.behavior = NSPopoverBehaviorTransient;
-            self.blogsMenuPopover.delegate = self;
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
+	}
 
-            NSRect r = self.blogNameButton.bounds;
-            [self.blogsMenuPopover showRelativeToRect:r ofView:self.blogNameButton preferredEdge:NSRectEdgeMaxY];
-        }
-    }
-}
+	NSMenu* menu = [RFBlogsController blogsMenuWithTarget:[RFBlogsController class] action:@selector(selectDestinationMenuItem:)];
+	if (menu.numberOfItems == 0) {
+		return;
+	}
 
-- (void) hideBlogsMenu
-{
-    if (self.blogsMenuPopover) {
-        [self.blogsMenuPopover performClose:nil];
-        self.blogsMenuPopover = nil;
-    }
-}
-
-- (void) popoverDidClose:(NSNotification *)notification
-{
-    self.blogsMenuPopover = nil;
+	NSPoint menu_point = NSMakePoint(0.0, NSMinY(self.blogNameButton.bounds));
+	[menu popUpMenuPositioningItem:nil atLocation:menu_point inView:self.blogNameButton];
 }
 
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
     [self setupBlogName];
-    [self hideBlogsMenu];
 
 	self.selectedCollection = nil;
 	
