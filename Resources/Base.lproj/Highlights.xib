@@ -22,13 +22,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
-                    <rect key="frame" x="0.0" y="0.0" width="500" height="499"/>
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
                     <clipView key="contentView" drawsBackground="NO" id="Z2x-kS-S6r">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="499"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="60" usesAutomaticRowHeights="YES" viewBased="YES" id="N7o-iT-Tun" customClass="MBHighlightsTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="499"/>
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -86,7 +86,7 @@
                     </scroller>
                 </scrollView>
                 <box autoresizesSubviews="NO" boxType="custom" borderType="none" translatesAutoresizingMaskIntoConstraints="NO" id="iLe-1W-Cas" customClass="MBOutlineHeaderBox">
-                    <rect key="frame" x="0.0" y="499" width="500" height="44"/>
+                    <rect key="frame" x="0.0" y="500" width="500" height="44"/>
                     <view key="contentView" id="rs8-VO-drM">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -138,7 +138,7 @@
                 <constraint firstItem="JbW-2g-UKv" firstAttribute="top" secondItem="iLe-1W-Cas" secondAttribute="bottom" id="D7I-gN-sCO"/>
                 <constraint firstAttribute="bottom" secondItem="JbW-2g-UKv" secondAttribute="bottom" id="F2s-d3-O4t"/>
                 <constraint firstAttribute="trailing" secondItem="iLe-1W-Cas" secondAttribute="trailing" id="GtE-nl-0cY"/>
-                <constraint firstItem="iLe-1W-Cas" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="VkZ-o9-4Du"/>
+                <constraint firstItem="iLe-1W-Cas" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="-1" id="VkZ-o9-4Du"/>
                 <constraint firstItem="JbW-2g-UKv" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="XPH-IL-lny"/>
                 <constraint firstItem="iLe-1W-Cas" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="bU2-PG-VfI"/>
             </constraints>

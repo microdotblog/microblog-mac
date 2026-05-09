@@ -140,6 +140,7 @@
 		4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86742E6CB16500697E41 /* MBBookNoteController.m */; };
 		4B5D867B2E6CB1DE00697E41 /* BookNoteWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */; };
 		4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */; };
+		4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
 		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB424E44853007674FF /* PostWindow.xib */; };
@@ -555,6 +556,8 @@
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
+		4B6F8EA12EF01A7C00A1B2C3 /* MBSplitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSplitView.h; path = Source/MBSplitView.h; sourceTree = "<group>"; };
+		4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSplitView.m; path = Source/MBSplitView.m; sourceTree = "<group>"; };
 		4B71E6A12DE0C94D0097E1F3 /* HTMLNode+Mutating.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "HTMLNode+Mutating.h"; path = "Shared/HTMLParser/HTMLNode+Mutating.h"; sourceTree = "<group>"; };
 		4B71E6A22DE0C94D0097E1F3 /* HTMLNode+Mutating.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "HTMLNode+Mutating.m"; path = "Shared/HTMLParser/HTMLNode+Mutating.m"; sourceTree = "<group>"; };
 		4B79E2842D089BC500A22861 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Collections.xib; sourceTree = "<group>"; };
@@ -1060,6 +1063,8 @@
 				4BF612BA2B1EF89800F415AA /* MBDraftLabel.m */,
 				4BD833A1273C60A5007350F2 /* RFPostTableView.h */,
 				4BD833A2273C60A5007350F2 /* RFPostTableView.m */,
+				4B6F8EA12EF01A7C00A1B2C3 /* MBSplitView.h */,
+				4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */,
 				4BF7E53228394C5C00500C59 /* MBBooksTableView.h */,
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
@@ -1573,6 +1578,7 @@
 				4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
+				4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
