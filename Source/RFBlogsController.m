@@ -367,6 +367,24 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 	}
 }
 
++ (void) clearCachedDestinations
+{
+	NSString* cache_file = [self destinationsCacheFile];
+	if (cache_file.length > 0) {
+		BOOL is_directory = NO;
+		if ([[NSFileManager defaultManager] fileExistsAtPath:cache_file isDirectory:&is_directory] && !is_directory) {
+			[[NSFileManager defaultManager] removeItemAtPath:cache_file error:nil];
+		}
+	}
+
+	for (RFAccount* account in [RFSettings accounts]) {
+		if (account.username.length > 0) {
+			NSString* pref_key = [NSString stringWithFormat:@"%@_%@", account.username, @"Destinations"];
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:pref_key];
+		}
+	}
+}
+
 + (void) fetchDestinationsInBackgroundWithCompletion:(void (^)(NSArray* destinations))completion
 {
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];

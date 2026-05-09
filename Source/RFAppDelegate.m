@@ -23,6 +23,7 @@
 #import "RFBookmarkController.h"
 #import "RFPostWindowController.h"
 #import "RFPostController.h"
+#import "RFBlogsController.h"
 #import "MBBlogImportController.h"
 #import "MBPreviewController.h"
 #import "MBEditTagsController.h"
@@ -510,6 +511,8 @@
 
 - (IBAction) signOut:(id)sender
 {
+	[RFBlogsController clearCachedDestinations];
+
 	for (RFAccount* a in [RFSettings accounts]) {
 		NSString* microblog_username = [RFSettings stringForKey:kAccountUsername account:a];
 		NSString* external_username = [RFSettings stringForKey:kExternalBlogUsername account:a];

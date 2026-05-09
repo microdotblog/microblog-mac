@@ -18,6 +18,7 @@
 
 + (NSArray *) cachedDestinations;
 + (void) saveCachedDestinationsFrom:(NSArray *)destinations;
++ (void) clearCachedDestinations;
 + (void) fetchDestinationsInBackgroundWithCompletion:(void (^)(NSArray* destinations))completion;
 + (NSMenu *) blogsMenuWithTarget:(id)target action:(SEL)action;
 + (void) selectDestinationMenuItem:(NSMenuItem *)menuItem;
