@@ -164,6 +164,12 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self setupNotifications];
 
 	[self updateTitleHeaderWithAnimation:NO];
+
+	if (!self.editingPost && !self.isReply) {
+		self.isShowingCategories = [[NSUserDefaults standardUserDefaults] boolForKey:kIsShowingCategories];
+		self.isShowingCrosspostServices = [[NSUserDefaults standardUserDefaults] boolForKey:kIsShowingCrosspostServices];
+	}
+
 	[self downloadCategories];
 	[self downloadBlogs];
 }
@@ -268,7 +274,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 {
 	self.photosCollectionView.delegate = self;
 	self.photosCollectionView.dataSource = self;
-	
+
 	[self.photosCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"PhotoCell" bundle:nil] forItemWithIdentifier:kPhotoCellIdentifier];
 
 	if (self.attachedPhotos.count > 0) {
@@ -278,9 +284,61 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		self.photosHeightConstraint.constant = 0;
 	}
 
+	// Categories collection view (from XIB) — categories only
+	NSCollectionViewFlowLayout* categoriesLayout = [[NSCollectionViewFlowLayout alloc] init];
+	categoriesLayout.minimumInteritemSpacing = 4;
+	categoriesLayout.minimumLineSpacing = 0;
+	self.categoriesCollectionView.collectionViewLayout = categoriesLayout;
 	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CategoryCell" bundle:nil] forItemWithIdentifier:kCategoryCellIdentifier];
-	[self.categoriesCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"CrosspostCell" bundle:nil] forItemWithIdentifier:kCrosspostCellIdentifier];
 	self.categoriesHeightConstraint.constant = 0;
+
+	NSScrollView* categoriesScrollView = self.categoriesCollectionView.enclosingScrollView;
+	categoriesScrollView.hasVerticalScroller = YES;
+	categoriesScrollView.autohidesScrollers = YES;
+
+	// Crosspost collection view (programmatic)
+	NSScrollView* photosScrollView = self.photosCollectionView.enclosingScrollView;
+	NSView* superview = categoriesScrollView.superview;
+
+	NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
+	layout.itemSize = NSMakeSize(120, 30);
+	layout.minimumInteritemSpacing = 4;
+	layout.minimumLineSpacing = 0;
+
+	NSCollectionView* crosspostCV = [[NSCollectionView alloc] initWithFrame:NSZeroRect];
+	crosspostCV.collectionViewLayout = layout;
+	crosspostCV.delegate = self;
+	crosspostCV.dataSource = self;
+	crosspostCV.backgroundColors = @[[NSColor clearColor]];
+	[crosspostCV registerNib:[[NSNib alloc] initWithNibNamed:@"CrosspostCell" bundle:nil] forItemWithIdentifier:kCrosspostCellIdentifier];
+	self.crosspostCollectionView = crosspostCV;
+
+	NSScrollView* crosspostScrollView = [[NSScrollView alloc] initWithFrame:NSZeroRect];
+	crosspostScrollView.documentView = crosspostCV;
+	crosspostScrollView.drawsBackground = NO;
+	crosspostScrollView.hasVerticalScroller = YES;
+	crosspostScrollView.autohidesScrollers = YES;
+	crosspostScrollView.translatesAutoresizingMaskIntoConstraints = NO;
+	[superview addSubview:crosspostScrollView];
+
+	// Remove existing constraint between categories and photos scroll views
+	for (NSLayoutConstraint* constraint in [superview.constraints copy]) {
+		if ((constraint.firstItem == photosScrollView && constraint.firstAttribute == NSLayoutAttributeTop && constraint.secondItem == categoriesScrollView) ||
+			(constraint.secondItem == photosScrollView && constraint.secondAttribute == NSLayoutAttributeTop && constraint.firstItem == categoriesScrollView)) {
+			[superview removeConstraint:constraint];
+			break;
+		}
+	}
+
+	// Insert crosspost scroll view between categories and photos
+	self.crosspostHeightConstraint = [crosspostScrollView.heightAnchor constraintEqualToConstant:0];
+	[NSLayoutConstraint activateConstraints:@[
+		[crosspostScrollView.leadingAnchor constraintEqualToAnchor:superview.leadingAnchor],
+		[crosspostScrollView.trailingAnchor constraintEqualToAnchor:superview.trailingAnchor],
+		[crosspostScrollView.topAnchor constraintEqualToAnchor:categoriesScrollView.bottomAnchor constant:4],
+		[photosScrollView.topAnchor constraintEqualToAnchor:crosspostScrollView.bottomAnchor constant:4],
+		self.crosspostHeightConstraint
+	]];
 }
 
 - (void) setupSummary
@@ -506,21 +564,33 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) updateCategoriesPane
 {
 	if (self.isShowingCategories) {
-		NSInteger estimated_rows = ceil (self.categories.count / [self bestCheckboxColumnsCount]);
-		if (estimated_rows == 0) {
-			estimated_rows = 1;
-		}
-		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
-	}
-	else if (self.isShowingCrosspostServices) {
-		NSInteger estimated_rows = ceil (self.crosspostServices.count / [self bestCheckboxColumnsCount]);
-		if (estimated_rows == 0) {
-			estimated_rows = 1;
-		}
-		self.categoriesHeightConstraint.animator.constant = estimated_rows * 30.0;
+		CGFloat w = self.categoriesCollectionView.enclosingScrollView.bounds.size.width;
+		CGFloat contentHeight = [self calculatedPaneHeightForTitles:self.categories inWidth:w];
+		CGFloat maxHeight = 120.0;
+		self.categoriesHeightConstraint.animator.constant = MIN(contentHeight, maxHeight);
 	}
 	else {
 		self.categoriesHeightConstraint.animator.constant = 0;
+	}
+}
+
+- (void) updateCrosspostPane
+{
+	if (self.isShowingCrosspostServices) {
+		NSMutableArray* titles = [NSMutableArray array];
+		for (NSDictionary* info in self.crosspostServices) {
+			NSString* name = info[@"name"];
+			if (name) {
+				[titles addObject:name];
+			}
+		}
+		CGFloat w = self.crosspostCollectionView.enclosingScrollView.bounds.size.width;
+		CGFloat contentHeight = [self calculatedPaneHeightForTitles:titles inWidth:w];
+		CGFloat maxHeight = 120.0;
+		self.crosspostHeightConstraint.animator.constant = MIN(contentHeight, maxHeight);
+	}
+	else {
+		self.crosspostHeightConstraint.animator.constant = 0;
 	}
 }
 
@@ -576,23 +646,47 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (self.isShowingCategories) {
 		self.selectedCategories = [self currentSelectedCategories];
 	}
-	else if (self.isShowingCrosspostServices) {
+	if (self.isShowingCrosspostServices) {
 		self.selectedCrosspostUIDs = [self currentSelectedCrossposting];
 	}
 }
 
-- (NSInteger) bestCheckboxColumnsCount
+- (CGFloat) widthForCheckboxTitle:(NSString *)title
 {
-	CGFloat w = self.categoriesCollectionView.bounds.size.width;
-	if (w > 600.0) {
-		return 4;
+	NSDictionary* attrs = @{NSFontAttributeName: [NSFont systemFontOfSize:13]};
+	CGFloat textWidth = ceil([title sizeWithAttributes:attrs].width);
+	return textWidth + 40; // checkbox indicator + margins
+}
+
+- (CGFloat) calculatedPaneHeightForTitles:(NSArray *)titles inWidth:(CGFloat)availableWidth
+{
+	if (titles.count == 0) {
+		return 30.0;
 	}
-	else if (w > 400.0) {
-		return 3;
+	if (availableWidth <= 0) {
+		availableWidth = 400;
 	}
-	else {
-		return 2;
+
+	CGFloat spacing = 4;
+	CGFloat currentRowWidth = 0;
+	NSInteger rows = 1;
+
+	for (NSString* title in titles) {
+		CGFloat itemWidth = [self widthForCheckboxTitle:title];
+
+		if (currentRowWidth > 0 && currentRowWidth + spacing + itemWidth > availableWidth) {
+			rows++;
+			currentRowWidth = itemWidth;
+		}
+		else {
+			if (currentRowWidth > 0) {
+				currentRowWidth += spacing;
+			}
+			currentRowWidth += itemWidth;
+		}
 	}
+
+	return rows * 30.0;
 }
 
 #pragma mark -
@@ -643,13 +737,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (IBAction) toggleCategories:(id)sender
 {
 	[self updateSelectedCheckboxes];
-	
+
 	self.isShowingCategories = !self.isShowingCategories;
-	self.isShowingCrosspostServices = NO;
-	self.isShowingSummary = NO;
+	[[NSUserDefaults standardUserDefaults] setBool:self.isShowingCategories forKey:kIsShowingCategories];
 
 	[self updateCategoriesPane];
-	[self updateSummaryPane];
 	[self.categoriesCollectionView reloadData];
 }
 
@@ -658,12 +750,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self updateSelectedCheckboxes];
 
 	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
-	self.isShowingCategories = NO;
-	self.isShowingSummary = NO;
+	[[NSUserDefaults standardUserDefaults] setBool:self.isShowingCrosspostServices forKey:kIsShowingCrosspostServices];
 
-	[self updateCategoriesPane];
-	[self updateSummaryPane];
-	[self.categoriesCollectionView reloadData];
+	[self updateCrosspostPane];
+	[self.crosspostCollectionView reloadData];
 }
 
 - (IBAction) toggleSummary:(id)sender
@@ -671,12 +761,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self updateSelectedCheckboxes];
 
 	self.isShowingSummary = !self.isShowingSummary;
-	self.isShowingCategories = NO;
-	self.isShowingCrosspostServices = NO;
 
-	[self updateCategoriesPane];
 	[self updateSummaryPane];
-	[self.categoriesCollectionView reloadData];
 }
 
 //- (IBAction) close:(id)sender
@@ -988,7 +1074,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (collectionView == self.photosCollectionView) {
 		return self.attachedPhotos.count;
 	}
-	else if (self.isShowingCrosspostServices) {
+	else if (collectionView == self.crosspostCollectionView) {
 		return self.crosspostServices.count;
 	}
 	else {
@@ -1029,7 +1115,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		
 		return item;
 	}
-	else if (self.isShowingCrosspostServices) {
+	else if (collectionView == self.crosspostCollectionView) {
 		NSDictionary* info = [self.crosspostServices objectAtIndex:indexPath.item];
 		NSString* service_uid = info[@"uid"];
 		NSString* service_name = info[@"name"];
@@ -1038,7 +1124,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		item.uid = service_uid;
 		item.nameCheckbox.title = service_name;
 		item.nameCheckbox.state = [self.selectedCrosspostUIDs containsObject:service_uid];
-		
+
 		return item;
 	}
 	else {
@@ -1069,8 +1155,15 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		cell_size.width = 100;
 		cell_size.height = 100;
 	}
+	else if (collectionView == self.crosspostCollectionView) {
+		NSDictionary* info = [self.crosspostServices objectAtIndex:indexPath.item];
+		NSString* name = info[@"name"] ?: @"";
+		cell_size.width = [self widthForCheckboxTitle:name];
+		cell_size.height = 30;
+	}
 	else {
-		cell_size.width = collectionView.bounds.size.width / [self bestCheckboxColumnsCount];
+		NSString* name = [self.categories objectAtIndex:indexPath.item];
+		cell_size.width = [self widthForCheckboxTitle:name];
 		cell_size.height = 30;
 	}
 	
@@ -1174,12 +1267,12 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (NSArray *) currentSelectedCrossposting
 {
 	NSMutableArray* uids = [NSMutableArray array];
-	
+
 	if (self.isShowingCrosspostServices) {
-		NSUInteger num = [self.categoriesCollectionView numberOfItemsInSection:0];
+		NSUInteger num = [self.crosspostCollectionView numberOfItemsInSection:0];
 		for (NSUInteger i = 0; i < num; i++) {
 			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
-			NSCollectionViewItem* item = [self.categoriesCollectionView itemAtIndexPath:index_path];
+			NSCollectionViewItem* item = [self.crosspostCollectionView itemAtIndexPath:index_path];
 			if ([item isKindOfClass:[MBCrosspostCell class]]) {
 				MBCrosspostCell* cell = (MBCrosspostCell *)item;
 				if (cell.nameCheckbox.state == NSControlStateValueOn) {
@@ -1188,7 +1281,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			}
 		}
 	}
-	
+
 	return uids;
 }
 
@@ -2260,6 +2353,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					RFDispatchMain (^{
 						if (self.editingPost && ([self.editingPost.categories count] > 0)) {
 							self.isShowingCategories = YES;
+						}
+						if (self.isShowingCategories) {
 							[self updateCategoriesPane];
 						}
 						[self.categoriesCollectionView reloadData];
@@ -2299,7 +2394,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					}
 					self.selectedCrosspostUIDs = selected_uids;
 					RFDispatchMain (^{
-						[self.categoriesCollectionView reloadData];
+						if (self.isShowingCrosspostServices) {
+							[self updateCrosspostPane];
+						}
+						[self.crosspostCollectionView reloadData];
 					});
 				}
 			}

@@ -28,6 +28,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* photosHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* categoriesHeightConstraint;
+@property (strong, nonatomic) NSCollectionView* crosspostCollectionView;
+@property (strong, nonatomic) NSLayoutConstraint* crosspostHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* summaryTextHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* photoButtonLeftConstraint;
