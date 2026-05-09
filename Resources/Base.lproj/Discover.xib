@@ -106,7 +106,7 @@
                     <color key="fillColor" name="color_timeline_background"/>
                 </box>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Kvs-M2-DAj">
-                    <rect key="frame" x="12" y="402" width="431" height="5"/>
+                    <rect key="frame" x="0.0" y="402" width="455" height="5"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="nbd-6t-dBH"/>
                     </constraints>
@@ -114,13 +114,13 @@
             </subviews>
             <constraints>
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="top" secondItem="Kvs-M2-DAj" secondAttribute="bottom" id="0Ob-5z-6bU"/>
-                <constraint firstItem="Kvs-M2-DAj" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="8QZ-OP-uHI"/>
+                <constraint firstItem="Kvs-M2-DAj" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="8QZ-OP-uHI"/>
                 <constraint firstAttribute="trailing" secondItem="7LD-DW-RCG" secondAttribute="trailing" id="Ds4-wp-amK"/>
                 <constraint firstAttribute="bottom" secondItem="7LD-DW-RCG" secondAttribute="bottom" id="H0W-JU-WUp"/>
                 <constraint firstItem="Kvs-M2-DAj" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="43" id="Rce-m8-GR8"/>
                 <constraint firstItem="3gz-se-iln" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="TYz-bI-eta"/>
                 <constraint firstItem="3gz-se-iln" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="UXv-sc-b6z"/>
-                <constraint firstAttribute="trailing" secondItem="Kvs-M2-DAj" secondAttribute="trailing" constant="12" id="WxB-WW-cvj"/>
+                <constraint firstAttribute="trailing" secondItem="Kvs-M2-DAj" secondAttribute="trailing" id="WxB-WW-cvj"/>
                 <constraint firstAttribute="trailing" secondItem="3gz-se-iln" secondAttribute="trailing" id="pBi-1t-l3B"/>
                 <constraint firstItem="7LD-DW-RCG" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="pUd-pf-egI"/>
             </constraints>

@@ -53,7 +53,7 @@
                     </constraints>
                 </progressIndicator>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-Fs-AYI">
-                    <rect key="frame" x="12" y="373" width="456" height="5"/>
+                    <rect key="frame" x="0.0" y="373" width="480" height="5"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="fJb-1p-qvm"/>
                     </constraints>
@@ -113,7 +113,7 @@
                 <constraint firstItem="lML-7D-4aS" firstAttribute="centerY" secondItem="cIs-MO-cjs" secondAttribute="centerY" id="LWY-JU-D1o"/>
                 <constraint firstItem="DtU-Fs-AYI" firstAttribute="top" secondItem="cIs-MO-cjs" secondAttribute="bottom" constant="14" id="RS6-OP-BWQ"/>
                 <constraint firstAttribute="bottom" secondItem="aey-yi-VLC" secondAttribute="bottom" id="cfX-pf-lVP"/>
-                <constraint firstAttribute="trailing" secondItem="DtU-Fs-AYI" secondAttribute="trailing" constant="12" id="dEc-aj-AA2"/>
+                <constraint firstAttribute="trailing" secondItem="DtU-Fs-AYI" secondAttribute="trailing" id="dEc-aj-AA2"/>
                 <constraint firstItem="cIs-MO-cjs" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="14" id="hl4-WJ-Naf"/>
                 <constraint firstItem="aey-yi-VLC" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="i64-F4-m25"/>
                 <constraint firstAttribute="trailing" secondItem="aey-yi-VLC" secondAttribute="trailing" id="kCI-cx-QGa"/>
@@ -121,7 +121,7 @@
                 <constraint firstItem="cIs-MO-cjs" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="pDi-my-Tvl"/>
                 <constraint firstAttribute="trailing" secondItem="lML-7D-4aS" secondAttribute="trailing" constant="12" id="qmR-PI-5l5"/>
                 <constraint firstItem="lML-7D-4aS" firstAttribute="leading" secondItem="B4V-OG-cnp" secondAttribute="trailing" constant="10" id="xio-U0-eQN"/>
-                <constraint firstItem="DtU-Fs-AYI" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="ztO-vg-vhF"/>
+                <constraint firstItem="DtU-Fs-AYI" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="ztO-vg-vhF"/>
             </constraints>
             <point key="canvasLocation" x="139" y="228"/>
         </customView>
