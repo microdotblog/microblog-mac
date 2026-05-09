@@ -53,6 +53,8 @@ static NSString* const kSaveNotesToFolderPrefKey = @"SaveNotesToFolder";
 static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
 static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 
+static NSString* const kSaveBackupsToFolderPrefKey = @"SaveBackupsToFolder";
+
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url" // NSURL
 

@@ -54,7 +54,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupWebsiteField];
 	[self setupDayOneField];
 	[self setupNotesCheckboxes];
-	
+	[self setupBackupCheckboxes];
+
 	[self updateRadioButtons];
 	[self updateMenus];
 
@@ -162,6 +163,18 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.accountsCollectionView.dataSource = self;
 	
 	[self.accountsCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"AccountCell" bundle:nil] forItemWithIdentifier:kAccountCellIdentifier];
+}
+
+- (void) setupBackupCheckboxes
+{
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	
+	if ([defaults boolForKey:kSaveBackupsToFolderPrefKey]) {
+		[self.backupFolderCheckbox setState:NSControlStateValueOn];
+	}
+	else {
+		[self.backupFolderCheckbox setState:NSControlStateValueOff];
+	}
 }
 
 - (void) setupNotesCheckboxes
@@ -351,6 +364,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) showGeneralPane:(id)sender
 {
 	self.notesPane.hidden = YES;
+	self.backupPane.hidden = YES;
 	[self.window.contentView addSubview:self.generalPane];
 	[self.generalPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.generalPane.hidden = NO;
@@ -359,9 +373,19 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) showNotesPane:(id)sender
 {
 	self.generalPane.hidden = YES;
+	self.backupPane.hidden = YES;
 	[self.window.contentView addSubview:self.notesPane];
 	[self.notesPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.notesPane.hidden = NO;
+}
+
+- (IBAction) showBackupPane:(id)sender
+{
+	self.generalPane.hidden = YES;
+	self.notesPane.hidden = YES;
+	[self.window.contentView addSubview:self.backupPane];
+	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
+	self.backupPane.hidden = NO;
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
@@ -379,6 +403,18 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	NSString* notes_folder = [RFAccount notesFolder];
 	NSURL* url = [NSURL fileURLWithPath:notes_folder];
 	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ url ]];
+}
+
+- (IBAction) showBackupsFolder:(id)sender
+{
+	NSString* notes_folder = [RFAccount backupsFolder];
+	NSURL* url = [NSURL fileURLWithPath:notes_folder];
+	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ url ]];
+}
+
+- (IBAction) backupsFolderCheckboxChanged:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveBackupsToFolderPrefKey];
 }
 
 - (IBAction) showSecretKey:(id)sender
