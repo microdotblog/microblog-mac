@@ -15,11 +15,28 @@
 
 @implementation RFBarExportController
 
+- (instancetype) init
+{
+	self = [super init];
+	if (self) {
+		self.posts = [NSMutableArray array];
+	}
+
+	return self;
+}
+
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-	
-	self.posts = [NSMutableArray array];
+}
+
+- (void) exportToPath:(NSString *)path progress:(void (^)(double progress))progressHandler completion:(void (^)(BOOL success, NSString* path))completionHandler
+{
+	self.destinationPath = path;
+	self.progressHandler = progressHandler;
+	self.completionHandler = completionHandler;
+
+	[self startExport];
 }
 
 - (NSString *) writePost:(RFPost *)post
@@ -156,9 +173,19 @@
 	NSString* zip_path = [downloads_folder stringByAppendingPathComponent:@"Micro.blog.bar"];
 	[SSZipArchive createZipFileAtPath:zip_path withContentsOfDirectory:self.exportFolder];
 	
-	NSString* new_path = [self promptSave:@"Micro.blog.bar"];
-	if (new_path) {
-		[self copyItemAtPath:zip_path toPath:new_path];
+	if (self.destinationPath) {
+		[self copyItemAtPath:zip_path toPath:self.destinationPath];
+
+		BOOL success = [[NSFileManager defaultManager] fileExistsAtPath:self.destinationPath];
+		if (self.completionHandler) {
+			self.completionHandler(success, self.destinationPath);
+		}
+	}
+	else {
+		NSString* new_path = [self promptSave:@"Micro.blog.bar"];
+		if (new_path) {
+			[self copyItemAtPath:zip_path toPath:new_path];
+		}
 	}
 
 	[self cleanupExport];

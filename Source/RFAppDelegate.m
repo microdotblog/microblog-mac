@@ -32,6 +32,7 @@
 #import "MBInfoController.h"
 #import "MBCollectionsController.h"
 #import "MBAboutController.h"
+#import "MBBackupsController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -59,6 +60,7 @@
 	[self setupNotifications];
 	[self setupAppearance];
 	[self setupFollowerAutoComplete];
+	[self setupBackups];
 
 	self.postWindows = [NSMutableArray array];
 	self.photoWindows = [NSMutableArray array];
@@ -189,6 +191,12 @@
 	}];
 	
 	[RFSettings migrateSettings];
+}
+
+- (void) setupBackups
+{
+	self.backupsController = [[MBBackupsController alloc] init];
+	[self.backupsController start];
 }
 
 - (void) setupNotifications

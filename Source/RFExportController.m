@@ -44,7 +44,7 @@
 	[self setupWindow];
 	[self setupProgress];
 
-	[self downloadUploadsInBackgroundWithOffset:0];
+	[self startExport];
 }
 
 - (void) setupWindow
@@ -60,6 +60,20 @@
 {
 	[self.progressBar setIndeterminate:YES];
 	[self.progressBar startAnimation:nil];
+}
+
+- (void) startExport
+{
+	[self updateExportProgress:0.0];
+	[self downloadUploadsInBackgroundWithOffset:0];
+}
+
+- (void) updateExportProgress:(double)progress
+{
+	double normalized_progress = MAX(0.0, MIN(1.0, progress));
+	if (self.progressHandler) {
+		self.progressHandler(normalized_progress);
+	}
 }
 
 - (void) downloadPostsInBackgroundWithOffset:(NSInteger)offset
@@ -103,6 +117,7 @@
 			[self.statusField setStringValue:s];
 			[self.progressBar setIndeterminate:YES];
 			[self.progressBar startAnimation:nil];
+			[self updateExportProgress:0.75];
 		});
 
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -150,6 +165,7 @@
 //					[self.cancelButton setAction:@selector(revealFolder:)];
 					
 					[self finishExport];
+					[self updateExportProgress:1.0];
 					[self.window close];
 				}
 				else {
@@ -219,8 +235,9 @@
 					self.totalUploads = self.queuedUploads.count;
 					[self.progressBar setIndeterminate:NO];
 					[self.progressBar setMinValue:0];
-					[self.progressBar setMaxValue:self.totalUploads - 1];
+					[self.progressBar setMaxValue:MAX(self.totalUploads - 1, 1)];
 					
+					[self updateExportProgress:0.5];
 					[self downloadNextUploadInBackground];
 				}
 				else {
@@ -255,6 +272,10 @@
 		RFDispatchMainAsync (^{
 			[self.statusField setStringValue:s];
 			[self.progressBar setDoubleValue:self.totalUploads - self.queuedUploads.count];
+			if (self.totalUploads > 0) {
+				double upload_progress = ((double)(self.totalUploads - self.queuedUploads.count) / (double)self.totalUploads) * 0.5;
+				[self updateExportProgress:upload_progress];
+			}
 		});
 		
 		[self downloadURL:up.url forUpload:up withCompletion:^{

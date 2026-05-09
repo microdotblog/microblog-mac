@@ -55,6 +55,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupDayOneField];
 	[self setupNotesCheckboxes];
 	[self setupBackupCheckboxes];
+	[self setupBackupProgressBar];
 
 	[self updateRadioButtons];
 	[self updateMenus];
@@ -155,6 +156,16 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAccountNotification:) name:kRemoveAccountNotification object:self.accountsCollectionView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backupDidUpdateNotification:) name:kBackupDidUpdateNotification object:nil];
+}
+
+- (void) setupBackupProgressBar
+{
+	self.backupProgressBar.hidden = YES;
+	self.backupProgressBar.indeterminate = NO;
+	self.backupProgressBar.minValue = 0.0;
+	self.backupProgressBar.maxValue = 1.0;
+	self.backupProgressBar.doubleValue = 0.0;
 }
 
 - (void) setupCollectionView
@@ -415,6 +426,24 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) backupsFolderCheckboxChanged:(id)sender
 {
 	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveBackupsToFolderPrefKey];
+}
+
+- (void) backupDidUpdateNotification:(NSNotification *)notification
+{
+	NSNumber* progress = [notification.userInfo objectForKey:kCurrentBackupProgressKey];
+	if (progress == nil) {
+		return;
+	}
+
+	self.backupProgressBar.hidden = NO;
+	self.backupProgressBar.doubleValue = progress.doubleValue;
+
+	if (progress.doubleValue >= 1.0) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			self.backupProgressBar.hidden = YES;
+			self.backupProgressBar.doubleValue = 0.0;
+		});
+	}
 }
 
 - (IBAction) showSecretKey:(id)sender

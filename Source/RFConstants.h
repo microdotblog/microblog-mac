@@ -54,6 +54,11 @@ static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
 static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 
 static NSString* const kSaveBackupsToFolderPrefKey = @"SaveBackupsToFolder";
+static NSString* const kLastBackupDatePrefKey = @"LastBackupDate";
+static NSString* const kBackupDidUpdateNotification = @"MBBackupDidUpdate";
+static NSString* const kCurrentBackupProgressKey = @"CurrentBackupProgress";
+static NSInteger const kBackupMinimumDays = 7;
+static NSInteger const kMaxBackupFiles = 5;
 
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url" // NSURL
