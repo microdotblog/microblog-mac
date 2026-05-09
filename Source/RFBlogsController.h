@@ -36,4 +36,6 @@
 @property (assign, nonatomic) BOOL showsChevron;
 @property (copy, nonatomic) void (^mouseDownHandler)(RFHostnameField* field, NSEvent* event);
 
+- (NSRect) hostnameRect;
+
 @end

@@ -1372,7 +1372,12 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return;
 	}
 
-	NSPoint menu_point = NSMakePoint(0.0, NSMinY(self.blognameField.bounds));
+	NSRect anchor_rect = self.blognameField.bounds;
+	if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
+		anchor_rect = [(RFHostnameField*) self.blognameField hostnameRect];
+	}
+
+	NSPoint menu_point = NSMakePoint(NSMinX(anchor_rect), NSMinY(anchor_rect));
 	[menu popUpMenuPositioningItem:nil atLocation:menu_point inView:self.blognameField];
 }
 
