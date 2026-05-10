@@ -168,6 +168,36 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.backupProgressBar.doubleValue = 0.0;
 }
 
+- (void) updateBackupProgressBarWithProgress:(NSNumber *)progress
+{
+	BOOL is_starting = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupProgressStartingPrefKey];
+	if (is_starting) {
+		self.backupProgressBar.hidden = NO;
+		self.backupProgressBar.indeterminate = YES;
+		[self.backupProgressBar startAnimation:nil];
+		return;
+	}
+
+	self.backupProgressBar.indeterminate = NO;
+	[self.backupProgressBar stopAnimation:nil];
+
+	if (progress == nil) {
+		self.backupProgressBar.hidden = YES;
+		self.backupProgressBar.doubleValue = 0.0;
+		return;
+	}
+
+	self.backupProgressBar.hidden = NO;
+	self.backupProgressBar.doubleValue = progress.doubleValue;
+
+	if (progress.doubleValue >= 1.0) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			self.backupProgressBar.hidden = YES;
+			self.backupProgressBar.doubleValue = 0.0;
+		});
+	}
+}
+
 - (void) setupCollectionView
 {
 	self.accountsCollectionView.delegate = self;
@@ -397,6 +427,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.window.contentView addSubview:self.backupPane];
 	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.backupPane.hidden = NO;
+	[self updateBackupProgressBarWithProgress:nil];
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
@@ -428,22 +459,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveBackupsToFolderPrefKey];
 }
 
+- (IBAction) cancelBackup:(id)sender
+{
+}
+
 - (void) backupDidUpdateNotification:(NSNotification *)notification
 {
 	NSNumber* progress = [notification.userInfo objectForKey:kCurrentBackupProgressKey];
-	if (progress == nil) {
-		return;
-	}
-
-	self.backupProgressBar.hidden = NO;
-	self.backupProgressBar.doubleValue = progress.doubleValue;
-
-	if (progress.doubleValue >= 1.0) {
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			self.backupProgressBar.hidden = YES;
-			self.backupProgressBar.doubleValue = 0.0;
-		});
-	}
+	[self updateBackupProgressBarWithProgress:progress];
 }
 
 - (IBAction) showSecretKey:(id)sender

@@ -47,6 +47,8 @@
 
 @property (strong, nonatomic) IBOutlet NSButton* backupFolderCheckbox;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* backupProgressBar;
+@property (strong, nonatomic) IBOutlet NSTextField* backupStatusField;
+@property (strong, nonatomic) IBOutlet NSButton* backupCancelButton;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;

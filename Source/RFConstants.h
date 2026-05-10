@@ -55,6 +55,7 @@ static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 
 static NSString* const kSaveBackupsToFolderPrefKey = @"SaveBackupsToFolder";
 static NSString* const kLastBackupDatePrefKey = @"LastBackupDate";
+static NSString* const kBackupProgressStartingPrefKey = @"BackupProgressStarting";
 static NSString* const kBackupDidUpdateNotification = @"MBBackupDidUpdate";
 static NSString* const kCurrentBackupProgressKey = @"CurrentBackupProgress";
 static NSInteger const kBackupMinimumDays = 7;

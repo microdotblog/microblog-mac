@@ -29,6 +29,7 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 
 - (void) start
 {
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupProgressStartingPrefKey];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChangeNotification:) name:NSUserDefaultsDidChangeNotification object:nil];
 	[self updateTimer];
 }
@@ -44,11 +45,21 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	if (is_enabled && (self.backupTimer == nil)) {
 		self.backupTimer = [NSTimer scheduledTimerWithTimeInterval:kBackupTimerInterval target:self selector:@selector(checkForBackup:) userInfo:nil repeats:YES];
 		self.backupTimer.tolerance = 60;
+
+		if (![self hasLastBackupDate]) {
+			self.backupTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:kInitialBackupTimerInterval];
+		}
 	}
 	else if (!is_enabled && self.backupTimer) {
 		[self.backupTimer invalidate];
 		self.backupTimer = nil;
 	}
+}
+
+- (BOOL) hasLastBackupDate
+{
+	NSDate* last_backup = [[NSUserDefaults standardUserDefaults] objectForKey:kLastBackupDatePrefKey];
+	return [last_backup isKindOfClass:[NSDate class]];
 }
 
 - (void) checkForBackup:(id)sender
@@ -71,12 +82,13 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 - (void) runBackup
 {
 	self.isRunningBackup = YES;
-	[self postProgress:0.0];
+	[self setBackupProgressStarting:YES];
 
 	NSString* path = [self backupPath];
 	self.exportController = [[RFBarExportController alloc] init];
 	__weak MBBackupsController* weak_self = self;
 	[self.exportController exportToPath:path progress:^(double progress) {
+		[weak_self setBackupProgressStarting:NO];
 		[weak_self postProgress:progress];
 	} completion:^(BOOL success, NSString* saved_path) {
 		MBBackupsController* strong_self = weak_self;
@@ -84,10 +96,19 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 			[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastBackupDatePrefKey];
 			[strong_self cleanupOldBackups];
 		}
+		[strong_self setBackupProgressStarting:NO];
 		[strong_self postProgress:1.0];
 		strong_self.isRunningBackup = NO;
 		strong_self.exportController = nil;
 	}];
+}
+
+- (void) setBackupProgressStarting:(BOOL)isStarting
+{
+	[[NSUserDefaults standardUserDefaults] setBool:isStarting forKey:kBackupProgressStartingPrefKey];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:kBackupDidUpdateNotification object:self];
+	});
 }
 
 - (NSString *) backupPath

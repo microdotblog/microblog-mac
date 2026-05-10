@@ -64,7 +64,6 @@
 
 - (void) startExport
 {
-	[self updateExportProgress:0.0];
 	[self downloadUploadsInBackgroundWithOffset:0];
 }
 
@@ -280,7 +279,7 @@
 		
 		[self downloadURL:up.url forUpload:up withCompletion:^{
 			[self.queuedUploads removeObject:up];
-			[self downloadNextUpload];
+			[self downloadNextUploadInBackground];
 		}];
 	}
 	else {
