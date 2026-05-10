@@ -679,7 +679,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="vzr-gP-UIY">
+                <button hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vzr-gP-UIY">
                     <rect key="frame" x="365" y="278" width="30" height="36"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="M0R-Q8-NWM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

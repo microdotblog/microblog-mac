@@ -25,13 +25,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) NSInteger totalUploads;
 @property (assign) BOOL isCancelled;
 @property (copy, nonatomic, nullable) void (^progressHandler)(double progress);
+@property (copy, nonatomic, nullable) void (^statusHandler)(NSString* status);
 
 - (void) startExport;
+- (void) cancelExport;
 - (NSString *) writePost:(RFPost *)post;
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 - (void) downloadURL:(NSString *)url forUpload:(RFUpload *)upload withCompletion:(void (^)(void))handler;
 - (NSString *) promptSave:(NSString *)defaultName;
 - (void) finishExport;
+- (void) finishCancel;
 - (void) cleanupExport;
 - (void) copyItemAtPath:(NSString *)sourcePath toPath:(NSString *)destPath;
 

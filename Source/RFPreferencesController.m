@@ -166,10 +166,39 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.backupProgressBar.minValue = 0.0;
 	self.backupProgressBar.maxValue = 1.0;
 	self.backupProgressBar.doubleValue = 0.0;
+	self.backupStatusField.hidden = YES;
+	self.backupCancelButton.hidden = YES;
 }
 
-- (void) updateBackupProgressBarWithProgress:(NSNumber *)progress
+- (void) updateBackupStatus:(NSString *)status
 {
+	BOOL is_in_progress = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupInProgressPrefKey];
+	NSString* current_status = status;
+	if (current_status.length == 0) {
+		current_status = [[NSUserDefaults standardUserDefaults] stringForKey:kBackupStatusTextPrefKey];
+	}
+	if (current_status.length == 0) {
+		current_status = @"Starting backup...";
+	}
+
+	self.backupStatusField.hidden = !is_in_progress;
+	self.backupCancelButton.hidden = !is_in_progress;
+	if (is_in_progress) {
+		self.backupStatusField.stringValue = current_status;
+	}
+}
+
+- (void) updateBackupProgressBarWithProgress:(NSNumber *)progress status:(NSString *)status
+{
+	BOOL is_in_progress = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupInProgressPrefKey];
+	[self updateBackupStatus:status];
+
+	if (!is_in_progress) {
+		self.backupProgressBar.hidden = YES;
+		self.backupProgressBar.doubleValue = 0.0;
+		return;
+	}
+
 	BOOL is_starting = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupProgressStartingPrefKey];
 	if (is_starting) {
 		self.backupProgressBar.hidden = NO;
@@ -182,8 +211,6 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.backupProgressBar stopAnimation:nil];
 
 	if (progress == nil) {
-		self.backupProgressBar.hidden = YES;
-		self.backupProgressBar.doubleValue = 0.0;
 		return;
 	}
 
@@ -194,6 +221,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 			self.backupProgressBar.hidden = YES;
 			self.backupProgressBar.doubleValue = 0.0;
+			self.backupStatusField.hidden = YES;
+			self.backupCancelButton.hidden = YES;
 		});
 	}
 }
@@ -427,7 +456,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.window.contentView addSubview:self.backupPane];
 	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.backupPane.hidden = NO;
-	[self updateBackupProgressBarWithProgress:nil];
+	[self updateBackupProgressBarWithProgress:nil status:nil];
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
@@ -461,12 +490,14 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 
 - (IBAction) cancelBackup:(id)sender
 {
+	[[NSNotificationCenter defaultCenter] postNotificationName:kCancelBackupNotification object:self];
 }
 
 - (void) backupDidUpdateNotification:(NSNotification *)notification
 {
 	NSNumber* progress = [notification.userInfo objectForKey:kCurrentBackupProgressKey];
-	[self updateBackupProgressBarWithProgress:progress];
+	NSString* status = [notification.userInfo objectForKey:kCurrentBackupStatusKey];
+	[self updateBackupProgressBarWithProgress:progress status:status];
 }
 
 - (IBAction) showSecretKey:(id)sender

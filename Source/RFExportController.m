@@ -75,6 +75,18 @@
 	}
 }
 
+- (void) updateExportStatus:(NSString *)status
+{
+	if (self.statusHandler) {
+		self.statusHandler(status);
+	}
+}
+
+- (void) cancelExport
+{
+	self.isCancelled = YES;
+}
+
 - (void) downloadPostsInBackgroundWithOffset:(NSInteger)offset
 {
 	[self performSelectorInBackground:@selector(downloadPosts:) withObject:@(offset)];
@@ -114,6 +126,7 @@
 
 		RFDispatchMainAsync (^{
 			[self.statusField setStringValue:s];
+			[self updateExportStatus:s];
 			[self.progressBar setIndeterminate:YES];
 			[self.progressBar startAnimation:nil];
 			[self updateExportProgress:0.75];
@@ -241,6 +254,7 @@
 				}
 				else {
 					[self.statusField setStringValue:s];
+					[self updateExportStatus:s];
 
 					[self.queuedUploads addObjectsFromArray:new_posts];
 					NSInteger new_offset = [offset integerValue] + limit;
@@ -270,6 +284,7 @@
 		
 		RFDispatchMainAsync (^{
 			[self.statusField setStringValue:s];
+			[self updateExportStatus:s];
 			[self.progressBar setDoubleValue:self.totalUploads - self.queuedUploads.count];
 			if (self.totalUploads > 0) {
 				double upload_progress = ((double)(self.totalUploads - self.queuedUploads.count) / (double)self.totalUploads) * 0.5;
@@ -447,7 +462,7 @@
 
 - (IBAction) cancel:(id)sender
 {
-	self.isCancelled = YES;
+	[self cancelExport];
 	self.cancelButton.enabled = NO;
 }
 

@@ -30,10 +30,11 @@
 	[super windowDidLoad];
 }
 
-- (void) exportToPath:(NSString *)path progress:(void (^)(double progress))progressHandler completion:(void (^)(BOOL success, NSString* path))completionHandler
+- (void) exportToPath:(NSString *)path progress:(void (^)(double progress))progressHandler status:(void (^)(NSString* status))statusHandler completion:(void (^)(BOOL success, NSString* _Nullable path))completionHandler
 {
 	self.destinationPath = path;
 	self.progressHandler = progressHandler;
+	self.statusHandler = statusHandler;
 	self.completionHandler = completionHandler;
 
 	[self startExport];
@@ -177,7 +178,8 @@
 		[self copyItemAtPath:zip_path toPath:self.destinationPath];
 
 		BOOL success = [[NSFileManager defaultManager] fileExistsAtPath:self.destinationPath];
-		if (self.completionHandler) {
+		if (self.completionHandler && !self.hasFinished) {
+			self.hasFinished = YES;
 			self.completionHandler(success, self.destinationPath);
 		}
 	}
@@ -189,6 +191,16 @@
 	}
 
 	[self cleanupExport];
+}
+
+- (void) finishCancel
+{
+	if (self.completionHandler && !self.hasFinished) {
+		self.hasFinished = YES;
+		self.completionHandler(NO, nil);
+	}
+
+	[super finishCancel];
 }
 
 @end

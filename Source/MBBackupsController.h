@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) start;
 - (void) checkForBackup:(nullable id)sender;
+- (void) cancelBackup;
 
 @end
 

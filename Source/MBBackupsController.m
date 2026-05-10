@@ -11,6 +11,7 @@
 #import "RFSettings.h"
 
 static NSTimeInterval const kBackupTimerInterval = 60 * 60;
+static NSTimeInterval const kInitialBackupTimerInterval = 5 * 60;
 
 @interface MBBackupsController ()
 
@@ -29,14 +30,22 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 
 - (void) start
 {
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupInProgressPrefKey];
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupProgressStartingPrefKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kBackupStatusTextPrefKey];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChangeNotification:) name:NSUserDefaultsDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cancelBackupNotification:) name:kCancelBackupNotification object:nil];
 	[self updateTimer];
 }
 
 - (void) userDefaultsDidChangeNotification:(NSNotification *)notification
 {
 	[self updateTimer];
+}
+
+- (void) cancelBackupNotification:(NSNotification *)notification
+{
+	[self cancelBackup];
 }
 
 - (void) updateTimer
@@ -82,14 +91,18 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 - (void) runBackup
 {
 	self.isRunningBackup = YES;
+	[self setBackupInProgress:YES];
 	[self setBackupProgressStarting:YES];
+	[self updateBackupStatus:@"Starting backup..."];
 
 	NSString* path = [self backupPath];
 	self.exportController = [[RFBarExportController alloc] init];
 	__weak MBBackupsController* weak_self = self;
 	[self.exportController exportToPath:path progress:^(double progress) {
 		[weak_self setBackupProgressStarting:NO];
-		[weak_self postProgress:progress];
+		[weak_self postProgress:@(progress)];
+	} status:^(NSString* status) {
+		[weak_self updateBackupStatus:status];
 	} completion:^(BOOL success, NSString* saved_path) {
 		MBBackupsController* strong_self = weak_self;
 		if (success) {
@@ -97,10 +110,38 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 			[strong_self cleanupOldBackups];
 		}
 		[strong_self setBackupProgressStarting:NO];
-		[strong_self postProgress:1.0];
+		if (success) {
+			[strong_self postProgress:@(1.0)];
+		}
+		else {
+			[strong_self postProgress:nil];
+		}
+		[strong_self updateBackupStatus:nil];
+		[strong_self setBackupInProgress:NO];
 		strong_self.isRunningBackup = NO;
 		strong_self.exportController = nil;
 	}];
+}
+
+- (void) cancelBackup
+{
+	if (!self.isRunningBackup) {
+		return;
+	}
+
+	[self.exportController cancelExport];
+	[self setBackupProgressStarting:NO];
+	[self updateBackupStatus:nil];
+	[self setBackupInProgress:NO];
+	[self postProgress:nil];
+}
+
+- (void) setBackupInProgress:(BOOL)isInProgress
+{
+	[[NSUserDefaults standardUserDefaults] setBool:isInProgress forKey:kBackupInProgressPrefKey];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:kBackupDidUpdateNotification object:self];
+	});
 }
 
 - (void) setBackupProgressStarting:(BOOL)isStarting
@@ -108,6 +149,22 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	[[NSUserDefaults standardUserDefaults] setBool:isStarting forKey:kBackupProgressStartingPrefKey];
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[[NSNotificationCenter defaultCenter] postNotificationName:kBackupDidUpdateNotification object:self];
+	});
+}
+
+- (void) updateBackupStatus:(NSString *)status
+{
+	NSDictionary* user_info = nil;
+	if (status.length > 0) {
+		[[NSUserDefaults standardUserDefaults] setObject:status forKey:kBackupStatusTextPrefKey];
+		user_info = @{ kCurrentBackupStatusKey: status };
+	}
+	else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:kBackupStatusTextPrefKey];
+	}
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:kBackupDidUpdateNotification object:self userInfo:user_info];
 	});
 }
 
@@ -144,11 +201,16 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	return [NSString stringWithFormat:@"%@-%@.bar", safe_blog, date_s];
 }
 
-- (void) postProgress:(double)progress
+- (void) postProgress:(NSNumber *)progress
 {
-	NSNumber* progress_num = @(MAX(0.0, MIN(1.0, progress)));
+	NSMutableDictionary* user_info = [NSMutableDictionary dictionary];
+	if (progress) {
+		NSNumber* progress_num = @(MAX(0.0, MIN(1.0, progress.doubleValue)));
+		[user_info setObject:progress_num forKey:kCurrentBackupProgressKey];
+	}
+
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:kBackupDidUpdateNotification object:self userInfo:@{ kCurrentBackupProgressKey: progress_num }];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kBackupDidUpdateNotification object:self userInfo:user_info];
 	});
 }
 
