@@ -20,9 +20,13 @@
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
 
+static NSInteger const kRecentPostsInitialLimit = 15;
+static NSInteger const kRecentPostsBackgroundLimit = 100;
+
 @interface RFAllPostsController ()
 
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
+@property (assign, nonatomic) NSInteger postsRequestID;
 
 @end
 
@@ -134,16 +138,29 @@
 
 - (void) fetchPostsForSearch:(NSString *)search
 {
+	self.postsRequestID++;
+	NSInteger request_id = self.postsRequestID;
+
 	self.currentPosts = @[];
 	self.blogNameButton.hidden = YES;
 	self.tableView.animator.alphaValue = 0.0;
 
+	if (search.length == 0) {
+		[self fetchPostsForSearch:search limit:kRecentPostsInitialLimit offset:0 existingPosts:nil requestID:request_id fetchMore:YES];
+	}
+	else {
+		[self fetchPostsForSearch:search limit:0 offset:0 existingPosts:nil requestID:request_id fetchMore:NO];
+	}
+}
+
+- (void) fetchPostsForSearch:(NSString *)search limit:(NSInteger)limit offset:(NSInteger)offset existingPosts:(NSArray *)existingPosts requestID:(NSInteger)requestID fetchMore:(BOOL)fetchMore
+{
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
 	}
 
-    NSDictionary* args;
+	NSMutableDictionary* args;
 	NSString* channel;
 	
 	if (self.isShowingPages) {
@@ -152,13 +169,18 @@
 	else {
 		channel = @"default";
 	}
-    
-	args = @{
+	
+	args = [@{
 		@"q": @"source",
 		@"mp-destination": destination_uid,
 		@"mp-channel": channel,
 		@"filter": search
-	};
+	} mutableCopy];
+	
+	if (limit > 0) {
+		[args setObject:@(limit) forKey:@"limit"];
+		[args setObject:@(offset) forKey:@"offset"];
+	}
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
@@ -174,11 +196,30 @@
 			}
 			
 			RFDispatchMainAsync (^{
-				if (search.length == 0) {
-					self.allPosts = new_posts;
+				if (requestID != self.postsRequestID) {
+					return;
 				}
-				self.currentPosts = new_posts;
+
+				NSArray* posts_to_show = new_posts;
+				NSString* selected_url = nil;
+				NSInteger selected_row = self.tableView.selectedRow;
+				if ((existingPosts.count > 0) && (selected_row >= 0) && (selected_row < self.currentPosts.count)) {
+					RFPost* selected_post = [self.currentPosts objectAtIndex:selected_row];
+					selected_url = selected_post.url;
+				}
+
+				if (existingPosts.count > 0) {
+					NSMutableArray* merged_posts = [existingPosts mutableCopy];
+					[merged_posts addObjectsFromArray:new_posts];
+					posts_to_show = merged_posts;
+				}
+
+				if (search.length == 0) {
+					self.allPosts = posts_to_show;
+				}
+				self.currentPosts = posts_to_show;
 				[self.tableView reloadData];
+				[self restoreSelectionForPostURL:selected_url];
 
 				[self setupBlogName];
 				[self stopLoadingSidebarRow];
@@ -187,15 +228,28 @@
 				self.blogNameButton.hidden = NO;
 				self.tableView.animator.alphaValue = 1.0;
 
-				// would be nice to restore selection, but might be a different blog, etc.
-				// do this later
-//				NSIndexSet* selection = [self.tableView selectedRowIndexes];
-//				if (selection.count > 0) {
-//					[self.tableView selectRowIndexes:selection byExtendingSelection:NO];
-//				}
+					if (fetchMore && new_posts.count == limit) {
+						[self fetchPostsForSearch:search limit:kRecentPostsBackgroundLimit offset:kRecentPostsInitialLimit existingPosts:posts_to_show requestID:requestID fetchMore:NO];
+					}
 			});
 		}
 	}];
+}
+
+- (void) restoreSelectionForPostURL:(NSString *)url
+{
+	if (url.length == 0) {
+		return;
+	}
+
+	for (NSInteger i = 0; i < self.currentPosts.count; i++) {
+		RFPost* post = [self.currentPosts objectAtIndex:i];
+		if ([post.url isEqualToString:url]) {
+			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+			[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+			break;
+		}
+	}
 }
 
 - (void) fetchDrafts
@@ -438,7 +492,7 @@
 - (void) closePostingNotification:(NSNotification *)notification
 {
 	[self fetchPosts];
-	[self fetchPosts];
+	[self fetchDrafts];
 }
 
 - (void) draftDidUpdateNotification:(NSNotification *)notification
