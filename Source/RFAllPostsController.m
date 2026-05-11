@@ -218,6 +218,11 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 					self.allPosts = posts_to_show;
 				}
 
+				NSString* current_search = self.searchField.stringValue ?: @"";
+				if (self.isShowingDrafts || ![current_search isEqualToString:search]) {
+					return;
+				}
+
 				BOOL is_appending_posts = (existingPosts.count > 0);
 				NSInteger existing_count = self.currentPosts.count;
 				self.currentPosts = posts_to_show;
