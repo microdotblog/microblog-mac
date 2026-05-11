@@ -336,6 +336,7 @@
 
 	NSString* temp_filename = [NSString stringWithFormat:@"Micro.blog-%@", [[NSUUID UUID] UUIDString]];
 	NSString* temp_folder = [NSTemporaryDirectory() stringByAppendingPathComponent:temp_filename];
+	[RFSettings addTemporaryFolder:temp_folder];
 
 	NSString* folder_name = @"Micro.blog export";
 	NSString* destination_name = [RFSettings stringForKey:kCurrentDestinationName];
@@ -437,6 +438,7 @@
 		NSString* parent_folder = [self.exportFolder stringByDeletingLastPathComponent];
 		if ((parent_folder.length > 0) && [parent_folder containsString:temp_folder] && [parent_folder containsString:@"Micro.blog"]) {
 			[[NSFileManager defaultManager] removeItemAtPath:parent_folder error:&error];
+			[RFSettings removeTemporaryFolder:parent_folder];
 		}
 	}
 }

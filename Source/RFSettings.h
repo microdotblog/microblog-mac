@@ -71,6 +71,7 @@ static NSString* const kIsShowingCrosspostServices = @"IsShowingCrosspostService
 + (void) removeObjectForKey:(NSString *)prefKey account:(RFAccount *)account;
 
 + (void) addTemporaryFolder:(NSString *)path;
++ (void) removeTemporaryFolder:(NSString *)path;
 + (void) cleanupTemporaryFolders;
 
 + (NSDictionary *) networkingArgsForDestination;
