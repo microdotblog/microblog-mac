@@ -15,7 +15,7 @@
 #import "RFSettings.h"
 #import "RFAccount.h"
 
-static NSString* const RFDestinationsCacheFilename = @"Destinations.json";
+static NSString* const RFDestinationsPrefName = @"Destinations";
 static CGFloat const RFHostnameButtonChevronSize = 12.0;
 static CGFloat const RFHostnameFieldChevronSize = 12.0;
 static CGFloat const RFHostnameChevronSpacing = 6.0;
@@ -289,18 +289,18 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 
 @implementation RFBlogsController
 
-+ (NSString *) destinationsCacheFile
++ (NSString *) cachedDestinationsPrefKeyForUsername:(NSString *)username
 {
-	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-	NSString* support_folder = [paths firstObject];
-	if (support_folder.length == 0) {
+	if (username.length == 0) {
 		return nil;
 	}
 
-	NSString* microblog_folder = [support_folder stringByAppendingPathComponent:@"Micro.blog"];
-	NSString* caches_folder = [microblog_folder stringByAppendingPathComponent:@"Caches"];
-	[[NSFileManager defaultManager] createDirectoryAtPath:caches_folder withIntermediateDirectories:YES attributes:nil error:NULL];
-	return [caches_folder stringByAppendingPathComponent:RFDestinationsCacheFilename];
+	return [NSString stringWithFormat:@"%@_%@", username, RFDestinationsPrefName];
+}
+
++ (NSString *) cachedDestinationsPrefKey
+{
+	return [self cachedDestinationsPrefKeyForUsername:[RFSettings defaultAccount].username];
 }
 
 + (NSArray *) normalizedDestinationsFromDestinations:(NSArray *)destinations
@@ -338,20 +338,14 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 
 + (NSArray *) cachedDestinations
 {
-	NSString* cache_file = [self destinationsCacheFile];
-	NSData* data = [NSData dataWithContentsOfFile:cache_file];
-	if (data.length > 0) {
-		id payload = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-		if ([payload isKindOfClass:[NSArray class]]) {
-			return [self normalizedDestinationsFromDestinations:payload];
-		}
+	NSString* pref_key = [self cachedDestinationsPrefKey];
+	if (pref_key.length == 0) {
+		return @[];
 	}
 
-	NSString* username = [RFSettings defaultAccount].username;
-	NSString* pref_key = [NSString stringWithFormat:@"%@_%@", username, @"Destinations"];
-	NSArray* old_cached = [[NSUserDefaults standardUserDefaults] arrayForKey:pref_key];
-	if (old_cached.count > 0) {
-		return [self normalizedDestinationsFromDestinations:old_cached];
+	NSArray* cached = [[NSUserDefaults standardUserDefaults] arrayForKey:pref_key];
+	if (cached.count > 0) {
+		return [self normalizedDestinationsFromDestinations:cached];
 	}
 
 	return @[];
@@ -360,26 +354,17 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 + (void) saveCachedDestinationsFrom:(NSArray *)destinations
 {
 	NSArray* normalized_destinations = [self normalizedDestinationsFromDestinations:destinations];
-	NSString* cache_file = [self destinationsCacheFile];
-	NSData* data = [NSJSONSerialization dataWithJSONObject:normalized_destinations options:0 error:nil];
-	if (data.length > 0) {
-		[data writeToFile:cache_file atomically:YES];
+	NSString* pref_key = [self cachedDestinationsPrefKey];
+	if (pref_key.length > 0) {
+		[[NSUserDefaults standardUserDefaults] setObject:normalized_destinations forKey:pref_key];
 	}
 }
 
 + (void) clearCachedDestinations
 {
-	NSString* cache_file = [self destinationsCacheFile];
-	if (cache_file.length > 0) {
-		BOOL is_directory = NO;
-		if ([[NSFileManager defaultManager] fileExistsAtPath:cache_file isDirectory:&is_directory] && !is_directory) {
-			[[NSFileManager defaultManager] removeItemAtPath:cache_file error:nil];
-		}
-	}
-
 	for (RFAccount* account in [RFSettings accounts]) {
 		if (account.username.length > 0) {
-			NSString* pref_key = [NSString stringWithFormat:@"%@_%@", account.username, @"Destinations"];
+			NSString* pref_key = [self cachedDestinationsPrefKeyForUsername:account.username];
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:pref_key];
 		}
 	}
@@ -486,12 +471,6 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 - (void) setupTable
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BlogCell" bundle:nil] forIdentifier:@"BlogCell"];
-}
-
-- (NSString *) cachedDestinationsPrefKey
-{
-	NSString* username = [RFSettings defaultAccount].username;
-	return [NSString stringWithFormat:@"%@_%@", username, @"Destinations"];
 }
 
 - (NSArray *) loadCachedDestinations
