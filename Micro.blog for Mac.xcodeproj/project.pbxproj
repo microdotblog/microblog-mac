@@ -97,6 +97,7 @@
 		4B3840D72696223E00AD3781 /* RFWordPressExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D62696223E00AD3781 /* RFWordPressExportController.m */; };
 		4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D9269645E000AD3781 /* RFBarExportController.m */; };
 		4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 4B3840DC26964F3B00AD3781 /* ZipArchive */; };
+		4B38E5E92F00000100BD98AB /* MBBackupsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B38E5EB2F00000100BD98AB /* MBBackupsController.m */; };
 		4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */; };
 		4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B332A4C72AA00CAACCD /* MBMessageBox.m */; };
 		4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */; };
@@ -140,6 +141,7 @@
 		4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86742E6CB16500697E41 /* MBBookNoteController.m */; };
 		4B5D867B2E6CB1DE00697E41 /* BookNoteWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */; };
 		4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */; };
+		4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
 		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB424E44853007674FF /* PostWindow.xib */; };
@@ -444,6 +446,8 @@
 		4B3840D62696223E00AD3781 /* RFWordPressExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFWordPressExportController.m; path = Source/RFWordPressExportController.m; sourceTree = "<group>"; };
 		4B3840D8269645E000AD3781 /* RFBarExportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBarExportController.h; path = Source/RFBarExportController.h; sourceTree = "<group>"; };
 		4B3840D9269645E000AD3781 /* RFBarExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBarExportController.m; path = Source/RFBarExportController.m; sourceTree = "<group>"; };
+		4B38E5EA2F00000100BD98AB /* MBBackupsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBackupsController.h; path = Source/MBBackupsController.h; sourceTree = "<group>"; };
+		4B38E5EB2F00000100BD98AB /* MBBackupsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBackupsController.m; path = Source/MBBackupsController.m; sourceTree = "<group>"; };
 		4B390B2F2A4C655C00CAACCD /* MBStatusBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatusBubbleView.h; path = Source/MBStatusBubbleView.h; sourceTree = "<group>"; };
 		4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatusBubbleView.m; path = Source/MBStatusBubbleView.m; sourceTree = "<group>"; };
 		4B390B322A4C72AA00CAACCD /* MBMessageBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMessageBox.h; path = Source/MBMessageBox.h; sourceTree = "<group>"; };
@@ -555,6 +559,8 @@
 		4B6AE7741F8B336600CB7950 /* RFPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhoto.h; path = Source/RFPhoto.h; sourceTree = "<group>"; };
 		4B6AE7891F8D8A2D00CB7950 /* RFHighlightingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextView.h; path = Source/RFHighlightingTextView.h; sourceTree = "<group>"; };
 		4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextView.m; path = Source/RFHighlightingTextView.m; sourceTree = "<group>"; };
+		4B6F8EA12EF01A7C00A1B2C3 /* MBSplitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSplitView.h; path = Source/MBSplitView.h; sourceTree = "<group>"; };
+		4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSplitView.m; path = Source/MBSplitView.m; sourceTree = "<group>"; };
 		4B71E6A12DE0C94D0097E1F3 /* HTMLNode+Mutating.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "HTMLNode+Mutating.h"; path = "Shared/HTMLParser/HTMLNode+Mutating.h"; sourceTree = "<group>"; };
 		4B71E6A22DE0C94D0097E1F3 /* HTMLNode+Mutating.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "HTMLNode+Mutating.m"; path = "Shared/HTMLParser/HTMLNode+Mutating.m"; sourceTree = "<group>"; };
 		4B79E2842D089BC500A22861 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Collections.xib; sourceTree = "<group>"; };
@@ -957,6 +963,8 @@
 				4B3840D62696223E00AD3781 /* RFWordPressExportController.m */,
 				4B3840D8269645E000AD3781 /* RFBarExportController.h */,
 				4B3840D9269645E000AD3781 /* RFBarExportController.m */,
+				4B38E5EA2F00000100BD98AB /* MBBackupsController.h */,
+				4B38E5EB2F00000100BD98AB /* MBBackupsController.m */,
 				4B3840CF2692038B00AD3781 /* RFMarkdownExportController.h */,
 				4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */,
 				4B3840D2269203B400AD3781 /* RFDayOneExportController.h */,
@@ -1060,6 +1068,8 @@
 				4BF612BA2B1EF89800F415AA /* MBDraftLabel.m */,
 				4BD833A1273C60A5007350F2 /* RFPostTableView.h */,
 				4BD833A2273C60A5007350F2 /* RFPostTableView.m */,
+				4B6F8EA12EF01A7C00A1B2C3 /* MBSplitView.h */,
+				4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */,
 				4BF7E53228394C5C00500C59 /* MBBooksTableView.h */,
 				4BF7E53128394C5C00500C59 /* MBBooksTableView.m */,
 				4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */,
@@ -1573,6 +1583,7 @@
 				4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
+				4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,
 				4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */,
@@ -1684,6 +1695,7 @@
 				4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
+				4B38E5E92F00000100BD98AB /* MBBackupsController.m in Sources */,
 				4B9F06432767BCE60007F21D /* MBDateController.m in Sources */,
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B5606DA2A73F92F00843D59 /* MBTokenField.m in Sources */,

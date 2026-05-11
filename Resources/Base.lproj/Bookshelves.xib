@@ -94,7 +94,7 @@
                                 </scroller>
                             </scrollView>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hbF-ds-dXl">
-                                <rect key="frame" x="12" y="449" width="416" height="5"/>
+                                <rect key="frame" x="0.0" y="449" width="440" height="5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="oyz-oa-WOe"/>
                                 </constraints>
@@ -150,13 +150,13 @@
                             <constraint firstItem="Ytt-Lj-Xoq" firstAttribute="leading" secondItem="wee-hs-BYT" secondAttribute="trailing" constant="12" id="9ic-Rd-HnT"/>
                             <constraint firstItem="Ytt-Lj-Xoq" firstAttribute="centerY" secondItem="Eko-fD-FxQ" secondAttribute="centerY" id="BfZ-A1-tGp"/>
                             <constraint firstItem="7Mx-iY-OHb" firstAttribute="centerY" secondItem="Eko-fD-FxQ" secondAttribute="centerY" id="VgB-mG-RTi"/>
-                            <constraint firstAttribute="trailing" secondItem="hbF-ds-dXl" secondAttribute="trailing" constant="12" id="YLa-QH-uJX"/>
+                            <constraint firstAttribute="trailing" secondItem="hbF-ds-dXl" secondAttribute="trailing" id="YLa-QH-uJX"/>
                             <constraint firstAttribute="trailing" secondItem="7Mx-iY-OHb" secondAttribute="trailing" constant="12" id="YmJ-63-AgR"/>
                             <constraint firstItem="wee-hs-BYT" firstAttribute="leading" secondItem="Eko-fD-FxQ" secondAttribute="trailing" constant="8" symbolic="YES" id="buo-ob-wWi"/>
                             <constraint firstItem="Eko-fD-FxQ" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" constant="12" id="hNA-os-bAu"/>
                             <constraint firstItem="uks-Oo-UlR" firstAttribute="top" secondItem="hbF-ds-dXl" secondAttribute="bottom" id="j6V-Yw-cqX"/>
                             <constraint firstItem="wee-hs-BYT" firstAttribute="centerY" secondItem="Eko-fD-FxQ" secondAttribute="centerY" id="n8v-no-TPa"/>
-                            <constraint firstItem="hbF-ds-dXl" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" constant="12" id="pca-cC-t09"/>
+                            <constraint firstItem="hbF-ds-dXl" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" id="pca-cC-t09"/>
                             <constraint firstItem="uks-Oo-UlR" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" id="qs9-nD-ajg"/>
                             <constraint firstItem="Eko-fD-FxQ" firstAttribute="top" secondItem="TX8-3G-OWq" secondAttribute="top" constant="13" id="ra8-NM-xtC"/>
                             <constraint firstItem="uks-Oo-UlR" firstAttribute="top" secondItem="TX8-3G-OWq" secondAttribute="top" constant="44" id="uLz-c7-yiD"/>

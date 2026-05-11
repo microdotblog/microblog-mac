@@ -15,7 +15,7 @@
 @class MBDateController;
 @class MBSelectiveUsernamesController;
 
-@interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination, NSPopoverDelegate>
+@interface RFPostController : NSViewController <NSTextViewDelegate, NSTextStorageDelegate, NSCollectionViewDelegate, NSCollectionViewDataSource, NSDraggingDestination>
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextView* textView;
@@ -61,7 +61,6 @@
 @property (strong, nonatomic) NSArray* selectedCrosspostUIDs; // NSString
 @property (strong, nonatomic) RFHighlightingTextStorage* textStorage;
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
-@property (strong, nonatomic) NSPopover* blogsMenuPopover;
 @property (strong, nonatomic) RFPhotoAltController* altController;
 @property (strong, nonatomic) NSArray* destinations; // NSDictionary
 @property (strong, nonatomic) NSDate* postedAt;
@@ -79,6 +78,7 @@
 - (IBAction) save:(id)sender;
 - (NSString *) postButtonTitle;
 - (BOOL) isPage;
+- (void) refreshDestinationsCache;
 
 - (NSString *) currentTitle;
 - (NSString *) currentText;

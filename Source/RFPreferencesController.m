@@ -54,7 +54,9 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupWebsiteField];
 	[self setupDayOneField];
 	[self setupNotesCheckboxes];
-	
+	[self setupBackupCheckboxes];
+	[self setupBackupProgressBar];
+
 	[self updateRadioButtons];
 	[self updateMenus];
 
@@ -154,6 +156,95 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAccountNotification:) name:kRemoveAccountNotification object:self.accountsCollectionView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backupDidUpdateNotification:) name:kBackupDidUpdateNotification object:nil];
+}
+
+- (void) setupBackupProgressBar
+{
+	self.backupProgressBar.hidden = YES;
+	self.backupProgressBar.indeterminate = NO;
+	self.backupProgressBar.minValue = 0.0;
+	self.backupProgressBar.maxValue = 1.0;
+	self.backupProgressBar.doubleValue = 0.0;
+	self.backupStatusField.hidden = YES;
+	self.backupCancelButton.hidden = YES;
+}
+
+- (NSString *) localizedBackupDateString:(NSDate *)date
+{
+	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+	formatter.dateStyle = NSDateFormatterShortStyle;
+	formatter.timeStyle = NSDateFormatterShortStyle;
+	return [formatter stringFromDate:date];
+}
+
+- (void) updateBackupDateField
+{
+	NSDate* last_backup = [[NSUserDefaults standardUserDefaults] objectForKey:kLastBackupDatePrefKey];
+	if ([last_backup isKindOfClass:[NSDate class]]) {
+		self.backupDateField.stringValue = [NSString stringWithFormat:@"Last backup: %@", [self localizedBackupDateString:last_backup]];
+	}
+	else {
+		NSDate* next_backup = [NSDate dateWithTimeIntervalSinceNow:kInitialBackupTimerInterval];
+		self.backupDateField.stringValue = [NSString stringWithFormat:@"Next backup: %@", [self localizedBackupDateString:next_backup]];
+	}
+}
+
+- (void) updateBackupStatus:(NSString *)status
+{
+	BOOL is_in_progress = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupInProgressPrefKey];
+	NSString* current_status = status;
+	if (current_status.length == 0) {
+		current_status = [[NSUserDefaults standardUserDefaults] stringForKey:kBackupStatusTextPrefKey];
+	}
+	if (current_status.length == 0) {
+		current_status = @"Starting backup...";
+	}
+
+	self.backupStatusField.hidden = !is_in_progress;
+	self.backupCancelButton.hidden = !is_in_progress;
+	if (is_in_progress) {
+		self.backupStatusField.stringValue = current_status;
+	}
+}
+
+- (void) updateBackupProgressBarWithProgress:(NSNumber *)progress status:(NSString *)status
+{
+	BOOL is_in_progress = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupInProgressPrefKey];
+	[self updateBackupStatus:status];
+
+	if (!is_in_progress) {
+		self.backupProgressBar.hidden = YES;
+		self.backupProgressBar.doubleValue = 0.0;
+		return;
+	}
+
+	BOOL is_starting = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupProgressStartingPrefKey];
+	if (is_starting) {
+		self.backupProgressBar.hidden = NO;
+		self.backupProgressBar.indeterminate = YES;
+		[self.backupProgressBar startAnimation:nil];
+		return;
+	}
+
+	self.backupProgressBar.indeterminate = NO;
+	[self.backupProgressBar stopAnimation:nil];
+
+	if (progress == nil) {
+		return;
+	}
+
+	self.backupProgressBar.hidden = NO;
+	self.backupProgressBar.doubleValue = progress.doubleValue;
+
+	if (progress.doubleValue >= 1.0) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			self.backupProgressBar.hidden = YES;
+			self.backupProgressBar.doubleValue = 0.0;
+			self.backupStatusField.hidden = YES;
+			self.backupCancelButton.hidden = YES;
+		});
+	}
 }
 
 - (void) setupCollectionView
@@ -162,6 +253,18 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.accountsCollectionView.dataSource = self;
 	
 	[self.accountsCollectionView registerNib:[[NSNib alloc] initWithNibNamed:@"AccountCell" bundle:nil] forItemWithIdentifier:kAccountCellIdentifier];
+}
+
+- (void) setupBackupCheckboxes
+{
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	
+	if ([defaults boolForKey:kSaveBackupsToFolderPrefKey]) {
+		[self.backupFolderCheckbox setState:NSControlStateValueOn];
+	}
+	else {
+		[self.backupFolderCheckbox setState:NSControlStateValueOff];
+	}
 }
 
 - (void) setupNotesCheckboxes
@@ -351,6 +454,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) showGeneralPane:(id)sender
 {
 	self.notesPane.hidden = YES;
+	self.backupPane.hidden = YES;
 	[self.window.contentView addSubview:self.generalPane];
 	[self.generalPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.generalPane.hidden = NO;
@@ -359,9 +463,21 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) showNotesPane:(id)sender
 {
 	self.generalPane.hidden = YES;
+	self.backupPane.hidden = YES;
 	[self.window.contentView addSubview:self.notesPane];
 	[self.notesPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.notesPane.hidden = NO;
+}
+
+- (IBAction) showBackupPane:(id)sender
+{
+	self.generalPane.hidden = YES;
+	self.notesPane.hidden = YES;
+	[self.window.contentView addSubview:self.backupPane];
+	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
+	self.backupPane.hidden = NO;
+	[self updateBackupDateField];
+	[self updateBackupProgressBarWithProgress:nil status:nil];
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
@@ -379,6 +495,31 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	NSString* notes_folder = [RFAccount notesFolder];
 	NSURL* url = [NSURL fileURLWithPath:notes_folder];
 	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ url ]];
+}
+
+- (IBAction) showBackupsFolder:(id)sender
+{
+	NSString* notes_folder = [RFAccount backupsFolder];
+	NSURL* url = [NSURL fileURLWithPath:notes_folder];
+	[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ url ]];
+}
+
+- (IBAction) backupsFolderCheckboxChanged:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveBackupsToFolderPrefKey];
+}
+
+- (IBAction) cancelBackup:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kCancelBackupNotification object:self];
+}
+
+- (void) backupDidUpdateNotification:(NSNotification *)notification
+{
+	NSNumber* progress = [notification.userInfo objectForKey:kCurrentBackupProgressKey];
+	NSString* status = [notification.userInfo objectForKey:kCurrentBackupStatusKey];
+	[self updateBackupDateField];
+	[self updateBackupProgressBarWithProgress:progress status:status];
 }
 
 - (IBAction) showSecretKey:(id)sender

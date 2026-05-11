@@ -15,11 +15,29 @@
 
 @implementation RFBarExportController
 
+- (instancetype) init
+{
+	self = [super init];
+	if (self) {
+		self.posts = [NSMutableArray array];
+	}
+
+	return self;
+}
+
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-	
-	self.posts = [NSMutableArray array];
+}
+
+- (void) exportToPath:(NSString *)path progress:(void (^)(double progress))progressHandler status:(void (^)(NSString* status))statusHandler completion:(void (^)(BOOL success, NSString* _Nullable path))completionHandler
+{
+	self.destinationPath = path;
+	self.progressHandler = progressHandler;
+	self.statusHandler = statusHandler;
+	self.completionHandler = completionHandler;
+
+	[self startExport];
 }
 
 - (NSString *) writePost:(RFPost *)post
@@ -156,12 +174,33 @@
 	NSString* zip_path = [downloads_folder stringByAppendingPathComponent:@"Micro.blog.bar"];
 	[SSZipArchive createZipFileAtPath:zip_path withContentsOfDirectory:self.exportFolder];
 	
-	NSString* new_path = [self promptSave:@"Micro.blog.bar"];
-	if (new_path) {
-		[self copyItemAtPath:zip_path toPath:new_path];
+	if (self.destinationPath) {
+		[self copyItemAtPath:zip_path toPath:self.destinationPath];
+
+		BOOL success = [[NSFileManager defaultManager] fileExistsAtPath:self.destinationPath];
+		if (self.completionHandler && !self.hasFinished) {
+			self.hasFinished = YES;
+			self.completionHandler(success, self.destinationPath);
+		}
+	}
+	else {
+		NSString* new_path = [self promptSave:@"Micro.blog.bar"];
+		if (new_path) {
+			[self copyItemAtPath:zip_path toPath:new_path];
+		}
 	}
 
 	[self cleanupExport];
+}
+
+- (void) finishCancel
+{
+	if (self.completionHandler && !self.hasFinished) {
+		self.hasFinished = YES;
+		self.completionHandler(NO, nil);
+	}
+
+	[super finishCancel];
 }
 
 @end

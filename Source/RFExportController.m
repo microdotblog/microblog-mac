@@ -44,7 +44,7 @@
 	[self setupWindow];
 	[self setupProgress];
 
-	[self downloadUploadsInBackgroundWithOffset:0];
+	[self startExport];
 }
 
 - (void) setupWindow
@@ -60,6 +60,31 @@
 {
 	[self.progressBar setIndeterminate:YES];
 	[self.progressBar startAnimation:nil];
+}
+
+- (void) startExport
+{
+	[self downloadUploadsInBackgroundWithOffset:0];
+}
+
+- (void) updateExportProgress:(double)progress
+{
+	double normalized_progress = MAX(0.0, MIN(1.0, progress));
+	if (self.progressHandler) {
+		self.progressHandler(normalized_progress);
+	}
+}
+
+- (void) updateExportStatus:(NSString *)status
+{
+	if (self.statusHandler) {
+		self.statusHandler(status);
+	}
+}
+
+- (void) cancelExport
+{
+	self.isCancelled = YES;
 }
 
 - (void) downloadPostsInBackgroundWithOffset:(NSInteger)offset
@@ -101,8 +126,10 @@
 
 		RFDispatchMainAsync (^{
 			[self.statusField setStringValue:s];
+			[self updateExportStatus:s];
 			[self.progressBar setIndeterminate:YES];
 			[self.progressBar startAnimation:nil];
+			[self updateExportProgress:0.75];
 		});
 
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
@@ -150,6 +177,7 @@
 //					[self.cancelButton setAction:@selector(revealFolder:)];
 					
 					[self finishExport];
+					[self updateExportProgress:1.0];
 					[self.window close];
 				}
 				else {
@@ -219,12 +247,14 @@
 					self.totalUploads = self.queuedUploads.count;
 					[self.progressBar setIndeterminate:NO];
 					[self.progressBar setMinValue:0];
-					[self.progressBar setMaxValue:self.totalUploads - 1];
+					[self.progressBar setMaxValue:MAX(self.totalUploads - 1, 1)];
 					
+					[self updateExportProgress:0.5];
 					[self downloadNextUploadInBackground];
 				}
 				else {
 					[self.statusField setStringValue:s];
+					[self updateExportStatus:s];
 
 					[self.queuedUploads addObjectsFromArray:new_posts];
 					NSInteger new_offset = [offset integerValue] + limit;
@@ -254,12 +284,17 @@
 		
 		RFDispatchMainAsync (^{
 			[self.statusField setStringValue:s];
+			[self updateExportStatus:s];
 			[self.progressBar setDoubleValue:self.totalUploads - self.queuedUploads.count];
+			if (self.totalUploads > 0) {
+				double upload_progress = ((double)(self.totalUploads - self.queuedUploads.count) / (double)self.totalUploads) * 0.5;
+				[self updateExportProgress:upload_progress];
+			}
 		});
 		
 		[self downloadURL:up.url forUpload:up withCompletion:^{
 			[self.queuedUploads removeObject:up];
-			[self downloadNextUpload];
+			[self downloadNextUploadInBackground];
 		}];
 	}
 	else {
@@ -301,6 +336,7 @@
 
 	NSString* temp_filename = [NSString stringWithFormat:@"Micro.blog-%@", [[NSUUID UUID] UUIDString]];
 	NSString* temp_folder = [NSTemporaryDirectory() stringByAppendingPathComponent:temp_filename];
+	[RFSettings addTemporaryFolder:temp_folder];
 
 	NSString* folder_name = @"Micro.blog export";
 	NSString* destination_name = [RFSettings stringForKey:kCurrentDestinationName];
@@ -402,6 +438,7 @@
 		NSString* parent_folder = [self.exportFolder stringByDeletingLastPathComponent];
 		if ((parent_folder.length > 0) && [parent_folder containsString:temp_folder] && [parent_folder containsString:@"Micro.blog"]) {
 			[[NSFileManager defaultManager] removeItemAtPath:parent_folder error:&error];
+			[RFSettings removeTemporaryFolder:parent_folder];
 		}
 	}
 }
@@ -427,7 +464,7 @@
 
 - (IBAction) cancel:(id)sender
 {
-	self.isCancelled = YES;
+	[self cancelExport];
 	self.cancelButton.enabled = NO;
 }
 

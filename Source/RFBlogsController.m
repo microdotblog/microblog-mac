@@ -15,7 +15,431 @@
 #import "RFSettings.h"
 #import "RFAccount.h"
 
+static NSString* const RFDestinationsPrefName = @"Destinations";
+static CGFloat const RFHostnameButtonChevronSize = 12.0;
+static CGFloat const RFHostnameFieldChevronSize = 12.0;
+static CGFloat const RFHostnameChevronSpacing = 6.0;
+
+@interface RFHostnameButton ()
+
+@property (strong, nonatomic) NSImageView* chevronView;
+@property (strong, nonatomic) NSTrackingArea* trackingArea;
+@property (assign, nonatomic) BOOL isHovering;
+
+- (void) setupChevron;
+- (void) updateChevronFrame;
+- (void) updateChevronVisibility;
+
+@end
+
+@implementation RFHostnameButton
+
+- (void) awakeFromNib
+{
+	[super awakeFromNib];
+	[self setupChevron];
+}
+
+- (instancetype) initWithFrame:(NSRect)frameRect
+{
+	self = [super initWithFrame:frameRect];
+	if (self) {
+		[self setupChevron];
+	}
+	return self;
+}
+
+- (void) setupChevron
+{
+	if (self.chevronView != nil) {
+		return;
+	}
+
+	NSImage* chevron_image = [NSImage imageWithSystemSymbolName:@"chevron.down" accessibilityDescription:@"Show Blogs"];
+	self.chevronView = [[NSImageView alloc] initWithFrame:NSZeroRect];
+	self.chevronView.image = chevron_image;
+	self.chevronView.imageScaling = NSImageScaleProportionallyDown;
+	self.chevronView.hidden = YES;
+	[self addSubview:self.chevronView];
+}
+
+- (void) layout
+{
+	[super layout];
+	[self updateChevronFrame];
+}
+
+- (void) setTitle:(NSString *)title
+{
+	[super setTitle:title];
+	[self invalidateIntrinsicContentSize];
+	[self updateChevronFrame];
+}
+
+- (NSSize) intrinsicContentSize
+{
+	NSSize size = [super intrinsicContentSize];
+
+	if (self.showsChevron) {
+		size.width += RFHostnameChevronSpacing + RFHostnameButtonChevronSize;
+	}
+
+	return size;
+}
+
+- (void) updateChevronFrame
+{
+	NSFont* font = self.font ?: [NSFont systemFontOfSize:[NSFont systemFontSize]];
+	CGFloat text_width = ceil([self.title ?: @"" sizeWithAttributes:@{ NSFontAttributeName: font }].width);
+	NSRect title_rect = [self.cell titleRectForBounds:self.bounds];
+	CGFloat x = NSMinX(title_rect) + text_width + RFHostnameChevronSpacing;
+	x = MIN(x, NSMaxX(self.bounds) - RFHostnameButtonChevronSize);
+	CGFloat y = floor(NSMidY(self.bounds) - (RFHostnameButtonChevronSize / 2.0));
+	self.chevronView.frame = NSMakeRect(x, y, RFHostnameButtonChevronSize, RFHostnameButtonChevronSize);
+}
+
+- (void) updateTrackingAreas
+{
+	[super updateTrackingAreas];
+
+	if (self.trackingArea != nil) {
+		[self removeTrackingArea:self.trackingArea];
+	}
+
+	NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect;
+	self.trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:options owner:self userInfo:nil];
+	[self addTrackingArea:self.trackingArea];
+}
+
+- (void) mouseEntered:(NSEvent *)event
+{
+	self.isHovering = YES;
+	[self updateChevronVisibility];
+}
+
+- (void) mouseExited:(NSEvent *)event
+{
+	self.isHovering = NO;
+	[self updateChevronVisibility];
+}
+
+- (void) mouseDown:(NSEvent *)event
+{
+	if (!self.enabled) {
+		[super mouseDown:event];
+		return;
+	}
+
+	[self highlight:YES];
+	[NSApp sendAction:self.action to:self.target from:self];
+	[self highlight:NO];
+}
+
+- (void) setShowsChevron:(BOOL)showsChevron
+{
+	_showsChevron = showsChevron;
+	[self invalidateIntrinsicContentSize];
+	[self updateChevronVisibility];
+}
+
+- (void) updateChevronVisibility
+{
+	[self updateChevronFrame];
+	self.chevronView.hidden = !(self.showsChevron && self.isHovering);
+}
+
+@end
+
+@interface RFHostnameField ()
+
+@property (strong, nonatomic) NSImageView* chevronView;
+@property (strong, nonatomic) NSTrackingArea* trackingArea;
+@property (assign, nonatomic) BOOL isHovering;
+@property (copy, nonatomic) NSString* displayString;
+
+- (void) setupChevron;
+- (void) updateChevronVisibility;
+
+@end
+
+@implementation RFHostnameField
+
+@synthesize showsChevron = _showsChevron;
+
+- (void) awakeFromNib
+{
+	[super awakeFromNib];
+	[self setupChevron];
+}
+
+- (instancetype) initWithFrame:(NSRect)frameRect
+{
+	self = [super initWithFrame:frameRect];
+	if (self) {
+		[self setupChevron];
+	}
+	return self;
+}
+
+- (void) setupChevron
+{
+	if (self.chevronView != nil) {
+		return;
+	}
+
+	NSImage* chevron_image = [NSImage imageWithSystemSymbolName:@"chevron.down" accessibilityDescription:@"Show Blogs"];
+	self.chevronView = [[NSImageView alloc] initWithFrame:NSZeroRect];
+	self.chevronView.image = chevron_image;
+	self.chevronView.imageScaling = NSImageScaleProportionallyDown;
+	self.chevronView.hidden = YES;
+	[self addSubview:self.chevronView];
+	self.textColor = [NSColor secondaryLabelColor];
+	self.displayString = self.stringValue ?: @"";
+}
+
+- (void) layout
+{
+	[super layout];
+	[self updateChevronFrame];
+}
+
+- (void) setStringValue:(NSString *)stringValue
+{
+	self.displayString = stringValue ?: @"";
+	[super setStringValue:self.displayString];
+	[self updateChevronVisibility];
+}
+
+- (void) updateChevronFrame
+{
+	CGFloat size = RFHostnameFieldChevronSize;
+	CGFloat spacing = RFHostnameChevronSpacing;
+	NSRect hostname_rect = [self hostnameRect];
+	CGFloat text_x = NSMinX(hostname_rect);
+	CGFloat text_width = NSWidth(hostname_rect);
+	CGFloat x = text_x + text_width + spacing;
+	CGFloat y = floor(NSMidY(self.bounds) - (size / 2.0));
+	self.chevronView.frame = NSMakeRect(x, y, size, size);
+}
+
+- (NSRect) hostnameRect
+{
+	NSFont* font = self.font ?: [NSFont systemFontOfSize:[NSFont systemFontSize]];
+	CGFloat text_width = ceil([self.displayString ?: @"" sizeWithAttributes:@{ NSFontAttributeName: font }].width);
+	CGFloat text_x = 0.0;
+
+	if (self.alignment == NSTextAlignmentCenter) {
+		text_x = floor((NSWidth(self.bounds) - text_width) / 2.0);
+	}
+	else if (self.alignment == NSTextAlignmentRight) {
+		text_x = NSWidth(self.bounds) - text_width;
+	}
+
+	return NSMakeRect(text_x, 0.0, text_width, NSHeight(self.bounds));
+}
+
+- (void) updateTrackingAreas
+{
+	[super updateTrackingAreas];
+
+	if (self.trackingArea != nil) {
+		[self removeTrackingArea:self.trackingArea];
+	}
+
+	NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect;
+	self.trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:options owner:self userInfo:nil];
+	[self addTrackingArea:self.trackingArea];
+}
+
+- (void) mouseEntered:(NSEvent *)event
+{
+	self.isHovering = YES;
+	[self updateChevronVisibility];
+}
+
+- (void) mouseExited:(NSEvent *)event
+{
+	self.isHovering = NO;
+	[self updateChevronVisibility];
+}
+
+- (void) mouseDown:(NSEvent *)event
+{
+	if (self.mouseDownHandler != nil) {
+		self.mouseDownHandler(self, event);
+		return;
+	}
+
+	[super mouseDown:event];
+}
+
+- (void) setShowsChevron:(BOOL)showsChevron
+{
+	_showsChevron = showsChevron;
+	[self updateChevronVisibility];
+}
+
+- (void) updateChevronVisibility
+{
+	[self updateChevronFrame];
+	self.chevronView.hidden = !(self.showsChevron && self.isHovering);
+}
+
+@end
+
 @implementation RFBlogsController
+
++ (NSString *) cachedDestinationsPrefKeyForUsername:(NSString *)username
+{
+	if (username.length == 0) {
+		return nil;
+	}
+
+	return [NSString stringWithFormat:@"%@_%@", username, RFDestinationsPrefName];
+}
+
++ (NSString *) cachedDestinationsPrefKey
+{
+	return [self cachedDestinationsPrefKeyForUsername:[RFSettings defaultAccount].username];
+}
+
++ (NSArray *) normalizedDestinationsFromDestinations:(NSArray *)destinations
+{
+	NSMutableArray* normalized_destinations = [NSMutableArray array];
+	for (id object in destinations) {
+		if (![object isKindOfClass:[NSDictionary class]]) {
+			continue;
+		}
+
+		NSDictionary* d = (NSDictionary*) object;
+		NSString* uid = d[@"uid"] ?: @"";
+		NSString* name = d[@"name"] ?: @"";
+		if (uid.length == 0 || name.length == 0) {
+			continue;
+		}
+
+		NSMutableDictionary* destination = [NSMutableDictionary dictionaryWithDictionary:@{
+			@"uid": uid,
+			@"name": name
+		}];
+
+		for (NSString* key in d) {
+			id value = d[key];
+			if ([key isKindOfClass:[NSString class]] && [NSJSONSerialization isValidJSONObject:@[ value ]]) {
+				destination[key] = value;
+			}
+		}
+
+		[normalized_destinations addObject:destination];
+	}
+
+	return normalized_destinations;
+}
+
++ (NSArray *) cachedDestinations
+{
+	NSString* pref_key = [self cachedDestinationsPrefKey];
+	if (pref_key.length == 0) {
+		return @[];
+	}
+
+	NSArray* cached = [[NSUserDefaults standardUserDefaults] arrayForKey:pref_key];
+	if (cached.count > 0) {
+		return [self normalizedDestinationsFromDestinations:cached];
+	}
+
+	return @[];
+}
+
++ (void) saveCachedDestinationsFrom:(NSArray *)destinations
+{
+	NSArray* normalized_destinations = [self normalizedDestinationsFromDestinations:destinations];
+	NSString* pref_key = [self cachedDestinationsPrefKey];
+	if (pref_key.length > 0) {
+		[[NSUserDefaults standardUserDefaults] setObject:normalized_destinations forKey:pref_key];
+	}
+}
+
++ (void) clearCachedDestinations
+{
+	for (RFAccount* account in [RFSettings accounts]) {
+		if (account.username.length > 0) {
+			NSString* pref_key = [self cachedDestinationsPrefKeyForUsername:account.username];
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:pref_key];
+		}
+	}
+}
+
++ (void) fetchDestinationsInBackgroundWithCompletion:(void (^)(NSArray* destinations))completion
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:@{ @"q": @"config" } completion:^(UUHttpResponse* response) {
+		NSArray* destinations = nil;
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			destinations = [response.parsedResponse objectForKey:@"destination"];
+			[self saveCachedDestinationsFrom:destinations];
+		}
+
+		NSArray* cached_destinations = [self cachedDestinations];
+		if (completion != nil) {
+			RFDispatchMainAsync(^{
+				completion(cached_destinations);
+			});
+		}
+	}];
+}
+
++ (BOOL) hasMultipleCachedDestinations
+{
+	return ([self cachedDestinations].count > 1);
+}
+
++ (NSMenu *) blogsMenuWithTarget:(id)target action:(SEL)action
+{
+	NSMenu* menu = [[NSMenu alloc] initWithTitle:@"Blogs"];
+	NSString* current_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+
+	for (NSDictionary* destination in [self cachedDestinations]) {
+		NSString* name = destination[@"name"];
+		if (name.length == 0) {
+			continue;
+		}
+
+		NSMenuItem* menu_item = [[NSMenuItem alloc] initWithTitle:name action:action keyEquivalent:@""];
+		menu_item.target = target;
+		menu_item.representedObject = destination;
+		if (current_uid.length > 0 && [current_uid isEqualToString:(destination[@"uid"] ?: @"")]) {
+			menu_item.state = NSControlStateValueOn;
+		}
+		[menu addItem:menu_item];
+	}
+
+#if 0
+	if (menu.numberOfItems > 0) {
+		[menu addItem:[NSMenuItem separatorItem]];
+	}
+
+	NSMenuItem* new_blog_item = [[NSMenuItem alloc] initWithTitle:@"New Blog..." action:action keyEquivalent:@""];
+	new_blog_item.target = target;
+	[menu addItem:new_blog_item];
+#endif
+
+	return menu;
+}
+
++ (void) selectDestinationMenuItem:(NSMenuItem *)menuItem
+{
+	NSDictionary* destination = menuItem.representedObject;
+	if ([destination isKindOfClass:[NSDictionary class]]) {
+		[RFSettings setString:destination[@"uid"] forKey:kCurrentDestinationUID];
+		[RFSettings setString:destination[@"name"] forKey:kCurrentDestinationName];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUpdatedBlogNotification object:self];
+	}
+	else {
+		NSURL* url = [NSURL URLWithString:@"https://micro.blog/new/site"];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
+}
 
 - (instancetype) init
 {
@@ -49,30 +473,14 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BlogCell" bundle:nil] forIdentifier:@"BlogCell"];
 }
 
-- (NSString *) cachedDestinationsPrefKey
-{
-	NSString* username = [RFSettings defaultAccount].username;
-	return [NSString stringWithFormat:@"%@_%@", username, @"Destinations"];
-}
-
 - (NSArray *) loadCachedDestinations
 {
-	NSArray* cached = [[NSUserDefaults standardUserDefaults] arrayForKey:[self cachedDestinationsPrefKey]];
-	return cached;
+	return [[self class] cachedDestinations];
 }
 
 - (void) saveCachedDestinationsFrom:(NSArray *)destinations
 {
-	NSMutableArray* pruned = [NSMutableArray array];
-	for (NSDictionary* d in destinations) {
-		NSString* uid = d[@"uid"] ?: @"";
-		NSString* name = d[@"name"] ?: @"";
-		[pruned addObject:@{
-			@"uid": uid,
-			@"name": name
-		}];
-	}
-	[[NSUserDefaults standardUserDefaults] setObject:pruned forKey:[self cachedDestinationsPrefKey]];
+	[[self class] saveCachedDestinationsFrom:destinations];
 }
 
 - (void) fetchBlogsShowProgress:(BOOL)showProgress
@@ -89,7 +497,7 @@
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSArray* destinations = [response.parsedResponse objectForKey:@"destination"];
 			[self saveCachedDestinationsFrom:destinations];
-			self.destinations = [[NSUserDefaults standardUserDefaults] arrayForKey:[self cachedDestinationsPrefKey]];
+			self.destinations = [self loadCachedDestinations];
 			RFDispatchMainAsync (^{
 				[self.progressTimer invalidate];
 				[self.progressSpinner stopAnimation:nil];

@@ -206,6 +206,18 @@
 	[[NSUserDefaults standardUserDefaults] setObject:paths forKey:kTemporaryFoldersPrefKey];
 }
 
++ (void) removeTemporaryFolder:(NSString *)path
+{
+	NSMutableArray* paths = [[[NSUserDefaults standardUserDefaults] arrayForKey:kTemporaryFoldersPrefKey] mutableCopy];
+	[paths removeObject:path];
+	if (paths.count > 0) {
+		[[NSUserDefaults standardUserDefaults] setObject:paths forKey:kTemporaryFoldersPrefKey];
+	}
+	else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:kTemporaryFoldersPrefKey];
+	}
+}
+
 + (void) cleanupTemporaryFolders
 {
 	NSArray* paths = [[NSUserDefaults standardUserDefaults] arrayForKey:kTemporaryFoldersPrefKey];

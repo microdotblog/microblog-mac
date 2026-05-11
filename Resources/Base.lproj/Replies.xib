@@ -36,7 +36,7 @@
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="v42-K4-VVS">
-                                <rect key="frame" x="12" y="355" width="442" height="5"/>
+                                <rect key="frame" x="-1" y="355" width="468" height="5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="C7U-a3-j64"/>
                                 </constraints>
@@ -130,7 +130,7 @@
                             <constraint firstItem="to5-1o-4Bg" firstAttribute="top" secondItem="0o1-PH-fL2" secondAttribute="top" constant="14" id="7ZZ-lN-BeQ"/>
                             <constraint firstItem="to5-1o-4Bg" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="12" id="BB1-q4-Ktk"/>
                             <constraint firstItem="vQK-JK-BMA" firstAttribute="centerY" secondItem="to5-1o-4Bg" secondAttribute="centerY" id="Kv9-6Z-Ot7"/>
-                            <constraint firstAttribute="trailing" secondItem="v42-K4-VVS" secondAttribute="trailing" constant="12" id="Q2c-Cs-ZFW"/>
+                            <constraint firstAttribute="trailing" secondItem="v42-K4-VVS" secondAttribute="trailing" constant="-1" id="Q2c-Cs-ZFW"/>
                             <constraint firstItem="6Oh-RE-57v" firstAttribute="leading" secondItem="to5-1o-4Bg" secondAttribute="trailing" constant="10" id="aY7-3t-FQ7"/>
                             <constraint firstItem="vQK-JK-BMA" firstAttribute="leading" secondItem="6Oh-RE-57v" secondAttribute="trailing" constant="10" id="bka-Oh-ZFR"/>
                             <constraint firstItem="aXp-jh-SPs" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="-1" id="dAx-rQ-Vr1"/>
@@ -139,7 +139,7 @@
                             <constraint firstAttribute="trailing" secondItem="vQK-JK-BMA" secondAttribute="trailing" constant="12" id="n59-Sv-iry"/>
                             <constraint firstItem="v42-K4-VVS" firstAttribute="top" secondItem="to5-1o-4Bg" secondAttribute="bottom" constant="14" id="paq-JQ-3gC"/>
                             <constraint firstAttribute="bottom" secondItem="aXp-jh-SPs" secondAttribute="bottom" constant="-1" id="tAV-mv-b4V"/>
-                            <constraint firstItem="v42-K4-VVS" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="12" id="zDl-l1-DEl"/>
+                            <constraint firstItem="v42-K4-VVS" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="-1" id="zDl-l1-DEl"/>
                         </constraints>
                     </view>
                     <color key="borderColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

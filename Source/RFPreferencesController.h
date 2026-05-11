@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet NSToolbar* toolbar;
 @property (strong, nonatomic) IBOutlet NSView* generalPane;
 @property (strong, nonatomic) IBOutlet NSView* notesPane;
+@property (strong, nonatomic) IBOutlet NSView* backupPane;
 
 @property (strong, nonatomic) IBOutlet NSTextField* messageField;
 @property (strong, nonatomic) IBOutlet NSBox* messageHeader;
@@ -43,6 +44,12 @@
 @property (strong, nonatomic) IBOutlet NSImageView* qrCodeView;
 @property (strong, nonatomic) IBOutlet NSTextField* qrCodeArrow;
 @property (strong, nonatomic) IBOutlet NSTextField* qrCodeInfo;
+
+@property (strong, nonatomic) IBOutlet NSButton* backupFolderCheckbox;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* backupProgressBar;
+@property (strong, nonatomic) IBOutlet NSTextField* backupDateField;
+@property (strong, nonatomic) IBOutlet NSTextField* backupStatusField;
+@property (strong, nonatomic) IBOutlet NSButton* backupCancelButton;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;

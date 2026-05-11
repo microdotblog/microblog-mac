@@ -46,6 +46,21 @@
 	return notes_folder;
 }
 
++ (NSString *) backupsFolder
+{
+	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	NSString* support_folder = [paths firstObject];
+
+	NSError* error = nil;
+	NSString* microblog_folder = [support_folder stringByAppendingPathComponent:@"Micro.blog"];
+	[[NSFileManager defaultManager] createDirectoryAtPath:microblog_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	NSString* backups_folder = [microblog_folder stringByAppendingPathComponent:@"Backups"];
+	[[NSFileManager defaultManager] createDirectoryAtPath:backups_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	return backups_folder;
+}
+
 + (NSString *) cachedProfileFolder
 {
 	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
