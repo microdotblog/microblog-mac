@@ -240,7 +240,9 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 				self.tableView.animator.alphaValue = 1.0;
 
 				if (fetchMore && new_posts.count == limit) {
-					[self fetchPostsForSearch:search limit:kRecentPostsBackgroundLimit offset:kRecentPostsInitialLimit existingPosts:posts_to_show requestID:requestID fetchMore:NO];
+					NSInteger next_offset = offset + limit;
+					BOOL should_fetch_more = (offset == 0);
+					[self fetchPostsForSearch:search limit:kRecentPostsBackgroundLimit offset:next_offset existingPosts:posts_to_show requestID:requestID fetchMore:should_fetch_more];
 				}
 			});
 		}
