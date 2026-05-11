@@ -217,8 +217,19 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 				if (search.length == 0) {
 					self.allPosts = posts_to_show;
 				}
+
+				BOOL is_appending_posts = (existingPosts.count > 0);
+				NSInteger existing_count = self.currentPosts.count;
 				self.currentPosts = posts_to_show;
-				[self.tableView reloadData];
+
+				if (is_appending_posts && new_posts.count > 0) {
+					NSRange range = NSMakeRange(existing_count, new_posts.count);
+					NSIndexSet* row_indexes = [NSIndexSet indexSetWithIndexesInRange:range];
+					[self.tableView insertRowsAtIndexes:row_indexes withAnimation:NSTableViewAnimationEffectNone];
+				}
+				else if (!is_appending_posts) {
+					[self.tableView reloadData];
+				}
 				[self restoreSelectionForPostURL:selected_url];
 
 				[self setupBlogName];
@@ -228,9 +239,9 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 				self.blogNameButton.hidden = NO;
 				self.tableView.animator.alphaValue = 1.0;
 
-					if (fetchMore && new_posts.count == limit) {
-						[self fetchPostsForSearch:search limit:kRecentPostsBackgroundLimit offset:kRecentPostsInitialLimit existingPosts:posts_to_show requestID:requestID fetchMore:NO];
-					}
+				if (fetchMore && new_posts.count == limit) {
+					[self fetchPostsForSearch:search limit:kRecentPostsBackgroundLimit offset:kRecentPostsInitialLimit existingPosts:posts_to_show requestID:requestID fetchMore:NO];
+				}
 			});
 		}
 	}];
