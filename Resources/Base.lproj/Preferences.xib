@@ -639,7 +639,7 @@
                         <constraint firstAttribute="width" constant="369" id="S5T-xl-eLn"/>
                         <constraint firstAttribute="height" constant="50" id="wZP-67-qQm"/>
                     </constraints>
-                    <textFieldCell key="cell" title="Micro.blog will download the posts and photos from your blog to an archive file on your Mac once a week." id="dnn-a8-Qzb">
+                    <textFieldCell key="cell" title="Micro.blog will download the posts and photos from your blog to a blog archive file on your Mac once a week." id="dnn-a8-Qzb">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
