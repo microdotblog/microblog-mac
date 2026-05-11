@@ -170,6 +170,26 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.backupCancelButton.hidden = YES;
 }
 
+- (NSString *) localizedBackupDateString:(NSDate *)date
+{
+	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+	formatter.dateStyle = NSDateFormatterShortStyle;
+	formatter.timeStyle = NSDateFormatterShortStyle;
+	return [formatter stringFromDate:date];
+}
+
+- (void) updateBackupDateField
+{
+	NSDate* last_backup = [[NSUserDefaults standardUserDefaults] objectForKey:kLastBackupDatePrefKey];
+	if ([last_backup isKindOfClass:[NSDate class]]) {
+		self.backupDateField.stringValue = [NSString stringWithFormat:@"Last backup: %@", [self localizedBackupDateString:last_backup]];
+	}
+	else {
+		NSDate* next_backup = [NSDate dateWithTimeIntervalSinceNow:kInitialBackupTimerInterval];
+		self.backupDateField.stringValue = [NSString stringWithFormat:@"Next backup: %@", [self localizedBackupDateString:next_backup]];
+	}
+}
+
 - (void) updateBackupStatus:(NSString *)status
 {
 	BOOL is_in_progress = [[NSUserDefaults standardUserDefaults] boolForKey:kBackupInProgressPrefKey];
@@ -456,6 +476,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.window.contentView addSubview:self.backupPane];
 	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.backupPane.hidden = NO;
+	[self updateBackupDateField];
 	[self updateBackupProgressBarWithProgress:nil status:nil];
 }
 
@@ -497,6 +518,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	NSNumber* progress = [notification.userInfo objectForKey:kCurrentBackupProgressKey];
 	NSString* status = [notification.userInfo objectForKey:kCurrentBackupStatusKey];
+	[self updateBackupDateField];
 	[self updateBackupProgressBarWithProgress:progress status:status];
 }
 

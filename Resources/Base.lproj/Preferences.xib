@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="accountsCollectionView" destination="4NN-qZ-kGJ" id="GoM-qZ-yW7"/>
                 <outlet property="backupCancelButton" destination="vzr-gP-UIY" id="gzX-pt-dVn"/>
+                <outlet property="backupDateField" destination="Wz2-SR-PYM" id="QYV-oI-Z7p"/>
                 <outlet property="backupFolderCheckbox" destination="B0n-SO-nte" id="whD-8O-vwx"/>
                 <outlet property="backupPane" destination="UYJ-an-MUd" id="SUt-FU-7Jl"/>
                 <outlet property="backupProgressBar" destination="5K3-Ol-d7W" id="3wO-Lw-Zdl"/>
@@ -666,13 +667,13 @@
                     </connections>
                 </button>
                 <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="5K3-Ol-d7W">
-                    <rect key="frame" x="20" y="286" width="340" height="20"/>
+                    <rect key="frame" x="20" y="256" width="340" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="uBy-sc-MbL"/>
                     </constraints>
                 </progressIndicator>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6DL-kJ-oTU">
-                    <rect key="frame" x="20" y="314" width="371" height="16"/>
+                    <rect key="frame" x="18" y="284" width="373" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Status..." id="ZI7-Di-yHQ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -680,7 +681,7 @@
                     </textFieldCell>
                 </textField>
                 <button hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vzr-gP-UIY">
-                    <rect key="frame" x="365" y="278" width="30" height="36"/>
+                    <rect key="frame" x="365" y="248" width="30" height="36"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="M0R-Q8-NWM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -693,8 +694,17 @@
                         <action selector="cancelBackup:" target="-2" id="X85-Gj-kz5"/>
                     </connections>
                 </button>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wz2-SR-PYM">
+                    <rect key="frame" x="18" y="320" width="122" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Next backup: today" id="O6Q-HM-NEf">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
+                <constraint firstItem="6DL-kJ-oTU" firstAttribute="top" secondItem="Wz2-SR-PYM" secondAttribute="bottom" constant="20" id="1Fq-5q-eRU"/>
                 <constraint firstItem="0y1-UE-Iss" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="9De-ZM-Sv6"/>
                 <constraint firstItem="0y1-UE-Iss" firstAttribute="top" secondItem="UYJ-an-MUd" secondAttribute="top" constant="29" id="Bgv-HE-hec"/>
                 <constraint firstItem="LmD-dE-rpk" firstAttribute="centerY" secondItem="B0n-SO-nte" secondAttribute="centerY" id="CGs-Ou-5ma"/>
@@ -702,12 +712,13 @@
                 <constraint firstAttribute="trailing" secondItem="vzr-gP-UIY" secondAttribute="trailing" constant="14" id="EmW-Wm-4yv"/>
                 <constraint firstItem="LmD-dE-rpk" firstAttribute="leading" secondItem="B0n-SO-nte" secondAttribute="trailing" constant="8" symbolic="YES" id="Md8-OJ-ifz"/>
                 <constraint firstItem="B0n-SO-nte" firstAttribute="top" secondItem="0y1-UE-Iss" secondAttribute="bottom" constant="6" id="MgK-yV-TMN"/>
-                <constraint firstItem="6DL-kJ-oTU" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="22" id="OyL-rR-zHM"/>
+                <constraint firstItem="6DL-kJ-oTU" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="OyL-rR-zHM"/>
                 <constraint firstAttribute="trailing" secondItem="6DL-kJ-oTU" secondAttribute="trailing" constant="20" symbolic="YES" id="SRT-xK-F8K"/>
-                <constraint firstItem="6DL-kJ-oTU" firstAttribute="top" secondItem="LmD-dE-rpk" secondAttribute="bottom" constant="24" id="YKO-g0-BGd"/>
+                <constraint firstItem="Wz2-SR-PYM" firstAttribute="top" secondItem="B0n-SO-nte" secondAttribute="bottom" constant="20" id="eUB-k4-39x"/>
                 <constraint firstItem="vzr-gP-UIY" firstAttribute="centerY" secondItem="5K3-Ol-d7W" secondAttribute="centerY" id="kiq-Xx-DE6"/>
                 <constraint firstItem="5K3-Ol-d7W" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="lEp-Eh-Uzm"/>
                 <constraint firstItem="vzr-gP-UIY" firstAttribute="leading" secondItem="5K3-Ol-d7W" secondAttribute="trailing" constant="5" id="q7s-71-XdI"/>
+                <constraint firstItem="Wz2-SR-PYM" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="rp7-st-HJu"/>
                 <constraint firstItem="B0n-SO-nte" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="so7-Qx-24x"/>
             </constraints>
             <point key="canvasLocation" x="918.5" y="59.5"/>

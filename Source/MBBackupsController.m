@@ -11,8 +11,6 @@
 #import "RFSettings.h"
 
 static NSTimeInterval const kBackupTimerInterval = 60 * 60;
-static NSTimeInterval const kInitialBackupTimerInterval = 5 * 60;
-
 @interface MBBackupsController ()
 
 @property (strong, nonatomic, nullable) NSTimer* backupTimer;
