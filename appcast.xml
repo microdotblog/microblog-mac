@@ -5,6 +5,31 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.9</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added new Backup preference tab to save your default blog posts and photos to a .bar archive once a week. Backups are on by default.</li>
+					<li>Improved Posts and Pages to load recent posts faster.</li>
+					<li>Improved the blogs popup menu when you have multiple blogs to open quickly as a standard menu.</li>
+					<li>Updated Categories and Cross-posting in the new post window so both sections can stay visible.</li>
+					<li>Fixed flickering and selection changes when refreshing Posts and Pages.</li>
+					<li>Fixed dark mode divider colors in the main window.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Mon, 11 Mar 2026 09:55:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.9.zip" sparkle:shortVersionString="3.9" sparkle:version="236" length="4561704" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.8.4</title>
  			<description><![CDATA[
 				<style>

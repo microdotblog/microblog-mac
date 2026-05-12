@@ -141,7 +141,6 @@
 		4B5D86752E6CB16500697E41 /* MBBookNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D86742E6CB16500697E41 /* MBBookNoteController.m */; };
 		4B5D867B2E6CB1DE00697E41 /* BookNoteWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5D86792E6CB1DE00697E41 /* BookNoteWindow.xib */; };
 		4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D867D2E6CC74A00697E41 /* SAMKeychain+Helper.m */; };
-		4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */; };
 		4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAAF24E2ECD6007674FF /* RFUploadsScrollView.m */; };
 		4B5DDAB324E2F03D007674FF /* RFPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB224E2F03D007674FF /* RFPhotoImageView.m */; };
 		4B5DDAB624E44853007674FF /* PostWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B5DDAB424E44853007674FF /* PostWindow.xib */; };
@@ -162,6 +161,7 @@
 		4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7711F8B335C00CB7950 /* RFMicropub.m */; };
 		4B6AE7751F8B336600CB7950 /* RFPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE7731F8B336600CB7950 /* RFPhoto.m */; };
 		4B6AE78B1F8D8A2D00CB7950 /* RFHighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6AE78A1F8D8A2D00CB7950 /* RFHighlightingTextView.m */; };
+		4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F8EA22EF01A7C00A1B2C3 /* MBSplitView.m */; };
 		4B71E6A32DE0C94D0097E1F3 /* HTMLNode+Mutating.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B71E6A22DE0C94D0097E1F3 /* HTMLNode+Mutating.m */; };
 		4B79E2852D089BC500A22861 /* Collections.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B79E2832D089BC500A22861 /* Collections.xib */; };
 		4B79E28A2D089D2700A22861 /* MBCollectionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B79E2892D089D2700A22861 /* MBCollectionsController.m */; };
@@ -2335,7 +2335,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 235;
+				CURRENT_PROJECT_VERSION = 236;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2352,7 +2352,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.8.4;
+				MARKETING_VERSION = 3.9;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2372,7 +2372,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 235;
+				CURRENT_PROJECT_VERSION = 236;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2389,7 +2389,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.8.4;
+				MARKETING_VERSION = 3.9;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
