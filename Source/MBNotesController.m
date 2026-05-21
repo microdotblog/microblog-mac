@@ -608,14 +608,27 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (row >= 0) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
 
-		NSString* s = n.text;
-		if (s.length > 20) {
-			s = [s substringToIndex:20];
-			s = [s stringByAppendingString:@"..."];
+		NSString* trimmed_text = [n.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSString* title = @"Delete empty note?";
+		if (trimmed_text.length > 0) {
+			NSString* s = [trimmed_text stringByReplacingOccurrencesOfString:@"#" withString:@""];
+			s = [s stringByReplacingOccurrencesOfString:@"\r" withString:@" "];
+			s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+			s = [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			if (s.length > 20) {
+				s = [s substringToIndex:20];
+				s = [s stringByAppendingString:@"..."];
+			}
+			if (s.length > 0) {
+				title = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+			}
+			else {
+				title = @"Delete note?";
+			}
 		}
 		
 		NSAlert* sheet = [[NSAlert alloc] init];
-		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.messageText = title;
 		sheet.informativeText = @"This note will be deleted from Micro.blog.";
 		[sheet addButtonWithTitle:@"Delete"];
 		[sheet addButtonWithTitle:@"Cancel"];
