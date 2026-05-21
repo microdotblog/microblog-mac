@@ -416,7 +416,8 @@
 
 - (IBAction) newNote:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kNewNoteNotification object:self];
+	[self showMainWindow:nil];
+	[self.timelineController showNotesAndStartNewNote];
 }
 
 - (IBAction) importBlogArchive:(id)sender

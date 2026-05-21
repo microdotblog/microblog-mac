@@ -664,6 +664,11 @@ static NSInteger const kSelectionNotes = 12;
 
 - (IBAction) showNotes:(id)sender
 {
+	[self showNotesWithRefresh:YES];
+}
+
+- (void) showNotesWithRefresh:(BOOL)shouldRefresh
+{
 	self.selectedTimeline = kSelectionNotes;
 
 	[self closeOverlays];
@@ -671,7 +676,7 @@ static NSInteger const kSelectionNotes = 12;
 	if (self.notesController == nil) {
 		self.notesController = [[MBNotesController alloc] init];
 	}
-	else {
+	else if (shouldRefresh) {
 		[self.notesController deselectAll];
 		[self.notesController fetchNotes];
 	}
@@ -680,6 +685,12 @@ static NSInteger const kSelectionNotes = 12;
 
 	[self selectSidebarRow:kSelectionNotes];
 	[self startLoadingSidebarRow:kSelectionNotes];
+}
+
+- (void) showNotesAndStartNewNote
+{
+	[self showNotesWithRefresh:NO];
+	[self.notesController startNewNote];
 }
 
 - (IBAction) refreshTimeline:(id)sender

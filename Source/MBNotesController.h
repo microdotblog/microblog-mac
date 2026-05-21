@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) MBVersionsController* versionsController;
 
 - (void) fetchNotes;
+- (void) startNewNote;
 - (void) focusSearch;
 - (void) deselectAll;
 
