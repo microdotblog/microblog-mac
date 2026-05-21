@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) saveNote:(MBNote *)note;
 - (BOOL) saveNotes:(NSArray *)notes;
+- (BOOL) deleteNoteWithID:(NSNumber *)noteID;
 - (nullable MBNote *) noteWithID:(NSNumber *)noteID;
 - (NSArray *) notesWithNotebookID:(NSNumber *)notebookID;
 

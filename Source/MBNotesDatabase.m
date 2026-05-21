@@ -183,6 +183,15 @@ static NSString* const kNotesUpdatedAtIndexSQL = @"CREATE INDEX IF NOT EXISTS up
 	return did_save;
 }
 
+- (BOOL) deleteNoteWithID:(NSNumber *)noteID
+{
+	if (noteID == nil) {
+		return NO;
+	}
+
+	return [self executeUpdate:@"DELETE FROM notes WHERE id = ?", noteID];
+}
+
 - (MBNote *) noteWithID:(NSNumber *)noteID
 {
 	FMResultSet* results = [self executeQuery:@"SELECT * FROM notes WHERE id = ?", noteID];

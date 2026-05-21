@@ -749,6 +749,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Note" message:msg button:@"OK" completionHandler:NULL];
 			}
 			else {
+				MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+				[db deleteNoteWithID:note.noteID];
+				[db close];
+
 				[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:nil];
 			}
 			
@@ -804,6 +808,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 			if (note.noteID == nil) {
 				note.noteID = [response.parsedResponse objectForKey:@"id"];
 			}
+			note.updatedAt = [NSDate date];
+
+			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+			[db saveNote:note];
+			[db close];
 			
 			[self.progressSpinner stopAnimation:nil];
 			[self reloadRowForNote:note onlyRecentNotes:NO];
