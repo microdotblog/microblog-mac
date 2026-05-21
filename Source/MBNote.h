@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) decryptText:(NSString *)text withKey:(NSString *)key;
 
 + (BOOL) isProbablyEncrypted:(NSString *)text;
++ (MBNote *) noteWithDictionary:(NSDictionary *)dictionary notebookID:(NSNumber *)notebookID secretKey:(NSString *)secretKey;
 
 @end
 

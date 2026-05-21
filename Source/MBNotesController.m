@@ -15,12 +15,12 @@
 #import "MBNotesKeyController.h"
 #import "MBVersionsController.h"
 #import "MBBookCoverView.h"
+#import "MBNotesDatabase.h"
 #import "RFClient.h"
 #import "RFAccount.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
-#import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
 #import "NSColor+Extras.h"
@@ -340,17 +340,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
-				NSDictionary* mb = [item objectForKey:@"_microblog"];
-				
-				MBNote* n = [[MBNote alloc] init];
-				
-				n.noteID = [item objectForKey:@"id"];
-				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
-				n.isShared = [[mb objectForKey:@"is_shared"] boolValue];
-				n.sharedURL = [mb objectForKey:@"shared_url"];
-				n.attachedBookISBN = [mb objectForKey:@"attached_book_isbn"];
-				n.attachedBookTitle = [mb objectForKey:@"attached_book_title"];
-				n.notebookID = notebookID;
+				MBNote* n = [MBNote noteWithDictionary:item notebookID:notebookID secretKey:self.secretKey];
 
                 // if selected note, update if sharing changed
                 if (self.selectedNote && self.selectedNote.noteID) {
@@ -362,23 +352,13 @@ static NSString* const kNotesSettingsType = @"Setting";
                         });
                     }
                 }
-				
-				if (n.isEncrypted) {
-					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
-					if (n.text == nil) {
-						// decryption probably failed
-						n.text = @"";
-					}
-				}
-				else {
-					n.text = [item objectForKey:@"content_text"];
-				}
-				
-				NSString* date_s = [item objectForKey:@"date_published"];
-				n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
-				
+
 				[new_notes addObject:n];
 			}
+
+			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+			[db saveNotes:new_notes];
+			[db close];
 			
 			[array addObjectsFromArray:new_notes];
 			

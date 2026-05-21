@@ -85,6 +85,8 @@
 		4B2F97282E00B97B00A834C8 /* SelectiveUsernameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2F97262E00B97B00A834C8 /* SelectiveUsernameCell.xib */; };
 		4B2FAB232E87567200F725D4 /* MBUploadProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B2FAB222E87567200F725D4 /* MBUploadProgress.m */; };
 		4B32DD1E2E43E11F003313B3 /* MBGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B32DD1D2E43E11F003313B3 /* MBGoal.m */; };
+		4B35A5BC2FBFA58700E5F46C /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 4B35A5BB2FBFA58700E5F46C /* FMDB */; };
+		4B35A5BD2FBFA58700E5F46C /* MBNotesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B35A5BF2FBFA58700E5F46C /* MBNotesDatabase.m */; };
 		4B36915429A2BA8B00561D9A /* MBCrosspostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */; };
 		4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B36915529A2BAD800561D9A /* CrosspostCell.xib */; };
 		4B37737D2C3DC451000495DF /* Info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B37737B2C3DC451000495DF /* Info.xib */; };
@@ -290,6 +292,8 @@
 /* Begin PBXFileReference section */
 		4B001CCE2B27944300BBF456 /* MBNotesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesController.h; path = Source/MBNotesController.h; sourceTree = "<group>"; };
 		4B001CCF2B27944300BBF456 /* MBNotesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesController.m; path = Source/MBNotesController.m; sourceTree = "<group>"; };
+		4B35A5BE2FBFA58700E5F46C /* MBNotesDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesDatabase.h; path = Source/MBNotesDatabase.h; sourceTree = "<group>"; };
+		4B35A5BF2FBFA58700E5F46C /* MBNotesDatabase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesDatabase.m; path = Source/MBNotesDatabase.m; sourceTree = "<group>"; };
 		4B001CD12B27955900BBF456 /* MBNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNote.h; path = Source/MBNote.h; sourceTree = "<group>"; };
 		4B001CD22B27955900BBF456 /* MBNote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNote.m; path = Source/MBNote.m; sourceTree = "<group>"; };
 		4B001CD42B27957800BBF456 /* MBNoteCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNoteCell.h; path = Source/MBNoteCell.h; sourceTree = "<group>"; };
@@ -759,6 +763,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */,
+				4B35A5BC2FBFA58700E5F46C /* FMDB in Frameworks */,
 				4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */,
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
@@ -1017,6 +1022,8 @@
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
 				4B001CCE2B27944300BBF456 /* MBNotesController.h */,
 				4B001CCF2B27944300BBF456 /* MBNotesController.m */,
+				4B35A5BE2FBFA58700E5F46C /* MBNotesDatabase.h */,
+				4B35A5BF2FBFA58700E5F46C /* MBNotesDatabase.m */,
 				4B001CD12B27955900BBF456 /* MBNote.h */,
 				4BEB08F12B79348C004082CB /* MBNotebook.h */,
 				4BEB08F22B79348C004082CB /* MBNotebook.m */,
@@ -1380,6 +1387,7 @@
 			name = Micro.blog;
 			packageProductDependencies = (
 				4B3840DC26964F3B00AD3781 /* ZipArchive */,
+				4B35A5BB2FBFA58700E5F46C /* FMDB */,
 			);
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
@@ -1418,6 +1426,7 @@
 			mainGroup = 4B7F0ACF1BAF4B77004553A6;
 			packageReferences = (
 				4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */,
+				4B35A5BA2FBFA58700E5F46C /* XCRemoteSwiftPackageReference "fmdb" */,
 			);
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
@@ -1562,6 +1571,7 @@
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
 				4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */,
+				4B35A5BD2FBFA58700E5F46C /* MBNotesDatabase.m in Sources */,
 				4BE23F8F2A70090D00E24718 /* MBHighlightsController.m in Sources */,
 				4B400D05201EC55B00C71AAF /* MMElement.m in Sources */,
 				4BEB08F32B79348C004082CB /* MBNotebook.m in Sources */,
@@ -2423,6 +2433,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4B35A5BA2FBFA58700E5F46C /* XCRemoteSwiftPackageReference "fmdb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ccgus/fmdb";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.12;
+			};
+		};
 		4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZipArchive/ZipArchive.git";
@@ -2434,6 +2452,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4B35A5BB2FBFA58700E5F46C /* FMDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B35A5BA2FBFA58700E5F46C /* XCRemoteSwiftPackageReference "fmdb" */;
+			productName = FMDB;
+		};
 		4B3840DC26964F3B00AD3781 /* ZipArchive */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */;
