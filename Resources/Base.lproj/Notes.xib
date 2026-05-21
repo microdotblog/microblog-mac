@@ -25,6 +25,7 @@
                 <outlet property="sharedFooter" destination="Wmy-sy-ayo" id="gao-Sg-bj9"/>
                 <outlet property="sharedHeightConstraint" destination="hcM-rT-u18" id="IwW-m6-Ltb"/>
                 <outlet property="sharedLinkButton" destination="kRT-cP-h9u" id="8I4-A0-sod"/>
+                <outlet property="splitView" destination="K8i-KT-xcK" id="7fJ-yc-Spl"/>
                 <outlet property="tableView" destination="Sif-9p-2X2" id="n5n-9F-Djv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="q4Y-Df-f8v"/>
             </connections>

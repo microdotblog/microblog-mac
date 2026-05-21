@@ -56,6 +56,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	[self setupSecretKey];
 	[self setupTable];
+	[self setupSplitView];
 	[self setupNotifications];
 	[self setupTimer];
 	[self setupDetail];
@@ -63,6 +64,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	[self fetchNotes];
 	[self saveKeyToCloud];
+}
+
+- (void) setupSplitView
+{
+	NSString* autosave_name = @"NotesSplitView";
+	NSString* defaults_key = [NSString stringWithFormat:@"NSSplitView Subview Frames %@", autosave_name];
+	BOOL has_saved_position = ([[NSUserDefaults standardUserDefaults] objectForKey:defaults_key] != nil);
+
+	[self.splitView setAutosaveName:autosave_name];
+
+	if (!has_saved_position) {
+		RFDispatchMainAsync(^{
+			[self.view layoutSubtreeIfNeeded];
+			[self.splitView setPosition:(self.splitView.bounds.size.width / 2.0) ofDividerAtIndex:0];
+		});
+	}
 }
 
 - (void) setupSecretKey
