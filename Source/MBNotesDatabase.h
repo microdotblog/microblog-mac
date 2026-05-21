@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBNotesDatabase : FMDatabase
 
 + (NSString *) databasePath;
++ (BOOL) databaseExists;
 
 - (nullable instancetype) init;
 - (BOOL) createTables;
@@ -27,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) saveNote:(MBNote *)note;
 - (BOOL) saveNotes:(NSArray *)notes;
 - (nullable MBNote *) noteWithID:(NSNumber *)noteID;
+- (NSArray *) notesWithNotebookID:(NSNumber *)notebookID;
 
 @end
 

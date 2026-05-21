@@ -23,7 +23,7 @@ static NSString* const kNotesTableSQL = @"CREATE TABLE IF NOT EXISTS notes ("
 	"attached_book_title TEXT"
 	")";
 
-static NSString* const kNotesUpdatedAtIndexSQL = @"CREATE INDEX IF NOT EXISTS updated_at_index ON notes (updated_at DESC)";
+static NSString* const kNotesUpdatedAtIndexSQL = @"CREATE INDEX IF NOT EXISTS updated_at_index ON notes (notebook_id, updated_at DESC)";
 
 @implementation MBNotesDatabase
 
@@ -40,6 +40,11 @@ static NSString* const kNotesUpdatedAtIndexSQL = @"CREATE INDEX IF NOT EXISTS up
 	[[NSFileManager defaultManager] createDirectoryAtPath:databases_folder withIntermediateDirectories:YES attributes:nil error:&error];
 
 	return [databases_folder stringByAppendingPathComponent:@"Notes.db"];
+}
+
++ (BOOL) databaseExists
+{
+	return [[NSFileManager defaultManager] fileExistsAtPath:[self databasePath]];
 }
 
 - (instancetype) init
@@ -188,6 +193,19 @@ static NSString* const kNotesUpdatedAtIndexSQL = @"CREATE INDEX IF NOT EXISTS up
 	[results close];
 
 	return note;
+}
+
+- (NSArray *) notesWithNotebookID:(NSNumber *)notebookID
+{
+	NSMutableArray* notes = [NSMutableArray array];
+	FMResultSet* results = [self executeQuery:@"SELECT * FROM notes WHERE notebook_id = ? ORDER BY updated_at DESC", notebookID];
+
+	while ([results next]) {
+		[notes addObject:[self noteFromResultSet:results]];
+	}
+	[results close];
+
+	return notes;
 }
 
 - (id) dbValue:(id)value

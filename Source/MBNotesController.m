@@ -269,8 +269,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 	self.isFetchingNotes = YES;
 
-	NSMutableArray* new_notes = [NSMutableArray array];
-	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:new_notes completion:^{
+	NSMutableArray* cached_notes = [[self cachedNotesWithNotebookID:notebookID] mutableCopy];
+	NSMutableSet* cached_note_ids = [self noteIDsFromNotes:cached_notes];
+	NSMutableSet* server_note_ids = [NSMutableSet set];
+
+	if (cached_notes.count > 0) {
+		self.allNotes = cached_notes;
+		self.currentNotes = cached_notes;
+		if (self.searchField.stringValue.length > 0) {
+			[self runSearch:self.searchField.stringValue];
+		}
+		else {
+			[self.tableView reloadData];
+		}
+	}
+
+	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:cached_notes cachedNoteIDs:cached_note_ids serverNoteIDs:server_note_ids completion:^{
 		self.isFetchingNotes = NO;
 
 		if (handler) {
@@ -279,6 +293,69 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 		self.noteCreatedWhileFetching = nil;
 	}];
+}
+
+- (NSArray *) cachedNotesWithNotebookID:(NSNumber *)notebookID
+{
+	if (![MBNotesDatabase databaseExists]) {
+		return @[];
+	}
+
+	MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+	NSArray* notes = [db notesWithNotebookID:notebookID];
+	[db close];
+
+	return notes;
+}
+
+- (NSMutableSet *) noteIDsFromNotes:(NSArray *)notes
+{
+	NSMutableSet* note_ids = [NSMutableSet set];
+
+	for (MBNote* note in notes) {
+		if (note.noteID) {
+			[note_ids addObject:note.noteID];
+		}
+	}
+
+	return note_ids;
+}
+
+- (void) mergeNotes:(NSArray *)notes intoNotesArray:(NSMutableArray *)array atOffset:(NSInteger)offset
+{
+	if (notes.count == 0) {
+		return;
+	}
+
+	NSSet* note_ids = [self noteIDsFromNotes:notes];
+	NSMutableIndexSet* indexes = [NSMutableIndexSet indexSet];
+
+	for (NSInteger i = 0; i < array.count; i++) {
+		MBNote* note = [array objectAtIndex:i];
+		if (note.noteID && [note_ids containsObject:note.noteID]) {
+			[indexes addIndex:i];
+		}
+	}
+
+	[array removeObjectsAtIndexes:indexes];
+
+	NSInteger insert_index = MIN(offset, array.count);
+	NSIndexSet* insert_indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(insert_index, notes.count)];
+	[array insertObjects:notes atIndexes:insert_indexes];
+}
+
+- (void) removeNotesFromArray:(NSMutableArray *)array notInNoteIDs:(NSSet *)noteIDs
+{
+	NSMutableIndexSet* indexes = [NSMutableIndexSet indexSet];
+
+	for (NSInteger i = 0; i < array.count; i++) {
+		MBNote* note = [array objectAtIndex:i];
+		if (note.noteID && ![noteIDs containsObject:note.noteID]) {
+			[indexes addIndex:i];
+		}
+	}
+
+	[array removeObjectsAtIndexes:indexes];
 }
 
 - (NSArray *) notesArrayByIncludingNewNoteIfNeeded:(NSArray *)notes
@@ -307,7 +384,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
-- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array completion:(void (^)(void))handler
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array cachedNoteIDs:(NSMutableSet *)cachedNoteIDs serverNoteIDs:(NSMutableSet *)serverNoteIDs completion:(void (^)(void))handler
 {
 	if (self.secretKey == nil) {
 		return;
@@ -323,7 +400,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	// remember selection if there is one
 	NSNumber* selected_id = nil;
 	NSInteger selected_row = [self.tableView selectedRow];
-	if (selected_row >= 0) {
+	if ((selected_row >= 0) && (selected_row < self.currentNotes.count)) {
 		MBNote* n = [self.currentNotes objectAtIndex:selected_row];
 		selected_id = n.noteID;
 	}
@@ -337,10 +414,18 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_notes = [NSMutableArray array];
+			BOOL all_notes_cached = YES;
 			
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBNote* n = [MBNote noteWithDictionary:item notebookID:notebookID secretKey:self.secretKey];
+				BOOL note_is_cached = (n.noteID && [cachedNoteIDs containsObject:n.noteID]);
+				if (!note_is_cached) {
+					all_notes_cached = NO;
+				}
+				if (n.noteID) {
+					[serverNoteIDs addObject:n.noteID];
+				}
 
                 // if selected note, update if sharing changed
                 if (self.selectedNote && self.selectedNote.noteID) {
@@ -360,10 +445,23 @@ static NSString* const kNotesSettingsType = @"Setting";
 			[db saveNotes:new_notes];
 			[db close];
 			
-			[array addObjectsFromArray:new_notes];
+			for (MBNote* note in new_notes) {
+				if (note.noteID) {
+					[cachedNoteIDs addObject:note.noteID];
+				}
+			}
+
+			[self mergeNotes:new_notes intoNotesArray:array atOffset:offset];
 			
 			RFDispatchMainAsync(^{
-				if (items.count < count) {
+				BOOL reached_end = (items.count < count);
+				BOOL should_stop_paging = (reached_end || all_notes_cached);
+
+				if (should_stop_paging) {
+					if (reached_end) {
+						[self removeNotesFromArray:array notInNoteIDs:serverNoteIDs];
+					}
+
 					NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array];
 					self.allNotes = updated_notes;
 					self.currentNotes = updated_notes;
@@ -416,7 +514,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 					// fetch another page
 					NSLog(@"Fetching another page of notes, offset: %ld", (long)offset);
 					NSInteger new_offset = offset + count;
-					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array completion:handler];
+					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array cachedNoteIDs:cachedNoteIDs serverNoteIDs:serverNoteIDs completion:handler];
 				}
 			});
 		}
