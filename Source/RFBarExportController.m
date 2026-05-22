@@ -9,6 +9,7 @@
 #import "RFBarExportController.h"
 
 #import "RFPost.h"
+#import "RFSettings.h"
 #import "UUDate.h"
 #import "MMMarkdown.h"
 #import <ZipArchive.h>
@@ -47,88 +48,87 @@
 	return post.text;
 }
 
-- (NSString *) placeholderForPost:(RFPost *)post
+- (NSString *) escapedHTMLString:(NSString *)s
 {
-	return [NSString stringWithFormat:@"[placeholder_post_%@]", post.postID];
+	if (s == nil) {
+		return @"";
+	}
+
+	NSMutableString* result = [s mutableCopy];
+	[result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:0 range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:0 range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@">" withString:@"&gt;" options:0 range:NSMakeRange(0, result.length)];
+	return result;
 }
 
-- (NSXMLDocument *) makeHTML
+- (NSString *) escapedHTMLAttributeString:(NSString *)s
 {
-	NSXMLElement* root = [NSXMLNode elementWithName:@"html"];
-	NSXMLDocument* doc = [[NSXMLDocument alloc] initWithRootElement:root];
-	[doc setDocumentContentKind:NSXMLDocumentHTMLKind];
-	[doc setCharacterEncoding:@"UTF-8"];
-	
-	NSXMLElement* body = [NSXMLNode elementWithName:@"body"];
-	[root addChild:body];
+	NSMutableString* result = [[self escapedHTMLString:s] mutableCopy];
+	[result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:0 range:NSMakeRange(0, result.length)];
+	return result;
+}
 
-	NSXMLElement* feed_div = [NSXMLNode elementWithName:@"div"];
-	[body addChild:feed_div];
-
-	NSXMLNode* feed_class = [NSXMLNode attributeWithName:@"class" stringValue:@"h-feed"];
-	[feed_div addAttribute:feed_class];
-
-	for (RFPost* post in self.posts) {
-		NSXMLElement* entry_div = [NSXMLNode elementWithName:@"div"];
-		[feed_div addChild:entry_div];
-
-		NSXMLNode* entry_class = [NSXMLNode attributeWithName:@"class" stringValue:@"h-entry"];
-		[entry_div addAttribute:entry_class];
-
-		if (post.title.length > 0) {
-			NSXMLElement* h1_tag = [NSXMLNode elementWithName:@"h1" stringValue:post.title];
-			[entry_div addChild:h1_tag];
-
-			NSXMLNode* h1_class = [NSXMLNode attributeWithName:@"class" stringValue:@"p-name"];
-			[h1_tag addAttribute:h1_class];
+- (NSArray *) renderedPostsForPosts:(NSArray *)posts
+{
+	NSMutableArray* rendered_posts = [NSMutableArray array];
+	for (RFPost* post in posts) {
+		NSError* error = nil;
+		NSString* post_text = post.text ?: @"";
+		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post_text extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
+		if (post_html == nil) {
+			post_html = @"";
 		}
 
-		NSXMLElement* a_tag = [NSXMLNode elementWithName:@"a"];
-		[entry_div addChild:a_tag];
-
-		NSXMLNode* a_href = [NSXMLNode attributeWithName:@"href" stringValue:post.url];
-		[a_tag addAttribute:a_href];
-
-		NSXMLNode* a_class = [NSXMLNode attributeWithName:@"class" stringValue:@"u-url"];
-		[a_tag addAttribute:a_class];
-
-		NSXMLElement* time_tag = [NSXMLNode elementWithName:@"time" stringValue:[post.postedAt description]];
-		[a_tag addChild:time_tag];
-
-		NSXMLNode* time_datetime = [NSXMLNode attributeWithName:@"datetime" stringValue:[post.postedAt uuRfc3339String]];
-		[time_tag addAttribute:time_datetime];
-
-		NSXMLNode* time_class = [NSXMLNode attributeWithName:@"class" stringValue:@"dt-published"];
-		[time_tag addAttribute:time_class];
-
-		NSXMLElement* content_div = [NSXMLNode elementWithName:@"div"];
-		[entry_div addChild:content_div];
-
-		NSXMLNode* content_class = [NSXMLNode attributeWithName:@"class" stringValue:@"e-content"];
-		[content_div addAttribute:content_class];
-		
-		NSString* placeholder = [self placeholderForPost:post];
-		
-		NSXMLNode* content_html = [NSXMLNode textWithStringValue:placeholder];
-		[content_div addChild:content_html];
+		[rendered_posts addObject:@{
+			@"post": post,
+			@"html": post_html
+		}];
 	}
-	
-	return doc;
+
+	return rendered_posts;
 }
 
-- (NSDictionary *) makeJSON
+- (NSString *) makeHTMLWithRenderedPosts:(NSArray *)renderedPosts
+{
+	NSMutableString* html = [NSMutableString string];
+	[html appendString:@"<html><body><div class=\"h-feed\">"];
+
+	for (NSDictionary* rendered_post in renderedPosts) {
+		RFPost* post = [rendered_post objectForKey:@"post"];
+		NSString* post_html = [rendered_post objectForKey:@"html"];
+		NSString* posted_at = [post.postedAt description];
+		NSString* posted_at_rfc3339 = [post.postedAt uuRfc3339String];
+
+		[html appendString:@"<div class=\"h-entry\">"];
+		if (post.title.length > 0) {
+			[html appendFormat:@"<h1 class=\"p-name\">%@</h1>", [self escapedHTMLString:post.title]];
+		}
+
+		[html appendFormat:@"<a href=\"%@\" class=\"u-url\"><time datetime=\"%@\" class=\"dt-published\">%@</time></a>",
+			[self escapedHTMLAttributeString:post.url],
+			[self escapedHTMLAttributeString:posted_at_rfc3339],
+			[self escapedHTMLString:posted_at]
+		];
+		[html appendFormat:@"<div class=\"e-content\">%@</div>", post_html];
+		[html appendString:@"</div>"];
+	}
+	
+	[html appendString:@"</div></body></html>"];
+	return html;
+}
+
+- (NSDictionary *) makeJSONWithRenderedPosts:(NSArray *)renderedPosts
 {
 	NSMutableArray* items = [NSMutableArray array];
 	
-	for (RFPost* post in self.posts) {
+	for (NSDictionary* rendered_post in renderedPosts) {
+		RFPost* post = [rendered_post objectForKey:@"post"];
+		NSString* post_html = [rendered_post objectForKey:@"html"];
 		NSMutableDictionary* info = [NSMutableDictionary dictionary];
 		
 		[info setValue:post.postID forKey:@"id"];
 		[info setValue:post.title forKey:@"title"];
 		[info setValue:post.text forKey:@"content_text"];
-		
-		NSError* error = nil;
-		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
 		[info setValue:post_html forKey:@"content_html"];
 
 		[info setValue:post.url forKey:@"url"];
@@ -146,59 +146,120 @@
 	return root;
 }
 
-- (void) finishExport
+- (NSString *) createArchiveInExportFolder:(NSString *)exportFolder posts:(NSArray *)posts error:(NSError **)error
 {
-	NSError* error = nil;
+	NSArray* rendered_posts = [self renderedPostsForPosts:posts];
 
-	NSXMLDocument* doc = [self makeHTML];
-	NSString* html_s = [doc XMLString];
-	
-	for (RFPost* post in self.posts) {
-		NSError* error = nil;
-		NSString* post_html = [MMMarkdown HTMLStringWithMarkdown:post.text extensions:MMMarkdownExtensionsFencedCodeBlocks|MMMarkdownExtensionsTables error:&error];
-		NSString* post_placeholder = [self placeholderForPost:post];
-		html_s = [html_s stringByReplacingOccurrencesOfString:post_placeholder withString:post_html];
+	NSString* html_s = [self makeHTMLWithRenderedPosts:rendered_posts];
+
+	NSString* html_path = [exportFolder stringByAppendingPathComponent:@"index.html"];
+	if (![html_s writeToFile:html_path atomically:YES encoding:NSUTF8StringEncoding error:error]) {
+		return nil;
 	}
 
-	NSString* html_path = [self.exportFolder stringByAppendingPathComponent:@"index.html"];
-	[html_s writeToFile:html_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
-
-	NSDictionary* info = [self makeJSON];
-	NSData* d = [NSJSONSerialization dataWithJSONObject:info options:0 error:&error];
+	NSDictionary* info = [self makeJSONWithRenderedPosts:rendered_posts];
+	NSData* d = [NSJSONSerialization dataWithJSONObject:info options:0 error:error];
+	if (d == nil) {
+		return nil;
+	}
 	NSString* json_s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 
-	NSString* json_path = [self.exportFolder stringByAppendingPathComponent:@"feed.json"];
-	[json_s writeToFile:json_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	NSString* json_path = [exportFolder stringByAppendingPathComponent:@"feed.json"];
+	if (![json_s writeToFile:json_path atomically:YES encoding:NSUTF8StringEncoding error:error]) {
+		return nil;
+	}
 	
-	NSString* downloads_folder = [self.exportFolder stringByDeletingLastPathComponent];
+	NSString* downloads_folder = [exportFolder stringByDeletingLastPathComponent];
 	NSString* zip_path = [downloads_folder stringByAppendingPathComponent:@"Micro.blog.bar"];
-	[SSZipArchive createZipFileAtPath:zip_path withContentsOfDirectory:self.exportFolder];
+	if (![SSZipArchive createZipFileAtPath:zip_path withContentsOfDirectory:exportFolder]) {
+		return nil;
+	}
 	
-	if (self.destinationPath) {
-		[self copyItemAtPath:zip_path toPath:self.destinationPath];
+	return zip_path;
+}
 
-		BOOL success = [[NSFileManager defaultManager] fileExistsAtPath:self.destinationPath];
-		if (self.completionHandler && !self.hasFinished) {
-			self.hasFinished = YES;
-			self.completionHandler(success, self.destinationPath);
+- (BOOL) copyExportFileAtPath:(NSString *)sourcePath toPath:(NSString *)destPath error:(NSError **)error
+{
+	NSFileManager* fm = [NSFileManager defaultManager];
+	BOOL is_folder = NO;
+	if ([fm fileExistsAtPath:destPath isDirectory:&is_folder]) {
+		if (is_folder) {
+			return NO;
 		}
+
+		NSURL* source_url = [NSURL fileURLWithPath:sourcePath];
+		NSURL* dest_url = [NSURL fileURLWithPath:destPath];
+		return [fm replaceItemAtURL:dest_url withItemAtURL:source_url backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:NULL error:error];
 	}
 	else {
-		NSString* new_path = [self promptSave:@"Micro.blog.bar"];
-		if (new_path) {
-			[self copyItemAtPath:zip_path toPath:new_path];
+		return [fm copyItemAtPath:sourcePath toPath:destPath error:error];
+	}
+}
+
+- (void) cleanupExportFolder:(NSString *)exportFolder
+{
+	NSString* temp_folder = NSTemporaryDirectory();
+	if ((exportFolder.length > 0) && [exportFolder containsString:temp_folder] && [exportFolder containsString:@"Micro.blog"]) {
+		NSError* error = nil;
+		[[NSFileManager defaultManager] removeItemAtPath:exportFolder error:&error];
+
+		NSString* parent_folder = [exportFolder stringByDeletingLastPathComponent];
+		if ((parent_folder.length > 0) && [parent_folder containsString:temp_folder] && [parent_folder containsString:@"Micro.blog"]) {
+			[[NSFileManager defaultManager] removeItemAtPath:parent_folder error:&error];
+			[RFSettings removeTemporaryFolder:parent_folder];
 		}
 	}
+}
 
-	[self cleanupExport];
+- (void) finishExport
+{
+	NSArray* posts = [self.posts copy];
+	NSString* export_folder = [self.exportFolder copy];
+	NSString* destination_path = [self.destinationPath copy];
+
+	if (destination_path) {
+		[self updateExportStatus:@"Creating archive..."];
+		dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+			NSError* error = nil;
+			NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts error:&error];
+			BOOL success = NO;
+			if (zip_path) {
+				success = [self copyExportFileAtPath:zip_path toPath:destination_path error:&error];
+			}
+			[self cleanupExportFolder:export_folder];
+
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (self.completionHandler && !self.hasFinished) {
+					self.hasFinished = YES;
+					self.completionHandler(success, destination_path);
+				}
+			});
+		});
+	}
+	else {
+		NSError* error = nil;
+		NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts error:&error];
+		NSString* new_path = [self promptSave:@"Micro.blog.bar"];
+		if (zip_path && new_path) {
+			[self copyItemAtPath:zip_path toPath:new_path];
+		}
+		[self cleanupExportFolder:export_folder];
+	}
+}
+
+- (BOOL) finishExportCompletesAsynchronously
+{
+	return self.destinationPath != nil;
 }
 
 - (void) finishCancel
 {
-	if (self.completionHandler && !self.hasFinished) {
-		self.hasFinished = YES;
-		self.completionHandler(NO, nil);
-	}
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (self.completionHandler && !self.hasFinished) {
+			self.hasFinished = YES;
+			self.completionHandler(NO, nil);
+		}
+	});
 
 	[super finishCancel];
 }

@@ -87,6 +87,11 @@
 	self.isCancelled = YES;
 }
 
+- (BOOL) finishExportCompletesAsynchronously
+{
+	return NO;
+}
+
 - (void) downloadPostsInBackgroundWithOffset:(NSInteger)offset
 {
 	[self performSelectorInBackground:@selector(downloadPosts:) withObject:@(offset)];
@@ -175,10 +180,13 @@
 //					[self.secondaryField setHidden:NO];
 //					[self.cancelButton setTitle:@"Reveal Folder"];
 //					[self.cancelButton setAction:@selector(revealFolder:)];
-					
+
+					BOOL finishes_asynchronously = [self finishExportCompletesAsynchronously];
 					[self finishExport];
-					[self updateExportProgress:1.0];
-					[self.window close];
+					if (!finishes_asynchronously) {
+						[self updateExportProgress:1.0];
+						[self.window close];
+					}
 				}
 				else {
 					NSInteger new_offset = [offset integerValue] + limit;

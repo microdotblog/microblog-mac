@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) startExport;
 - (void) cancelExport;
+- (BOOL) finishExportCompletesAsynchronously;
+- (void) updateExportStatus:(NSString *)status;
 - (NSString *) writePost:(RFPost *)post;
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 - (void) downloadURL:(NSString *)url forUpload:(RFUpload *)upload withCompletion:(void (^)(void))handler;
