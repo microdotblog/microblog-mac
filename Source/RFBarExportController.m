@@ -302,17 +302,27 @@
 		[self updateExportStatus:@"Creating archive..."];
 		dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
 			NSError* error = nil;
-			NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts blogHost:blog_host downloadedPaths:downloaded_paths error:&error];
 			BOOL success = NO;
-			if (zip_path) {
+
+			NSString* zip_path = nil;
+			if (!self.isCancelled) {
+				zip_path = [self createArchiveInExportFolder:export_folder posts:posts blogHost:blog_host downloadedPaths:downloaded_paths error:&error];
+			}
+
+			if (zip_path && !self.isCancelled) {
 				success = [self copyExportFileAtPath:zip_path toPath:destination_path error:&error];
 			}
+
+			if (self.isCancelled) {
+				success = NO;
+			}
+
 			[self cleanupExportFolder:export_folder];
 
 			dispatch_async(dispatch_get_main_queue(), ^{
 				if (self.completionHandler && !self.hasFinished) {
 					self.hasFinished = YES;
-					self.completionHandler(success, destination_path);
+					self.completionHandler(success && !self.isCancelled, destination_path);
 				}
 			});
 		});
