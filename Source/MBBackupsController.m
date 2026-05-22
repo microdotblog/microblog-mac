@@ -175,6 +175,18 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 
 - (NSString *) backupFilename
 {
+	NSString* safe_blog = [self safeBackupBlogName];
+	
+	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+	formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+	formatter.dateFormat = @"yyyy-MM-dd";
+	NSString* date_s = [formatter stringFromDate:[NSDate date]];
+	
+	return [NSString stringWithFormat:@"%@-%@.bar", safe_blog, date_s];
+}
+
+- (NSString *) safeBackupBlogName
+{
 	NSString* blog = [RFSettings stringForKey:kCurrentDestinationName];
 	if (blog.length == 0) {
 		blog = [RFSettings stringForKey:kAccountDefaultSite];
@@ -190,13 +202,8 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	if (safe_blog.length == 0) {
 		safe_blog = @"Micro.blog";
 	}
-
-	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-	formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-	formatter.dateFormat = @"yyyy-MM-dd";
-	NSString* date_s = [formatter stringFromDate:[NSDate date]];
-
-	return [NSString stringWithFormat:@"%@-%@.bar", safe_blog, date_s];
+	
+	return safe_blog;
 }
 
 - (void) postProgress:(NSNumber *)progress
@@ -218,10 +225,14 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	NSURL* backups_url = [NSURL fileURLWithPath:[RFAccount backupsFolder] isDirectory:YES];
 	NSArray* resource_keys = @[ NSURLContentModificationDateKey, NSURLIsDirectoryKey ];
 	NSArray<NSURL *>* urls = [fm contentsOfDirectoryAtURL:backups_url includingPropertiesForKeys:resource_keys options:NSDirectoryEnumerationSkipsHiddenFiles error:NULL];
+	NSString* backup_prefix = [[self safeBackupBlogName] stringByAppendingString:@"-"];
 
 	NSMutableArray<NSDictionary *>* backup_files = [NSMutableArray array];
 	for (NSURL* url in urls) {
 		if (![[url pathExtension] isEqualToString:@"bar"]) {
+			continue;
+		}
+		if (![url.lastPathComponent hasPrefix:backup_prefix]) {
 			continue;
 		}
 
