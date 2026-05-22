@@ -192,6 +192,45 @@ static NSString* const kNotesUpdatedAtIndexSQL = @"CREATE INDEX IF NOT EXISTS up
 	return [self executeUpdate:@"DELETE FROM notes WHERE id = ?", noteID];
 }
 
+- (BOOL) deleteNotesWithNotebookID:(NSNumber *)notebookID notInNoteIDs:(NSSet *)noteIDs
+{
+	if (notebookID == nil) {
+		return NO;
+	}
+
+	NSMutableArray* note_ids_to_delete = [NSMutableArray array];
+	FMResultSet* results = [self executeQuery:@"SELECT id FROM notes WHERE notebook_id = ?", notebookID];
+	while ([results next]) {
+		NSNumber* note_id = @([results longLongIntForColumn:@"id"]);
+		if (![noteIDs containsObject:note_id]) {
+			[note_ids_to_delete addObject:note_id];
+		}
+	}
+	[results close];
+
+	if (note_ids_to_delete.count == 0) {
+		return YES;
+	}
+
+	BOOL did_delete = YES;
+	[self beginTransaction];
+	for (NSNumber* note_id in note_ids_to_delete) {
+		if (![self deleteNoteWithID:note_id]) {
+			did_delete = NO;
+			break;
+		}
+	}
+
+	if (did_delete) {
+		[self commit];
+	}
+	else {
+		[self rollback];
+	}
+
+	return did_delete;
+}
+
 - (MBNote *) noteWithID:(NSNumber *)noteID
 {
 	FMResultSet* results = [self executeQuery:@"SELECT * FROM notes WHERE id = ?", noteID];

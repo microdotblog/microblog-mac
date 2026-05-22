@@ -33,8 +33,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 @interface MBNotesController ()
 
 @property (assign, nonatomic) BOOL isFetchingNotes;
+@property (assign, nonatomic) BOOL isPagingNotesInBackground;
 @property (assign, nonatomic) BOOL shouldStartNewNoteAfterFetch;
+@property (assign, nonatomic) NSInteger notesFetchRequestID;
 @property (strong, nonatomic, nullable) MBNote* noteCreatedWhileFetching;
+@property (strong, nonatomic) NSMutableSet* noteIDsChangedWhilePaging;
 
 @end
 
@@ -45,6 +48,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	self = [super initWithNibName:@"Notes" bundle:nil];
 	if (self) {
 		self.editedNotes = [NSMutableSet set];
+		self.noteIDsChangedWhilePaging = [NSMutableSet set];
 	}
 	
 	return self;
@@ -207,6 +211,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			}];
 		}
 		else {
+			self.shouldStartNewNoteAfterFetch = NO;
 			self.isFetchingNotes = NO;
 		}
 	}];
@@ -285,6 +290,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 
 	self.isFetchingNotes = YES;
+	self.isPagingNotesInBackground = YES;
+	[self.noteIDsChangedWhilePaging removeAllObjects];
+	self.notesFetchRequestID++;
+	NSInteger request_id = self.notesFetchRequestID;
 
 	NSMutableArray* cached_notes = [[self cachedNotesWithNotebookID:notebookID] mutableCopy];
 	NSMutableSet* cached_note_ids = [self noteIDsFromNotes:cached_notes];
@@ -301,15 +310,27 @@ static NSString* const kNotesSettingsType = @"Setting";
 		}
 	}
 
-	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:cached_notes cachedNoteIDs:cached_note_ids serverNoteIDs:server_note_ids completion:^{
+	__block BOOL did_finish_initial_load = NO;
+	void (^initial_handler)(void) = ^{
+		if (did_finish_initial_load) {
+			return;
+		}
+
+		did_finish_initial_load = YES;
 		self.isFetchingNotes = NO;
 
 		if (handler) {
 			handler();
 		}
+	};
 
+	void (^background_handler)(void) = ^{
+		self.isPagingNotesInBackground = NO;
 		self.noteCreatedWhileFetching = nil;
-	}];
+		[self.noteIDsChangedWhilePaging removeAllObjects];
+	};
+
+	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:cached_notes cachedNoteIDs:cached_note_ids serverNoteIDs:server_note_ids requestID:request_id completion:initial_handler backgroundCompletion:background_handler];
 }
 
 - (NSArray *) cachedNotesWithNotebookID:(NSNumber *)notebookID
@@ -375,6 +396,13 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[array removeObjectsAtIndexes:indexes];
 }
 
+- (void) deleteCachedNotesWithNotebookID:(NSNumber *)notebookID notInNoteIDs:(NSSet *)noteIDs
+{
+	MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+	[db deleteNotesWithNotebookID:notebookID notInNoteIDs:noteIDs];
+	[db close];
+}
+
 - (NSArray *) notesArrayByIncludingNewNoteIfNeeded:(NSArray *)notes
 {
 	if (self.noteCreatedWhileFetching == nil) {
@@ -401,14 +429,60 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 }
 
-- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array cachedNoteIDs:(NSMutableSet *)cachedNoteIDs serverNoteIDs:(NSMutableSet *)serverNoteIDs completion:(void (^)(void))handler
+- (void) finishInitialNotesLoadWithCompletion:(void (^)(void))handler
+{
+	if (handler) {
+		handler();
+	}
+
+	self.notebooksPopup.enabled = YES;
+	[self.progressSpinner stopAnimation:nil];
+	[self stopLoadingSidebarRow];
+}
+
+- (void) updateNotesListWithArray:(NSMutableArray *)array selectedNoteID:(NSNumber *)selectedID offset:(NSInteger)offset
+{
+	NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array];
+	self.allNotes = updated_notes;
+	self.currentNotes = updated_notes;
+	if (self.searchField.stringValue.length > 0) {
+		[self runSearch:self.searchField.stringValue];
+	}
+	else {
+		[self.tableView reloadData];
+	}
+	if (offset == 0) {
+		[self startNewNoteAfterFirstBatchIfNeeded];
+	}
+
+	if (selectedID) {
+		for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+			MBNote* n = [self.currentNotes objectAtIndex:i];
+			if ([n.noteID isEqualToNumber:selectedID]) {
+				NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+				[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+				break;
+			}
+		}
+	}
+	else if (self.noteCreatedWhileFetching) {
+		NSInteger row = [self.currentNotes indexOfObjectIdenticalTo:self.noteCreatedWhileFetching];
+		if (row != NSNotFound) {
+			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
+			[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+			[self.view.window makeFirstResponder:self.detailTextView];
+		}
+	}
+}
+
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array cachedNoteIDs:(NSMutableSet *)cachedNoteIDs serverNoteIDs:(NSMutableSet *)serverNoteIDs requestID:(NSInteger)requestID completion:(void (^)(void))handler backgroundCompletion:(void (^)(void))backgroundHandler
 {
 	if (self.secretKey == nil) {
 		return;
 	}
 
-	// if multiple notebooks, disable until we're done loading (and only on 2nd or later request)
-	if ((self.notebooks.count > 1) && (offset > 0)) {
+	// if multiple notebooks, disable until the visible loading phase is done
+	if (self.isFetchingNotes && (self.notebooks.count > 1) && (offset > 0)) {
 		self.notebooksPopup.enabled = NO;
 	}
 
@@ -429,6 +503,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/notebooks/%@", notebookID];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (requestID != self.notesFetchRequestID) {
+			return;
+		}
+
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_notes = [NSMutableArray array];
 			BOOL all_notes_cached = YES;
@@ -472,78 +550,46 @@ static NSString* const kNotesSettingsType = @"Setting";
 			
 			RFDispatchMainAsync(^{
 				BOOL reached_end = (items.count < count);
-				BOOL should_stop_paging = (reached_end || all_notes_cached);
-
-				if (should_stop_paging) {
-					if (reached_end) {
-						[self removeNotesFromArray:array notInNoteIDs:serverNoteIDs];
+				if (reached_end) {
+					NSMutableSet* note_ids_to_keep = [serverNoteIDs mutableCopy];
+					[note_ids_to_keep unionSet:self.noteIDsChangedWhilePaging];
+					if (self.noteCreatedWhileFetching.noteID) {
+						[note_ids_to_keep addObject:self.noteCreatedWhileFetching.noteID];
 					}
 
-					NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array];
-					self.allNotes = updated_notes;
-					self.currentNotes = updated_notes;
-					if (self.searchField.stringValue.length > 0) {
-						[self runSearch:self.searchField.stringValue];
-					}
-					else {
-						[self.tableView reloadData];
-					}
+					[self deleteCachedNotesWithNotebookID:notebookID notInNoteIDs:note_ids_to_keep];
+					[self removeNotesFromArray:array notInNoteIDs:note_ids_to_keep];
+					[self updateNotesListWithArray:array selectedNoteID:selected_id offset:offset];
+
 					if (offset == 0) {
-						[self startNewNoteAfterFirstBatchIfNeeded];
+						[self finishInitialNotesLoadWithCompletion:handler];
 					}
-					// restore selection
-					if (selected_id) {
-						for (NSInteger i = 0; i < self.currentNotes.count; i++) {
-							MBNote* n = [self.currentNotes objectAtIndex:i];
-							if ([n.noteID isEqualToNumber:selected_id]) {
-								NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
-								[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-								break;
-							}
-						}
+					if (backgroundHandler) {
+						backgroundHandler();
 					}
-					else if (self.noteCreatedWhileFetching) {
-						NSInteger row = [self.currentNotes indexOfObjectIdenticalTo:self.noteCreatedWhileFetching];
-						if (row != NSNotFound) {
-							NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
-							[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-							[self.view.window makeFirstResponder:self.detailTextView];
-						}
-					}
-					if (handler) {
-						handler();
-					}
-
-					self.notebooksPopup.enabled = YES;
-					[self.progressSpinner stopAnimation:nil];
-					[self stopLoadingSidebarRow];
 				}
 				else {
-					// if this was the first page, show results right away
 					if (offset == 0) {
-						NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array];
-						self.allNotes = updated_notes;
-						self.currentNotes = updated_notes;
-						[self.tableView reloadData];
-						[self startNewNoteAfterFirstBatchIfNeeded];
+						[self updateNotesListWithArray:array selectedNoteID:selected_id offset:offset];
+						[self finishInitialNotesLoadWithCompletion:handler];
 					}
 
-					// fetch another page
-					NSLog(@"Fetching another page of notes, offset: %ld", (long)offset);
+					NSLog(@"Fetching another page of notes, offset: %ld, all cached: %@", (long)offset, all_notes_cached ? @"yes" : @"no");
 					NSInteger new_offset = offset + count;
-					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array cachedNoteIDs:cachedNoteIDs serverNoteIDs:serverNoteIDs completion:handler];
+					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array cachedNoteIDs:cachedNoteIDs serverNoteIDs:serverNoteIDs requestID:requestID completion:handler backgroundCompletion:backgroundHandler];
 				}
 			});
 		}
 		else {
 			RFDispatchMainAsync(^{
-				if (handler) {
-					handler();
+				if (offset == 0) {
+					self.shouldStartNewNoteAfterFetch = NO;
+					[self finishInitialNotesLoadWithCompletion:handler];
 				}
 
-				self.notebooksPopup.enabled = YES;
-				[self.progressSpinner stopAnimation:nil];
-				[self stopLoadingSidebarRow];
+				if (backgroundHandler) {
+					backgroundHandler();
+				}
 			});
 		}
 	}];
@@ -809,6 +855,9 @@ static NSString* const kNotesSettingsType = @"Setting";
 				note.noteID = [response.parsedResponse objectForKey:@"id"];
 			}
 			note.updatedAt = [NSDate date];
+			if (self.isPagingNotesInBackground && note.noteID) {
+				[self.noteIDsChangedWhilePaging addObject:note.noteID];
+			}
 
 			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
 			[db saveNote:note];
@@ -936,7 +985,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	NSMutableArray* new_notes = self.allNotes ? [self.allNotes mutableCopy] : [NSMutableArray array];
 	[new_notes insertObject:n atIndex:0];
 	
-	if (self.isFetchingNotes) {
+	if (self.isFetchingNotes || self.isPagingNotesInBackground) {
 		self.noteCreatedWhileFetching = n;
 	}
 
