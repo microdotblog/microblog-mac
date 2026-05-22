@@ -50,6 +50,8 @@
 @property (strong, nonatomic) IBOutlet NSTextField* backupDateField;
 @property (strong, nonatomic) IBOutlet NSTextField* backupStatusField;
 @property (strong, nonatomic) IBOutlet NSButton* backupCancelButton;
+@property (strong, nonatomic) IBOutlet NSTextField* backupRecentsField;
+@property (strong, nonatomic) IBOutlet NSPopUpButton* backupRecentsPopup;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;

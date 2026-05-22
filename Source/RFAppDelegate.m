@@ -184,12 +184,13 @@
 
 - (void) setupDefaults
 {
-		[[NSUserDefaults standardUserDefaults] registerDefaults:@{
-			kTextSizePrefKey: @(kTextSizeMedium),
-			kSaveNotesToFolderPrefKey: @YES,
-			kSaveKeyToCloudPrefKey: @YES,
-			kSaveBackupsToFolderPrefKey: @YES
-		}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{
+		kTextSizePrefKey: @(kTextSizeMedium),
+		kSaveNotesToFolderPrefKey: @YES,
+		kSaveKeyToCloudPrefKey: @YES,
+		kSaveBackupsToFolderPrefKey: @YES,
+		kBackupsToKeepPrefKey: @(kDefaultBackupsToKeep)
+	}];
 	
 	[RFSettings migrateSettings];
 }

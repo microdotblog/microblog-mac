@@ -55,6 +55,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupDayOneField];
 	[self setupNotesCheckboxes];
 	[self setupBackupCheckboxes];
+	[self setupBackupRecentsPopup];
 	[self setupBackupProgressBar];
 
 	[self updateRadioButtons];
@@ -170,6 +171,26 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.backupCancelButton.hidden = YES;
 }
 
+- (void) setupBackupRecentsPopup
+{
+	for (NSMenuItem* item in self.backupRecentsPopup.menu.itemArray) {
+		item.tag = item.title.integerValue;
+	}
+	
+	NSInteger backups_to_keep = [[NSUserDefaults standardUserDefaults] integerForKey:kBackupsToKeepPrefKey];
+	if (backups_to_keep < 1) {
+		backups_to_keep = kDefaultBackupsToKeep;
+	}
+	[self.backupRecentsPopup selectItemWithTag:backups_to_keep];
+}
+
+- (void) updateBackupRecentsEnabled
+{
+	BOOL is_enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kSaveBackupsToFolderPrefKey];
+	self.backupRecentsField.enabled = is_enabled;
+	self.backupRecentsPopup.enabled = is_enabled;
+}
+
 - (NSString *) localizedBackupDateString:(NSDate *)date
 {
 	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
@@ -265,6 +286,8 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	else {
 		[self.backupFolderCheckbox setState:NSControlStateValueOff];
 	}
+	
+	[self updateBackupRecentsEnabled];
 }
 
 - (void) setupNotesCheckboxes
@@ -476,6 +499,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.window.contentView addSubview:self.backupPane];
 	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.backupPane.hidden = NO;
+	[self updateBackupRecentsEnabled];
 	[self updateBackupDateField];
 	[self updateBackupProgressBarWithProgress:nil status:nil];
 }
@@ -507,6 +531,13 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) backupsFolderCheckboxChanged:(id)sender
 {
 	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveBackupsToFolderPrefKey];
+	[self updateBackupRecentsEnabled];
+}
+
+- (IBAction) backupsRecentsChanged:(id)sender
+{
+	NSInteger backups_to_keep = [[sender selectedItem] tag];
+	[[NSUserDefaults standardUserDefaults] setInteger:backups_to_keep forKey:kBackupsToKeepPrefKey];
 }
 
 - (IBAction) cancelBackup:(id)sender

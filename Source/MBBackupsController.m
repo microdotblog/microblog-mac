@@ -249,7 +249,11 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 		return [second_date compare:first_date];
 	}];
 
-	for (NSInteger i = kMaxBackupFiles; i < backup_files.count; i++) {
+	NSInteger backups_to_keep = [[NSUserDefaults standardUserDefaults] integerForKey:kBackupsToKeepPrefKey];
+	if (backups_to_keep < 1) {
+		backups_to_keep = kDefaultBackupsToKeep;
+	}
+	for (NSInteger i = backups_to_keep; i < backup_files.count; i++) {
 		NSURL* url = [[backup_files objectAtIndex:i] objectForKey:@"url"];
 		if ([self isSafeBackupFileToDelete:url]) {
 			[fm removeItemAtURL:url error:NULL];
