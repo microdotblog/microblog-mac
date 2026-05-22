@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.9.1</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Improved notes sync with local cache database, much faster refresh.</li>
+					<li>Added a backup preference for how many recent backup files to keep.</li>
+					<li>Fixed File menu → New Note to switch to Notes pane if not selected.</li>
+					<li>Fixed remembering the Notes pane split view position.</li>
+					<li>Fixed backup cleanup to only remove backup files for the current blog.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Fri, 22 Mar 2026 14:15:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.9.1.zip" sparkle:shortVersionString="3.9.1" sparkle:version="237" length="4629412" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.9</title>
  			<description><![CDATA[
 				<style>
