@@ -73,6 +73,7 @@ typedef NSInteger RFSelectedTimelineType;
 
 - (void) showConversationWithPostID:(NSString *)postID;
 - (void) showProfileWithUsername:(NSString *)username;
+- (void) showNotesAndStartNewNote;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;
 - (NSString *) usernameOfPostID:(NSString *)postID;
 

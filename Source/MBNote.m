@@ -11,6 +11,7 @@
 #import "SAMKeychain.h"
 #import "SAMKeychain+Helper.h"
 #import "Micro_blog-Swift.h"
+#import "UUDate.h"
 
 @implementation MBNote
 
@@ -120,6 +121,53 @@
 	}
 		
 	return result;
+}
+
++ (MBNote *) noteWithDictionary:(NSDictionary *)dictionary notebookID:(NSNumber *)notebookID secretKey:(NSString *)secretKey
+{
+	NSDictionary* mb = [dictionary objectForKey:@"_microblog"];
+	if (![mb isKindOfClass:[NSDictionary class]]) {
+		mb = @{};
+	}
+
+	MBNote* note = [[MBNote alloc] init];
+
+	note.noteID = [dictionary objectForKey:@"id"];
+	note.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
+	note.isShared = [[mb objectForKey:@"is_shared"] boolValue];
+	note.sharedURL = [mb objectForKey:@"shared_url"];
+	note.attachedBookISBN = [mb objectForKey:@"attached_book_isbn"];
+	note.attachedBookTitle = [mb objectForKey:@"attached_book_title"];
+	note.notebookID = notebookID;
+
+	NSString* text = [dictionary objectForKey:@"content_text"];
+	if (note.isEncrypted) {
+		note.text = [MBNote decryptText:text withKey:secretKey];
+		if (note.text == nil) {
+			// decryption probably failed
+			note.text = @"";
+		}
+	}
+	else {
+		note.text = text;
+	}
+
+	NSString* created_s = [dictionary objectForKey:@"date_published"];
+	note.createdAt = [NSDate uuDateFromRfc3339String:created_s];
+
+	NSString* updated_s = [dictionary objectForKey:@"date_modified"];
+	if (updated_s == nil) {
+		updated_s = [dictionary objectForKey:@"date_updated"];
+	}
+	if (updated_s == nil) {
+		updated_s = [mb objectForKey:@"updated_at"];
+	}
+	note.updatedAt = [NSDate uuDateFromRfc3339String:updated_s];
+	if (note.updatedAt == nil) {
+		note.updatedAt = note.createdAt;
+	}
+
+	return note;
 }
 
 @end

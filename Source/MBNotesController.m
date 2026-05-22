@@ -15,12 +15,12 @@
 #import "MBNotesKeyController.h"
 #import "MBVersionsController.h"
 #import "MBBookCoverView.h"
+#import "MBNotesDatabase.h"
 #import "RFClient.h"
 #import "RFAccount.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
-#import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
 #import "NSColor+Extras.h"
@@ -30,6 +30,17 @@
 static NSString* const kNotesCloudContainer = @"iCloud.blog.micro.shared";
 static NSString* const kNotesSettingsType = @"Setting";
 
+@interface MBNotesController ()
+
+@property (assign, nonatomic) BOOL isFetchingNotes;
+@property (assign, nonatomic) BOOL isPagingNotesInBackground;
+@property (assign, nonatomic) BOOL shouldStartNewNoteAfterFetch;
+@property (assign, nonatomic) NSInteger notesFetchRequestID;
+@property (strong, nonatomic, nullable) MBNote* noteCreatedWhileFetching;
+@property (strong, nonatomic) NSMutableSet* noteIDsChangedWhilePaging;
+
+@end
+
 @implementation MBNotesController
 
 - (id) init
@@ -37,6 +48,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	self = [super initWithNibName:@"Notes" bundle:nil];
 	if (self) {
 		self.editedNotes = [NSMutableSet set];
+		self.noteIDsChangedWhilePaging = [NSMutableSet set];
 	}
 	
 	return self;
@@ -48,6 +60,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	[self setupSecretKey];
 	[self setupTable];
+	[self setupSplitView];
 	[self setupNotifications];
 	[self setupTimer];
 	[self setupDetail];
@@ -55,6 +68,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	[self fetchNotes];
 	[self saveKeyToCloud];
+}
+
+- (void) setupSplitView
+{
+	NSString* autosave_name = @"NotesSplitView";
+	NSString* defaults_key = [NSString stringWithFormat:@"NSSplitView Subview Frames %@", autosave_name];
+	BOOL has_saved_position = ([[NSUserDefaults standardUserDefaults] objectForKey:defaults_key] != nil);
+
+	[self.splitView setAutosaveName:autosave_name];
+
+	if (!has_saved_position) {
+		RFDispatchMainAsync(^{
+			[self.view layoutSubtreeIfNeeded];
+			[self.splitView setPosition:(self.splitView.bounds.size.width / 2.0) ofDividerAtIndex:0];
+		});
+	}
 }
 
 - (void) setupSecretKey
@@ -168,13 +197,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) fetchNotes
 {
+	if (self.secretKey == nil) {
+		return;
+	}
+
 	[self.progressSpinner startAnimation:nil];
+	self.isFetchingNotes = YES;
 
 	[self fetchNotebooksWithCompletion:^{
 		if (self.currentNotebook) {
-			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
+			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:nil finishedCompletion:^{
 				[self saveNotesToDisk];
 			}];
+		}
+		else {
+			self.shouldStartNewNoteAfterFetch = NO;
+			self.isFetchingNotes = NO;
 		}
 	}];
 }
@@ -237,23 +275,222 @@ static NSString* const kNotesSettingsType = @"Setting";
 				handler();
 			});
 		}
+		else {
+			RFDispatchMainAsync(^{
+				handler();
+			});
+		}
 	}];
 }
 
 - (void) fetchNotesWithNotebookID:(NSNumber *)notebookID completion:(void (^)(void))handler
 {
-	NSMutableArray* new_notes = [NSMutableArray array];
-	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:new_notes completion:handler];
+	[self fetchNotesWithNotebookID:notebookID completion:handler finishedCompletion:nil];
 }
 
-- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array completion:(void (^)(void))handler
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID completion:(void (^)(void))handler finishedCompletion:(void (^)(void))finishedHandler
 {
 	if (self.secretKey == nil) {
 		return;
 	}
 
-	// if multiple notebooks, disable until we're done loading (and only on 2nd or later request)
-	if ((self.notebooks.count > 1) && (offset > 0)) {
+	self.isFetchingNotes = YES;
+	self.isPagingNotesInBackground = YES;
+	[self.noteIDsChangedWhilePaging removeAllObjects];
+	self.notesFetchRequestID++;
+	NSInteger request_id = self.notesFetchRequestID;
+
+	NSMutableArray* cached_notes = [[self cachedNotesWithNotebookID:notebookID] mutableCopy];
+	NSMutableSet* cached_note_ids = [self noteIDsFromNotes:cached_notes];
+	NSMutableSet* server_note_ids = [NSMutableSet set];
+
+	if (cached_notes.count > 0) {
+		self.allNotes = cached_notes;
+		self.currentNotes = cached_notes;
+		if (self.searchField.stringValue.length > 0) {
+			[self runSearch:self.searchField.stringValue];
+		}
+		else {
+			[self.tableView reloadData];
+		}
+	}
+
+	__block BOOL did_finish_initial_load = NO;
+	void (^initial_handler)(void) = ^{
+		if (did_finish_initial_load) {
+			return;
+		}
+
+		did_finish_initial_load = YES;
+		self.isFetchingNotes = NO;
+
+		if (handler) {
+			handler();
+		}
+	};
+
+	void (^background_handler)(void) = ^{
+		self.isPagingNotesInBackground = NO;
+		self.noteCreatedWhileFetching = nil;
+		[self.noteIDsChangedWhilePaging removeAllObjects];
+	};
+
+	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:cached_notes cachedNoteIDs:cached_note_ids serverNoteIDs:server_note_ids requestID:request_id completion:initial_handler backgroundCompletion:background_handler finishedCompletion:finishedHandler];
+}
+
+- (NSArray *) cachedNotesWithNotebookID:(NSNumber *)notebookID
+{
+	if (![MBNotesDatabase databaseExists]) {
+		return @[];
+	}
+
+	MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+	NSArray* notes = [db notesWithNotebookID:notebookID];
+	[db close];
+
+	return notes;
+}
+
+- (NSMutableSet *) noteIDsFromNotes:(NSArray *)notes
+{
+	NSMutableSet* note_ids = [NSMutableSet set];
+
+	for (MBNote* note in notes) {
+		if (note.noteID) {
+			[note_ids addObject:note.noteID];
+		}
+	}
+
+	return note_ids;
+}
+
+- (void) mergeNotes:(NSArray *)notes intoNotesArray:(NSMutableArray *)array atOffset:(NSInteger)offset
+{
+	if (notes.count == 0) {
+		return;
+	}
+
+	NSSet* note_ids = [self noteIDsFromNotes:notes];
+	NSMutableIndexSet* indexes = [NSMutableIndexSet indexSet];
+
+	for (NSInteger i = 0; i < array.count; i++) {
+		MBNote* note = [array objectAtIndex:i];
+		if (note.noteID && [note_ids containsObject:note.noteID]) {
+			[indexes addIndex:i];
+		}
+	}
+
+	[array removeObjectsAtIndexes:indexes];
+
+	NSInteger insert_index = MIN(offset, array.count);
+	NSIndexSet* insert_indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(insert_index, notes.count)];
+	[array insertObjects:notes atIndexes:insert_indexes];
+}
+
+- (void) removeNotesFromArray:(NSMutableArray *)array notInNoteIDs:(NSSet *)noteIDs
+{
+	NSMutableIndexSet* indexes = [NSMutableIndexSet indexSet];
+
+	for (NSInteger i = 0; i < array.count; i++) {
+		MBNote* note = [array objectAtIndex:i];
+		if (note.noteID && ![noteIDs containsObject:note.noteID]) {
+			[indexes addIndex:i];
+		}
+	}
+
+	[array removeObjectsAtIndexes:indexes];
+}
+
+- (void) deleteCachedNotesWithNotebookID:(NSNumber *)notebookID notInNoteIDs:(NSSet *)noteIDs
+{
+	MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+	[db deleteNotesWithNotebookID:notebookID notInNoteIDs:noteIDs];
+	[db close];
+}
+
+- (NSArray *) notesArrayByIncludingNewNoteIfNeeded:(NSArray *)notes forNotebookID:(NSNumber *)notebookID
+{
+	if (self.noteCreatedWhileFetching == nil) {
+		return notes;
+	}
+	if (![self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
+		return notes;
+	}
+
+	NSMutableArray* new_notes = [notes mutableCopy];
+	for (NSInteger i = new_notes.count - 1; i >= 0; i--) {
+		MBNote* n = [new_notes objectAtIndex:i];
+		if ((n == self.noteCreatedWhileFetching) || (n.noteID && self.noteCreatedWhileFetching.noteID && [n.noteID isEqualToNumber:self.noteCreatedWhileFetching.noteID])) {
+			[new_notes removeObjectAtIndex:i];
+		}
+	}
+
+	[new_notes insertObject:self.noteCreatedWhileFetching atIndex:0];
+	return new_notes;
+}
+
+- (void) startNewNoteAfterFirstBatchIfNeeded
+{
+	if (self.shouldStartNewNoteAfterFetch) {
+		self.shouldStartNewNoteAfterFetch = NO;
+		[self createNewNote];
+	}
+}
+
+- (void) finishInitialNotesLoadWithCompletion:(void (^)(void))handler
+{
+	if (handler) {
+		handler();
+	}
+
+	self.notebooksPopup.enabled = YES;
+	[self.progressSpinner stopAnimation:nil];
+	[self stopLoadingSidebarRow];
+}
+
+- (void) updateNotesListWithArray:(NSMutableArray *)array selectedNoteID:(NSNumber *)selectedID notebookID:(NSNumber *)notebookID offset:(NSInteger)offset
+{
+	NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array forNotebookID:notebookID];
+	self.allNotes = updated_notes;
+	self.currentNotes = updated_notes;
+	if (self.searchField.stringValue.length > 0) {
+		[self runSearch:self.searchField.stringValue];
+	}
+	else {
+		[self.tableView reloadData];
+	}
+	if (offset == 0) {
+		[self startNewNoteAfterFirstBatchIfNeeded];
+	}
+
+	if (selectedID) {
+		for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+			MBNote* n = [self.currentNotes objectAtIndex:i];
+			if ([n.noteID isEqualToNumber:selectedID]) {
+				NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+				[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+				break;
+			}
+		}
+	}
+	else if (self.noteCreatedWhileFetching && [self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
+		NSInteger row = [self.currentNotes indexOfObjectIdenticalTo:self.noteCreatedWhileFetching];
+		if (row != NSNotFound) {
+			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
+			[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+			[self.view.window makeFirstResponder:self.detailTextView];
+		}
+	}
+}
+
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array cachedNoteIDs:(NSMutableSet *)cachedNoteIDs serverNoteIDs:(NSMutableSet *)serverNoteIDs requestID:(NSInteger)requestID completion:(void (^)(void))handler backgroundCompletion:(void (^)(void))backgroundHandler finishedCompletion:(void (^)(void))finishedHandler
+{
+	if (self.secretKey == nil) {
+		return;
+	}
+
+	// if multiple notebooks, disable until the visible loading phase is done
+	if (self.isFetchingNotes && (self.notebooks.count > 1) && (offset > 0)) {
 		self.notebooksPopup.enabled = NO;
 	}
 
@@ -262,7 +499,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	// remember selection if there is one
 	NSNumber* selected_id = nil;
 	NSInteger selected_row = [self.tableView selectedRow];
-	if (selected_row >= 0) {
+	if ((selected_row >= 0) && (selected_row < self.currentNotes.count)) {
 		MBNote* n = [self.currentNotes objectAtIndex:selected_row];
 		selected_id = n.noteID;
 	}
@@ -274,22 +511,29 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/notebooks/%@", notebookID];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (requestID != self.notesFetchRequestID) {
+			return;
+		}
+
+		NSDictionary* response_dict = nil;
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			response_dict = response.parsedResponse;
+		}
+		NSArray* items = [response_dict objectForKey:@"items"];
+
+		if ([items isKindOfClass:[NSArray class]]) {
 			NSMutableArray* new_notes = [NSMutableArray array];
+			BOOL all_notes_cached = YES;
 			
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
-				NSDictionary* mb = [item objectForKey:@"_microblog"];
-				
-				MBNote* n = [[MBNote alloc] init];
-				
-				n.noteID = [item objectForKey:@"id"];
-				n.isEncrypted = [[mb objectForKey:@"is_encrypted"] boolValue];
-				n.isShared = [[mb objectForKey:@"is_shared"] boolValue];
-				n.sharedURL = [mb objectForKey:@"shared_url"];
-				n.attachedBookISBN = [mb objectForKey:@"attached_book_isbn"];
-				n.attachedBookTitle = [mb objectForKey:@"attached_book_title"];
-				n.notebookID = notebookID;
+				MBNote* n = [MBNote noteWithDictionary:item notebookID:notebookID secretKey:self.secretKey];
+				BOOL note_is_cached = (n.noteID && [cachedNoteIDs containsObject:n.noteID]);
+				if (!note_is_cached) {
+					all_notes_cached = NO;
+				}
+				if (n.noteID) {
+					[serverNoteIDs addObject:n.noteID];
+				}
 
                 // if selected note, update if sharing changed
                 if (self.selectedNote && self.selectedNote.noteID) {
@@ -301,68 +545,66 @@ static NSString* const kNotesSettingsType = @"Setting";
                         });
                     }
                 }
-				
-				if (n.isEncrypted) {
-					n.text = [MBNote decryptText:[item objectForKey:@"content_text"] withKey:self.secretKey];
-					if (n.text == nil) {
-						// decryption probably failed
-						n.text = @"";
-					}
-				}
-				else {
-					n.text = [item objectForKey:@"content_text"];
-				}
-				
-				NSString* date_s = [item objectForKey:@"date_published"];
-				n.createdAt = [NSDate uuDateFromRfc3339String:date_s];
-				
+
 				[new_notes addObject:n];
 			}
+
+			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+			[db saveNotes:new_notes];
+			[db close];
 			
-			[array addObjectsFromArray:new_notes];
+			for (MBNote* note in new_notes) {
+				if (note.noteID) {
+					[cachedNoteIDs addObject:note.noteID];
+				}
+			}
+
+			[self mergeNotes:new_notes intoNotesArray:array atOffset:offset];
 			
 			RFDispatchMainAsync(^{
-				if (items.count < count) {
-					self.allNotes = array;
-					self.currentNotes = array;
-					if (self.searchField.stringValue.length > 0) {
-						[self runSearch:self.searchField.stringValue];
-					}
-					else {
-						[self.tableView reloadData];
-					}
-					if (handler) {
-						handler();
-					}
-					
-					// restore selection
-					if (selected_id) {
-						for (NSInteger i = 0; i < self.currentNotes.count; i++) {
-							MBNote* n = [self.currentNotes objectAtIndex:i];
-							if ([n.noteID isEqualToNumber:selected_id]) {
-								NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
-								[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-								break;
-							}
-						}
+				BOOL reached_end = (items.count < count);
+				if (reached_end) {
+					NSMutableSet* note_ids_to_keep = [serverNoteIDs mutableCopy];
+					[note_ids_to_keep unionSet:self.noteIDsChangedWhilePaging];
+					if (self.noteCreatedWhileFetching.noteID && [self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
+						[note_ids_to_keep addObject:self.noteCreatedWhileFetching.noteID];
 					}
 
-					self.notebooksPopup.enabled = YES;
-					[self.progressSpinner stopAnimation:nil];
-					[self stopLoadingSidebarRow];
+					[self deleteCachedNotesWithNotebookID:notebookID notInNoteIDs:note_ids_to_keep];
+					[self removeNotesFromArray:array notInNoteIDs:note_ids_to_keep];
+					[self updateNotesListWithArray:array selectedNoteID:selected_id notebookID:notebookID offset:offset];
+
+					if (offset == 0) {
+						[self finishInitialNotesLoadWithCompletion:handler];
+					}
+					if (backgroundHandler) {
+						backgroundHandler();
+					}
+					if (finishedHandler) {
+						finishedHandler();
+					}
 				}
 				else {
-					// if this was the first page, show results right away
 					if (offset == 0) {
-						self.allNotes = array;
-						self.currentNotes = array;
-						[self.tableView reloadData];
+						[self updateNotesListWithArray:array selectedNoteID:selected_id notebookID:notebookID offset:offset];
+						[self finishInitialNotesLoadWithCompletion:handler];
 					}
 
-					// fetch another page
-					NSLog(@"Fetching another page of notes, offset: %ld", (long)offset);
+					NSLog(@"Fetching another page of notes, offset: %ld, all cached: %@", (long)offset, all_notes_cached ? @"yes" : @"no");
 					NSInteger new_offset = offset + count;
-					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array completion:handler];
+					[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array cachedNoteIDs:cachedNoteIDs serverNoteIDs:serverNoteIDs requestID:requestID completion:handler backgroundCompletion:backgroundHandler finishedCompletion:finishedHandler];
+				}
+			});
+		}
+		else {
+			RFDispatchMainAsync(^{
+				if (offset == 0) {
+					self.shouldStartNewNoteAfterFetch = NO;
+					[self finishInitialNotesLoadWithCompletion:handler];
+				}
+
+				if (backgroundHandler) {
+					backgroundHandler();
 				}
 			});
 		}
@@ -523,14 +765,27 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (row >= 0) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
 
-		NSString* s = n.text;
-		if (s.length > 20) {
-			s = [s substringToIndex:20];
-			s = [s stringByAppendingString:@"..."];
+		NSString* trimmed_text = [n.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSString* title = @"Delete empty note?";
+		if (trimmed_text.length > 0) {
+			NSString* s = [trimmed_text stringByReplacingOccurrencesOfString:@"#" withString:@""];
+			s = [s stringByReplacingOccurrencesOfString:@"\r" withString:@" "];
+			s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+			s = [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			if (s.length > 20) {
+				s = [s substringToIndex:20];
+				s = [s stringByAppendingString:@"..."];
+			}
+			if (s.length > 0) {
+				title = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+			}
+			else {
+				title = @"Delete note?";
+			}
 		}
 		
 		NSAlert* sheet = [[NSAlert alloc] init];
-		sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+		sheet.messageText = title;
 		sheet.informativeText = @"This note will be deleted from Micro.blog.";
 		[sheet addButtonWithTitle:@"Delete"];
 		[sheet addButtonWithTitle:@"Cancel"];
@@ -556,6 +811,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Note" message:msg button:@"OK" completionHandler:NULL];
 			}
 			else {
+				MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+				[db deleteNoteWithID:note.noteID];
+				[db close];
+
 				[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:nil];
 			}
 			
@@ -611,6 +870,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 			if (note.noteID == nil) {
 				note.noteID = [response.parsedResponse objectForKey:@"id"];
 			}
+			note.updatedAt = [NSDate date];
+			if (self.isPagingNotesInBackground && note.noteID) {
+				[self.noteIDsChangedWhilePaging addObject:note.noteID];
+			}
+
+			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+			[db saveNote:note];
+			[db close];
 			
 			[self.progressSpinner stopAnimation:nil];
 			[self reloadRowForNote:note onlyRecentNotes:NO];
@@ -703,19 +970,41 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) startNewNoteNotification:(NSNotification *)notification
 {
-	if (self.currentNotebook == nil) {
+	[self startNewNote];
+}
+
+- (void) startNewNote
+{
+	if (self.secretKey == nil) {
 		return;
 	}
-	
+
+	if (self.isFetchingNotes || (self.currentNotebook == nil) || (self.allNotes == nil)) {
+		self.shouldStartNewNoteAfterFetch = YES;
+		if (!self.isFetchingNotes) {
+			[self fetchNotes];
+		}
+	}
+	else {
+		[self createNewNote];
+	}
+}
+
+- (void) createNewNote
+{
 	MBNote* n = [[MBNote alloc] init];
 	n.text = @"";
 	n.notebookID = self.currentNotebook.notebookID;
 	n.isEncrypted = YES;
 	n.createdAt = [NSDate date];
 	
-	NSMutableArray* new_notes = [self.allNotes mutableCopy];
+	NSMutableArray* new_notes = self.allNotes ? [self.allNotes mutableCopy] : [NSMutableArray array];
 	[new_notes insertObject:n atIndex:0];
 	
+	if (self.isFetchingNotes || self.isPagingNotesInBackground) {
+		self.noteCreatedWhileFetching = n;
+	}
+
 	self.allNotes = new_notes;
 	self.currentNotes = new_notes;
 	[self.tableView reloadData];

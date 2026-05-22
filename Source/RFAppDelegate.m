@@ -184,12 +184,13 @@
 
 - (void) setupDefaults
 {
-		[[NSUserDefaults standardUserDefaults] registerDefaults:@{
-			kTextSizePrefKey: @(kTextSizeMedium),
-			kSaveNotesToFolderPrefKey: @YES,
-			kSaveKeyToCloudPrefKey: @YES,
-			kSaveBackupsToFolderPrefKey: @YES
-		}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{
+		kTextSizePrefKey: @(kTextSizeMedium),
+		kSaveNotesToFolderPrefKey: @YES,
+		kSaveKeyToCloudPrefKey: @YES,
+		kSaveBackupsToFolderPrefKey: @YES,
+		kBackupsToKeepPrefKey: @(kDefaultBackupsToKeep)
+	}];
 	
 	[RFSettings migrateSettings];
 }
@@ -416,7 +417,8 @@
 
 - (IBAction) newNote:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kNewNoteNotification object:self];
+	[self showMainWindow:nil];
+	[self.timelineController showNotesAndStartNewNote];
 }
 
 - (IBAction) importBlogArchive:(id)sender

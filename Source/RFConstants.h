@@ -54,6 +54,7 @@ static NSString* const kSaveKeyToCloudPrefKey = @"SaveKeyToCloud";
 static NSString* const kCurrentNotebookIDPrefKey = @"CurrentNotebookID";
 
 static NSString* const kSaveBackupsToFolderPrefKey = @"SaveBackupsToFolder";
+static NSString* const kBackupsToKeepPrefKey = @"BackupsToKeep";
 static NSString* const kLastBackupDatePrefKey = @"LastBackupDate";
 static NSString* const kBackupInProgressPrefKey = @"BackupInProgress";
 static NSString* const kBackupProgressStartingPrefKey = @"BackupProgressStarting";
@@ -62,9 +63,10 @@ static NSString* const kBackupDidUpdateNotification = @"MBBackupDidUpdate";
 static NSString* const kCancelBackupNotification = @"MBCancelBackup";
 static NSString* const kCurrentBackupProgressKey = @"CurrentBackupProgress";
 static NSString* const kCurrentBackupStatusKey = @"CurrentBackupStatus";
-static NSTimeInterval const kInitialBackupTimerInterval = 5 * 60;
+
+static NSTimeInterval const kInitialBackupTimerInterval = 5 * 60; // 5 minutes
 static NSInteger const kBackupMinimumDays = 7;
-static NSInteger const kMaxBackupFiles = 5;
+static NSInteger const kDefaultBackupsToKeep = 2;
 
 #define kOpenMicroblogURLNotification @"RFOpenMicroblogURL"
 #define kOpenMicroblogURLKey @"url" // NSURL

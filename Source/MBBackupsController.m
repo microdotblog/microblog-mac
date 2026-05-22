@@ -10,7 +10,8 @@
 #import "RFConstants.h"
 #import "RFSettings.h"
 
-static NSTimeInterval const kBackupTimerInterval = 60 * 60;
+static NSTimeInterval const kBackupTimerInterval = 60 * 60; // 1 hour
+
 @interface MBBackupsController ()
 
 @property (strong, nonatomic, nullable) NSTimer* backupTimer;
@@ -31,8 +32,10 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupInProgressPrefKey];
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupProgressStartingPrefKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kBackupStatusTextPrefKey];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChangeNotification:) name:NSUserDefaultsDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cancelBackupNotification:) name:kCancelBackupNotification object:nil];
+
 	[self updateTimer];
 }
 
@@ -175,6 +178,18 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 
 - (NSString *) backupFilename
 {
+	NSString* safe_blog = [self safeBackupBlogName];
+	
+	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+	formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+	formatter.dateFormat = @"yyyy-MM-dd";
+	NSString* date_s = [formatter stringFromDate:[NSDate date]];
+	
+	return [NSString stringWithFormat:@"%@-%@.bar", safe_blog, date_s];
+}
+
+- (NSString *) safeBackupBlogName
+{
 	NSString* blog = [RFSettings stringForKey:kCurrentDestinationName];
 	if (blog.length == 0) {
 		blog = [RFSettings stringForKey:kAccountDefaultSite];
@@ -190,13 +205,8 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	if (safe_blog.length == 0) {
 		safe_blog = @"Micro.blog";
 	}
-
-	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-	formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-	formatter.dateFormat = @"yyyy-MM-dd";
-	NSString* date_s = [formatter stringFromDate:[NSDate date]];
-
-	return [NSString stringWithFormat:@"%@-%@.bar", safe_blog, date_s];
+	
+	return safe_blog;
 }
 
 - (void) postProgress:(NSNumber *)progress
@@ -218,10 +228,14 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	NSURL* backups_url = [NSURL fileURLWithPath:[RFAccount backupsFolder] isDirectory:YES];
 	NSArray* resource_keys = @[ NSURLContentModificationDateKey, NSURLIsDirectoryKey ];
 	NSArray<NSURL *>* urls = [fm contentsOfDirectoryAtURL:backups_url includingPropertiesForKeys:resource_keys options:NSDirectoryEnumerationSkipsHiddenFiles error:NULL];
+	NSString* backup_prefix = [[self safeBackupBlogName] stringByAppendingString:@"-"];
 
 	NSMutableArray<NSDictionary *>* backup_files = [NSMutableArray array];
 	for (NSURL* url in urls) {
 		if (![[url pathExtension] isEqualToString:@"bar"]) {
+			continue;
+		}
+		if (![url.lastPathComponent hasPrefix:backup_prefix]) {
 			continue;
 		}
 
@@ -249,7 +263,11 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 		return [second_date compare:first_date];
 	}];
 
-	for (NSInteger i = kMaxBackupFiles; i < backup_files.count; i++) {
+	NSInteger backups_to_keep = [[NSUserDefaults standardUserDefaults] integerForKey:kBackupsToKeepPrefKey];
+	if (backups_to_keep < 1) {
+		backups_to_keep = kDefaultBackupsToKeep;
+	}
+	for (NSInteger i = backups_to_keep; i < backup_files.count; i++) {
 		NSURL* url = [[backup_files objectAtIndex:i] objectForKey:@"url"];
 		if ([self isSafeBackupFileToDelete:url]) {
 			[fm removeItemAtURL:url error:NULL];

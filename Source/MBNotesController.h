@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) IBOutlet NSSearchField* searchField;
+@property (strong, nonatomic) IBOutlet NSSplitView* splitView;
 @property (strong, nonatomic) IBOutlet NSTextView* detailTextView;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* notebooksPopup;
 @property (strong, nonatomic) IBOutlet NSMenuItem* shareMenuItem;
@@ -47,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) MBVersionsController* versionsController;
 
 - (void) fetchNotes;
+- (void) startNewNote;
 - (void) focusSearch;
 - (void) deselectAll;
 
