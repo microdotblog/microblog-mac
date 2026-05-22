@@ -63,7 +63,8 @@ static NSString* const kBackupDidUpdateNotification = @"MBBackupDidUpdate";
 static NSString* const kCancelBackupNotification = @"MBCancelBackup";
 static NSString* const kCurrentBackupProgressKey = @"CurrentBackupProgress";
 static NSString* const kCurrentBackupStatusKey = @"CurrentBackupStatus";
-static NSTimeInterval const kInitialBackupTimerInterval = 5 * 60;
+
+static NSTimeInterval const kInitialBackupTimerInterval = 5 * 60; // 5 minutes
 static NSInteger const kBackupMinimumDays = 7;
 static NSInteger const kDefaultBackupsToKeep = 2;
 

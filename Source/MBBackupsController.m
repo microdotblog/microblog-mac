@@ -10,7 +10,8 @@
 #import "RFConstants.h"
 #import "RFSettings.h"
 
-static NSTimeInterval const kBackupTimerInterval = 60 * 60;
+static NSTimeInterval const kBackupTimerInterval = 60 * 60; // 1 hour
+
 @interface MBBackupsController ()
 
 @property (strong, nonatomic, nullable) NSTimer* backupTimer;
@@ -31,8 +32,10 @@ static NSTimeInterval const kBackupTimerInterval = 60 * 60;
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupInProgressPrefKey];
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBackupProgressStartingPrefKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kBackupStatusTextPrefKey];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChangeNotification:) name:NSUserDefaultsDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cancelBackupNotification:) name:kCancelBackupNotification object:nil];
+
 	[self updateTimer];
 }
 

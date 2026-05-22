@@ -292,8 +292,6 @@
 /* Begin PBXFileReference section */
 		4B001CCE2B27944300BBF456 /* MBNotesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesController.h; path = Source/MBNotesController.h; sourceTree = "<group>"; };
 		4B001CCF2B27944300BBF456 /* MBNotesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesController.m; path = Source/MBNotesController.m; sourceTree = "<group>"; };
-		4B35A5BE2FBFA58700E5F46C /* MBNotesDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesDatabase.h; path = Source/MBNotesDatabase.h; sourceTree = "<group>"; };
-		4B35A5BF2FBFA58700E5F46C /* MBNotesDatabase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesDatabase.m; path = Source/MBNotesDatabase.m; sourceTree = "<group>"; };
 		4B001CD12B27955900BBF456 /* MBNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNote.h; path = Source/MBNote.h; sourceTree = "<group>"; };
 		4B001CD22B27955900BBF456 /* MBNote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNote.m; path = Source/MBNote.m; sourceTree = "<group>"; };
 		4B001CD42B27957800BBF456 /* MBNoteCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNoteCell.h; path = Source/MBNoteCell.h; sourceTree = "<group>"; };
@@ -431,6 +429,8 @@
 		4B2FAB222E87567200F725D4 /* MBUploadProgress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBUploadProgress.m; path = Source/MBUploadProgress.m; sourceTree = "<group>"; };
 		4B32DD1C2E43E11F003313B3 /* MBGoal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBGoal.h; path = Source/MBGoal.h; sourceTree = "<group>"; };
 		4B32DD1D2E43E11F003313B3 /* MBGoal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBGoal.m; path = Source/MBGoal.m; sourceTree = "<group>"; };
+		4B35A5BE2FBFA58700E5F46C /* MBNotesDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesDatabase.h; path = Source/MBNotesDatabase.h; sourceTree = "<group>"; };
+		4B35A5BF2FBFA58700E5F46C /* MBNotesDatabase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesDatabase.m; path = Source/MBNotesDatabase.m; sourceTree = "<group>"; };
 		4B36915229A2BA8B00561D9A /* MBCrosspostCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCrosspostCell.h; path = Source/MBCrosspostCell.h; sourceTree = "<group>"; };
 		4B36915329A2BA8B00561D9A /* MBCrosspostCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCrosspostCell.m; path = Source/MBCrosspostCell.m; sourceTree = "<group>"; };
 		4B36915629A2BAD800561D9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/CrosspostCell.xib; sourceTree = "<group>"; };
