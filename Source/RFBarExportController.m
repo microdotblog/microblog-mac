@@ -118,7 +118,8 @@
 	if (src_url.host.length == 0 || src_url.path.length == 0) {
 		return nil;
 	}
-	if ([[src lowercaseString] rangeOfString:blogHost].location == NSNotFound) {
+	NSString* host_match = [NSString stringWithFormat:@"//%@/", blogHost];
+	if ([[src lowercaseString] rangeOfString:host_match].location == NSNotFound) {
 		return nil;
 	}
 	if (![downloadedPaths containsObject:src_url.path]) {
