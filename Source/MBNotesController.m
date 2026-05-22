@@ -515,11 +515,16 @@ static NSString* const kNotesSettingsType = @"Setting";
 			return;
 		}
 
+		NSDictionary* response_dict = nil;
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			response_dict = response.parsedResponse;
+		}
+		NSArray* items = [response_dict objectForKey:@"items"];
+
+		if ([items isKindOfClass:[NSArray class]]) {
 			NSMutableArray* new_notes = [NSMutableArray array];
 			BOOL all_notes_cached = YES;
 			
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBNote* n = [MBNote noteWithDictionary:item notebookID:notebookID secretKey:self.secretKey];
 				BOOL note_is_cached = (n.noteID && [cachedNoteIDs containsObject:n.noteID]);
