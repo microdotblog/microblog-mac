@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong) NSString* exportFolder;
 @property (strong) NSMutableArray* queuedUploads;
+@property (strong) NSMutableSet* downloadedUploadPaths;
 @property (assign) NSInteger totalUploads;
 @property (assign) BOOL isCancelled;
 @property (copy, nonatomic, nullable) void (^progressHandler)(double progress);

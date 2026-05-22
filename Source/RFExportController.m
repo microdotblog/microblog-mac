@@ -31,6 +31,7 @@
 	self = [super initWithWindowNibName:@"Export"];
 	if (self) {
 		self.queuedUploads = [NSMutableArray array];
+		self.downloadedUploadPaths = [NSMutableSet set];
 		self.exportFolder = [self prepareExportFolder];
 	}
 	
@@ -327,7 +328,10 @@
 	
 	// this is called from a thread so we'll keep it simple
 	NSData* d = [NSData dataWithContentsOfURL:download_url];
-	[d writeToFile:download_path atomically:NO];
+	BOOL did_write = [d writeToFile:download_path atomically:NO];
+	if (did_write && download_url.path.length > 0) {
+		[self.downloadedUploadPaths addObject:download_url.path];
+	}
 
 	// wait a second so we don't hit the server too much
 	[NSThread sleepForTimeInterval:1];

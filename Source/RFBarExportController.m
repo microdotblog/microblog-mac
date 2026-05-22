@@ -88,7 +88,85 @@
 	return rendered_posts;
 }
 
-- (NSString *) makeHTMLWithRenderedPosts:(NSArray *)renderedPosts
+- (NSString *) currentExportBlogHostname
+{
+	NSString* blog = [RFSettings stringForKey:kCurrentDestinationName];
+	if (blog.length == 0) {
+		return nil;
+	}
+
+	NSURL* blog_url = [NSURL URLWithString:blog];
+	if (blog_url.host.length == 0) {
+		blog_url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@", blog]];
+	}
+
+	NSString* host = blog_url.host;
+	if (host.length == 0) {
+		host = blog;
+	}
+
+	return [host lowercaseString];
+}
+
+- (NSString *) relativePathForDownloadedImageSource:(NSString *)src blogHost:(NSString *)blogHost downloadedPaths:(NSSet *)downloadedPaths
+{
+	if (blogHost.length == 0 || downloadedPaths.count == 0) {
+		return nil;
+	}
+
+	NSURL* src_url = [NSURL URLWithString:src];
+	if (src_url.host.length == 0 || src_url.path.length == 0) {
+		return nil;
+	}
+	if ([[src lowercaseString] rangeOfString:blogHost].location == NSNotFound) {
+		return nil;
+	}
+	if (![downloadedPaths containsObject:src_url.path]) {
+		return nil;
+	}
+
+	NSString* relative_path = src_url.path;
+	while ([relative_path hasPrefix:@"/"]) {
+		relative_path = [relative_path substringFromIndex:1];
+	}
+	return relative_path;
+}
+
+- (NSString *) HTMLByRewritingDownloadedImageSourcesInHTML:(NSString *)html blogHost:(NSString *)blogHost downloadedPaths:(NSSet *)downloadedPaths
+{
+	if ([html rangeOfString:@"<img" options:NSCaseInsensitiveSearch].location == NSNotFound) {
+		return html;
+	}
+
+	NSMutableString* result = [html mutableCopy];
+	NSError* error = nil;
+	NSRegularExpression* img_regex = [NSRegularExpression regularExpressionWithPattern:@"<img\\b[^>]*>" options:NSRegularExpressionCaseInsensitive error:&error];
+	NSRegularExpression* src_regex = [NSRegularExpression regularExpressionWithPattern:@"\\bsrc\\s*=\\s*([\"'])(.*?)\\1" options:NSRegularExpressionCaseInsensitive error:&error];
+	NSArray* img_matches = [img_regex matchesInString:html options:0 range:NSMakeRange(0, html.length)];
+
+	for (NSTextCheckingResult* img_match in [img_matches reverseObjectEnumerator]) {
+		NSString* img_tag = [html substringWithRange:img_match.range];
+		NSTextCheckingResult* src_match = [src_regex firstMatchInString:img_tag options:0 range:NSMakeRange(0, img_tag.length)];
+		if (src_match == nil || src_match.numberOfRanges < 3) {
+			continue;
+		}
+
+		NSRange src_range = [src_match rangeAtIndex:2];
+		NSString* src = [img_tag substringWithRange:src_range];
+		NSString* relative_path = [self relativePathForDownloadedImageSource:src blogHost:blogHost downloadedPaths:downloadedPaths];
+		if (relative_path.length == 0) {
+			continue;
+		}
+
+		NSMutableString* rewritten_tag = [img_tag mutableCopy];
+		[rewritten_tag replaceCharactersInRange:src_range withString:relative_path];
+		[result replaceCharactersInRange:img_match.range withString:rewritten_tag];
+	}
+
+	return result;
+}
+
+- (NSString *) makeHTMLWithRenderedPosts:(NSArray *)renderedPosts blogHost:(NSString *)blogHost downloadedPaths:(NSSet *)downloadedPaths
 {
 	NSMutableString* html = [NSMutableString string];
 	[html appendString:@"<html><body><div class=\"h-feed\">"];
@@ -96,6 +174,7 @@
 	for (NSDictionary* rendered_post in renderedPosts) {
 		RFPost* post = [rendered_post objectForKey:@"post"];
 		NSString* post_html = [rendered_post objectForKey:@"html"];
+		NSString* archive_html = [self HTMLByRewritingDownloadedImageSourcesInHTML:post_html blogHost:blogHost downloadedPaths:downloadedPaths];
 		NSString* posted_at = [post.postedAt description];
 		NSString* posted_at_rfc3339 = [post.postedAt uuRfc3339String];
 
@@ -109,7 +188,7 @@
 			[self escapedHTMLAttributeString:posted_at_rfc3339],
 			[self escapedHTMLString:posted_at]
 		];
-		[html appendFormat:@"<div class=\"e-content\">%@</div>", post_html];
+		[html appendFormat:@"<div class=\"e-content\">%@</div>", archive_html];
 		[html appendString:@"</div>"];
 	}
 	
@@ -146,11 +225,11 @@
 	return root;
 }
 
-- (NSString *) createArchiveInExportFolder:(NSString *)exportFolder posts:(NSArray *)posts error:(NSError **)error
+- (NSString *) createArchiveInExportFolder:(NSString *)exportFolder posts:(NSArray *)posts blogHost:(NSString *)blogHost downloadedPaths:(NSSet *)downloadedPaths error:(NSError **)error
 {
 	NSArray* rendered_posts = [self renderedPostsForPosts:posts];
 
-	NSString* html_s = [self makeHTMLWithRenderedPosts:rendered_posts];
+	NSString* html_s = [self makeHTMLWithRenderedPosts:rendered_posts blogHost:blogHost downloadedPaths:downloadedPaths];
 
 	NSString* html_path = [exportFolder stringByAppendingPathComponent:@"index.html"];
 	if (![html_s writeToFile:html_path atomically:YES encoding:NSUTF8StringEncoding error:error]) {
@@ -216,12 +295,14 @@
 	NSArray* posts = [self.posts copy];
 	NSString* export_folder = [self.exportFolder copy];
 	NSString* destination_path = [self.destinationPath copy];
+	NSString* blog_host = [self currentExportBlogHostname];
+	NSSet* downloaded_paths = [self.downloadedUploadPaths copy];
 
 	if (destination_path) {
 		[self updateExportStatus:@"Creating archive..."];
 		dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
 			NSError* error = nil;
-			NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts error:&error];
+			NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts blogHost:blog_host downloadedPaths:downloaded_paths error:&error];
 			BOOL success = NO;
 			if (zip_path) {
 				success = [self copyExportFileAtPath:zip_path toPath:destination_path error:&error];
@@ -238,7 +319,7 @@
 	}
 	else {
 		NSError* error = nil;
-		NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts error:&error];
+		NSString* zip_path = [self createArchiveInExportFolder:export_folder posts:posts blogHost:blog_host downloadedPaths:downloaded_paths error:&error];
 		NSString* new_path = [self promptSave:@"Micro.blog.bar"];
 		if (zip_path && new_path) {
 			[self copyItemAtPath:zip_path toPath:new_path];
