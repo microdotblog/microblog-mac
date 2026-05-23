@@ -216,7 +216,7 @@
                     </connections>
                 </button>
                 <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hL1-ML-R2g">
-                    <rect key="frame" x="171" y="333" width="72" height="23"/>
+                    <rect key="frame" x="174" y="333" width="72" height="23"/>
                     <buttonCell key="cell" type="roundTextured" title="Notes" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6v4-Ys-J0A">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -244,7 +244,7 @@
                 <constraint firstItem="hL1-ML-R2g" firstAttribute="centerY" secondItem="vbd-mb-sxh" secondAttribute="centerY" id="fFP-bg-TQH"/>
                 <constraint firstItem="lFS-tK-LeF" firstAttribute="top" secondItem="vbd-mb-sxh" secondAttribute="bottom" constant="20" id="iQG-YF-CjW"/>
                 <constraint firstItem="QOm-co-d9F" firstAttribute="top" secondItem="PpW-Zm-Vp1" secondAttribute="bottom" constant="15" id="jIl-9b-hfg"/>
-                <constraint firstItem="hL1-ML-R2g" firstAttribute="leading" secondItem="vbd-mb-sxh" secondAttribute="trailing" constant="5" id="lPq-au-MyX"/>
+                <constraint firstItem="hL1-ML-R2g" firstAttribute="leading" secondItem="vbd-mb-sxh" secondAttribute="trailing" constant="8" symbolic="YES" id="lPq-au-MyX"/>
                 <constraint firstAttribute="trailing" secondItem="PpW-Zm-Vp1" secondAttribute="trailing" constant="20" symbolic="YES" id="vg4-gh-faI"/>
                 <constraint firstItem="tuh-Zo-Onj" firstAttribute="leading" secondItem="PNT-6i-zu9" secondAttribute="trailing" constant="15" id="vmR-Ya-mvB"/>
                 <constraint firstItem="lFS-tK-LeF" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="xuF-aw-FeC"/>
@@ -649,8 +649,8 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B0n-SO-nte">
-                    <rect key="frame" x="20" y="356" width="163" height="16"/>
-                    <buttonCell key="cell" type="check" title="Backup default blog to:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bYB-Ql-oX2">
+                    <rect key="frame" x="20" y="356" width="202" height="16"/>
+                    <buttonCell key="cell" type="check" title="Backup default blog to folder:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bYB-Ql-oX2">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -659,7 +659,7 @@
                     </connections>
                 </button>
                 <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LmD-dE-rpk">
-                    <rect key="frame" x="190" y="352" width="88" height="23"/>
+                    <rect key="frame" x="229" y="352" width="88" height="23"/>
                     <buttonCell key="cell" type="roundTextured" title="Backups" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="92p-2T-z3Z">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -716,7 +716,7 @@
                     <rect key="frame" x="180" y="316" width="51" height="24"/>
                     <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Mfh-Ud-aDe" id="wdf-GM-AcC">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" id="rSy-hM-rTy">
                             <items>
                                 <menuItem title="1" state="on" id="Mfh-Ud-aDe"/>

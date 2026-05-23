@@ -458,6 +458,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	[self setupUser];
 	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
+	[self setupCSS:[self currentWebView]];
 	[self showTimeline:nil];
 }
 

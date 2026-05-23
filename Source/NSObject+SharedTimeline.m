@@ -14,10 +14,18 @@
 
 - (void) setupCSS:(WebView *)webView;
 {
-	NSString* selected_hex = [[NSColor selectedContentBackgroundColor] mb_hexString];
-	NSString* pressed_hex = [[NSColor colorNamed:@"color_row_pressed"] mb_hexString];
-	NSString* unfocused_background_hex = [[NSColor colorNamed:@"color_row_unfocused_selection"] mb_hexString];
-	NSString* unfocused_text_hex = [[NSColor textColor] mb_hexString];
+	NSAppearance* appearance = [[NSApplication sharedApplication] effectiveAppearance];
+	__block NSString* selected_hex = nil;
+	__block NSString* pressed_hex = nil;
+	__block NSString* unfocused_background_hex = nil;
+	__block NSString* unfocused_text_hex = nil;
+
+	[appearance performAsCurrentDrawingAppearance:^{
+		selected_hex = [[NSColor selectedContentBackgroundColor] mb_hexString];
+		pressed_hex = [[NSColor colorNamed:@"color_row_pressed"] mb_hexString];
+		unfocused_background_hex = [[NSColor colorNamed:@"color_row_unfocused_selection"] mb_hexString];
+		unfocused_text_hex = [[NSColor textColor] mb_hexString];
+	}];
 
 	NSString* template_file = [[NSBundle mainBundle] pathForResource:@"Posts" ofType:@"css"];
 	NSString* template_css = [NSString stringWithContentsOfFile:template_file encoding:NSUTF8StringEncoding error:NULL];
@@ -33,11 +41,14 @@
 
 - (void) injectCSS:(NSString *)cssString intoWebView:(WebView *)webView
 {
-	// create new style element and add CSS
-	NSString* js = [NSString stringWithFormat:@"var style = document.createElement('style');"
+	NSString* js = [NSString stringWithFormat:@"var style = document.getElementById('mb-posts-css');"
+						"if (!style) {"
+						"	style = document.createElement('style');"
+						"	style.id = 'mb-posts-css';"
+						"	document.getElementsByTagName('head')[0].appendChild(style);"
+						"}"
 						"style.type = 'text/css';"
-						"style.innerHTML = `%@`;"
-						"document.getElementsByTagName('head')[0].appendChild(style);", cssString];
+						"style.innerHTML = `%@`;", cssString];
 	[webView stringByEvaluatingJavaScriptFromString:js];
 }
 
