@@ -84,7 +84,19 @@
 
 - (void) application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
 {
-	[self handleURLs:urls];
+	NSMutableArray* other_urls = [NSMutableArray array];
+	for (NSURL* url in urls) {
+		if (url.isFileURL) {
+			[self openBlogArchiveAtPath:url.path];
+		}
+		else {
+			[other_urls addObject:url];
+		}
+	}
+
+	if (other_urls.count > 0) {
+		[self handleURLs:other_urls];
+	}
 }
 
 - (void) handleURLs:(NSArray *)urls
@@ -129,6 +141,29 @@
 
 - (BOOL) application:(NSApplication *)sender openFile:(NSString *)path
 {
+	return [self openBlogArchiveAtPath:path];
+}
+
+- (void) application:(NSApplication *)sender openFiles:(NSArray<NSString *> *)filenames
+{
+	BOOL handled = NO;
+	for (NSString* path in filenames) {
+		if ([self openBlogArchiveAtPath:path]) {
+			handled = YES;
+			break;
+		}
+	}
+
+	[sender replyToOpenOrPrint:handled ? NSApplicationDelegateReplySuccess : NSApplicationDelegateReplyFailure];
+}
+
+- (BOOL) openBlogArchiveAtPath:(NSString *)path
+{
+	NSString* extension = path.pathExtension.lowercaseString;
+	if (![extension isEqualToString:@"bar"] && ![extension isEqualToString:@"zip"]) {
+		return NO;
+	}
+
 	if (self.blogImportController) {
 		[self.blogImportController close];
 		self.blogImportController = nil;
