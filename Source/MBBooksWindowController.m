@@ -118,38 +118,43 @@
 	
 	RFClient* client = [[RFClient alloc] initWithPath:[NSString stringWithFormat:@"/books/bookshelves/%@", self.bookshelf.bookshelfID]];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			NSMutableArray* new_books = [NSMutableArray array];
-
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			for (NSDictionary* item in items) {
-				MBBook* b = [[MBBook alloc] init];
-				b.bookID = [item objectForKey:@"id"];
-				b.title = [item objectForKey:@"title"];
-				b.coverURL = [item objectForKey:@"image"];
-				b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
-
-				NSMutableArray* author_names = [NSMutableArray array];
-				for (NSDictionary* info in [item objectForKey:@"authors"]) {
-					[author_names addObject:[info objectForKey:@"name"]];
-				}
-				b.authors = author_names;
-
-				[new_books addObject:b];
-			}
-			
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			RFDispatchMainAsync (^{
-				if (![RFBookshelf isSameBooks:self.allBooks asBooks:new_books]) {
-					self.allBooks = new_books;
-					self.currentBooks = new_books;
-					self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
-					[self.tableView reloadData];
-					[self setupBooksCount];
-				}
-				
 				[self.progressSpinner stopAnimation:nil];
 			});
+			return;
 		}
+
+		NSMutableArray* new_books = [NSMutableArray array];
+
+		NSArray* items = [response.parsedResponse objectForKey:@"items"];
+		for (NSDictionary* item in items) {
+			MBBook* b = [[MBBook alloc] init];
+			b.bookID = [item objectForKey:@"id"];
+			b.title = [item objectForKey:@"title"];
+			b.coverURL = [item objectForKey:@"image"];
+			b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
+
+			NSMutableArray* author_names = [NSMutableArray array];
+			for (NSDictionary* info in [item objectForKey:@"authors"]) {
+				[author_names addObject:[info objectForKey:@"name"]];
+			}
+			b.authors = author_names;
+
+			[new_books addObject:b];
+		}
+
+		RFDispatchMainAsync (^{
+			if (![RFBookshelf isSameBooks:self.allBooks asBooks:new_books]) {
+				self.allBooks = new_books;
+				self.currentBooks = new_books;
+				self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
+				[self.tableView reloadData];
+				[self setupBooksCount];
+			}
+
+			[self.progressSpinner stopAnimation:nil];
+		});
 	}];
 }
 
@@ -165,36 +170,41 @@
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books/search"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			NSMutableArray* new_books = [NSMutableArray array];
-			
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			for (NSDictionary* item in items) {
-				NSMutableArray* author_names = [NSMutableArray array];
-				for (NSDictionary* info in [item objectForKey:@"authors"]) {
-					NSString* author_name = [info objectForKey:@"name"];
-					if (author_name) {
-						[author_names addObject:author_name];
-					}
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			RFDispatchMainAsync (^{
+				[self.progressSpinner stopAnimation:nil];
+			});
+			return;
+		}
+
+		NSMutableArray* new_books = [NSMutableArray array];
+
+		NSArray* items = [response.parsedResponse objectForKey:@"items"];
+		for (NSDictionary* item in items) {
+			NSMutableArray* author_names = [NSMutableArray array];
+			for (NSDictionary* info in [item objectForKey:@"authors"]) {
+				NSString* author_name = [info objectForKey:@"name"];
+				if (author_name) {
+					[author_names addObject:author_name];
 				}
-
-				MBBook* b = [[MBBook alloc] init];
-				b.title = [item objectForKey:@"title"];
-				b.authors = author_names;
-				b.coverURL = [item objectForKey:@"image"];
-				b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
-				b.bookDescription = [item objectForKey:@"content_text"];
-
-				[new_books addObject:b];
 			}
 
-			RFDispatchMainAsync (^{
-				self.currentBooks = new_books;
-				[self.progressSpinner stopAnimation:nil];
-				self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleNone;
-				[self.tableView reloadData];
-			});
+			MBBook* b = [[MBBook alloc] init];
+			b.title = [item objectForKey:@"title"];
+			b.authors = author_names;
+			b.coverURL = [item objectForKey:@"image"];
+			b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
+			b.bookDescription = [item objectForKey:@"content_text"];
+
+			[new_books addObject:b];
 		}
+
+		RFDispatchMainAsync (^{
+			self.currentBooks = new_books;
+			[self.progressSpinner stopAnimation:nil];
+			self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleNone;
+			[self.tableView reloadData];
+		});
 	}];
 }
 
@@ -219,7 +229,7 @@
 
 				[new_bookshelves addObject:shelf];
 			}
-			
+
 			RFDispatchMainAsync (^{
 				self.bookshelves = new_bookshelves;
 				[self setupBookshelvesMenu];
@@ -242,15 +252,20 @@
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books"];
 	[client postWithParams:params completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			RFDispatchMainAsync (^{
 				[self.progressSpinner stopAnimation:nil];
-				[self.searchField setStringValue:@""];
-				[self fetchBooks];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self userInfo:@{ kBookWasAddedBookshelfKey: bookshelf }];
 			});
+			return;
 		}
+
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			[self.searchField setStringValue:@""];
+			[self fetchBooks];
+
+			[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self userInfo:@{ kBookWasAddedBookshelfKey: bookshelf }];
+		});
 	}];
 }
 
@@ -260,14 +275,19 @@
 
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/books/bookshelves/%@/remove/%@", bookshelf.bookshelfID, book.bookID];
 	[client deleteWithObject:nil completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			RFDispatchMainAsync (^{
 				[self.progressSpinner stopAnimation:nil];
-				[self fetchBooks];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasRemovedNotification object:self userInfo:@{ kBookWasRemovedBookshelfKey: bookshelf }];
 			});
+			return;
 		}
+
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			[self fetchBooks];
+
+			[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasRemovedNotification object:self userInfo:@{ kBookWasRemovedBookshelfKey: bookshelf }];
+		});
 	}];
 }
 
@@ -281,14 +301,19 @@
 	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/books/bookshelves/%@/assign", bookshelf.bookshelfID];
 	[client postWithParams:params completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			RFDispatchMainAsync (^{
 				[self.progressSpinner stopAnimation:nil];
-				[self fetchBooks];
-
-				[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAssignedNotification object:self userInfo:@{ kBookWasAssignedBookshelfKey: bookshelf }];
 			});
+			return;
 		}
+
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			[self fetchBooks];
+
+			[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAssignedNotification object:self userInfo:@{ kBookWasAssignedBookshelfKey: bookshelf }];
+		});
 	}];
 }
 
