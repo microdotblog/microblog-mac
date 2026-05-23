@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 3.9.2</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Fixed opening .bar files by double-clicking them in the Finder.</li>
+					<li>Fixed blog archive backups so large backup files won't temporarily freeze the app.</li>
+					<li>Fixed .bar exports to use relative paths in HTML for downloaded images.</li>
+					<li>Fixed the books search spinner not stopping after an error.</li>
+					<li>Fixed selected row color and split view divider after switching to dark mode.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Sat, 23 Mar 2026 13:25:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_3.9.2.zip" sparkle:shortVersionString="3.9.2" sparkle:version="238" length="4635107" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.9.1</title>
  			<description><![CDATA[
 				<style>
