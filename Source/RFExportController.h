@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong) NSString* exportFolder;
 @property (strong) NSMutableArray* queuedUploads;
+@property (strong) NSMutableSet* downloadedUploadPaths;
 @property (assign) NSInteger totalUploads;
 @property (assign) BOOL isCancelled;
 @property (copy, nonatomic, nullable) void (^progressHandler)(double progress);
@@ -29,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) startExport;
 - (void) cancelExport;
+- (BOOL) finishExportCompletesAsynchronously;
+- (void) updateExportStatus:(NSString *)status;
 - (NSString *) writePost:(RFPost *)post;
 - (NSString *) writePost:(RFPost *)post includeFrontmatter:(BOOL)includeFrontmatter;
 - (void) downloadURL:(NSString *)url forUpload:(RFUpload *)upload withCompletion:(void (^)(void))handler;
