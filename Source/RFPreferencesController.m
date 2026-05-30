@@ -478,6 +478,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	self.notesPane.hidden = YES;
 	self.backupPane.hidden = YES;
+	self.robotsPane.hidden = YES;
 	[self.window.contentView addSubview:self.generalPane];
 	[self.generalPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.generalPane.hidden = NO;
@@ -487,6 +488,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	self.generalPane.hidden = YES;
 	self.backupPane.hidden = YES;
+	self.robotsPane.hidden = YES;
 	[self.window.contentView addSubview:self.notesPane];
 	[self.notesPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.notesPane.hidden = NO;
@@ -496,12 +498,23 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 {
 	self.generalPane.hidden = YES;
 	self.notesPane.hidden = YES;
+	self.robotsPane.hidden = YES;
 	[self.window.contentView addSubview:self.backupPane];
 	[self.backupPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.backupPane.hidden = NO;
 	[self updateBackupRecentsEnabled];
 	[self updateBackupDateField];
 	[self updateBackupProgressBarWithProgress:nil status:nil];
+}
+
+- (IBAction) showRobotsPane:(id)sender
+{
+	self.generalPane.hidden = YES;
+	self.notesPane.hidden = YES;
+	self.backupPane.hidden = YES;
+	[self.window.contentView addSubview:self.robotsPane];
+	[self.robotsPane setFrameOrigin:NSMakePoint(0, 0)];
+	self.robotsPane.hidden = NO;
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
