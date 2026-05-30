@@ -17,6 +17,8 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "RFWordpressController.h"
+#import "MBRobotsController.h"
+#import "MBRobotsModel.h"
 #import "NSString+Extras.h"
 #import "UUHttpSession.h"
 #import "UUString.h"
@@ -28,6 +30,13 @@ static CGFloat const kWordPressMenusHeight = 100;
 static CGFloat const kDayOneSettingsPadding = 15;
 static CGFloat const kToolbarHeight = 82;
 static NSString* const kAccountCellIdentifier = @"AccountCell";
+
+@interface RFPreferencesController ()
+
+@property (strong, nonatomic) MBRobotsController* robotsController;
+@property (assign, nonatomic) BOOL isRobotsMachineSupported;
+
+@end
 
 @implementation RFPreferencesController
 
@@ -57,6 +66,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self setupBackupCheckboxes];
 	[self setupBackupRecentsPopup];
 	[self setupBackupProgressBar];
+	[self setupRobotsSettings];
 
 	[self updateRadioButtons];
 	[self updateMenus];
@@ -169,6 +179,24 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	self.backupProgressBar.doubleValue = 0.0;
 	self.backupStatusField.hidden = YES;
 	self.backupCancelButton.hidden = YES;
+}
+
+- (void) setupRobotsSettings
+{
+	self.robotsController = [[MBRobotsController alloc] init];
+	self.isRobotsMachineSupported = [MBRobotsController isSupportedMachine];
+
+	self.robotsStatusField.stringValue = self.isRobotsMachineSupported ? @"Requires: 15 GB storage" : @"Requires: M1 or later and 24 GB of memory";
+	self.robotsCheckbox.enabled = self.isRobotsMachineSupported;
+
+	BOOL is_enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kUseLocalAIModelsPrefKey];
+	if (!self.isRobotsMachineSupported || (is_enabled && ![MBRobotsModel isLocalModelAvailable])) {
+		is_enabled = NO;
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
+	}
+
+	self.robotsCheckbox.state = is_enabled ? NSControlStateValueOn : NSControlStateValueOff;
+	[self hideRobotsDownloadProgress];
 }
 
 - (void) setupBackupRecentsPopup
@@ -515,6 +543,7 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.window.contentView addSubview:self.robotsPane];
 	[self.robotsPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.robotsPane.hidden = NO;
+	[self updateRobotsSettings];
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
@@ -556,6 +585,126 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 - (IBAction) cancelBackup:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kCancelBackupNotification object:self];
+}
+
+- (IBAction) aiCheckboxChecked:(id)sender
+{
+	if (self.robotsCheckbox.state == NSControlStateValueOn) {
+		[self enableLocalRobotsModel];
+	}
+	else {
+		[self disableLocalRobotsModel];
+	}
+}
+
+- (void) updateRobotsSettings
+{
+	self.isRobotsMachineSupported = [MBRobotsController isSupportedMachine];
+	self.robotsStatusField.stringValue = self.isRobotsMachineSupported ? @"Requires: 15 GB storage" : @"Requires: M1 or later and 24 GB of memory";
+	self.robotsCheckbox.enabled = self.isRobotsMachineSupported;
+
+	if (!self.isRobotsMachineSupported) {
+		self.robotsCheckbox.state = NSControlStateValueOff;
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
+		[self hideRobotsDownloadProgress];
+	}
+}
+
+- (void) enableLocalRobotsModel
+{
+	if (!self.isRobotsMachineSupported) {
+		self.robotsCheckbox.state = NSControlStateValueOff;
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
+		return;
+	}
+
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUseLocalAIModelsPrefKey];
+
+	if ([MBRobotsModel isLocalModelAvailable]) {
+		[self showRobotsDownloadStatus:@"Local model is ready." detail:@""];
+		return;
+	}
+
+	__weak RFPreferencesController* weak_self = self;
+	[self.robotsController startDownloadingModelWithProgress:^(BOOL indeterminate, double progress, NSString* status, NSString* detail) {
+		[weak_self updateRobotsDownloadProgressIndeterminate:indeterminate progress:progress status:status detail:detail];
+	} completion:^(BOOL success, BOOL cancelled, NSError* error) {
+		[weak_self robotsDownloadDidFinishWithSuccess:success cancelled:cancelled error:error];
+	}];
+}
+
+- (void) disableLocalRobotsModel
+{
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
+
+	if (self.robotsController.isDownloading) {
+		[self.robotsController cancelDownload];
+	}
+
+	[MBRobotsModel deleteLocalModelFiles];
+	[self hideRobotsDownloadProgress];
+}
+
+- (void) updateRobotsDownloadProgressIndeterminate:(BOOL)indeterminate progress:(double)progress status:(NSString *)status detail:(NSString *)detail
+{
+	self.downloadModelProgressBar.hidden = NO;
+	self.downloadModelStatusField.hidden = NO;
+	self.downloadModelRemainingField.hidden = (detail.length == 0);
+	self.downloadModelStatusField.stringValue = status ?: @"";
+	self.downloadModelRemainingField.stringValue = detail ?: @"";
+
+	self.downloadModelProgressBar.minValue = 0.0;
+	self.downloadModelProgressBar.maxValue = 1.0;
+	self.downloadModelProgressBar.indeterminate = indeterminate;
+	if (indeterminate) {
+		[self.downloadModelProgressBar startAnimation:nil];
+	}
+	else {
+		[self.downloadModelProgressBar stopAnimation:nil];
+		self.downloadModelProgressBar.doubleValue = MAX(0.0, MIN(1.0, progress));
+	}
+}
+
+- (void) robotsDownloadDidFinishWithSuccess:(BOOL)success cancelled:(BOOL)cancelled error:(NSError *)error
+{
+	if (success) {
+		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUseLocalAIModelsPrefKey];
+		self.robotsCheckbox.state = NSControlStateValueOn;
+		[self updateRobotsDownloadProgressIndeterminate:NO progress:1.0 status:@"Local model is ready." detail:@""];
+	}
+	else {
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
+		self.robotsCheckbox.state = NSControlStateValueOff;
+		if (cancelled) {
+			[self hideRobotsDownloadProgress];
+		}
+		else {
+			NSString* error_message = error.localizedDescription ?: @"Download failed.";
+			[self showRobotsDownloadStatus:@"Download failed." detail:error_message];
+		}
+	}
+}
+
+- (void) showRobotsDownloadStatus:(NSString *)status detail:(NSString *)detail
+{
+	self.downloadModelProgressBar.hidden = YES;
+	[self.downloadModelProgressBar stopAnimation:nil];
+	self.downloadModelStatusField.hidden = NO;
+	self.downloadModelRemainingField.hidden = (detail.length == 0);
+	self.downloadModelStatusField.stringValue = status ?: @"";
+	self.downloadModelRemainingField.stringValue = detail ?: @"";
+}
+
+- (void) hideRobotsDownloadProgress
+{
+	self.downloadModelProgressBar.hidden = YES;
+	self.downloadModelProgressBar.indeterminate = NO;
+	self.downloadModelProgressBar.doubleValue = 0.0;
+	[self.downloadModelProgressBar stopAnimation:nil];
+	self.downloadModelStatusField.hidden = YES;
+	self.downloadModelRemainingField.hidden = YES;
+	self.downloadModelStatusField.stringValue = @"";
+	self.downloadModelRemainingField.stringValue = @"";
 }
 
 - (void) backupDidUpdateNotification:(NSNotification *)notification

@@ -39,7 +39,9 @@
                 <outlet property="qrCodeArrow" destination="PNT-6i-zu9" id="B8R-K7-gQc"/>
                 <outlet property="qrCodeInfo" destination="tuh-Zo-Onj" id="LAw-Jj-lWd"/>
                 <outlet property="qrCodeView" destination="QOm-co-d9F" id="qwG-Ud-Fyn"/>
+                <outlet property="robotsCheckbox" destination="Y23-fR-U6Q" id="GQK-5B-MQx"/>
                 <outlet property="robotsPane" destination="gaf-Xc-HPl" id="lR9-Qj-Ddj"/>
+                <outlet property="robotsStatusField" destination="OQV-PN-WaB" id="Bbm-4k-UoB"/>
                 <outlet property="showNotesKeyButton" destination="9i9-be-zbc" id="MDe-sb-53i"/>
                 <outlet property="textSizePopup" destination="W83-Xx-rHt" id="fZ5-0E-FFS"/>
                 <outlet property="toolbar" destination="0BJ-9c-nr7" id="hC5-j4-OnJ"/>
@@ -798,6 +800,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="aiCheckboxChecked:" target="-2" id="QTN-GB-27e"/>
+                    </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQV-PN-WaB">
                     <rect key="frame" x="18" y="309" width="134" height="16"/>

@@ -219,6 +219,8 @@
 		4BBB74082A71AF4A00479BCB /* MBHighlightsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */; };
 		4BBD6DCF24A59D620018C337 /* RFSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */; };
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
+		4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1012FCB000100000001 /* MBRobotsController.m */; };
+		4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1042FCB000100000001 /* MBRobotsModel.m */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */; };
@@ -336,6 +338,10 @@
 		4B2CAAB01F8FE99900D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Preferences.xib; sourceTree = "<group>"; };
 		4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPreferencesController.h; path = Source/RFPreferencesController.h; sourceTree = "<group>"; };
 		4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPreferencesController.m; path = Source/RFPreferencesController.m; sourceTree = "<group>"; };
+		4BC0D1002FCB000100000001 /* MBRobotsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsController.h; path = Source/MBRobotsController.h; sourceTree = "<group>"; };
+		4BC0D1012FCB000100000001 /* MBRobotsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsController.m; path = Source/MBRobotsController.m; sourceTree = "<group>"; };
+		4BC0D1032FCB000100000001 /* MBRobotsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsModel.h; path = Source/MBRobotsModel.h; sourceTree = "<group>"; };
+		4BC0D1042FCB000100000001 /* MBRobotsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsModel.m; path = Source/MBRobotsModel.m; sourceTree = "<group>"; };
 		4B2CAAB51F90002500D9B10E /* RFMacApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMacApplication.h; path = Source/RFMacApplication.h; sourceTree = "<group>"; };
 		4B2CAAB61F90002500D9B10E /* RFMacApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMacApplication.m; path = Source/RFMacApplication.m; sourceTree = "<group>"; };
 		4B2CAAB81F90652600D9B10E /* RFXMLRSDParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFXMLRSDParser.m; path = Source/RFXMLRSDParser.m; sourceTree = "<group>"; };
@@ -952,6 +958,10 @@
 				4B2CAAB61F90002500D9B10E /* RFMacApplication.m */,
 				4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */,
 				4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */,
+				4BC0D1002FCB000100000001 /* MBRobotsController.h */,
+				4BC0D1012FCB000100000001 /* MBRobotsController.m */,
+				4BC0D1032FCB000100000001 /* MBRobotsModel.h */,
+				4BC0D1042FCB000100000001 /* MBRobotsModel.m */,
 				4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */,
 				4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */,
 				4BD83398273C3DF3007350F2 /* RFGoToUserController.h */,
@@ -1718,6 +1728,8 @@
 				4BF7E51E2835850600500C59 /* RFBookshelf.m in Sources */,
 				4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */,
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
+				4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */,
+				4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */,
 				4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
