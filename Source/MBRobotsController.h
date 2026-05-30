@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^MBRobotsDownloadProgressBlock)(BOOL indeterminate, double progress, NSString* status, NSString* detail);
+typedef void (^MBRobotsDownloadProgressBlock)(BOOL indeterminate, double progress, NSString* detail);
 typedef void (^MBRobotsDownloadCompletionBlock)(BOOL success, BOOL cancelled, NSError* _Nullable error);
 
 @interface MBRobotsController : NSObject

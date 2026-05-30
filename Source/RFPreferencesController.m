@@ -621,13 +621,13 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUseLocalAIModelsPrefKey];
 
 	if ([MBRobotsModel isLocalModelAvailable]) {
-		[self showRobotsDownloadStatus:@"Local model is ready." detail:@""];
+		[self hideRobotsDownloadProgress];
 		return;
 	}
 
 	__weak RFPreferencesController* weak_self = self;
-	[self.robotsController startDownloadingModelWithProgress:^(BOOL indeterminate, double progress, NSString* status, NSString* detail) {
-		[weak_self updateRobotsDownloadProgressIndeterminate:indeterminate progress:progress status:status detail:detail];
+	[self.robotsController startDownloadingModelWithProgress:^(BOOL indeterminate, double progress, NSString* detail) {
+		[weak_self updateRobotsDownloadProgressIndeterminate:indeterminate progress:progress detail:detail];
 	} completion:^(BOOL success, BOOL cancelled, NSError* error) {
 		[weak_self robotsDownloadDidFinishWithSuccess:success cancelled:cancelled error:error];
 	}];
@@ -645,12 +645,11 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self hideRobotsDownloadProgress];
 }
 
-- (void) updateRobotsDownloadProgressIndeterminate:(BOOL)indeterminate progress:(double)progress status:(NSString *)status detail:(NSString *)detail
+- (void) updateRobotsDownloadProgressIndeterminate:(BOOL)indeterminate progress:(double)progress detail:(NSString *)detail
 {
 	self.downloadModelProgressBar.hidden = NO;
 	self.downloadModelStatusField.hidden = NO;
 	self.downloadModelRemainingField.hidden = (detail.length == 0);
-	self.downloadModelStatusField.stringValue = status ?: @"";
 	self.downloadModelRemainingField.stringValue = detail ?: @"";
 
 	self.downloadModelProgressBar.minValue = 0.0;
@@ -670,29 +669,13 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	if (success) {
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUseLocalAIModelsPrefKey];
 		self.robotsCheckbox.state = NSControlStateValueOn;
-		[self updateRobotsDownloadProgressIndeterminate:NO progress:1.0 status:@"Local model is ready." detail:@""];
+		[self hideRobotsDownloadProgress];
 	}
 	else {
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
 		self.robotsCheckbox.state = NSControlStateValueOff;
-		if (cancelled) {
-			[self hideRobotsDownloadProgress];
-		}
-		else {
-			NSString* error_message = error.localizedDescription ?: @"Download failed.";
-			[self showRobotsDownloadStatus:@"Download failed." detail:error_message];
-		}
+		[self hideRobotsDownloadProgress];
 	}
-}
-
-- (void) showRobotsDownloadStatus:(NSString *)status detail:(NSString *)detail
-{
-	self.downloadModelProgressBar.hidden = YES;
-	[self.downloadModelProgressBar stopAnimation:nil];
-	self.downloadModelStatusField.hidden = NO;
-	self.downloadModelRemainingField.hidden = (detail.length == 0);
-	self.downloadModelStatusField.stringValue = status ?: @"";
-	self.downloadModelRemainingField.stringValue = detail ?: @"";
 }
 
 - (void) hideRobotsDownloadProgress
@@ -703,7 +686,6 @@ static NSString* const kAccountCellIdentifier = @"AccountCell";
 	[self.downloadModelProgressBar stopAnimation:nil];
 	self.downloadModelStatusField.hidden = YES;
 	self.downloadModelRemainingField.hidden = YES;
-	self.downloadModelStatusField.stringValue = @"";
 	self.downloadModelRemainingField.stringValue = @"";
 }
 
