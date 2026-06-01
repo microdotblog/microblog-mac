@@ -20,7 +20,8 @@ extern NSString* const MBRobotsModelBaseURLString;
 + (NSString *) localModelFolderPath;
 + (BOOL) isLocalModelAvailable;
 + (unsigned long long) localModelStorageBytes;
-+ (NSString *) runPrompt:(NSString *)string;
++ (void) runPrompt:(NSString *)string completion:(void (^)(NSString* result))completion;
++ (void) preloadModelWithCompletion:(void (^)(BOOL success))completion;
 + (void) deleteLocalModelFiles;
 
 @end

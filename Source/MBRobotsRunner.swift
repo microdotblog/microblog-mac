@@ -13,6 +13,24 @@ import Tokenizers
 class MBRobotsPromptRunner: NSObject {
 	private static let engine = MBRobotsPromptEngine()
 
+	@objc class func preloadModel(modelFolderPath: String, completion: @escaping (Bool) -> Void) {
+		Task.detached(priority: .utility) {
+			let success: Bool
+			do {
+				try await engine.preloadModel(modelFolderPath: modelFolderPath)
+				success = true
+			}
+			catch {
+				NSLog("Local AI model preload failed: \(error.localizedDescription)")
+				success = false
+			}
+
+			DispatchQueue.main.async {
+				completion(success)
+			}
+		}
+	}
+
 	@objc class func runPrompt(_ prompt: String, modelFolderPath: String) -> String {
 		let semaphore = DispatchSemaphore(value: 0)
 		let lock = NSLock()
@@ -39,6 +57,23 @@ class MBRobotsPromptRunner: NSObject {
 			output
 		}
 	}
+
+	@objc class func runPrompt(_ prompt: String, modelFolderPath: String, completion: @escaping (String) -> Void) {
+		Task.detached(priority: .utility) {
+			let result: String
+			do {
+				result = try await engine.runPrompt(prompt, modelFolderPath: modelFolderPath)
+			}
+			catch {
+				NSLog("Local AI prompt failed: \(error.localizedDescription)")
+				result = ""
+			}
+
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
+	}
 }
 
 private actor MBRobotsPromptEngine {
@@ -52,7 +87,12 @@ private actor MBRobotsPromptEngine {
 			instructions: "You are a helpful assistant.",
 			generateParameters: GenerateParameters(maxTokens: 1024, temperature: 0.6)
 		)
-		return try await session.respond(to: prompt)
+		let response = try await session.respond(to: prompt)
+		return MBRobotsPromptCleaner.clean(response)
+	}
+
+	func preloadModel(modelFolderPath: String) async throws {
+		_ = try await loadModelIfNeeded(modelFolderPath: modelFolderPath)
 	}
 
 	private func loadModelIfNeeded(modelFolderPath: String) async throws -> ModelContainer {
@@ -115,6 +155,43 @@ private enum MBRobotsGemma4Loader {
 		}
 
 		return Set(baseConfig.eosTokenIds?.values ?? [])
+	}
+}
+
+private enum MBRobotsPromptCleaner {
+	static func clean(_ response: String) -> String {
+		var s = response
+		s = removeChannelBlocks(from: s)
+		s = removeControlTokens(from: s)
+		return s.trimmingCharacters(in: .whitespacesAndNewlines)
+	}
+
+	private static func removeChannelBlocks(from response: String) -> String {
+		var s = response
+		let pattern = #"<\|channel\>[^<\n]*\n([\s\S]*?)<channel\|>"#
+		while let range = s.range(of: pattern, options: .regularExpression) {
+			s.removeSubrange(range)
+		}
+
+		return s
+	}
+
+	private static func removeControlTokens(from response: String) -> String {
+		let tokens = [
+			"<|turn>",
+			"<turn|>",
+			"<|channel>",
+			"<channel|>",
+			"<|tool_call>",
+			"<tool_call|>",
+			"<|tool_response>",
+			"<tool_response|>",
+			"<|think|>"
+		]
+
+		return tokens.reduce(response) { partial, token in
+			partial.replacingOccurrences(of: token, with: "")
+		}
 	}
 }
 

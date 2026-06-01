@@ -208,6 +208,11 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 		self.isRobotsMachineSupported = YES;
 		self.robotsCheckbox.enabled = YES;
 		[self updateRobotsStatusForEnabledModel];
+		[MBRobotsModel preloadModelWithCompletion:^(BOOL success) {
+			if (!success) {
+				NSLog(@"Local AI model preload failed.");
+			}
+		}];
 	}
 	else {
 		[self updateRobotsSettings];
@@ -232,8 +237,9 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 
 - (IBAction) testPrompt:(id)sender
 {
-	NSString* s = [MBRobotsModel runPrompt:@"What color is the sky?"];
-	NSLog(@"answer: %@", s);
+	[MBRobotsModel runPrompt:@"What color is the sky?" completion:^(NSString* result) {
+		NSLog(@"answer: %@", result);
+	}];
 }
 
 - (void) updateBackupRecentsEnabled
@@ -731,6 +737,11 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 		self.robotsCheckbox.state = NSControlStateValueOn;
 		[self updateRobotsStatusForEnabledModel];
 		[self hideRobotsDownloadProgress];
+		[MBRobotsModel preloadModelWithCompletion:^(BOOL preload_success) {
+			if (!preload_success) {
+				NSLog(@"Local AI model preload failed.");
+			}
+		}];
 	}
 	else {
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUseLocalAIModelsPrefKey];
