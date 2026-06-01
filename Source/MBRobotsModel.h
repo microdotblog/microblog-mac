@@ -23,7 +23,8 @@ extern NSString* const MBRobotsModelBaseURLString;
 + (void) runPrompt:(NSString *)string completion:(void (^)(NSString* result))completion;
 + (void) runPrompt:(NSString *)string imageFilePath:(NSString *)imageFilePath completion:(void (^)(NSString* result))completion;
 + (void) preloadModelWithCompletion:(void (^)(BOOL success))completion;
-+ (void) unloadModelWithCompletion:(void (^)(void))completion;
++ (void) unloadModel;
++ (void) unloadModelWithCompletion:(void (^ _Nullable)(void))completion;
 + (void) deleteLocalModelFiles;
 
 @end
