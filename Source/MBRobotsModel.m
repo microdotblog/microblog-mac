@@ -110,6 +110,18 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 	}];
 }
 
++ (void) runPrompt:(NSString *)string imageFilePath:(NSString *)imageFilePath completion:(void (^)(NSString* result))completion
+{
+	if (![self isLocalModelAvailable] || (imageFilePath.length == 0)) {
+		completion(@"");
+		return;
+	}
+
+	[MBRobotsPromptRunner runPrompt:string imageFilePath:imageFilePath modelFolderPath:[self localModelFolderPath] completion:^(NSString* result) {
+		completion(result ?: @"");
+	}];
+}
+
 + (void) preloadModelWithCompletion:(void (^)(BOOL success))completion
 {
 	if (![self isLocalModelAvailable]) {

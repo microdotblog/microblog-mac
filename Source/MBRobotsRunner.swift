@@ -84,6 +84,23 @@ class MBRobotsPromptRunner: NSObject {
 			}
 		}
 	}
+
+	@objc class func runPrompt(_ prompt: String, imageFilePath: String, modelFolderPath: String, completion: @escaping (String) -> Void) {
+		Task.detached(priority: .utility) {
+			let result: String
+			do {
+				result = try await engine.runPrompt(prompt, imageFilePath: imageFilePath, modelFolderPath: modelFolderPath)
+			}
+			catch {
+				NSLog("Local AI image prompt failed: \(error.localizedDescription)")
+				result = ""
+			}
+
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
+	}
 }
 
 private actor MBRobotsPromptEngine {
@@ -98,6 +115,18 @@ private actor MBRobotsPromptEngine {
 			generateParameters: GenerateParameters(maxTokens: 1024, temperature: 0.6)
 		)
 		let response = try await session.respond(to: prompt)
+		return MBRobotsPromptCleaner.clean(response)
+	}
+
+	func runPrompt(_ prompt: String, imageFilePath: String, modelFolderPath: String) async throws -> String {
+		let model = try await loadModelIfNeeded(modelFolderPath: modelFolderPath)
+		let session = ChatSession(
+			model,
+			instructions: "You are a helpful assistant.",
+			generateParameters: GenerateParameters(maxTokens: 1024, temperature: 0.6)
+		)
+		let imageURL = URL(fileURLWithPath: imageFilePath)
+		let response = try await session.respond(to: prompt, image: .url(imageURL))
 		return MBRobotsPromptCleaner.clean(response)
 	}
 
