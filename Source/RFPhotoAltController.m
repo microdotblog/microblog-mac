@@ -14,8 +14,10 @@
 #import "RFSettings.h"
 #import "RFClient.h"
 #import "RFMacros.h"
+#import "MBRobotsModel.h"
 
 static NSInteger const kMaxAltTextChecks = 20;
+static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 1 sentence? Don't start the sentence with the text \"This image\" or \"The image\".";
 
 @implementation RFPhotoAltController
 
@@ -45,8 +47,12 @@ static NSInteger const kMaxAltTextChecks = 20;
 	[self setupText];
 	[self setupDefaultButton];
 	
+	BOOL is_using_local_ai = [[NSUserDefaults standardUserDefaults] boolForKey:kUseLocalAIModelsPrefKey] && [MBRobotsModel isLocalModelAvailable];
 	BOOL is_using_ai = [RFSettings boolForKey:kIsUsingAI];
-	if (is_using_ai) {
+	if (is_using_local_ai) {
+		[self generateLocalAltText];
+	}
+	else if (is_using_ai) {
 		[self startUpload];
 	}
 }
@@ -171,6 +177,76 @@ static NSInteger const kMaxAltTextChecks = 20;
 			}
 		});
 	}];
+}
+
+- (void) generateLocalAltText
+{
+	// skip videos since they don't get alt text anyway
+	if (self.photo.isVideo) {
+		return;
+	}
+
+	// don't generate if we already have alt text
+	if (self.photo.altText.length > 0) {
+		return;
+	}
+
+	NSString* image_path = [self temporaryImagePathForLocalAltText];
+	if (image_path.length == 0) {
+		self.progressStatusField.hidden = NO;
+		self.progressStatusField.stringValue = @"Failed to load image";
+		return;
+	}
+
+	self.progressStatusField.hidden = NO;
+	self.progressStatusField.stringValue = @"Generating text...";
+	[self.progressSpinner startAnimation:nil];
+
+	[MBRobotsModel runPrompt:kLocalAltTextPrompt imageFilePath:image_path completion:^(NSString* result) {
+		[[NSFileManager defaultManager] removeItemAtPath:image_path error:NULL];
+		if (self.isCancelled) {
+			return;
+		}
+
+		NSString* alt_text = [self cleanedGeneratedAltText:result];
+		[self.progressSpinner stopAnimation:nil];
+		self.progressStatusField.stringValue = @"";
+
+		if ((alt_text.length > 0) && (self.descriptionField.string.length == 0)) {
+			self.descriptionField.string = alt_text;
+		}
+	}];
+}
+
+- (NSString *) temporaryImagePathForLocalAltText
+{
+	NSData* d = [self.photo jpegData];
+	if (d == nil) {
+		return @"";
+	}
+
+	NSString* filename = [[[NSUUID UUID] UUIDString] stringByAppendingPathExtension:@"jpg"];
+	NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+	if (![d writeToFile:path atomically:YES]) {
+		return @"";
+	}
+
+	return path;
+}
+
+- (NSString *) cleanedGeneratedAltText:(NSString *)altText
+{
+	NSString* result = altText ?: @"";
+	NSCharacterSet* newline_chars = [NSCharacterSet newlineCharacterSet];
+	result = [[result componentsSeparatedByCharactersInSet:newline_chars] componentsJoinedByString:@" "];
+	result = [result stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+	result = [result stringByReplacingOccurrencesOfString:@"“" withString:@""];
+	result = [result stringByReplacingOccurrencesOfString:@"”" withString:@""];
+	result = [result stringByReplacingOccurrencesOfString:@"'" withString:@""];
+	result = [result stringByReplacingOccurrencesOfString:@"‘" withString:@""];
+	result = [result stringByReplacingOccurrencesOfString:@"’" withString:@""];
+	result = [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	return result;
 }
 
 - (void) waitForAltText
