@@ -120,6 +120,11 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 	[MBRobotsPromptRunner preloadModelWithModelFolderPath:[self localModelFolderPath] completion:completion];
 }
 
++ (void) unloadModelWithCompletion:(void (^)(void))completion
+{
+	[MBRobotsPromptRunner unloadModelWithCompletion:completion];
+}
+
 + (void) deleteLocalModelFiles
 {
 	NSFileManager* fm = [NSFileManager defaultManager];

@@ -31,6 +31,16 @@ class MBRobotsPromptRunner: NSObject {
 		}
 	}
 
+	@objc class func unloadModel(completion: @escaping () -> Void) {
+		Task.detached(priority: .utility) {
+			await engine.unloadModel()
+
+			DispatchQueue.main.async {
+				completion()
+			}
+		}
+	}
+
 	@objc class func runPrompt(_ prompt: String, modelFolderPath: String) -> String {
 		let semaphore = DispatchSemaphore(value: 0)
 		let lock = NSLock()
@@ -93,6 +103,12 @@ private actor MBRobotsPromptEngine {
 
 	func preloadModel(modelFolderPath: String) async throws {
 		_ = try await loadModelIfNeeded(modelFolderPath: modelFolderPath)
+	}
+
+	func unloadModel() {
+		modelContainer = nil
+		modelFolderPath = nil
+		Memory.clearCache()
 	}
 
 	private func loadModelIfNeeded(modelFolderPath: String) async throws -> ModelContainer {
