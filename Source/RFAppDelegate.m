@@ -49,6 +49,7 @@
 #import "RFAutoCompleteCache.h"
 #import "RFUserCache.h"
 #import "MBMenus.h"
+#import "MBRobotsModel.h"
 
 @implementation RFAppDelegate
 
@@ -72,6 +73,13 @@
 {
 	[self showMainWindow:nil];
 	[self setupBookmarks];
+}
+
+- (void) applicationDidResignActive:(NSNotification *)notification
+{
+	if (self.postWindows.count == 0) {
+		[MBRobotsModel unloadModel];
+	}
 }
 
 - (BOOL) applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag

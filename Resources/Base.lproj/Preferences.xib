@@ -21,6 +21,9 @@
                 <outlet property="categoryPopup" destination="2AP-RA-v1x" id="Qbu-6k-Y0H"/>
                 <outlet property="dayOneJournalNameField" destination="Uaa-gd-eFu" id="Xdy-rG-Gb7"/>
                 <outlet property="dayOneReturnButton" destination="t95-rG-Mb1" id="oOE-FP-KA7"/>
+                <outlet property="downloadModelProgressBar" destination="ofd-Hp-CdP" id="7Hs-PP-LgL"/>
+                <outlet property="downloadModelRemainingField" destination="Ipg-99-5Ze" id="XyB-kn-keN"/>
+                <outlet property="downloadModelStatusField" destination="sS9-BY-cI0" id="whl-sc-kvy"/>
                 <outlet property="generalPane" destination="aU5-ED-gYs" id="iJe-Cj-ASC"/>
                 <outlet property="messageField" destination="UK6-9N-kOk" id="6BJ-sH-62d"/>
                 <outlet property="messageHeader" destination="e0X-yV-XWC" id="tBC-Oe-FZ4"/>
@@ -36,6 +39,9 @@
                 <outlet property="qrCodeArrow" destination="PNT-6i-zu9" id="B8R-K7-gQc"/>
                 <outlet property="qrCodeInfo" destination="tuh-Zo-Onj" id="LAw-Jj-lWd"/>
                 <outlet property="qrCodeView" destination="QOm-co-d9F" id="qwG-Ud-Fyn"/>
+                <outlet property="robotsCheckbox" destination="Y23-fR-U6Q" id="GQK-5B-MQx"/>
+                <outlet property="robotsPane" destination="gaf-Xc-HPl" id="lR9-Qj-Ddj"/>
+                <outlet property="robotsStatusField" destination="OQV-PN-WaB" id="Bbm-4k-UoB"/>
                 <outlet property="showNotesKeyButton" destination="9i9-be-zbc" id="MDe-sb-53i"/>
                 <outlet property="textSizePopup" destination="W83-Xx-rHt" id="fZ5-0E-FFS"/>
                 <outlet property="toolbar" destination="0BJ-9c-nr7" id="hC5-j4-OnJ"/>
@@ -110,11 +116,19 @@
                             <action selector="showBackupPane:" target="-2" id="tz2-x1-ACA"/>
                         </connections>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="E213A7E5-BBA4-4BDE-92B3-9432F6330E8C" label="AI" paletteLabel="AI" tag="-1" image="wand.and.rays" catalog="system" selectable="YES" id="EoP-VJ-vM0">
+                        <size key="minSize" width="24" height="24"/>
+                        <size key="maxSize" width="24" height="24"/>
+                        <connections>
+                            <action selector="showRobotsPane:" target="-2" id="NQ5-Vm-Q1z"/>
+                        </connections>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="K2G-iN-6st"/>
                     <toolbarItem reference="Zr9-2p-gjQ"/>
                     <toolbarItem reference="y2U-18-ZHm"/>
+                    <toolbarItem reference="EoP-VJ-vM0"/>
                 </defaultToolbarItems>
             </toolbar>
             <point key="canvasLocation" x="-512.5" y="37.5"/>
@@ -124,7 +138,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lFS-tK-LeF">
-                    <rect key="frame" x="20" y="301" width="176" height="16"/>
+                    <rect key="frame" x="20" y="303" width="176" height="16"/>
                     <buttonCell key="cell" type="check" title="Save secret key to iCloud" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="xkR-hY-6tC">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -143,7 +157,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9i9-be-zbc">
-                    <rect key="frame" x="20" y="257" width="122" height="24"/>
+                    <rect key="frame" x="20" y="259" width="122" height="24"/>
                     <buttonCell key="cell" type="push" title="Show Secret Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="buK-Vi-xYA">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -156,7 +170,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4I2-KF-Jxw">
-                    <rect key="frame" x="154" y="257" width="90" height="24"/>
+                    <rect key="frame" x="154" y="259" width="90" height="24"/>
                     <buttonCell key="cell" type="push" title="Save Key..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bgR-WB-0ue">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -166,7 +180,7 @@
                     </connections>
                 </button>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PpW-Zm-Vp1">
-                    <rect key="frame" x="20" y="220" width="371" height="16"/>
+                    <rect key="frame" x="20" y="222" width="371" height="16"/>
                     <textFieldCell key="cell" selectable="YES" title="mkey123456789" id="8gd-1D-ici">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -174,7 +188,7 @@
                     </textFieldCell>
                 </textField>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QOm-co-d9F">
-                    <rect key="frame" x="22" y="35" width="170" height="170"/>
+                    <rect key="frame" x="22" y="37" width="170" height="170"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="170" id="3Rg-2L-NX5"/>
                         <constraint firstAttribute="height" constant="170" id="rCK-6H-jen"/>
@@ -182,7 +196,7 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="P4J-95-6hv"/>
                 </imageView>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Zo-Onj">
-                    <rect key="frame" x="240" y="95" width="130" height="50"/>
+                    <rect key="frame" x="240" y="97" width="130" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="126" id="ExI-gT-ECB"/>
                         <constraint firstAttribute="height" constant="50" id="Ue4-iU-b2K"/>
@@ -194,7 +208,7 @@
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNT-6i-zu9">
-                    <rect key="frame" x="205" y="110" width="24" height="20"/>
+                    <rect key="frame" x="205" y="112" width="24" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="H7f-1Y-mOc"/>
                         <constraint firstAttribute="height" constant="20" id="cjX-pz-djm"/>
@@ -206,7 +220,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-mb-sxh">
-                    <rect key="frame" x="20" y="337" width="147" height="16"/>
+                    <rect key="frame" x="20" y="339" width="147" height="16"/>
                     <buttonCell key="cell" type="check" title="Save notes to folder:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ffi-yp-70i">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -216,7 +230,7 @@
                     </connections>
                 </button>
                 <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hL1-ML-R2g">
-                    <rect key="frame" x="174" y="333" width="72" height="23"/>
+                    <rect key="frame" x="174" y="335" width="72" height="23"/>
                     <buttonCell key="cell" type="roundTextured" title="Notes" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6v4-Ys-J0A">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -232,7 +246,7 @@
                 <constraint firstItem="vbd-mb-sxh" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="6E1-gR-xMJ"/>
                 <constraint firstItem="tuh-Zo-Onj" firstAttribute="centerY" secondItem="QOm-co-d9F" secondAttribute="centerY" id="AA2-bX-vIJ"/>
                 <constraint firstAttribute="trailing" secondItem="xT9-EZ-swE" secondAttribute="trailing" constant="20" symbolic="YES" id="BNH-jI-azV"/>
-                <constraint firstItem="vbd-mb-sxh" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="20" id="BPS-Lk-GQc"/>
+                <constraint firstItem="vbd-mb-sxh" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="18" id="BPS-Lk-GQc"/>
                 <constraint firstItem="PpW-Zm-Vp1" firstAttribute="top" secondItem="9i9-be-zbc" secondAttribute="bottom" constant="21" id="DB6-08-mnF"/>
                 <constraint firstItem="xT9-EZ-swE" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" id="FlV-Sc-ITO"/>
                 <constraint firstItem="QOm-co-d9F" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="22" id="Iwo-Bj-U7o"/>
@@ -637,10 +651,9 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0y1-UE-Iss">
-                    <rect key="frame" x="18" y="378" width="373" height="50"/>
+                    <rect key="frame" x="18" y="405" width="373" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="369" id="S5T-xl-eLn"/>
-                        <constraint firstAttribute="height" constant="50" id="wZP-67-qQm"/>
                     </constraints>
                     <textFieldCell key="cell" title="Micro.blog will download the posts and photos from your blog to a blog archive file on your Mac once a week." id="dnn-a8-Qzb">
                         <font key="font" usesAppearanceFont="YES"/>
@@ -649,7 +662,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B0n-SO-nte">
-                    <rect key="frame" x="20" y="356" width="202" height="16"/>
+                    <rect key="frame" x="20" y="372" width="202" height="16"/>
                     <buttonCell key="cell" type="check" title="Backup default blog to folder:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bYB-Ql-oX2">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -659,7 +672,7 @@
                     </connections>
                 </button>
                 <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LmD-dE-rpk">
-                    <rect key="frame" x="229" y="352" width="88" height="23"/>
+                    <rect key="frame" x="229" y="368" width="88" height="23"/>
                     <buttonCell key="cell" type="roundTextured" title="Backups" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="92p-2T-z3Z">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -669,13 +682,13 @@
                     </connections>
                 </button>
                 <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="5K3-Ol-d7W">
-                    <rect key="frame" x="20" y="220" width="340" height="20"/>
+                    <rect key="frame" x="20" y="236" width="340" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="uBy-sc-MbL"/>
                     </constraints>
                 </progressIndicator>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6DL-kJ-oTU">
-                    <rect key="frame" x="18" y="248" width="373" height="16"/>
+                    <rect key="frame" x="18" y="264" width="373" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Status..." id="ZI7-Di-yHQ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -683,7 +696,7 @@
                     </textFieldCell>
                 </textField>
                 <button hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vzr-gP-UIY">
-                    <rect key="frame" x="365" y="212" width="30" height="36"/>
+                    <rect key="frame" x="365" y="228" width="30" height="36"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="M0R-Q8-NWM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -697,7 +710,7 @@
                     </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wz2-SR-PYM">
-                    <rect key="frame" x="18" y="284" width="122" height="16"/>
+                    <rect key="frame" x="18" y="300" width="122" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Next backup: today" id="O6Q-HM-NEf">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -705,7 +718,7 @@
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NBd-zW-S2Q">
-                    <rect key="frame" x="18" y="320" width="154" height="16"/>
+                    <rect key="frame" x="18" y="336" width="154" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Recent backups to keep:" id="ayn-Dq-exp">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -713,7 +726,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e7H-kp-svn">
-                    <rect key="frame" x="180" y="316" width="51" height="24"/>
+                    <rect key="frame" x="180" y="332" width="51" height="24"/>
                     <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Mfh-Ud-aDe" id="wdf-GM-AcC">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="message"/>
@@ -745,13 +758,13 @@
                 <constraint firstItem="0y1-UE-Iss" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="9De-ZM-Sv6"/>
                 <constraint firstItem="NBd-zW-S2Q" firstAttribute="top" secondItem="B0n-SO-nte" secondAttribute="bottom" constant="20" id="Aba-WO-lxb"/>
                 <constraint firstItem="NBd-zW-S2Q" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="Be3-h0-ynZ"/>
-                <constraint firstItem="0y1-UE-Iss" firstAttribute="top" secondItem="UYJ-an-MUd" secondAttribute="top" constant="29" id="Bgv-HE-hec"/>
+                <constraint firstItem="0y1-UE-Iss" firstAttribute="top" secondItem="UYJ-an-MUd" secondAttribute="top" constant="20" symbolic="YES" id="Bgv-HE-hec"/>
                 <constraint firstItem="LmD-dE-rpk" firstAttribute="centerY" secondItem="B0n-SO-nte" secondAttribute="centerY" id="CGs-Ou-5ma"/>
                 <constraint firstItem="5K3-Ol-d7W" firstAttribute="top" secondItem="6DL-kJ-oTU" secondAttribute="bottom" constant="8" symbolic="YES" id="E8c-Nn-b8L"/>
                 <constraint firstAttribute="trailing" secondItem="vzr-gP-UIY" secondAttribute="trailing" constant="14" id="EmW-Wm-4yv"/>
                 <constraint firstItem="e7H-kp-svn" firstAttribute="centerY" secondItem="NBd-zW-S2Q" secondAttribute="centerY" id="JXB-ZJ-4RU"/>
                 <constraint firstItem="LmD-dE-rpk" firstAttribute="leading" secondItem="B0n-SO-nte" secondAttribute="trailing" constant="8" symbolic="YES" id="Md8-OJ-ifz"/>
-                <constraint firstItem="B0n-SO-nte" firstAttribute="top" secondItem="0y1-UE-Iss" secondAttribute="bottom" constant="6" id="MgK-yV-TMN"/>
+                <constraint firstItem="B0n-SO-nte" firstAttribute="top" secondItem="0y1-UE-Iss" secondAttribute="bottom" constant="17" id="MgK-yV-TMN"/>
                 <constraint firstItem="6DL-kJ-oTU" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="OyL-rR-zHM"/>
                 <constraint firstAttribute="trailing" secondItem="6DL-kJ-oTU" secondAttribute="trailing" constant="20" symbolic="YES" id="SRT-xK-F8K"/>
                 <constraint firstItem="e7H-kp-svn" firstAttribute="leading" secondItem="NBd-zW-S2Q" secondAttribute="trailing" constant="10" id="aI1-Jc-THZ"/>
@@ -764,12 +777,98 @@
             </constraints>
             <point key="canvasLocation" x="918.5" y="59.5"/>
         </customView>
+        <customView id="gaf-Xc-HPl">
+            <rect key="frame" x="0.0" y="0.0" width="409" height="457"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e4P-fz-vUv">
+                    <rect key="frame" x="18" y="357" width="373" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="369" id="BuL-r9-xkV"/>
+                    </constraints>
+                    <textFieldCell key="cell" id="2LN-Y6-ppc">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <string key="title">AI can be used to generate accessibility text for photos, summarize blog posts, and more. Your Mac will be used when possible for your own data as well as to process posts for other Micro.blog users, reducing reliance on cloud AI services for everyone.</string>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y23-fR-U6Q">
+                    <rect key="frame" x="20" y="326" width="141" height="16"/>
+                    <buttonCell key="cell" type="check" title="Use local AI models" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5TR-aa-bFW">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="aiCheckboxChecked:" target="-2" id="QTN-GB-27e"/>
+                    </connections>
+                </button>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQV-PN-WaB">
+                    <rect key="frame" x="18" y="293" width="134" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Requires: 24 GB RAM" id="rr6-K2-0xR">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="ofd-Hp-CdP">
+                    <rect key="frame" x="20" y="258" width="369" height="20"/>
+                </progressIndicator>
+                <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sS9-BY-cI0">
+                    <rect key="frame" x="18" y="234" width="167" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Downloading local model..." id="QBr-Wg-adO">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ipg-99-5Ze">
+                    <rect key="frame" x="264" y="234" width="127" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="5 minutes remaining" id="Ph2-2y-XuL">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eXp-Uy-Kv5">
+                    <rect key="frame" x="20" y="20" width="98" height="24"/>
+                    <buttonCell key="cell" type="push" title="Test Prompt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0rV-Le-IAi">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="testPrompt:" target="-2" id="Y4D-IW-rG2"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="e4P-fz-vUv" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="0oT-hm-fbE"/>
+                <constraint firstItem="e4P-fz-vUv" firstAttribute="top" secondItem="gaf-Xc-HPl" secondAttribute="top" constant="20" symbolic="YES" id="1eN-cC-QF8"/>
+                <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="15" id="79R-1J-fXg"/>
+                <constraint firstAttribute="bottom" secondItem="eXp-Uy-Kv5" secondAttribute="bottom" constant="20" symbolic="YES" id="9fm-sa-TKc"/>
+                <constraint firstItem="OQV-PN-WaB" firstAttribute="top" secondItem="Y23-fR-U6Q" secondAttribute="bottom" constant="17" id="AG0-4h-pa9"/>
+                <constraint firstItem="sS9-BY-cI0" firstAttribute="top" secondItem="ofd-Hp-CdP" secondAttribute="bottom" constant="8" symbolic="YES" id="Ejp-3d-HSh"/>
+                <constraint firstItem="eXp-Uy-Kv5" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="JfN-FG-ITa"/>
+                <constraint firstItem="ofd-Hp-CdP" firstAttribute="top" secondItem="OQV-PN-WaB" secondAttribute="bottom" constant="15" id="QSs-Ev-aOf"/>
+                <constraint firstAttribute="trailing" secondItem="e4P-fz-vUv" secondAttribute="trailing" constant="20" symbolic="YES" id="WJE-zh-twG"/>
+                <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="15" id="XVu-UT-S8r"/>
+                <constraint firstAttribute="trailing" secondItem="ofd-Hp-CdP" secondAttribute="trailing" constant="20" symbolic="YES" id="c9G-Pb-lFs"/>
+                <constraint firstItem="sS9-BY-cI0" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="ftP-fQ-EW1"/>
+                <constraint firstItem="ofd-Hp-CdP" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="mMF-Ex-ANY"/>
+                <constraint firstItem="OQV-PN-WaB" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="rqo-i8-Jqs"/>
+                <constraint firstItem="Y23-fR-U6Q" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="tTP-ok-zz8"/>
+                <constraint firstItem="Ipg-99-5Ze" firstAttribute="top" secondItem="ofd-Hp-CdP" secondAttribute="bottom" constant="8" symbolic="YES" id="tcu-z6-vFz"/>
+                <constraint firstAttribute="trailing" secondItem="Ipg-99-5Ze" secondAttribute="trailing" constant="20" symbolic="YES" id="xk5-UB-grH"/>
+            </constraints>
+            <point key="canvasLocation" x="1401.5" y="59.5"/>
+        </customView>
     </objects>
     <resources>
         <image name="archivebox" catalog="system" width="16" height="14"/>
         <image name="folder.fill" catalog="system" width="18" height="14"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="note" catalog="system" width="16" height="14"/>
+        <image name="wand.and.rays" catalog="system" width="16" height="16"/>
         <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
     </resources>
 </document>
