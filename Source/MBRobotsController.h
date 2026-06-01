@@ -15,6 +15,8 @@ typedef void (^MBRobotsDownloadCompletionBlock)(BOOL success, BOOL cancelled, NS
 @property (assign, nonatomic, readonly) BOOL isDownloading;
 
 + (BOOL) isSupportedMachine;
++ (BOOL) hasSupportedHardware;
++ (BOOL) hasRequiredStorage;
 
 - (void) startDownloadingModelWithProgress:(MBRobotsDownloadProgressBlock)progressBlock completion:(MBRobotsDownloadCompletionBlock)completionBlock;
 - (void) cancelDownload;

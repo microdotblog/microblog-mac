@@ -19,6 +19,7 @@ extern NSString* const MBRobotsModelBaseURLString;
 + (NSArray<NSString *> *) largeModelFilenames;
 + (NSString *) localModelFolderPath;
 + (BOOL) isLocalModelAvailable;
++ (unsigned long long) localModelStorageBytes;
 + (void) deleteLocalModelFiles;
 
 @end

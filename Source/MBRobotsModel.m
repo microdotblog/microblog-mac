@@ -73,6 +73,29 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 	return YES;
 }
 
++ (unsigned long long) localModelStorageBytes
+{
+	NSFileManager* fm = [NSFileManager defaultManager];
+	NSString* model_folder = [self localModelFolderPath];
+	if (model_folder.length == 0) {
+		return 0;
+	}
+
+	unsigned long long total_bytes = 0;
+	for (NSString* filename in [self modelFilenames]) {
+		NSString* path = [model_folder stringByAppendingPathComponent:filename];
+		BOOL is_directory = NO;
+		if (![fm fileExistsAtPath:path isDirectory:&is_directory] || is_directory) {
+			continue;
+		}
+
+		NSDictionary<NSFileAttributeKey, id>* attributes = [fm attributesOfItemAtPath:path error:NULL];
+		total_bytes += [attributes[NSFileSize] unsignedLongLongValue];
+	}
+
+	return total_bytes;
+}
+
 + (void) deleteLocalModelFiles
 {
 	NSFileManager* fm = [NSFileManager defaultManager];

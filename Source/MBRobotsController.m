@@ -10,7 +10,9 @@
 #import <math.h>
 #import <sys/sysctl.h>
 
-static uint64_t const kMinimumMemoryBytes = 24ULL * 1024ULL * 1024ULL * 1024ULL;
+static uint64_t const kBytesPerGB = 1024ULL * 1024 * 1024;
+static uint64_t const kMinimumMemoryBytes = 24 * kBytesPerGB;
+static uint64_t const kMinimumStorageBytes = 20 * kBytesPerGB;
 
 @interface MBRobotsController () <NSURLSessionDataDelegate>
 
@@ -59,6 +61,11 @@ static uint64_t const kMinimumMemoryBytes = 24ULL * 1024ULL * 1024ULL * 1024ULL;
 
 + (BOOL) isSupportedMachine
 {
+	return [self hasSupportedHardware] && [self hasRequiredStorage];
+}
+
++ (BOOL) hasSupportedHardware
+{
 	return [self hasAppleSilicon] && [self hasRequiredMemory];
 }
 
@@ -80,6 +87,33 @@ static uint64_t const kMinimumMemoryBytes = 24ULL * 1024ULL * 1024ULL * 1024ULL;
 #else
 	return NO;
 #endif
+}
+
++ (BOOL) hasRequiredStorage
+{
+	NSNumber* available_storage = [self availableStorageBytes];
+	return (available_storage != nil) && (available_storage.unsignedLongLongValue >= kMinimumStorageBytes);
+}
+
++ (NSNumber *) availableStorageBytes
+{
+	NSArray<NSURL *>* urls = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+	NSURL* app_support_url = urls.firstObject;
+	if (app_support_url == nil) {
+		app_support_url = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
+	}
+
+	NSError* error = nil;
+	NSDictionary<NSURLResourceKey, id>* values = [app_support_url resourceValuesForKeys:@[
+		NSURLVolumeAvailableCapacityForImportantUsageKey,
+		NSURLVolumeAvailableCapacityKey
+	] error:&error];
+	NSNumber* available_storage = values[NSURLVolumeAvailableCapacityForImportantUsageKey];
+	if (available_storage == nil) {
+		available_storage = values[NSURLVolumeAvailableCapacityKey];
+	}
+
+	return available_storage;
 }
 
 - (void) startDownloadingModelWithProgress:(MBRobotsDownloadProgressBlock)progressBlock completion:(MBRobotsDownloadCompletionBlock)completionBlock

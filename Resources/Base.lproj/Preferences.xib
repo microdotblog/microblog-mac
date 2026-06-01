@@ -138,7 +138,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lFS-tK-LeF">
-                    <rect key="frame" x="20" y="301" width="176" height="16"/>
+                    <rect key="frame" x="20" y="303" width="176" height="16"/>
                     <buttonCell key="cell" type="check" title="Save secret key to iCloud" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="xkR-hY-6tC">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -157,7 +157,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9i9-be-zbc">
-                    <rect key="frame" x="20" y="257" width="122" height="24"/>
+                    <rect key="frame" x="20" y="259" width="122" height="24"/>
                     <buttonCell key="cell" type="push" title="Show Secret Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="buK-Vi-xYA">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -170,7 +170,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4I2-KF-Jxw">
-                    <rect key="frame" x="154" y="257" width="90" height="24"/>
+                    <rect key="frame" x="154" y="259" width="90" height="24"/>
                     <buttonCell key="cell" type="push" title="Save Key..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bgR-WB-0ue">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -180,7 +180,7 @@
                     </connections>
                 </button>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PpW-Zm-Vp1">
-                    <rect key="frame" x="20" y="220" width="371" height="16"/>
+                    <rect key="frame" x="20" y="222" width="371" height="16"/>
                     <textFieldCell key="cell" selectable="YES" title="mkey123456789" id="8gd-1D-ici">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -188,7 +188,7 @@
                     </textFieldCell>
                 </textField>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QOm-co-d9F">
-                    <rect key="frame" x="22" y="35" width="170" height="170"/>
+                    <rect key="frame" x="22" y="37" width="170" height="170"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="170" id="3Rg-2L-NX5"/>
                         <constraint firstAttribute="height" constant="170" id="rCK-6H-jen"/>
@@ -196,7 +196,7 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="P4J-95-6hv"/>
                 </imageView>
                 <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Zo-Onj">
-                    <rect key="frame" x="240" y="95" width="130" height="50"/>
+                    <rect key="frame" x="240" y="97" width="130" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="126" id="ExI-gT-ECB"/>
                         <constraint firstAttribute="height" constant="50" id="Ue4-iU-b2K"/>
@@ -208,7 +208,7 @@
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNT-6i-zu9">
-                    <rect key="frame" x="205" y="110" width="24" height="20"/>
+                    <rect key="frame" x="205" y="112" width="24" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="H7f-1Y-mOc"/>
                         <constraint firstAttribute="height" constant="20" id="cjX-pz-djm"/>
@@ -220,7 +220,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-mb-sxh">
-                    <rect key="frame" x="20" y="337" width="147" height="16"/>
+                    <rect key="frame" x="20" y="339" width="147" height="16"/>
                     <buttonCell key="cell" type="check" title="Save notes to folder:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ffi-yp-70i">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -230,7 +230,7 @@
                     </connections>
                 </button>
                 <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hL1-ML-R2g">
-                    <rect key="frame" x="174" y="333" width="72" height="23"/>
+                    <rect key="frame" x="174" y="335" width="72" height="23"/>
                     <buttonCell key="cell" type="roundTextured" title="Notes" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6v4-Ys-J0A">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -246,7 +246,7 @@
                 <constraint firstItem="vbd-mb-sxh" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" symbolic="YES" id="6E1-gR-xMJ"/>
                 <constraint firstItem="tuh-Zo-Onj" firstAttribute="centerY" secondItem="QOm-co-d9F" secondAttribute="centerY" id="AA2-bX-vIJ"/>
                 <constraint firstAttribute="trailing" secondItem="xT9-EZ-swE" secondAttribute="trailing" constant="20" symbolic="YES" id="BNH-jI-azV"/>
-                <constraint firstItem="vbd-mb-sxh" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="20" id="BPS-Lk-GQc"/>
+                <constraint firstItem="vbd-mb-sxh" firstAttribute="top" secondItem="xT9-EZ-swE" secondAttribute="bottom" constant="18" id="BPS-Lk-GQc"/>
                 <constraint firstItem="PpW-Zm-Vp1" firstAttribute="top" secondItem="9i9-be-zbc" secondAttribute="bottom" constant="21" id="DB6-08-mnF"/>
                 <constraint firstItem="xT9-EZ-swE" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="20" id="FlV-Sc-ITO"/>
                 <constraint firstItem="QOm-co-d9F" firstAttribute="leading" secondItem="YMl-Rz-Pmv" secondAttribute="leading" constant="22" id="Iwo-Bj-U7o"/>
@@ -651,10 +651,9 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0y1-UE-Iss">
-                    <rect key="frame" x="18" y="387" width="373" height="50"/>
+                    <rect key="frame" x="18" y="405" width="373" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="369" id="S5T-xl-eLn"/>
-                        <constraint firstAttribute="height" constant="50" id="wZP-67-qQm"/>
                     </constraints>
                     <textFieldCell key="cell" title="Micro.blog will download the posts and photos from your blog to a blog archive file on your Mac once a week." id="dnn-a8-Qzb">
                         <font key="font" usesAppearanceFont="YES"/>
@@ -663,7 +662,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B0n-SO-nte">
-                    <rect key="frame" x="20" y="365" width="202" height="16"/>
+                    <rect key="frame" x="20" y="372" width="202" height="16"/>
                     <buttonCell key="cell" type="check" title="Backup default blog to folder:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bYB-Ql-oX2">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -673,7 +672,7 @@
                     </connections>
                 </button>
                 <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LmD-dE-rpk">
-                    <rect key="frame" x="229" y="361" width="88" height="23"/>
+                    <rect key="frame" x="229" y="368" width="88" height="23"/>
                     <buttonCell key="cell" type="roundTextured" title="Backups" bezelStyle="texturedRounded" image="folder.fill" catalog="system" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="92p-2T-z3Z">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -683,13 +682,13 @@
                     </connections>
                 </button>
                 <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="5K3-Ol-d7W">
-                    <rect key="frame" x="20" y="229" width="340" height="20"/>
+                    <rect key="frame" x="20" y="236" width="340" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="uBy-sc-MbL"/>
                     </constraints>
                 </progressIndicator>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6DL-kJ-oTU">
-                    <rect key="frame" x="18" y="257" width="373" height="16"/>
+                    <rect key="frame" x="18" y="264" width="373" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Status..." id="ZI7-Di-yHQ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -697,7 +696,7 @@
                     </textFieldCell>
                 </textField>
                 <button hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vzr-gP-UIY">
-                    <rect key="frame" x="365" y="221" width="30" height="36"/>
+                    <rect key="frame" x="365" y="228" width="30" height="36"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="M0R-Q8-NWM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -711,7 +710,7 @@
                     </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wz2-SR-PYM">
-                    <rect key="frame" x="18" y="293" width="122" height="16"/>
+                    <rect key="frame" x="18" y="300" width="122" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Next backup: today" id="O6Q-HM-NEf">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -719,7 +718,7 @@
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NBd-zW-S2Q">
-                    <rect key="frame" x="18" y="329" width="154" height="16"/>
+                    <rect key="frame" x="18" y="336" width="154" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Recent backups to keep:" id="ayn-Dq-exp">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -727,7 +726,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e7H-kp-svn">
-                    <rect key="frame" x="180" y="325" width="51" height="24"/>
+                    <rect key="frame" x="180" y="332" width="51" height="24"/>
                     <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Mfh-Ud-aDe" id="wdf-GM-AcC">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="message"/>
@@ -765,7 +764,7 @@
                 <constraint firstAttribute="trailing" secondItem="vzr-gP-UIY" secondAttribute="trailing" constant="14" id="EmW-Wm-4yv"/>
                 <constraint firstItem="e7H-kp-svn" firstAttribute="centerY" secondItem="NBd-zW-S2Q" secondAttribute="centerY" id="JXB-ZJ-4RU"/>
                 <constraint firstItem="LmD-dE-rpk" firstAttribute="leading" secondItem="B0n-SO-nte" secondAttribute="trailing" constant="8" symbolic="YES" id="Md8-OJ-ifz"/>
-                <constraint firstItem="B0n-SO-nte" firstAttribute="top" secondItem="0y1-UE-Iss" secondAttribute="bottom" constant="6" id="MgK-yV-TMN"/>
+                <constraint firstItem="B0n-SO-nte" firstAttribute="top" secondItem="0y1-UE-Iss" secondAttribute="bottom" constant="17" id="MgK-yV-TMN"/>
                 <constraint firstItem="6DL-kJ-oTU" firstAttribute="leading" secondItem="UYJ-an-MUd" secondAttribute="leading" constant="20" symbolic="YES" id="OyL-rR-zHM"/>
                 <constraint firstAttribute="trailing" secondItem="6DL-kJ-oTU" secondAttribute="trailing" constant="20" symbolic="YES" id="SRT-xK-F8K"/>
                 <constraint firstItem="e7H-kp-svn" firstAttribute="leading" secondItem="NBd-zW-S2Q" secondAttribute="trailing" constant="10" id="aI1-Jc-THZ"/>
@@ -783,19 +782,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e4P-fz-vUv">
-                    <rect key="frame" x="18" y="373" width="373" height="64"/>
+                    <rect key="frame" x="18" y="357" width="373" height="80"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="369" id="BuL-r9-xkV"/>
                     </constraints>
                     <textFieldCell key="cell" id="2LN-Y6-ppc">
                         <font key="font" usesAppearanceFont="YES"/>
-                        <string key="title">Artificial intelligence can be used to generate accessibility text for photos, summarize blog posts, and more. Your Mac will be used when possible for your own data as well as for feeds and posts available to other Micro.blog users.</string>
+                        <string key="title">AI can be used to generate accessibility text for photos, summarize blog posts, and more. Your Mac will be used when possible for your own data as well as to process posts for other Micro.blog users, reducing reliance on cloud AI services for everyone.</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y23-fR-U6Q">
-                    <rect key="frame" x="20" y="342" width="141" height="16"/>
+                    <rect key="frame" x="20" y="326" width="141" height="16"/>
                     <buttonCell key="cell" type="check" title="Use local AI models" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5TR-aa-bFW">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -805,7 +804,7 @@
                     </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQV-PN-WaB">
-                    <rect key="frame" x="18" y="309" width="134" height="16"/>
+                    <rect key="frame" x="18" y="293" width="134" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Requires: 24 GB RAM" id="rr6-K2-0xR">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -813,10 +812,10 @@
                     </textFieldCell>
                 </textField>
                 <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="ofd-Hp-CdP">
-                    <rect key="frame" x="20" y="274" width="369" height="20"/>
+                    <rect key="frame" x="20" y="258" width="369" height="20"/>
                 </progressIndicator>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sS9-BY-cI0">
-                    <rect key="frame" x="18" y="250" width="167" height="16"/>
+                    <rect key="frame" x="18" y="234" width="167" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Downloading local model..." id="QBr-Wg-adO">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -824,7 +823,7 @@
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ipg-99-5Ze">
-                    <rect key="frame" x="264" y="250" width="127" height="16"/>
+                    <rect key="frame" x="264" y="234" width="127" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="5 minutes remaining" id="Ph2-2y-XuL">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
