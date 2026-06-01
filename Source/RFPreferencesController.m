@@ -228,6 +228,14 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	[self.backupRecentsPopup selectItemWithTag:backups_to_keep];
 }
 
+#pragma mark -
+
+- (IBAction) testPrompt:(id)sender
+{
+	NSString* s = [MBRobotsModel runPrompt:@"What color is the sky?"];
+	NSLog(@"answer: %@", s);
+}
+
 - (void) updateBackupRecentsEnabled
 {
 	BOOL is_enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kSaveBackupsToFolderPrefKey];

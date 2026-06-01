@@ -830,13 +830,25 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eXp-Uy-Kv5">
+                    <rect key="frame" x="20" y="20" width="98" height="24"/>
+                    <buttonCell key="cell" type="push" title="Test Prompt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0rV-Le-IAi">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="testPrompt:" target="-2" id="Y4D-IW-rG2"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="e4P-fz-vUv" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="0oT-hm-fbE"/>
                 <constraint firstItem="e4P-fz-vUv" firstAttribute="top" secondItem="gaf-Xc-HPl" secondAttribute="top" constant="20" symbolic="YES" id="1eN-cC-QF8"/>
                 <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="15" id="79R-1J-fXg"/>
+                <constraint firstAttribute="bottom" secondItem="eXp-Uy-Kv5" secondAttribute="bottom" constant="20" symbolic="YES" id="9fm-sa-TKc"/>
                 <constraint firstItem="OQV-PN-WaB" firstAttribute="top" secondItem="Y23-fR-U6Q" secondAttribute="bottom" constant="17" id="AG0-4h-pa9"/>
                 <constraint firstItem="sS9-BY-cI0" firstAttribute="top" secondItem="ofd-Hp-CdP" secondAttribute="bottom" constant="8" symbolic="YES" id="Ejp-3d-HSh"/>
+                <constraint firstItem="eXp-Uy-Kv5" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="JfN-FG-ITa"/>
                 <constraint firstItem="ofd-Hp-CdP" firstAttribute="top" secondItem="OQV-PN-WaB" secondAttribute="bottom" constant="15" id="QSs-Ev-aOf"/>
                 <constraint firstAttribute="trailing" secondItem="e4P-fz-vUv" secondAttribute="trailing" constant="20" symbolic="YES" id="WJE-zh-twG"/>
                 <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="15" id="XVu-UT-S8r"/>

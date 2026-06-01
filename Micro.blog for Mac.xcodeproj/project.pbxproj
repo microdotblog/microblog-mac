@@ -221,6 +221,11 @@
 		4BBD6DD224A59D800018C337 /* SeparatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BBD6DD024A59D800018C337 /* SeparatorCell.xib */; };
 		4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1012FCB000100000001 /* MBRobotsController.m */; };
 		4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1042FCB000100000001 /* MBRobotsModel.m */; };
+		4BC0D1072FCB000100000001 /* MBRobotsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */; };
+		4BC0D1152FCB000100000001 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1102FCB000100000001 /* MLXLLM */; };
+		4BC0D1162FCB000100000001 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1112FCB000100000001 /* MLXLMCommon */; };
+		4BC0D1172FCB000100000001 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1182FCB000100000001 /* MLXVLM */; };
+		4BC0D11A2FCB000100000001 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D11B2FCB000100000001 /* Tokenizers */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */; };
@@ -338,10 +343,6 @@
 		4B2CAAB01F8FE99900D9B10E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Preferences.xib; sourceTree = "<group>"; };
 		4B2CAAB21F8FEB5100D9B10E /* RFPreferencesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPreferencesController.h; path = Source/RFPreferencesController.h; sourceTree = "<group>"; };
 		4B2CAAB31F8FEB5100D9B10E /* RFPreferencesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPreferencesController.m; path = Source/RFPreferencesController.m; sourceTree = "<group>"; };
-		4BC0D1002FCB000100000001 /* MBRobotsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsController.h; path = Source/MBRobotsController.h; sourceTree = "<group>"; };
-		4BC0D1012FCB000100000001 /* MBRobotsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsController.m; path = Source/MBRobotsController.m; sourceTree = "<group>"; };
-		4BC0D1032FCB000100000001 /* MBRobotsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsModel.h; path = Source/MBRobotsModel.h; sourceTree = "<group>"; };
-		4BC0D1042FCB000100000001 /* MBRobotsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsModel.m; path = Source/MBRobotsModel.m; sourceTree = "<group>"; };
 		4B2CAAB51F90002500D9B10E /* RFMacApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFMacApplication.h; path = Source/RFMacApplication.h; sourceTree = "<group>"; };
 		4B2CAAB61F90002500D9B10E /* RFMacApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFMacApplication.m; path = Source/RFMacApplication.m; sourceTree = "<group>"; };
 		4B2CAAB81F90652600D9B10E /* RFXMLRSDParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFXMLRSDParser.m; path = Source/RFXMLRSDParser.m; sourceTree = "<group>"; };
@@ -669,6 +670,11 @@
 		4BBD6DCD24A59D620018C337 /* RFSeparatorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFSeparatorCell.h; path = Source/RFSeparatorCell.h; sourceTree = "<group>"; };
 		4BBD6DCE24A59D620018C337 /* RFSeparatorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFSeparatorCell.m; path = Source/RFSeparatorCell.m; sourceTree = "<group>"; };
 		4BBD6DD124A59D800018C337 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/SeparatorCell.xib; sourceTree = "<group>"; };
+		4BC0D1002FCB000100000001 /* MBRobotsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsController.h; path = Source/MBRobotsController.h; sourceTree = "<group>"; };
+		4BC0D1012FCB000100000001 /* MBRobotsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsController.m; path = Source/MBRobotsController.m; sourceTree = "<group>"; };
+		4BC0D1032FCB000100000001 /* MBRobotsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsModel.h; path = Source/MBRobotsModel.h; sourceTree = "<group>"; };
+		4BC0D1042FCB000100000001 /* MBRobotsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsModel.m; path = Source/MBRobotsModel.m; sourceTree = "<group>"; };
+		4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBRobotsRunner.swift; path = Source/MBRobotsRunner.swift; sourceTree = "<group>"; };
 		4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -768,6 +774,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BC0D1152FCB000100000001 /* MLXLLM in Frameworks */,
+				4BC0D1162FCB000100000001 /* MLXLMCommon in Frameworks */,
+				4BC0D1172FCB000100000001 /* MLXVLM in Frameworks */,
+				4BC0D11A2FCB000100000001 /* Tokenizers in Frameworks */,
 				4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */,
 				4B35A5BC2FBFA58700E5F46C /* FMDB in Frameworks */,
 				4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */,
@@ -962,6 +972,7 @@
 				4BC0D1012FCB000100000001 /* MBRobotsController.m */,
 				4BC0D1032FCB000100000001 /* MBRobotsModel.h */,
 				4BC0D1042FCB000100000001 /* MBRobotsModel.m */,
+				4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */,
 				4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */,
 				4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */,
 				4BD83398273C3DF3007350F2 /* RFGoToUserController.h */,
@@ -1398,6 +1409,10 @@
 			packageProductDependencies = (
 				4B3840DC26964F3B00AD3781 /* ZipArchive */,
 				4B35A5BB2FBFA58700E5F46C /* FMDB */,
+				4BC0D1102FCB000100000001 /* MLXLLM */,
+				4BC0D1112FCB000100000001 /* MLXLMCommon */,
+				4BC0D1182FCB000100000001 /* MLXVLM */,
+				4BC0D11B2FCB000100000001 /* Tokenizers */,
 			);
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
@@ -1437,6 +1452,9 @@
 			packageReferences = (
 				4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */,
 				4B35A5BA2FBFA58700E5F46C /* XCRemoteSwiftPackageReference "fmdb" */,
+				4B6C002E2FCDC49E00365AA3 /* XCRemoteSwiftPackageReference "mlx-swift" */,
+				4BC0D1082FCB000100000001 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */,
+				4BC0D10B2FCB000100000001 /* XCRemoteSwiftPackageReference "swift-transformers" */,
 			);
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
@@ -1730,6 +1748,7 @@
 				4B2CAAB41F8FEB5100D9B10E /* RFPreferencesController.m in Sources */,
 				4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */,
 				4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */,
+				4BC0D1072FCB000100000001 /* MBRobotsRunner.swift in Sources */,
 				4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
@@ -2357,7 +2376,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 238;
+				CURRENT_PROJECT_VERSION = 239;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2373,8 +2392,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.9.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2394,7 +2413,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 238;
+				CURRENT_PROJECT_VERSION = 239;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2410,8 +2429,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 3.9.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2461,6 +2480,30 @@
 				minimumVersion = 2.4.2;
 			};
 		};
+		4B6C002E2FCDC49E00365AA3 /* XCRemoteSwiftPackageReference "mlx-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ml-explore/mlx-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.31.3;
+			};
+		};
+		4BC0D1082FCB000100000001 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ml-explore/mlx-swift-lm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.31.3;
+			};
+		};
+		4BC0D10B2FCB000100000001 /* XCRemoteSwiftPackageReference "swift-transformers" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/huggingface/swift-transformers";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2473,6 +2516,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */;
 			productName = ZipArchive;
+		};
+		4BC0D1102FCB000100000001 /* MLXLLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4BC0D1082FCB000100000001 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLLM;
+		};
+		4BC0D1112FCB000100000001 /* MLXLMCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4BC0D1082FCB000100000001 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLMCommon;
+		};
+		4BC0D1182FCB000100000001 /* MLXVLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4BC0D1082FCB000100000001 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXVLM;
+		};
+		4BC0D11B2FCB000100000001 /* Tokenizers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4BC0D10B2FCB000100000001 /* XCRemoteSwiftPackageReference "swift-transformers" */;
+			productName = Tokenizers;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -5,6 +5,8 @@
 
 #import "MBRobotsModel.h"
 
+#import "Micro_blog-Swift.h"
+
 NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.blog/models/gemma-4/";
 
 @implementation MBRobotsModel
@@ -94,6 +96,15 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 	}
 
 	return total_bytes;
+}
+
++ (NSString *) runPrompt:(NSString *)string
+{
+	if (![self isLocalModelAvailable]) {
+		return @"";
+	}
+
+	return [MBRobotsPromptRunner runPrompt:string modelFolderPath:[self localModelFolderPath]] ?: @"";
 }
 
 + (void) deleteLocalModelFiles
