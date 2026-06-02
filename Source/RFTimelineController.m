@@ -35,7 +35,6 @@
 #import "RFPost.h"
 #import "RFStack.h"
 #import "RFBookshelf.h"
-#import "MBSplitView.h"
 #import "MBRestoreCursorView.h"
 #import "MBTimelineBackgroundView.h"
 #import "MBMessageBox.h"
@@ -82,7 +81,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	[super windowDidLoad];
 
-	[self setupBackground];
+	[self setupWindowAppearance];
 	[self setupWindowViews];
 	[self setupToolbarViews];
 	[self setupSidebar];
@@ -96,63 +95,65 @@ static NSInteger const kSelectionNotes = 12;
 	[self setupTimer];
 }
 
-- (void) setupBackground
+- (void) setupWindowAppearance
 {
-	if ([NSAppearance rf_isDarkMode]) {
-		self.window.backgroundColor = [NSColor windowBackgroundColor];
-	}
-	else {
-		self.window.backgroundColor = [NSColor whiteColor];
-	}
+	self.window.styleMask |= NSWindowStyleMaskFullSizeContentView;
+	self.window.titlebarAppearsTransparent = YES;
+	self.window.titleVisibility = NSWindowTitleHidden;
+	self.window.toolbarStyle = NSWindowToolbarStyleUnified;
 }
 
 - (void) setupWindowViews
 {
-	NSView* content_view = self.window.contentView;
-	[[content_view subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
-	self.splitView = [[MBSplitView alloc] initWithFrame:content_view.bounds];
-	self.splitView.vertical = YES;
-	self.splitView.dividerStyle = NSSplitViewDividerStyleThin;
-	self.splitView.translatesAutoresizingMaskIntoConstraints = NO;
-	[content_view addSubview:self.splitView];
-
-	[NSLayoutConstraint activateConstraints:@[
-		[self.splitView.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
-		[self.splitView.trailingAnchor constraintEqualToAnchor:content_view.trailingAnchor],
-		[self.splitView.topAnchor constraintEqualToAnchor:content_view.topAnchor],
-		[self.splitView.bottomAnchor constraintEqualToAnchor:content_view.bottomAnchor]
-	]];
-
-	[self setupSidebarView];
+	NSView* sidebar_view = [self makeSidebarView];
 	[self setupContentView];
+
+	self.sidebarController = [[NSViewController alloc] init];
+	self.sidebarController.view = sidebar_view;
+
+	self.contentController = [[NSViewController alloc] init];
+	self.contentController.view = self.containerView;
+
+	self.splitController = [[NSSplitViewController alloc] init];
+
+	NSSplitViewItem* sidebar_item = [NSSplitViewItem sidebarWithViewController:self.sidebarController];
+	sidebar_item.minimumThickness = 150.0;
+	sidebar_item.maximumThickness = 320.0;
+	sidebar_item.canCollapse = NO;
+	sidebar_item.holdingPriority = 260.0;
+	sidebar_item.allowsFullHeightLayout = YES;
+
+	NSSplitViewItem* content_item = [NSSplitViewItem splitViewItemWithViewController:self.contentController];
+	content_item.minimumThickness = 420.0;
+	content_item.canCollapse = NO;
+	content_item.allowsFullHeightLayout = YES;
+
+	[self.splitController addSplitViewItem:sidebar_item];
+	[self.splitController addSplitViewItem:content_item];
+	self.splitController.splitView.dividerStyle = NSSplitViewDividerStyleThin;
+	self.splitView = self.splitController.splitView;
+
+	self.window.contentViewController = self.splitController;
+	[self.splitView setPosition:230.0 ofDividerAtIndex:0];
 }
 
-- (void) setupSidebarView
+- (NSView *) makeSidebarView
 {
 	MBRestoreCursorView* sidebar_view = [[MBRestoreCursorView alloc] initWithFrame:NSMakeRect(0, 0, 230, self.window.contentView.bounds.size.height)];
-	sidebar_view.autoresizingMask = NSViewHeightSizable;
-	[self.splitView addSubview:sidebar_view];
-
-	NSVisualEffectView* effect_view = [[NSVisualEffectView alloc] initWithFrame:sidebar_view.bounds];
-	effect_view.hidden = YES;
-	effect_view.blendingMode = NSVisualEffectBlendingModeBehindWindow;
-	effect_view.material = NSVisualEffectMaterialSidebar;
-	effect_view.state = NSVisualEffectStateFollowsWindowActiveState;
-	effect_view.translatesAutoresizingMaskIntoConstraints = NO;
-	[sidebar_view addSubview:effect_view];
+	sidebar_view.translatesAutoresizingMaskIntoConstraints = NO;
 
 	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSInsetRect(sidebar_view.bounds, -1, -1)];
 	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
 	scroll_view.autohidesScrollers = YES;
+	scroll_view.hasVerticalScroller = YES;
 	scroll_view.hasHorizontalScroller = NO;
 	scroll_view.usesPredominantAxisScrolling = NO;
 	scroll_view.horizontalLineScroll = 36;
 	scroll_view.verticalLineScroll = 36;
 	scroll_view.horizontalPageScroll = 10;
 	scroll_view.verticalPageScroll = 10;
-	scroll_view.drawsBackground = YES;
-	scroll_view.backgroundColor = [NSColor colorNamed:@"color_sidebar_background"];
+	scroll_view.drawsBackground = NO;
+	scroll_view.borderType = NSNoBorder;
 	[sidebar_view addSubview:scroll_view];
 
 	self.tableView = [[NSTableView alloc] initWithFrame:sidebar_view.bounds];
@@ -165,11 +166,10 @@ static NSInteger const kSelectionNotes = 12;
 	self.tableView.autosaveTableColumns = NO;
 	self.tableView.rowHeight = 34;
 	self.tableView.intercellSpacing = NSMakeSize(5, 2);
-	self.tableView.backgroundColor = [NSColor colorNamed:@"color_sidebar_background"];
-	self.tableView.gridColor = [NSColor gridColor];
 	self.tableView.headerView = nil;
+	self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
 	if (@available(macOS 11.0, *)) {
-		self.tableView.style = NSTableViewStyleFullWidth;
+		self.tableView.style = NSTableViewStyleSourceList;
 	}
 
 	NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:@"SidebarColumn"];
@@ -180,25 +180,21 @@ static NSInteger const kSelectionNotes = 12;
 	[self.tableView addTableColumn:column];
 
 	scroll_view.documentView = self.tableView;
-	scroll_view.contentView.backgroundColor = [NSColor colorNamed:@"color_sidebar_background"];
 
 	[NSLayoutConstraint activateConstraints:@[
-		[effect_view.leadingAnchor constraintEqualToAnchor:sidebar_view.leadingAnchor],
-		[effect_view.trailingAnchor constraintEqualToAnchor:sidebar_view.trailingAnchor],
-		[effect_view.topAnchor constraintEqualToAnchor:sidebar_view.topAnchor],
-		[effect_view.bottomAnchor constraintEqualToAnchor:sidebar_view.bottomAnchor],
 		[scroll_view.leadingAnchor constraintEqualToAnchor:sidebar_view.leadingAnchor constant:-1],
 		[scroll_view.trailingAnchor constraintEqualToAnchor:sidebar_view.trailingAnchor constant:2],
 		[scroll_view.topAnchor constraintEqualToAnchor:sidebar_view.topAnchor constant:-1],
 		[scroll_view.bottomAnchor constraintEqualToAnchor:sidebar_view.bottomAnchor constant:1]
 	]];
+
+	return sidebar_view;
 }
 
 - (void) setupContentView
 {
 	self.containerView = [[MBTimelineBackgroundView alloc] initWithFrame:NSMakeRect(230, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
-	self.containerView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-	[self.splitView addSubview:self.containerView];
+	self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
 
 	self.webView = [[WebView alloc] initWithFrame:NSZeroRect frameName:nil groupName:nil];
 	self.webView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -364,6 +360,7 @@ static NSInteger const kSelectionNotes = 12;
     [toolbar setDelegate:self];
 
     [self.window setToolbar:toolbar];
+	self.window.toolbarStyle = NSWindowToolbarStyleUnified;
 
 	[self hidePublishingStatus:NO];
 }
@@ -380,15 +377,13 @@ static NSInteger const kSelectionNotes = 12;
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
     self.tableView.refusesFirstResponder = YES;
-    self.tableView.enclosingScrollView.automaticallyAdjustsContentInsets = NO;
+    self.tableView.enclosingScrollView.automaticallyAdjustsContentInsets = YES;
     self.tableView.enclosingScrollView.contentInsets = NSEdgeInsetsMake (5, 0, 0, 0);
 }
 
 - (void) setupSplitView
 {
 	[self.splitView setAutosaveName:@"TimelineSplitView"];
-	self.splitView.delegate = self;
-	[self.splitView setHoldingPriority:NSLayoutPriorityRequired forSubviewAtIndex:0];
 }
 
 - (void) setupWebView
@@ -2148,7 +2143,7 @@ static NSInteger const kSelectionNotes = 12;
 
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
-	return 200;
+	return 320;
 }
 
 - (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
