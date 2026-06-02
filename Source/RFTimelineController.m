@@ -1403,10 +1403,7 @@ static NSInteger const kSelectionNotes = 12;
 	right_constraint.active = NO;
 	self.navigationPinnedConstraint = right_constraint;
 
-	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-	if ((lastView == self.containerView) && ![self shouldExtendContentUnderToolbar]) {
-		top_constraint = [addingView.topAnchor constraintEqualToAnchor:self.contentWrapperView.safeAreaLayoutGuide.topAnchor];
-	}
+	NSLayoutConstraint* top_constraint = [addingView.topAnchor constraintEqualToAnchor:self.contentWrapperView.safeAreaLayoutGuide.topAnchor];
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
 	top_constraint.active = YES;
 
