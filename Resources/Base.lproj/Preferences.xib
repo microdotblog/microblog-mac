@@ -40,7 +40,9 @@
                 <outlet property="qrCodeInfo" destination="tuh-Zo-Onj" id="LAw-Jj-lWd"/>
                 <outlet property="qrCodeView" destination="QOm-co-d9F" id="qwG-Ud-Fyn"/>
                 <outlet property="robotsCheckbox" destination="Y23-fR-U6Q" id="GQK-5B-MQx"/>
-                <outlet property="robotsPane" destination="gaf-Xc-HPl" id="lR9-Qj-Ddj"/>
+                <outlet property="robotsGlobalCheckbox" destination="nch-Xi-lxX" id="0hr-ZG-2QG"/>
+                <outlet property="robotsGlobalSpinner" destination="E0d-U1-duG" id="R7E-Ep-SXb"/>
+                <outlet property="robotsPane" destination="gaf-Xc-HPl" id="efo-8J-lwY"/>
                 <outlet property="robotsStatusField" destination="OQV-PN-WaB" id="Bbm-4k-UoB"/>
                 <outlet property="showNotesKeyButton" destination="9i9-be-zbc" id="MDe-sb-53i"/>
                 <outlet property="textSizePopup" destination="W83-Xx-rHt" id="fZ5-0E-FFS"/>
@@ -782,19 +784,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e4P-fz-vUv">
-                    <rect key="frame" x="18" y="357" width="373" height="80"/>
+                    <rect key="frame" x="18" y="241" width="373" height="64"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="369" id="BuL-r9-xkV"/>
                     </constraints>
                     <textFieldCell key="cell" id="2LN-Y6-ppc">
                         <font key="font" usesAppearanceFont="YES"/>
-                        <string key="title">AI can be used to generate accessibility text for photos, summarize blog posts, and more. Your Mac will be used when possible for your own data as well as to process posts for other Micro.blog users, reducing reliance on cloud AI services for everyone.</string>
+                        <string key="title">Your Mac can also be used with local AI models when possible for your own data as well as to process posts for other Micro.blog users, reducing reliance on cloud AI services for everyone.</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y23-fR-U6Q">
-                    <rect key="frame" x="20" y="326" width="141" height="16"/>
+                    <rect key="frame" x="20" y="208" width="141" height="16"/>
                     <buttonCell key="cell" type="check" title="Use local AI models" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5TR-aa-bFW">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -804,7 +806,7 @@
                     </connections>
                 </button>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQV-PN-WaB">
-                    <rect key="frame" x="18" y="293" width="134" height="16"/>
+                    <rect key="frame" x="18" y="175" width="134" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Requires: 24 GB RAM" id="rr6-K2-0xR">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -812,10 +814,10 @@
                     </textFieldCell>
                 </textField>
                 <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="ofd-Hp-CdP">
-                    <rect key="frame" x="20" y="258" width="369" height="20"/>
+                    <rect key="frame" x="20" y="140" width="369" height="20"/>
                 </progressIndicator>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sS9-BY-cI0">
-                    <rect key="frame" x="18" y="234" width="167" height="16"/>
+                    <rect key="frame" x="18" y="116" width="167" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Downloading local model..." id="QBr-Wg-adO">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -823,7 +825,7 @@
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ipg-99-5Ze">
-                    <rect key="frame" x="264" y="234" width="127" height="16"/>
+                    <rect key="frame" x="264" y="116" width="127" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="5 minutes remaining" id="Ph2-2y-XuL">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -840,25 +842,70 @@
                         <action selector="testPrompt:" target="-2" id="Y4D-IW-rG2"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nch-Xi-lxX">
+                    <rect key="frame" x="20" y="421" width="171" height="16"/>
+                    <buttonCell key="cell" type="check" title="Use artificial intelligence" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="YeZ-9d-B35">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="aiGlobalCheckboxChecked:" target="-2" id="EsE-iP-4BW"/>
+                    </connections>
+                </button>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x4O-Td-6zA">
+                    <rect key="frame" x="18" y="340" width="373" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="369" id="1qx-9Y-BJu"/>
+                    </constraints>
+                    <textFieldCell key="cell" id="eSd-lV-xQB">
+                        <font key="font" metaFont="system"/>
+                        <string key="title">Micro.blog will use its own servers or OpenAI to process some data, to help with automatic podcast transcripts, photo summaries, search, and other features. Micro.blog will never sell your data or use it for training.</string>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="bqz-Nc-C2H">
+                    <rect key="frame" x="20" y="320" width="369" height="5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="UgR-WD-YVt"/>
+                    </constraints>
+                </box>
+                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="E0d-U1-duG">
+                    <rect key="frame" x="373" y="421" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="NbH-i2-3Gw"/>
+                        <constraint firstAttribute="width" constant="16" id="vhB-c3-ZoN"/>
+                    </constraints>
+                </progressIndicator>
             </subviews>
             <constraints>
                 <constraint firstItem="e4P-fz-vUv" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="0oT-hm-fbE"/>
-                <constraint firstItem="e4P-fz-vUv" firstAttribute="top" secondItem="gaf-Xc-HPl" secondAttribute="top" constant="20" symbolic="YES" id="1eN-cC-QF8"/>
-                <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="15" id="79R-1J-fXg"/>
+                <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="17" id="79R-1J-fXg"/>
                 <constraint firstAttribute="bottom" secondItem="eXp-Uy-Kv5" secondAttribute="bottom" constant="20" symbolic="YES" id="9fm-sa-TKc"/>
                 <constraint firstItem="OQV-PN-WaB" firstAttribute="top" secondItem="Y23-fR-U6Q" secondAttribute="bottom" constant="17" id="AG0-4h-pa9"/>
                 <constraint firstItem="sS9-BY-cI0" firstAttribute="top" secondItem="ofd-Hp-CdP" secondAttribute="bottom" constant="8" symbolic="YES" id="Ejp-3d-HSh"/>
+                <constraint firstItem="x4O-Td-6zA" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="ErR-V6-4mT"/>
+                <constraint firstItem="e4P-fz-vUv" firstAttribute="top" secondItem="bqz-Nc-C2H" secondAttribute="bottom" constant="17" id="J07-vV-F2B"/>
                 <constraint firstItem="eXp-Uy-Kv5" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="JfN-FG-ITa"/>
+                <constraint firstAttribute="trailing" secondItem="E0d-U1-duG" secondAttribute="trailing" constant="20" symbolic="YES" id="LBn-JL-9zt"/>
+                <constraint firstItem="nch-Xi-lxX" firstAttribute="top" secondItem="gaf-Xc-HPl" secondAttribute="top" constant="20" symbolic="YES" id="Mha-yb-MNu"/>
+                <constraint firstItem="bqz-Nc-C2H" firstAttribute="top" secondItem="x4O-Td-6zA" secondAttribute="bottom" constant="17" id="Nqq-Oi-ier"/>
                 <constraint firstItem="ofd-Hp-CdP" firstAttribute="top" secondItem="OQV-PN-WaB" secondAttribute="bottom" constant="15" id="QSs-Ev-aOf"/>
+                <constraint firstItem="bqz-Nc-C2H" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" id="Ta9-gf-UhF"/>
                 <constraint firstAttribute="trailing" secondItem="e4P-fz-vUv" secondAttribute="trailing" constant="20" symbolic="YES" id="WJE-zh-twG"/>
-                <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="15" id="XVu-UT-S8r"/>
+                <constraint firstAttribute="trailing" secondItem="x4O-Td-6zA" secondAttribute="trailing" constant="20" symbolic="YES" id="XV4-at-fEn"/>
+                <constraint firstItem="Y23-fR-U6Q" firstAttribute="top" secondItem="e4P-fz-vUv" secondAttribute="bottom" constant="17" id="XVu-UT-S8r"/>
                 <constraint firstAttribute="trailing" secondItem="ofd-Hp-CdP" secondAttribute="trailing" constant="20" symbolic="YES" id="c9G-Pb-lFs"/>
+                <constraint firstAttribute="trailing" secondItem="bqz-Nc-C2H" secondAttribute="trailing" constant="20" id="dO2-I4-Xle"/>
                 <constraint firstItem="sS9-BY-cI0" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="ftP-fQ-EW1"/>
+                <constraint firstItem="x4O-Td-6zA" firstAttribute="top" secondItem="nch-Xi-lxX" secondAttribute="bottom" constant="17" id="kty-80-qsA"/>
                 <constraint firstItem="ofd-Hp-CdP" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="mMF-Ex-ANY"/>
+                <constraint firstItem="E0d-U1-duG" firstAttribute="top" secondItem="gaf-Xc-HPl" secondAttribute="top" constant="20" symbolic="YES" id="ns2-vi-cwL"/>
                 <constraint firstItem="OQV-PN-WaB" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="rqo-i8-Jqs"/>
                 <constraint firstItem="Y23-fR-U6Q" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="tTP-ok-zz8"/>
                 <constraint firstItem="Ipg-99-5Ze" firstAttribute="top" secondItem="ofd-Hp-CdP" secondAttribute="bottom" constant="8" symbolic="YES" id="tcu-z6-vFz"/>
                 <constraint firstAttribute="trailing" secondItem="Ipg-99-5Ze" secondAttribute="trailing" constant="20" symbolic="YES" id="xk5-UB-grH"/>
+                <constraint firstItem="nch-Xi-lxX" firstAttribute="leading" secondItem="gaf-Xc-HPl" secondAttribute="leading" constant="20" symbolic="YES" id="ywg-V2-9lB"/>
             </constraints>
             <point key="canvasLocation" x="1401.5" y="59.5"/>
         </customView>

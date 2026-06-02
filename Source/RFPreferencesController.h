@@ -55,10 +55,12 @@
 @property (strong, nonatomic) IBOutlet NSPopUpButton* backupRecentsPopup;
 
 @property (strong, nonatomic) IBOutlet NSButton* robotsCheckbox;
+@property (strong, nonatomic) IBOutlet NSButton* robotsGlobalCheckbox;
 @property (strong, nonatomic) IBOutlet NSTextField* robotsStatusField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* downloadModelProgressBar;
 @property (strong, nonatomic) IBOutlet NSTextField* downloadModelStatusField;
 @property (strong, nonatomic) IBOutlet NSTextField* downloadModelRemainingField;
+@property (strong, nonatomic) IBOutlet NSProgressIndicator* robotsGlobalSpinner;
 
 @property (strong, nonatomic) RFWordpressController* wordpressController;
 @property (assign, nonatomic) BOOL hasShownWindow;
