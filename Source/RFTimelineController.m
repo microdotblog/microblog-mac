@@ -347,7 +347,7 @@ static NSInteger const kSelectionNotes = 12;
 	profile_box.triangleWidthConstraint = arrow_width_constraint;
 
 	[NSLayoutConstraint activateConstraints:@[
-		[self.profileImageView.leadingAnchor constraintEqualToAnchor:profile_content.leadingAnchor constant:8],
+		[self.profileImageView.leadingAnchor constraintEqualToAnchor:profile_content.leadingAnchor constant: 4],
 		[self.profileImageView.centerYAnchor constraintEqualToAnchor:profile_content.centerYAnchor],
 		[self.profileImageView.widthAnchor constraintEqualToConstant:20],
 		[self.profileImageView.heightAnchor constraintEqualToConstant:20],
@@ -1821,7 +1821,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	if (@available(macOS 15.0, *)) {
 		if (![self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
-			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:0];
+			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:1];
 		}
 	}
 
@@ -2221,14 +2221,13 @@ static NSInteger const kSelectionNotes = 12;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"StatusBubble", @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
+    return @[ @"ProfileBox", @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
 	NSMutableArray* items = [NSMutableArray array];
 
-//	[items addObject:@"StatusBubble"];
 	[items addObject:@"ProfileBox"];
 	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 
