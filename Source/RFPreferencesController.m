@@ -228,7 +228,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 
 - (void) setupRobotsGlobalSettings
 {
-	BOOL is_using_ai = [RFSettings boolForKey:kIsUsingAI account:self.selectedAccount];
+	BOOL is_using_ai = [RFSettings boolForKey:kIsUsingAI];
 	self.robotsGlobalCheckbox.state = is_using_ai ? NSControlStateValueOn : NSControlStateValueOff;
 	self.robotsGlobalSpinner.hidden = YES;
 	[self.robotsGlobalSpinner stopAnimation:nil];
@@ -236,7 +236,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 
 - (void) refreshRobotsGlobalSettingsFromServer
 {
-	RFAccount* account = self.selectedAccount ?: [RFSettings defaultAccount];
+	RFAccount* account = [RFSettings defaultAccount];
 	NSString* username = account.username;
 	if (username.length == 0) {
 		return;
@@ -260,10 +260,8 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 		RFDispatchMainAsync(^{
 			if (is_using_ai) {
 				BOOL is_enabled = [is_using_ai boolValue];
-				[RFSettings setBool:is_enabled forKey:kIsUsingAI account:account];
-				if ([account.username isEqualToString:self.selectedAccount.username]) {
-					self.robotsGlobalCheckbox.state = is_enabled ? NSControlStateValueOn : NSControlStateValueOff;
-				}
+				[RFSettings setBool:is_enabled forKey:kIsUsingAI];
+				self.robotsGlobalCheckbox.state = is_enabled ? NSControlStateValueOn : NSControlStateValueOff;
 			}
 		});
 	}];
@@ -681,7 +679,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 - (IBAction) aiGlobalCheckboxChecked:(id)sender
 {
 	BOOL is_using_ai = (self.robotsGlobalCheckbox.state == NSControlStateValueOn);
-	[RFSettings setBool:is_using_ai forKey:kIsUsingAI account:self.selectedAccount];
+	[RFSettings setBool:is_using_ai forKey:kIsUsingAI];
 
 	self.robotsGlobalSpinner.hidden = NO;
 	[self.robotsGlobalSpinner startAnimation:nil];
