@@ -61,6 +61,7 @@ static NSInteger const kSelectionReplies = 9;
 static NSInteger const kSelectionBookshelves = 10;
 static NSInteger const kSelectionMovies = 11;
 static NSInteger const kSelectionNotes = 12;
+static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 @interface RFTimelineController ()
 
@@ -94,6 +95,7 @@ static NSInteger const kSelectionNotes = 12;
 	[self setupToolbarViews];
 	[self setupSidebar];
 	[self setupToolbar];
+	[self setupWindowFrameAutosave];
 	[self setupFullScreen];
 	[self setupTable];
 	[self setupSplitView];
@@ -109,6 +111,12 @@ static NSInteger const kSelectionNotes = 12;
 	self.window.titlebarAppearsTransparent = YES;
 	self.window.titleVisibility = NSWindowTitleHidden;
 	self.window.toolbarStyle = NSWindowToolbarStyleUnified;
+}
+
+- (void) setupWindowFrameAutosave
+{
+	[self.window setFrameUsingName:kTimelineWindowFrameAutosaveName];
+	self.window.frameAutosaveName = kTimelineWindowFrameAutosaveName;
 }
 
 - (void) setupWindowViews
