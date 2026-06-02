@@ -64,6 +64,8 @@ static NSInteger const kSelectionNotes = 12;
 
 @interface RFTimelineController ()
 
+@property (strong, nonatomic) NSView* contentWrapperView;
+@property (strong, nonatomic) NSVisualEffectView* toolbarScrimView;
 @property (strong, nonatomic) MBMessageBox* messageBox;
 
 @end
@@ -148,16 +150,41 @@ static NSInteger const kSelectionNotes = 12;
 {
 	NSView* content_view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
 	content_view.translatesAutoresizingMaskIntoConstraints = NO;
+	self.contentWrapperView = content_view;
+
 	[content_view addSubview:self.containerView];
+
+	NSVisualEffectView* scrim_view = [[NSVisualEffectView alloc] initWithFrame:NSZeroRect];
+	scrim_view.translatesAutoresizingMaskIntoConstraints = NO;
+	scrim_view.blendingMode = NSVisualEffectBlendingModeWithinWindow;
+	scrim_view.material = NSVisualEffectMaterialHeaderView;
+	scrim_view.state = NSVisualEffectStateFollowsWindowActiveState;
+	scrim_view.hidden = YES;
+	self.toolbarScrimView = scrim_view;
+	[content_view addSubview:scrim_view];
 
 	[NSLayoutConstraint activateConstraints:@[
 		[self.containerView.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
 		[self.containerView.trailingAnchor constraintEqualToAnchor:content_view.trailingAnchor],
-		[self.containerView.topAnchor constraintEqualToAnchor:content_view.safeAreaLayoutGuide.topAnchor],
-		[self.containerView.bottomAnchor constraintEqualToAnchor:content_view.bottomAnchor]
+		[self.containerView.topAnchor constraintEqualToAnchor:content_view.topAnchor],
+		[self.containerView.bottomAnchor constraintEqualToAnchor:content_view.bottomAnchor],
+		[scrim_view.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
+		[scrim_view.trailingAnchor constraintEqualToAnchor:content_view.trailingAnchor],
+		[scrim_view.topAnchor constraintEqualToAnchor:content_view.topAnchor],
+		[scrim_view.bottomAnchor constraintEqualToAnchor:content_view.safeAreaLayoutGuide.topAnchor]
 	]];
 
 	return content_view;
+}
+
+- (BOOL) shouldExtendContentUnderToolbar
+{
+	return ((self.selectedTimeline == kSelectionTimeline) || (self.selectedTimeline == kSelectionMentions));
+}
+
+- (void) updateToolbarScrimVisibility
+{
+	self.toolbarScrimView.hidden = ![self shouldExtendContentUnderToolbar];
 }
 
 - (NSView *) makeSidebarView
@@ -1195,6 +1222,7 @@ static NSInteger const kSelectionNotes = 12;
 	[self popToRootViewController];
 
 	[self hideMessageField];
+	[self updateToolbarScrimVisibility];
 
 	if (self.rootController) {
 		[self.rootController.view removeFromSuperview];
@@ -1376,6 +1404,9 @@ static NSInteger const kSelectionNotes = 12;
 	self.navigationPinnedConstraint = right_constraint;
 
 	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+	if ((lastView == self.containerView) && ![self shouldExtendContentUnderToolbar]) {
+		top_constraint = [addingView.topAnchor constraintEqualToAnchor:self.contentWrapperView.safeAreaLayoutGuide.topAnchor];
+	}
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
 	top_constraint.active = YES;
 
@@ -1407,6 +1438,9 @@ static NSInteger const kSelectionNotes = 12;
 	self.overlayRightConstraint = right_constraint;
 
 	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+	if ((lastView == self.containerView) && ![self shouldExtendContentUnderToolbar]) {
+		top_constraint = [addingView.topAnchor constraintEqualToAnchor:self.contentWrapperView.safeAreaLayoutGuide.topAnchor];
+	}
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
 	top_constraint.active = YES;
 
@@ -1432,6 +1466,7 @@ static NSInteger const kSelectionNotes = 12;
 
 	self.rootController.view.animator.alphaValue = 1.0;
 	[self addResizeConstraintsToOverlay:self.rootController.view containerView:self.containerView];
+	[self updateToolbarScrimVisibility];
 
 	RFDispatchMainAsync(^{
 		[self.window makeFirstResponder:controller];
@@ -2186,7 +2221,7 @@ static NSInteger const kSelectionNotes = 12;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", @"UploadButton", @"NewPost" ];
+    return @[ @"StatusBubble", @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -2194,8 +2229,8 @@ static NSInteger const kSelectionNotes = 12;
 	NSMutableArray* items = [NSMutableArray array];
 
 //	[items addObject:@"StatusBubble"];
-	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 	[items addObject:@"ProfileBox"];
+	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 
 	if (self.selectedTimeline == kSelectionUploads) {
 		[items addObject:@"UploadButton"];

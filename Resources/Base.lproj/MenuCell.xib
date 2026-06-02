@@ -29,7 +29,7 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="bubble.right" catalog="system" id="AyK-pr-eut"/>
                 </imageView>
                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aHh-Pv-oex">
-                    <rect key="frame" x="140" y="8" width="14" height="14"/>
+                    <rect key="frame" x="145" y="8" width="14" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="14" id="GhX-C5-oRs"/>
                         <constraint firstAttribute="height" constant="14" id="HDd-5H-MHe"/>
@@ -40,7 +40,7 @@
                 <constraint firstItem="HZB-bv-PgW" firstAttribute="centerY" secondItem="WOV-ev-LvX" secondAttribute="centerY" id="GOe-Ea-2Qf"/>
                 <constraint firstItem="fCm-G0-kQc" firstAttribute="leading" secondItem="WOV-ev-LvX" secondAttribute="leading" constant="16" id="LkL-nN-ISM"/>
                 <constraint firstItem="HZB-bv-PgW" firstAttribute="leading" secondItem="fCm-G0-kQc" secondAttribute="trailing" constant="3" id="WQ0-uj-r0Y"/>
-                <constraint firstAttribute="trailing" secondItem="aHh-Pv-oex" secondAttribute="trailing" constant="22" id="Zwa-JP-ymv"/>
+                <constraint firstAttribute="trailing" secondItem="aHh-Pv-oex" secondAttribute="trailing" constant="17" id="Zwa-JP-ymv"/>
                 <constraint firstItem="aHh-Pv-oex" firstAttribute="centerY" secondItem="WOV-ev-LvX" secondAttribute="centerY" id="gfd-O4-7OI"/>
                 <constraint firstItem="fCm-G0-kQc" firstAttribute="centerY" secondItem="WOV-ev-LvX" secondAttribute="centerY" id="pBb-fm-Cas"/>
                 <constraint firstItem="aHh-Pv-oex" firstAttribute="leading" secondItem="HZB-bv-PgW" secondAttribute="trailing" constant="8" symbolic="YES" id="sxn-1u-ax8"/>
