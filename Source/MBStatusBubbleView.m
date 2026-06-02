@@ -13,7 +13,30 @@
 
 @implementation MBStatusBubbleView
 
+- (instancetype) initWithFrame:(NSRect)frameRect
+{
+	self = [super initWithFrame:frameRect];
+	if (self) {
+		[self setupAppearance];
+	}
+	return self;
+}
+
+- (instancetype) initWithCoder:(NSCoder *)coder
+{
+	self = [super initWithCoder:coder];
+	if (self) {
+		[self setupAppearance];
+	}
+	return self;
+}
+
 - (void) awakeFromNib
+{
+	[super awakeFromNib];
+}
+
+- (void) setupAppearance
 {
 	if ([NSAppearance mb_isLiquidGlass]) {
 		self.cornerRadius = 18;

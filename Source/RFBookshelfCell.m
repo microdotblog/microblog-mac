@@ -98,6 +98,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	if (indexPath.item < self.books.count) {
 		MBBook* b = [self.books objectAtIndex:indexPath.item];
+		item.thumbnailImageView.wantsLayer = YES;
+		item.thumbnailImageView.layer.cornerRadius = 4;
+		item.thumbnailImageView.layer.masksToBounds = YES;
 		item.thumbnailImageView.image = b.coverImage;
 		if (item.thumbnailImageView.image == nil) {
 			b.coverImage = [b cachedCover];

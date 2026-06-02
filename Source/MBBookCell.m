@@ -15,6 +15,15 @@
 
 @implementation MBBookCell
 
+- (void) awakeFromNib
+{
+	[super awakeFromNib];
+
+	self.coverImageView.wantsLayer = YES;
+	self.coverImageView.layer.cornerRadius = 4;
+	self.coverImageView.layer.masksToBounds = YES;
+}
+
 - (void) setupWithBook:(MBBook *)book inBookshelf:(RFBookshelf *)bookshelf
 {
 	self.book = book;

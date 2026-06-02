@@ -35,7 +35,11 @@
 #import "RFPost.h"
 #import "RFStack.h"
 #import "RFBookshelf.h"
+#import "MBRestoreCursorView.h"
+#import "MBTimelineBackgroundView.h"
+#import "MBMessageBox.h"
 #import "MBStatusBubbleView.h"
+#import "RFAccountPopoverBox.h"
 #import "NSObject+SharedTimeline.h"
 #import "MBBooksWindowController.h"
 #import "MBNotesController.h"
@@ -57,6 +61,15 @@ static NSInteger const kSelectionReplies = 9;
 static NSInteger const kSelectionBookshelves = 10;
 static NSInteger const kSelectionMovies = 11;
 static NSInteger const kSelectionNotes = 12;
+static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
+
+@interface RFTimelineController ()
+
+@property (strong, nonatomic) NSView* contentWrapperView;
+@property (strong, nonatomic) NSVisualEffectView* toolbarScrimView;
+@property (strong, nonatomic) MBMessageBox* messageBox;
+
+@end
 
 @implementation RFTimelineController
 
@@ -69,17 +82,20 @@ static NSInteger const kSelectionNotes = 12;
 		self.booksWindowControllers = [NSMutableArray array];
 		self.cachedUsernames = [NSMutableSet set];
 	}
-	
+
 	return self;
 }
 
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-	
-	[self setupBackground];
+
+	[self setupWindowAppearance];
+	[self setupWindowViews];
+	[self setupToolbarViews];
 	[self setupSidebar];
 	[self setupToolbar];
+	[self setupWindowFrameAutosave];
 	[self setupFullScreen];
 	[self setupTable];
 	[self setupSplitView];
@@ -89,14 +105,309 @@ static NSInteger const kSelectionNotes = 12;
 	[self setupTimer];
 }
 
-- (void) setupBackground
+- (void) setupWindowAppearance
 {
-	if ([NSAppearance rf_isDarkMode]) {
-		self.window.backgroundColor = [NSColor windowBackgroundColor];
+	self.window.styleMask |= NSWindowStyleMaskFullSizeContentView;
+	self.window.titlebarAppearsTransparent = YES;
+	self.window.titleVisibility = NSWindowTitleHidden;
+	self.window.toolbarStyle = NSWindowToolbarStyleUnified;
+}
+
+- (void) setupWindowFrameAutosave
+{
+	[self.window setFrameUsingName:kTimelineWindowFrameAutosaveName];
+	self.window.frameAutosaveName = kTimelineWindowFrameAutosaveName;
+}
+
+- (void) setupWindowViews
+{
+	NSView* sidebar_view = [self makeSidebarView];
+	[self setupContentView];
+	NSView* content_view = [self makeContentWrapperView];
+
+	self.sidebarController = [[NSViewController alloc] init];
+	self.sidebarController.view = sidebar_view;
+
+	self.contentController = [[NSViewController alloc] init];
+	self.contentController.view = content_view;
+
+	self.splitController = [[NSSplitViewController alloc] init];
+
+	NSSplitViewItem* sidebar_item = [NSSplitViewItem sidebarWithViewController:self.sidebarController];
+	sidebar_item.minimumThickness = 150.0;
+	sidebar_item.maximumThickness = 320.0;
+	sidebar_item.canCollapse = NO;
+	sidebar_item.holdingPriority = 260.0;
+	sidebar_item.allowsFullHeightLayout = YES;
+
+	NSSplitViewItem* content_item = [NSSplitViewItem splitViewItemWithViewController:self.contentController];
+	content_item.minimumThickness = 420.0;
+	content_item.canCollapse = NO;
+	content_item.allowsFullHeightLayout = NO;
+
+	[self.splitController addSplitViewItem:sidebar_item];
+	[self.splitController addSplitViewItem:content_item];
+	self.splitController.splitView.dividerStyle = NSSplitViewDividerStyleThin;
+	self.splitView = self.splitController.splitView;
+
+	self.window.contentViewController = self.splitController;
+	[self.splitView setPosition:230.0 ofDividerAtIndex:0];
+}
+
+- (NSView *) makeContentWrapperView
+{
+	NSView* content_view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
+	content_view.translatesAutoresizingMaskIntoConstraints = NO;
+	self.contentWrapperView = content_view;
+
+	[content_view addSubview:self.containerView];
+
+	NSVisualEffectView* scrim_view = [[NSVisualEffectView alloc] initWithFrame:NSZeroRect];
+	scrim_view.translatesAutoresizingMaskIntoConstraints = NO;
+	scrim_view.blendingMode = NSVisualEffectBlendingModeWithinWindow;
+	scrim_view.material = NSVisualEffectMaterialHeaderView;
+	scrim_view.state = NSVisualEffectStateFollowsWindowActiveState;
+	scrim_view.hidden = YES;
+	self.toolbarScrimView = scrim_view;
+	[content_view addSubview:scrim_view];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[self.containerView.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
+		[self.containerView.trailingAnchor constraintEqualToAnchor:content_view.trailingAnchor],
+		[self.containerView.topAnchor constraintEqualToAnchor:content_view.topAnchor],
+		[self.containerView.bottomAnchor constraintEqualToAnchor:content_view.bottomAnchor],
+		[scrim_view.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
+		[scrim_view.trailingAnchor constraintEqualToAnchor:content_view.trailingAnchor],
+		[scrim_view.topAnchor constraintEqualToAnchor:content_view.topAnchor],
+		[scrim_view.bottomAnchor constraintEqualToAnchor:content_view.safeAreaLayoutGuide.topAnchor]
+	]];
+
+	return content_view;
+}
+
+- (BOOL) shouldExtendContentUnderToolbar
+{
+	return ((self.selectedTimeline == kSelectionTimeline) || (self.selectedTimeline == kSelectionMentions));
+}
+
+- (void) updateToolbarScrimVisibility
+{
+	self.toolbarScrimView.hidden = ![self shouldExtendContentUnderToolbar];
+}
+
+- (NSView *) makeSidebarView
+{
+	MBRestoreCursorView* sidebar_view = [[MBRestoreCursorView alloc] initWithFrame:NSMakeRect(0, 0, 230, self.window.contentView.bounds.size.height)];
+	sidebar_view.translatesAutoresizingMaskIntoConstraints = NO;
+
+	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSInsetRect(sidebar_view.bounds, -1, -1)];
+	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
+	scroll_view.autohidesScrollers = YES;
+	scroll_view.hasVerticalScroller = YES;
+	scroll_view.hasHorizontalScroller = NO;
+	scroll_view.usesPredominantAxisScrolling = NO;
+	scroll_view.horizontalLineScroll = 36;
+	scroll_view.verticalLineScroll = 36;
+	scroll_view.horizontalPageScroll = 10;
+	scroll_view.verticalPageScroll = 10;
+	scroll_view.drawsBackground = NO;
+	scroll_view.borderType = NSNoBorder;
+	[sidebar_view addSubview:scroll_view];
+
+	self.tableView = [[NSTableView alloc] initWithFrame:sidebar_view.bounds];
+	self.tableView.allowsExpansionToolTips = YES;
+	self.tableView.columnAutoresizingStyle = NSTableViewLastColumnOnlyAutoresizingStyle;
+	self.tableView.allowsColumnReordering = NO;
+	self.tableView.allowsColumnSelection = YES;
+	self.tableView.allowsColumnResizing = NO;
+	self.tableView.allowsMultipleSelection = NO;
+	self.tableView.autosaveTableColumns = NO;
+	self.tableView.rowHeight = 34;
+	self.tableView.intercellSpacing = NSMakeSize(5, 2);
+	self.tableView.headerView = nil;
+	self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
+	if (@available(macOS 11.0, *)) {
+		self.tableView.style = NSTableViewStyleSourceList;
 	}
-	else {
-		self.window.backgroundColor = [NSColor whiteColor];
-	}
+
+	NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:@"SidebarColumn"];
+	column.width = 219;
+	column.minWidth = 40;
+	column.maxWidth = 1000;
+	column.resizingMask = NSTableColumnAutoresizingMask | NSTableColumnUserResizingMask;
+	[self.tableView addTableColumn:column];
+
+	scroll_view.documentView = self.tableView;
+
+	[NSLayoutConstraint activateConstraints:@[
+		[scroll_view.leadingAnchor constraintEqualToAnchor:sidebar_view.leadingAnchor constant:-1],
+		[scroll_view.trailingAnchor constraintEqualToAnchor:sidebar_view.trailingAnchor constant:2],
+		[scroll_view.topAnchor constraintEqualToAnchor:sidebar_view.topAnchor constant:-1],
+		[scroll_view.bottomAnchor constraintEqualToAnchor:sidebar_view.bottomAnchor constant:1]
+	]];
+
+	return sidebar_view;
+}
+
+- (void) setupContentView
+{
+	self.containerView = [[MBTimelineBackgroundView alloc] initWithFrame:NSMakeRect(230, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
+	self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
+
+	self.webView = [[WebView alloc] initWithFrame:NSZeroRect frameName:nil groupName:nil];
+	self.webView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.webView.preferences setDefaultFontSize:16];
+	[self.webView.preferences setDefaultFixedFontSize:13];
+	[self.webView.preferences setMinimumFontSize:0];
+	[self.webView.preferences setJavaEnabled:NO];
+	[self.containerView addSubview:self.webView];
+
+	MBMessageBox* message_box = [[MBMessageBox alloc] initWithFrame:NSZeroRect];
+	message_box.translatesAutoresizingMaskIntoConstraints = NO;
+	message_box.boxType = NSBoxCustom;
+	message_box.borderType = NSLineBorder;
+	message_box.titlePosition = NSNoTitle;
+	message_box.hidden = YES;
+	self.messageBox = message_box;
+	[self.containerView addSubview:message_box];
+
+	NSView* message_content = message_box.contentView;
+	self.messageField = [NSTextField labelWithString:@"1 new post"];
+	self.messageField.translatesAutoresizingMaskIntoConstraints = NO;
+	self.messageField.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
+	self.messageField.textColor = [NSColor colorNamed:@"color_notification_text"];
+	[message_content addSubview:self.messageField];
+
+	NSButton* refresh_button = [[NSButton alloc] initWithFrame:NSZeroRect];
+	refresh_button.translatesAutoresizingMaskIntoConstraints = NO;
+	refresh_button.bezelStyle = NSBezelStyleRounded;
+	refresh_button.bordered = NO;
+	refresh_button.transparent = YES;
+	refresh_button.target = self;
+	refresh_button.action = @selector(refreshTimeline:);
+	[message_content addSubview:refresh_button];
+
+	self.messageSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+	self.messageSpinner.translatesAutoresizingMaskIntoConstraints = NO;
+	self.messageSpinner.indeterminate = YES;
+	self.messageSpinner.displayedWhenStopped = NO;
+	self.messageSpinner.bezeled = NO;
+	self.messageSpinner.controlSize = NSControlSizeSmall;
+	self.messageSpinner.style = NSProgressIndicatorStyleSpinning;
+	self.messageSpinner.wantsLayer = YES;
+	[message_content addSubview:self.messageSpinner];
+
+	self.messageTopConstraint = [message_box.topAnchor constraintEqualToAnchor:self.containerView.topAnchor constant:-1];
+	self.timelineLeftConstraint = [self.webView.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor];
+	self.timelineRightConstraint = [self.webView.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[message_box.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor constant:-1],
+		[message_box.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor constant:1],
+		self.messageTopConstraint,
+		[message_box.heightAnchor constraintEqualToConstant:34],
+		self.timelineLeftConstraint,
+		self.timelineRightConstraint,
+		[self.webView.topAnchor constraintEqualToAnchor:message_box.bottomAnchor],
+		[self.webView.bottomAnchor constraintEqualToAnchor:self.containerView.bottomAnchor],
+		[refresh_button.leadingAnchor constraintEqualToAnchor:message_content.leadingAnchor],
+		[refresh_button.trailingAnchor constraintEqualToAnchor:message_content.trailingAnchor],
+		[refresh_button.topAnchor constraintEqualToAnchor:message_content.topAnchor],
+		[refresh_button.bottomAnchor constraintEqualToAnchor:message_content.bottomAnchor],
+		[self.messageField.leadingAnchor constraintEqualToAnchor:message_content.leadingAnchor constant:7],
+		[self.messageField.centerYAnchor constraintEqualToAnchor:message_content.centerYAnchor],
+		[self.messageField.trailingAnchor constraintLessThanOrEqualToAnchor:self.messageSpinner.leadingAnchor constant:-8],
+		[self.messageSpinner.trailingAnchor constraintEqualToAnchor:message_content.trailingAnchor constant:-8],
+		[self.messageSpinner.centerYAnchor constraintEqualToAnchor:message_content.centerYAnchor],
+		[self.messageSpinner.widthAnchor constraintEqualToConstant:16],
+		[self.messageSpinner.heightAnchor constraintEqualToConstant:16]
+	]];
+}
+
+- (void) setupToolbarViews
+{
+	RFAccountPopoverBox* profile_box = [[RFAccountPopoverBox alloc] initWithFrame:NSMakeRect(0, 0, 102, 40)];
+	profile_box.boxType = NSBoxCustom;
+	profile_box.borderType = NSNoBorder;
+	profile_box.titlePosition = NSNoTitle;
+	self.profileBox = profile_box;
+
+	NSView* profile_content = profile_box.contentView;
+	self.profileImageView = [[RFRoundedImageView alloc] initWithFrame:NSZeroRect];
+	self.profileImageView.translatesAutoresizingMaskIntoConstraints = NO;
+	self.profileImageView.imageScaling = NSImageScaleProportionallyDown;
+	[profile_content addSubview:self.profileImageView];
+
+	self.usernameField = [NSTextField labelWithString:@"@test"];
+	self.usernameField.translatesAutoresizingMaskIntoConstraints = NO;
+	self.usernameField.lineBreakMode = NSLineBreakByClipping;
+	[profile_content addSubview:self.usernameField];
+
+	self.switchAccountView = [[NSImageView alloc] initWithFrame:NSZeroRect];
+	self.switchAccountView.translatesAutoresizingMaskIntoConstraints = NO;
+	self.switchAccountView.wantsLayer = YES;
+	self.switchAccountView.alphaValue = 0.7;
+	self.switchAccountView.image = [NSImage imageNamed:@"down_arrow"];
+	self.switchAccountView.imageScaling = NSImageScaleProportionallyDown;
+	[profile_content addSubview:self.switchAccountView];
+
+	NSLayoutConstraint* arrow_width_constraint = [self.switchAccountView.widthAnchor constraintEqualToConstant:16];
+	profile_box.triangleWidthConstraint = arrow_width_constraint;
+
+	[NSLayoutConstraint activateConstraints:@[
+		[self.profileImageView.leadingAnchor constraintEqualToAnchor:profile_content.leadingAnchor constant: 4],
+		[self.profileImageView.centerYAnchor constraintEqualToAnchor:profile_content.centerYAnchor],
+		[self.profileImageView.widthAnchor constraintEqualToConstant:20],
+		[self.profileImageView.heightAnchor constraintEqualToConstant:20],
+		[self.usernameField.leadingAnchor constraintEqualToAnchor:self.profileImageView.trailingAnchor constant:5],
+		[self.usernameField.centerYAnchor constraintEqualToAnchor:self.profileImageView.centerYAnchor],
+		[self.switchAccountView.leadingAnchor constraintEqualToAnchor:self.usernameField.trailingAnchor constant:2],
+		[self.switchAccountView.trailingAnchor constraintEqualToAnchor:profile_content.trailingAnchor constant:-5],
+		[self.switchAccountView.centerYAnchor constraintEqualToAnchor:profile_content.centerYAnchor],
+		arrow_width_constraint,
+		[self.switchAccountView.heightAnchor constraintEqualToConstant:19]
+	]];
+	[profile_box setupAccountPopover];
+
+	NSView* status_wrapper = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 280, 104)];
+	self.statusBubble = status_wrapper;
+
+	MBStatusBubbleView* bubble_view = [[MBStatusBubbleView alloc] initWithFrame:status_wrapper.bounds];
+	bubble_view.translatesAutoresizingMaskIntoConstraints = NO;
+	[status_wrapper addSubview:bubble_view];
+
+	NSTextField* status_field = [NSTextField labelWithString:@"status message"];
+	status_field.translatesAutoresizingMaskIntoConstraints = NO;
+	status_field.lineBreakMode = NSLineBreakByTruncatingTail;
+	status_field.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
+	status_field.textColor = [NSColor colorNamed:@"color_notification_text"];
+	bubble_view.statusMessageTextField = status_field;
+	[bubble_view addSubview:status_field];
+
+	self.statusProgressSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+	self.statusProgressSpinner.translatesAutoresizingMaskIntoConstraints = NO;
+	self.statusProgressSpinner.indeterminate = YES;
+	self.statusProgressSpinner.controlSize = NSControlSizeSmall;
+	self.statusProgressSpinner.style = NSProgressIndicatorStyleSpinning;
+	self.statusProgressSpinner.wantsLayer = YES;
+	[bubble_view addSubview:self.statusProgressSpinner];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[bubble_view.leadingAnchor constraintEqualToAnchor:status_wrapper.leadingAnchor],
+		[bubble_view.trailingAnchor constraintEqualToAnchor:status_wrapper.trailingAnchor],
+		[bubble_view.topAnchor constraintEqualToAnchor:status_wrapper.topAnchor],
+		[bubble_view.bottomAnchor constraintEqualToAnchor:status_wrapper.bottomAnchor],
+		[status_field.leadingAnchor constraintEqualToAnchor:bubble_view.leadingAnchor constant:15],
+		[status_field.centerYAnchor constraintEqualToAnchor:bubble_view.centerYAnchor],
+		[status_field.widthAnchor constraintLessThanOrEqualToConstant:230],
+		[self.statusProgressSpinner.leadingAnchor constraintEqualToAnchor:status_field.trailingAnchor constant:11],
+		[self.statusProgressSpinner.trailingAnchor constraintEqualToAnchor:bubble_view.trailingAnchor constant:-15],
+		[self.statusProgressSpinner.centerYAnchor constraintEqualToAnchor:bubble_view.centerYAnchor],
+		[self.statusProgressSpinner.widthAnchor constraintEqualToConstant:12],
+		[self.statusProgressSpinner.heightAnchor constraintEqualToConstant:12],
+		[bubble_view.widthAnchor constraintGreaterThanOrEqualToConstant:130],
+		[bubble_view.widthAnchor constraintLessThanOrEqualToConstant:280]
+	]];
 }
 
 - (void) setupToolbar
@@ -107,9 +418,10 @@ static NSInteger const kSelectionNotes = 12;
     [toolbar setAutosavesConfiguration:NO];
     [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
     [toolbar setDelegate:self];
-    
+
     [self.window setToolbar:toolbar];
-	
+	self.window.toolbarStyle = NSWindowToolbarStyleUnified;
+
 	[self hidePublishingStatus:NO];
 }
 
@@ -121,39 +433,24 @@ static NSInteger const kSelectionNotes = 12;
 - (void) setupTable
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"MenuCell" bundle:nil] forIdentifier:@"MenuCell"];
+	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"SeparatorCell" bundle:nil] forIdentifier:@"SeparatorCell"];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
     self.tableView.refusesFirstResponder = YES;
-    self.tableView.enclosingScrollView.automaticallyAdjustsContentInsets = NO;
+    self.tableView.enclosingScrollView.automaticallyAdjustsContentInsets = YES;
     self.tableView.enclosingScrollView.contentInsets = NSEdgeInsetsMake (5, 0, 0, 0);
 }
 
 - (void) setupSplitView
 {
-	if (NO) {
-		self.sidebarController = [[NSViewController alloc] init];
-		NSSplitViewItem* sidebar_item = [NSSplitViewItem sidebarWithViewController:self.sidebarController];
-		
-		self.contentController = [[NSViewController alloc] init];
-		NSSplitViewItem* content_item = [NSSplitViewItem contentListWithViewController:self.contentController];
-		
-		self.splitController = [[NSSplitViewController alloc] init];
-		[self.splitController addSplitViewItem:sidebar_item];
-		[self.splitController addSplitViewItem:content_item];
-		
-		self.window.contentViewController = self.splitController;
-	}
-	else {
-		[self.splitView setAutosaveName:@"TimelineSplitView"];
-		self.splitView.delegate = self;
-		[self.splitView setHoldingPriority:NSLayoutPriorityRequired forSubviewAtIndex:0];
-	}
+	[self.splitView setAutosaveName:@"TimelineSplitView"];
 }
 
 - (void) setupWebView
 {
 	self.messageTopConstraint.constant = -35;
-	
+	self.messageBox.hidden = YES;
+
 //	[self setupWebDelegates:self.webView];
 //	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self showTimeline:nil];
@@ -171,17 +468,14 @@ static NSInteger const kSelectionNotes = 12;
 {
 	self.selectedAccount = [RFSettings defaultAccount];
 
-	NSString* full_name = [RFSettings stringForKey:kAccountFullName];
 	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* gravatar_url = [RFSettings stringForKey:kAccountGravatarURL];
-	
-	self.fullNameField.stringValue = full_name;
+
 	self.usernameField.stringValue = [NSString stringWithFormat:@"@%@", username];
 	[self.profileImageView loadFromURL:gravatar_url];
 
-	self.fullNameField.nextResponder = self.profileBox;
 	self.usernameField.nextResponder = self.profileBox;
-	
+
 	if ([NSAppearance rf_isDarkMode]) {
 		self.switchAccountView.image = [NSImage imageNamed:@"down_arrow_darkmode"];
 	}
@@ -221,7 +515,7 @@ static NSInteger const kSelectionNotes = 12;
 - (void) setupSidebar
 {
 	self.sidebarItems = [NSMutableArray array];
-	
+
 	[self.sidebarItems addObject:@(kSelectionTimeline)];
 	[self.sidebarItems addObject:@(kSelectionMentions)];
 	[self.sidebarItems addObject:@(kSelectionFavorites)];
@@ -234,7 +528,7 @@ static NSInteger const kSelectionNotes = 12;
 		[self.sidebarItems addObject:@(kSelectionUploads)];
 		[self.sidebarItems addObject:@(kSelectionDivider2)];
 	}
-	
+
 	[self.sidebarItems addObject:@(kSelectionReplies)];
 	[self.sidebarItems addObject:@(kSelectionBookshelves)];
 	[self.sidebarItems addObject:@(kSelectionMovies)];
@@ -258,11 +552,11 @@ static NSInteger const kSelectionNotes = 12;
 - (void) moveUp:(id)sender
 {
 	NSString* js;
-	
+
 	NSString* last_selected_id = nil;
 	if ([self.selectedPostID length] > 0) {
 		last_selected_id = self.selectedPostID;
-		
+
 		// select previous
 		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
 			var next_div = div.previousElementSibling;\
@@ -275,10 +569,10 @@ static NSInteger const kSelectionNotes = 12;
 		js = @"var div = document.querySelector('.post');\
 			div.classList.add('is_selected');";
 	}
-	
+
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
-	
+
 	// deselect last if changed
 	if (last_selected_id && ![last_selected_id isEqualToString:self.selectedPostID]) {
 		[self setSelected:NO withPostID:last_selected_id];
@@ -288,11 +582,11 @@ static NSInteger const kSelectionNotes = 12;
 - (void) moveDown:(id)sender
 {
 	NSString* js;
-	
+
 	NSString* last_selected_id = nil;
 	if ([self.selectedPostID length] > 0) {
 		last_selected_id = self.selectedPostID;
-				
+
 		// select next
 		js = [NSString stringWithFormat:@"var div = document.getElementById('post_%@');\
    var next_div = div.nextElementSibling;\
@@ -305,10 +599,10 @@ static NSInteger const kSelectionNotes = 12;
 		js = @"var div = document.querySelector('.post');\
   div.classList.add('is_selected');";
 	}
-	
+
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	[self updateSelectionFromMove];
-	
+
 	// deselect last if changed
 	if (last_selected_id && ![last_selected_id isEqualToString:self.selectedPostID]) {
 		[self setSelected:NO withPostID:last_selected_id];
@@ -326,7 +620,7 @@ static NSInteger const kSelectionNotes = 12;
 			self.statusBubble.alphaValue = 1.0;
 		});
 	}
-	
+
 	[self applyForegroundJS:[self currentWebView]];
 }
 
@@ -338,7 +632,7 @@ static NSInteger const kSelectionNotes = 12;
 	if (self.statusBubble.alphaValue != 0.0) {
 		self.statusBubble.alphaValue = 0.5;
 	}
-	
+
 	[self applyBackgroundJS:[self currentWebView]];
 }
 
@@ -369,7 +663,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	id bookmark_id = [notification.userInfo objectForKey:kTagsDidUpdateIDKey];
 	NSString* new_tags = [notification.userInfo objectForKey:kTagsDidUpdateTagsKey];
-	
+
 	NSString* js = [NSString stringWithFormat:@"document.getElementById('tags_%@').textContent = \"Tags: %@\";", bookmark_id, new_tags];
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
@@ -429,7 +723,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	NSString* username = [notification.userInfo objectForKey:kSwitchAccountUsernameKey];
 	[[NSUserDefaults standardUserDefaults] setObject:username forKey:kCurrentUsername];
-	
+
 	[self setupUser];
 	[self showTimeline:nil];
 }
@@ -444,7 +738,7 @@ static NSInteger const kSelectionNotes = 12;
 			found = YES;
 		}
 	}
-	
+
 	if (!found) {
 		[self setupUser];
 		[self showTimeline:nil];
@@ -471,14 +765,14 @@ static NSInteger const kSelectionNotes = 12;
 {
 	RFBookshelf* bookshelf = [notification.userInfo objectForKey:kOpenBookshelfKey];
 	MBBooksWindowController* found_controller = nil;
-	
+
 	for (MBBooksWindowController* controller in self.booksWindowControllers) {
 		if ([controller.bookshelf.bookshelfID isEqualToNumber:bookshelf.bookshelfID]) {
 			found_controller = controller;
 			break;
 		}
 	}
-	
+
 	if (found_controller) {
 		[found_controller showWindow:nil];
 		[found_controller fetchBooks];
@@ -512,7 +806,7 @@ static NSInteger const kSelectionNotes = 12;
 
 	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
-	
+
 	CGFloat scroller_width = 0;
 	if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
 		scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
@@ -524,7 +818,7 @@ static NSInteger const kSelectionNotes = 12;
 	if (text_size == 0) {
 		text_size = kTextSizeMedium;
 	}
-	
+
 	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
@@ -545,7 +839,7 @@ static NSInteger const kSelectionNotes = 12;
 	[self closeOverlays];
 
 	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/mentions"];
-	
+
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
@@ -658,7 +952,7 @@ static NSInteger const kSelectionNotes = 12;
 
 	MBMoviesController* controller = [[MBMoviesController alloc] init];
 	[self showRootController:controller];
-	
+
 	[self selectSidebarRow:kSelectionMovies];
 	[self startLoadingSidebarRow:kSelectionMovies];
 }
@@ -681,7 +975,7 @@ static NSInteger const kSelectionNotes = 12;
 		[self.notesController deselectAll];
 		[self.notesController fetchNotes];
 	}
-	
+
 	[self showRootController:self.notesController];
 
 	[self selectSidebarRow:kSelectionNotes];
@@ -697,7 +991,7 @@ static NSInteger const kSelectionNotes = 12;
 - (IBAction) refreshTimeline:(id)sender
 {
 	[self.messageSpinner startAnimation:nil];
-	
+
 	if (self.selectedTimeline == kSelectionTimeline) {
 		[self showTimeline:nil];
 	}
@@ -761,15 +1055,15 @@ static NSInteger const kSelectionNotes = 12;
 {
 	BOOL was_showing = [RFSettings boolForKey:kIsShowingBookmarkSummaries];
 	[RFSettings setBool:!was_showing forKey:kIsShowingBookmarkSummaries];
-	
+
 	NSDictionary* params = @{
 		@"summaries": @(!was_showing)
 	};
-	
+
 	RFClient* client = [[RFClient alloc] initWithPath:@"/bookmarks/settings"];
 	[client postWithParams:params completion:^(UUHttpResponse* response) {
 	}];
-	
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshBookmarksNotification object:self];
 }
 
@@ -840,7 +1134,7 @@ static NSInteger const kSelectionNotes = 12;
 			return NO;
 		}
 	}
-	
+
 	return YES;
 }
 
@@ -874,7 +1168,7 @@ static NSInteger const kSelectionNotes = 12;
 			[args setObject:top_post_id forKey:@"since_id"];
 		}
 	}
-	
+
 	// always call to get publishing status, even if no new posts
 	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/check"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
@@ -934,15 +1228,15 @@ static NSInteger const kSelectionNotes = 12;
 {
 	self.webView.hidden = YES;
 	[self popToRootViewController];
-	
-	self.messageTopConstraint.animator.constant = -35;
-	[self.messageSpinner stopAnimation:nil];
+
+	[self hideMessageField];
+	[self updateToolbarScrimVisibility];
 
 	if (self.rootController) {
 		[self.rootController.view removeFromSuperview];
 		self.rootController = nil;
 	}
-	
+
 	self.overlayLeftConstraint = nil;
 	self.overlayRightConstraint = nil;
 
@@ -1048,7 +1342,7 @@ static NSInteger const kSelectionNotes = 12;
 
 	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
-	
+
 	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
 		context.duration = 0.3;
 		context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
@@ -1064,7 +1358,7 @@ static NSInteger const kSelectionNotes = 12;
 		// after animating, temporary pin to right
 		self.navigationRightConstraint.active = NO;
 		self.navigationPinnedConstraint.active = YES;
-		
+
 		// focus new controller
 		[self.window makeFirstResponder:controller];
 	}];
@@ -1117,7 +1411,7 @@ static NSInteger const kSelectionNotes = 12;
 	right_constraint.active = NO;
 	self.navigationPinnedConstraint = right_constraint;
 
-	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+	NSLayoutConstraint* top_constraint = [addingView.topAnchor constraintEqualToAnchor:self.contentWrapperView.safeAreaLayoutGuide.topAnchor];
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
 	top_constraint.active = YES;
 
@@ -1141,14 +1435,17 @@ static NSInteger const kSelectionNotes = 12;
 	left_constraint.active = YES;
 
 	self.overlayLeftConstraint = left_constraint;
-	
+
 	NSLayoutConstraint* right_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0.0];
 	right_constraint.priority = NSLayoutPriorityDefaultHigh;
 	right_constraint.active = YES;
-	
+
 	self.overlayRightConstraint = right_constraint;
 
 	NSLayoutConstraint* top_constraint = [NSLayoutConstraint constraintWithItem:addingView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:lastView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+	if ((lastView == self.containerView) && ![self shouldExtendContentUnderToolbar]) {
+		top_constraint = [addingView.topAnchor constraintEqualToAnchor:self.contentWrapperView.safeAreaLayoutGuide.topAnchor];
+	}
 	top_constraint.priority = NSLayoutPriorityDefaultHigh;
 	top_constraint.active = YES;
 
@@ -1168,12 +1465,13 @@ static NSInteger const kSelectionNotes = 12;
 	NSRect r = self.webView.bounds;
 	self.rootController.view.frame = r;
 	self.rootController.view.alphaValue = 0.0;
-	
+
 	self.rootController.view.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.containerView addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.webView];
 
 	self.rootController.view.animator.alphaValue = 1.0;
 	[self addResizeConstraintsToOverlay:self.rootController.view containerView:self.containerView];
+	[self updateToolbarScrimVisibility];
 
 	RFDispatchMainAsync(^{
 		[self.window makeFirstResponder:controller];
@@ -1193,7 +1491,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	NSViewController* controller = [[MBHighlightsController alloc] init];
 	[controller view];
-	
+
 	[self pushViewController:controller];
 }
 
@@ -1202,16 +1500,16 @@ static NSInteger const kSelectionNotes = 12;
 	// select and remember webview for unselection
 	WebView* current_webview = [self currentWebView];
 	[self setPressed:YES withPostID:postID];
-	
+
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
-	
+
 	// give the selection a moment to be visible before animating away
 	RFDispatchSeconds (0.1, ^{
 		[self pushViewController:controller];
 	});
-	
+
 	// unselect after delay
 	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
 	RFDispatchSeconds (0.5, ^{
@@ -1223,8 +1521,8 @@ static NSInteger const kSelectionNotes = 12;
 {
 	NSString* link = [self linkOfPostID:postID];
 	NSURL* url = [NSURL URLWithString:link];
-	
-	[[NSWorkspace sharedWorkspace] openURL:url];	
+
+	[[NSWorkspace sharedWorkspace] openURL:url];
 
 //	NSArray* items = @[ [NSURL URLWithString:@"https://manton.org/"] ];
 //	NSSharingServicePicker* picker = [[NSSharingServicePicker alloc] initWithItems:items];
@@ -1250,7 +1548,7 @@ static NSInteger const kSelectionNotes = 12;
 			if (exists) {
 				// cache our answer
 				[self.cachedUsernames addObject:username];
-				
+
 				// navigate to profile
 				[self showProfileWithExistingUsername:username];
 			}
@@ -1302,7 +1600,7 @@ static NSInteger const kSelectionNotes = 12;
 			break;
 		}
 	}
-	
+
 	[self updateToolbarForSidebarSelection];
 }
 
@@ -1344,7 +1642,7 @@ static NSInteger const kSelectionNotes = 12;
 		[[NSWorkspace sharedWorkspace] openURL:item];
 	}];
 	[services insertObject:browser_service atIndex:0];
-	
+
 	return services;
 }
 
@@ -1418,14 +1716,14 @@ static NSInteger const kSelectionNotes = 12;
 	NSString* top_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:top_js];
 	NSString* height_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:height_js];
 	NSString* scroll_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:scroll_js];
-    
+
 	CGFloat top_f = [self currentWebView].bounds.size.height - [top_s floatValue] - [height_s floatValue];
 	top_f += [scroll_s floatValue];
-	
+
 	// adjust to full cell width
 	CGFloat left_f = 0.0;
 	CGFloat width_f = [self currentWebView].bounds.size.width;
-	
+
 	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
 }
 
@@ -1442,7 +1740,7 @@ static NSInteger const kSelectionNotes = 12;
 		.map(e => e.textContent.trim())\
 		.filter(u => u.length > 0)\
 		.join(',');";
-	
+
 	NSString* usernames_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	NSArray* usernames = [usernames_s componentsSeparatedByString:@","];
 	return usernames;
@@ -1467,7 +1765,7 @@ static NSInteger const kSelectionNotes = 12;
 - (void) showURL:(NSURL *)url
 {
 	BOOL found_microblog_url = NO;
-	
+
 	NSString* hostname = [url host];
 	NSString* path = [url path];
 	if ([hostname isEqualToString:@"micro.blog"]) {
@@ -1513,7 +1811,7 @@ static NSInteger const kSelectionNotes = 12;
 			}
 		}
 	}
-	
+
 	if (!found_microblog_url) {
 		if ([url.pathExtension isEqualToString:@"jpg"] || [url.pathExtension isEqualToString:@"png"]) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPhotoURLNotification object:self userInfo:@{ kOpenPhotoURLKey: url }];
@@ -1528,7 +1826,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	if (@available(macOS 15.0, *)) {
 		if (![self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
-			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:0];
+			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:1];
 		}
 	}
 
@@ -1574,6 +1872,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	if (self.selectedTimeline == kSelectionTimeline) {
 		self.messageField.stringValue = message;
+		self.messageBox.hidden = NO;
 		self.messageTopConstraint.animator.constant = -1;
 	}
 }
@@ -1581,6 +1880,7 @@ static NSInteger const kSelectionNotes = 12;
 - (void) hideMessageField
 {
 	self.messageTopConstraint.animator.constant = -35;
+	self.messageBox.hidden = YES;
 	[self.messageSpinner stopAnimation:nil];
 }
 
@@ -1594,7 +1894,7 @@ static NSInteger const kSelectionNotes = 12;
 	NSToolbar* toolbar = self.window.toolbar;
 	BOOL should_show_upload = self.selectedTimeline == kSelectionUploads;
 	BOOL upload_exists = NO;
-	
+
 	// check if the UploadButton already exists in the toolbar
 	for (NSToolbarItem* item in toolbar.items) {
 		if ([item.itemIdentifier isEqualToString:@"UploadButton"]) {
@@ -1602,10 +1902,9 @@ static NSInteger const kSelectionNotes = 12;
 			break;
 		}
 	}
-	
+
 	if (should_show_upload && !upload_exists) {
-		// insert the UploadButton at a desired index
-		NSInteger insert_index = toolbar.items.count - 2;
+		NSInteger insert_index = toolbar.items.count - 1;
 		[toolbar insertItemWithItemIdentifier:@"UploadButton" atIndex:insert_index];
 	}
 	else if (!should_show_upload && upload_exists) {
@@ -1631,8 +1930,8 @@ static NSInteger const kSelectionNotes = 12;
 	NSScrollView* scrollview = webView.mainFrame.frameView.documentView.enclosingScrollView;
 	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
 	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
-		
-	[self setupCSS:webView];	
+
+	[self setupCSS:webView];
 	[self stopLoadingSidebarRow];
 	[self updateCachedUsers];
 }
@@ -1659,9 +1958,9 @@ static NSInteger const kSelectionNotes = 12;
 		NSInteger status_code = [url_response statusCode];
 		if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
 			[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
-		
+
 			NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
-		
+
 			NSAlert* alert = [[NSAlert alloc] init];
 			[alert addButtonWithTitle:@"OK"];
 			[alert setMessageText:@"Error loading Micro.blog timeline"];
@@ -1697,7 +1996,7 @@ static NSInteger const kSelectionNotes = 12;
 			case WebMenuItemTagOpenImageInNewWindow:
 			case WebMenuItemTagDownloadImageToDisk:
 				break;
-			
+
 			default:
 				[new_items addObject:item];
 				break;
@@ -1717,7 +2016,7 @@ static NSInteger const kSelectionNotes = 12;
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	NSInteger sidebar_row = [[self.sidebarItems objectAtIndex:row] integerValue];
-	
+
     if ((sidebar_row == kSelectionDivider1) || (sidebar_row == kSelectionDivider2)) {
         RFSeparatorCell* separator = [tableView makeViewWithIdentifier:@"SeparatorCell" owner:self];
         return separator;
@@ -1725,7 +2024,7 @@ static NSInteger const kSelectionNotes = 12;
 
     RFMenuCell* cell = [tableView makeViewWithIdentifier:@"MenuCell" owner:self];
 	cell.sidebarRow = row;
-	
+
 	if (sidebar_row == kSelectionTimeline) {
 		cell.titleField.stringValue = @"Timeline";
 		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Timeline"];
@@ -1910,7 +2209,7 @@ static NSInteger const kSelectionNotes = 12;
 
 - (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
 {
-	return 200;
+	return 320;
 }
 
 - (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
@@ -1927,25 +2226,22 @@ static NSInteger const kSelectionNotes = 12;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+    return @[ @"ProfileBox", @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
 	NSMutableArray* items = [NSMutableArray array];
-	
-//	[items addObject:@"StatusBubble"];
-	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
+
 	[items addObject:@"ProfileBox"];
 	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 
 	if (self.selectedTimeline == kSelectionUploads) {
 		[items addObject:@"UploadButton"];
-		[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 	}
 
 	[items addObject:@"NewPost"];
-	
+
 	return items;
 }
 
@@ -1968,13 +2264,13 @@ static NSInteger const kSelectionNotes = 12;
 		// for newer macOS, position image more explicitly
 		if (@available(macOS 15.0, *)) {
 			NSImage* button_img = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"New Post"];
-			
+
 			NSButton* button = [[NSButton alloc] initWithFrame:NSMakeRect(0, 5, 35, 30)];
 			button.image = button_img;
 			button.imagePosition = NSImageOnly;
 			button.target = nil;
 			button.action = @selector(newDocument:);
-			
+
 			NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 			item.view = button;
 			return item;

@@ -17,6 +17,7 @@
 #import "RFXMLRPCRequest.h"
 #import "RFXMLRPCParser.h"
 #import "RFWordpressController.h"
+#import "RFClient.h"
 #import "MBRobotsController.h"
 #import "MBRobotsModel.h"
 #import "NSString+Extras.h"
@@ -97,6 +98,9 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 - (void) appDidBecomeActiveNotification:(NSNotification *)notification
 {
 	[self updateRobotsSettingsIfAllowed];
+	if (![self.robotsPane isHidden]) {
+		[self refreshRobotsGlobalSettingsFromServer];
+	}
 }
 
 - (void) removeAccountNotification:(NSNotification *)notification
@@ -196,6 +200,8 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 - (void) setupRobotsSettings
 {
 	self.robotsController = [[MBRobotsController alloc] init];
+	[self setupRobotsGlobalSettings];
+
 	BOOL is_enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kUseLocalAIModelsPrefKey];
 
 	if (is_enabled && ![MBRobotsModel isLocalModelAvailable]) {
@@ -218,6 +224,47 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 		[self updateRobotsSettings];
 	}
 	[self hideRobotsDownloadProgress];
+}
+
+- (void) setupRobotsGlobalSettings
+{
+	BOOL is_using_ai = [RFSettings boolForKey:kIsUsingAI];
+	self.robotsGlobalCheckbox.state = is_using_ai ? NSControlStateValueOn : NSControlStateValueOff;
+	self.robotsGlobalSpinner.hidden = YES;
+	[self.robotsGlobalSpinner stopAnimation:nil];
+}
+
+- (void) refreshRobotsGlobalSettingsFromServer
+{
+	RFAccount* account = [RFSettings defaultAccount];
+	NSString* username = account.username;
+	if (username.length == 0) {
+		return;
+	}
+
+	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
+	if (token.length == 0) {
+		return;
+	}
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/account/verify"];
+	NSDictionary* args = @{
+		@"token": token
+	};
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		NSNumber* is_using_ai = nil;
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			is_using_ai = [response.parsedResponse objectForKey:@"is_using_ai"];
+		}
+
+		RFDispatchMainAsync(^{
+			if (is_using_ai) {
+				BOOL is_enabled = [is_using_ai boolValue];
+				[RFSettings setBool:is_enabled forKey:kIsUsingAI];
+				self.robotsGlobalCheckbox.state = is_enabled ? NSControlStateValueOn : NSControlStateValueOff;
+			}
+		});
+	}];
 }
 
 - (void) setupBackupRecentsPopup
@@ -442,6 +489,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	
 	[self setupWebsiteField];
     [self setupDayOneField];
+	[self setupRobotsGlobalSettings];
 	[self updateRadioButtons];
 	[self updateMenus];
 
@@ -574,6 +622,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	[self.robotsPane setFrameOrigin:NSMakePoint(0, 0)];
 	self.robotsPane.hidden = NO;
 	[self updateRobotsSettingsIfAllowed];
+	[self refreshRobotsGlobalSettingsFromServer];
 }
 
 - (IBAction) folderCheckboxChanged:(id)sender
@@ -625,6 +674,26 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	else {
 		[self disableLocalRobotsModel];
 	}
+}
+
+- (IBAction) aiGlobalCheckboxChecked:(id)sender
+{
+	BOOL is_using_ai = (self.robotsGlobalCheckbox.state == NSControlStateValueOn);
+	[RFSettings setBool:is_using_ai forKey:kIsUsingAI];
+
+	self.robotsGlobalSpinner.hidden = NO;
+	[self.robotsGlobalSpinner startAnimation:nil];
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/account/ai"];
+	NSDictionary* args = @{
+		@"is_using_ai": @(is_using_ai ? 1 : 0)
+	};
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			[self.robotsGlobalSpinner stopAnimation:nil];
+			self.robotsGlobalSpinner.hidden = YES;
+		});
+	}];
 }
 
 - (void) updateRobotsSettings

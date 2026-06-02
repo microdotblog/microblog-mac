@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,7 +31,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="12" y="5" width="244" height="34"/>
+                                <rect key="frame" x="18" y="5" width="235" height="34"/>
                                 <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -41,10 +41,10 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="19n-45-pjW">
-                                <rect key="frame" x="386" y="8" width="57" height="25"/>
+                                <rect key="frame" x="386" y="10" width="50" height="24"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" id="XxI-f7-TCr">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" autoenablesItems="NO" id="MYu-pW-ukj">
                                         <items>
                                             <menuItem state="on" image="tag" catalog="system" hidden="YES" id="2FC-Vg-pFi"/>
@@ -58,8 +58,8 @@
                                     <action selector="selectTag:" target="-2" id="l6r-mw-bB1"/>
                                 </connections>
                             </popUpButton>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-LX-dfu">
-                                <rect key="frame" x="322" y="14" width="61" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-LX-dfu">
+                                <rect key="frame" x="319" y="14" width="61" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="tag name" id="7BV-Sg-PE6">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -67,7 +67,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bv2-Qf-nrK">
-                                <rect key="frame" x="294" y="3.5" width="30" height="36.5"/>
+                                <rect key="frame" x="291" y="3.5" width="30" height="36.5"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle.fill" catalog="system" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="v3f-sx-Mby">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" metaFont="system" size="16"/>
@@ -83,8 +83,8 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="oyw-LX-dfu" secondAttribute="trailing" constant="8" symbolic="YES" id="JfF-Qu-ud1"/>
-                            <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="15" id="KiJ-eQ-agP"/>
-                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="12" id="LIb-hE-eB9"/>
+                            <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="18" id="KiJ-eQ-agP"/>
+                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="18" id="LIb-hE-eB9"/>
                             <constraint firstItem="Bv2-Qf-nrK" firstAttribute="centerY" secondItem="oyw-LX-dfu" secondAttribute="centerY" id="M3H-Y7-ebv"/>
                             <constraint firstItem="Bv2-Qf-nrK" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="38" id="OQs-4M-7Pc"/>
                             <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="Pnf-vK-gmG"/>

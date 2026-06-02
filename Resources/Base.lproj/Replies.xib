@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,7 +28,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="to5-1o-4Bg">
-                                <rect key="frame" x="10" y="372" width="297" height="16"/>
+                                <rect key="frame" x="16" y="372" width="297" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Replies can be edited for 24 hours after posting." id="p4S-hd-4MQ">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -45,7 +45,7 @@
                                 <rect key="frame" x="-1" y="-1" width="468" height="358"/>
                                 <clipView key="contentView" id="YzZ-5e-l05">
                                     <rect key="frame" x="0.0" y="0.0" width="468" height="358"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="KFU-m9-WQE" customClass="RFPostTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="468" height="358"/>
@@ -105,7 +105,7 @@
                                 </scroller>
                             </scrollView>
                             <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vQK-JK-BMA">
-                                <rect key="frame" x="341" y="368" width="113" height="24"/>
+                                <rect key="frame" x="347" y="368" width="101" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="CZX-XK-3dH"/>
                                 </constraints>
@@ -119,7 +119,7 @@
                                 </connections>
                             </searchField>
                             <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="6Oh-RE-57v">
-                                <rect key="frame" x="315" y="372" width="16" height="16"/>
+                                <rect key="frame" x="321" y="372" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="B8O-Wy-xBa"/>
                                 </constraints>
@@ -128,7 +128,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="aXp-jh-SPs" secondAttribute="trailing" constant="-1" id="7NY-9T-MC7"/>
                             <constraint firstItem="to5-1o-4Bg" firstAttribute="top" secondItem="0o1-PH-fL2" secondAttribute="top" constant="14" id="7ZZ-lN-BeQ"/>
-                            <constraint firstItem="to5-1o-4Bg" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="12" id="BB1-q4-Ktk"/>
+                            <constraint firstItem="to5-1o-4Bg" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="18" id="BB1-q4-Ktk"/>
                             <constraint firstItem="vQK-JK-BMA" firstAttribute="centerY" secondItem="to5-1o-4Bg" secondAttribute="centerY" id="Kv9-6Z-Ot7"/>
                             <constraint firstAttribute="trailing" secondItem="v42-K4-VVS" secondAttribute="trailing" constant="-1" id="Q2c-Cs-ZFW"/>
                             <constraint firstItem="6Oh-RE-57v" firstAttribute="leading" secondItem="to5-1o-4Bg" secondAttribute="trailing" constant="10" id="aY7-3t-FQ7"/>
@@ -136,7 +136,7 @@
                             <constraint firstItem="aXp-jh-SPs" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="-1" id="dAx-rQ-Vr1"/>
                             <constraint firstItem="6Oh-RE-57v" firstAttribute="centerY" secondItem="vQK-JK-BMA" secondAttribute="centerY" id="hXu-OD-GVi"/>
                             <constraint firstItem="aXp-jh-SPs" firstAttribute="top" secondItem="v42-K4-VVS" secondAttribute="bottom" id="liu-GG-RD4"/>
-                            <constraint firstAttribute="trailing" secondItem="vQK-JK-BMA" secondAttribute="trailing" constant="12" id="n59-Sv-iry"/>
+                            <constraint firstAttribute="trailing" secondItem="vQK-JK-BMA" secondAttribute="trailing" constant="18" id="n59-Sv-iry"/>
                             <constraint firstItem="v42-K4-VVS" firstAttribute="top" secondItem="to5-1o-4Bg" secondAttribute="bottom" constant="14" id="paq-JQ-3gC"/>
                             <constraint firstAttribute="bottom" secondItem="aXp-jh-SPs" secondAttribute="bottom" constant="-1" id="tAV-mv-b4V"/>
                             <constraint firstItem="v42-K4-VVS" firstAttribute="leading" secondItem="0o1-PH-fL2" secondAttribute="leading" constant="-1" id="zDl-l1-DEl"/>

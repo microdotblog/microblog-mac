@@ -19,11 +19,17 @@
 
 - (void) awakeFromNib
 {
+	[super awakeFromNib];
+	[self setupAccountPopover];
+}
+
+- (void) setupAccountPopover
+{
 	if ([NSAppearance mb_isLiquidGlass]) {
 		self.cornerRadius = 18;
 	}
 
-	if (![self hasMultipleAccounts]) {
+	if (![self hasMultipleAccounts] && self.triangleWidthConstraint) {
 		self.triangleWidthConstraint.constant = 0;
 	}
 	

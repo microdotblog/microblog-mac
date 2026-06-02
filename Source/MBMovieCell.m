@@ -22,38 +22,38 @@
 
 	if (movie.username.length > 0) {
 		self.subtitleField.stringValue = [movie displayUsername];
-		self.leftConstraint.constant = 12;
-		self.disclosureInsetConstraint.constant = 12;
+		self.leftConstraint.constant = 18;
+		self.disclosureInsetConstraint.constant = 18;
 		self.disclosureTriangle.hidden = YES;
 	}
 	else if (movie.seasonsCount > 0) {
 		self.subtitleField.stringValue = [movie displayYearSeasons];
-		self.leftConstraint.constant = 40;
-		self.disclosureInsetConstraint.constant = 12;
+		self.leftConstraint.constant = 44;
+		self.disclosureInsetConstraint.constant = 18;
 		self.disclosureTriangle.hidden = NO;
 	}
 	else if (movie.episodesCount > 0) {
 		self.subtitleField.stringValue = [movie displayEpisodes];
-		self.leftConstraint.constant = 60;
-		self.disclosureInsetConstraint.constant = 32;
+		self.leftConstraint.constant = 64;
+		self.disclosureInsetConstraint.constant = 36;
 		self.disclosureTriangle.hidden = NO;
 	}
 	else if (movie.year.length > 0) {
 		self.subtitleField.stringValue = [movie displayYearDirector];
-		self.leftConstraint.constant = self.needsInset ? 40 : 12;
-		self.disclosureInsetConstraint.constant = 12;
+		self.leftConstraint.constant = self.needsInset ? 44 : 18;
+		self.disclosureInsetConstraint.constant = 18;
 		self.disclosureTriangle.hidden = YES;
 	}
 	else if (movie.isSearchedEpisode) {
 		self.subtitleField.stringValue = movie.airDate;
-		self.leftConstraint.constant = 80;
-		self.disclosureInsetConstraint.constant = 12;
+		self.leftConstraint.constant = 84;
+		self.disclosureInsetConstraint.constant = 18;
 		self.disclosureTriangle.hidden = YES;
 	}
 	else {
 		self.subtitleField.stringValue = @"";
-		self.leftConstraint.constant = self.needsInset ? 40 : 12;
-		self.disclosureInsetConstraint.constant = 12;
+		self.leftConstraint.constant = self.needsInset ? 44 : 18;
+		self.disclosureInsetConstraint.constant = 18;
 		self.disclosureTriangle.hidden = YES;
 	}
 }

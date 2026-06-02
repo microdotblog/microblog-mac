@@ -11,19 +11,6 @@
         <customView id="yiG-GL-bSe" customClass="RFSeparatorCell">
             <rect key="frame" x="0.0" y="0.0" width="166" height="23"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <subviews>
-                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3wJ-3r-oRF">
-                    <rect key="frame" x="0.0" y="9" width="166" height="5"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="1" id="GZe-Nq-8Jk"/>
-                    </constraints>
-                </box>
-            </subviews>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="3wJ-3r-oRF" secondAttribute="trailing" id="CDd-mv-Eat"/>
-                <constraint firstItem="3wJ-3r-oRF" firstAttribute="centerY" secondItem="yiG-GL-bSe" secondAttribute="centerY" id="PkG-7W-uvi"/>
-                <constraint firstItem="3wJ-3r-oRF" firstAttribute="leading" secondItem="yiG-GL-bSe" secondAttribute="leading" id="gct-IV-Q9q"/>
-            </constraints>
             <point key="canvasLocation" x="-104" y="3.5"/>
         </customView>
     </objects>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIs-MO-cjs">
-                    <rect key="frame" x="10" y="390" width="198" height="16"/>
+                    <rect key="frame" x="16" y="390" width="198" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Blog about movies or TV shows." id="SYr-8o-qtc">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -32,7 +32,7 @@
                     </textFieldCell>
                 </textField>
                 <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lML-7D-4aS">
-                    <rect key="frame" x="320" y="386" width="148" height="24"/>
+                    <rect key="frame" x="314" y="386" width="148" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="148" id="NTT-bK-AqG"/>
                     </constraints>
@@ -46,7 +46,7 @@
                     </connections>
                 </searchField>
                 <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="B4V-OG-cnp">
-                    <rect key="frame" x="294" y="390" width="16" height="16"/>
+                    <rect key="frame" x="288" y="390" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="16" id="53a-Ab-NLM"/>
                         <constraint firstAttribute="height" constant="16" id="Qgy-go-2R8"/>
@@ -118,8 +118,8 @@
                 <constraint firstItem="aey-yi-VLC" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="i64-F4-m25"/>
                 <constraint firstAttribute="trailing" secondItem="aey-yi-VLC" secondAttribute="trailing" id="kCI-cx-QGa"/>
                 <constraint firstItem="aey-yi-VLC" firstAttribute="top" secondItem="DtU-Fs-AYI" secondAttribute="bottom" id="kq7-eu-dvF"/>
-                <constraint firstItem="cIs-MO-cjs" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="12" id="pDi-my-Tvl"/>
-                <constraint firstAttribute="trailing" secondItem="lML-7D-4aS" secondAttribute="trailing" constant="12" id="qmR-PI-5l5"/>
+                <constraint firstItem="cIs-MO-cjs" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="18" id="pDi-my-Tvl"/>
+                <constraint firstAttribute="trailing" secondItem="lML-7D-4aS" secondAttribute="trailing" constant="18" id="qmR-PI-5l5"/>
                 <constraint firstItem="lML-7D-4aS" firstAttribute="leading" secondItem="B4V-OG-cnp" secondAttribute="trailing" constant="10" id="xio-U0-eQN"/>
                 <constraint firstItem="DtU-Fs-AYI" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="ztO-vg-vhF"/>
             </constraints>

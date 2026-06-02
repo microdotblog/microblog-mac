@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SHu-UC-LXk">
-                    <rect key="frame" x="10" y="138" width="212" height="19"/>
+                    <rect key="frame" x="16" y="138" width="206" height="19"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Title" id="fuH-m6-LAJ">
                         <font key="font" metaFont="systemMedium" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -23,7 +23,7 @@
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="cqh-qn-4tc">
-                    <rect key="frame" x="10" y="116" width="237" height="19"/>
+                    <rect key="frame" x="16" y="116" width="231" height="19"/>
                     <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="JGb-iT-Ibo">
                         <font key="font" metaFont="system" size="15"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -42,7 +42,7 @@
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qsJ-3v-yGf">
-                    <rect key="frame" x="8" y="10" width="75" height="16"/>
+                    <rect key="frame" x="16" y="10" width="75" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="2018-01-01" id="hMh-k9-AAe">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="color_date_text"/>
@@ -50,13 +50,13 @@
                     </textFieldCell>
                 </textField>
                 <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNp-zY-KaG">
-                    <rect key="frame" x="10" y="31" width="245" height="80"/>
+                    <rect key="frame" x="18" y="31" width="229" height="80"/>
                     <clipView key="contentView" drawsBackground="NO" id="Ohc-Wa-tH7">
-                        <rect key="frame" x="0.0" y="0.0" width="245" height="80"/>
+                        <rect key="frame" x="0.0" y="0.0" width="229" height="80"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView id="pRF-IQ-J13">
-                                <rect key="frame" x="0.0" y="0.0" width="245" height="80"/>
+                                <rect key="frame" x="0.0" y="0.0" width="229" height="80"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" scrollDirection="horizontal" id="3Am-oc-SXG">
                                     <size key="itemSize" width="80" height="80"/>
@@ -74,7 +74,7 @@
                         <constraint firstAttribute="height" constant="80" id="VLH-38-Efj"/>
                     </constraints>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Yoz-0P-D3o">
-                        <rect key="frame" x="0.0" y="64" width="241" height="16"/>
+                        <rect key="frame" x="0.0" y="63" width="229" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Deb-8e-OaO">
@@ -86,13 +86,13 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="qsJ-3v-yGf" secondAttribute="bottom" constant="10" id="5Xv-DY-qm2"/>
                 <constraint firstItem="SHu-UC-LXk" firstAttribute="top" secondItem="c6c-8Z-vh5" secondAttribute="top" constant="10" id="AeT-xz-iWl"/>
-                <constraint firstItem="cqh-qn-4tc" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="12" id="Fxg-s3-Lav"/>
-                <constraint firstItem="qsJ-3v-yGf" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="10" id="LG4-cs-qCv"/>
-                <constraint firstAttribute="trailing" secondItem="XNp-zY-KaG" secondAttribute="trailing" constant="10" id="MM1-v2-oFq"/>
+                <constraint firstItem="cqh-qn-4tc" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="18" id="Fxg-s3-Lav"/>
+                <constraint firstItem="qsJ-3v-yGf" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="18" id="LG4-cs-qCv"/>
+                <constraint firstAttribute="trailing" secondItem="XNp-zY-KaG" secondAttribute="trailing" constant="18" id="MM1-v2-oFq"/>
                 <constraint firstAttribute="trailing" secondItem="b3L-Cl-lup" secondAttribute="trailing" constant="9" id="PRR-XB-3b4"/>
-                <constraint firstItem="SHu-UC-LXk" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="12" id="PrR-DA-bg6"/>
+                <constraint firstItem="SHu-UC-LXk" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="18" id="PrR-DA-bg6"/>
                 <constraint firstItem="XNp-zY-KaG" firstAttribute="top" secondItem="cqh-qn-4tc" secondAttribute="bottom" constant="5" id="dAf-EY-cw2"/>
-                <constraint firstItem="XNp-zY-KaG" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="10" id="eas-Nn-sbQ"/>
+                <constraint firstItem="XNp-zY-KaG" firstAttribute="leading" secondItem="c6c-8Z-vh5" secondAttribute="leading" constant="18" id="eas-Nn-sbQ"/>
                 <constraint firstAttribute="trailing" secondItem="cqh-qn-4tc" secondAttribute="trailing" constant="20" id="fWe-xJ-v5o"/>
                 <constraint firstItem="qsJ-3v-yGf" firstAttribute="top" secondItem="cqh-qn-4tc" secondAttribute="bottom" constant="90" id="he9-DX-5VJ"/>
                 <constraint firstItem="cqh-qn-4tc" firstAttribute="top" secondItem="c6c-8Z-vh5" secondAttribute="top" constant="32" id="jBB-a0-1XQ"/>
