@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -100,7 +100,7 @@
                                 </constraints>
                             </box>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Eko-fD-FxQ">
-                                <rect key="frame" x="10" y="466" width="43" height="16"/>
+                                <rect key="frame" x="16" y="466" width="43" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Goals:" id="HgM-OG-1Ly">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -108,7 +108,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wee-hs-BYT">
-                                <rect key="frame" x="59" y="462" width="190" height="24"/>
+                                <rect key="frame" x="65" y="462" width="190" height="24"/>
                                 <popUpButtonCell key="cell" type="push" title="Reading 2025 [progress]" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1pd-m4-A8q" id="IOZ-Eg-7Fl" customClass="MBGoalPopUpButtonCell">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
@@ -126,7 +126,7 @@
                                 </connections>
                             </popUpButton>
                             <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ytt-Lj-Xoq">
-                                <rect key="frame" x="259" y="466" width="88" height="16"/>
+                                <rect key="frame" x="265" y="466" width="88" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="5 of 30 books" id="qzX-3J-CrH">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -134,7 +134,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Mx-iY-OHb">
-                                <rect key="frame" x="350" y="462" width="78" height="24"/>
+                                <rect key="frame" x="344" y="462" width="78" height="24"/>
                                 <buttonCell key="cell" type="push" title="Edit Goal" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VCB-DR-IHd">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -151,9 +151,9 @@
                             <constraint firstItem="Ytt-Lj-Xoq" firstAttribute="centerY" secondItem="Eko-fD-FxQ" secondAttribute="centerY" id="BfZ-A1-tGp"/>
                             <constraint firstItem="7Mx-iY-OHb" firstAttribute="centerY" secondItem="Eko-fD-FxQ" secondAttribute="centerY" id="VgB-mG-RTi"/>
                             <constraint firstAttribute="trailing" secondItem="hbF-ds-dXl" secondAttribute="trailing" id="YLa-QH-uJX"/>
-                            <constraint firstAttribute="trailing" secondItem="7Mx-iY-OHb" secondAttribute="trailing" constant="12" id="YmJ-63-AgR"/>
+                            <constraint firstAttribute="trailing" secondItem="7Mx-iY-OHb" secondAttribute="trailing" constant="18" id="YmJ-63-AgR"/>
                             <constraint firstItem="wee-hs-BYT" firstAttribute="leading" secondItem="Eko-fD-FxQ" secondAttribute="trailing" constant="8" symbolic="YES" id="buo-ob-wWi"/>
-                            <constraint firstItem="Eko-fD-FxQ" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" constant="12" id="hNA-os-bAu"/>
+                            <constraint firstItem="Eko-fD-FxQ" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" constant="18" id="hNA-os-bAu"/>
                             <constraint firstItem="uks-Oo-UlR" firstAttribute="top" secondItem="hbF-ds-dXl" secondAttribute="bottom" id="j6V-Yw-cqX"/>
                             <constraint firstItem="wee-hs-BYT" firstAttribute="centerY" secondItem="Eko-fD-FxQ" secondAttribute="centerY" id="n8v-no-TPa"/>
                             <constraint firstItem="hbF-ds-dXl" firstAttribute="leading" secondItem="TX8-3G-OWq" secondAttribute="leading" id="pca-cC-t09"/>
@@ -178,7 +178,7 @@
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="170" y="214" width="366" height="144"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
             <view key="contentView" id="Db6-fF-KG3">
                 <rect key="frame" x="0.0" y="0.0" width="366" height="144"/>
                 <autoresizingMask key="autoresizingMask"/>
