@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,7 +14,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aQZ-pt-d1U">
-                    <rect key="frame" x="10" y="45" width="401" height="17"/>
+                    <rect key="frame" x="16" y="45" width="389" height="17"/>
                     <textFieldCell key="cell" selectable="YES" allowsUndo="NO" id="n1a-1c-gwg">
                         <font key="font" metaFont="system" size="14"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -22,7 +22,7 @@
                     </textFieldCell>
                 </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="CcR-9L-5aF">
-                    <rect key="frame" x="7" y="9" width="177" height="28"/>
+                    <rect key="frame" x="11" y="9" width="177" height="28"/>
                     <subviews>
                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lvv-lo-Nlm">
                             <rect key="frame" x="22" y="7" width="41" height="14"/>
@@ -47,10 +47,10 @@
             </subviews>
             <constraints>
                 <constraint firstItem="aQZ-pt-d1U" firstAttribute="top" secondItem="MWm-zI-3Q4" secondAttribute="top" constant="11" id="Bd6-C9-wuy"/>
-                <constraint firstAttribute="trailing" secondItem="aQZ-pt-d1U" secondAttribute="trailing" constant="12" id="K4F-SV-1Qb"/>
-                <constraint firstItem="CcR-9L-5aF" firstAttribute="leading" secondItem="MWm-zI-3Q4" secondAttribute="leading" constant="7" id="Tj9-D8-l2G"/>
+                <constraint firstAttribute="trailing" secondItem="aQZ-pt-d1U" secondAttribute="trailing" constant="18" id="K4F-SV-1Qb"/>
+                <constraint firstItem="CcR-9L-5aF" firstAttribute="leading" secondItem="MWm-zI-3Q4" secondAttribute="leading" constant="11" id="Tj9-D8-l2G"/>
                 <constraint firstItem="CcR-9L-5aF" firstAttribute="top" secondItem="aQZ-pt-d1U" secondAttribute="bottom" constant="8" id="ehP-Kf-ywl"/>
-                <constraint firstItem="aQZ-pt-d1U" firstAttribute="leading" secondItem="MWm-zI-3Q4" secondAttribute="leading" constant="12" id="jy4-mg-UAC"/>
+                <constraint firstItem="aQZ-pt-d1U" firstAttribute="leading" secondItem="MWm-zI-3Q4" secondAttribute="leading" constant="18" id="jy4-mg-UAC"/>
                 <constraint firstAttribute="bottom" secondItem="CcR-9L-5aF" secondAttribute="bottom" constant="9" id="tXn-DZ-LI8"/>
             </constraints>
             <connections>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dtO-rB-w9P">
-                    <rect key="frame" x="102" y="50" width="67" height="16"/>
+                    <rect key="frame" x="110" y="50" width="67" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Movie title" id="7lD-Eg-g3a">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -23,7 +23,7 @@
                     </textFieldCell>
                 </textField>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wFV-JM-ycp">
-                    <rect key="frame" x="40" y="14" width="50" height="68"/>
+                    <rect key="frame" x="48" y="14" width="50" height="68"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="68" id="6Mv-CY-o3C"/>
                         <constraint firstAttribute="width" constant="50" id="DoA-Ij-AFx"/>
@@ -31,7 +31,7 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="Plx-cH-ZDj"/>
                 </imageView>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="egf-Hs-gWE">
-                    <rect key="frame" x="102" y="29" width="62" height="16"/>
+                    <rect key="frame" x="110" y="29" width="62" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="@manton" id="2aj-ca-obJ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="color_date_text"/>
@@ -39,7 +39,7 @@
                     </textFieldCell>
                 </textField>
                 <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ICa-aB-Kyx">
-                    <rect key="frame" x="12" y="42" width="13" height="13"/>
+                    <rect key="frame" x="18" y="42" width="13" height="13"/>
                     <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G9S-qW-OKp">
                         <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -49,7 +49,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QqF-NT-Vak">
-                    <rect key="frame" x="354" y="38" width="80" height="20"/>
+                    <rect key="frame" x="348" y="38" width="80" height="20"/>
                     <buttonCell key="cell" type="push" title="New Post..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i11-oT-YYa">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -67,10 +67,10 @@
                 <constraint firstItem="QqF-NT-Vak" firstAttribute="centerY" secondItem="Ilv-VD-qwE" secondAttribute="centerY" id="92n-hi-Zct"/>
                 <constraint firstItem="ICa-aB-Kyx" firstAttribute="centerY" secondItem="Ilv-VD-qwE" secondAttribute="centerY" id="bOa-A6-Qzn"/>
                 <constraint firstItem="dtO-rB-w9P" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="btK-ke-qut"/>
-                <constraint firstItem="wFV-JM-ycp" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="40" id="fXG-1N-jll"/>
+                <constraint firstItem="wFV-JM-ycp" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="48" id="fXG-1N-jll"/>
                 <constraint firstAttribute="bottom" secondItem="dtO-rB-w9P" secondAttribute="bottom" constant="50" id="ftX-4D-Z2h"/>
-                <constraint firstAttribute="trailing" secondItem="QqF-NT-Vak" secondAttribute="trailing" constant="12" id="mfz-Dz-BwI"/>
-                <constraint firstItem="ICa-aB-Kyx" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="12" id="top-vz-FXC"/>
+                <constraint firstAttribute="trailing" secondItem="QqF-NT-Vak" secondAttribute="trailing" constant="18" id="mfz-Dz-BwI"/>
+                <constraint firstItem="ICa-aB-Kyx" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="18" id="top-vz-FXC"/>
                 <constraint firstItem="egf-Hs-gWE" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="unN-bC-3ov"/>
             </constraints>
             <connections>
