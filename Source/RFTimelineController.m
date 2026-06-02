@@ -62,6 +62,12 @@ static NSInteger const kSelectionBookshelves = 10;
 static NSInteger const kSelectionMovies = 11;
 static NSInteger const kSelectionNotes = 12;
 
+@interface RFTimelineController ()
+
+@property (strong, nonatomic) MBMessageBox* messageBox;
+
+@end
+
 @implementation RFTimelineController
 
 - (instancetype) init
@@ -107,12 +113,13 @@ static NSInteger const kSelectionNotes = 12;
 {
 	NSView* sidebar_view = [self makeSidebarView];
 	[self setupContentView];
+	NSView* content_view = [self makeContentWrapperView];
 
 	self.sidebarController = [[NSViewController alloc] init];
 	self.sidebarController.view = sidebar_view;
 
 	self.contentController = [[NSViewController alloc] init];
-	self.contentController.view = self.containerView;
+	self.contentController.view = content_view;
 
 	self.splitController = [[NSSplitViewController alloc] init];
 
@@ -126,7 +133,7 @@ static NSInteger const kSelectionNotes = 12;
 	NSSplitViewItem* content_item = [NSSplitViewItem splitViewItemWithViewController:self.contentController];
 	content_item.minimumThickness = 420.0;
 	content_item.canCollapse = NO;
-	content_item.allowsFullHeightLayout = YES;
+	content_item.allowsFullHeightLayout = NO;
 
 	[self.splitController addSplitViewItem:sidebar_item];
 	[self.splitController addSplitViewItem:content_item];
@@ -135,6 +142,22 @@ static NSInteger const kSelectionNotes = 12;
 
 	self.window.contentViewController = self.splitController;
 	[self.splitView setPosition:230.0 ofDividerAtIndex:0];
+}
+
+- (NSView *) makeContentWrapperView
+{
+	NSView* content_view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
+	content_view.translatesAutoresizingMaskIntoConstraints = NO;
+	[content_view addSubview:self.containerView];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[self.containerView.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
+		[self.containerView.trailingAnchor constraintEqualToAnchor:content_view.trailingAnchor],
+		[self.containerView.topAnchor constraintEqualToAnchor:content_view.safeAreaLayoutGuide.topAnchor],
+		[self.containerView.bottomAnchor constraintEqualToAnchor:content_view.bottomAnchor]
+	]];
+
+	return content_view;
 }
 
 - (NSView *) makeSidebarView
@@ -209,6 +232,8 @@ static NSInteger const kSelectionNotes = 12;
 	message_box.boxType = NSBoxCustom;
 	message_box.borderType = NSLineBorder;
 	message_box.titlePosition = NSNoTitle;
+	message_box.hidden = YES;
+	self.messageBox = message_box;
 	[self.containerView addSubview:message_box];
 
 	NSView* message_content = message_box.contentView;
@@ -389,6 +414,7 @@ static NSInteger const kSelectionNotes = 12;
 - (void) setupWebView
 {
 	self.messageTopConstraint.constant = -35;
+	self.messageBox.hidden = YES;
 
 //	[self setupWebDelegates:self.webView];
 //	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
@@ -1168,8 +1194,7 @@ static NSInteger const kSelectionNotes = 12;
 	self.webView.hidden = YES;
 	[self popToRootViewController];
 
-	self.messageTopConstraint.animator.constant = -35;
-	[self.messageSpinner stopAnimation:nil];
+	[self hideMessageField];
 
 	if (self.rootController) {
 		[self.rootController.view removeFromSuperview];
@@ -1807,6 +1832,7 @@ static NSInteger const kSelectionNotes = 12;
 {
 	if (self.selectedTimeline == kSelectionTimeline) {
 		self.messageField.stringValue = message;
+		self.messageBox.hidden = NO;
 		self.messageTopConstraint.animator.constant = -1;
 	}
 }
@@ -1814,6 +1840,7 @@ static NSInteger const kSelectionNotes = 12;
 - (void) hideMessageField
 {
 	self.messageTopConstraint.animator.constant = -35;
+	self.messageBox.hidden = YES;
 	[self.messageSpinner stopAnimation:nil];
 }
 
@@ -1837,8 +1864,7 @@ static NSInteger const kSelectionNotes = 12;
 	}
 
 	if (should_show_upload && !upload_exists) {
-		// insert the UploadButton at a desired index
-		NSInteger insert_index = toolbar.items.count - 2;
+		NSInteger insert_index = toolbar.items.count - 1;
 		[toolbar insertItemWithItemIdentifier:@"UploadButton" atIndex:insert_index];
 	}
 	else if (!should_show_upload && upload_exists) {
@@ -2160,7 +2186,7 @@ static NSInteger const kSelectionNotes = 12;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", NSToolbarFlexibleSpaceItemIdentifier, @"NewPost" ];
+    return @[ @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"ProfileBox", @"UploadButton", @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -2170,11 +2196,9 @@ static NSInteger const kSelectionNotes = 12;
 //	[items addObject:@"StatusBubble"];
 	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 	[items addObject:@"ProfileBox"];
-	[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 
 	if (self.selectedTimeline == kSelectionUploads) {
 		[items addObject:@"UploadButton"];
-		[items addObject:NSToolbarFlexibleSpaceItemIdentifier];
 	}
 
 	[items addObject:@"NewPost"];
