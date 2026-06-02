@@ -12,8 +12,33 @@
 
 @implementation RFRoundedImageView
 
+- (instancetype) initWithFrame:(NSRect)frameRect
+{
+	self = [super initWithFrame:frameRect];
+	if (self) {
+		[self setupRoundedLayer];
+	}
+	return self;
+}
+
+- (instancetype) initWithCoder:(NSCoder *)coder
+{
+	self = [super initWithCoder:coder];
+	if (self) {
+		[self setupRoundedLayer];
+	}
+	return self;
+}
+
 - (void) awakeFromNib
 {
+	[super awakeFromNib];
+	[self setupRoundedLayer];
+}
+
+- (void) setupRoundedLayer
+{
+	self.wantsLayer = YES;
 	self.layer.cornerRadius = self.bounds.size.width / 2.0;
 }
 

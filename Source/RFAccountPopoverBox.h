@@ -16,4 +16,6 @@
 @property (strong, nonatomic) NSColor* originalLightColor;
 @property (strong, nonatomic) NSColor* savedFillColor;
 
+- (void) setupAccountPopover;
+
 @end

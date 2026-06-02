@@ -13,11 +13,27 @@
 
 @implementation MBSplitView
 
+- (instancetype) initWithFrame:(NSRect)frameRect
+{
+	self = [super initWithFrame:frameRect];
+	if (self) {
+		[self setupNotifications];
+	}
+	return self;
+}
+
+- (instancetype) initWithCoder:(NSCoder *)coder
+{
+	self = [super initWithCoder:coder];
+	if (self) {
+		[self setupNotifications];
+	}
+	return self;
+}
+
 - (void) awakeFromNib
 {
 	[super awakeFromNib];
-	
-	[self setupNotifications];
 }
 
 - (void) setupNotifications

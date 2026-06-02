@@ -10,7 +10,30 @@
 
 @implementation MBRestoreCursorView
 
+- (instancetype) initWithFrame:(NSRect)frameRect
+{
+	self = [super initWithFrame:frameRect];
+	if (self) {
+		[self setupTrackingArea];
+	}
+	return self;
+}
+
+- (instancetype) initWithCoder:(NSCoder *)coder
+{
+	self = [super initWithCoder:coder];
+	if (self) {
+		[self setupTrackingArea];
+	}
+	return self;
+}
+
 - (void) awakeFromNib
+{
+	[super awakeFromNib];
+}
+
+- (void) setupTrackingArea
 {
 	NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:(NSTrackingCursorUpdate | NSTrackingActiveInKeyWindow) owner:self userInfo:nil];
 	[self addTrackingArea:area];
