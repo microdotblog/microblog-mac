@@ -161,7 +161,28 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 		return YES;
 	}
 
-	return NO;
+	CFTypeRef power_info = IOPSCopyPowerSourcesInfo();
+	if (power_info == NULL) {
+		return NO;
+	}
+
+	CFStringRef power_type = IOPSGetProvidingPowerSourceType(power_info);
+	if ((power_type != NULL) && CFStringCompare(power_type, CFSTR(kIOPMACPowerKey), 0) == kCFCompareEqualTo) {
+		CFRelease(power_info);
+		return YES;
+	}
+
+	CFArrayRef power_sources = IOPSCopyPowerSourcesList(power_info);
+	if (power_sources == NULL) {
+		CFRelease(power_info);
+		return NO;
+	}
+
+	BOOL has_power_sources = (CFArrayGetCount(power_sources) > 0);
+	CFRelease(power_sources);
+	CFRelease(power_info);
+
+	return !has_power_sources;
 }
 
 - (NSTimeInterval) idleSeconds
