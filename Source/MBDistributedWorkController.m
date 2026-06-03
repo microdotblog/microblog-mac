@@ -143,11 +143,11 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 	}
 
 	if (![self isPluggedIntoPower]) {
-//		return NO;
+		return NO;
 	}
 
 	if ([self idleSeconds] < kDistributedWorkMinimumIdleSeconds) {
-//		return NO;
+		return NO;
 	}
 
 	return [self isCPUUsageLowEnough];
