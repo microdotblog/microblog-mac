@@ -24,6 +24,7 @@
 @class MBCollectionsController;
 @class MBAboutController;
 @class MBBackupsController;
+@class MBDistributedWorkController;
 
 @interface RFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -43,6 +44,7 @@
 @property (strong, nonatomic) MBCollectionsController* collectionsController;
 @property (strong, nonatomic) MBAboutController* aboutController;
 @property (strong, nonatomic) MBBackupsController* backupsController;
+@property (strong, nonatomic) MBDistributedWorkController* distributedWorkController;
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 @property (strong, nonatomic) NSMutableArray* photoWindows; // RFPhotoZoomController
 

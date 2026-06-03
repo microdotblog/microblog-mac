@@ -187,6 +187,8 @@
 		4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB42BBD95360091BB19 /* MBLogCell.m */; };
 		4B88CFB82BBD954A0091BB19 /* LogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFB62BBD954A0091BB19 /* LogCell.xib */; };
 		4B88CFBB2BBD9D3B0091BB19 /* MBLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */; };
+		4B90D0042FD000100000001 /* MBDistributedWorkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B90D0032FD000100000001 /* MBDistributedWorkController.m */; };
+		4B90D0062FD000100000001 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B90D0052FD000100000001 /* IOKit.framework */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
 		4B8FBDE51F867A4000906C86 /* UUDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDDF1F867A3200906C86 /* UUDataCache.m */; };
 		4B8FBDE61F867A4000906C86 /* UUDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD91F867A3200906C86 /* UUDate.m */; };
@@ -611,6 +613,9 @@
 		4B88CFB72BBD954A0091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/LogCell.xib; sourceTree = "<group>"; };
 		4B88CFB92BBD9D3B0091BB19 /* MBLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLog.h; path = Source/MBLog.h; sourceTree = "<group>"; };
 		4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLog.m; path = Source/MBLog.m; sourceTree = "<group>"; };
+		4B90D0022FD000100000001 /* MBDistributedWorkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDistributedWorkController.h; path = Source/MBDistributedWorkController.h; sourceTree = "<group>"; };
+		4B90D0032FD000100000001 /* MBDistributedWorkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDistributedWorkController.m; path = Source/MBDistributedWorkController.m; sourceTree = "<group>"; };
+		4B90D0052FD000100000001 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4B8FBDD41F858FCE00906C86 /* RFHighlightingTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFHighlightingTextStorage.h; path = Source/RFHighlightingTextStorage.h; sourceTree = "<group>"; };
 		4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFHighlightingTextStorage.m; path = Source/RFHighlightingTextStorage.m; sourceTree = "<group>"; };
 		4B8FBDD91F867A3200906C86 /* UUDate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UUDate.m; path = Shared/UUToolbox/UUDate.m; sourceTree = "<group>"; };
@@ -781,6 +786,7 @@
 				4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */,
 				4B35A5BC2FBFA58700E5F46C /* FMDB in Frameworks */,
 				4B5714D1224BD048001F8E4F /* libxml2.tbd in Frameworks */,
+				4B90D0062FD000100000001 /* IOKit.framework in Frameworks */,
 				4B8FBDFC1F86827900906C86 /* Security.framework in Frameworks */,
 				4B7F0B021BAF4F73004553A6 /* WebKit.framework in Frameworks */,
 				4B00B679255D827800CBE873 /* Sparkle.framework in Frameworks */,
@@ -991,6 +997,8 @@
 				4B3840D9269645E000AD3781 /* RFBarExportController.m */,
 				4B38E5EA2F00000100BD98AB /* MBBackupsController.h */,
 				4B38E5EB2F00000100BD98AB /* MBBackupsController.m */,
+				4B90D0022FD000100000001 /* MBDistributedWorkController.h */,
+				4B90D0032FD000100000001 /* MBDistributedWorkController.m */,
 				4B3840CF2692038B00AD3781 /* RFMarkdownExportController.h */,
 				4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */,
 				4B3840D2269203B400AD3781 /* RFDayOneExportController.h */,
@@ -1335,6 +1343,7 @@
 			isa = PBXGroup;
 			children = (
 				4B5714D0224BD048001F8E4F /* libxml2.tbd */,
+				4B90D0052FD000100000001 /* IOKit.framework */,
 				4B8FBDFB1F86827800906C86 /* Security.framework */,
 				4B7F0B011BAF4F73004553A6 /* WebKit.framework */,
 				4B00B678255D827800CBE873 /* Sparkle.framework */,
@@ -1749,6 +1758,7 @@
 				4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */,
 				4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */,
 				4BC0D1072FCB000100000001 /* MBRobotsRunner.swift in Sources */,
+				4B90D0042FD000100000001 /* MBDistributedWorkController.m in Sources */,
 				4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
 				4B2CAB1B1F90667300D9B10E /* clean.c in Sources */,
