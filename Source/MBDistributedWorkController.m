@@ -17,7 +17,11 @@
 static NSString* const kDistributedWorkQueuedPath = @"/feeds/work/queued";
 static NSString* const kDistributedWorkFinishedPath = @"/feeds/work/finished";
 static NSString* const kWorkPromptTypeStatement = @"statement";
+static NSString* const kWorkPromptTypeKeywords = @"keywords";
 static NSString* const kWorkPromptStatement = @"Write one neutral, third-person sentence stating the main idea of this post. Do not quote the text. Do not use first-person language. Do not start with \"the author\". Avoid adjectives and value judgments.";
+static NSString* const kWorkPromptKeywords = @"What are about 10 keywords for this text? Return the keywords only without any punctuation except commas in between each word.";
+static NSString* const kWorkPromptFewerKeywords = @"What are about 5 keywords for this text? Return the keywords only without any punctuation except commas in between each word.";
+static NSUInteger const kWorkPromptKeywordsMaximumLength = 200;
 static NSTimeInterval const kDistributedWorkTimerInterval = 30.0;
 static NSTimeInterval const kDistributedWorkTimerTolerance = 5.0;
 static NSTimeInterval const kDistributedWorkMinimumIdleSeconds = 60.0;
@@ -251,6 +255,10 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 		[self processStatementWorkWithText:text completion:handler];
 		return;
 	}
+	else if ([prompt_type isEqualToString:kWorkPromptTypeKeywords]) {
+		[self processKeywordsWorkWithText:text completion:handler];
+		return;
+	}
 
 	if (handler) {
 		handler(text);
@@ -276,6 +284,32 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 {
 	NSString* prompt = [NSString stringWithFormat:@"%@\n\n%@", kWorkPromptStatement, text ?: @""];
 	[MBRobotsModel runPrompt:prompt completion:^(NSString* result) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (handler) {
+				handler(result ?: @"");
+			}
+		});
+	}];
+}
+
+- (void) processKeywordsWorkWithText:(NSString *)text completion:(void (^)(NSString* text))handler
+{
+	[self runWorkPrompt:kWorkPromptKeywords text:text completion:^(NSString* result) {
+		if (result.length <= kWorkPromptKeywordsMaximumLength) {
+			if (handler) {
+				handler(result);
+			}
+			return;
+		}
+
+		[self runWorkPrompt:kWorkPromptFewerKeywords text:text completion:handler];
+	}];
+}
+
+- (void) runWorkPrompt:(NSString *)prompt text:(NSString *)text completion:(void (^)(NSString* text))handler
+{
+	NSString* full_prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt, text ?: @""];
+	[MBRobotsModel runPrompt:full_prompt completion:^(NSString* result) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (handler) {
 				handler(result ?: @"");
