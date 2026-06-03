@@ -98,7 +98,7 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 
 			strong_self.isCheckingForWork = NO;
 
-			if (response.httpResponse.statusCode < 200 || response.httpResponse.statusCode >= 300) {
+			if (![strong_self isSuccessfulResponse:response]) {
 				return;
 			}
 
@@ -131,6 +131,10 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 - (BOOL) canProcessWorkNow
 {
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:kUseLocalAIModelsPrefKey]) {
+		return NO;
+	}
+
+	if (![MBRobotsModel isLocalModelAvailable]) {
 		return NO;
 	}
 
@@ -202,6 +206,10 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 		return;
 	}
 
+	if (![MBRobotsModel isLocalModelAvailable]) {
+		return;
+	}
+
 	NSDictionary* item = [self.queuedWorkItems firstObject];
 	[self.queuedWorkItems removeObjectAtIndex:0];
 
@@ -242,10 +250,32 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 				return;
 			}
 
+			if (![strong_self isSuccessfulResponse:response]) {
+				strong_self.isProcessingWork = NO;
+				[strong_self processNextQueuedWorkItem];
+				return;
+			}
+
+			if (![MBRobotsModel isLocalModelAvailable]) {
+				strong_self.isProcessingWork = NO;
+				[strong_self processNextQueuedWorkItem];
+				return;
+			}
+
 			NSString* text = [strong_self textFromResponse:response];
 			[strong_self processWork:work fetchedText:text completion:handler];
 		});
 	}];
+}
+
+- (BOOL) isSuccessfulResponse:(UUHttpResponse *)response
+{
+	if (response.httpError != nil) {
+		return NO;
+	}
+
+	NSInteger status_code = response.httpResponse.statusCode;
+	return (status_code >= 200 && status_code < 300);
 }
 
 - (void) processWork:(NSDictionary *)work fetchedText:(NSString *)text completion:(void (^)(NSString* text))handler
