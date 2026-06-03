@@ -27,9 +27,11 @@
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
-@interface RFAllUploadsController ()
+@interface RFAllUploadsController () <NSTextFieldDelegate>
 
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
+@property (assign, nonatomic) NSInteger uploadsRequestID;
+@property (copy, nonatomic) NSString* currentSearch;
 
 @end
 
@@ -51,6 +53,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self setupCollectionView];
     [self setupBlogName];
     [self setupNotifications];
+	self.searchField.delegate = self;
 	
     [self fetchUploads];
 	[self fetchCollections];
@@ -160,6 +163,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedPhotoNotification:) name:kDeleteSelectedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFromCollectionNotification:) name:kRemoveFromCollectionNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCollectionNotification:) name:kShowCollectionNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionsNotification:) name:kUpdateCollectionsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadDidUpdateNotification:) name:kUploadDidUpdateNotification object:nil];
 }
 
@@ -168,13 +172,36 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self fetchUploadsForSearch:@""];
 }
 
+- (NSString *) currentSearchFieldString
+{
+	NSText* editor = self.searchField.currentEditor;
+	if (editor) {
+		return editor.string ?: @"";
+	}
+	else {
+		return self.searchField.stringValue ?: @"";
+	}
+}
+
+- (void) replaceUploads:(NSArray *)uploads
+{
+	[self.collectionView deselectAll:nil];
+	self.allPosts = uploads ?: @[];
+	[self.collectionView reloadData];
+	[self.collectionView.collectionViewLayout invalidateLayout];
+	[self.collectionView layoutSubtreeIfNeeded];
+}
+
 - (void) fetchUploadsForSearch:(NSString *)search
 {
+	self.uploadsRequestID++;
+	NSInteger request_id = self.uploadsRequestID;
+
 	[self registerPhotoCellIfNeededForSearch:search];
 
-	self.allPosts = @[];
+	[self replaceUploads:@[]];
 	self.blogNameButton.hidden = YES;
-	self.collectionView.animator.alphaValue = 0.0;
+	self.collectionView.alphaValue = 0.0;
 
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
@@ -202,8 +229,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSMutableArray* new_posts = nil;
+
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			__block NSMutableArray* new_posts = [NSMutableArray array];
+			new_posts = [NSMutableArray array];
 
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
@@ -233,19 +262,54 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 				[new_posts addObject:upload];
 			}
-			
-			RFDispatchMainAsync (^{
-				self.allPosts = new_posts;
-				[self.collectionView reloadData];
-//				[self.collectionView.collectionViewLayout invalidateLayout];
-//				[self.collectionView layoutSubtreeIfNeeded];
-				[self setupBlogName];
-				[self stopLoadingSidebarRow];
-				self.blogNameButton.hidden = NO;
-				self.collectionView.animator.alphaValue = 1.0;
-			});
 		}
+			
+		RFDispatchMainAsync (^{
+			if (request_id != self.uploadsRequestID) {
+				return;
+			}
+
+			if (new_posts) {
+				[self replaceUploads:new_posts];
+			}
+			else {
+				[self.collectionView reloadData];
+			}
+
+			[self setupBlogName];
+			[self stopLoadingSidebarRow];
+			self.blogNameButton.hidden = NO;
+			self.collectionView.alphaValue = 1.0;
+		});
 	}];
+}
+
+- (void) refreshUploadsForCurrentFilter
+{
+	if (self.selectedCollection) {
+		[self fetchUploadsForSearch:@""];
+		return;
+	}
+
+	NSString* search = self.currentSearch ?: @"";
+	if (search.length == 0) {
+		// get everything
+		[self fetchUploadsForSearch:@""];
+	}
+	else if (search.length >= 4) {
+		// only to server if query not too short
+		[self fetchUploadsForSearch:search];
+	}
+	else {
+		// for short keywords we don't support, clear view
+		self.uploadsRequestID++;
+		[self registerPhotoCellIfNeededForSearch:@""];
+		[self replaceUploads:@[]];
+		[self setupBlogName];
+		[self stopLoadingSidebarRow];
+		self.blogNameButton.hidden = NO;
+		self.collectionView.alphaValue = 1.0;
+	}
 }
 
 - (void) startUploadsTimer
@@ -263,6 +327,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) checkForNewUploads:(NSTimer *)timer
 {
+	if (self.selectedCollection || self.currentSearch.length > 0) {
+		return;
+	}
+
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
@@ -291,7 +359,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			RFUpload* first_upload = [self.allPosts firstObject];
 			NSString* current_url = first_upload.url;
 			if (![latest_url isEqualToString:current_url]) {
-				[self fetchUploads];
+				[self refreshUploadsForCurrentFilter];
 			}
 		});
 	}];
@@ -314,6 +382,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		if ([[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
 			NSArray* items = [[response parsedResponse] objectForKey:@"items"];
 			NSString* s = @"";
+			NSMutableDictionary* collection_names_by_url = [NSMutableDictionary dictionary];
 			if (items.count > 0) {
 				if (items.count == 1) {
 					s = @"1 collection";
@@ -321,9 +390,36 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				else {
 					s = [NSString stringWithFormat:@"%lu collections", (unsigned long)items.count];
 				}
+
+				for (NSDictionary* info in items) {
+					NSDictionary* props = [info objectForKey:@"properties"];
+					NSString* name = [[props objectForKey:@"name"] firstObject];
+					NSString* url = [[props objectForKey:@"url"] firstObject];
+					if (url.length > 0) {
+						[collection_names_by_url setObject:(name ?: @"") forKey:url];
+					}
+				}
 			}
+
 			RFDispatchMain(^{
-				[self setCollectionsTitle:s includeCancel:NO];
+				NSString* selected_url = self.selectedCollection.url;
+				NSString* selected_name = nil;
+				if (selected_url.length > 0) {
+					selected_name = [collection_names_by_url objectForKey:selected_url];
+				}
+				if (self.selectedCollection && selected_name == nil) {
+					self.selectedCollection = nil;
+					self.searchField.enabled = YES;
+					[self setCollectionsTitle:s includeCancel:NO];
+					[self refreshUploadsForCurrentFilter];
+				}
+				else if (self.selectedCollection) {
+					self.selectedCollection.name = selected_name;
+					[self setCollectionsTitle:self.selectedCollection.name includeCancel:YES];
+				}
+				else {
+					[self setCollectionsTitle:s includeCancel:NO];
+				}
 			});
 		}
 	}];
@@ -398,7 +494,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
 	NSIndexPath* index_path = [index_paths anyObject];
+	if (index_path == nil || index_path.item >= self.allPosts.count) {
+		return;
+	}
+
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
+	if (up.url.length == 0) {
+		return;
+	}
 	
 	NSString* alt = up.alt;
 	if (alt == nil) {
@@ -416,6 +519,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
 	NSIndexPath* index_path = [index_paths anyObject];
+	if (index_path == nil || index_path.item >= self.allPosts.count) {
+		return;
+	}
+
 	RFPhotoCell* cell = (RFPhotoCell *)[self collectionView:self.collectionView itemForRepresentedObjectAtIndexPath:index_path];
 	[cell copyHTML:sender];
 }
@@ -437,9 +544,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
-    [self setupBlogName];
+	[self setupBlogName];
 
 	self.selectedCollection = nil;
+	self.currentSearch = @"";
+	self.searchField.enabled = YES;
+	self.searchField.stringValue = @"";
 	
 	[self fetchUploads];
 	[self fetchCollections];
@@ -447,7 +557,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) closePostingNotification:(NSNotification *)notification
 {
-	[self fetchUploads];
+	[self refreshUploadsForCurrentFilter];
 }
 
 - (void) uploadFilesNotification:(NSNotification *)notification
@@ -563,6 +673,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	MBCollection* c = [notification.userInfo objectForKey:kCollectionKey];
 	self.selectedCollection = c;
+	self.currentSearch = @"";
 	[self setCollectionsTitle:c.name includeCancel:YES];
 
 	self.searchField.enabled = NO;
@@ -571,26 +682,26 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self fetchUploads];
 }
 
+- (void) updateCollectionsNotification:(NSNotification *)notification
+{
+	[self fetchCollections];
+}
+
 - (void) uploadDidUpdateNotification:(NSNotification *)notification
 {
-	[self fetchUploads];
+	[self refreshUploadsForCurrentFilter];
 }
 
 - (IBAction) search:(id)sender
 {
-	NSString* s = [sender stringValue];
-	if (s.length == 0) {
-		// get everything
-		[self fetchUploads];
-	}
-	else if (s.length >= 4) {
-		// only to server if query not too short
-		[self fetchUploadsForSearch:s];
-	}
-	else {
-		// for short keywords we don't support, clear view
-		self.allPosts = @[];
-		[self.collectionView reloadData];
+	self.currentSearch = [self currentSearchFieldString];
+	[self refreshUploadsForCurrentFilter];
+}
+
+- (void) controlTextDidChange:(NSNotification *)notification
+{
+	if (notification.object == self.searchField && [self currentSearchFieldString].length == 0) {
+		self.currentSearch = @"";
 	}
 }
 
@@ -722,7 +833,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video upload failed. Please try again." button:@"OK" completionHandler:NULL];
 				}
 				else {
-					[innerSelf fetchUploads];
+					[innerSelf refreshUploadsForCurrentFilter];
 				}
 
 				[innerSelf restoreProgressSpinnerAfterVideoUpload];
@@ -821,7 +932,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 	else {
 		[self hideUploadProgress];
-		[self fetchUploads];
+		[self refreshUploadsForCurrentFilter];
 	}
 }
 
@@ -928,14 +1039,22 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
 	NSIndexPath* index_path = [index_paths anyObject];
+	if (index_path == nil || index_path.item >= self.allPosts.count) {
+		return;
+	}
+
 	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
+	if (up.url.length == 0) {
+		return;
+	}
 
 	if ([up isPhoto]) {
-		NSDictionary* info = @{
-			kOpenPhotoURLKey: [NSURL URLWithString:up.url],
-			kOpenPhotoAltKey: up.alt,
-			kOpenPhotoAllowCopyKey: @(YES)
-		};
+		NSMutableDictionary* info = [NSMutableDictionary dictionary];
+		[info setObject:[NSURL URLWithString:up.url] forKey:kOpenPhotoURLKey];
+		if (up.alt) {
+			[info setObject:up.alt forKey:kOpenPhotoAltKey];
+		}
+		[info setObject:@(YES) forKey:kOpenPhotoAllowCopyKey];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPhotoURLNotification object:self userInfo:info];
 	}
 	else {
@@ -950,7 +1069,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSSet* index_paths = [self.collectionView selectionIndexPaths];
 	NSIndexPath* index_path = [index_paths anyObject];
-	if (index_path) {
+	if (index_path && index_path.item < self.allPosts.count) {
 		RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
 		NSString* s = [up filename];
 		
@@ -994,7 +1113,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Upload" message:msg button:@"OK" completionHandler:NULL];
 			}
 			else {
-				[self fetchUploads];
+				[self refreshUploadsForCurrentFilter];
 			}
 		});
 	}];
@@ -1008,7 +1127,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	if (self.selectedCollection) {
 		self.selectedCollection = nil;
+		self.currentSearch = @"";
 		self.searchField.enabled = YES;
+		self.searchField.stringValue = @"";
 		
 		[self fetchUploads];
 		[self fetchCollections];
@@ -1038,7 +1159,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	[client postWithObject:info completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
-			[self fetchUploads];
+			[self refreshUploadsForCurrentFilter];
 			[self notifyCollections];
 		});
 	}];
@@ -1056,12 +1177,37 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	return self.allPosts.count;
 }
 
+- (void) reloadUpload:(RFUpload *)upload atIndexPathIfCurrent:(NSIndexPath *)indexPath
+{
+	if (indexPath.item >= self.allPosts.count) {
+		return;
+	}
+
+	RFUpload* current_upload = [self.allPosts objectAtIndex:indexPath.item];
+	if (current_upload != upload) {
+		return;
+	}
+
+	[self.collectionView mb_safeReloadAtIndexPath:indexPath];
+}
+
 - (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
-	
 	NSUserInterfaceItemIdentifier identifier = self.photoCellIdentifier ?: kPhotoCellIdentifier;
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:identifier forIndexPath:indexPath];
+	if (indexPath.item >= self.allPosts.count) {
+		item.url = nil;
+		item.poster_url = nil;
+		item.alt = nil;
+		item.isAI = NO;
+		item.width = 0;
+		item.height = 0;
+		item.thumbnailImageView.image = nil;
+		item.iconView.hidden = YES;
+		return item;
+	}
+
+	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	if ([up isPhoto]) {
 		item.thumbnailImageView.image = up.cachedImage;
 		item.thumbnailImageView.alphaValue = 1.0;
@@ -1100,6 +1246,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(RFPhotoCell *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (indexPath.item >= self.allPosts.count) {
+		return;
+	}
+
 	RFUpload* up = [self.allPosts objectAtIndex:indexPath.item];
 	if ([up isPhoto]) {
 		if (up.cachedImage == nil) {
@@ -1114,7 +1264,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					NSImage* img = response.parsedResponse;
 					RFDispatchMain(^{
 						up.cachedImage = img;
-						[collectionView mb_safeReloadAtIndexPath:indexPath];
+						[self reloadUpload:up atIndexPathIfCurrent:indexPath];
 					});
 				}
 				else {
@@ -1124,7 +1274,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 							NSImage* img = response.parsedResponse;
 							RFDispatchMain(^{
 								up.cachedImage = img;
-								[collectionView mb_safeReloadAtIndexPath:indexPath];
+								[self reloadUpload:up atIndexPathIfCurrent:indexPath];
 							});
 						}
 					}];
@@ -1140,7 +1290,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					NSImage* img = response.parsedResponse;
 					RFDispatchMain(^{
 						up.cachedPoster = img;
-						[collectionView mb_safeReloadAtIndexPath:indexPath];
+						[self reloadUpload:up atIndexPathIfCurrent:indexPath];
 					});
 				}
 			}];
@@ -1153,21 +1303,35 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	// update selection style
 	for (NSIndexPath* index_path in indexPaths) {
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+		if (item == nil) {
+			continue;
+		}
+
 		item.selectionOverlayView.layer.opacity = 0.4;
 		item.selectionOverlayView.layer.backgroundColor = [NSColor blackColor].CGColor;
 	}
 	
 	// also notify get info window
 	NSIndexPath* index_path = [indexPaths anyObject];
+	if (index_path == nil || index_path.item >= self.allPosts.count) {
+		return;
+	}
+
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
-	NSString* alt = item.alt;
+	RFUpload* upload = [self.allPosts objectAtIndex:index_path.item];
+	NSString* url = item.url ?: upload.url;
+	if (url.length == 0) {
+		return;
+	}
+
+	NSString* alt = item.alt ?: upload.alt;
 	if (alt == nil) {
 		alt = @"";
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateInfoNotification object:self userInfo:@{
-		kInfoURLKey: item.url,
+		kInfoURLKey: url,
 		kInfoTextKey: alt,
-		kInfoAIKey: @(item.isAI)
+		kInfoAIKey: @(upload.isAI)
 	}];
 }
 
@@ -1175,6 +1339,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	for (NSIndexPath* index_path in indexPaths) {
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView itemAtIndexPath:index_path];
+		if (item == nil) {
+			continue;
+		}
+
 		item.selectionOverlayView.layer.opacity = 0.0;
 		item.selectionOverlayView.layer.backgroundColor = nil;
 	}
@@ -1184,6 +1352,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (id<NSPasteboardWriting>) collectionView:(NSCollectionView *)collectionView pasteboardWriterForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (indexPath.item >= self.allPosts.count) {
+		return nil;
+	}
+
 	RFUpload* upload = [self.allPosts objectAtIndex:indexPath.item];
 	return [upload htmlTag];
 }

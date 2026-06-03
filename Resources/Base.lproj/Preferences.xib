@@ -870,7 +870,7 @@
                         <constraint firstAttribute="height" constant="1" id="UgR-WD-YVt"/>
                     </constraints>
                 </box>
-                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="E0d-U1-duG">
+                <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="E0d-U1-duG">
                     <rect key="frame" x="373" y="421" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="16" id="NbH-i2-3Gw"/>
