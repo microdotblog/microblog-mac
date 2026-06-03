@@ -5,6 +5,7 @@
 
 #import "MBDistributedWorkController.h"
 
+#import "MBRobotsModel.h"
 #import "RFConstants.h"
 #import "RFClient.h"
 #import "RFSettings.h"
@@ -15,6 +16,8 @@
 
 static NSString* const kDistributedWorkQueuedPath = @"/feeds/work/queued";
 static NSString* const kDistributedWorkFinishedPath = @"/feeds/work/finished";
+static NSString* const kWorkPromptTypeStatement = @"statement";
+static NSString* const kWorkPromptStatement = @"Write one neutral, third-person sentence stating the main idea of this post. Do not quote the text. Do not use first-person language. Do not start with \"the author\". Avoid adjectives and value judgments.";
 static NSTimeInterval const kDistributedWorkTimerInterval = 30.0;
 static NSTimeInterval const kDistributedWorkTimerTolerance = 5.0;
 static NSTimeInterval const kDistributedWorkMinimumIdleSeconds = 60.0;
@@ -236,9 +239,46 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 			}
 
 			NSString* text = [strong_self textFromResponse:response];
+			[strong_self processWork:work fetchedText:text completion:handler];
+		});
+	}];
+}
 
+- (void) processWork:(NSDictionary *)work fetchedText:(NSString *)text completion:(void (^)(NSString* text))handler
+{
+	NSString* prompt_type = [self promptTypeForWork:work];
+	if ([prompt_type isEqualToString:kWorkPromptTypeStatement]) {
+		[self processStatementWorkWithText:text completion:handler];
+		return;
+	}
+
+	if (handler) {
+		handler(text);
+	}
+}
+
+- (NSString *) promptTypeForWork:(NSDictionary *)work
+{
+	NSDictionary* microblog = [work objectForKey:@"_microblog"];
+	if (![microblog isKindOfClass:[NSDictionary class]]) {
+		return @"";
+	}
+
+	NSString* prompt_type = [microblog objectForKey:@"prompt"];
+	if (![prompt_type isKindOfClass:[NSString class]]) {
+		return @"";
+	}
+
+	return prompt_type;
+}
+
+- (void) processStatementWorkWithText:(NSString *)text completion:(void (^)(NSString* text))handler
+{
+	NSString* prompt = [NSString stringWithFormat:@"%@\n\n%@", kWorkPromptStatement, text ?: @""];
+	[MBRobotsModel runPrompt:prompt completion:^(NSString* result) {
+		dispatch_async(dispatch_get_main_queue(), ^{
 			if (handler) {
-				handler(text);
+				handler(result ?: @"");
 			}
 		});
 	}];
