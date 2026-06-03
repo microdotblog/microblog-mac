@@ -59,12 +59,42 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 		headers = [NSMutableDictionary dictionary];
 	}
 
-	NSString* username = [RFSettings stringForKey:kAccountUsername];
-	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
-	if (token) {
-		[headers setObject:[NSString stringWithFormat:@"Token %@", token] forKey:@"Authorization"];
+	[headers setObject:[self userAgentString] forKey:@"User-Agent"];
+
+	if ([self isMicroBlogURL]) {
+		NSString* username = [RFSettings stringForKey:kAccountUsername];
+		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
+		if (token) {
+			[headers setObject:[NSString stringWithFormat:@"Token %@", token] forKey:@"Authorization"];
+		}
 	}
 	request.headerFields = headers;
+}
+
+- (BOOL) isMicroBlogURL
+{
+	NSURL* url = [NSURL URLWithString:self.url];
+	NSString* host = url.host.lowercaseString;
+	NSURL* server_url = [NSURL URLWithString:kServerSchemeAndHostname];
+	NSString* server_host = server_url.host.lowercaseString;
+
+	return [host isEqualToString:server_host];
+}
+
+- (NSString *) userAgentString
+{
+	NSBundle* bundle = [NSBundle mainBundle];
+	NSString* version = [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+	NSOperatingSystemVersion os_version = [[NSProcessInfo processInfo] operatingSystemVersion];
+	NSString* macos_version;
+	if (os_version.patchVersion > 0) {
+		macos_version = [NSString stringWithFormat:@"%ld.%ld.%ld", os_version.majorVersion, os_version.minorVersion, os_version.patchVersion];
+	}
+	else {
+		macos_version = [NSString stringWithFormat:@"%ld.%ld", os_version.majorVersion, os_version.minorVersion];
+	}
+
+	return [NSString stringWithFormat:@"Micro.blog/%@ (Macintosh; macOS %@)", version, macos_version];
 }
 
 #pragma mark -

@@ -88,9 +88,11 @@
 
 - (IBAction) removeFromCollection:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kRemoveFromCollectionNotification object:self userInfo:@{
-		kRemoveFromCollectionURLKey: self.url
-	}];
+	if (self.url.length > 0) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kRemoveFromCollectionNotification object:self userInfo:@{
+			kRemoveFromCollectionURLKey: self.url
+		}];
+	}
 }
 
 - (IBAction) openInBrowser:(id)sender
@@ -153,11 +155,15 @@
 
 - (IBAction) getInfo:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:@{
-		kInfoURLKey: self.url,
-		kInfoTextKey: self.alt,
-		kInfoAIKey: @(self.isAI)
-	}];
+	if (self.url.length == 0) {
+		return;
+	}
+
+	NSMutableDictionary* info = [NSMutableDictionary dictionary];
+	[info setObject:self.url forKey:kInfoURLKey];
+	[info setObject:(self.alt ?: @"") forKey:kInfoTextKey];
+	[info setObject:@(self.isAI) forKey:kInfoAIKey];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowInfoNotification object:self userInfo:info];
 }
 
 @end

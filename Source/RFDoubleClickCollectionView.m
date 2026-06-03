@@ -14,6 +14,16 @@
 
 @implementation RFDoubleClickCollectionView
 
+- (NSCollectionViewLayoutAttributes *) layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	@try {
+		return [super layoutAttributesForItemAtIndexPath:indexPath];
+	}
+	@catch (NSException* exception) {
+		return nil;
+	}
+}
+
 - (void) mouseUp:(NSEvent *)event
 {
 	[super mouseUp:event];

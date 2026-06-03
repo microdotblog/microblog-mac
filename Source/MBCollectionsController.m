@@ -136,6 +136,7 @@
 		
 		RFDispatchMain(^{
 			[self refresh];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateCollectionsNotification object:self];
 		});
 	}];
 }
@@ -225,6 +226,7 @@
 		
 		RFDispatchMain(^{
 			[self refresh];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateCollectionsNotification object:self];
 		});
 	}];
 }
