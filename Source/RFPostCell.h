@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* draftField;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* textRightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* dateTopConstraint;
 
 @property (strong, nonatomic) NSArray* photos; // RFPhoto
