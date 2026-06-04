@@ -790,7 +790,7 @@
                     </constraints>
                     <textFieldCell key="cell" id="2LN-Y6-ppc">
                         <font key="font" usesAppearanceFont="YES"/>
-                        <string key="title">Your Mac can also be used with local AI models when possible for your own data as well as to process posts for other Micro.blog users, reducing reliance on cloud AI services for everyone.</string>
+                        <string key="title">Your Mac can also be used with local AI models when possible for your own data, as well as to summarize public posts for other Micro.blog users, reducing reliance on cloud AI services for everyone.</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
