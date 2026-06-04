@@ -105,6 +105,7 @@
                 <outlet property="draftField" destination="b3L-Cl-lup" id="GpP-If-efw"/>
                 <outlet property="photosCollectionView" destination="pRF-IQ-J13" id="ICT-6K-pGn"/>
                 <outlet property="textField" destination="cqh-qn-4tc" id="mYW-Wl-0go"/>
+                <outlet property="textRightConstraint" destination="fWe-xJ-v5o" id="axY-x1-SOz"/>
                 <outlet property="textTopConstraint" destination="jBB-a0-1XQ" id="QKc-Ym-7ig"/>
                 <outlet property="titleField" destination="SHu-UC-LXk" id="fYy-ul-0p5"/>
             </connections>

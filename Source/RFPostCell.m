@@ -59,7 +59,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if (date_s) {
 		self.dateField.stringValue = date_s;
 	}
-	self.draftField.hidden = !post.isDraft;
+	
+	if (post.isDraft) {
+		self.draftField.hidden = NO;
+		self.textRightConstraint.constant = 40;
+	}
+	else {
+		self.draftField.hidden = YES;
+		self.textRightConstraint.constant = 20;
+	}
 	
 	if (post.title.length == 0) {
 		self.textTopConstraint.constant = 10;
