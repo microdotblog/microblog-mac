@@ -187,6 +187,7 @@
 		4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB42BBD95360091BB19 /* MBLogCell.m */; };
 		4B88CFB82BBD954A0091BB19 /* LogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFB62BBD954A0091BB19 /* LogCell.xib */; };
 		4B88CFBB2BBD9D3B0091BB19 /* MBLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */; };
+		4B90D0002FD100000000001 /* MBLogFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B90D0082FD100000000001 /* MBLogFile.m */; };
 		4B90D0042FD000100000001 /* MBDistributedWorkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B90D0032FD000100000001 /* MBDistributedWorkController.m */; };
 		4B90D0062FD000100000001 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B90D0052FD000100000001 /* IOKit.framework */; };
 		4B8FBDD61F858FCE00906C86 /* RFHighlightingTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FBDD51F858FCE00906C86 /* RFHighlightingTextStorage.m */; };
@@ -613,6 +614,8 @@
 		4B88CFB72BBD954A0091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/LogCell.xib; sourceTree = "<group>"; };
 		4B88CFB92BBD9D3B0091BB19 /* MBLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLog.h; path = Source/MBLog.h; sourceTree = "<group>"; };
 		4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLog.m; path = Source/MBLog.m; sourceTree = "<group>"; };
+		4B90D0072FD100000000001 /* MBLogFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLogFile.h; path = Source/MBLogFile.h; sourceTree = "<group>"; };
+		4B90D0082FD100000000001 /* MBLogFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLogFile.m; path = Source/MBLogFile.m; sourceTree = "<group>"; };
 		4B90D0022FD000100000001 /* MBDistributedWorkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDistributedWorkController.h; path = Source/MBDistributedWorkController.h; sourceTree = "<group>"; };
 		4B90D0032FD000100000001 /* MBDistributedWorkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDistributedWorkController.m; path = Source/MBDistributedWorkController.m; sourceTree = "<group>"; };
 		4B90D0052FD000100000001 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -1232,6 +1235,8 @@
 				4B88CFB42BBD95360091BB19 /* MBLogCell.m */,
 				4B88CFB92BBD9D3B0091BB19 /* MBLog.h */,
 				4B88CFBA2BBD9D3B0091BB19 /* MBLog.m */,
+				4B90D0072FD100000000001 /* MBLogFile.h */,
+				4B90D0082FD100000000001 /* MBLogFile.m */,
 				4B37737E2C3DC4A5000495DF /* MBInfoController.h */,
 				4B37737F2C3DC4A5000495DF /* MBInfoController.m */,
 				4B79E2882D089D2700A22861 /* MBCollectionsController.h */,
@@ -1744,6 +1749,7 @@
 				4B8FBDEA1F867A4000906C86 /* UUHttpSession.m in Sources */,
 				4B38E5E92F00000100BD98AB /* MBBackupsController.m in Sources */,
 				4B9F06432767BCE60007F21D /* MBDateController.m in Sources */,
+				4B90D0002FD100000000001 /* MBLogFile.m in Sources */,
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B5606DA2A73F92F00843D59 /* MBTokenField.m in Sources */,
 				4BE23F982A700AFA00E24718 /* MBHighlightCell.m in Sources */,

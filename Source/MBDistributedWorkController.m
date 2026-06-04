@@ -5,6 +5,7 @@
 
 #import "MBDistributedWorkController.h"
 
+#import "MBLogFile.h"
 #import "MBRobotsModel.h"
 #import "RFConstants.h"
 #import "RFClient.h"
@@ -247,6 +248,7 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 			return;
 		}
 
+		[MBLogFile logFields:@[ url, text ?: @"" ] toName:@"Work"];
 		[strong_self finishWork:item text:text completion:^{
 			strong_self.isProcessingWork = NO;
 			[strong_self processNextQueuedWorkItem];

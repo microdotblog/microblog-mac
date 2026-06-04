@@ -16,6 +16,7 @@
 + (NSString *) autosaveDraftFileForChannel:(NSString *)channel;
 + (NSString *) notesFolder;
 + (NSString *) backupsFolder;
++ (NSString *) logsFolder;
 - (NSString *) profileImageURL;
 - (NSImage *) cachedProfileImage;
 - (void) saveProfileImage:(NSImage *)image;
