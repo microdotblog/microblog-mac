@@ -1,0 +1,667 @@
+//
+//  MBCategoriesController.m
+//  Micro.blog
+//
+//  Created by Manton Reece on 6/4/26.
+//  Copyright © 2026 Micro.blog. All rights reserved.
+//
+
+#import "MBCategoriesController.h"
+
+#import "MBCategory.h"
+#import "MBCategoryCell.h"
+#import "MBCategoriesTableView.h"
+#import "RFPostCell.h"
+#import "RFPostTableView.h"
+#import "RFPost.h"
+#import "RFClient.h"
+#import "RFSettings.h"
+#import "RFConstants.h"
+#import "RFMacros.h"
+#import "NSString+Extras.h"
+#import "NSAlert+Extras.h"
+
+static NSString* const kCategoryCellIdentifier = @"CategoryCell";
+static NSInteger const kCategoriesPostsLimit = 200;
+
+@interface MBCategoriesController ()
+
+@property (assign, nonatomic) NSInteger categoriesRequestID;
+@property (assign, nonatomic) NSInteger postsRequestID;
+
+@end
+
+@implementation MBCategoriesController
+
+- (instancetype) init
+{
+	self = [super initWithNibName:nil bundle:nil];
+	if (self) {
+		self.categories = @[];
+		self.currentPosts = @[];
+	}
+
+	return self;
+}
+
+- (void) loadView
+{
+	NSView* view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 520, 520)];
+	view.translatesAutoresizingMaskIntoConstraints = NO;
+	self.view = view;
+}
+
+- (void) viewDidLoad
+{
+	[super viewDidLoad];
+
+	[self setupViews];
+	[self setupTables];
+	[self setupMenus];
+	[self setupNotifications];
+
+	[self fetchCategories];
+}
+
+- (void) setupViews
+{
+	NSScrollView* categories_scroll_view = [self scrollView];
+	self.categoriesTableView = [[MBCategoriesTableView alloc] initWithFrame:NSZeroRect];
+	[self setupTable:self.categoriesTableView rowHeight:34.0];
+	categories_scroll_view.documentView = self.categoriesTableView;
+	[self.view addSubview:categories_scroll_view];
+
+	NSBox* separator = [[NSBox alloc] initWithFrame:NSZeroRect];
+	separator.translatesAutoresizingMaskIntoConstraints = NO;
+	separator.boxType = NSBoxSeparator;
+	[self.view addSubview:separator];
+
+	NSScrollView* posts_scroll_view = [self scrollView];
+	self.postsTableView = [[RFPostTableView alloc] initWithFrame:NSZeroRect];
+	[self setupTable:self.postsTableView rowHeight:120.0];
+	self.postsTableView.usesAutomaticRowHeights = YES;
+	posts_scroll_view.documentView = self.postsTableView;
+	[self.view addSubview:posts_scroll_view];
+
+	self.progressSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+	self.progressSpinner.translatesAutoresizingMaskIntoConstraints = NO;
+	self.progressSpinner.indeterminate = YES;
+	self.progressSpinner.displayedWhenStopped = NO;
+	self.progressSpinner.bezeled = NO;
+	self.progressSpinner.controlSize = NSControlSizeSmall;
+	self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
+	[self.view addSubview:self.progressSpinner];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[categories_scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[categories_scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[categories_scroll_view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		[categories_scroll_view.heightAnchor constraintEqualToConstant:180],
+		[separator.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[separator.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[separator.topAnchor constraintEqualToAnchor:categories_scroll_view.bottomAnchor],
+		[separator.heightAnchor constraintEqualToConstant:1],
+		[posts_scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[posts_scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[posts_scroll_view.topAnchor constraintEqualToAnchor:separator.bottomAnchor],
+		[posts_scroll_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+		[self.progressSpinner.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+		[self.progressSpinner.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
+	]];
+}
+
+- (NSScrollView *) scrollView
+{
+	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSZeroRect];
+	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
+	scroll_view.autohidesScrollers = YES;
+	scroll_view.hasVerticalScroller = YES;
+	scroll_view.hasHorizontalScroller = NO;
+	scroll_view.usesPredominantAxisScrolling = NO;
+	scroll_view.horizontalLineScroll = 17;
+	scroll_view.verticalLineScroll = 17;
+	scroll_view.horizontalPageScroll = 10;
+	scroll_view.verticalPageScroll = 10;
+	scroll_view.drawsBackground = YES;
+	scroll_view.borderType = NSNoBorder;
+	return scroll_view;
+}
+
+- (void) setupTable:(NSTableView *)tableView rowHeight:(CGFloat)rowHeight
+{
+	tableView.allowsExpansionToolTips = YES;
+	tableView.columnAutoresizingStyle = NSTableViewLastColumnOnlyAutoresizingStyle;
+	tableView.allowsColumnReordering = NO;
+	tableView.allowsColumnSelection = YES;
+	tableView.allowsColumnResizing = NO;
+	tableView.allowsMultipleSelection = NO;
+	tableView.autosaveTableColumns = NO;
+	tableView.headerView = nil;
+	tableView.rowHeight = rowHeight;
+	tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
+	tableView.delegate = self;
+	tableView.dataSource = self;
+	tableView.target = self;
+	tableView.doubleAction = @selector(openRow:);
+
+	if (@available(macOS 11.0, *)) {
+		tableView.style = NSTableViewStylePlain;
+	}
+
+	NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:@"Column"];
+	column.width = 520;
+	column.minWidth = 40;
+	column.maxWidth = 1000;
+	column.resizingMask = NSTableColumnAutoresizingMask | NSTableColumnUserResizingMask;
+	[tableView addTableColumn:column];
+}
+
+- (void) setupTables
+{
+	[self.postsTableView registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
+	self.categoriesTableView.alphaValue = 0.0;
+	self.postsTableView.alphaValue = 0.0;
+}
+
+- (void) setupMenus
+{
+	self.categoryContextMenu = [[NSMenu alloc] initWithTitle:@"Categories"];
+	NSMenuItem* edit_category_item = [self.categoryContextMenu addItemWithTitle:@"Edit" action:@selector(editSelectedCategory:) keyEquivalent:@""];
+	edit_category_item.target = self;
+	NSMenuItem* delete_category_item = [self.categoryContextMenu addItemWithTitle:@"Delete" action:@selector(deleteSelectedCategory:) keyEquivalent:@""];
+	delete_category_item.target = self;
+	self.categoriesTableView.menu = self.categoryContextMenu;
+
+	self.postContextMenu = [[NSMenu alloc] initWithTitle:@"Posts"];
+	NSMenuItem* edit_post_item = [self.postContextMenu addItemWithTitle:@"Edit" action:@selector(openSelectedPost:) keyEquivalent:@""];
+	edit_post_item.target = self;
+	NSMenuItem* delete_post_item = [self.postContextMenu addItemWithTitle:@"Delete" action:@selector(deleteSelectedPost:) keyEquivalent:@""];
+	delete_post_item.target = self;
+	[self.postContextMenu addItem:[NSMenuItem separatorItem]];
+	NSMenuItem* browser_item = [self.postContextMenu addItemWithTitle:[NSString mb_openInBrowserString] action:@selector(openPostInBrowser:) keyEquivalent:@""];
+	browser_item.target = self;
+	NSMenuItem* copy_item = [self.postContextMenu addItemWithTitle:@"Copy Link" action:@selector(copyPostLink:) keyEquivalent:@""];
+	copy_item.target = self;
+	self.postsTableView.menu = self.postContextMenu;
+}
+
+- (void) setupNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
+}
+
+- (void) fetchCategories
+{
+	self.categoriesRequestID++;
+	NSInteger request_id = self.categoriesRequestID;
+
+	self.categories = @[];
+	self.selectedCategory = nil;
+	self.currentPosts = @[];
+	[self.categoriesTableView reloadData];
+	[self.postsTableView reloadData];
+	[self.progressSpinner startAnimation:nil];
+	self.categoriesTableView.animator.alphaValue = 0.0;
+	self.postsTableView.animator.alphaValue = 0.0;
+
+	NSString* destination_uid = [self currentDestinationUID];
+	NSDictionary* args = @{
+		@"q": @"category",
+		@"mp-destination": destination_uid
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSArray* new_categories = [MBCategory categoriesFromResponse:response.parsedResponse];
+
+			RFDispatchMainAsync (^{
+				if (request_id != self.categoriesRequestID) {
+					return;
+				}
+
+				self.categories = new_categories;
+				[self.categoriesTableView reloadData];
+				self.categoriesTableView.animator.alphaValue = 1.0;
+
+				if (new_categories.count > 0) {
+					NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:0];
+					[self.categoriesTableView selectRowIndexes:index_set byExtendingSelection:NO];
+					[self fetchPosts];
+				}
+				else {
+					[self.progressSpinner stopAnimation:nil];
+					[self stopLoadingSidebarRow];
+				}
+			});
+		}
+		else {
+			RFDispatchMainAsync (^{
+				if (request_id != self.categoriesRequestID) {
+					return;
+				}
+
+				[self.progressSpinner stopAnimation:nil];
+				[self stopLoadingSidebarRow];
+			});
+		}
+	}];
+}
+
+- (void) fetchPosts
+{
+	NSInteger row = self.categoriesTableView.selectedRow;
+	if (row < 0 || row >= (NSInteger)self.categories.count) {
+		self.selectedCategory = nil;
+		self.currentPosts = @[];
+		[self.postsTableView reloadData];
+		return;
+	}
+
+	MBCategory* category = [self.categories objectAtIndex:row];
+	self.selectedCategory = category;
+	self.postsRequestID++;
+	NSInteger request_id = self.postsRequestID;
+
+	self.currentPosts = @[];
+	[self.postsTableView reloadData];
+	self.postsTableView.animator.alphaValue = 0.0;
+	[self.progressSpinner startAnimation:nil];
+
+	NSDictionary* args = [self postQueryArgumentsForCategory:category];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray* new_posts = [NSMutableArray array];
+
+			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+			for (NSDictionary* item in items) {
+				NSDictionary* props = [item objectForKey:@"properties"];
+				RFPost* post = [[RFPost alloc] initFromProperties:props];
+				post.channel = @"default";
+				if ([self post:post isInCategory:category]) {
+					[new_posts addObject:post];
+				}
+			}
+
+			RFDispatchMainAsync (^{
+				if (request_id != self.postsRequestID) {
+					return;
+				}
+
+				self.currentPosts = new_posts;
+				[self.postsTableView reloadData];
+				[self.progressSpinner stopAnimation:nil];
+				self.postsTableView.animator.alphaValue = 1.0;
+				[self stopLoadingSidebarRow];
+			});
+		}
+		else {
+			RFDispatchMainAsync (^{
+				if (request_id != self.postsRequestID) {
+					return;
+				}
+
+				[self.progressSpinner stopAnimation:nil];
+				[self stopLoadingSidebarRow];
+			});
+		}
+	}];
+}
+
+- (NSDictionary *) postQueryArgumentsForCategory:(MBCategory *)category
+{
+	#pragma unused(category)
+
+	return @{
+		@"q": @"source",
+		@"mp-destination": [self currentDestinationUID],
+		@"mp-channel": @"default",
+		@"limit": @(kCategoriesPostsLimit)
+	};
+}
+
+- (BOOL) post:(RFPost *)post isInCategory:(MBCategory *)category
+{
+	for (NSString* name in post.categories) {
+		if ([name isEqualToString:category.name]) {
+			return YES;
+		}
+	}
+
+	return NO;
+}
+
+- (NSString *) currentDestinationUID
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	return destination_uid;
+}
+
+- (void) stopLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+}
+
+#pragma mark -
+
+- (IBAction) openRow:(id)sender
+{
+	if (sender == self.categoriesTableView || self.view.window.firstResponder == self.categoriesTableView) {
+		[self editSelectedCategory:sender];
+	}
+	else {
+		[self openSelectedPost:sender];
+	}
+}
+
+- (IBAction) editSelectedCategory:(id)sender
+{
+	MBCategory* category = [self selectedCategoryForAction];
+	if (category == nil) {
+		return;
+	}
+
+	NSAlert* sheet = [[NSAlert alloc] init];
+	sheet.messageText = @"Edit Category";
+	sheet.informativeText = @"Rename this category.";
+	[sheet addButtonWithTitle:@"Save"];
+	[sheet addButtonWithTitle:@"Cancel"];
+
+	NSTextField* field = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 260, 24)];
+	field.stringValue = category.name;
+	sheet.accessoryView = field;
+
+	[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSAlertFirstButtonReturn) {
+			NSString* new_name = field.stringValue ?: @"";
+			if (new_name.length > 0 && ![new_name isEqualToString:category.name]) {
+				[self updateCategory:category withName:new_name];
+			}
+		}
+	}];
+}
+
+- (IBAction) deleteSelectedCategory:(id)sender
+{
+	MBCategory* category = [self selectedCategoryForAction];
+	if (category == nil) {
+		return;
+	}
+
+	NSAlert* sheet = [[NSAlert alloc] init];
+	sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", category.name];
+	sheet.informativeText = @"This category will be removed from your blog.";
+	[sheet addButtonWithTitle:@"Delete"];
+	[sheet addButtonWithTitle:@"Cancel"];
+
+	[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSAlertFirstButtonReturn) {
+			[self deleteCategory:category];
+		}
+	}];
+}
+
+- (void) updateCategory:(MBCategory *)category withName:(NSString *)name
+{
+	NSDictionary* params = @{
+		@"action": @"update-category",
+		@"mp-destination": [self currentDestinationUID],
+		@"category": category.name,
+		@"name": name
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			if ([self responseHasError:response]) {
+				[self showMicropubError:response title:@"Error Editing Category"];
+			}
+			else {
+				[self fetchCategories];
+			}
+		});
+	}];
+}
+
+- (void) deleteCategory:(MBCategory *)category
+{
+	NSDictionary* params = @{
+		@"action": @"delete-category",
+		@"mp-destination": [self currentDestinationUID],
+		@"category": category.name
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			if ([self responseHasError:response]) {
+				[self showMicropubError:response title:@"Error Deleting Category"];
+			}
+			else {
+				[self fetchCategories];
+			}
+		});
+	}];
+}
+
+- (MBCategory *) selectedCategoryForAction
+{
+	NSInteger row = self.categoriesTableView.selectedRow;
+	if (row >= 0 && row < (NSInteger)self.categories.count) {
+		return [self.categories objectAtIndex:row];
+	}
+	else {
+		return nil;
+	}
+}
+
+- (IBAction) openSelectedPost:(id)sender
+{
+	RFPost* post = [self selectedPostForAction];
+	if (post != nil) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
+	}
+}
+
+- (IBAction) openPostInBrowser:(id)sender
+{
+	RFPost* post = [self selectedPostForAction];
+	if (post.url.length > 0) {
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:post.url]];
+	}
+}
+
+- (IBAction) copyPostLink:(id)sender
+{
+	RFPost* post = [self selectedPostForAction];
+	if (post.url.length > 0) {
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:post.url forType:NSPasteboardTypeString];
+	}
+}
+
+- (IBAction) deleteSelectedPost:(id)sender
+{
+	RFPost* post = [self selectedPostForAction];
+	if (post == nil) {
+		return;
+	}
+
+	NSString* s = post.title;
+	if (s.length == 0) {
+		s = [post displaySummary];
+		if (s.length > 20) {
+			s = [s substringToIndex:20];
+			s = [s stringByAppendingString:@"..."];
+		}
+	}
+
+	NSAlert* sheet = [[NSAlert alloc] init];
+	sheet.messageText = [NSString stringWithFormat:@"Delete \"%@\"?", s];
+	sheet.informativeText = @"This post will be removed from your blog and the Micro.blog timeline.";
+	[sheet addButtonWithTitle:@"Delete"];
+	[sheet addButtonWithTitle:@"Cancel"];
+	[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSAlertFirstButtonReturn) {
+			[self deletePost:post];
+		}
+	}];
+}
+
+- (void) deletePost:(RFPost *)post
+{
+	NSDictionary* args = @{
+		@"action": @"delete",
+		@"mp-destination": [self currentDestinationUID],
+		@"url": post.url
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			if ([self responseHasError:response]) {
+				[self showMicropubError:response title:@"Error Deleting Post"];
+			}
+			else {
+				[self fetchPosts];
+			}
+		});
+	}];
+}
+
+- (RFPost *) selectedPostForAction
+{
+	NSInteger row = self.postsTableView.selectedRow;
+	if (row >= 0 && row < (NSInteger)self.currentPosts.count) {
+		return [self.currentPosts objectAtIndex:row];
+	}
+	else {
+		return nil;
+	}
+}
+
+- (void) delete:(id)sender
+{
+	if (self.view.window.firstResponder == self.categoriesTableView) {
+		[self deleteSelectedCategory:sender];
+	}
+	else if (self.view.window.firstResponder == self.postsTableView) {
+		[self deleteSelectedPost:sender];
+	}
+}
+
+- (BOOL) responseHasError:(UUHttpResponse *)response
+{
+	if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		return (response.parsedResponse[@"error"] != nil);
+	}
+	else {
+		return NO;
+	}
+}
+
+- (void) showMicropubError:(UUHttpResponse *)response title:(NSString *)title
+{
+	NSString* msg = nil;
+	if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		msg = response.parsedResponse[@"error_description"];
+	}
+	if (msg.length == 0) {
+		msg = @"Could not update the category.";
+	}
+
+	[NSAlert rf_showOneButtonAlert:title message:msg button:@"OK" completionHandler:NULL];
+}
+
+#pragma mark -
+
+- (void) updatedBlogNotification:(NSNotification *)notification
+{
+	[self fetchCategories];
+}
+
+- (void) closePostingNotification:(NSNotification *)notification
+{
+	[self fetchPosts];
+}
+
+- (void) tableViewSelectionDidChange:(NSNotification *)notification
+{
+	if (notification.object == self.categoriesTableView) {
+		[self fetchPosts];
+	}
+}
+
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
+{
+	if (tableView == self.categoriesTableView) {
+		return self.categories.count;
+	}
+	else {
+		return self.currentPosts.count;
+	}
+}
+
+- (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
+{
+	if (tableView == self.categoriesTableView) {
+		return nil;
+	}
+	else {
+		RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
+		if (row < self.currentPosts.count) {
+			RFPost* post = [self.currentPosts objectAtIndex:row];
+			[cell setupWithPost:post skipPhotos:NO search:@""];
+		}
+
+		return cell;
+	}
+}
+
+- (NSView *) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	if (tableView == self.categoriesTableView) {
+		MBCategoryCell* cell = [tableView makeViewWithIdentifier:kCategoryCellIdentifier owner:self];
+		if (cell == nil) {
+			cell = [[MBCategoryCell alloc] initWithFrame:NSMakeRect(0, 0, tableView.bounds.size.width, tableView.rowHeight)];
+		}
+
+		if (row < self.categories.count) {
+			MBCategory* category = [self.categories objectAtIndex:row];
+			[cell setupWithCategory:category];
+		}
+
+		return cell;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(editSelectedCategory:) || item.action == @selector(deleteSelectedCategory:)) {
+		return ([self selectedCategoryForAction] != nil);
+	}
+	else if (item.action == @selector(openSelectedPost:) || item.action == @selector(deleteSelectedPost:) || item.action == @selector(openPostInBrowser:) || item.action == @selector(copyPostLink:)) {
+		return ([self selectedPostForAction] != nil);
+	}
+	else {
+		return YES;
+	}
+}
+
+@end

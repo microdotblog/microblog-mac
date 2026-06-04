@@ -229,6 +229,10 @@
 		4BC0D1162FCB000100000001 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1112FCB000100000001 /* MLXLMCommon */; };
 		4BC0D1172FCB000100000001 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1182FCB000100000001 /* MLXVLM */; };
 		4BC0D11A2FCB000100000001 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D11B2FCB000100000001 /* Tokenizers */; };
+		4BC120022FD21A2400000001 /* MBCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC120012FD21A2400000001 /* MBCategory.m */; };
+		4BC120052FD21A2400000001 /* MBCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC120042FD21A2400000001 /* MBCategoryCell.m */; };
+		4BC120082FD21A2400000001 /* MBCategoriesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC120072FD21A2400000001 /* MBCategoriesTableView.m */; };
+		4BC1200B2FD21A2400000001 /* MBCategoriesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC1200A2FD21A2400000001 /* MBCategoriesController.m */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
 		4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */; };
@@ -683,6 +687,14 @@
 		4BC0D1032FCB000100000001 /* MBRobotsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsModel.h; path = Source/MBRobotsModel.h; sourceTree = "<group>"; };
 		4BC0D1042FCB000100000001 /* MBRobotsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsModel.m; path = Source/MBRobotsModel.m; sourceTree = "<group>"; };
 		4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBRobotsRunner.swift; path = Source/MBRobotsRunner.swift; sourceTree = "<group>"; };
+		4BC120002FD21A2400000001 /* MBCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategory.h; path = Source/MBCategory.h; sourceTree = "<group>"; };
+		4BC120012FD21A2400000001 /* MBCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategory.m; path = Source/MBCategory.m; sourceTree = "<group>"; };
+		4BC120032FD21A2400000001 /* MBCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategoryCell.h; path = Source/MBCategoryCell.h; sourceTree = "<group>"; };
+		4BC120042FD21A2400000001 /* MBCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategoryCell.m; path = Source/MBCategoryCell.m; sourceTree = "<group>"; };
+		4BC120062FD21A2400000001 /* MBCategoriesTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategoriesTableView.h; path = Source/MBCategoriesTableView.h; sourceTree = "<group>"; };
+		4BC120072FD21A2400000001 /* MBCategoriesTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategoriesTableView.m; path = Source/MBCategoriesTableView.m; sourceTree = "<group>"; };
+		4BC120092FD21A2400000001 /* MBCategoriesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategoriesController.h; path = Source/MBCategoriesController.h; sourceTree = "<group>"; };
+		4BC1200A2FD21A2400000001 /* MBCategoriesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategoriesController.m; path = Source/MBCategoriesController.m; sourceTree = "<group>"; };
 		4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -1052,6 +1064,12 @@
 				4BF7E5232836085900500C59 /* MBDisabledScrollView.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
 				4BF537272247341800CF9D66 /* RFAllPostsController.m */,
+				4BC120092FD21A2400000001 /* MBCategoriesController.h */,
+				4BC1200A2FD21A2400000001 /* MBCategoriesController.m */,
+				4BC120032FD21A2400000001 /* MBCategoryCell.h */,
+				4BC120042FD21A2400000001 /* MBCategoryCell.m */,
+				4BC120002FD21A2400000001 /* MBCategory.h */,
+				4BC120012FD21A2400000001 /* MBCategory.m */,
 				4B001CCE2B27944300BBF456 /* MBNotesController.h */,
 				4B001CCF2B27944300BBF456 /* MBNotesController.m */,
 				4B35A5BE2FBFA58700E5F46C /* MBNotesDatabase.h */,
@@ -1125,6 +1143,8 @@
 				4BBB74072A71AF4A00479BCB /* MBHighlightsTableView.m */,
 				4BB990682A8694C900C490E2 /* MBTagsTableView.h */,
 				4BB990692A8694C900C490E2 /* MBTagsTableView.m */,
+				4BC120062FD21A2400000001 /* MBCategoriesTableView.h */,
+				4BC120072FD21A2400000001 /* MBCategoriesTableView.m */,
 				4B19707D2EB7F26500BFFD8E /* MBMoviesTableView.h */,
 				4B19707E2EB7F26500BFFD8E /* MBMoviesTableView.m */,
 				4B1970802EBA3BAF00BFFD8E /* MBResponderExtras.h */,
@@ -1612,6 +1632,7 @@
 				4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */,
 				4B4DC4521BB04BD80095CCBB /* RFTimelineController.m in Sources */,
 				4BF537282247341800CF9D66 /* RFAllPostsController.m in Sources */,
+				4BC1200B2FD21A2400000001 /* MBCategoriesController.m in Sources */,
 				4B1F2A262BC2219C00B52EAC /* MBTimelineWindow.m in Sources */,
 				4B35A5BD2FBFA58700E5F46C /* MBNotesDatabase.m in Sources */,
 				4BE23F8F2A70090D00E24718 /* MBHighlightsController.m in Sources */,
@@ -1651,6 +1672,7 @@
 				4B2CAAB71F90002500D9B10E /* RFMacApplication.m in Sources */,
 				4B2CAB101F90667300D9B10E /* attrdict.c in Sources */,
 				4BB990672A86865B00C490E2 /* MBTagCell.m in Sources */,
+				4BC120052FD21A2400000001 /* MBCategoryCell.m in Sources */,
 				C549E92121EEB6D600730675 /* RFUserCache.m in Sources */,
 				4BF5372E2247BD8D00CF9D66 /* RFPostCell.m in Sources */,
 				4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */,
@@ -1708,6 +1730,7 @@
 				4B8FBDE81F867A4000906C86 /* UUHttpClient.m in Sources */,
 				4BF1A1222BBEF57B00256D3C /* MBSimpleTimelineController.m in Sources */,
 				4B79E28D2D089D7600A22861 /* MBCollection.m in Sources */,
+				4BC120022FD21A2400000001 /* MBCategory.m in Sources */,
 				4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */,
 				4B79E2902D089DC000A22861 /* MBCollectionCell.m in Sources */,
 				4B2CAAAE1F8FCBC800D9B10E /* RFPhotoCell.m in Sources */,
@@ -1733,6 +1756,7 @@
 				4B8FBDE91F867A4000906C86 /* UUHttpResponseHandler.m in Sources */,
 				4B6AE7721F8B335C00CB7950 /* RFMicropub.m in Sources */,
 				4BD833A3273C60A5007350F2 /* RFPostTableView.m in Sources */,
+				4BC120082FD21A2400000001 /* MBCategoriesTableView.m in Sources */,
 				4B2CAB181F90667300D9B10E /* alloc.c in Sources */,
 				4B5A25101F849AF2007C548F /* RFMenuCell.m in Sources */,
 				4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */,
