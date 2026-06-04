@@ -17,6 +17,9 @@
 
 static NSString* const kDistributedWorkQueuedPath = @"/feeds/work/queued";
 static NSString* const kDistributedWorkFinishedPath = @"/feeds/work/finished";
+#ifdef DEBUG
+static NSString* const kDistributedWorkLocalFilename = @"DistributedWork.json";
+#endif
 static NSString* const kWorkPromptTypeStatement = @"statement";
 static NSString* const kWorkPromptTypeKeywords = @"keywords";
 static NSString* const kWorkPromptStatement = @"Write one neutral, third-person sentence stating the main idea of this post. Do not quote the text. Do not use first-person language. Do not start with \"the author\". Avoid adjectives and value judgments.";
@@ -88,6 +91,13 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 
 	self.isCheckingForWork = YES;
 
+#ifdef DEBUG
+	if ([self loadLocalWorkFileIfAvailable]) {
+		self.isCheckingForWork = NO;
+		return;
+	}
+#endif
+
 	RFClient* client = [[RFClient alloc] initWithPath:kDistributedWorkQueuedPath];
 	__weak MBDistributedWorkController* weak_self = self;
 	[client getWithCompletion:^(UUHttpResponse* response) {
@@ -103,25 +113,65 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 				return;
 			}
 
-			if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-				return;
-			}
-
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			if (![items isKindOfClass:[NSArray class]]) {
-				return;
-			}
-
-			[strong_self.queuedWorkItems removeAllObjects];
-			for (id item in items) {
-				if ([item isKindOfClass:[NSDictionary class]]) {
-					[strong_self.queuedWorkItems addObject:item];
-				}
-			}
-
-			[strong_self processNextQueuedWorkItem];
+			[strong_self queueWorkItemsFromParsedResponse:response.parsedResponse];
 		});
 	}];
+}
+
+#ifdef DEBUG
+- (BOOL) loadLocalWorkFileIfAvailable
+{
+	NSString* path = [self localWorkFilePath];
+	if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+		return NO;
+	}
+
+	NSData* data = [NSData dataWithContentsOfFile:path];
+	if (data.length == 0) {
+		return YES;
+	}
+
+	id parsed_response = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+	[self queueWorkItemsFromParsedResponse:parsed_response];
+
+	return YES;
+}
+
+- (NSString *) localWorkFilePath
+{
+	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	NSString* support_folder = [paths firstObject];
+
+	NSError* error = nil;
+	NSString* microblog_folder = [support_folder stringByAppendingPathComponent:@"Micro.blog"];
+	[[NSFileManager defaultManager] createDirectoryAtPath:microblog_folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+	return [microblog_folder stringByAppendingPathComponent:kDistributedWorkLocalFilename];
+}
+#endif
+
+- (void) queueWorkItemsFromParsedResponse:(id)parsedResponse
+{
+	NSArray* items = nil;
+	if ([parsedResponse isKindOfClass:[NSDictionary class]]) {
+		items = [parsedResponse objectForKey:@"items"];
+	}
+	else if ([parsedResponse isKindOfClass:[NSArray class]]) {
+		items = parsedResponse;
+	}
+
+	if (![items isKindOfClass:[NSArray class]]) {
+		return;
+	}
+
+	[self.queuedWorkItems removeAllObjects];
+	for (id item in items) {
+		if ([item isKindOfClass:[NSDictionary class]]) {
+			[self.queuedWorkItems addObject:item];
+		}
+	}
+
+	[self processNextQueuedWorkItem];
 }
 
 - (BOOL) hasAccount
@@ -264,6 +314,12 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 
 	self.isProcessingWork = YES;
 
+	NSString* content_text = [self contentTextForWork:work];
+	if (content_text != nil) {
+		[self processWork:work fetchedText:content_text completion:handler];
+		return;
+	}
+
 	RFClient* client = [[RFClient alloc] initWithURL:url];
 	__weak MBDistributedWorkController* weak_self = self;
 	[client getWithCompletion:^(UUHttpResponse* response) {
@@ -289,6 +345,16 @@ static double const kDistributedWorkMaximumCPUUsage = 0.20;
 			[strong_self processWork:work fetchedText:text completion:handler];
 		});
 	}];
+}
+
+- (nullable NSString *) contentTextForWork:(NSDictionary *)work
+{
+	NSString* content_text = [work objectForKey:@"content_text"];
+	if (![content_text isKindOfClass:[NSString class]]) {
+		return nil;
+	}
+
+	return content_text;
 }
 
 - (BOOL) isSuccessfulResponse:(UUHttpResponse *)response
