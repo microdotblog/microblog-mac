@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSSplitView* splitView;
 @property (strong, nonatomic) NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic) NSButton* blogNameButton;
+@property (strong, nonatomic) NSButton* editFiltersButton;
 @property (strong, nonatomic) NSMenu* categoryContextMenu;
 @property (strong, nonatomic) NSMenu* postContextMenu;
 

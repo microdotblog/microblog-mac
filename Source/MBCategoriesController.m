@@ -140,6 +140,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	NSScrollView* categories_scroll_view = [self scrollView];
 	self.categoriesTableView = [[MBCategoriesTableView alloc] initWithFrame:NSZeroRect];
 	[self setupTable:self.categoriesTableView rowHeight:34.0];
+	categories_scroll_view.backgroundColor = [self categoriesBackgroundColor];
+	self.categoriesTableView.backgroundColor = [self categoriesBackgroundColor];
 	categories_scroll_view.documentView = self.categoriesTableView;
 	self.categoriesScrollView = categories_scroll_view;
 
@@ -161,7 +163,17 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	self.progressSpinner.bezeled = NO;
 	self.progressSpinner.controlSize = NSControlSizeSmall;
 	self.progressSpinner.style = NSProgressIndicatorStyleSpinning;
-	[self.view addSubview:self.progressSpinner];
+	[header_view addSubview:self.progressSpinner];
+
+	NSButton* edit_filters_button = [[NSButton alloc] initWithFrame:NSZeroRect];
+	edit_filters_button.translatesAutoresizingMaskIntoConstraints = NO;
+	edit_filters_button.title = @"Edit Filters";
+	edit_filters_button.bezelStyle = NSBezelStyleRounded;
+	edit_filters_button.target = self;
+	edit_filters_button.action = @selector(editFilters:);
+	edit_filters_button.font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+	self.editFiltersButton = edit_filters_button;
+	[header_view addSubview:edit_filters_button];
 
 	[NSLayoutConstraint activateConstraints:@[
 		[header_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
@@ -179,8 +191,11 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 		[split_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
 		[split_view.topAnchor constraintEqualToAnchor:header_view.bottomAnchor],
 		[split_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
-		[self.progressSpinner.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-		[self.progressSpinner.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
+		[self.progressSpinner.leadingAnchor constraintEqualToAnchor:blog_name_button.trailingAnchor constant:-7],
+		[self.progressSpinner.centerYAnchor constraintEqualToAnchor:blog_name_button.centerYAnchor],
+		[edit_filters_button.trailingAnchor constraintEqualToAnchor:header_view.trailingAnchor constant:-18],
+		[edit_filters_button.centerYAnchor constraintEqualToAnchor:blog_name_button.centerYAnchor],
+		[self.progressSpinner.trailingAnchor constraintLessThanOrEqualToAnchor:edit_filters_button.leadingAnchor constant:-12]
 	]];
 }
 
@@ -271,6 +286,22 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	if ([self.blogNameButton isKindOfClass:[RFHostnameButton class]]) {
 		((RFHostnameButton*) self.blogNameButton).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
 	}
+}
+
+- (NSColor *) categoriesBackgroundColor
+{
+	return [NSColor colorWithName:@"MBCategoriesBackgroundColor" dynamicProvider:^NSColor* (NSAppearance* appearance) {
+		NSAppearanceName best_match = [appearance bestMatchFromAppearancesWithNames:@[
+			NSAppearanceNameAqua,
+			NSAppearanceNameDarkAqua
+		]];
+		if ([best_match isEqualToString:NSAppearanceNameDarkAqua]) {
+			return [NSColor colorWithCalibratedWhite:0.04 alpha:1.0];
+		}
+		else {
+			return [NSColor colorWithCalibratedWhite:0.975 alpha:1.0];
+		}
+	}];
 }
 
 - (NSScrollView *) scrollView
@@ -513,12 +544,63 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	return destination_uid;
 }
 
+- (NSString *) currentDestinationSiteID
+{
+	NSString* current_uid = [self currentDestinationUID];
+	for (NSDictionary* destination in [RFBlogsController cachedDestinations]) {
+		if (![destination isKindOfClass:[NSDictionary class]]) {
+			continue;
+		}
+
+		NSString* uid = destination[@"uid"] ?: @"";
+		if (![uid isEqualToString:current_uid]) {
+			continue;
+		}
+
+		for (NSString* key in @[ @"site_id", @"siteID", @"blog_id", @"blogID", @"id" ]) {
+			id value = destination[key];
+			if ([value isKindOfClass:[NSNumber class]]) {
+				return [(NSNumber*) value stringValue];
+			}
+			else if ([value isKindOfClass:[NSString class]] && [(NSString*) value length] > 0) {
+				return (NSString*) value;
+			}
+		}
+	}
+
+	if (current_uid.length > 0) {
+		NSCharacterSet* non_digits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+		if ([current_uid rangeOfCharacterFromSet:non_digits].location == NSNotFound) {
+			return current_uid;
+		}
+	}
+
+	return nil;
+}
+
 - (void) stopLoadingSidebarRow
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
 }
 
 #pragma mark -
+
+- (IBAction) editFilters:(id)sender
+{
+	#pragma unused(sender)
+
+	NSString* site_id = [self currentDestinationSiteID];
+	NSString* url_string = nil;
+	if (site_id.length > 0) {
+		url_string = [NSString stringWithFormat:@"https://micro.blog/account/categories/%@/filters", site_id];
+	}
+	else {
+		url_string = @"https://micro.blog/account/categories";
+	}
+
+	NSURL* url = [NSURL URLWithString:url_string];
+	[[NSWorkspace sharedWorkspace] openURL:url];
+}
 
 - (IBAction) blogNameClicked:(id)sender
 {

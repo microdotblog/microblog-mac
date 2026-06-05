@@ -53,13 +53,13 @@
 	[self addSubview:self.editField];
 
 	[NSLayoutConstraint activateConstraints:@[
-		[self.nameField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:10],
+		[self.nameField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18],
 		[self.nameField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.nameField.trailingAnchor constraintLessThanOrEqualToAnchor:self.countField.leadingAnchor constant:-10],
 		[self.countField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-14],
 		[self.countField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.countField.widthAnchor constraintGreaterThanOrEqualToConstant:32],
-		[self.editField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:7],
+		[self.editField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18],
 		[self.editField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-80],
 		[self.editField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.editField.heightAnchor constraintEqualToConstant:24]
