@@ -41,7 +41,7 @@
 	[self addSubview:self.countField];
 
 	[NSLayoutConstraint activateConstraints:@[
-		[self.nameField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:14],
+		[self.nameField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:10],
 		[self.nameField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.nameField.trailingAnchor constraintLessThanOrEqualToAnchor:self.countField.leadingAnchor constant:-10],
 		[self.countField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-14],

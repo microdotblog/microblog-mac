@@ -12,11 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class MBCategory;
 
-@interface MBCategoriesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+@interface MBCategoriesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSSplitViewDelegate>
 
 @property (strong, nonatomic) NSTableView* categoriesTableView;
 @property (strong, nonatomic) NSTableView* postsTableView;
+@property (strong, nonatomic) NSSplitView* splitView;
 @property (strong, nonatomic) NSProgressIndicator* progressSpinner;
+@property (strong, nonatomic) NSButton* blogNameButton;
 @property (strong, nonatomic) NSMenu* categoryContextMenu;
 @property (strong, nonatomic) NSMenu* postContextMenu;
 

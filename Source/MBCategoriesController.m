@@ -11,9 +11,11 @@
 #import "MBCategory.h"
 #import "MBCategoryCell.h"
 #import "MBCategoriesTableView.h"
+#import "MBSplitView.h"
 #import "RFPostCell.h"
 #import "RFPostTableView.h"
 #import "RFPost.h"
+#import "RFBlogsController.h"
 #import "RFClient.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
@@ -23,11 +25,17 @@
 
 static NSString* const kCategoryCellIdentifier = @"CategoryCell";
 static NSInteger const kCategoriesPostsLimit = 200;
+static CGFloat const kCategoriesInitialRatio = 0.30;
+static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 @interface MBCategoriesController ()
 
+@property (strong, nonatomic) NSScrollView* categoriesScrollView;
+@property (strong, nonatomic) NSScrollView* postsScrollView;
 @property (assign, nonatomic) NSInteger categoriesRequestID;
 @property (assign, nonatomic) NSInteger postsRequestID;
+@property (assign, nonatomic) BOOL isObservingWindowNotifications;
+@property (assign, nonatomic) BOOL didSetInitialSplitPosition;
 
 @end
 
@@ -56,6 +64,7 @@ static NSInteger const kCategoriesPostsLimit = 200;
 	[super viewDidLoad];
 
 	[self setupViews];
+	[self setupBlogName];
 	[self setupTables];
 	[self setupMenus];
 	[self setupNotifications];
@@ -63,25 +72,83 @@ static NSInteger const kCategoriesPostsLimit = 200;
 	[self fetchCategories];
 }
 
+- (void) viewDidAppear
+{
+	[super viewDidAppear];
+
+	if (!self.isObservingWindowNotifications && self.view.window != nil) {
+		self.isObservingWindowNotifications = YES;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
+	}
+
+	[self refreshDestinationsCache];
+	[self scheduleInitialSplitPosition];
+}
+
+- (void) viewDidDisappear
+{
+	[super viewDidDisappear];
+
+	if (self.isObservingWindowNotifications) {
+		self.isObservingWindowNotifications = NO;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+	}
+}
+
+- (void) dealloc
+{
+	if (self.isObservingWindowNotifications) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+	}
+}
+
 - (void) setupViews
 {
+	NSView* header_view = [[NSView alloc] initWithFrame:NSZeroRect];
+	header_view.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.view addSubview:header_view];
+
+	RFHostnameButton* blog_name_button = [[RFHostnameButton alloc] initWithFrame:NSZeroRect];
+	blog_name_button.translatesAutoresizingMaskIntoConstraints = NO;
+	blog_name_button.hidden = YES;
+	blog_name_button.target = self;
+	blog_name_button.action = @selector(blogNameClicked:);
+	blog_name_button.bezelStyle = NSBezelStyleRounded;
+	blog_name_button.bordered = NO;
+	blog_name_button.alignment = NSTextAlignmentLeft;
+	blog_name_button.font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+	self.blogNameButton = blog_name_button;
+	[header_view addSubview:blog_name_button];
+
+	NSBox* header_separator = [[NSBox alloc] initWithFrame:NSZeroRect];
+	header_separator.translatesAutoresizingMaskIntoConstraints = NO;
+	header_separator.boxType = NSBoxSeparator;
+	[header_view addSubview:header_separator];
+
+	MBSplitView* split_view = [[MBSplitView alloc] initWithFrame:NSZeroRect];
+	split_view.translatesAutoresizingMaskIntoConstraints = NO;
+	split_view.vertical = NO;
+	split_view.dividerStyle = NSSplitViewDividerStyleThin;
+	split_view.delegate = self;
+	self.splitView = split_view;
+	[self.view addSubview:split_view];
+
 	NSScrollView* categories_scroll_view = [self scrollView];
 	self.categoriesTableView = [[MBCategoriesTableView alloc] initWithFrame:NSZeroRect];
 	[self setupTable:self.categoriesTableView rowHeight:34.0];
 	categories_scroll_view.documentView = self.categoriesTableView;
-	[self.view addSubview:categories_scroll_view];
-
-	NSBox* separator = [[NSBox alloc] initWithFrame:NSZeroRect];
-	separator.translatesAutoresizingMaskIntoConstraints = NO;
-	separator.boxType = NSBoxSeparator;
-	[self.view addSubview:separator];
+	self.categoriesScrollView = categories_scroll_view;
 
 	NSScrollView* posts_scroll_view = [self scrollView];
 	self.postsTableView = [[RFPostTableView alloc] initWithFrame:NSZeroRect];
 	[self setupTable:self.postsTableView rowHeight:120.0];
+	self.postsTableView.usesAlternatingRowBackgroundColors = YES;
 	self.postsTableView.usesAutomaticRowHeights = YES;
 	posts_scroll_view.documentView = self.postsTableView;
-	[self.view addSubview:posts_scroll_view];
+	self.postsScrollView = posts_scroll_view;
+
+	[split_view addSubview:categories_scroll_view];
+	[split_view addSubview:posts_scroll_view];
 
 	self.progressSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
 	self.progressSpinner.translatesAutoresizingMaskIntoConstraints = NO;
@@ -93,27 +160,119 @@ static NSInteger const kCategoriesPostsLimit = 200;
 	[self.view addSubview:self.progressSpinner];
 
 	[NSLayoutConstraint activateConstraints:@[
-		[categories_scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-		[categories_scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-		[categories_scroll_view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-		[categories_scroll_view.heightAnchor constraintEqualToConstant:180],
-		[separator.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-		[separator.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-		[separator.topAnchor constraintEqualToAnchor:categories_scroll_view.bottomAnchor],
-		[separator.heightAnchor constraintEqualToConstant:1],
-		[posts_scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-		[posts_scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-		[posts_scroll_view.topAnchor constraintEqualToAnchor:separator.bottomAnchor],
-		[posts_scroll_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+		[header_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[header_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[header_view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		[header_view.heightAnchor constraintEqualToConstant:45],
+		[blog_name_button.leadingAnchor constraintEqualToAnchor:header_view.leadingAnchor constant:18],
+		[blog_name_button.topAnchor constraintEqualToAnchor:header_view.topAnchor constant:5],
+		[blog_name_button.heightAnchor constraintEqualToConstant:32],
+		[header_separator.leadingAnchor constraintEqualToAnchor:header_view.leadingAnchor],
+		[header_separator.trailingAnchor constraintEqualToAnchor:header_view.trailingAnchor],
+		[header_separator.bottomAnchor constraintEqualToAnchor:header_view.bottomAnchor],
+		[header_separator.heightAnchor constraintEqualToConstant:1],
+		[split_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[split_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[split_view.topAnchor constraintEqualToAnchor:header_view.bottomAnchor],
+		[split_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
 		[self.progressSpinner.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
 		[self.progressSpinner.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
 	]];
 }
 
+- (void) viewDidLayout
+{
+	[super viewDidLayout];
+
+	[self setInitialSplitPositionIfReady];
+}
+
+- (void) scheduleInitialSplitPosition
+{
+	if (self.didSetInitialSplitPosition) {
+		return;
+	}
+
+	RFDispatchMainAsync(^{
+		[self.view layoutSubtreeIfNeeded];
+		[self setInitialSplitPositionIfReady];
+	});
+}
+
+- (void) setInitialSplitPositionIfReady
+{
+	if (self.didSetInitialSplitPosition) {
+		return;
+	}
+
+	CGFloat width = self.splitView.bounds.size.width;
+	CGFloat height = self.splitView.bounds.size.height;
+	CGFloat divider_thickness = self.splitView.dividerThickness;
+	if (width <= 0.0 || height < ((kCategoriesMinimumPaneHeight * 2.0) + divider_thickness)) {
+		return;
+	}
+
+	self.didSetInitialSplitPosition = YES;
+	CGFloat initial_height = round (height * kCategoriesInitialRatio);
+	initial_height = MAX (kCategoriesMinimumPaneHeight, initial_height);
+	initial_height = MIN (initial_height, height - kCategoriesMinimumPaneHeight - divider_thickness);
+	self.categoriesScrollView.frame = NSMakeRect(0.0, 0.0, width, initial_height);
+	self.postsScrollView.frame = NSMakeRect(0.0, initial_height + divider_thickness, width, height - initial_height - divider_thickness);
+	[self.splitView adjustSubviews];
+	[self.splitView setPosition:initial_height ofDividerAtIndex:0];
+}
+
+- (BOOL) splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview
+{
+	#pragma unused(splitView)
+	#pragma unused(subview)
+
+	return NO;
+}
+
+- (CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+	#pragma unused(splitView)
+	#pragma unused(proposedMinimumPosition)
+	#pragma unused(dividerIndex)
+
+	return kCategoriesMinimumPaneHeight;
+}
+
+- (CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+	#pragma unused(proposedMaximumPosition)
+	#pragma unused(dividerIndex)
+
+	return splitView.bounds.size.height - kCategoriesMinimumPaneHeight;
+}
+
+- (BOOL) splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view
+{
+	#pragma unused(splitView)
+
+	return (view == self.postsScrollView);
+}
+
+- (void) setupBlogName
+{
+	NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
+	if (s) {
+		self.blogNameButton.title = s;
+	}
+	else {
+		self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+
+	if ([self.blogNameButton isKindOfClass:[RFHostnameButton class]]) {
+		((RFHostnameButton*) self.blogNameButton).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
+	}
+}
+
 - (NSScrollView *) scrollView
 {
 	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSZeroRect];
-	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
+	scroll_view.translatesAutoresizingMaskIntoConstraints = YES;
 	scroll_view.autohidesScrollers = YES;
 	scroll_view.hasVerticalScroller = YES;
 	scroll_view.hasHorizontalScroller = NO;
@@ -202,6 +361,7 @@ static NSInteger const kCategoriesPostsLimit = 200;
 	[self.categoriesTableView reloadData];
 	[self.postsTableView reloadData];
 	[self.progressSpinner startAnimation:nil];
+	self.blogNameButton.hidden = YES;
 	self.categoriesTableView.animator.alphaValue = 0.0;
 	self.postsTableView.animator.alphaValue = 0.0;
 
@@ -224,6 +384,8 @@ static NSInteger const kCategoriesPostsLimit = 200;
 				self.categories = new_categories;
 				[self.categoriesTableView reloadData];
 				self.categoriesTableView.animator.alphaValue = 1.0;
+				[self setupBlogName];
+				self.blogNameButton.hidden = NO;
 
 				if (new_categories.count > 0) {
 					NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:0];
@@ -243,6 +405,7 @@ static NSInteger const kCategoriesPostsLimit = 200;
 				}
 
 				[self.progressSpinner stopAnimation:nil];
+				self.blogNameButton.hidden = NO;
 				[self stopLoadingSidebarRow];
 			});
 		}
@@ -304,6 +467,7 @@ static NSInteger const kCategoriesPostsLimit = 200;
 				}
 
 				[self.progressSpinner stopAnimation:nil];
+				self.blogNameButton.hidden = NO;
 				[self stopLoadingSidebarRow];
 			});
 		}
@@ -349,6 +513,43 @@ static NSInteger const kCategoriesPostsLimit = 200;
 }
 
 #pragma mark -
+
+- (IBAction) blogNameClicked:(id)sender
+{
+	[self showBlogsMenu];
+}
+
+- (void) windowDidBecomeKeyNotification:(NSNotification *)notification
+{
+	[self refreshDestinationsCache];
+}
+
+- (void) refreshDestinationsCache
+{
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
+	}
+
+	[RFBlogsController fetchDestinationsInBackgroundWithCompletion:^(NSArray* destinations) {
+		#pragma unused(destinations)
+		[self setupBlogName];
+	}];
+}
+
+- (void) showBlogsMenu
+{
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+		return;
+	}
+
+	NSMenu* menu = [RFBlogsController blogsMenuWithTarget:[RFBlogsController class] action:@selector(selectDestinationMenuItem:)];
+	if (menu.numberOfItems == 0) {
+		return;
+	}
+
+	NSPoint menu_point = NSMakePoint(0.0, NSMinY(self.blogNameButton.bounds));
+	[menu popUpMenuPositioningItem:nil atLocation:menu_point inView:self.blogNameButton];
+}
 
 - (IBAction) openRow:(id)sender
 {
@@ -590,6 +791,7 @@ static NSInteger const kCategoriesPostsLimit = 200;
 
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
+	[self setupBlogName];
 	[self fetchCategories];
 }
 
