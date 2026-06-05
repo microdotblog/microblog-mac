@@ -24,7 +24,10 @@
 + (NSArray *) categoriesFromResponse:(NSDictionary *)response
 {
 	NSMutableArray* results = [NSMutableArray array];
-	NSArray* categories = [response objectForKey:@"categories"];
+	NSArray* categories = [response objectForKey:@"microblog-categories"];
+	if (![categories isKindOfClass:[NSArray class]]) {
+		categories = [response objectForKey:@"categories"];
+	}
 
 	for (id category_info in categories) {
 		MBCategory* category = [self categoryFromObject:category_info];
@@ -52,7 +55,9 @@
 		}
 
 		NSNumber* count = [self countFromDictionary:info];
-		return [[MBCategory alloc] initWithName:name postsCount:count];
+		MBCategory* category = [[MBCategory alloc] initWithName:name postsCount:count];
+		category.uid = [self numberFromObject:[info objectForKey:@"uid"]];
+		return category;
 	}
 	else {
 		return [[MBCategory alloc] initWithName:@"" postsCount:nil];
@@ -75,6 +80,19 @@
 	NSDictionary* microblog_info = [info objectForKey:@"_microblog"];
 	if ([microblog_info isKindOfClass:[NSDictionary class]]) {
 		return [self countFromDictionary:microblog_info];
+	}
+	else {
+		return nil;
+	}
+}
+
++ (NSNumber *) numberFromObject:(id)value
+{
+	if ([value isKindOfClass:[NSNumber class]]) {
+		return value;
+	}
+	else if ([value isKindOfClass:[NSString class]]) {
+		return @([(NSString *)value integerValue]);
 	}
 	else {
 		return nil;

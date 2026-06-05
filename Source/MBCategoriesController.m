@@ -474,9 +474,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				NSDictionary* props = [item objectForKey:@"properties"];
 				RFPost* post = [[RFPost alloc] initFromProperties:props];
 				post.channel = @"default";
-				if ([self post:post isInCategory:category]) {
-					[new_posts addObject:post];
-				}
+				[new_posts addObject:post];
 			}
 
 			RFDispatchMainAsync (^{
@@ -507,25 +505,18 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (NSDictionary *) postQueryArgumentsForCategory:(MBCategory *)category
 {
-	#pragma unused(category)
-
-	return @{
+	NSMutableDictionary* args = [@{
 		@"q": @"source",
 		@"mp-destination": [self currentDestinationUID],
 		@"mp-channel": @"default",
 		@"limit": @(kCategoriesPostsLimit)
-	};
-}
+	} mutableCopy];
 
-- (BOOL) post:(RFPost *)post isInCategory:(MBCategory *)category
-{
-	for (NSString* name in post.categories) {
-		if ([name isEqualToString:category.name]) {
-			return YES;
-		}
+	if (category.uid != nil) {
+		[args setObject:category.uid forKey:@"category"];
 	}
 
-	return NO;
+	return args;
 }
 
 - (NSString *) currentDestinationUID
@@ -849,22 +840,79 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (void) updateCategory:(MBCategory *)category withName:(NSString *)name
 {
-	// TODO: Save category rename to the Micropub endpoint when the POST details are finalized.
+	if (category.uid == nil) {
+		[self showMicropubErrorMessage:@"Could not update the category because it is missing a category ID." title:@"Error Updating Category"];
+		return;
+	}
+
+	NSString* previous_name = category.name;
 	category.name = name;
+
+	NSDictionary* params = @{
+		@"mp-channel": @"categories",
+		@"mp-destination": [self currentDestinationUID],
+		@"action": @"update",
+		@"uid": category.uid,
+		@"name": name
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			if ([self responseHasError:response]) {
+				category.name = previous_name;
+				[self reloadCategory:category];
+				[self showMicropubError:response title:@"Error Updating Category"];
+			}
+			else {
+				[self updateCategory:category fromResponse:response];
+				[self reloadCategory:category];
+			}
+		});
+	}];
 }
 
 - (void) createCategory:(MBCategory *)category withName:(NSString *)name
 {
-	// TODO: Save new category to the Micropub endpoint when the POST details are finalized.
 	category.name = name;
+
+	NSDictionary* params = @{
+		@"mp-channel": @"categories",
+		@"mp-destination": [self currentDestinationUID],
+		@"name": name
+	};
+
+	[self.progressSpinner startAnimation:nil];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client postWithParams:params completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			[self.progressSpinner stopAnimation:nil];
+			if ([self responseHasError:response]) {
+				[self removeCategory:category];
+				[self showMicropubError:response title:@"Error Creating Category"];
+			}
+			else {
+				[self updateCategory:category fromResponse:response];
+				[self reloadCategory:category];
+			}
+		});
+	}];
 }
 
 - (void) deleteCategory:(MBCategory *)category
 {
+	if (category.uid == nil) {
+		[self showMicropubErrorMessage:@"Could not delete the category because it is missing a category ID." title:@"Error Deleting Category"];
+		return;
+	}
+
 	NSDictionary* params = @{
-		@"action": @"delete-category",
+		@"mp-channel": @"categories",
 		@"mp-destination": [self currentDestinationUID],
-		@"category": category.name
+		@"action": @"delete",
+		@"uid": category.uid
 	};
 
 	[self.progressSpinner startAnimation:nil];
@@ -876,10 +924,55 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				[self showMicropubError:response title:@"Error Deleting Category"];
 			}
 			else {
+				self.selectedCategory = nil;
+				self.currentPosts = @[];
+				[self.postsTableView reloadData];
 				[self fetchCategories];
 			}
 		});
 	}];
+}
+
+- (void) updateCategory:(MBCategory *)category fromResponse:(UUHttpResponse *)response
+{
+	if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		return;
+	}
+
+	MBCategory* updated_category = [MBCategory categoryFromObject:response.parsedResponse];
+	if (updated_category.name.length > 0) {
+		category.name = updated_category.name;
+	}
+	if (updated_category.uid != nil) {
+		category.uid = updated_category.uid;
+	}
+	category.postsCount = updated_category.postsCount;
+}
+
+- (void) reloadCategory:(MBCategory *)category
+{
+	NSUInteger index = [self.categories indexOfObjectIdenticalTo:category];
+	if (index == NSNotFound) {
+		return;
+	}
+
+	NSIndexSet* row_indexes = [NSIndexSet indexSetWithIndex:index];
+	NSIndexSet* column_indexes = [NSIndexSet indexSetWithIndex:0];
+	[self.categoriesTableView reloadDataForRowIndexes:row_indexes columnIndexes:column_indexes];
+	[self.categoriesTableView selectRowIndexes:row_indexes byExtendingSelection:NO];
+}
+
+- (void) removeCategory:(MBCategory *)category
+{
+	NSUInteger index = [self.categories indexOfObjectIdenticalTo:category];
+	if (index == NSNotFound) {
+		return;
+	}
+
+	NSMutableArray* updated_categories = [self.categories mutableCopy];
+	[updated_categories removeObjectAtIndex:index];
+	self.categories = updated_categories;
+	[self.categoriesTableView reloadData];
 }
 
 - (MBCategory *) selectedCategoryForAction
@@ -993,6 +1086,10 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (BOOL) responseHasError:(UUHttpResponse *)response
 {
+	if (response.httpResponse.statusCode < 200 || response.httpResponse.statusCode > 299) {
+		return YES;
+	}
+
 	if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 		return (response.parsedResponse[@"error"] != nil);
 	}
@@ -1008,10 +1105,20 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 		msg = response.parsedResponse[@"error_description"];
 	}
 	if (msg.length == 0) {
-		msg = @"Could not update the category.";
+		if (response.httpResponse.statusCode > 0) {
+			msg = [NSString stringWithFormat:@"The server returned HTTP %ld.", (long)response.httpResponse.statusCode];
+		}
+		else {
+			msg = @"Could not update the category.";
+		}
 	}
 
-	[NSAlert rf_showOneButtonAlert:title message:msg button:@"OK" completionHandler:NULL];
+	[self showMicropubErrorMessage:msg title:title];
+}
+
+- (void) showMicropubErrorMessage:(NSString *)message title:(NSString *)title
+{
+	[NSAlert rf_showOneButtonAlert:title message:message button:@"OK" completionHandler:NULL];
 }
 
 #pragma mark -

@@ -56,7 +56,7 @@
 		[self.nameField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18],
 		[self.nameField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.nameField.trailingAnchor constraintLessThanOrEqualToAnchor:self.countField.leadingAnchor constant:-10],
-		[self.countField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-14],
+		[self.countField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-18],
 		[self.countField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.countField.widthAnchor constraintGreaterThanOrEqualToConstant:32],
 		[self.editField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:14],
