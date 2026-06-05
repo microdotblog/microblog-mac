@@ -37,6 +37,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 @property (assign, nonatomic) NSInteger categoriesRequestID;
 @property (assign, nonatomic) NSInteger postsRequestID;
 @property (assign, nonatomic) NSInteger editingCategoryRow;
+@property (assign, nonatomic) BOOL isCreatingCategory;
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
 @property (assign, nonatomic) BOOL didSetInitialSplitPosition;
 
@@ -421,18 +422,11 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				self.categories = new_categories;
 				[self.categoriesTableView reloadData];
 				self.categoriesTableView.animator.alphaValue = 1.0;
+				self.postsTableView.animator.alphaValue = 1.0;
 				[self setupBlogName];
 				self.blogNameButton.hidden = NO;
-
-				if (new_categories.count > 0) {
-					NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:0];
-					[self.categoriesTableView selectRowIndexes:index_set byExtendingSelection:NO];
-					[self fetchPosts];
-				}
-				else {
-					[self.progressSpinner stopAnimation:nil];
-					[self stopLoadingSidebarRow];
-				}
+				[self.progressSpinner stopAnimation:nil];
+				[self stopLoadingSidebarRow];
 			});
 		}
 		else {
@@ -649,6 +643,30 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	}
 }
 
+- (void) newCategory:(id)sender
+{
+	#pragma unused(sender)
+
+	[self cancelCategoryRename];
+
+	MBCategory* category = [[MBCategory alloc] initWithName:@"" postsCount:nil];
+	NSMutableArray* updated_categories = [NSMutableArray arrayWithObject:category];
+	[updated_categories addObjectsFromArray:self.categories];
+	self.categories = updated_categories;
+	self.isCreatingCategory = YES;
+	self.editingCategory = category;
+	self.editingCategoryRow = 0;
+	self.categoryEditField = nil;
+
+	[self.categoriesTableView reloadData];
+	[self.categoriesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+	[self.categoriesTableView scrollRowToVisible:0];
+
+	RFDispatchMainAsync(^{
+		[self focusCategoryRenameField];
+	});
+}
+
 - (IBAction) editSelectedCategory:(id)sender
 {
 	MBCategory* category = [self selectedCategoryForAction];
@@ -668,6 +686,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 	[self cancelCategoryRename];
 	[self.categoriesTableView scrollRowToVisible:row];
+	self.isCreatingCategory = NO;
 	self.editingCategory = category;
 	self.editingCategoryRow = row;
 	self.categoryEditField = nil;
@@ -707,31 +726,72 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	}
 
 	NSString* new_name = [field.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	if (new_name.length > 0 && ![new_name isEqualToString:category.name]) {
-		[self updateCategory:category withName:new_name];
+	if (self.isCreatingCategory) {
+		if (new_name.length > 0) {
+			[self createCategory:category withName:new_name];
+			[self finishEditingCategoryKeepingNewRowSelected:YES];
+		}
+		else {
+			[self removeNewCategoryRow];
+			[self finishEditingCategory];
+		}
+	}
+	else {
+		if (new_name.length > 0 && ![new_name isEqualToString:category.name]) {
+			[self updateCategory:category withName:new_name];
+		}
+
+		[self finishEditingCategory];
+	}
+}
+
+- (void) cancelCategoryRename
+{
+	if (self.isCreatingCategory) {
+		[self removeNewCategoryRow];
 	}
 
 	[self finishEditingCategory];
 }
 
-- (void) cancelCategoryRename
+- (void) finishEditingCategory
 {
-	[self finishEditingCategory];
+	[self finishEditingCategoryKeepingNewRowSelected:NO];
 }
 
-- (void) finishEditingCategory
+- (void) finishEditingCategoryKeepingNewRowSelected:(BOOL)keepNewRowSelected
 {
 	NSInteger row = self.editingCategoryRow;
 	NSTextField* field = self.categoryEditField;
 	self.categoryEditField = nil;
 	self.editingCategory = nil;
 	self.editingCategoryRow = -1;
+	self.isCreatingCategory = NO;
 
 	if (field != nil) {
 		[self.view.window makeFirstResponder:self.categoriesTableView];
 	}
 
-	[self updateVisibleCategoryRow:row];
+	if (keepNewRowSelected) {
+		[self.categoriesTableView reloadData];
+		if (self.categories.count > 0) {
+			[self.categoriesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+			[self.categoriesTableView scrollRowToVisible:0];
+		}
+	}
+	else {
+		[self updateVisibleCategoryRow:row];
+	}
+}
+
+- (void) removeNewCategoryRow
+{
+	if (self.editingCategoryRow >= 0 && self.editingCategoryRow < (NSInteger)self.categories.count) {
+		NSMutableArray* updated_categories = [self.categories mutableCopy];
+		[updated_categories removeObjectAtIndex:self.editingCategoryRow];
+		self.categories = updated_categories;
+		[self.categoriesTableView reloadData];
+	}
 }
 
 - (MBCategoryCell *) categoryCellForRow:(NSInteger)row makeIfNecessary:(BOOL)makeIfNecessary
@@ -790,6 +850,12 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 - (void) updateCategory:(MBCategory *)category withName:(NSString *)name
 {
 	// TODO: Save category rename to the Micropub endpoint when the POST details are finalized.
+	category.name = name;
+}
+
+- (void) createCategory:(MBCategory *)category withName:(NSString *)name
+{
+	// TODO: Save new category to the Micropub endpoint when the POST details are finalized.
 	category.name = name;
 }
 

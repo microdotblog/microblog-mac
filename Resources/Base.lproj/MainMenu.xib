@@ -84,6 +84,12 @@
                                     <action selector="newPage:" target="-1" id="cFO-oo-bGp"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="New Category" image="tag" catalog="system" id="hql-N8-tff">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newCategory:" target="-1" id="3X3-sL-umy"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="New Collection" image="photo" catalog="system" id="KF6-ha-NaE">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

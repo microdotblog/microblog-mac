@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) fetchCategories;
 - (void) fetchPosts;
+- (void) newCategory:(id)sender;
 - (void) openRow:(id)sender;
 
 @end

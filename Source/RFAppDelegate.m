@@ -457,6 +457,12 @@
 	[self.prefsController showWindow:nil];
 }
 
+- (IBAction) newCategory:(id)sender
+{
+	[self showMainWindow:nil];
+	[self.timelineController newCategory:sender];
+}
+
 - (IBAction) newBookmark:(id)sender
 {
 	if (!self.bookmarkController) {

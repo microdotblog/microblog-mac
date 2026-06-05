@@ -934,6 +934,18 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self startLoadingSidebarRow:kSelectionCategories];
 }
 
+- (BOOL) canCreateNewCategory
+{
+	return (self.selectedTimeline == kSelectionCategories && [self.rootController isKindOfClass:[MBCategoriesController class]]);
+}
+
+- (void) newCategory:(id)sender
+{
+	if ([self.rootController isKindOfClass:[MBCategoriesController class]]) {
+		[(MBCategoriesController *)self.rootController newCategory:sender];
+	}
+}
+
 - (IBAction) showReplies:(id)sender
 {
 	self.selectedTimeline = kSelectionReplies;
@@ -1130,6 +1142,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		if (![RFSettings isUsingMicroblog]) {
 			return NO;
 		}
+	}
+	else if (item.action == @selector(newCategory:)) {
+		return [self canCreateNewCategory];
 	}
 	else if (item.action == @selector(reply:)) {
 		if (self.selectedPostID.length == 0) {
