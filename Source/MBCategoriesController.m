@@ -32,8 +32,11 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 @property (strong, nonatomic) NSScrollView* categoriesScrollView;
 @property (strong, nonatomic) NSScrollView* postsScrollView;
+@property (strong, nonatomic) NSTextField* categoryEditField;
+@property (strong, nonatomic) MBCategory* editingCategory;
 @property (assign, nonatomic) NSInteger categoriesRequestID;
 @property (assign, nonatomic) NSInteger postsRequestID;
+@property (assign, nonatomic) NSInteger editingCategoryRow;
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
 @property (assign, nonatomic) BOOL didSetInitialSplitPosition;
 
@@ -47,6 +50,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	if (self) {
 		self.categories = @[];
 		self.currentPosts = @[];
+		self.editingCategoryRow = -1;
 	}
 
 	return self;
@@ -325,7 +329,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 - (void) setupMenus
 {
 	self.categoryContextMenu = [[NSMenu alloc] initWithTitle:@"Categories"];
-	NSMenuItem* edit_category_item = [self.categoryContextMenu addItemWithTitle:@"Edit" action:@selector(editSelectedCategory:) keyEquivalent:@""];
+	NSMenuItem* edit_category_item = [self.categoryContextMenu addItemWithTitle:@"Rename" action:@selector(editSelectedCategory:) keyEquivalent:@""];
 	edit_category_item.target = self;
 	NSMenuItem* delete_category_item = [self.categoryContextMenu addItemWithTitle:@"Delete" action:@selector(deleteSelectedCategory:) keyEquivalent:@""];
 	delete_category_item.target = self;
@@ -352,6 +356,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (void) fetchCategories
 {
+	[self cancelCategoryRename];
+
 	self.categoriesRequestID++;
 	NSInteger request_id = self.categoriesRequestID;
 
@@ -568,24 +574,115 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 		return;
 	}
 
-	NSAlert* sheet = [[NSAlert alloc] init];
-	sheet.messageText = @"Edit Category";
-	sheet.informativeText = @"Rename this category.";
-	[sheet addButtonWithTitle:@"Save"];
-	[sheet addButtonWithTitle:@"Cancel"];
+	NSInteger row = self.categoriesTableView.selectedRow;
+	[self startEditingCategory:category row:row];
+}
 
-	NSTextField* field = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 260, 24)];
-	field.stringValue = category.name;
-	sheet.accessoryView = field;
+- (void) startEditingCategory:(MBCategory *)category row:(NSInteger)row
+{
+	if (row < 0) {
+		return;
+	}
 
-	[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
-		if (returnCode == NSAlertFirstButtonReturn) {
-			NSString* new_name = field.stringValue ?: @"";
-			if (new_name.length > 0 && ![new_name isEqualToString:category.name]) {
-				[self updateCategory:category withName:new_name];
-			}
+	[self cancelCategoryRename];
+	[self.categoriesTableView scrollRowToVisible:row];
+	self.editingCategory = category;
+	self.editingCategoryRow = row;
+	self.categoryEditField = nil;
+	[self updateVisibleCategoryRow:row];
+
+	RFDispatchMainAsync(^{
+		[self focusCategoryRenameField];
+	});
+}
+
+- (void) focusCategoryRenameField
+{
+	NSTextField* field = self.categoryEditField;
+	if (field == nil && self.editingCategoryRow >= 0) {
+		[self updateVisibleCategoryRow:self.editingCategoryRow];
+		MBCategoryCell* cell = [self categoryCellForRow:self.editingCategoryRow makeIfNecessary:NO];
+		if (cell != nil) {
+			field = cell.editField;
 		}
-	}];
+	}
+
+	if (field != nil) {
+		self.categoryEditField = field;
+		[self.view.window makeFirstResponder:field];
+		[field selectText:nil];
+	}
+}
+
+- (IBAction) commitCategoryRename:(id)sender
+{
+	#pragma unused(sender)
+
+	NSTextField* field = self.categoryEditField;
+	MBCategory* category = self.editingCategory;
+	if (field == nil || category == nil) {
+		return;
+	}
+
+	NSString* new_name = [field.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	if (new_name.length > 0 && ![new_name isEqualToString:category.name]) {
+		[self updateCategory:category withName:new_name];
+	}
+
+	[self finishEditingCategory];
+}
+
+- (void) cancelCategoryRename
+{
+	[self finishEditingCategory];
+}
+
+- (void) finishEditingCategory
+{
+	NSInteger row = self.editingCategoryRow;
+	NSTextField* field = self.categoryEditField;
+	self.categoryEditField = nil;
+	self.editingCategory = nil;
+	self.editingCategoryRow = -1;
+
+	if (field != nil) {
+		[self.view.window makeFirstResponder:self.categoriesTableView];
+	}
+
+	[self updateVisibleCategoryRow:row];
+}
+
+- (MBCategoryCell *) categoryCellForRow:(NSInteger)row makeIfNecessary:(BOOL)makeIfNecessary
+{
+	if (row < 0 || row >= (NSInteger)self.categories.count) {
+		return nil;
+	}
+
+	[self.categoriesTableView layoutSubtreeIfNeeded];
+	NSTableRowView* row_view = [self.categoriesTableView rowViewAtRow:row makeIfNecessary:makeIfNecessary];
+	if ([row_view isKindOfClass:[MBCategoryCell class]]) {
+		return (MBCategoryCell*) row_view;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (void) updateVisibleCategoryRow:(NSInteger)row
+{
+	MBCategoryCell* cell = [self categoryCellForRow:row makeIfNecessary:YES];
+	if (cell == nil) {
+		return;
+	}
+
+	MBCategory* category = [self.categories objectAtIndex:row];
+	if (row == self.editingCategoryRow && self.editingCategory != nil) {
+		[cell setupForEditingWithCategory:category target:self action:@selector(commitCategoryRename:) delegate:self];
+		self.categoryEditField = cell.editField;
+	}
+	else {
+		[cell setupWithCategory:category];
+	}
 }
 
 - (IBAction) deleteSelectedCategory:(id)sender
@@ -610,26 +707,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (void) updateCategory:(MBCategory *)category withName:(NSString *)name
 {
-	NSDictionary* params = @{
-		@"action": @"update-category",
-		@"mp-destination": [self currentDestinationUID],
-		@"category": category.name,
-		@"name": name
-	};
-
-	[self.progressSpinner startAnimation:nil];
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-	[client postWithParams:params completion:^(UUHttpResponse* response) {
-		RFDispatchMainAsync (^{
-			[self.progressSpinner stopAnimation:nil];
-			if ([self responseHasError:response]) {
-				[self showMicropubError:response title:@"Error Editing Category"];
-			}
-			else {
-				[self fetchCategories];
-			}
-		});
-	}];
+	// TODO: Save category rename to the Micropub endpoint when the POST details are finalized.
+	category.name = name;
 }
 
 - (void) deleteCategory:(MBCategory *)category
@@ -800,9 +879,36 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	[self fetchPosts];
 }
 
+- (BOOL) control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector
+{
+	#pragma unused(textView)
+
+	if (control == self.categoryEditField) {
+		if (commandSelector == @selector(insertNewline:) || commandSelector == @selector(insertNewlineIgnoringFieldEditor:)) {
+			[self commitCategoryRename:control];
+			return YES;
+		}
+		else if (commandSelector == @selector(cancelOperation:)) {
+			[self cancelCategoryRename];
+			return YES;
+		}
+	}
+
+	return NO;
+}
+
+- (void) controlTextDidEndEditing:(NSNotification *)notification
+{
+	#pragma unused(notification)
+}
+
 - (void) tableViewSelectionDidChange:(NSNotification *)notification
 {
 	if (notification.object == self.categoriesTableView) {
+		if (self.editingCategoryRow >= 0 && self.categoriesTableView.selectedRow != self.editingCategoryRow) {
+			[self cancelCategoryRename];
+		}
+
 		[self fetchPosts];
 	}
 }
@@ -820,7 +926,26 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	if (tableView == self.categoriesTableView) {
-		return nil;
+		if (row >= self.categories.count) {
+			return nil;
+		}
+
+		MBCategory* category = [self.categories objectAtIndex:row];
+		MBCategoryCell* cell = [tableView makeViewWithIdentifier:kCategoryCellIdentifier owner:self];
+		if (cell == nil) {
+			cell = [[MBCategoryCell alloc] initWithFrame:NSMakeRect(0, 0, tableView.bounds.size.width, tableView.rowHeight)];
+			cell.identifier = kCategoryCellIdentifier;
+		}
+
+		if (row == self.editingCategoryRow && self.editingCategory != nil) {
+			[cell setupForEditingWithCategory:category target:self action:@selector(commitCategoryRename:) delegate:self];
+			self.categoryEditField = cell.editField;
+		}
+		else {
+			[cell setupWithCategory:category];
+		}
+
+		return cell;
 	}
 	else {
 		RFPostCell* cell = [tableView makeViewWithIdentifier:@"PostCell" owner:self];
@@ -835,22 +960,11 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (NSView *) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-	if (tableView == self.categoriesTableView) {
-		MBCategoryCell* cell = [tableView makeViewWithIdentifier:kCategoryCellIdentifier owner:self];
-		if (cell == nil) {
-			cell = [[MBCategoryCell alloc] initWithFrame:NSMakeRect(0, 0, tableView.bounds.size.width, tableView.rowHeight)];
-		}
+	#pragma unused(tableView)
+	#pragma unused(tableColumn)
+	#pragma unused(row)
 
-		if (row < self.categories.count) {
-			MBCategory* category = [self.categories objectAtIndex:row];
-			[cell setupWithCategory:category];
-		}
-
-		return cell;
-	}
-	else {
-		return nil;
-	}
+	return nil;
 }
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item

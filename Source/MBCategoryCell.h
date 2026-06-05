@@ -12,12 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class MBCategory;
 
-@interface MBCategoryCell : NSTableCellView
+@interface MBCategoryCell : NSTableRowView
 
 @property (strong, nonatomic) NSTextField* nameField;
 @property (strong, nonatomic) NSTextField* countField;
+@property (strong, nonatomic) NSTextField* editField;
 
 - (void) setupWithCategory:(MBCategory *)category;
+- (void) setupForEditingWithCategory:(MBCategory *)category target:(id)target action:(SEL)action delegate:(id<NSTextFieldDelegate>)delegate;
 
 @end
 

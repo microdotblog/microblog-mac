@@ -40,18 +40,40 @@
 	self.countField.lineBreakMode = NSLineBreakByTruncatingTail;
 	[self addSubview:self.countField];
 
+	self.editField = [[NSTextField alloc] initWithFrame:NSZeroRect];
+	self.editField.translatesAutoresizingMaskIntoConstraints = NO;
+	self.editField.font = [NSFont systemFontOfSize:13 weight:NSFontWeightRegular];
+	self.editField.bordered = YES;
+	self.editField.bezeled = YES;
+	self.editField.drawsBackground = YES;
+	self.editField.focusRingType = NSFocusRingTypeDefault;
+	self.editField.lineBreakMode = NSLineBreakByTruncatingTail;
+	self.editField.usesSingleLineMode = YES;
+	self.editField.hidden = YES;
+	[self addSubview:self.editField];
+
 	[NSLayoutConstraint activateConstraints:@[
 		[self.nameField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:10],
 		[self.nameField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
 		[self.nameField.trailingAnchor constraintLessThanOrEqualToAnchor:self.countField.leadingAnchor constant:-10],
 		[self.countField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-14],
 		[self.countField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
-		[self.countField.widthAnchor constraintGreaterThanOrEqualToConstant:32]
+		[self.countField.widthAnchor constraintGreaterThanOrEqualToConstant:32],
+		[self.editField.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:7],
+		[self.editField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-80],
+		[self.editField.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+		[self.editField.heightAnchor constraintEqualToConstant:24]
 	]];
 }
 
 - (void) setupWithCategory:(MBCategory *)category
 {
+	self.nameField.hidden = NO;
+	self.countField.hidden = NO;
+	self.editField.hidden = YES;
+	self.editField.delegate = nil;
+	self.editField.target = nil;
+	self.editField.action = nil;
 	self.nameField.stringValue = category.name ?: @"";
 
 	if (category.postsCount != nil) {
@@ -60,13 +82,54 @@
 	else {
 		self.countField.stringValue = @"";
 	}
+
+	self.needsLayout = YES;
+	self.needsDisplay = YES;
 }
 
-- (void) setBackgroundStyle:(NSBackgroundStyle)backgroundStyle
+- (void) setupForEditingWithCategory:(MBCategory *)category target:(id)target action:(SEL)action delegate:(id<NSTextFieldDelegate>)delegate
 {
-	[super setBackgroundStyle:backgroundStyle];
+	self.nameField.hidden = YES;
+	self.countField.hidden = YES;
+	self.editField.hidden = NO;
+	self.editField.stringValue = category.name ?: @"";
+	self.editField.delegate = delegate;
+	self.editField.target = target;
+	self.editField.action = action;
+	self.needsLayout = YES;
+	self.needsDisplay = YES;
+	[self.editField setNeedsDisplay:YES];
+}
 
-	if (backgroundStyle == NSBackgroundStyleEmphasized) {
+- (NSView *) hitTest:(NSPoint)point
+{
+	if (!self.editField.hidden) {
+		NSPoint field_point = [self convertPoint:point toView:self.editField];
+		if (NSPointInRect(field_point, self.editField.bounds)) {
+			return self.editField;
+		}
+	}
+
+	return [super hitTest:point];
+}
+
+- (void) setSelected:(BOOL)selected
+{
+	[super setSelected:selected];
+
+	[self updateTextColors];
+}
+
+- (void) setEmphasized:(BOOL)emphasized
+{
+	[super setEmphasized:emphasized];
+
+	[self updateTextColors];
+}
+
+- (void) updateTextColors
+{
+	if (self.selected && self.emphasized) {
 		self.nameField.textColor = [NSColor selectedControlTextColor];
 		self.countField.textColor = [NSColor selectedControlTextColor];
 	}

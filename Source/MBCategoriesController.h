@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class MBCategory;
 
-@interface MBCategoriesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSSplitViewDelegate>
+@interface MBCategoriesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSSplitViewDelegate, NSTextFieldDelegate>
 
 @property (strong, nonatomic) NSTableView* categoriesTableView;
 @property (strong, nonatomic) NSTableView* postsTableView;
