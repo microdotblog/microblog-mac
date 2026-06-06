@@ -117,6 +117,7 @@
 		4B41CB4B2E22BA98000C324F /* MBVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB4A2E22BA98000C324F /* MBVersion.m */; };
 		4B41CB4E2E22DB30000C324F /* MBVersionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB4D2E22DB30000C324F /* MBVersionCell.m */; };
 		4B41CB512E22DB55000C324F /* VersionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B41CB4F2E22DB55000C324F /* VersionCell.xib */; };
+		4B426E862FD495CC002913E6 /* NSMenuItem+RSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B426E842FD495CC002913E6 /* NSMenuItem+RSCore.m */; };
 		4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */; };
 		4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */; };
 		4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */; };
@@ -499,6 +500,8 @@
 		4B41CB4C2E22DB30000C324F /* MBVersionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBVersionCell.h; path = Source/MBVersionCell.h; sourceTree = "<group>"; };
 		4B41CB4D2E22DB30000C324F /* MBVersionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBVersionCell.m; path = Source/MBVersionCell.m; sourceTree = "<group>"; };
 		4B41CB502E22DB55000C324F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/VersionCell.xib; sourceTree = "<group>"; };
+		4B426E832FD495CC002913E6 /* NSMenuItem+RSCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMenuItem+RSCore.h"; sourceTree = "<group>"; };
+		4B426E842FD495CC002913E6 /* NSMenuItem+RSCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMenuItem+RSCore.m"; sourceTree = "<group>"; };
 		4B4C7DBF24E1BC03000004E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Bookmark.xib; sourceTree = "<group>"; };
 		4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFBookmarkController.h; path = Source/RFBookmarkController.h; sourceTree = "<group>"; };
 		4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBookmarkController.m; path = Source/RFBookmarkController.m; sourceTree = "<group>"; };
@@ -937,6 +940,16 @@
 				4B400D02201EC55B00C71AAF /* MMSpanParser.m */,
 			);
 			name = MMMarkdown;
+			sourceTree = "<group>";
+		};
+		4B426E852FD495CC002913E6 /* RSCore */ = {
+			isa = PBXGroup;
+			children = (
+				4B426E832FD495CC002913E6 /* NSMenuItem+RSCore.h */,
+				4B426E842FD495CC002913E6 /* NSMenuItem+RSCore.m */,
+			);
+			name = RSCore;
+			path = Shared/RSCore;
 			sourceTree = "<group>";
 		};
 		4B5714C9224BD00B001F8E4F /* HTMLParser */ = {
@@ -1385,6 +1398,7 @@
 				4B5714C9224BD00B001F8E4F /* HTMLParser */,
 				4B400CF1201EC52500C71AAF /* MMMarkdown */,
 				4B8FBDD81F867A2800906C86 /* UUToolbox */,
+				4B426E852FD495CC002913E6 /* RSCore */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -1776,6 +1790,7 @@
 				4B90D0002FD100000000001 /* MBLogFile.m in Sources */,
 				4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */,
 				4B5606DA2A73F92F00843D59 /* MBTokenField.m in Sources */,
+				4B426E862FD495CC002913E6 /* NSMenuItem+RSCore.m in Sources */,
 				4BE23F982A700AFA00E24718 /* MBHighlightCell.m in Sources */,
 				4BE23F922A700A7200E24718 /* MBHighlight.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,

@@ -51,11 +51,16 @@
 #import "RFUserCache.h"
 #import "MBMenus.h"
 #import "MBRobotsModel.h"
+#import "NSMenuItem+RSCore.h"
 
 @implementation RFAppDelegate
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"ShowMenuIcons"]) {
+		[NSMenuItem rs_disableIcons];
+	}
+
 	[self removeSandboxedContainer];
 	
 	[self setupDefaults];
