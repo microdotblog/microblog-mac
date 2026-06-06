@@ -840,8 +840,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (void) updateCategory:(MBCategory *)category withName:(NSString *)name
 {
-	if (category.uid == nil) {
-		[self showMicropubErrorMessage:@"Could not update the category because it is missing a category ID." title:@"Error Updating Category"];
+	if (category.url.length == 0) {
+		[self showMicropubErrorMessage:@"Could not update the category because it is missing a category URL." title:@"Error Updating Category"];
 		return;
 	}
 
@@ -852,7 +852,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 		@"mp-channel": @"categories",
 		@"mp-destination": [self currentDestinationUID],
 		@"action": @"update",
-		@"uid": category.uid,
+		@"url": category.url,
 		@"name": name
 	};
 
@@ -903,8 +903,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (void) deleteCategory:(MBCategory *)category
 {
-	if (category.uid == nil) {
-		[self showMicropubErrorMessage:@"Could not delete the category because it is missing a category ID." title:@"Error Deleting Category"];
+	if (category.url.length == 0) {
+		[self showMicropubErrorMessage:@"Could not delete the category because it is missing a category URL." title:@"Error Deleting Category"];
 		return;
 	}
 
@@ -912,7 +912,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 		@"mp-channel": @"categories",
 		@"mp-destination": [self currentDestinationUID],
 		@"action": @"delete",
-		@"uid": category.uid
+		@"url": category.url
 	};
 
 	[self.progressSpinner startAnimation:nil];
@@ -945,6 +945,9 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	}
 	if (updated_category.uid != nil) {
 		category.uid = updated_category.uid;
+	}
+	if (updated_category.url.length > 0) {
+		category.url = updated_category.url;
 	}
 	category.postsCount = updated_category.postsCount;
 }

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString* name;
 @property (strong, nonatomic, nullable) NSNumber* uid;
+@property (strong, nonatomic, nullable) NSString* url;
 @property (strong, nonatomic, nullable) NSNumber* postsCount;
 
 - (instancetype) initWithName:(NSString *)name postsCount:(nullable NSNumber *)postsCount;

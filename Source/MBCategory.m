@@ -57,6 +57,7 @@
 		NSNumber* count = [self countFromDictionary:info];
 		MBCategory* category = [[MBCategory alloc] initWithName:name postsCount:count];
 		category.uid = [self numberFromObject:[info objectForKey:@"uid"]];
+		category.url = [self stringFromObject:[info objectForKey:@"url"]];
 		return category;
 	}
 	else {
@@ -93,6 +94,19 @@
 	}
 	else if ([value isKindOfClass:[NSString class]]) {
 		return @([(NSString *)value integerValue]);
+	}
+	else {
+		return nil;
+	}
+}
+
++ (NSString *) stringFromObject:(id)value
+{
+	if ([value isKindOfClass:[NSString class]]) {
+		return value;
+	}
+	else if ([value isKindOfClass:[NSNumber class]]) {
+		return [(NSNumber *)value stringValue];
 	}
 	else {
 		return nil;
