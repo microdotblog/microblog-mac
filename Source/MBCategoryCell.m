@@ -122,8 +122,9 @@
 		return;
 	}
 
-	if ([self.superview respondsToSelector:@selector(rightMouseDown:)]) {
-		[self.superview rightMouseDown:event];
+	NSTableView* table_view = [self enclosingTableView];
+	if (table_view != nil) {
+		[table_view rightMouseDown:event];
 	}
 	else {
 		[super rightMouseDown:event];
@@ -137,12 +138,26 @@
 		return;
 	}
 
-	if ([self.superview respondsToSelector:@selector(mouseDown:)]) {
-		[self.superview mouseDown:event];
+	NSTableView* table_view = [self enclosingTableView];
+	if (table_view != nil) {
+		[table_view mouseDown:event];
 	}
 	else {
 		[super mouseDown:event];
 	}
+}
+
+- (NSTableView *) enclosingTableView
+{
+	NSView* view = self.superview;
+	while (view != nil) {
+		if ([view isKindOfClass:[NSTableView class]]) {
+			return (NSTableView *)view;
+		}
+		view = view.superview;
+	}
+
+	return nil;
 }
 
 - (void) setSelected:(BOOL)selected

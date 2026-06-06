@@ -14,8 +14,10 @@
 #import "MBSplitView.h"
 #import "RFPostCell.h"
 #import "RFPostTableView.h"
+#import "RFPostController.h"
 #import "RFPost.h"
 #import "RFBlogsController.h"
+#import "RFAppDelegate.h"
 #import "RFClient.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
@@ -24,7 +26,7 @@
 #import "NSAlert+Extras.h"
 
 static NSString* const kCategoryCellIdentifier = @"CategoryCell";
-static NSInteger const kCategoriesPostsLimit = 200;
+static NSInteger const kCategoriesPostsLimit = 100;
 static CGFloat const kCategoriesInitialRatio = 0.30;
 static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
@@ -360,6 +362,9 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 - (void) setupMenus
 {
 	self.categoryContextMenu = [[NSMenu alloc] initWithTitle:@"Categories"];
+	NSMenuItem* new_post_item = [self.categoryContextMenu addItemWithTitle:@"New Post..." action:@selector(newPostWithSelectedCategory:) keyEquivalent:@""];
+	new_post_item.target = self;
+	[self.categoryContextMenu addItem:[NSMenuItem separatorItem]];
 	NSMenuItem* edit_category_item = [self.categoryContextMenu addItemWithTitle:@"Rename" action:@selector(editSelectedCategory:) keyEquivalent:@""];
 	edit_category_item.target = self;
 	NSMenuItem* delete_category_item = [self.categoryContextMenu addItemWithTitle:@"Delete" action:@selector(deleteSelectedCategory:) keyEquivalent:@""];
@@ -437,7 +442,78 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				[self stopLoadingSidebarRow];
 			});
 		}
+		}];
+	}
+
+- (void) refreshCategoriesList
+{
+	MBCategory* selected_category = self.selectedCategory;
+	NSInteger selected_row = self.categoriesTableView.selectedRow;
+	NSString* destination_uid = [self currentDestinationUID];
+	NSDictionary* args = @{
+		@"q": @"category",
+		@"mp-destination": destination_uid
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			NSArray* new_categories = [MBCategory categoriesFromResponse:response.parsedResponse];
+
+			RFDispatchMainAsync (^{
+				self.categories = new_categories;
+				[self.categoriesTableView reloadData];
+				[self restoreSelectedCategory:selected_category fallbackRow:selected_row];
+				[self setupBlogName];
+			});
+		}
 	}];
+}
+
+- (void) restoreSelectedCategory:(MBCategory *)category fallbackRow:(NSInteger)row
+{
+	NSInteger restored_row = [self rowForCategoryMatchingCategory:category];
+	if (restored_row < 0 && row >= 0 && row < (NSInteger)self.categories.count) {
+		restored_row = row;
+	}
+
+	if (restored_row >= 0) {
+		self.selectedCategory = [self.categories objectAtIndex:restored_row];
+		[self.categoriesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:restored_row] byExtendingSelection:NO];
+	}
+	else {
+		self.selectedCategory = nil;
+		[self.categoriesTableView deselectAll:nil];
+	}
+}
+
+- (NSInteger) rowForCategoryMatchingCategory:(MBCategory *)category
+{
+	if (category == nil) {
+		return -1;
+	}
+
+	for (NSInteger i = 0; i < (NSInteger)self.categories.count; i++) {
+		MBCategory* existing_category = [self.categories objectAtIndex:i];
+		if ([self category:existing_category matchesCategory:category]) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+- (BOOL) category:(MBCategory *)category matchesCategory:(MBCategory *)otherCategory
+{
+	if (category.uid != nil && otherCategory.uid != nil) {
+		return [category.uid isEqualToNumber:otherCategory.uid];
+	}
+	else if (category.url.length > 0 && otherCategory.url.length > 0) {
+		return [category.url isEqualToString:otherCategory.url];
+	}
+	else {
+		return [category.name isEqualToString:otherCategory.name];
+	}
 }
 
 - (void) fetchPosts
@@ -611,6 +687,20 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	RFDispatchMainAsync(^{
 		[self focusCategoryRenameField];
 	});
+}
+
+- (IBAction) newPostWithSelectedCategory:(id)sender
+{
+	#pragma unused(sender)
+
+	MBCategory* category = [self selectedCategoryForAction];
+	if (category.name.length == 0) {
+		return;
+	}
+
+	RFPostController* post_controller = [[RFPostController alloc] initWithCategoryName:category.name];
+	RFAppDelegate* app_delegate = (RFAppDelegate *)[NSApp delegate];
+	[app_delegate showPostController:post_controller];
 }
 
 - (IBAction) editSelectedCategory:(id)sender
@@ -1125,6 +1215,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (void) closePostingNotification:(NSNotification *)notification
 {
+	[self refreshCategoriesList];
 	[self fetchPosts];
 }
 
@@ -1218,7 +1309,11 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if (item.action == @selector(editSelectedCategory:) || item.action == @selector(deleteSelectedCategory:)) {
+	if (item.action == @selector(newPostWithSelectedCategory:)) {
+		MBCategory* category = [self selectedCategoryForAction];
+		return (category.name.length > 0);
+	}
+	else if (item.action == @selector(editSelectedCategory:) || item.action == @selector(deleteSelectedCategory:)) {
 		return ([self selectedCategoryForAction] != nil);
 	}
 	else if (item.action == @selector(openSelectedPost:) || item.action == @selector(deleteSelectedPost:) || item.action == @selector(openPostInBrowser:) || item.action == @selector(copyPostLink:)) {
