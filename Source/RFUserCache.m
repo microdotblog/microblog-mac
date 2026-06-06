@@ -131,11 +131,47 @@ static NSTimeInterval const kProfileImagesCleanupExpirationSeconds = (60 * 60 * 
 		@"image/gif": @"gif",
 		@"image/webp": @"webp",
 		@"image/tiff": @"tif",
+		@"image/tif": @"tif",
 		@"image/heic": @"heic",
 		@"image/heif": @"heif"
 	};
 
 	return [extensions objectForKey:mimeType.lowercaseString];
+}
+
++ (NSString *) avatarExtensionForImageData:(NSData *)data
+{
+	if (data.length < 4) {
+		return nil;
+	}
+
+	const unsigned char* bytes = data.bytes;
+	if (bytes[0] == 0xff && bytes[1] == 0xd8 && bytes[2] == 0xff) {
+		return @"jpg";
+	}
+	if (bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4e && bytes[3] == 0x47) {
+		return @"png";
+	}
+	if (bytes[0] == 0x47 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x38) {
+		return @"gif";
+	}
+	if (data.length >= 12 &&
+		bytes[0] == 0x52 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x46 &&
+		bytes[8] == 0x57 && bytes[9] == 0x45 && bytes[10] == 0x42 && bytes[11] == 0x50) {
+		return @"webp";
+	}
+	if ((bytes[0] == 0x49 && bytes[1] == 0x49 && bytes[2] == 0x2a && bytes[3] == 0x00) ||
+		(bytes[0] == 0x4d && bytes[1] == 0x4d && bytes[2] == 0x00 && bytes[3] == 0x2a)) {
+		return @"tif";
+	}
+	if (data.length >= 12 && bytes[4] == 0x66 && bytes[5] == 0x74 && bytes[6] == 0x79 && bytes[7] == 0x70) {
+		NSString* brand = [[NSString alloc] initWithBytes:&bytes[8] length:4 encoding:NSASCIIStringEncoding];
+		if ([brand hasPrefix:@"hei"] || [brand isEqualToString:@"mif1"]) {
+			return @"heic";
+		}
+	}
+
+	return nil;
 }
 
 + (NSString *) avatarCachePathForURL:(NSURL *)url extension:(NSString *)extension
@@ -271,12 +307,20 @@ static NSTimeInterval const kProfileImagesCleanupExpirationSeconds = (60 * 60 * 
 		
 		[UUHttpSession get:url.absoluteString queryArguments:nil completionHandler:^(UUHttpResponse *response)
 		 {
-			 if ([response.parsedResponse isKindOfClass:[NSImage class]])
+			 NSImage* image = nil;
+			 if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+				 image = response.parsedResponse;
+			 }
+			 else if (response.rawResponse.length > 0) {
+				 image = [[NSImage alloc] initWithData:response.rawResponse];
+			 }
+
+			 if (image != nil)
 			 {
-				 NSImage* image = response.parsedResponse;
 				 NSString* extension = [RFUserCache avatarExtensionForMIMEType:response.httpResponse.MIMEType];
 				 extension = extension ?: [RFUserCache normalizedImageExtension:url.pathExtension];
 				 NSData* data = response.rawResponse;
+				 extension = extension ?: [RFUserCache avatarExtensionForImageData:data];
 				 if (data.length == 0) {
 					 data = image.TIFFRepresentation;
 					 extension = @"tif";

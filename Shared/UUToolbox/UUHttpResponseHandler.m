@@ -38,8 +38,13 @@ NSString * const kUUContentTypeTextPlain        = @"text/plain";
 NSString * const kUUContentTypeBinary           = @"application/octet-stream";
 NSString * const kUUContentTypeImagePng         = @"image/png";
 NSString * const kUUContentTypeImageJpeg        = @"image/jpeg";
+NSString * const kUUContentTypeImageJpg         = @"image/jpg";
 NSString * const kUUContentTypeImageGif         = @"image/gif";
 NSString * const kUUContentTypeImageWebp        = @"image/webp";
+NSString * const kUUContentTypeImageTiff        = @"image/tiff";
+NSString * const kUUContentTypeImageTif         = @"image/tif";
+NSString * const kUUContentTypeImageHeic        = @"image/heic";
+NSString * const kUUContentTypeImageHeif        = @"image/heif";
 NSString * const kUUContentTypeFormEncoded      = @"application/x-www-form-urlencoded";
 
 NSString * const kUUContentLengthHeader  = @"Content-Length";
@@ -130,7 +135,17 @@ NSString * const kUUHttpMethodHead       = @"HEAD";
 
 - (NSArray*) supportedMimeTypes
 {
-    return @[kUUContentTypeImagePng, kUUContentTypeImageJpeg, kUUContentTypeImageGif, kUUContentTypeImageWebp];
+    return @[
+		kUUContentTypeImagePng,
+		kUUContentTypeImageJpeg,
+		kUUContentTypeImageJpg,
+		kUUContentTypeImageGif,
+		kUUContentTypeImageWebp,
+		kUUContentTypeImageTiff,
+		kUUContentTypeImageTif,
+		kUUContentTypeImageHeic,
+		kUUContentTypeImageHeif
+	];
 }
 
 - (id) parseResponse:(NSData*)rxBuffer response:(NSHTTPURLResponse*)response forRequest:(NSURLRequest*)request
