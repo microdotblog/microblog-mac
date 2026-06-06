@@ -802,10 +802,11 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 	NSString* previous_name = category.name;
 	category.name = name;
+	NSString* destination_uid = [self currentDestinationUID];
 
 	NSDictionary* params = @{
 		@"mp-channel": @"categories",
-		@"mp-destination": [self currentDestinationUID],
+		@"mp-destination": destination_uid,
 		@"action": @"update",
 		@"url": category.url,
 		@"name": name
@@ -824,6 +825,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 			else {
 				[self updateCategory:category fromResponse:response];
 				[self reloadCategory:category];
+				[self sendCategoryRenamedNotificationFromName:previous_name toName:category.name destinationUID:destination_uid];
 			}
 		});
 	}];
@@ -902,6 +904,19 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 		category.url = updated_category.url;
 	}
 	category.postsCount = updated_category.postsCount;
+}
+
+- (void) sendCategoryRenamedNotificationFromName:(NSString *)oldName toName:(NSString *)newName destinationUID:(NSString *)destinationUID
+{
+	if (oldName.length == 0 || newName.length == 0 || [oldName isEqualToString:newName]) {
+		return;
+	}
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kCategoryWasRenamedNotification object:self userInfo:@{
+		kCategoryWasRenamedOldNameKey: oldName,
+		kCategoryWasRenamedNewNameKey: newName,
+		kCategoryWasRenamedDestinationKey: destinationUID ?: @""
+	}];
 }
 
 - (void) reloadCategory:(MBCategory *)category

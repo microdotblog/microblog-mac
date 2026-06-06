@@ -196,6 +196,11 @@ static NSString* const kUpdateCollectionsNotification = @"MBUpdateCollectionsNot
 
 static NSString* const kEditCollectionNotification = @"MBEditCollectionNotification";
 
+static NSString* const kCategoryWasRenamedNotification = @"MBCategoryWasRenamedNotification";
+static NSString* const kCategoryWasRenamedOldNameKey = @"old_name";
+static NSString* const kCategoryWasRenamedNewNameKey = @"new_name";
+static NSString* const kCategoryWasRenamedDestinationKey = @"destination";
+
 static NSString* const kPostingCheckboxChangedNotification = @"MBPostingCheckboxChangedNotification";
 
 static NSString* const kNewPostWithPhotoNotification = @"MBNewPostWithPhotoNotification";

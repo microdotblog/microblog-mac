@@ -384,6 +384,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetAutoCompleteNotification:) name:kResetUserAutoCompleteNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postingCheckboxChangedNotification:) name:kPostingCheckboxChangedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(summaryTextDidChange:) name:NSTextDidChangeNotification object:self.summaryTextView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(categoryWasRenamedNotification:) name:kCategoryWasRenamedNotification object:nil];
 }
 
 #pragma mark -
@@ -983,6 +984,73 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self setupBlogName];
 	[self downloadCategories];
 	[self downloadBlogs];
+}
+
+- (void) categoryWasRenamedNotification:(NSNotification *)notification
+{
+	NSString* destination_uid = notification.userInfo[kCategoryWasRenamedDestinationKey];
+	if (destination_uid.length > 0 && ![destination_uid isEqualToString:[self currentDestinationUID]]) {
+		return;
+	}
+
+	NSString* old_name = notification.userInfo[kCategoryWasRenamedOldNameKey];
+	NSString* new_name = notification.userInfo[kCategoryWasRenamedNewNameKey];
+	if (old_name.length == 0 || new_name.length == 0 || [old_name isEqualToString:new_name]) {
+		return;
+	}
+
+	if (self.isShowingCategories) {
+		[self updateSelectedCheckboxes];
+	}
+
+	NSArray* updated_categories = [self categoriesByReplacingCategoryName:old_name withName:new_name inCategories:self.categories];
+	NSArray* updated_selected = [self categoriesByReplacingCategoryName:old_name withName:new_name inCategories:self.selectedCategories];
+	BOOL did_update_categories = (updated_categories != nil);
+	BOOL did_update_selected = (updated_selected != nil);
+	if (did_update_categories) {
+		self.categories = updated_categories;
+	}
+	if (did_update_selected) {
+		self.selectedCategories = updated_selected;
+	}
+
+	if (did_update_categories || did_update_selected) {
+		[self updateCategoriesPane];
+		[self.categoriesCollectionView reloadData];
+	}
+}
+
+- (NSArray *) categoriesByReplacingCategoryName:(NSString *)oldName withName:(NSString *)newName inCategories:(NSArray *)categories
+{
+	NSMutableArray* updated_categories = [NSMutableArray arrayWithCapacity:categories.count];
+	BOOL did_update = NO;
+
+	for (NSString* category_name in categories) {
+		if ([category_name isEqualToString:oldName]) {
+			[updated_categories addObject:newName];
+			did_update = YES;
+		}
+		else {
+			[updated_categories addObject:category_name];
+		}
+	}
+
+	if (did_update) {
+		return updated_categories;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (NSString *) currentDestinationUID
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	return destination_uid;
 }
 
 - (void) removeAttachedPhotoNotification:(NSNotification *)notification
