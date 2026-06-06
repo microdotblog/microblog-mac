@@ -17,13 +17,58 @@
 
 - (NSMenu *) menuForEvent:(NSEvent *)event
 {
-	NSInteger row = [self rowAtPoint:[self convertPoint:event.locationInWindow fromView:nil]];
-	if (row >= 0) {
-		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
-		[self selectRowIndexes:index_set byExtendingSelection:NO];
+	[self selectRowForMenuEvent:event];
+	return [super menuForEvent:event];
+}
+
+- (void) rightMouseDown:(NSEvent *)event
+{
+	if ([self selectRowForMenuEvent:event] && self.menu != nil) {
+		[NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
+	}
+	else {
+		[super rightMouseDown:event];
+	}
+}
+
+- (void) mouseDown:(NSEvent *)event
+{
+	if ((event.modifierFlags & NSEventModifierFlagControl) && [self selectRowForMenuEvent:event] && self.menu != nil) {
+		[NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
+	}
+	else {
+		[super mouseDown:event];
+	}
+}
+
+- (BOOL) selectRowForMenuEvent:(NSEvent *)event
+{
+	NSInteger row = [self rowForMenuEvent:event];
+	if (row < 0) {
+		return NO;
 	}
 
-	return [super menuForEvent:event];
+	NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
+	[self selectRowIndexes:index_set byExtendingSelection:NO];
+	return YES;
+}
+
+- (NSInteger) rowForMenuEvent:(NSEvent *)event
+{
+	NSPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+	NSInteger row = [self rowAtPoint:point];
+	if (row >= 0) {
+		return row;
+	}
+
+	if (self.numberOfRows > 0) {
+		NSRect first_row_rect = NSInsetRect([self rectOfRow:0], 0.0, -3.0);
+		if (NSPointInRect(point, first_row_rect)) {
+			return 0;
+		}
+	}
+
+	return -1;
 }
 
 - (void) keyDown:(NSEvent *)event
