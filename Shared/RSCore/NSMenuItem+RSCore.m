@@ -26,11 +26,16 @@ static void *kShouldShowImageKey = &kShouldShowImageKey;
 
 - (NSImage *)rs_swizzledImage {
 
-	if (self.rs_shouldShowImage || [self rs_isToolbarItemRepresentation] || ![self rs_isMainMenuItem] || self.title.length < 1) {
+	if (self.rs_shouldShowImage || [self rs_isToolbarItemRepresentation] || self.title.length < 1) {
 		// Call the original getter (now swapped to rs_swizzledImage)
 		return [self rs_swizzledImage];
 	}
-	return nil;
+
+	if ([self rs_isMainMenuItem] || [self rs_isContextMenuItem]) {
+		return nil;
+	}
+
+	return [self rs_swizzledImage];
 }
 
 - (BOOL)rs_isToolbarItemRepresentation {
@@ -45,6 +50,20 @@ static void *kShouldShowImageKey = &kShouldShowImageKey;
 	// This allows images to show for (for instance) the traffic light menus
 	// and for menu items in submenus such as Move & Resize and Full Screen Tile.
 	return self.menu.supermenu == NSApplication.sharedApplication.mainMenu;
+}
+
+- (BOOL)rs_isContextMenuItem {
+
+	NSMenu* menu = self.menu;
+	if (menu == nil || menu == NSApplication.sharedApplication.mainMenu) {
+		return NO;
+	}
+
+	while (menu.supermenu != nil) {
+		menu = menu.supermenu;
+	}
+
+	return menu != NSApplication.sharedApplication.mainMenu;
 }
 
 - (BOOL)rs_shouldShowImage {
