@@ -115,7 +115,6 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 
 	RFHostnameButton* blog_name_button = [[RFHostnameButton alloc] initWithFrame:NSZeroRect];
 	blog_name_button.translatesAutoresizingMaskIntoConstraints = NO;
-	blog_name_button.hidden = YES;
 	blog_name_button.target = self;
 	blog_name_button.action = @selector(blogNameClicked:);
 	blog_name_button.bezelStyle = NSBezelStyleRounded;
@@ -399,7 +398,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	[self.categoriesTableView reloadData];
 	[self.postsTableView reloadData];
 	[self.progressSpinner startAnimation:nil];
-	self.blogNameButton.hidden = YES;
+	[self setupBlogName];
 	self.categoriesTableView.animator.alphaValue = 0.0;
 	self.postsTableView.animator.alphaValue = 0.0;
 
@@ -424,7 +423,6 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				self.categoriesTableView.animator.alphaValue = 1.0;
 				self.postsTableView.animator.alphaValue = 1.0;
 				[self setupBlogName];
-				self.blogNameButton.hidden = NO;
 				[self.progressSpinner stopAnimation:nil];
 				[self stopLoadingSidebarRow];
 			});
@@ -436,7 +434,6 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				}
 
 				[self.progressSpinner stopAnimation:nil];
-				self.blogNameButton.hidden = NO;
 				[self stopLoadingSidebarRow];
 			});
 		}
@@ -496,7 +493,6 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				}
 
 				[self.progressSpinner stopAnimation:nil];
-				self.blogNameButton.hidden = NO;
 				[self stopLoadingSidebarRow];
 			});
 		}
@@ -883,10 +879,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				[self showMicropubError:response title:@"Error Deleting Category"];
 			}
 			else {
-				self.selectedCategory = nil;
-				self.currentPosts = @[];
-				[self.postsTableView reloadData];
-				[self fetchCategories];
+				[self removeDeletedCategory:category];
 			}
 		});
 	}];
@@ -935,6 +928,30 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	[updated_categories removeObjectAtIndex:index];
 	self.categories = updated_categories;
 	[self.categoriesTableView reloadData];
+}
+
+- (void) removeDeletedCategory:(MBCategory *)category
+{
+	NSUInteger index = [self.categories indexOfObjectIdenticalTo:category];
+	if (index == NSNotFound) {
+		[self.categoriesTableView deselectAll:nil];
+		self.selectedCategory = nil;
+		self.currentPosts = @[];
+		self.postsRequestID++;
+		[self.postsTableView reloadData];
+		return;
+	}
+
+	NSIndexSet* row_indexes = [NSIndexSet indexSetWithIndex:index];
+	NSMutableArray* updated_categories = [self.categories mutableCopy];
+	[updated_categories removeObjectAtIndex:index];
+	self.categories = updated_categories;
+	[self.categoriesTableView removeRowsAtIndexes:row_indexes withAnimation:NSTableViewAnimationEffectFade];
+	[self.categoriesTableView deselectAll:nil];
+	self.selectedCategory = nil;
+	self.currentPosts = @[];
+	self.postsRequestID++;
+	[self.postsTableView reloadData];
 }
 
 - (MBCategory *) selectedCategoryForAction
