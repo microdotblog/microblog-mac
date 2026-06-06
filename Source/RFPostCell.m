@@ -21,6 +21,43 @@
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
+@interface RFPostPhotoScrollView : NSScrollView
+
+@end
+
+@implementation RFPostPhotoScrollView
+
+- (void) scrollWheel:(NSEvent *)event
+{
+	CGFloat delta_x = fabs (event.scrollingDeltaX);
+	CGFloat delta_y = fabs (event.scrollingDeltaY);
+	if (delta_y > delta_x) {
+		NSTableView* table_view = [self enclosingTableView];
+		if (table_view.enclosingScrollView != nil) {
+			[table_view.enclosingScrollView scrollWheel:event];
+			return;
+		}
+	}
+
+	[super scrollWheel:event];
+}
+
+- (NSTableView *) enclosingTableView
+{
+	NSView* view = self.superview;
+	while (view != nil) {
+		if ([view isKindOfClass:[NSTableView class]]) {
+			return (NSTableView*) view;
+		}
+
+		view = view.superview;
+	}
+
+	return nil;
+}
+
+@end
+
 @implementation RFPostCell
 
 - (void) setupWithPost:(RFPost *)post
