@@ -104,13 +104,45 @@
 - (NSView *) hitTest:(NSPoint)point
 {
 	if (!self.editField.hidden) {
-		NSPoint field_point = [self convertPoint:point toView:self.editField];
-		if (NSPointInRect(field_point, self.editField.bounds)) {
-			return self.editField;
-		}
+		return [super hitTest:point];
 	}
 
-	return [super hitTest:point];
+	if (NSPointInRect(point, self.bounds)) {
+		return self;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (void) rightMouseDown:(NSEvent *)event
+{
+	if (!self.editField.hidden) {
+		[super rightMouseDown:event];
+		return;
+	}
+
+	if ([self.superview respondsToSelector:@selector(rightMouseDown:)]) {
+		[self.superview rightMouseDown:event];
+	}
+	else {
+		[super rightMouseDown:event];
+	}
+}
+
+- (void) mouseDown:(NSEvent *)event
+{
+	if (!self.editField.hidden) {
+		[super mouseDown:event];
+		return;
+	}
+
+	if ([self.superview respondsToSelector:@selector(mouseDown:)]) {
+		[self.superview mouseDown:event];
+	}
+	else {
+		[super mouseDown:event];
+	}
 }
 
 - (void) setSelected:(BOOL)selected

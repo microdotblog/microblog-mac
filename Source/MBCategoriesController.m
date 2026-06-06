@@ -296,7 +296,7 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 			NSAppearanceNameDarkAqua
 		]];
 		if ([best_match isEqualToString:NSAppearanceNameDarkAqua]) {
-			return [NSColor colorWithCalibratedWhite:0.04 alpha:1.0];
+			return [NSColor colorWithCalibratedRed:0.114 green:0.137 blue:0.149 alpha:1.0];
 		}
 		else {
 			return [NSColor colorWithCalibratedWhite:0.975 alpha:1.0];

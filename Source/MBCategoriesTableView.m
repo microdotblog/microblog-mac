@@ -15,6 +15,17 @@
 	// override to avoid the focus highlight rectangle
 }
 
+- (NSMenu *) menuForEvent:(NSEvent *)event
+{
+	NSInteger row = [self rowAtPoint:[self convertPoint:event.locationInWindow fromView:nil]];
+	if (row >= 0) {
+		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
+		[self selectRowIndexes:index_set byExtendingSelection:NO];
+	}
+
+	return [super menuForEvent:event];
+}
+
 - (void) keyDown:(NSEvent *)event
 {
 	if ([[event characters] isEqualToString:@"\r"]) {
