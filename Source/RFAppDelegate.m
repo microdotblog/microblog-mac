@@ -193,6 +193,7 @@
 - (void) applicationWillTerminate:(NSNotification *)notification
 {
 	[RFSettings cleanupTemporaryFolders];
+	[RFUserCache cleanupExpiredProfileImages];
 }
 
 - (void) removeSandboxedContainer
