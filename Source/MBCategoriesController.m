@@ -529,40 +529,6 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	return destination_uid;
 }
 
-- (NSString *) currentDestinationSiteID
-{
-	NSString* current_uid = [self currentDestinationUID];
-	for (NSDictionary* destination in [RFBlogsController cachedDestinations]) {
-		if (![destination isKindOfClass:[NSDictionary class]]) {
-			continue;
-		}
-
-		NSString* uid = destination[@"uid"] ?: @"";
-		if (![uid isEqualToString:current_uid]) {
-			continue;
-		}
-
-		for (NSString* key in @[ @"site_id", @"siteID", @"blog_id", @"blogID", @"id" ]) {
-			id value = destination[key];
-			if ([value isKindOfClass:[NSNumber class]]) {
-				return [(NSNumber*) value stringValue];
-			}
-			else if ([value isKindOfClass:[NSString class]] && [(NSString*) value length] > 0) {
-				return (NSString*) value;
-			}
-		}
-	}
-
-	if (current_uid.length > 0) {
-		NSCharacterSet* non_digits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-		if ([current_uid rangeOfCharacterFromSet:non_digits].location == NSNotFound) {
-			return current_uid;
-		}
-	}
-
-	return nil;
-}
-
 - (void) stopLoadingSidebarRow
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
@@ -574,15 +540,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 {
 	#pragma unused(sender)
 
-	NSString* site_id = [self currentDestinationSiteID];
-	NSString* url_string = nil;
-	if (site_id.length > 0) {
-		url_string = [NSString stringWithFormat:@"https://micro.blog/account/categories/%@/filters", site_id];
-	}
-	else {
-		url_string = @"https://micro.blog/account/categories";
-	}
-
+	NSString* hostname = [RFSettings stringForKey:kCurrentDestinationName];
+	NSString* url_string = [NSString stringWithFormat:@"https://micro.blog/account/categories/%@/filters", hostname];
 	NSURL* url = [NSURL URLWithString:url_string];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
