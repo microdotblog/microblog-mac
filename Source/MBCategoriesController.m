@@ -442,8 +442,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 				[self stopLoadingSidebarRow];
 			});
 		}
-		}];
-	}
+	}];
+}
 
 - (void) refreshCategoriesList
 {
