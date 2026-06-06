@@ -12,7 +12,15 @@
 
 - (NSString *) displayUsername
 {
-	return [NSString stringWithFormat:@"@%@", self.username];
+	NSString* s = [NSString stringWithFormat:@"@%@", self.username];
+	if (self.url.length > 0) {
+		NSURL* url = [NSURL URLWithString:self.url];
+		if (url.host.length > 0) {
+			s = [s stringByAppendingFormat:@" • %@", url.host];
+		}
+	}
+
+	return s;
 }
 
 - (NSString *) displayYearDirector
