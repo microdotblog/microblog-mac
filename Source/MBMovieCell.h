@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MBMovie;
+@class RFRoundedImageView;
 
 @interface MBMovieCell : NSTableRowView
 
@@ -19,8 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSTextField* subtitleField;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* leftConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* disclosureInsetConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* statusLeftConstraint;
 @property (strong, nonatomic) IBOutlet NSButton* disclosureTriangle;
 @property (strong, nonatomic) IBOutlet NSButton* postButton;
+@property (strong, nonatomic) IBOutlet RFRoundedImageView* profileImageView;
 
 @property (strong, nonatomic) MBMovie* movie;
 @property (assign, nonatomic) BOOL needsInset;

@@ -9,8 +9,16 @@
 #import "MBMovieCell.h"
 
 #import "MBMovie.h"
+#import "RFRoundedImageView.h"
 #import "RFConstants.h"
 #import "NSString+Extras.h"
+
+@interface MBMovieCell ()
+
+@property (assign, nonatomic) CGFloat statusLeftDefaultConstant;
+@property (assign, nonatomic) BOOL hasStatusLeftDefaultConstant;
+
+@end
 
 @implementation MBMovieCell
 
@@ -19,6 +27,18 @@
 	self.movie = movie;
 	self.titleField.stringValue = movie.title;
 	self.posterImageView.image = movie.posterImage;
+	self.profileImageView.image = nil;
+	self.profileImageView.hidden = (movie.profileImageURL.length == 0);
+
+	if (!self.hasStatusLeftDefaultConstant) {
+		self.statusLeftDefaultConstant = self.statusLeftConstraint.constant;
+		self.hasStatusLeftDefaultConstant = YES;
+	}
+	self.statusLeftConstraint.constant = self.statusLeftDefaultConstant + (self.profileImageView.hidden ? 0 : 22);
+
+	if (movie.profileImageURL.length > 0) {
+		[self.profileImageView loadFromURL:movie.profileImageURL];
+	}
 
 	if (movie.username.length > 0) {
 		self.subtitleField.stringValue = [movie displayUsername];

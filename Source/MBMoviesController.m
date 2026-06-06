@@ -600,10 +600,12 @@
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBMovie* m = [[MBMovie alloc] init];
+				NSDictionary* author = [[item objectForKey:@"authors"] firstObject];
 				m.posterURL = [item objectForKey:@"image"];
 				m.url = [item objectForKey:@"url"];
 				m.title = [item objectForKey:@"title"];
-				m.username = [[[[item objectForKey:@"authors"] firstObject] objectForKey:@"_microblog"] objectForKey:@"username"];
+				m.profileImageURL = [author objectForKey:@"avatar"];
+				m.username = [[author objectForKey:@"_microblog"] objectForKey:@"username"];
 
 				[new_movies addObject:m];
 			}
