@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -82,6 +82,12 @@
                             <menuItem title="New Page" image="rectangle.stack" catalog="system" keyEquivalent="N" id="YGy-f8-9ba">
                                 <connections>
                                     <action selector="newPage:" target="-1" id="cFO-oo-bGp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="New Category" image="tag" catalog="system" id="hql-N8-tff">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newCategory:" target="-1" id="3X3-sL-umy"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="New Collection" image="photo" catalog="system" id="KF6-ha-NaE">
@@ -472,6 +478,12 @@ CA
                             <menuItem title="Uploads" image="photo.on.rectangle" catalog="system" keyEquivalent="7" id="KfJ-ma-HfZ">
                                 <connections>
                                     <action selector="showUploads:" target="-1" id="6rH-yU-e5s"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Categories" image="tag" catalog="system" id="0dC-Vb-VbL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showCategories:" target="-1" id="nJU-LX-0vi"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="3JP-ZY-dVL"/>

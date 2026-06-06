@@ -56,6 +56,8 @@
 		self.disclosureInsetConstraint.constant = 18;
 		self.disclosureTriangle.hidden = YES;
 	}
+
+	[self updateTextColors];
 }
 
 - (void) setDisclosureOpen:(BOOL)isOpen
@@ -68,6 +70,24 @@
 	[super setSelected:selected];
 	
 	self.postButton.hidden = !selected || (self.movie.username.length > 0);
+	[self updateTextColors];
+}
+
+- (void) setEmphasized:(BOOL)emphasized
+{
+	[super setEmphasized:emphasized];
+
+	[self updateTextColors];
+}
+
+- (void) updateTextColors
+{
+	if (self.selected && self.emphasized) {
+		self.subtitleField.textColor = [NSColor selectedControlTextColor];
+	}
+	else {
+		self.subtitleField.textColor = [NSColor colorNamed:@"color_date_text"];
+	}
 }
 
 #pragma mark -

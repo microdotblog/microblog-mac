@@ -448,32 +448,72 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self stopLoadingSidebarRow];
 }
 
-- (void) updateNotesListWithArray:(NSMutableArray *)array selectedNoteID:(NSNumber *)selectedID notebookID:(NSNumber *)notebookID offset:(NSInteger)offset
+- (NSNumber *) currentSelectedNoteID
 {
-	NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array forNotebookID:notebookID];
-	self.allNotes = updated_notes;
-	self.currentNotes = updated_notes;
-	if (self.searchField.stringValue.length > 0) {
-		[self runSearch:self.searchField.stringValue];
+	NSInteger selected_row = self.tableView.selectedRow;
+	if ((selected_row >= 0) && (selected_row < self.currentNotes.count)) {
+		MBNote* note = [self.currentNotes objectAtIndex:selected_row];
+		return note.noteID;
+	}
+
+	return self.selectedNote.noteID;
+}
+
+- (void) restoreSelectionWithNoteID:(NSNumber *)noteID focusDetail:(BOOL)shouldFocus
+{
+	if (noteID == nil) {
+		return;
+	}
+
+	for (NSInteger i = 0; i < self.currentNotes.count; i++) {
+		MBNote* note = [self.currentNotes objectAtIndex:i];
+		if ([note.noteID isEqualToNumber:noteID]) {
+			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
+			[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
+			if (shouldFocus) {
+				[self.view.window makeFirstResponder:self.detailTextView];
+			}
+			break;
+		}
+	}
+}
+
+- (void) updateCurrentNotesForSearch:(NSString *)search preservingSelectedNoteID:(NSNumber *)selectedID
+{
+	NSString* s = [search lowercaseString];
+	if (s.length == 0) {
+		self.currentNotes = self.allNotes;
 	}
 	else {
-		[self.tableView reloadData];
+		NSMutableArray* filtered_notes = [NSMutableArray array];
+		for (MBNote* n in self.allNotes) {
+			if ([[n.text lowercaseString] containsString:s]) {
+				[filtered_notes addObject:n];
+			}
+		}
+
+		self.currentNotes = filtered_notes;
 	}
+
+	[self.tableView reloadData];
+	[self restoreSelectionWithNoteID:selectedID focusDetail:NO];
+}
+
+- (void) updateNotesListWithArray:(NSMutableArray *)array selectedNoteID:(NSNumber *)selectedID notebookID:(NSNumber *)notebookID offset:(NSInteger)offset
+{
+	NSNumber* selected_id = [self currentSelectedNoteID];
+	if (selected_id == nil) {
+		selected_id = selectedID;
+	}
+
+	NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array forNotebookID:notebookID];
+	self.allNotes = updated_notes;
+	[self updateCurrentNotesForSearch:self.searchField.stringValue preservingSelectedNoteID:selected_id];
 	if (offset == 0) {
 		[self startNewNoteAfterFirstBatchIfNeeded];
 	}
 
-	if (selectedID) {
-		for (NSInteger i = 0; i < self.currentNotes.count; i++) {
-			MBNote* n = [self.currentNotes objectAtIndex:i];
-			if ([n.noteID isEqualToNumber:selectedID]) {
-				NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
-				[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-				break;
-			}
-		}
-	}
-	else if (self.noteCreatedWhileFetching && [self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
+	if ((selected_id == nil) && self.noteCreatedWhileFetching && [self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
 		NSInteger row = [self.currentNotes indexOfObjectIdenticalTo:self.noteCreatedWhileFetching];
 		if (row != NSNotFound) {
 			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
@@ -726,22 +766,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) runSearch:(NSString *)search
 {
-	NSString* s = [search lowercaseString];
-	if (s.length == 0) {
-		self.currentNotes = self.allNotes;
-		[self.tableView reloadData];
-	}
-	else {
-		NSMutableArray* filtered_notes = [NSMutableArray array];
-		for (MBNote* n in self.allNotes) {
-			if ([[n.text lowercaseString] containsString:s]) {
-				[filtered_notes addObject:n];
-			}
-		}
-
-		self.currentNotes = filtered_notes;
-		[self.tableView reloadData];
-	}
+	NSNumber* selected_id = [self currentSelectedNoteID];
+	[self updateCurrentNotesForSearch:search preservingSelectedNoteID:selected_id];
 }
 
 #pragma mark -
@@ -1244,7 +1270,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	
 	// update current edited note text (if not already being edited)
 	NSInteger row = self.tableView.selectedRow;
-	if (row >= 0) {
+	if ((row >= 0) && (row < self.currentNotes.count)) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
 		if (![self.selectedNote.noteID isEqualToNumber:n.noteID]) {
 			self.selectedNote = [n copy];

@@ -51,11 +51,16 @@
 #import "RFUserCache.h"
 #import "MBMenus.h"
 #import "MBRobotsModel.h"
+#import "NSMenuItem+RSCore.h"
 
 @implementation RFAppDelegate
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"ShowMenuIcons"]) {
+		[NSMenuItem rs_disableIcons];
+	}
+
 	[self removeSandboxedContainer];
 	
 	[self setupDefaults];
@@ -455,6 +460,12 @@
 	}
 
 	[self.prefsController showWindow:nil];
+}
+
+- (IBAction) newCategory:(id)sender
+{
+	[self showMainWindow:nil];
+	[self.timelineController newCategory:sender];
 }
 
 - (IBAction) newBookmark:(id)sender

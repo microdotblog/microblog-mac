@@ -15,6 +15,7 @@
 #import "RFPostWindowController.h"
 #import "RFAllPostsController.h"
 #import "RFAllUploadsController.h"
+#import "MBCategoriesController.h"
 #import "RFRepliesController.h"
 #import "RFBookshelvesController.h"
 #import "MBMoviesController.h"
@@ -56,11 +57,12 @@ static NSInteger const kSelectionDivider1 = 4;
 static NSInteger const kSelectionPosts = 5;
 static NSInteger const kSelectionPages = 6;
 static NSInteger const kSelectionUploads = 7;
-static NSInteger const kSelectionDivider2 = 8;
-static NSInteger const kSelectionReplies = 9;
-static NSInteger const kSelectionBookshelves = 10;
-static NSInteger const kSelectionMovies = 11;
-static NSInteger const kSelectionNotes = 12;
+static NSInteger const kSelectionCategories = 8;
+static NSInteger const kSelectionDivider2 = 9;
+static NSInteger const kSelectionReplies = 10;
+static NSInteger const kSelectionBookshelves = 11;
+static NSInteger const kSelectionMovies = 12;
+static NSInteger const kSelectionNotes = 13;
 static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 @interface RFTimelineController ()
@@ -526,6 +528,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[self.sidebarItems addObject:@(kSelectionPosts)];
 		[self.sidebarItems addObject:@(kSelectionPages)];
 		[self.sidebarItems addObject:@(kSelectionUploads)];
+		[self.sidebarItems addObject:@(kSelectionCategories)];
 		[self.sidebarItems addObject:@(kSelectionDivider2)];
 	}
 
@@ -918,6 +921,31 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self startLoadingSidebarRow:kSelectionUploads];
 }
 
+- (IBAction) showCategories:(id)sender
+{
+	self.selectedTimeline = kSelectionCategories;
+
+	[self closeOverlays];
+
+	MBCategoriesController* controller = [[MBCategoriesController alloc] init];
+	[self showRootController:controller];
+
+	[self selectSidebarRow:kSelectionCategories];
+	[self startLoadingSidebarRow:kSelectionCategories];
+}
+
+- (BOOL) canCreateNewCategory
+{
+	return (self.selectedTimeline == kSelectionCategories && [self.rootController isKindOfClass:[MBCategoriesController class]]);
+}
+
+- (void) newCategory:(id)sender
+{
+	if ([self.rootController isKindOfClass:[MBCategoriesController class]]) {
+		[(MBCategoriesController *)self.rootController newCategory:sender];
+	}
+}
+
 - (IBAction) showReplies:(id)sender
 {
 	self.selectedTimeline = kSelectionReplies;
@@ -1019,6 +1047,11 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 			[(RFAllUploadsController *)self.rootController fetchUploads];
 		}
 	}
+	else if (self.selectedTimeline == kSelectionCategories) {
+		if ([self.rootController isKindOfClass:[MBCategoriesController class]]) {
+			[(MBCategoriesController *)self.rootController fetchCategories];
+		}
+	}
 	else if (self.selectedTimeline == kSelectionReplies) {
 		if ([self.rootController isKindOfClass:[RFRepliesController class]]) {
 			[(RFRepliesController *)self.rootController fetchReplies];
@@ -1109,6 +1142,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		if (![RFSettings isUsingMicroblog]) {
 			return NO;
 		}
+	}
+	else if (item.action == @selector(newCategory:)) {
+		return [self canCreateNewCategory];
 	}
 	else if (item.action == @selector(reply:)) {
 		if (self.selectedPostID.length == 0) {
@@ -2095,6 +2131,16 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 			cell.iconView.alphaValue = 0.5;
 		}
     }
+	else if (sidebar_row == kSelectionCategories) {
+		cell.titleField.stringValue = @"Categories";
+		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"tag" accessibilityDescription:@"Categories"];
+		if (self.window.isKeyWindow) {
+			cell.iconView.alphaValue = 1.0;
+		}
+		else {
+			cell.iconView.alphaValue = 0.5;
+		}
+	}
 	else if (sidebar_row == kSelectionReplies) {
 		cell.titleField.stringValue = @"Replies";
 		cell.iconView.image = [NSImage rf_imageWithSystemSymbolName:@"bubble.left" accessibilityDescription:@"Replies"];
@@ -2167,6 +2213,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 	else if (sidebar_row == kSelectionUploads) {
 		[self showUploads:nil];
+	}
+	else if (sidebar_row == kSelectionCategories) {
+		[self showCategories:nil];
 	}
 	else if (sidebar_row == kSelectionDivider2) {
 		// separator

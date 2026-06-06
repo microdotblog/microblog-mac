@@ -47,6 +47,7 @@ static NSString* const kCategoryCellIdentifier = @"CategoryCell";
 static NSString* const kCrosspostCellIdentifier = @"CrosspostCell";
 static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
+static NSTimeInterval const kInitialCategoryResetDelay = 1.0;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
@@ -125,7 +126,20 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (self) {
 		self.attachedPhotos = @[ photo ];
 	}
-	
+
+	return self;
+}
+
+- (id) initWithCategoryName:(NSString *)categoryName
+{
+	self = [self init];
+	if (self && categoryName.length > 0) {
+		self.initialCategoryName = categoryName;
+		self.categories = @[ categoryName ];
+		self.selectedCategories = @[ categoryName ];
+		self.isShowingCategories = YES;
+	}
+
 	return self;
 }
 
@@ -143,6 +157,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) dealloc
 {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetInitialCategoryDisplay) object:nil];
+
 	for (RFPhoto* photo in self.attachedPhotos) {
 		[photo removeTemporaryVideo];
 	}
@@ -169,6 +185,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (!self.editingPost && !self.isReply) {
 		self.isShowingCategories = [[NSUserDefaults standardUserDefaults] boolForKey:kIsShowingCategories];
 		self.isShowingCrosspostServices = [[NSUserDefaults standardUserDefaults] boolForKey:kIsShowingCrosspostServices];
+	}
+	if (self.initialCategoryName.length > 0) {
+		self.isShowingCategories = YES;
+		[self updateCategoriesPane];
+		[self.categoriesCollectionView reloadData];
 	}
 
 	[self downloadCategories];
@@ -384,6 +405,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetAutoCompleteNotification:) name:kResetUserAutoCompleteNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postingCheckboxChangedNotification:) name:kPostingCheckboxChangedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(summaryTextDidChange:) name:NSTextDidChangeNotification object:self.summaryTextView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(categoryWasRenamedNotification:) name:kCategoryWasRenamedNotification object:nil];
 }
 
 #pragma mark -
@@ -606,7 +628,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 {
 	if (self.isShowingCategories) {
 		CGFloat w = self.categoriesCollectionView.enclosingScrollView.bounds.size.width;
-		CGFloat contentHeight = [self calculatedPaneHeightForTitles:self.categories inWidth:w];
+		CGFloat contentHeight = [self calculatedPaneHeightForTitles:[self displayedCategories] inWidth:w];
 		CGFloat maxHeight = 120.0;
 		self.categoriesHeightConstraint.animator.constant = MIN(contentHeight, maxHeight);
 	}
@@ -778,12 +800,22 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (IBAction) toggleCategories:(id)sender
 {
 	[self updateSelectedCheckboxes];
+	BOOL was_showing_categories = self.isShowingCategories;
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetInitialCategoryDisplay) object:nil];
+	if (!was_showing_categories && self.initialCategoryName.length > 0) {
+		[self resetInitialCategoryDisplay];
+	}
 
 	self.isShowingCategories = !self.isShowingCategories;
 	[[NSUserDefaults standardUserDefaults] setBool:self.isShowingCategories forKey:kIsShowingCategories];
 
 	[self updateCategoriesPane];
 	[self.categoriesCollectionView reloadData];
+
+	if (was_showing_categories && self.initialCategoryName.length > 0) {
+		[self performSelector:@selector(resetInitialCategoryDisplay) withObject:nil afterDelay:kInitialCategoryResetDelay];
+	}
 }
 
 - (IBAction) toggleCrossposting:(id)sender
@@ -985,6 +1017,77 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self downloadBlogs];
 }
 
+- (void) categoryWasRenamedNotification:(NSNotification *)notification
+{
+	NSString* destination_uid = notification.userInfo[kCategoryWasRenamedDestinationKey];
+	if (destination_uid.length > 0 && ![destination_uid isEqualToString:[self currentDestinationUID]]) {
+		return;
+	}
+
+	NSString* old_name = notification.userInfo[kCategoryWasRenamedOldNameKey];
+	NSString* new_name = notification.userInfo[kCategoryWasRenamedNewNameKey];
+	if (old_name.length == 0 || new_name.length == 0 || [old_name isEqualToString:new_name]) {
+		return;
+	}
+
+	if (self.isShowingCategories) {
+		[self updateSelectedCheckboxes];
+	}
+
+	NSArray* updated_categories = [self categoriesByReplacingCategoryName:old_name withName:new_name inCategories:self.categories];
+	NSArray* updated_selected = [self categoriesByReplacingCategoryName:old_name withName:new_name inCategories:self.selectedCategories];
+	BOOL did_update_initial = [self.initialCategoryName isEqualToString:old_name];
+	BOOL did_update_categories = (updated_categories != nil);
+	BOOL did_update_selected = (updated_selected != nil);
+	if (did_update_initial) {
+		self.initialCategoryName = new_name;
+	}
+	if (did_update_categories) {
+		self.categories = updated_categories;
+	}
+	if (did_update_selected) {
+		self.selectedCategories = updated_selected;
+	}
+
+	if (did_update_initial || did_update_categories || did_update_selected) {
+		[self updateCategoriesPane];
+		[self.categoriesCollectionView reloadData];
+	}
+}
+
+- (NSArray *) categoriesByReplacingCategoryName:(NSString *)oldName withName:(NSString *)newName inCategories:(NSArray *)categories
+{
+	NSMutableArray* updated_categories = [NSMutableArray arrayWithCapacity:categories.count];
+	BOOL did_update = NO;
+
+	for (NSString* category_name in categories) {
+		if ([category_name isEqualToString:oldName]) {
+			[updated_categories addObject:newName];
+			did_update = YES;
+		}
+		else {
+			[updated_categories addObject:category_name];
+		}
+	}
+
+	if (did_update) {
+		return updated_categories;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (NSString *) currentDestinationUID
+{
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	return destination_uid;
+}
+
 - (void) removeAttachedPhotoNotification:(NSNotification *)notification
 {
 	NSIndexPath* index_path = [notification.userInfo objectForKey:kRemoveAttachedPhotoIndexPath];
@@ -1118,7 +1221,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return self.crosspostServices.count;
 	}
 	else {
-		return self.categories.count;
+		return [self displayedCategories].count;
 	}
 }
 
@@ -1168,7 +1271,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return item;
 	}
 	else {
-		NSString* category_name = [self.categories objectAtIndex:indexPath.item];
+		NSString* category_name = [[self displayedCategories] objectAtIndex:indexPath.item];
 
 		RFCategoryCell* item = (RFCategoryCell *)[collectionView makeItemWithIdentifier:kCategoryCellIdentifier forIndexPath:indexPath];
 		item.categoryCheckbox.title = category_name;
@@ -1202,7 +1305,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		cell_size.height = 30;
 	}
 	else {
-		NSString* name = [self.categories objectAtIndex:indexPath.item];
+		NSString* name = [[self displayedCategories] objectAtIndex:indexPath.item];
 		cell_size.width = [self widthForCheckboxTitle:name];
 		cell_size.height = 30;
 	}
@@ -1215,6 +1318,22 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (BOOL) hasSnippetsBlog
 {
 	return [RFSettings boolForKey:kHasSnippetsBlog];
+}
+
+- (NSArray *) displayedCategories
+{
+	if (self.initialCategoryName.length > 0) {
+		return @[ self.initialCategoryName ];
+	}
+	else {
+		return self.categories;
+	}
+}
+
+- (void) resetInitialCategoryDisplay
+{
+	self.initialCategoryName = nil;
+	[self.categoriesCollectionView reloadData];
 }
 
 - (BOOL) hasMicropubBlog
