@@ -58,6 +58,14 @@
                         <action selector="startPost:" target="Ilv-VD-qwE" id="Vjm-Gm-KgY"/>
                     </connections>
                 </button>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IB9-hN-i4F" customClass="RFRoundedImageView">
+                    <rect key="frame" x="112" y="27" width="18" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="18" id="uSO-ck-1gA"/>
+                        <constraint firstAttribute="height" constant="18" id="zl5-Ml-6J0"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="2Et-ap-LeT"/>
+                </imageView>
             </subviews>
             <constraints>
                 <constraint firstItem="dtO-rB-w9P" firstAttribute="top" secondItem="Ilv-VD-qwE" secondAttribute="top" constant="30" id="0lT-rn-UI3"/>
@@ -65,10 +73,12 @@
                 <constraint firstItem="wFV-JM-ycp" firstAttribute="top" secondItem="Ilv-VD-qwE" secondAttribute="top" constant="14" id="2Et-SO-TMQ"/>
                 <constraint firstAttribute="bottom" secondItem="wFV-JM-ycp" secondAttribute="bottom" constant="14" id="5kn-DU-lKS"/>
                 <constraint firstItem="QqF-NT-Vak" firstAttribute="centerY" secondItem="Ilv-VD-qwE" secondAttribute="centerY" id="92n-hi-Zct"/>
+                <constraint firstItem="IB9-hN-i4F" firstAttribute="centerY" secondItem="egf-Hs-gWE" secondAttribute="centerY" constant="1" id="KfC-0Y-3N5"/>
                 <constraint firstItem="ICa-aB-Kyx" firstAttribute="centerY" secondItem="Ilv-VD-qwE" secondAttribute="centerY" id="bOa-A6-Qzn"/>
                 <constraint firstItem="dtO-rB-w9P" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="btK-ke-qut"/>
                 <constraint firstItem="wFV-JM-ycp" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="48" id="fXG-1N-jll"/>
                 <constraint firstAttribute="bottom" secondItem="dtO-rB-w9P" secondAttribute="bottom" constant="50" id="ftX-4D-Z2h"/>
+                <constraint firstItem="IB9-hN-i4F" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="hlM-Am-c5y"/>
                 <constraint firstAttribute="trailing" secondItem="QqF-NT-Vak" secondAttribute="trailing" constant="18" id="mfz-Dz-BwI"/>
                 <constraint firstItem="ICa-aB-Kyx" firstAttribute="leading" secondItem="Ilv-VD-qwE" secondAttribute="leading" constant="18" id="top-vz-FXC"/>
                 <constraint firstItem="egf-Hs-gWE" firstAttribute="leading" secondItem="wFV-JM-ycp" secondAttribute="trailing" constant="14" id="unN-bC-3ov"/>
@@ -79,6 +89,8 @@
                 <outlet property="leftConstraint" destination="fXG-1N-jll" id="4C4-IQ-ghi"/>
                 <outlet property="postButton" destination="QqF-NT-Vak" id="MuD-Ed-zz5"/>
                 <outlet property="posterImageView" destination="wFV-JM-ycp" id="jjm-yp-NuG"/>
+                <outlet property="profileImageView" destination="IB9-hN-i4F" id="9KB-qX-NDw"/>
+                <outlet property="statusLeftConstraint" destination="unN-bC-3ov" id="xYe-me-oUh"/>
                 <outlet property="subtitleField" destination="egf-Hs-gWE" id="eVr-EO-wb5"/>
                 <outlet property="titleField" destination="dtO-rB-w9P" id="XaC-b4-EL8"/>
             </connections>

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString* url;
 @property (strong) NSString* title;
 @property (strong) NSString* username;
+@property (strong) NSString* profileImageURL;
 @property (strong) NSString* posterURL;
 @property (strong) NSString* airDate;
 @property (strong) NSImage* posterImage;

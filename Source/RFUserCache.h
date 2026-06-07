@@ -16,8 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDictionary*) user:(NSString*)user;
 + (void) setCache:(NSDictionary*)userInfo forUser:(NSString*)user;
 
-+ (NSImage*) avatar:(NSURL*)url completionHandler:(void(^)(NSImage* image)) completionHandler;
-+ (void) cacheAvatar:(NSImage*)image forURL:(NSURL*)url;
++ (NSImage *) avatar:(NSURL *)url completionHandler:(void(^)(NSImage *image)) completionHandler;
++ (void) cacheAvatar:(NSImage *)image forURL:(NSURL *)url;
++ (void) cleanupExpiredProfileImages;
 
 @end
 
