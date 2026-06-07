@@ -277,10 +277,6 @@ static NSTimeInterval const kProfileImagesCleanupExpirationSeconds = (60 * 60 * 
 		return nil;
 	}
 
-	if ([RFUserCache expireAvatarCacheFilesForURL:url]) {
-		[[RFUserCache systemImageCache] removeObjectForKey:url.absoluteString];
-	}
-
 	NSImage* image = [[RFUserCache systemImageCache] objectForKey:url.absoluteString];
 	if (image)
 	{
@@ -288,6 +284,10 @@ static NSTimeInterval const kProfileImagesCleanupExpirationSeconds = (60 * 60 * 
 	}
 	
 	dispatch_async([RFUserCache imageProcessingQueue], ^{
+		if ([RFUserCache expireAvatarCacheFilesForURL:url]) {
+			[[RFUserCache systemImageCache] removeObjectForKey:url.absoluteString];
+		}
+
 		NSString* cached_file = [RFUserCache existingAvatarCachePathForURL:url];
 		NSImage* image = nil;
 		if (cached_file.length > 0) {
