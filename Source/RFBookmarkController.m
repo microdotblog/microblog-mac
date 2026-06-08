@@ -47,6 +47,8 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
+
+	self.statusField.hidden = YES;
 	
 	if (self.initialURL) {
 		self.urlField.stringValue = self.initialURL;
@@ -74,6 +76,7 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 
 	self.isSaving = YES;
 	[self.progressSpinner startAnimation:nil];
+	[self updateStatus:@"Downloading page..."];
 
 	NSString* url = self.urlField.stringValue;
 
@@ -121,6 +124,7 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 		return;
 	}
 
+	[self updateStatus:@"Summarizing text..."];
 	[MBBookmarkReadability textContentFromHTML:html baseURLString:urlString completion:^(NSString* text) {
 		if (text.length == 0) {
 			completion(@"");
@@ -137,6 +141,8 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 
 - (void) saveBookmarkWithURLString:(NSString *)urlString summary:(NSString *)summary
 {
+	[self updateStatus:@"Bookmarking..."];
+
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	NSMutableDictionary* args = [@{
 		@"h": @"entry",
@@ -155,6 +161,12 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 			[self.window performClose:nil];
 		});
 	}];
+}
+
+- (void) updateStatus:(NSString *)status
+{
+	self.statusField.hidden = NO;
+	self.statusField.stringValue = status;
 }
 
 @end

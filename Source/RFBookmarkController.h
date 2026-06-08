@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RFBookmarkController : NSWindowController
 
 @property (strong, nonatomic) IBOutlet NSTextField* urlField;
+@property (strong, nonatomic) IBOutlet NSTextField* statusField;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
 
 @property (strong, nonatomic) NSString* initialURL;
