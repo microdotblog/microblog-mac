@@ -475,7 +475,7 @@
 		self.bookmarkController = [[RFBookmarkController alloc] init];
 	}
 	
-	[self.bookmarkController showWindow:nil];
+	[self.bookmarkController showBookmarkWindow];
 }
 
 - (IBAction) newNote:(id)sender
@@ -952,7 +952,7 @@
 		self.bookmarkController = [[RFBookmarkController alloc] initWithURL:url];
 	}
 	
-	[self.bookmarkController showWindow:nil];
+	[self.bookmarkController showBookmarkWindowWithURL:url];
 }
 
 - (void) editTagsWithBookmarkID:(NSString *)bookmarkID

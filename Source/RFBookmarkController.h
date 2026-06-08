@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString* initialURL;
 
 - (instancetype) initWithURL:(NSString *)url;
+- (void) showBookmarkWindow;
+- (void) showBookmarkWindowWithURL:(NSString *)url;
 
 @end
 

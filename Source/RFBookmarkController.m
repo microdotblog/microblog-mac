@@ -49,13 +49,6 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	[super windowDidLoad];
 
 	self.statusField.hidden = YES;
-	
-	if (self.initialURL) {
-		self.urlField.stringValue = self.initialURL;
-	}
-	else {
-		[self setupClipboard];
-	}
 }
 
 - (void) setupClipboard
@@ -65,6 +58,37 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	NSString* url = [objs firstObject];
 	if (url && [url containsString:@"http"]) {
 		self.urlField.stringValue = url;
+	}
+}
+
+- (void) showBookmarkWindow
+{
+	[self prepareBookmarkWindowWithURL:self.initialURL];
+	[self showWindow:nil];
+}
+
+- (void) showBookmarkWindowWithURL:(NSString *)url
+{
+	self.initialURL = url;
+	[self prepareBookmarkWindowWithURL:url];
+	[self showWindow:nil];
+}
+
+- (void) prepareBookmarkWindowWithURL:(NSString *)url
+{
+	[self window];
+
+	self.isSaving = NO;
+	[self.progressSpinner stopAnimation:nil];
+	self.statusField.hidden = YES;
+	self.statusField.stringValue = @"";
+
+	if (url.length > 0) {
+		self.urlField.stringValue = url;
+	}
+	else {
+		self.urlField.stringValue = @"";
+		[self setupClipboard];
 	}
 }
 
