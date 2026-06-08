@@ -118,6 +118,7 @@
 		4B41CB4E2E22DB30000C324F /* MBVersionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B41CB4D2E22DB30000C324F /* MBVersionCell.m */; };
 		4B41CB512E22DB55000C324F /* VersionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B41CB4F2E22DB55000C324F /* VersionCell.xib */; };
 		4B426E862FD495CC002913E6 /* NSMenuItem+RSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B426E842FD495CC002913E6 /* NSMenuItem+RSCore.m */; };
+		4B426E892FD728BB002913E6 /* Readability in Frameworks */ = {isa = PBXBuildFile; productRef = 4B426E882FD728BB002913E6 /* Readability */; };
 		4B4C7DC024E1BC03000004E7 /* Bookmark.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4C7DBE24E1BC03000004E7 /* Bookmark.xib */; };
 		4B4C7DC324E1BCAD000004E7 /* RFBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */; };
 		4B4C7DC624E1D42D000004E7 /* RFDoubleClickCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4C7DC524E1D42D000004E7 /* RFDoubleClickCollectionView.m */; };
@@ -226,6 +227,7 @@
 		4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1012FCB000100000001 /* MBRobotsController.m */; };
 		4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1042FCB000100000001 /* MBRobotsModel.m */; };
 		4BC0D1072FCB000100000001 /* MBRobotsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */; };
+		4BC0D1092FCB000100000001 /* MBBookmarkReadability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0D10A2FCB000100000001 /* MBBookmarkReadability.swift */; };
 		4BC0D1152FCB000100000001 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1102FCB000100000001 /* MLXLLM */; };
 		4BC0D1162FCB000100000001 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1112FCB000100000001 /* MLXLMCommon */; };
 		4BC0D1172FCB000100000001 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC0D1182FCB000100000001 /* MLXVLM */; };
@@ -690,6 +692,7 @@
 		4BC0D1032FCB000100000001 /* MBRobotsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBRobotsModel.h; path = Source/MBRobotsModel.h; sourceTree = "<group>"; };
 		4BC0D1042FCB000100000001 /* MBRobotsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBRobotsModel.m; path = Source/MBRobotsModel.m; sourceTree = "<group>"; };
 		4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBRobotsRunner.swift; path = Source/MBRobotsRunner.swift; sourceTree = "<group>"; };
+		4BC0D10A2FCB000100000001 /* MBBookmarkReadability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MBBookmarkReadability.swift; path = Source/MBBookmarkReadability.swift; sourceTree = "<group>"; };
 		4BC120002FD21A2400000001 /* MBCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategory.h; path = Source/MBCategory.h; sourceTree = "<group>"; };
 		4BC120012FD21A2400000001 /* MBCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBCategory.m; path = Source/MBCategory.m; sourceTree = "<group>"; };
 		4BC120032FD21A2400000001 /* MBCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBCategoryCell.h; path = Source/MBCategoryCell.h; sourceTree = "<group>"; };
@@ -798,6 +801,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BC0D1152FCB000100000001 /* MLXLLM in Frameworks */,
+				4B426E892FD728BB002913E6 /* Readability in Frameworks */,
 				4BC0D1162FCB000100000001 /* MLXLMCommon in Frameworks */,
 				4BC0D1172FCB000100000001 /* MLXVLM in Frameworks */,
 				4BC0D11A2FCB000100000001 /* Tokenizers in Frameworks */,
@@ -1007,6 +1011,7 @@
 				4BC0D1032FCB000100000001 /* MBRobotsModel.h */,
 				4BC0D1042FCB000100000001 /* MBRobotsModel.m */,
 				4BC0D1062FCB000100000001 /* MBRobotsRunner.swift */,
+				4BC0D10A2FCB000100000001 /* MBBookmarkReadability.swift */,
 				4B4C7DC124E1BCAD000004E7 /* RFBookmarkController.h */,
 				4B4C7DC224E1BCAD000004E7 /* RFBookmarkController.m */,
 				4BD83398273C3DF3007350F2 /* RFGoToUserController.h */,
@@ -1461,6 +1466,7 @@
 				4BC0D1112FCB000100000001 /* MLXLMCommon */,
 				4BC0D1182FCB000100000001 /* MLXVLM */,
 				4BC0D11B2FCB000100000001 /* Tokenizers */,
+				4B426E882FD728BB002913E6 /* Readability */,
 			);
 			productName = "Snippets for Mac";
 			productReference = 4B7F0AD81BAF4B78004553A6 /* Micro.blog.app */;
@@ -1503,6 +1509,7 @@
 				4B6C002E2FCDC49E00365AA3 /* XCRemoteSwiftPackageReference "mlx-swift" */,
 				4BC0D1082FCB000100000001 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */,
 				4BC0D10B2FCB000100000001 /* XCRemoteSwiftPackageReference "swift-transformers" */,
+				4B426E872FD728BB002913E6 /* XCRemoteSwiftPackageReference "swift-readability" */,
 			);
 			productRefGroup = 4B7F0AD91BAF4B78004553A6 /* Products */;
 			projectDirPath = "";
@@ -1803,6 +1810,7 @@
 				4BC0D1022FCB000100000001 /* MBRobotsController.m in Sources */,
 				4BC0D1052FCB000100000001 /* MBRobotsModel.m in Sources */,
 				4BC0D1072FCB000100000001 /* MBRobotsRunner.swift in Sources */,
+				4BC0D1092FCB000100000001 /* MBBookmarkReadability.swift in Sources */,
 				4B90D0042FD000100000001 /* MBDistributedWorkController.m in Sources */,
 				4BABBF8B2D77983600919DEC /* MBSummaryBackgroundView.m in Sources */,
 				4B608B452003B7E200589F77 /* RFTopicController.m in Sources */,
@@ -2535,6 +2543,14 @@
 				minimumVersion = 2.4.2;
 			};
 		};
+		4B426E872FD728BB002913E6 /* XCRemoteSwiftPackageReference "swift-readability" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ryu0118/swift-readability";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
 		4B6C002E2FCDC49E00365AA3 /* XCRemoteSwiftPackageReference "mlx-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ml-explore/mlx-swift.git";
@@ -2571,6 +2587,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B3840DB26964F3B00AD3781 /* XCRemoteSwiftPackageReference "ZipArchive" */;
 			productName = ZipArchive;
+		};
+		4B426E882FD728BB002913E6 /* Readability */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B426E872FD728BB002913E6 /* XCRemoteSwiftPackageReference "swift-readability" */;
+			productName = Readability;
 		};
 		4BC0D1102FCB000100000001 /* MLXLLM */ = {
 			isa = XCSwiftPackageProductDependency;
