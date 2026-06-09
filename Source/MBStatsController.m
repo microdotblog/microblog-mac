@@ -17,6 +17,7 @@ static NSString* const kStatsInstallIDPrefKey = @"StatsInstallID";
 
 @interface MBStatsController ()
 
+- (void) sendStatsOnMainThread;
 - (NSDictionary *) statsDictionary;
 
 @end
@@ -25,16 +26,26 @@ static NSString* const kStatsInstallIDPrefKey = @"StatsInstallID";
 
 - (void) sendStats
 {
-	dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
-		if (![self hasAccountToken]) {
-			return;
-		}
+	if ([NSThread isMainThread]) {
+		[self sendStatsOnMainThread];
+	}
+	else {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self sendStatsOnMainThread];
+		});
+	}
+}
 
-		NSDictionary* stats = [self statsDictionary];
-		RFClient* client = [[RFClient alloc] initWithPath:kStatsPath];
-		[client postWithObject:stats completion:^(UUHttpResponse* response) {
-		}];
-	});
+- (void) sendStatsOnMainThread
+{
+	if (![self hasAccountToken]) {
+		return;
+	}
+
+	NSDictionary* stats = [self statsDictionary];
+	RFClient* client = [[RFClient alloc] initWithPath:kStatsPath];
+	[client postWithObject:stats completion:^(UUHttpResponse* response) {
+	}];
 }
 
 - (BOOL) hasAccountToken
