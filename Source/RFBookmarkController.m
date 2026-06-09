@@ -100,10 +100,15 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 
 	self.isSaving = YES;
 	[self.progressSpinner startAnimation:nil];
-	[self updateStatus:@"Downloading page..."];
 
 	NSString* url = self.urlField.stringValue;
 
+	if (![self canSummarizeBookmark]) {
+		[self saveBookmarkWithURLString:url summary:@""];
+		return;
+	}
+
+	[self updateStatus:@"Downloading page..."];
 	[self downloadHTMLForURLString:url completion:^(NSString* html) {
 		[self summaryForBookmarkHTML:html urlString:url completion:^(NSString* summary) {
 			[self saveBookmarkWithURLString:url summary:summary];
@@ -141,9 +146,14 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	[task resume];
 }
 
+- (BOOL) canSummarizeBookmark
+{
+	return [RFSettings boolForKey:kIsUsingAI] && [MBRobotsModel isLocalModelAvailable];
+}
+
 - (void) summaryForBookmarkHTML:(NSString *)html urlString:(NSString *)urlString completion:(void (^)(NSString* summary))completion
 {
-	if ((html.length == 0) || ![RFSettings boolForKey:kIsUsingAI] || ![MBRobotsModel isLocalModelAvailable]) {
+	if ((html.length == 0) || ![self canSummarizeBookmark]) {
 		completion(@"");
 		return;
 	}
