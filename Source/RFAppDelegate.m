@@ -34,6 +34,7 @@
 #import "MBAboutController.h"
 #import "MBBackupsController.h"
 #import "MBDistributedWorkController.h"
+#import "MBStatsController.h"
 #import "RFClient.h"
 #import "RFMicropub.h"
 #import "RFMacros.h"
@@ -69,6 +70,7 @@
 	[self setupFollowerAutoComplete];
 	[self setupBackups];
 	[self setupDistributedWork];
+	[self setupStats];
 
 	self.postWindows = [NSMutableArray array];
 	self.photoWindows = [NSMutableArray array];
@@ -256,6 +258,12 @@
 {
 	self.distributedWorkController = [[MBDistributedWorkController alloc] init];
 	[self.distributedWorkController start];
+}
+
+- (void) setupStats
+{
+	self.statsController = [[MBStatsController alloc] init];
+	[self.statsController sendStats];
 }
 
 - (void) setupNotifications

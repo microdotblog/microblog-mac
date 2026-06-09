@@ -100,6 +100,7 @@
 		4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D9269645E000AD3781 /* RFBarExportController.m */; };
 		4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 4B3840DC26964F3B00AD3781 /* ZipArchive */; };
 		4B38E5E92F00000100BD98AB /* MBBackupsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B38E5EB2F00000100BD98AB /* MBBackupsController.m */; };
+		4BD0A0102FDB000100000001 /* MBStatsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0A0122FDB000100000001 /* MBStatsController.m */; };
 		4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */; };
 		4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B332A4C72AA00CAACCD /* MBMessageBox.m */; };
 		4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */; };
@@ -469,6 +470,8 @@
 		4B3840D9269645E000AD3781 /* RFBarExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBarExportController.m; path = Source/RFBarExportController.m; sourceTree = "<group>"; };
 		4B38E5EA2F00000100BD98AB /* MBBackupsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBackupsController.h; path = Source/MBBackupsController.h; sourceTree = "<group>"; };
 		4B38E5EB2F00000100BD98AB /* MBBackupsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBackupsController.m; path = Source/MBBackupsController.m; sourceTree = "<group>"; };
+		4BD0A0112FDB000100000001 /* MBStatsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatsController.h; path = Source/MBStatsController.h; sourceTree = "<group>"; };
+		4BD0A0122FDB000100000001 /* MBStatsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatsController.m; path = Source/MBStatsController.m; sourceTree = "<group>"; };
 		4B390B2F2A4C655C00CAACCD /* MBStatusBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatusBubbleView.h; path = Source/MBStatusBubbleView.h; sourceTree = "<group>"; };
 		4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatusBubbleView.m; path = Source/MBStatusBubbleView.m; sourceTree = "<group>"; };
 		4B390B322A4C72AA00CAACCD /* MBMessageBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMessageBox.h; path = Source/MBMessageBox.h; sourceTree = "<group>"; };
@@ -1032,6 +1035,8 @@
 				4B38E5EB2F00000100BD98AB /* MBBackupsController.m */,
 				4B90D0022FD000100000001 /* MBDistributedWorkController.h */,
 				4B90D0032FD000100000001 /* MBDistributedWorkController.m */,
+				4BD0A0112FDB000100000001 /* MBStatsController.h */,
+				4BD0A0122FDB000100000001 /* MBStatsController.m */,
 				4B3840CF2692038B00AD3781 /* RFMarkdownExportController.h */,
 				4B3840D02692038B00AD3781 /* RFMarkdownExportController.m */,
 				4B3840D2269203B400AD3781 /* RFDayOneExportController.h */,
@@ -1801,6 +1806,7 @@
 				4BE23F982A700AFA00E24718 /* MBHighlightCell.m in Sources */,
 				4BE23F922A700A7200E24718 /* MBHighlight.m in Sources */,
 				4B8FBDF11F8681D000906C86 /* RFClient.m in Sources */,
+				4BD0A0102FDB000100000001 /* MBStatsController.m in Sources */,
 				4B400D07201EC55B00C71AAF /* MMParser.m in Sources */,
 				4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */,
 				4BDB783C2774E89400D7783C /* MBBlogImportController.m in Sources */,
