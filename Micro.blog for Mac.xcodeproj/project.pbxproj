@@ -100,7 +100,6 @@
 		4B3840DA269645E000AD3781 /* RFBarExportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B3840D9269645E000AD3781 /* RFBarExportController.m */; };
 		4B3840DD26964F3B00AD3781 /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 4B3840DC26964F3B00AD3781 /* ZipArchive */; };
 		4B38E5E92F00000100BD98AB /* MBBackupsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B38E5EB2F00000100BD98AB /* MBBackupsController.m */; };
-		4BD0A0102FDB000100000001 /* MBStatsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0A0122FDB000100000001 /* MBStatsController.m */; };
 		4B390B312A4C655C00CAACCD /* MBStatusBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */; };
 		4B390B342A4C72AA00CAACCD /* MBMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B332A4C72AA00CAACCD /* MBMessageBox.m */; };
 		4B390B372A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B390B362A4C8BE400CAACCD /* MBUnacceptableToolbarItem.m */; };
@@ -239,6 +238,7 @@
 		4BC1200B2FD21A2400000001 /* MBCategoriesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC1200A2FD21A2400000001 /* MBCategoriesController.m */; };
 		4BC826D71FAB663800A58AD4 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D11FAB663700A58AD4 /* SAMKeychainQuery.m */; };
 		4BC826D91FAB663800A58AD4 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC826D51FAB663700A58AD4 /* SAMKeychain.m */; };
+		4BD0A0102FDB000100000001 /* MBStatsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0A0122FDB000100000001 /* MBStatsController.m */; };
 		4BD2401828416F1400B0DBAE /* MBBookshelvesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */; };
 		4BD709042A754CCD00F154C6 /* MBTimelineBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD709032A754CCD00F154C6 /* MBTimelineBackgroundView.m */; };
 		4BD8339A273C3DF3007350F2 /* RFGoToUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD83399273C3DF3007350F2 /* RFGoToUserController.m */; };
@@ -470,8 +470,6 @@
 		4B3840D9269645E000AD3781 /* RFBarExportController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFBarExportController.m; path = Source/RFBarExportController.m; sourceTree = "<group>"; };
 		4B38E5EA2F00000100BD98AB /* MBBackupsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBackupsController.h; path = Source/MBBackupsController.h; sourceTree = "<group>"; };
 		4B38E5EB2F00000100BD98AB /* MBBackupsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBackupsController.m; path = Source/MBBackupsController.m; sourceTree = "<group>"; };
-		4BD0A0112FDB000100000001 /* MBStatsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatsController.h; path = Source/MBStatsController.h; sourceTree = "<group>"; };
-		4BD0A0122FDB000100000001 /* MBStatsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatsController.m; path = Source/MBStatsController.m; sourceTree = "<group>"; };
 		4B390B2F2A4C655C00CAACCD /* MBStatusBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatusBubbleView.h; path = Source/MBStatusBubbleView.h; sourceTree = "<group>"; };
 		4B390B302A4C655C00CAACCD /* MBStatusBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatusBubbleView.m; path = Source/MBStatusBubbleView.m; sourceTree = "<group>"; };
 		4B390B322A4C72AA00CAACCD /* MBMessageBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMessageBox.h; path = Source/MBMessageBox.h; sourceTree = "<group>"; };
@@ -708,6 +706,8 @@
 		4BC826D21FAB663700A58AD4 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		4BC826D41FAB663700A58AD4 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
 		4BC826D51FAB663700A58AD4 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		4BD0A0112FDB000100000001 /* MBStatsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBStatsController.h; path = Source/MBStatsController.h; sourceTree = "<group>"; };
+		4BD0A0122FDB000100000001 /* MBStatsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBStatsController.m; path = Source/MBStatsController.m; sourceTree = "<group>"; };
 		4BD2401628416F1400B0DBAE /* MBBookshelvesTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookshelvesTableView.h; path = Source/MBBookshelvesTableView.h; sourceTree = "<group>"; };
 		4BD2401728416F1400B0DBAE /* MBBookshelvesTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookshelvesTableView.m; path = Source/MBBookshelvesTableView.m; sourceTree = "<group>"; };
 		4BD709022A754CCD00F154C6 /* MBTimelineBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBTimelineBackgroundView.h; path = Source/MBTimelineBackgroundView.h; sourceTree = "<group>"; };
@@ -2445,7 +2445,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 241;
+				CURRENT_PROJECT_VERSION = 242;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2482,7 +2482,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 241;
+				CURRENT_PROJECT_VERSION = 242;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;

@@ -5,6 +5,32 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.0</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Major new version! Changes:</p>
+ 				<ul>
+					<li>Redesigned the main window sidebar and toolbar for a more modern macOS look.</li>
+					<li>Added a new Categories pane for browsing categories and posts. Right-click on a category for an option to start a new post with that category.</li>
+					<li>Added a File → New Category menu item when Categories pane is selected.</li>
+					<li>Added an AI preference pane with global toggle and option for local AI for Macs with lots of memory. Local AI can now be used for generating photo accessibility text and summarizing new bookmarks.</li>
+					<li>Updated movies with profile icons.</li>
+					<li>Fixed keeping the current note selection while syncing.</li>
+					<li>Fixed uploads search and collection refresh in some situations.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Thu, 11 Jun 2026 09:14:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.0.zip" sparkle:shortVersionString="4.0" sparkle:version="242" length="18361002" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 3.9.2</title>
  			<description><![CDATA[
 				<style>
