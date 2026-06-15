@@ -202,10 +202,19 @@
 		return YES;
 	}
 	else if ([pb.types containsObject:NSPasteboardTypeFileURL]) {
-		NSString* s = [pb propertyListForType:NSPasteboardTypeFileURL];
-		NSURL* url = [NSURL URLWithString:s];
-		NSArray* paths = @[ url.path ];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+		NSDictionary* options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES };
+		NSArray* urls = [pb readObjectsForClasses:@[[NSURL class]] options:options];
+		NSMutableArray* paths = [NSMutableArray array];
+
+		for (NSURL* url in urls) {
+			if (url.isFileURL && (url.path.length > 0)) {
+				[paths addObject:url.path];
+			}
+		}
+
+		if (paths.count > 0) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+		}
 
 		return YES;
 	}
