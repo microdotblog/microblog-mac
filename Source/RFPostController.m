@@ -939,6 +939,26 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 }
 
+- (BOOL) hasAttachableVideoURLs:(NSArray *)urls
+{
+	NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
+	NSInteger remaining_slots = 10 - self.attachedPhotos.count;
+
+	for (NSURL* url in urls) {
+		if (remaining_slots <= 0) {
+			break;
+		}
+
+		if ([video_extensions containsObject:[[url pathExtension] lowercaseString]]) {
+			return YES;
+		}
+
+		remaining_slots--;
+	}
+
+	return NO;
+}
+
 - (IBAction) choosePhoto:(id)sender
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
@@ -1006,7 +1026,19 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 
 	if ([urls count] > 0) {
-		[self attachPhotos:urls];
+		BOOL should_show_progress = !self.isSending;
+		BOOL has_video = [self hasAttachableVideoURLs:urls];
+		if (should_show_progress) {
+			[self startProgressAnimation];
+		}
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self attachPhotos:urls];
+
+			if (should_show_progress && !has_video) {
+				[self stopProgressAnimation];
+			}
+		});
 	}
 }
 
