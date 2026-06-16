@@ -706,6 +706,27 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 }
 
+- (BOOL) hasPendingVideoTranscodes
+{
+	for (RFPhoto* photo in self.attachedPhotos) {
+		if (photo.isVideo && (photo.thumbnailImage == nil)) {
+			return YES;
+		}
+	}
+
+	return NO;
+}
+
+- (BOOL) validateReadyToUploadPost
+{
+	if ([self hasPendingVideoTranscodes]) {
+		[NSAlert rf_showOneButtonAlert:@"Video Still Processing" message:@"Please wait for the video preview to finish before posting." button:@"OK" completionHandler:NULL];
+		return NO;
+	}
+
+	return YES;
+}
+
 - (void) updateSelectedCheckboxes
 {
 	if (self.isShowingCategories) {
@@ -1637,7 +1658,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if ((s.length == 0) && (self.attachedPhotos.count == 0)) {
 		return;
 	}
-	
+
+	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+
 	if (!self.isSending) {
 		// post button always publishes
 		self.isDraft = NO;
@@ -1649,6 +1674,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) save:(id)sender
 {
+	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+
 	// cmd-S saves to server
 	self.isDraft = YES;
 	self.view.window.documentEdited = NO;
@@ -1657,6 +1686,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) schedulePost:(id)sender
 {
+	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+
 	self.dateController = [[MBDateController alloc] init];
 	[self.view.window beginSheet:self.dateController.window completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == NSModalResponseOK) {
