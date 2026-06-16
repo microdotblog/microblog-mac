@@ -48,6 +48,7 @@ static NSString* const kCrosspostCellIdentifier = @"CrosspostCell";
 static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
 static NSTimeInterval const kInitialCategoryResetDelay = 1.0;
+static NSTimeInterval const kAttachmentProgressDelay = 0.05;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
@@ -57,6 +58,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (strong, atomic) NSMutableArray* autoCompleteData;
 @property (assign, nonatomic) BOOL resettingAutoComplete;
 @property (strong, nonatomic, nullable) MBUploadProgress* videoUploader;
+@property (assign, nonatomic) NSInteger pendingAttachmentSlots;
 
 @end
 
@@ -884,18 +886,28 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					NSError* error = nil;
 					AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
 					CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
-					photo.videoAsset = new_asset;
-					photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-
-					self.attachedPhotos = new_photos;
+					NSMutableArray* current_photos = [self.attachedPhotos mutableCopy];
+					NSUInteger photo_index = [current_photos indexOfObjectIdenticalTo:photo];
+					if (photo_index != NSNotFound) {
+						photo.videoAsset = new_asset;
+						photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+						self.attachedPhotos = current_photos;
+					}
+					else {
+						[photo removeTemporaryVideo];
+					}
 					[self stopProgressAnimation];
 					[self.photosCollectionView reloadData];
 
 					CGImageRelease (cgImage);
 				}
 				else {
-					[new_photos removeObject:photo];
-					self.attachedPhotos = new_photos;
+					NSMutableArray* current_photos = [self.attachedPhotos mutableCopy];
+					NSUInteger photo_index = [current_photos indexOfObjectIdenticalTo:photo];
+					if (photo_index != NSNotFound) {
+						[current_photos removeObjectAtIndex:photo_index];
+						self.attachedPhotos = current_photos;
+					}
 					[self stopProgressAnimation];
 					[photo removeTemporaryVideo];
 					[self.photosCollectionView reloadData];
@@ -942,21 +954,14 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 }
 
-- (BOOL) hasAttachableVideoURLs:(NSArray *)urls
+- (BOOL) hasVideoURLs:(NSArray *)urls
 {
 	NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
-	NSInteger remaining_slots = 10 - self.attachedPhotos.count;
 
 	for (NSURL* url in urls) {
-		if (remaining_slots <= 0) {
-			break;
-		}
-
 		if ([video_extensions containsObject:[[url pathExtension] lowercaseString]]) {
 			return YES;
 		}
-
-		remaining_slots--;
 	}
 
 	return NO;
@@ -1030,7 +1035,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 	if ([urls count] > 0) {
 		BOOL too_many_photos = NO;
-		NSInteger remaining_slots = 10 - self.attachedPhotos.count;
+		NSInteger remaining_slots = 10 - self.attachedPhotos.count - self.pendingAttachmentSlots;
 		if (remaining_slots < 0) {
 			remaining_slots = 0;
 		}
@@ -1052,20 +1057,30 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		}
 
 		BOOL should_show_progress = !self.isSending;
-		BOOL has_video = [self hasAttachableVideoURLs:urls];
+		BOOL has_video = [self hasVideoURLs:urls];
 		if (should_show_progress) {
 			[self startProgressAnimation];
 		}
 
-		[self attachPhotos:urls];
+		self.pendingAttachmentSlots += (NSInteger)urls.count;
+		NSArray* attach_urls = [urls copy];
+		dispatch_time_t attachment_delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kAttachmentProgressDelay * NSEC_PER_SEC));
+		dispatch_after(attachment_delay, dispatch_get_main_queue(), ^{
+			[self attachPhotos:attach_urls];
 
-		if (should_show_progress && !has_video) {
-			[self stopProgressAnimation];
-		}
+			self.pendingAttachmentSlots -= (NSInteger)attach_urls.count;
+			if (self.pendingAttachmentSlots < 0) {
+				self.pendingAttachmentSlots = 0;
+			}
 
-		if (too_many_photos) {
-			[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
-		}
+			if (should_show_progress && !has_video) {
+				[self stopProgressAnimation];
+			}
+
+			if (too_many_photos) {
+				[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+			}
+		});
 	}
 }
 
