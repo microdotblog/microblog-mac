@@ -150,14 +150,31 @@
 
 #pragma mark -
 
+- (BOOL) hasAttachableFilesOnPasteboard:(NSPasteboard *)pb
+{
+	NSArray* promise_types = [NSFilePromiseReceiver readableDraggedTypes];
+	return [pb.types containsObject:NSPasteboardTypeFileURL] || ([pb availableTypeFromArray:promise_types] != nil);
+}
+
 - (NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
 {
 	NSPasteboard* pb = [sender draggingPasteboard];
-	if ([pb.types containsObject:NSPasteboardTypeFileURL]) {
+	if ([self hasAttachableFilesOnPasteboard:pb]) {
 		return NSDragOperationCopy;
 	}
 	else {
 		return [super draggingEntered:sender];
+	}
+}
+
+- (NSDragOperation) draggingUpdated:(id<NSDraggingInfo>)sender
+{
+	NSPasteboard* pb = [sender draggingPasteboard];
+	if ([self hasAttachableFilesOnPasteboard:pb]) {
+		return NSDragOperationCopy;
+	}
+	else {
+		return [super draggingUpdated:sender];
 	}
 }
 
@@ -169,7 +186,7 @@
 - (BOOL) prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
 	NSPasteboard* pb = [sender draggingPasteboard];
-	if ([pb.types containsObject:NSPasteboardTypeFileURL]) {
+	if ([self hasAttachableFilesOnPasteboard:pb]) {
 		return YES;
 	}
 	else {
@@ -191,21 +208,40 @@
 		NSURL* dest_url = [NSURL fileURLWithPath:temp_folder];
 
 		NSArray* promises = [pb readObjectsForClasses:@[[NSFilePromiseReceiver class]] options:nil];
+		NSMutableArray* paths = [NSMutableArray array];
+		dispatch_group_t group = dispatch_group_create();
 		for (NSFilePromiseReceiver* promise in promises) {
+			dispatch_group_enter(group);
 			NSOperationQueue* queue = [NSOperationQueue mainQueue];
 			[promise receivePromisedFilesAtDestination:dest_url options:@{} operationQueue:queue reader:^(NSURL* file_url, NSError* error) {
-				NSArray* paths = @[ file_url.path ];
-				[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+				if (file_url.path.length > 0) {
+					[paths addObject:file_url.path];
+				}
+				dispatch_group_leave(group);
 			}];
 		}
-					 
+		dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+			if (paths.count > 0) {
+				[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+			}
+		});
+
 		return YES;
 	}
 	else if ([pb.types containsObject:NSPasteboardTypeFileURL]) {
-		NSString* s = [pb propertyListForType:NSPasteboardTypeFileURL];
-		NSURL* url = [NSURL URLWithString:s];
-		NSArray* paths = @[ url.path ];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+		NSDictionary* options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES };
+		NSArray* urls = [pb readObjectsForClasses:@[[NSURL class]] options:options];
+		NSMutableArray* paths = [NSMutableArray array];
+
+		for (NSURL* url in urls) {
+			if (url.isFileURL && (url.path.length > 0)) {
+				[paths addObject:url.path];
+			}
+		}
+
+		if (paths.count > 0) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+		}
 
 		return YES;
 	}

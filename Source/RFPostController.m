@@ -48,6 +48,7 @@ static NSString* const kCrosspostCellIdentifier = @"CrosspostCell";
 static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
 static NSTimeInterval const kInitialCategoryResetDelay = 1.0;
+static NSTimeInterval const kAttachmentProgressDelay = 0.05;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
@@ -57,6 +58,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (strong, atomic) NSMutableArray* autoCompleteData;
 @property (assign, nonatomic) BOOL resettingAutoComplete;
 @property (strong, nonatomic, nullable) MBUploadProgress* videoUploader;
+@property (assign, nonatomic) NSInteger pendingAttachmentSlots;
 
 @end
 
@@ -704,6 +706,27 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 }
 
+- (BOOL) hasPendingVideoTranscodes
+{
+	for (RFPhoto* photo in self.attachedPhotos) {
+		if (photo.isVideo && (photo.thumbnailImage == nil)) {
+			return YES;
+		}
+	}
+
+	return NO;
+}
+
+- (BOOL) validateReadyToUploadPost
+{
+	if ([self hasPendingVideoTranscodes]) {
+		[NSAlert rf_showOneButtonAlert:@"Video Still Processing" message:@"Please wait for the video preview to finish before posting." button:@"OK" completionHandler:NULL];
+		return NO;
+	}
+
+	return YES;
+}
+
 - (void) updateSelectedCheckboxes
 {
 	if (self.isShowingCategories) {
@@ -875,6 +898,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:nil];
 			photo.videoAsset = asset;
 			photo.isVideo = YES;
+			[new_photos addObject:photo];
 
 			[self startProgressAnimation];
 			[photo transcodeVideo:^(NSURL* new_url) {
@@ -883,19 +907,31 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					NSError* error = nil;
 					AVAssetImageGenerator* imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:new_asset];
 					CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
-					photo.videoAsset = new_asset;
-					photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-					[new_photos addObject:photo];
-
-					self.attachedPhotos = new_photos;
+					NSMutableArray* current_photos = [self.attachedPhotos mutableCopy];
+					NSUInteger photo_index = [current_photos indexOfObjectIdenticalTo:photo];
+					if (photo_index != NSNotFound) {
+						photo.videoAsset = new_asset;
+						photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
+						self.attachedPhotos = current_photos;
+					}
+					else {
+						[photo removeTemporaryVideo];
+					}
 					[self stopProgressAnimation];
 					[self.photosCollectionView reloadData];
-					
+
 					CGImageRelease (cgImage);
 				}
 				else {
+					NSMutableArray* current_photos = [self.attachedPhotos mutableCopy];
+					NSUInteger photo_index = [current_photos indexOfObjectIdenticalTo:photo];
+					if (photo_index != NSNotFound) {
+						[current_photos removeObjectAtIndex:photo_index];
+						self.attachedPhotos = current_photos;
+					}
 					[self stopProgressAnimation];
 					[photo removeTemporaryVideo];
+					[self.photosCollectionView reloadData];
 				}
 			}];
 		}
@@ -937,6 +973,19 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (too_many_photos) {
 		[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
 	}
+}
+
+- (BOOL) hasVideoURLs:(NSArray *)urls
+{
+	NSArray* video_extensions = @[ @"mov", @"m4v", @"mp4" ];
+
+	for (NSURL* url in urls) {
+		if ([video_extensions containsObject:[[url pathExtension] lowercaseString]]) {
+			return YES;
+		}
+	}
+
+	return NO;
 }
 
 - (IBAction) choosePhoto:(id)sender
@@ -1006,7 +1055,53 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 
 	if ([urls count] > 0) {
-		[self attachPhotos:urls];
+		BOOL too_many_photos = NO;
+		NSInteger remaining_slots = 10 - self.attachedPhotos.count - self.pendingAttachmentSlots;
+		if (remaining_slots < 0) {
+			remaining_slots = 0;
+		}
+		if ((NSInteger)urls.count > remaining_slots) {
+			too_many_photos = YES;
+			if (remaining_slots > 0) {
+				urls = [[urls subarrayWithRange:NSMakeRange(0, remaining_slots)] mutableCopy];
+			}
+			else {
+				[urls removeAllObjects];
+			}
+		}
+
+		if ([urls count] == 0) {
+			if (too_many_photos) {
+				[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+			}
+			return;
+		}
+
+		BOOL should_show_progress = !self.isSending;
+		BOOL has_video = [self hasVideoURLs:urls];
+		if (should_show_progress) {
+			[self startProgressAnimation];
+		}
+
+		self.pendingAttachmentSlots += (NSInteger)urls.count;
+		NSArray* attach_urls = [urls copy];
+		dispatch_time_t attachment_delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kAttachmentProgressDelay * NSEC_PER_SEC));
+		dispatch_after(attachment_delay, dispatch_get_main_queue(), ^{
+			[self attachPhotos:attach_urls];
+
+			self.pendingAttachmentSlots -= (NSInteger)attach_urls.count;
+			if (self.pendingAttachmentSlots < 0) {
+				self.pendingAttachmentSlots = 0;
+			}
+
+			if (should_show_progress && !has_video) {
+				[self stopProgressAnimation];
+			}
+
+			if (too_many_photos) {
+				[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+			}
+		});
 	}
 }
 
@@ -1240,7 +1335,12 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		else {
 			item.progressSpinner.hidden = NO;
 			[item.progressSpinner startAnimation:nil];
-			
+
+			if (photo.isVideo) {
+				item.thumbnailImageView.image = nil;
+				return item;
+			}
+
 			// download thumbnail
 			RFClient* client = [[RFClient alloc] initWithURL:photo.publishedURL];
 			[client getWithCompletion:^(UUHttpResponse* response) {
@@ -1558,7 +1658,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if ((s.length == 0) && (self.attachedPhotos.count == 0)) {
 		return;
 	}
-	
+
+	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+
 	if (!self.isSending) {
 		// post button always publishes
 		self.isDraft = NO;
@@ -1570,6 +1674,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) save:(id)sender
 {
+	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+
 	// cmd-S saves to server
 	self.isDraft = YES;
 	self.view.window.documentEdited = NO;
@@ -1578,6 +1686,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) schedulePost:(id)sender
 {
+	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+
 	self.dateController = [[MBDateController alloc] init];
 	[self.view.window beginSheet:self.dateController.window completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == NSModalResponseOK) {

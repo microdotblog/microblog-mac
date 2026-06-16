@@ -10,6 +10,9 @@
 
 #import "SDAVAssetExportSession.h"
 
+static CGFloat const kMaxVideoLandscapeWidth = 1920.0;
+static CGFloat const kMaxVideoLandscapeHeight = 1080.0;
+
 @implementation RFPhoto
 
 #if 0 // 10.13
@@ -72,34 +75,43 @@
 	}];
 }
 
+- (NSInteger) evenVideoDimension:(CGFloat)value
+{
+	NSInteger result = (NSInteger)floor(value);
+	if ((result % 2) != 0) {
+		result--;
+	}
+	if (result < 2) {
+		result = 2;
+	}
+
+	return result;
+}
+
 - (NSDictionary *) videoSettingsForSize:(CGSize)size
 {
 	NSInteger new_width;
 	NSInteger new_height;
-	
+
 	if ((size.width == 0) || (size.height == 0)) {
 		new_width = 640;
 		new_height = 480;
 	}
-	else if ((size.width > 640) && (size.height > 640)) {
-		if (size.width > size.height) {
-			new_width = 640;
-			new_height = size.height * (new_width / size.width);
-			if ((new_height % 2) != 0) {
-				new_height = new_height + 1;
-			}
-		}
-		else {
-			new_height = 640;
-			new_width = size.width * (new_height / size.height);
-			if ((new_width % 2) != 0) {
-				new_width = new_width + 1;
-			}
-		}
-	}
 	else {
-		new_width = size.width;
-		new_height = size.height;
+		CGFloat max_width = kMaxVideoLandscapeWidth;
+		CGFloat max_height = kMaxVideoLandscapeHeight;
+		if (size.height > size.width) {
+			max_width = kMaxVideoLandscapeHeight;
+			max_height = kMaxVideoLandscapeWidth;
+		}
+
+		CGFloat scale = MIN(max_width / size.width, max_height / size.height);
+		if (scale > 1.0) {
+			scale = 1.0;
+		}
+
+		new_width = [self evenVideoDimension:(size.width * scale)];
+		new_height = [self evenVideoDimension:(size.height * scale)];
 	}
 
 	return @{
