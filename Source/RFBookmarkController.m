@@ -56,7 +56,7 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
 	NSArray* objs = [pb readObjectsForClasses:@[ [NSString class] ] options:@{}];
 	NSString* url = [objs firstObject];
-	if (url && [url containsString:@"http"]) {
+	if (url && [url hasPrefix:@"http"]) {
 		self.urlField.stringValue = url;
 	}
 }
