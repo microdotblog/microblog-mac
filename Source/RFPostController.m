@@ -875,6 +875,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:nil];
 			photo.videoAsset = asset;
 			photo.isVideo = YES;
+			[new_photos addObject:photo];
 
 			[self startProgressAnimation];
 			[photo transcodeVideo:^(NSURL* new_url) {
@@ -885,17 +886,19 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					CGImageRef cgImage = [imageGenerator copyCGImageAtTime:CMTimeMake(0, 1) actualTime:nil error:&error];
 					photo.videoAsset = new_asset;
 					photo.thumbnailImage = [[NSImage alloc] initWithCGImage:cgImage size:CGSizeZero];
-					[new_photos addObject:photo];
 
 					self.attachedPhotos = new_photos;
 					[self stopProgressAnimation];
 					[self.photosCollectionView reloadData];
-					
+
 					CGImageRelease (cgImage);
 				}
 				else {
+					[new_photos removeObject:photo];
+					self.attachedPhotos = new_photos;
 					[self stopProgressAnimation];
 					[photo removeTemporaryVideo];
+					[self.photosCollectionView reloadData];
 				}
 			}];
 		}
@@ -1054,13 +1057,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			[self startProgressAnimation];
 		}
 
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self attachPhotos:urls];
+		[self attachPhotos:urls];
 
-			if (should_show_progress && !has_video) {
-				[self stopProgressAnimation];
-			}
-		});
+		if (should_show_progress && !has_video) {
+			[self stopProgressAnimation];
+		}
 
 		if (too_many_photos) {
 			[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
@@ -1298,7 +1299,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		else {
 			item.progressSpinner.hidden = NO;
 			[item.progressSpinner startAnimation:nil];
-			
+
+			if (photo.isVideo) {
+				return item;
+			}
+
 			// download thumbnail
 			RFClient* client = [[RFClient alloc] initWithURL:photo.publishedURL];
 			[client getWithCompletion:^(UUHttpResponse* response) {
