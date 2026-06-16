@@ -1026,6 +1026,28 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 
 	if ([urls count] > 0) {
+		BOOL too_many_photos = NO;
+		NSInteger remaining_slots = 10 - self.attachedPhotos.count;
+		if (remaining_slots < 0) {
+			remaining_slots = 0;
+		}
+		if ((NSInteger)urls.count > remaining_slots) {
+			too_many_photos = YES;
+			if (remaining_slots > 0) {
+				urls = [[urls subarrayWithRange:NSMakeRange(0, remaining_slots)] mutableCopy];
+			}
+			else {
+				[urls removeAllObjects];
+			}
+		}
+
+		if ([urls count] == 0) {
+			if (too_many_photos) {
+				[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+			}
+			return;
+		}
+
 		BOOL should_show_progress = !self.isSending;
 		BOOL has_video = [self hasAttachableVideoURLs:urls];
 		if (should_show_progress) {
@@ -1039,6 +1061,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 				[self stopProgressAnimation];
 			}
 		});
+
+		if (too_many_photos) {
+			[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+		}
 	}
 }
 
