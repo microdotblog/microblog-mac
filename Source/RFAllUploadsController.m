@@ -523,8 +523,14 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		return;
 	}
 
-	RFPhotoCell* cell = (RFPhotoCell *)[self collectionView:self.collectionView itemForRepresentedObjectAtIndexPath:index_path];
-	[cell copyHTML:sender];
+	RFUpload* up = [self.allPosts objectAtIndex:index_path.item];
+	[up ensureDimensionsWithCompletion:^{
+		NSString* s = [up htmlTag];
+
+		NSPasteboard* pb = [NSPasteboard generalPasteboard];
+		[pb clearContents];
+		[pb setString:s forType:NSPasteboardTypeString];
+	}];
 }
 
 - (void) showBlogsMenu
