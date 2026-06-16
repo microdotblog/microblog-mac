@@ -1316,6 +1316,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			[item.progressSpinner startAnimation:nil];
 
 			if (photo.isVideo) {
+				item.thumbnailImageView.image = nil;
 				return item;
 			}
 
