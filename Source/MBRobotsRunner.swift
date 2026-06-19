@@ -106,6 +106,7 @@ class MBRobotsPromptRunner: NSObject {
 private actor MBRobotsPromptEngine {
 	private var modelContainer: ModelContainer?
 	private var modelFolderPath: String?
+	private var hasTouchedMLX = false
 
 	func runPrompt(_ prompt: String, modelFolderPath: String) async throws -> String {
 		let model = try await loadModelIfNeeded(modelFolderPath: modelFolderPath)
@@ -135,9 +136,13 @@ private actor MBRobotsPromptEngine {
 	}
 
 	func unloadModel() {
+		let shouldClearCache = hasTouchedMLX
 		modelContainer = nil
 		modelFolderPath = nil
-		Memory.clearCache()
+		hasTouchedMLX = false
+		if shouldClearCache {
+			Memory.clearCache()
+		}
 	}
 
 	private func loadModelIfNeeded(modelFolderPath: String) async throws -> ModelContainer {
@@ -145,6 +150,7 @@ private actor MBRobotsPromptEngine {
 			return modelContainer
 		}
 
+		hasTouchedMLX = true
 		Memory.cacheLimit = 20 * 1024 * 1024
 		let modelURL = URL(fileURLWithPath: modelFolderPath, isDirectory: true)
 		let modelContainer = try await MBRobotsGemma4Loader.loadModelContainer(from: modelURL)
