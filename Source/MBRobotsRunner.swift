@@ -135,9 +135,12 @@ private actor MBRobotsPromptEngine {
 	}
 
 	func unloadModel() {
+		let hadModel = modelContainer != nil
 		modelContainer = nil
 		modelFolderPath = nil
-		Memory.clearCache()
+		if hadModel {
+			Memory.clearCache()
+		}
 	}
 
 	private func loadModelIfNeeded(modelFolderPath: String) async throws -> ModelContainer {

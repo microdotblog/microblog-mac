@@ -7,6 +7,8 @@
 
 #import "Micro_blog-Swift.h"
 
+#import <sys/sysctl.h>
+
 NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.blog/models/gemma-4/";
 
 @implementation MBRobotsModel
@@ -56,8 +58,27 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 	return model_url.path;
 }
 
++ (BOOL) isLocalModelSupported
+{
+	int arm64_supported = 0;
+	size_t size = sizeof(arm64_supported);
+	if (sysctlbyname("hw.optional.arm64", &arm64_supported, &size, NULL, 0) == 0) {
+		return arm64_supported == 1;
+	}
+
+#if defined(__arm64__) || defined(__aarch64__)
+	return YES;
+#else
+	return NO;
+#endif
+}
+
 + (BOOL) isLocalModelAvailable
 {
+	if (![self isLocalModelSupported]) {
+		return NO;
+	}
+
 	NSFileManager* fm = [NSFileManager defaultManager];
 	NSString* model_folder = [self localModelFolderPath];
 	if (model_folder.length == 0) {
@@ -77,6 +98,10 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 
 + (unsigned long long) localModelStorageBytes
 {
+	if (![self isLocalModelSupported]) {
+		return 0;
+	}
+
 	NSFileManager* fm = [NSFileManager defaultManager];
 	NSString* model_folder = [self localModelFolderPath];
 	if (model_folder.length == 0) {
@@ -134,6 +159,13 @@ NSString* const MBRobotsModelBaseURLString = @"https://s3.amazonaws.com/micro.bl
 
 + (void) unloadModelWithCompletion:(void (^ _Nullable)(void))completion
 {
+	if (![self isLocalModelSupported]) {
+		if (completion) {
+			completion();
+		}
+		return;
+	}
+
 	[MBRobotsPromptRunner unloadModelWithCompletion:completion ?: ^{
 	}];
 }

@@ -8,7 +8,6 @@
 #import "MBRobotsModel.h"
 
 #import <math.h>
-#import <sys/sysctl.h>
 
 static uint64_t const kBytesPerGB = 1024ULL * 1024 * 1024;
 static uint64_t const kMinimumMemoryBytes = 24 * kBytesPerGB;
@@ -66,27 +65,12 @@ static uint64_t const kMinimumStorageBytes = 20 * kBytesPerGB;
 
 + (BOOL) hasSupportedHardware
 {
-	return [self hasAppleSilicon] && [self hasRequiredMemory];
+	return [MBRobotsModel isLocalModelSupported] && [self hasRequiredMemory];
 }
 
 + (BOOL) hasRequiredMemory
 {
 	return [NSProcessInfo processInfo].physicalMemory >= kMinimumMemoryBytes;
-}
-
-+ (BOOL) hasAppleSilicon
-{
-	int arm64_supported = 0;
-	size_t size = sizeof(arm64_supported);
-	if (sysctlbyname("hw.optional.arm64", &arm64_supported, &size, NULL, 0) == 0) {
-		return arm64_supported == 1;
-	}
-
-#if defined(__arm64__) || defined(__aarch64__)
-	return YES;
-#else
-	return NO;
-#endif
 }
 
 + (BOOL) hasRequiredStorage
@@ -131,6 +115,11 @@ static uint64_t const kMinimumStorageBytes = 20 * kBytesPerGB;
 	self.receivedBytesThisRun = 0;
 	self.expectedContentLengthsByFilename = @{};
 	[self postProgressIndeterminate:NO progress:0.0 detail:@""];
+
+	if (![MBRobotsController isSupportedMachine]) {
+		[self finishWithSuccess:NO cancelled:NO error:nil];
+		return;
+	}
 
 	if ([MBRobotsModel isLocalModelAvailable]) {
 		[self finishWithSuccess:YES cancelled:NO error:nil];

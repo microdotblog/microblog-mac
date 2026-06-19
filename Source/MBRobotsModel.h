@@ -18,6 +18,7 @@ extern NSString* const MBRobotsModelBaseURLString;
 + (NSArray<NSString *> *) modelFilenames;
 + (NSArray<NSString *> *) largeModelFilenames;
 + (NSString *) localModelFolderPath;
++ (BOOL) isLocalModelSupported;
 + (BOOL) isLocalModelAvailable;
 + (unsigned long long) localModelStorageBytes;
 + (void) runPrompt:(NSString *)string completion:(void (^)(NSString* result))completion;
