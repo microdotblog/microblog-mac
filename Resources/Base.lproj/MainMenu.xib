@@ -542,8 +542,7 @@ CA
                                     <action selector="toggleSummary:" target="-1" id="9oh-3e-1QP"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Categories" id="QPg-0Y-Awf">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Categories" keyEquivalent="C" id="QPg-0Y-Awf">
                                 <connections>
                                     <action selector="toggleCategories:" target="-1" id="2c7-Og-LoF"/>
                                 </connections>
