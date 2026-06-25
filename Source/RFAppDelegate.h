@@ -51,6 +51,7 @@
 @property (strong, nonatomic) NSMutableArray* postWindows; // RFPostWindowController
 @property (strong, nonatomic) NSMutableArray* photoWindows; // RFPhotoZoomController
 
+- (IBAction) newBookmark:(id)sender;
 - (void) showPostController:(RFPostController *)controller;
 
 @end

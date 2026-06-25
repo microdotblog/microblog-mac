@@ -8,6 +8,7 @@
 
 #import "MBBookmarksController.h"
 
+#import "RFAppDelegate.h"
 #import "RFClient.h"
 #import "RFConstants.h"
 #import "RFMacros.h"
@@ -146,6 +147,10 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 					item = [self.tagsButton lastItem];
 					[item setRepresentedObject:@"all_tags"];
 					[item setKeyEquivalent:@"T"];
+					[item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
+
+					item = [menu addItemWithTitle:@"New Bookmark" action:@selector(newBookmark:) keyEquivalent:@"b"];
+					[item setTarget:[NSApp delegate]];
 					[item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
 
 					self.tagsButton.hidden = NO;

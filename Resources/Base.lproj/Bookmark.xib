@@ -20,8 +20,8 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <rect key="contentRect" x="598" y="554" width="480" height="152"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
-            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="147"/>
+            <view key="contentView" wantsLayer="YES" misplaced="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="140"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yp2-m1-ofD">
@@ -38,7 +38,7 @@ DQ
                         </connections>
                     </button>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Duk-51-Oc3">
-                        <rect key="frame" x="20" y="105" width="98" height="16"/>
+                        <rect key="frame" x="20" y="98" width="98" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Bookmark URL:" id="KlE-S4-CcC">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -57,7 +57,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xBU-vt-QFG">
-                        <rect key="frame" x="22" y="71" width="438" height="24"/>
+                        <rect key="frame" x="22" y="64" width="438" height="24"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Laa-Fr-dNn">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -77,7 +77,7 @@ DQ
                     <constraint firstItem="DcQ-Og-JIF" firstAttribute="centerY" secondItem="yp2-m1-ofD" secondAttribute="centerY" id="lNH-8A-l2V"/>
                     <constraint firstItem="Duk-51-Oc3" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="22" id="myC-Qn-aRC"/>
                     <constraint firstItem="LHx-uV-EiT" firstAttribute="leading" secondItem="DcQ-Og-JIF" secondAttribute="trailing" constant="8" id="nd5-Uu-YPW"/>
-                    <constraint firstItem="yp2-m1-ofD" firstAttribute="top" secondItem="xBU-vt-QFG" secondAttribute="bottom" constant="27" id="we9-4q-G8V"/>
+                    <constraint firstItem="yp2-m1-ofD" firstAttribute="top" secondItem="xBU-vt-QFG" secondAttribute="bottom" constant="20" id="we9-4q-G8V"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="87" y="52"/>

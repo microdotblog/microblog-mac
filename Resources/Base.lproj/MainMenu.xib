@@ -96,8 +96,7 @@
                                     <action selector="newCollection:" target="-1" id="xuh-Yx-ZKL"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Bookmark" image="star" catalog="system" id="ILN-3z-6jt">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="New Bookmark" image="star" catalog="system" keyEquivalent="B" id="ILN-3z-6jt">
                                 <connections>
                                     <action selector="newBookmark:" target="Voe-Tx-rLC" id="GIh-25-pmA"/>
                                 </connections>
