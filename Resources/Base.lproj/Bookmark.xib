@@ -11,6 +11,7 @@
                 <outlet property="progressSpinner" destination="DcQ-Og-JIF" id="59P-TZ-b9z"/>
                 <outlet property="statusField" destination="LHx-uV-EiT" id="Onb-I7-xrf"/>
                 <outlet property="urlField" destination="xBU-vt-QFG" id="nMM-0G-Y3g"/>
+                <outlet property="warningIconView" destination="snr-rQ-M4i" id="J5D-aj-nZE"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="pX3-td-S5A"/>
             </connections>
         </customObject>
@@ -21,7 +22,7 @@
             <rect key="contentRect" x="598" y="554" width="480" height="152"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="147"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="140"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yp2-m1-ofD">
@@ -38,7 +39,7 @@ DQ
                         </connections>
                     </button>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Duk-51-Oc3">
-                        <rect key="frame" x="20" y="105" width="98" height="16"/>
+                        <rect key="frame" x="20" y="104" width="98" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Bookmark URL:" id="KlE-S4-CcC">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -57,13 +58,21 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xBU-vt-QFG">
-                        <rect key="frame" x="22" y="71" width="438" height="24"/>
+                        <rect key="frame" x="22" y="64" width="438" height="24"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Laa-Fr-dNn">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="snr-rQ-M4i">
+                        <rect key="frame" x="16" y="17.5" width="24.5" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="3aP-QX-jb9"/>
+                            <constraint firstAttribute="width" constant="24" id="iXt-TV-4AO"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="exclamationmark.triangle.fill" catalog="system" id="fQl-HV-KyN"/>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="yp2-m1-ofD" secondAttribute="bottom" constant="20" symbolic="YES" id="4Qy-Fy-K3C"/>
@@ -71,16 +80,21 @@ DQ
                     <constraint firstItem="DcQ-Og-JIF" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Ebs-fe-O7O"/>
                     <constraint firstItem="xBU-vt-QFG" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="22" id="HSd-q5-dfc"/>
                     <constraint firstAttribute="trailing" secondItem="yp2-m1-ofD" secondAttribute="trailing" constant="20" symbolic="YES" id="HdF-pY-ig7"/>
-                    <constraint firstItem="Duk-51-Oc3" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="26" id="MNg-er-fMH"/>
-                    <constraint firstItem="xBU-vt-QFG" firstAttribute="top" secondItem="Duk-51-Oc3" secondAttribute="bottom" constant="10" id="Neo-FJ-CGf"/>
+                    <constraint firstItem="Duk-51-Oc3" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="MNg-er-fMH"/>
+                    <constraint firstItem="xBU-vt-QFG" firstAttribute="top" secondItem="Duk-51-Oc3" secondAttribute="bottom" constant="16" id="Neo-FJ-CGf"/>
+                    <constraint firstItem="snr-rQ-M4i" firstAttribute="centerX" secondItem="DcQ-Og-JIF" secondAttribute="centerX" id="OHX-oT-Wc5"/>
                     <constraint firstAttribute="trailing" secondItem="xBU-vt-QFG" secondAttribute="trailing" constant="20" symbolic="YES" id="d5I-OJ-hVB"/>
                     <constraint firstItem="DcQ-Og-JIF" firstAttribute="centerY" secondItem="yp2-m1-ofD" secondAttribute="centerY" id="lNH-8A-l2V"/>
                     <constraint firstItem="Duk-51-Oc3" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="22" id="myC-Qn-aRC"/>
                     <constraint firstItem="LHx-uV-EiT" firstAttribute="leading" secondItem="DcQ-Og-JIF" secondAttribute="trailing" constant="8" id="nd5-Uu-YPW"/>
-                    <constraint firstItem="yp2-m1-ofD" firstAttribute="top" secondItem="xBU-vt-QFG" secondAttribute="bottom" constant="27" id="we9-4q-G8V"/>
+                    <constraint firstItem="snr-rQ-M4i" firstAttribute="centerY" secondItem="DcQ-Og-JIF" secondAttribute="centerY" id="wYQ-ns-88s"/>
+                    <constraint firstItem="yp2-m1-ofD" firstAttribute="top" secondItem="xBU-vt-QFG" secondAttribute="bottom" constant="20" id="we9-4q-G8V"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="87" y="52"/>
         </window>
     </objects>
+    <resources>
+        <image name="exclamationmark.triangle.fill" catalog="system" width="17" height="15"/>
+    </resources>
 </document>

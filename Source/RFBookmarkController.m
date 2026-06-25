@@ -49,6 +49,7 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	[super windowDidLoad];
 
 	self.statusField.hidden = YES;
+	self.warningIconView.hidden = YES;
 }
 
 - (void) setupClipboard
@@ -82,6 +83,7 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	[self.progressSpinner stopAnimation:nil];
 	self.statusField.hidden = YES;
 	self.statusField.stringValue = @"";
+	self.warningIconView.hidden = YES;
 
 	if (url.length > 0) {
 		self.urlField.stringValue = url;
@@ -192,15 +194,68 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 		RFDispatchMainAsync (^{
 			self.isSaving = NO;
 			[self.progressSpinner stopAnimation:nil];
-			[self.window performClose:nil];
+			if ([self responseHasError:response]) {
+				[self updateErrorStatus:[self errorMessageFromResponse:response]];
+			}
+			else {
+				[self.window performClose:nil];
+			}
 		});
 	}];
+}
+
+- (BOOL) responseHasError:(UUHttpResponse *)response
+{
+	if (response.httpError != nil) {
+		return YES;
+	}
+
+	if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		return (response.parsedResponse[@"error"] != nil);
+	}
+	else {
+		return NO;
+	}
+}
+
+- (NSString *) errorMessageFromResponse:(UUHttpResponse *)response
+{
+	NSString* msg = nil;
+	if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		msg = response.parsedResponse[@"error_description"];
+		if (msg.length == 0) {
+			msg = response.parsedResponse[@"error"];
+		}
+	}
+
+	if (msg.length == 0) {
+		NSInteger status_code = response.httpResponse.statusCode;
+		if (status_code > 0) {
+			msg = [NSString stringWithFormat:@"Could not save bookmark. The server returned HTTP %ld.", (long)status_code];
+		}
+		else if (response.httpError.localizedDescription.length > 0) {
+			msg = response.httpError.localizedDescription;
+		}
+		else {
+			msg = @"Could not save bookmark.";
+		}
+	}
+
+	return msg;
 }
 
 - (void) updateStatus:(NSString *)status
 {
 	self.statusField.hidden = NO;
 	self.statusField.stringValue = status;
+	self.warningIconView.hidden = YES;
+}
+
+- (void) updateErrorStatus:(NSString *)status
+{
+	self.statusField.hidden = NO;
+	self.statusField.stringValue = status;
+	self.warningIconView.hidden = NO;
 }
 
 @end

@@ -192,7 +192,7 @@
 
 - (void) processBlockquote
 {
-	NSColor* blockquote_c = [NSColor colorWithRed:0.0 green:0.598 blue:0.004 alpha:1.0];
+	NSColor* blockquote_c = [NSColor colorNamed:@"color_syntax_blockquote"];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_blockquote = NO;
 	

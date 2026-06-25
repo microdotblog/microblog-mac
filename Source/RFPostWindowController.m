@@ -71,6 +71,8 @@
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.window];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignKeyNotification:) name:NSWindowDidResignKeyNotification object:self.window];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillCloseNotification:) name:NSWindowWillCloseNotification object:self.window];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStartProgressNotification:) name:kPostStartProgressNotification object:self.postController];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postStopProgressNotification:) name:kPostStopProgressNotification object:self.postController];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:self.postController];
@@ -158,6 +160,72 @@
 	return ![self.postController isReply] && self.window.isDocumentEdited && ([self.postController currentText].length > 0);
 }
 
+- (NSMenuItem *) copyLinkMenuItemInEditMenu
+{
+	NSMenu* main_menu = [NSApplication sharedApplication].mainMenu;
+	NSMenuItem* edit_menu_item = [main_menu itemWithTitle:@"Edit"];
+	return [edit_menu_item.submenu itemWithTitle:@"Copy Link"];
+}
+
+- (NSMenuItem *) toggleCategoriesMenuItemInViewMenu
+{
+	NSMenu* main_menu = [NSApplication sharedApplication].mainMenu;
+	NSMenuItem* view_menu_item = [main_menu itemWithTitle:@"View"];
+	for (NSMenuItem* item in view_menu_item.submenu.itemArray) {
+		if (item.action == @selector(toggleCategories:)) {
+			return item;
+		}
+	}
+
+	return nil;
+}
+
+- (BOOL) isPostWindowKey
+{
+	NSWindow* key_window = [NSApplication sharedApplication].keyWindow;
+	return [key_window isKindOfClass:[MBPostWindow class]];
+}
+
+- (void) clearCopyLinkMenuItemShortcut
+{
+	NSMenuItem* item = [self copyLinkMenuItemInEditMenu];
+	if (item != nil) {
+		item.keyEquivalent = @"";
+		item.keyEquivalentModifierMask = 0;
+	}
+}
+
+- (void) addToggleCategoriesMenuItemShortcut
+{
+	NSMenuItem* item = [self toggleCategoriesMenuItemInViewMenu];
+	if (item != nil) {
+		item.keyEquivalent = @"c";
+		item.keyEquivalentModifierMask = NSEventModifierFlagCommand | NSEventModifierFlagShift;
+	}
+}
+
+- (void) clearToggleCategoriesMenuItemShortcut
+{
+	NSMenuItem* item = [self toggleCategoriesMenuItemInViewMenu];
+	if (item != nil) {
+		item.keyEquivalent = @"";
+		item.keyEquivalentModifierMask = 0;
+	}
+}
+
+- (void) restoreCopyLinkMenuItemShortcutIfNeeded
+{
+	if (![self isPostWindowKey]) {
+		[self clearToggleCategoriesMenuItemShortcut];
+
+		NSMenuItem* item = [self copyLinkMenuItemInEditMenu];
+		if (item != nil) {
+			item.keyEquivalent = @"c";
+			item.keyEquivalentModifierMask = NSEventModifierFlagCommand | NSEventModifierFlagShift;
+		}
+	}
+}
+
 - (BOOL) windowShouldClose:(NSWindow *)sender
 {
 	if ([self isNeedingSavePrompt]) {
@@ -211,8 +279,25 @@
 
 - (void) windowDidBecomeKeyNotification:(NSNotification *)notification
 {
+	[self clearCopyLinkMenuItemShortcut];
+	[self addToggleCategoriesMenuItemShortcut];
+	
 	[self.postController becomeFirstResponder];
 	[self.postController refreshDestinationsCache];
+}
+
+- (void) windowDidResignKeyNotification:(NSNotification *)notification
+{
+	dispatch_async (dispatch_get_main_queue(), ^{
+		[self restoreCopyLinkMenuItemShortcutIfNeeded];
+	});
+}
+
+- (void) windowWillCloseNotification:(NSNotification *)notification
+{
+	dispatch_async (dispatch_get_main_queue(), ^{
+		[self restoreCopyLinkMenuItemShortcutIfNeeded];
+	});
 }
 
 #pragma mark -
