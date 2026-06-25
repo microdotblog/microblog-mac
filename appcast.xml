@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.0.3</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added keyboard shortcut command-shift-C to toggle showing categories in post window.</li>
+					<li>Added "New Bookmark" menu item to the Tags menu in Bookmarks section, also with new shortcut command-shift-B.</li>
+					<li>Improved blockquote syntax highlighting color in dark mode.</li>
+					<li>Fixed error handling when a bookmark can't be saved.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Thu, 25 Jun 2026 10:30:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.0.3.zip" sparkle:shortVersionString="4.0.3" sparkle:version="247" length="18369245" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.0.2</title>
  			<description><![CDATA[
 				<style>
