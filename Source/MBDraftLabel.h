@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBDraftLabel : NSTextField
 
+@property (strong, nonatomic, nullable) NSColor* bubbleColor;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -13,7 +13,7 @@
 - (void) drawRect:(NSRect)dirtyRect
 {
 	NSRect r = [self bounds];
-	NSColor* c = [[NSColor lightGrayColor] colorWithAlphaComponent:0.5];
+	NSColor* c = self.bubbleColor ?: [[NSColor lightGrayColor] colorWithAlphaComponent:0.5];
 	[c set];
 	
 	CGFloat radius = 5.0;
@@ -21,6 +21,12 @@
 	[path fill];
 	
 	[super drawRect:dirtyRect];
+}
+
+- (void) setBubbleColor:(NSColor *)bubbleColor
+{
+	_bubbleColor = bubbleColor;
+	self.needsDisplay = YES;
 }
 
 @end
