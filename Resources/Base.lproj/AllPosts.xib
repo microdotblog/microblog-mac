@@ -77,11 +77,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrF-A6-KAh">
-                                <rect key="frame" x="257" y="429" width="145" height="22"/>
+                            <searchField focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrF-A6-KAh">
+                                <rect key="frame" x="257" y="427" width="145" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="145" id="RKs-Cf-e27"/>
-                                    <constraint firstAttribute="height" constant="22" id="cwk-SX-HVK"/>
                                 </constraints>
                                 <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="SnF-SD-YzM">
                                     <font key="font" metaFont="system"/>
