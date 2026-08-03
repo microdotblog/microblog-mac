@@ -1675,19 +1675,35 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) save:(id)sender
 {
+	NSString* s = [self currentText];
+	if ((s.length == 0) && (self.attachedPhotos.count == 0)) {
+		return;
+	}
+
 	if (![self validateReadyToUploadPost]) {
 		return;
 	}
 
-	// cmd-S saves to server
-	self.isDraft = YES;
-	self.view.window.documentEdited = NO;
-	[self uploadPost];
+	if (!self.isSending) {
+		// cmd-S saves to server
+		self.isDraft = YES;
+		self.isSending = YES;
+		self.view.window.documentEdited = NO;
+		[self uploadPost];
+	}
 }
 
 - (IBAction) schedulePost:(id)sender
 {
+	NSString* s = [self currentText];
+	if ((s.length == 0) && (self.attachedPhotos.count == 0)) {
+		return;
+	}
+
 	if (![self validateReadyToUploadPost]) {
+		return;
+	}
+	if (self.isSending) {
 		return;
 	}
 
@@ -1696,6 +1712,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		if (returnCode == NSModalResponseOK) {
 			self.postedAt = self.dateController.date;
 			self.isDraft = NO;
+			self.isSending = YES;
 			self.view.window.documentEdited = NO;
 			[self uploadPost];
         }
@@ -1761,6 +1778,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			if (([s characterAtIndex:0] == '@') && [self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 				NSString* msg = @"When replying to another Micro.blog user, photos are not currently supported. Start the post with different text and @-mention the user elsewhere in the post to make this a microblog post with inline photos on your site.";
 				[NSAlert rf_showOneButtonAlert:@"Replies Can't Use Photos" message:msg button:@"OK" completionHandler:NULL];
+				[self hideProgressHeader];
 				return;
 			}
 			
@@ -1978,7 +1996,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 							[self closeWithoutSaving];
 						}
 						else {
-							[self stopProgressAnimation];
+							[self hideProgressHeader];
 							[self sendUpdatedDraftNotification];
 						}
 					});
@@ -2025,7 +2043,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 							self.editingPost = [[RFPost alloc] init];
 							self.editingPost.url = response.parsedResponse[@"url"];
 							self.editingPost.isDraft = YES;
-							[self stopProgressAnimation];
+							[self hideProgressHeader];
 							[self sendUpdatedDraftNotification];
 						}
 					});
@@ -2090,7 +2108,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						[self closeWithoutSaving];
 					}
 					else {
-						[self stopProgressAnimation];
+						[self hideProgressHeader];
 					}
 				});
 			}];
@@ -2159,7 +2177,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						[self closeWithoutSaving];
 					}
 					else {
-						[self stopProgressAnimation];
+						[self hideProgressHeader];
 					}
 				}));
 			}];
@@ -2271,16 +2289,23 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 				@"mp-destination": destination_uid
 			};
 			[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF isPNG:photo.isPNG completion:^(UUHttpResponse* response) {
-				NSDictionary* headers = response.httpResponse.allHeaderFields;
-				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{
-					if (image_url == nil) {
-						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+					if (response.httpError) {
+						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:msg button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 					}
 					else {
-						photo.publishedURL = image_url;
-						handler();
+						NSDictionary* headers = response.httpResponse.allHeaderFields;
+						NSString* image_url = headers[@"Location"];
+						if (image_url.length == 0) {
+							[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+							[self hideProgressHeader];
+						}
+						else {
+							photo.publishedURL = image_url;
+							handler();
+						}
 					}
 				});
 			}];
@@ -2291,16 +2316,23 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			NSDictionary* args = @{
 			};
 			[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:photo.isVideo isGIF:photo.isGIF isPNG:photo.isPNG completion:^(UUHttpResponse* response) {
-				NSDictionary* headers = response.httpResponse.allHeaderFields;
-				NSString* image_url = headers[@"Location"];
 				RFDispatchMainAsync (^{
-					if (image_url == nil) {
-						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+					if (response.httpError) {
+						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:msg button:@"OK" completionHandler:NULL];
 						[self hideProgressHeader];
 					}
 					else {
-						photo.publishedURL = image_url;
-						handler();
+						NSDictionary* headers = response.httpResponse.allHeaderFields;
+						NSString* image_url = headers[@"Location"];
+						if (image_url.length == 0) {
+							[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
+							[self hideProgressHeader];
+						}
+						else {
+							photo.publishedURL = image_url;
+							handler();
+						}
 					}
 				});
 			}];
