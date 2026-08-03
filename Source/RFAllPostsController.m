@@ -80,7 +80,17 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
 	}
 
+	BOOL was_showing_scheduled = self.isShowingScheduled;
 	[self updateScheduledPosts];
+	if (was_showing_scheduled) {
+		if (self.isShowingScheduled) {
+			self.currentPosts = self.scheduledPosts;
+		}
+		else {
+			self.currentPosts = self.allPosts;
+		}
+	}
+	[self.tableView reloadData];
 	[self refreshDestinationsCache];
 }
 
