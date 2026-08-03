@@ -21,6 +21,7 @@
 #import "RFMacros.h"
 #import "NSImage+Extras.h"
 #import "NSAlert+Extras.h"
+#import "NSError+Extras.h"
 #import "NSString+Extras.h"
 #import "NSCollectionView+Extras.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
@@ -992,9 +993,8 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		NSString* image_url = headers[@"Location"];
 		RFDispatchMainAsync ((^{
 			if (response.httpError) {
-				NSString* msg = [response.httpError.userInfo objectForKey:@"kUUHttpSessionHttpErrorMessageKey"];
-				NSString* s = [NSString stringWithFormat:@"Server returned error: %@", msg];
-				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:s button:@"OK" completionHandler:NULL];
+				NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:msg button:@"OK" completionHandler:NULL];
 				[self hideUploadProgress];
 			}
 			else if (image_url == nil) {
