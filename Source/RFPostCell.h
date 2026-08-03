@@ -11,14 +11,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class RFPost;
+@class MBDraftLabel;
 
 @interface RFPostCell : NSTableRowView <NSCollectionViewDelegate, NSCollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet NSTextField* titleField;
 @property (strong, nonatomic) IBOutlet NSTextField* textField;
 @property (strong, nonatomic) IBOutlet NSTextField* dateField;
-@property (strong, nonatomic) IBOutlet NSTextField* draftField;
+@property (strong, nonatomic) IBOutlet MBDraftLabel* draftField;
 @property (strong, nonatomic) IBOutlet NSCollectionView* photosCollectionView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* draftWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* textRightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* dateTopConstraint;

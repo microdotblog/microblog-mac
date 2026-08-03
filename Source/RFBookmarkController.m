@@ -13,6 +13,7 @@
 #import "RFConstants.h"
 #import "RFMacros.h"
 #import "RFSettings.h"
+#import "NSError+Extras.h"
 #import "Micro_blog-Swift.h"
 
 static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text in one short sentence. Do not start the summary with the text \"The author\" or \"The writer\" or \"The speaker\".\n\n%@";
@@ -229,12 +230,8 @@ static NSString* const kBookmarkSummaryPrompt = @"Summarize the following text i
 	}
 
 	if (msg.length == 0) {
-		NSInteger status_code = response.httpResponse.statusCode;
-		if (status_code > 0) {
-			msg = [NSString stringWithFormat:@"Could not save bookmark. The server returned HTTP %ld.", (long)status_code];
-		}
-		else if (response.httpError.localizedDescription.length > 0) {
-			msg = response.httpError.localizedDescription;
+		if (response.httpError != nil) {
+			msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 		}
 		else {
 			msg = @"Could not save bookmark.";

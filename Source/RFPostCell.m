@@ -11,6 +11,7 @@
 #import "RFPhotoCell.h"
 #import "RFPhoto.h"
 #import "RFPost.h"
+#import "MBDraftLabel.h"
 #import "UUHttpSession.h"
 #import "HTMLParser.h"
 #import "RFMacros.h"
@@ -97,9 +98,20 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.dateField.stringValue = date_s;
 	}
 	
+	BOOL is_scheduled = (post.postedAt != nil) && ([post.postedAt compare:[NSDate date]] == NSOrderedDescending);
 	if (post.isDraft) {
+		self.draftField.stringValue = @"draft";
+		self.draftField.bubbleColor = [[NSColor lightGrayColor] colorWithAlphaComponent:0.5];
+		self.draftWidthConstraint.constant = 28;
 		self.draftField.hidden = NO;
 		self.textRightConstraint.constant = 40;
+	}
+	else if (is_scheduled) {
+		self.draftField.stringValue = @"scheduled";
+		self.draftField.bubbleColor = [[NSColor systemGreenColor] colorWithAlphaComponent:0.25];
+		self.draftWidthConstraint.constant = 62;
+		self.draftField.hidden = NO;
+		self.textRightConstraint.constant = 74;
 	}
 	else {
 		self.draftField.hidden = YES;

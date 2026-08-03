@@ -45,6 +45,7 @@
 #import "MBBooksWindowController.h"
 #import "MBNotesController.h"
 #import "NSImage+Extras.h"
+#import "NSError+Extras.h"
 #import "RFGoToUserController.h"
 #import "NSAppearance+Extras.h"
 #import <QuartzCore/QuartzCore.h>
@@ -1262,6 +1263,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) closeOverlays
 {
+	[self.window makeFirstResponder:nil];
 	self.webView.hidden = YES;
 	[self popToRootViewController];
 
@@ -1970,6 +1972,52 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self setupCSS:webView];
 	[self stopLoadingSidebarRow];
 	[self updateCachedUsers];
+}
+
+- (void) showWebViewError:(NSError *)error webView:(WebView *)webView frame:(WebFrame *)frame
+{
+	if ((frame != webView.mainFrame) || (webView != [self currentWebView])) {
+		return;
+	}
+
+	if ([error.domain isEqualToString:NSURLErrorDomain] && (error.code == NSURLErrorCancelled)) {
+		return;
+	}
+
+	if ([error.domain isEqualToString:WebKitErrorDomain] && (error.code == WebKitErrorFrameLoadInterruptedByPolicyChange)) {
+		return;
+	}
+
+	NSURL* failing_url = [error.userInfo objectForKey:NSURLErrorFailingURLErrorKey];
+	if (![failing_url isKindOfClass:[NSURL class]]) {
+		failing_url = frame.provisionalDataSource.request.URL;
+	}
+	if (failing_url == nil) {
+		failing_url = frame.dataSource.request.URL;
+	}
+
+	if (![failing_url.host isEqualToString:@"micro.blog"] || ![failing_url.path hasPrefix:@"/hybrid/"]) {
+		return;
+	}
+
+	[self stopLoadingSidebarRow];
+
+	NSAlert* alert = [[NSAlert alloc] init];
+	[alert addButtonWithTitle:@"OK"];
+	[alert setMessageText:@"Error Loading Micro.blog"];
+	[alert setInformativeText:[error mb_networkMessageWithResponse:nil]];
+	[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+	}];
+}
+
+- (void) webView:(WebView *)webView didFailProvisionalLoadWithError:(NSError *)error forFrame:(WebFrame *)frame
+{
+	[self showWebViewError:error webView:webView frame:frame];
+}
+
+- (void) webView:(WebView *)webView didFailLoadWithError:(NSError *)error forFrame:(WebFrame *)frame
+{
+	[self showWebViewError:error webView:webView frame:frame];
 }
 
 - (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener

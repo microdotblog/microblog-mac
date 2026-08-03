@@ -30,6 +30,7 @@
 #import "RFXMLRPCParser.h"
 #import "SAMKeychain.h"
 #import "NSAlert+Extras.h"
+#import "NSError+Extras.h"
 #import "NSImage+Extras.h"
 #import "NSString+Extras.h"
 #import "NSCollectionView+Extras.h"
@@ -1857,7 +1858,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					}
 					else if (response.httpError) {
 						[self hideProgressHeader];
-						NSString* msg = [response.httpError localizedDescription];
+						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
@@ -1886,7 +1887,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					}
 					else if (response.httpError) {
 						[self hideProgressHeader];
-						NSString* msg = [response.httpError localizedDescription];
+						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
@@ -1963,7 +1964,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						}
 						else if (response.httpError) {
 							[self hideProgressHeader];
-							NSString* msg = [response.httpError localizedDescription];
+							NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 						}
 						else if (!self.isDraft) {
@@ -2007,7 +2008,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						}
 						else if (response.httpError) {
 							[self hideProgressHeader];
-							NSString* msg = [response.httpError localizedDescription];
+							NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 							[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 						}
 						else if (!self.isDraft) {
@@ -2075,7 +2076,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					}
 					else if (response.httpError) {
 						[self hideProgressHeader];
-						NSString* msg = [response.httpError localizedDescription];
+						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else if (!self.isDraft) {
@@ -2144,7 +2145,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					}
 					else if (response.httpError) {
 						[self hideProgressHeader];
-						NSString* msg = [response.httpError localizedDescription];
+						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Post" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else if (!self.isDraft) {

@@ -29,6 +29,7 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 - (void) setupChevron;
 - (void) updateChevronFrame;
 - (void) updateChevronVisibility;
+- (BOOL) hasRoomForChevron;
 
 @end
 
@@ -66,14 +67,14 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 - (void) layout
 {
 	[super layout];
-	[self updateChevronFrame];
+	[self updateChevronVisibility];
 }
 
 - (void) setTitle:(NSString *)title
 {
 	[super setTitle:title];
 	[self invalidateIntrinsicContentSize];
-	[self updateChevronFrame];
+	[self updateChevronVisibility];
 }
 
 - (NSSize) intrinsicContentSize
@@ -145,7 +146,16 @@ static CGFloat const RFHostnameChevronSpacing = 6.0;
 - (void) updateChevronVisibility
 {
 	[self updateChevronFrame];
-	self.chevronView.hidden = !(self.showsChevron && self.isHovering);
+	self.chevronView.hidden = !(self.showsChevron && self.isHovering && [self hasRoomForChevron]);
+}
+
+- (BOOL) hasRoomForChevron
+{
+	NSFont* font = self.font ?: [NSFont systemFontOfSize:[NSFont systemFontSize]];
+	CGFloat text_width = ceil([self.title ?: @"" sizeWithAttributes:@{ NSFontAttributeName: font }].width);
+	NSRect title_rect = [self.cell titleRectForBounds:self.bounds];
+	CGFloat chevron_max_x = NSMinX(title_rect) + text_width + RFHostnameChevronSpacing + RFHostnameButtonChevronSize;
+	return (chevron_max_x <= NSMaxX(self.bounds));
 }
 
 @end

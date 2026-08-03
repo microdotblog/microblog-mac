@@ -22,11 +22,26 @@
 
 static NSInteger const kRecentPostsInitialLimit = 15;
 static NSInteger const kRecentPostsBackgroundLimit = 100;
+static NSInteger const kAllPostsSegmentTag = 0;
+static NSInteger const kDraftsSegmentTag = 1;
+static NSInteger const kScheduledSegmentTag = 2;
+static CGFloat const kAllPostsSegmentWidth = 76.0;
+static CGFloat const kDraftsSegmentWidth = 68.0;
+static CGFloat const kScheduledSegmentWidth = 90.0;
+static NSString* const kSegmentStateCacheKey = @"PostsSegmentStateByHostname";
+static NSInteger const kSegmentStateDrafts = 1 << 0;
+static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 @interface RFAllPostsController ()
 
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
 @property (assign, nonatomic) NSInteger postsRequestID;
+@property (assign, nonatomic) BOOL isShowingScheduled;
+@property (assign, nonatomic) BOOL hasLoadedPosts;
+@property (assign, nonatomic) BOOL hasLoadedDrafts;
+@property (assign, nonatomic) BOOL hasCachedSegmentState;
+@property (strong, nonatomic) NSArray* scheduledPosts;
+@property (strong, nonatomic) NSTimer* scheduledPostsTimer;
 
 @end
 
@@ -65,11 +80,24 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
 	}
 
+	BOOL was_showing_scheduled = self.isShowingScheduled;
+	[self updateScheduledPosts];
+	if (was_showing_scheduled) {
+		if (self.isShowingScheduled) {
+			self.currentPosts = self.scheduledPosts;
+		}
+		else {
+			self.currentPosts = self.allPosts;
+		}
+	}
+	[self.tableView reloadData];
 	[self refreshDestinationsCache];
 }
 
 - (void) dealloc
 {
+	[self.scheduledPostsTimer invalidate];
+
 	if (self.isObservingWindowNotifications) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
 	}
@@ -78,6 +106,8 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 - (void) viewDidDisappear
 {
 	[super viewDidDisappear];
+	[self.scheduledPostsTimer invalidate];
+	self.scheduledPostsTimer = nil;
 
 	if (self.isObservingWindowNotifications) {
 		self.isObservingWindowNotifications = NO;
@@ -102,6 +132,7 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 	else {
 		self.blogNameButton.title = [RFSettings stringForKey:kAccountDefaultSite];
 	}
+	self.blogNameButton.toolTip = self.blogNameButton.title;
 
 	if ([self.blogNameButton isKindOfClass:[RFHostnameButton class]]) {
 		((RFHostnameButton*) self.blogNameButton).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
@@ -117,13 +148,213 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 
 - (void) setupTabs
 {
-	self.segmentedControl.hidden = self.isShowingPages;
+	[self.segmentedControl setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
+	[self loadCachedSegmentState];
+}
+
+- (void) updateSegmentedControlVisibility
+{
+	BOOL has_refreshed_segment_state = self.hasLoadedPosts || self.hasLoadedDrafts;
+	BOOL has_segment_state = self.hasCachedSegmentState || has_refreshed_segment_state;
+	self.segmentedControl.hidden = self.isShowingPages || !has_segment_state || (self.segmentedControl.segmentCount < 2);
 }
 
 - (void) disableTabs
 {
 	self.segmentedControl.enabled = NO;
 	[self.segmentedControl setSelectedSegment:0];
+	self.isShowingDrafts = NO;
+	self.isShowingScheduled = NO;
+}
+
+- (void) updateSegments
+{
+	if (self.isShowingPages) {
+		return;
+	}
+
+	BOOL has_drafts = self.hasLoadedDrafts ? (self.draftPosts.count > 0) : [self hasSegmentWithTag:kDraftsSegmentTag];
+	BOOL has_scheduled_posts = self.hasLoadedPosts ? (self.scheduledPosts.count > 0) : [self hasSegmentWithTag:kScheduledSegmentTag];
+	[self applySegmentsShowingDrafts:has_drafts scheduled:has_scheduled_posts];
+	[self cacheSegmentStateShowingDrafts:has_drafts scheduled:has_scheduled_posts];
+	[self updateSegmentedControlVisibility];
+}
+
+- (BOOL) hasSegmentWithTag:(NSInteger)tag
+{
+	for (NSInteger i = 0; i < self.segmentedControl.segmentCount; i++) {
+		if ([self.segmentedControl tagForSegment:i] == tag) {
+			return YES;
+		}
+	}
+
+	return NO;
+}
+
+- (void) applySegmentsShowingDrafts:(BOOL)hasDrafts scheduled:(BOOL)hasScheduled
+{
+	NSInteger selected_tag = kAllPostsSegmentTag;
+	if (self.isShowingDrafts) {
+		selected_tag = kDraftsSegmentTag;
+	}
+	else if (self.isShowingScheduled) {
+		selected_tag = kScheduledSegmentTag;
+	}
+
+	NSInteger segment_count = 1;
+	if (hasDrafts) {
+		segment_count++;
+	}
+	if (hasScheduled) {
+		segment_count++;
+	}
+	self.segmentedControl.segmentCount = segment_count;
+
+	NSInteger segment_index = 0;
+	NSInteger selected_index = 0;
+	[self.segmentedControl setLabel:@"All Posts" forSegment:segment_index];
+	[self.segmentedControl setTag:kAllPostsSegmentTag forSegment:segment_index];
+	[self.segmentedControl setWidth:kAllPostsSegmentWidth forSegment:segment_index];
+
+	if (hasDrafts) {
+		segment_index++;
+		[self.segmentedControl setLabel:@"Drafts" forSegment:segment_index];
+		[self.segmentedControl setTag:kDraftsSegmentTag forSegment:segment_index];
+		[self.segmentedControl setWidth:kDraftsSegmentWidth forSegment:segment_index];
+		if (selected_tag == kDraftsSegmentTag) {
+			selected_index = segment_index;
+		}
+	}
+	else if (selected_tag == kDraftsSegmentTag) {
+		self.isShowingDrafts = NO;
+	}
+
+	if (hasScheduled) {
+		segment_index++;
+		[self.segmentedControl setLabel:@"Scheduled" forSegment:segment_index];
+		[self.segmentedControl setTag:kScheduledSegmentTag forSegment:segment_index];
+		[self.segmentedControl setWidth:kScheduledSegmentWidth forSegment:segment_index];
+		if (selected_tag == kScheduledSegmentTag) {
+			selected_index = segment_index;
+		}
+	}
+	else if (selected_tag == kScheduledSegmentTag) {
+		self.isShowingScheduled = NO;
+	}
+
+	[self.segmentedControl setSelectedSegment:selected_index];
+}
+
+- (NSString *) currentBlogHostname
+{
+	NSString* hostname = [RFSettings stringForKey:kCurrentDestinationName];
+	if (hostname.length == 0) {
+		hostname = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+
+	return hostname.lowercaseString ?: @"";
+}
+
+- (void) loadCachedSegmentState
+{
+	self.hasCachedSegmentState = NO;
+	if (self.isShowingPages) {
+		[self applySegmentsShowingDrafts:NO scheduled:NO];
+		[self updateSegmentedControlVisibility];
+		return;
+	}
+
+	NSString* hostname = [self currentBlogHostname];
+	NSDictionary* cached_states = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kSegmentStateCacheKey];
+	NSNumber* state_number = [cached_states objectForKey:hostname];
+	if (hostname.length > 0 && [state_number isKindOfClass:[NSNumber class]]) {
+		NSInteger state = state_number.integerValue;
+		BOOL has_drafts = ((state & kSegmentStateDrafts) != 0);
+		BOOL has_scheduled_posts = ((state & kSegmentStateScheduled) != 0);
+		self.hasCachedSegmentState = YES;
+		[self applySegmentsShowingDrafts:has_drafts scheduled:has_scheduled_posts];
+	}
+	else {
+		[self applySegmentsShowingDrafts:NO scheduled:NO];
+	}
+
+	[self updateSegmentedControlVisibility];
+}
+
+- (void) cacheSegmentStateShowingDrafts:(BOOL)hasDrafts scheduled:(BOOL)hasScheduled
+{
+	NSString* hostname = [self currentBlogHostname];
+	if (hostname.length == 0) {
+		return;
+	}
+
+	NSInteger state = 0;
+	if (hasDrafts) {
+		state |= kSegmentStateDrafts;
+	}
+	if (hasScheduled) {
+		state |= kSegmentStateScheduled;
+	}
+
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	NSMutableDictionary* cached_states = [[defaults dictionaryForKey:kSegmentStateCacheKey] mutableCopy];
+	if (cached_states == nil) {
+		cached_states = [NSMutableDictionary dictionary];
+	}
+	[cached_states setObject:@(state) forKey:hostname];
+	[defaults setObject:cached_states forKey:kSegmentStateCacheKey];
+	self.hasCachedSegmentState = YES;
+}
+
+- (void) updateScheduledPosts
+{
+	NSDate* now = [NSDate date];
+	NSMutableArray* scheduled_posts = [NSMutableArray array];
+	NSDate* next_post_date = nil;
+	for (RFPost* post in self.allPosts) {
+		if ((post.postedAt != nil) && ([post.postedAt compare:now] == NSOrderedDescending)) {
+			[scheduled_posts addObject:post];
+			if ((next_post_date == nil) || ([post.postedAt compare:next_post_date] == NSOrderedAscending)) {
+				next_post_date = post.postedAt;
+			}
+		}
+	}
+
+	self.scheduledPosts = scheduled_posts;
+	[self updateSegments];
+	[self scheduleScheduledPostsUpdateForDate:next_post_date];
+}
+
+- (void) scheduleScheduledPostsUpdateForDate:(NSDate *)date
+{
+	[self.scheduledPostsTimer invalidate];
+	self.scheduledPostsTimer = nil;
+
+	if ((date == nil) || (self.view.window == nil)) {
+		return;
+	}
+
+	NSTimeInterval interval = MAX([date timeIntervalSinceNow] + 0.1, 0.1);
+	self.scheduledPostsTimer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(scheduledPostsTimerFired:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:self.scheduledPostsTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void) scheduledPostsTimerFired:(NSTimer *)timer
+{
+	self.scheduledPostsTimer = nil;
+	BOOL was_showing_scheduled = self.isShowingScheduled;
+	[self updateScheduledPosts];
+
+	if (was_showing_scheduled) {
+		if (self.isShowingScheduled) {
+			self.currentPosts = self.scheduledPosts;
+		}
+		else {
+			self.currentPosts = self.allPosts;
+		}
+	}
+
+	[self.tableView reloadData];
 }
 
 - (void) setupBrowser
@@ -133,6 +364,8 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 
 - (void) fetchPosts
 {
+	self.hasLoadedPosts = NO;
+	[self updateSegmentedControlVisibility];
 	[self fetchPostsForSearch:@""];
 }
 
@@ -214,8 +447,13 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 					posts_to_show = merged_posts;
 				}
 
+				BOOL will_fetch_more = fetchMore && (new_posts.count == limit);
+				BOOL was_showing_scheduled = self.isShowingScheduled;
 				if (search.length == 0) {
 					self.allPosts = posts_to_show;
+					self.hasLoadedPosts = YES;
+					[self updateScheduledPosts];
+					[self updateSegmentedControlVisibility];
 				}
 
 				NSString* current_search = self.searchField.stringValue ?: @"";
@@ -225,9 +463,17 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 
 				BOOL is_appending_posts = (existingPosts.count > 0);
 				NSInteger existing_count = self.currentPosts.count;
-				self.currentPosts = posts_to_show;
+				if (self.isShowingScheduled) {
+					self.currentPosts = self.scheduledPosts;
+				}
+				else {
+					self.currentPosts = posts_to_show;
+				}
 
-				if (is_appending_posts && new_posts.count > 0) {
+				if (self.isShowingScheduled || (was_showing_scheduled && !self.isShowingScheduled)) {
+					[self.tableView reloadData];
+				}
+				else if (is_appending_posts && new_posts.count > 0) {
 					NSRange range = NSMakeRange(existing_count, new_posts.count);
 					NSIndexSet* row_indexes = [NSIndexSet indexSetWithIndexesInRange:range];
 					[self.tableView insertRowsAtIndexes:row_indexes withAnimation:NSTableViewAnimationEffectNone];
@@ -244,7 +490,7 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 				self.blogNameButton.hidden = NO;
 				self.tableView.animator.alphaValue = 1.0;
 
-				if (fetchMore && new_posts.count == limit) {
+				if (will_fetch_more) {
 					NSInteger next_offset = offset + limit;
 					BOOL should_fetch_more = (offset == 0);
 					[self fetchPostsForSearch:search limit:kRecentPostsBackgroundLimit offset:next_offset existingPosts:posts_to_show requestID:requestID fetchMore:should_fetch_more];
@@ -273,6 +519,8 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 - (void) fetchDrafts
 {
 	self.isDownloadingDrafts = YES;
+	self.hasLoadedDrafts = NO;
+	[self updateSegmentedControlVisibility];
 	
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
@@ -302,8 +550,21 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 			}
 			
 			RFDispatchMainAsync (^{
+				BOOL was_showing_drafts = self.isShowingDrafts;
 				self.draftPosts = new_posts;
 				self.isDownloadingDrafts = NO;
+				self.hasLoadedDrafts = YES;
+				[self updateSegments];
+				[self updateSegmentedControlVisibility];
+				if (was_showing_drafts) {
+					if (self.isShowingDrafts) {
+						self.currentPosts = self.draftPosts;
+					}
+					else {
+						self.currentPosts = self.allPosts;
+					}
+					[self.tableView reloadData];
+				}
 			});
 		}
 	}];
@@ -499,7 +760,13 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
 	// reset to all posts
-	[self.segmentedControl setSelectedSegment:0];
+	self.isShowingDrafts = NO;
+	self.isShowingScheduled = NO;
+	self.hasLoadedPosts = NO;
+	self.hasLoadedDrafts = NO;
+	self.draftPosts = nil;
+	self.scheduledPosts = @[];
+	[self loadCachedSegmentState];
 	
 	[self setupBlogName];
 	
@@ -521,7 +788,9 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 
 - (IBAction) segmentChanged:(NSSegmentedControl *)sender
 {
-	self.isShowingDrafts = (sender.selectedSegment == 1);
+	NSInteger selected_tag = [sender tagForSegment:sender.selectedSegment];
+	self.isShowingDrafts = (selected_tag == kDraftsSegmentTag);
+	self.isShowingScheduled = (selected_tag == kScheduledSegmentTag);
 	
 	if (self.isShowingDrafts) {
 		// if still downloading, wait
@@ -538,6 +807,15 @@ static NSInteger const kRecentPostsBackgroundLimit = 100;
 		}
 		else {
 			self.currentPosts = self.draftPosts;
+		}
+	}
+	else if (self.isShowingScheduled) {
+		[self updateScheduledPosts];
+		if (self.isShowingScheduled) {
+			self.currentPosts = self.scheduledPosts;
+		}
+		else {
+			self.currentPosts = self.allPosts;
 		}
 	}
 	else {
