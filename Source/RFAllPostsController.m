@@ -41,6 +41,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 @property (assign, nonatomic) BOOL hasLoadedDrafts;
 @property (assign, nonatomic) BOOL hasCachedSegmentState;
 @property (strong, nonatomic) NSArray* scheduledPosts;
+@property (strong, nonatomic) NSTimer* scheduledPostsTimer;
 
 @end
 
@@ -79,11 +80,14 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotification:) name:NSWindowDidBecomeKeyNotification object:self.view.window];
 	}
 
+	[self updateScheduledPosts];
 	[self refreshDestinationsCache];
 }
 
 - (void) dealloc
 {
+	[self.scheduledPostsTimer invalidate];
+
 	if (self.isObservingWindowNotifications) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
 	}
@@ -92,6 +96,8 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 - (void) viewDidDisappear
 {
 	[super viewDidDisappear];
+	[self.scheduledPostsTimer invalidate];
+	self.scheduledPostsTimer = nil;
 
 	if (self.isObservingWindowNotifications) {
 		self.isObservingWindowNotifications = NO;
@@ -138,7 +144,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 - (void) updateSegmentedControlVisibility
 {
-	BOOL has_refreshed_segment_state = self.hasLoadedPosts && self.hasLoadedDrafts;
+	BOOL has_refreshed_segment_state = self.hasLoadedPosts || self.hasLoadedDrafts;
 	BOOL has_segment_state = self.hasCachedSegmentState || has_refreshed_segment_state;
 	self.segmentedControl.hidden = self.isShowingPages || !has_segment_state || (self.segmentedControl.segmentCount < 2);
 }
@@ -153,15 +159,26 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 - (void) updateSegments
 {
-	if (self.isShowingPages || !self.hasLoadedPosts || !self.hasLoadedDrafts) {
+	if (self.isShowingPages) {
 		return;
 	}
 
-	BOOL has_drafts = (self.draftPosts.count > 0);
-	BOOL has_scheduled_posts = (self.scheduledPosts.count > 0);
+	BOOL has_drafts = self.hasLoadedDrafts ? (self.draftPosts.count > 0) : [self hasSegmentWithTag:kDraftsSegmentTag];
+	BOOL has_scheduled_posts = self.hasLoadedPosts ? (self.scheduledPosts.count > 0) : [self hasSegmentWithTag:kScheduledSegmentTag];
 	[self applySegmentsShowingDrafts:has_drafts scheduled:has_scheduled_posts];
 	[self cacheSegmentStateShowingDrafts:has_drafts scheduled:has_scheduled_posts];
 	[self updateSegmentedControlVisibility];
+}
+
+- (BOOL) hasSegmentWithTag:(NSInteger)tag
+{
+	for (NSInteger i = 0; i < self.segmentedControl.segmentCount; i++) {
+		if ([self.segmentedControl tagForSegment:i] == tag) {
+			return YES;
+		}
+	}
+
+	return NO;
 }
 
 - (void) applySegmentsShowingDrafts:(BOOL)hasDrafts scheduled:(BOOL)hasScheduled
@@ -283,14 +300,51 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 {
 	NSDate* now = [NSDate date];
 	NSMutableArray* scheduled_posts = [NSMutableArray array];
+	NSDate* next_post_date = nil;
 	for (RFPost* post in self.allPosts) {
 		if ((post.postedAt != nil) && ([post.postedAt compare:now] == NSOrderedDescending)) {
 			[scheduled_posts addObject:post];
+			if ((next_post_date == nil) || ([post.postedAt compare:next_post_date] == NSOrderedAscending)) {
+				next_post_date = post.postedAt;
+			}
 		}
 	}
 
 	self.scheduledPosts = scheduled_posts;
 	[self updateSegments];
+	[self scheduleScheduledPostsUpdateForDate:next_post_date];
+}
+
+- (void) scheduleScheduledPostsUpdateForDate:(NSDate *)date
+{
+	[self.scheduledPostsTimer invalidate];
+	self.scheduledPostsTimer = nil;
+
+	if ((date == nil) || (self.view.window == nil)) {
+		return;
+	}
+
+	NSTimeInterval interval = MAX([date timeIntervalSinceNow] + 0.1, 0.1);
+	self.scheduledPostsTimer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(scheduledPostsTimerFired:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:self.scheduledPostsTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void) scheduledPostsTimerFired:(NSTimer *)timer
+{
+	self.scheduledPostsTimer = nil;
+	BOOL was_showing_scheduled = self.isShowingScheduled;
+	[self updateScheduledPosts];
+
+	if (was_showing_scheduled) {
+		if (self.isShowingScheduled) {
+			self.currentPosts = self.scheduledPosts;
+		}
+		else {
+			self.currentPosts = self.allPosts;
+		}
+	}
+
+	[self.tableView reloadData];
 }
 
 - (void) setupBrowser
@@ -387,9 +441,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 				BOOL was_showing_scheduled = self.isShowingScheduled;
 				if (search.length == 0) {
 					self.allPosts = posts_to_show;
-					if (!will_fetch_more) {
-						self.hasLoadedPosts = YES;
-					}
+					self.hasLoadedPosts = YES;
 					[self updateScheduledPosts];
 					[self updateSegmentedControlVisibility];
 				}
