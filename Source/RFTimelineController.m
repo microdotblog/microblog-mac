@@ -1263,6 +1263,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) closeOverlays
 {
+	[self.window makeFirstResponder:nil];
 	self.webView.hidden = YES;
 	[self popToRootViewController];
 
