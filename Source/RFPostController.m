@@ -1935,19 +1935,23 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			}
 
 			if (self.editingPost) {
+				NSMutableDictionary* replace_info = [@{
+					@"name": [self currentTitle],
+					@"content": text,
+					@"summary": summary,
+					@"category": category_names,
+					@"post-status": [self currentStatus]
+				} mutableCopy];
+				if (photo_values.count > 0) {
+					[replace_info setObject:photo_values forKey:@"photo"];
+				}
+
 				NSDictionary* info = @{
 					@"action": @"update",
 					@"url": self.editingPost.url,
 					@"mp-destination": destination_uid,
 					@"mp-syndicate-to": crosspost_uids,
-					@"replace": @{
-						@"name": [self currentTitle],
-						@"content": text,
-						@"summary": summary,
-						@"category": category_names,
-						@"photo": photo_values,
-						@"post-status": [self currentStatus]
-					}
+					@"replace": replace_info
 				};
 
 				if (self.postedAt) {
