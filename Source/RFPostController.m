@@ -61,7 +61,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (strong, nonatomic, nullable) MBUploadProgress* videoUploader;
 @property (assign, nonatomic) NSInteger pendingAttachmentSlots;
 
-- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs;
+- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs submittedText:(NSString *)submittedText;
 
 @end
 
@@ -1819,7 +1819,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDraftDidUpdateNotification object:self];
 }
 
-- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs
+- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs submittedText:(NSString *)submittedText
 {
 	NSString* post_url = self.editingPost.url;
 	if (post_url.length == 0) {
@@ -1865,7 +1865,28 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 				}
 			}
 
+			if ((content != nil) && ![content hasPrefix:submittedText]) {
+				error_message = @"The draft was saved, but its updated content could not be merged with newer edits in this window.";
+				content = nil;
+			}
+			else if ((content != nil) && (content.length == submittedText.length)) {
+				error_message = @"The draft was saved, but Micro.blog did not include the photo HTML in its updated content.";
+				content = nil;
+			}
+
 			if (content != nil) {
+				NSString* current_text = [self currentText];
+				BOOL had_new_edits = self.view.window.documentEdited || ![current_text isEqualToString:submittedText];
+				NSString* appended_html = [content substringFromIndex:submittedText.length];
+				NSRange selected_range = self.textView.selectedRange;
+
+				if ((appended_html.length > 0) && ![current_text hasSuffix:appended_html]) {
+					[self.textUndoManager disableUndoRegistration];
+					[self.textView.textStorage replaceCharactersInRange:NSMakeRange(current_text.length, 0) withString:appended_html];
+					[self.textUndoManager enableUndoRegistration];
+					self.textView.selectedRange = selected_range;
+				}
+
 				NSSet* uploaded_urls = [NSSet setWithArray:photoURLs];
 				NSMutableArray* remaining_photos = [NSMutableArray array];
 				for (RFPhoto* photo in self.attachedPhotos) {
@@ -1880,11 +1901,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 				self.initialText = content;
 				self.editingPost.text = content;
-				self.textView.string = content;
 				[self updateRemainingChars];
 				[self updateTitleHeader];
 				[self updateGenerateEnabled];
-				self.view.window.documentEdited = NO;
+				self.view.window.documentEdited = had_new_edits;
 
 				[self hideProgressHeader];
 				[self sendUpdatedDraftNotification];
@@ -2082,7 +2102,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						}
 						else {
 							if (uploaded_photo_urls.count > 0) {
-								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls];
+								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls submittedText:text];
 							}
 							else {
 								[self hideProgressHeader];
@@ -2134,7 +2154,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 							self.editingPost.url = response.parsedResponse[@"url"];
 							self.editingPost.isDraft = YES;
 							if (uploaded_photo_urls.count > 0) {
-								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls];
+								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls submittedText:text];
 							}
 							else {
 								[self hideProgressHeader];
