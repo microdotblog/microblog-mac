@@ -28,6 +28,9 @@ static NSInteger const kScheduledSegmentTag = 2;
 static CGFloat const kAllPostsSegmentWidth = 76.0;
 static CGFloat const kDraftsSegmentWidth = 68.0;
 static CGFloat const kScheduledSegmentWidth = 90.0;
+static NSString* const kSegmentStateCacheKey = @"PostsSegmentStateByHostname";
+static NSInteger const kSegmentStateDrafts = 1 << 0;
+static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 @interface RFAllPostsController ()
 
@@ -36,6 +39,7 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 @property (assign, nonatomic) BOOL isShowingScheduled;
 @property (assign, nonatomic) BOOL hasLoadedPosts;
 @property (assign, nonatomic) BOOL hasLoadedDrafts;
+@property (assign, nonatomic) BOOL hasCachedSegmentState;
 @property (strong, nonatomic) NSArray* scheduledPosts;
 
 @end
@@ -128,14 +132,15 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 
 - (void) setupTabs
 {
-	self.segmentedControl.segmentCount = 2;
 	[self.segmentedControl setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
-	[self updateSegmentedControlVisibility];
+	[self loadCachedSegmentState];
 }
 
 - (void) updateSegmentedControlVisibility
 {
-	self.segmentedControl.hidden = self.isShowingPages || !self.hasLoadedPosts || !self.hasLoadedDrafts || (self.segmentedControl.segmentCount < 2);
+	BOOL has_refreshed_segment_state = self.hasLoadedPosts && self.hasLoadedDrafts;
+	BOOL has_segment_state = self.hasCachedSegmentState || has_refreshed_segment_state;
+	self.segmentedControl.hidden = self.isShowingPages || !has_segment_state || (self.segmentedControl.segmentCount < 2);
 }
 
 - (void) disableTabs
@@ -148,8 +153,19 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 
 - (void) updateSegments
 {
-	BOOL has_drafts = (self.draftPosts == nil) || (self.draftPosts.count > 0);
+	if (self.isShowingPages || !self.hasLoadedPosts || !self.hasLoadedDrafts) {
+		return;
+	}
+
+	BOOL has_drafts = (self.draftPosts.count > 0);
 	BOOL has_scheduled_posts = (self.scheduledPosts.count > 0);
+	[self applySegmentsShowingDrafts:has_drafts scheduled:has_scheduled_posts];
+	[self cacheSegmentStateShowingDrafts:has_drafts scheduled:has_scheduled_posts];
+	[self updateSegmentedControlVisibility];
+}
+
+- (void) applySegmentsShowingDrafts:(BOOL)hasDrafts scheduled:(BOOL)hasScheduled
+{
 	NSInteger selected_tag = kAllPostsSegmentTag;
 	if (self.isShowingDrafts) {
 		selected_tag = kDraftsSegmentTag;
@@ -159,10 +175,10 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 	}
 
 	NSInteger segment_count = 1;
-	if (has_drafts) {
+	if (hasDrafts) {
 		segment_count++;
 	}
-	if (has_scheduled_posts) {
+	if (hasScheduled) {
 		segment_count++;
 	}
 	self.segmentedControl.segmentCount = segment_count;
@@ -173,7 +189,7 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 	[self.segmentedControl setTag:kAllPostsSegmentTag forSegment:segment_index];
 	[self.segmentedControl setWidth:kAllPostsSegmentWidth forSegment:segment_index];
 
-	if (has_drafts) {
+	if (hasDrafts) {
 		segment_index++;
 		[self.segmentedControl setLabel:@"Drafts" forSegment:segment_index];
 		[self.segmentedControl setTag:kDraftsSegmentTag forSegment:segment_index];
@@ -186,7 +202,7 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 		self.isShowingDrafts = NO;
 	}
 
-	if (has_scheduled_posts) {
+	if (hasScheduled) {
 		segment_index++;
 		[self.segmentedControl setLabel:@"Scheduled" forSegment:segment_index];
 		[self.segmentedControl setTag:kScheduledSegmentTag forSegment:segment_index];
@@ -200,6 +216,67 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 	}
 
 	[self.segmentedControl setSelectedSegment:selected_index];
+}
+
+- (NSString *) currentBlogHostname
+{
+	NSString* hostname = [RFSettings stringForKey:kCurrentDestinationName];
+	if (hostname.length == 0) {
+		hostname = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+
+	return hostname.lowercaseString ?: @"";
+}
+
+- (void) loadCachedSegmentState
+{
+	self.hasCachedSegmentState = NO;
+	if (self.isShowingPages) {
+		[self applySegmentsShowingDrafts:NO scheduled:NO];
+		[self updateSegmentedControlVisibility];
+		return;
+	}
+
+	NSString* hostname = [self currentBlogHostname];
+	NSDictionary* cached_states = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kSegmentStateCacheKey];
+	NSNumber* state_number = [cached_states objectForKey:hostname];
+	if (hostname.length > 0 && [state_number isKindOfClass:[NSNumber class]]) {
+		NSInteger state = state_number.integerValue;
+		BOOL has_drafts = ((state & kSegmentStateDrafts) != 0);
+		BOOL has_scheduled_posts = ((state & kSegmentStateScheduled) != 0);
+		self.hasCachedSegmentState = YES;
+		[self applySegmentsShowingDrafts:has_drafts scheduled:has_scheduled_posts];
+	}
+	else {
+		[self applySegmentsShowingDrafts:NO scheduled:NO];
+	}
+
+	[self updateSegmentedControlVisibility];
+}
+
+- (void) cacheSegmentStateShowingDrafts:(BOOL)hasDrafts scheduled:(BOOL)hasScheduled
+{
+	NSString* hostname = [self currentBlogHostname];
+	if (hostname.length == 0) {
+		return;
+	}
+
+	NSInteger state = 0;
+	if (hasDrafts) {
+		state |= kSegmentStateDrafts;
+	}
+	if (hasScheduled) {
+		state |= kSegmentStateScheduled;
+	}
+
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	NSMutableDictionary* cached_states = [[defaults dictionaryForKey:kSegmentStateCacheKey] mutableCopy];
+	if (cached_states == nil) {
+		cached_states = [NSMutableDictionary dictionary];
+	}
+	[cached_states setObject:@(state) forKey:hostname];
+	[defaults setObject:cached_states forKey:kSegmentStateCacheKey];
+	self.hasCachedSegmentState = YES;
 }
 
 - (void) updateScheduledPosts
@@ -310,11 +387,11 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 				BOOL was_showing_scheduled = self.isShowingScheduled;
 				if (search.length == 0) {
 					self.allPosts = posts_to_show;
-					[self updateScheduledPosts];
 					if (!will_fetch_more) {
 						self.hasLoadedPosts = YES;
-						[self updateSegmentedControlVisibility];
 					}
+					[self updateScheduledPosts];
+					[self updateSegmentedControlVisibility];
 				}
 
 				NSString* current_search = self.searchField.stringValue ?: @"";
@@ -625,10 +702,9 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 	self.isShowingScheduled = NO;
 	self.hasLoadedPosts = NO;
 	self.hasLoadedDrafts = NO;
-	[self updateSegmentedControlVisibility];
 	self.draftPosts = nil;
 	self.scheduledPosts = @[];
-	[self updateSegments];
+	[self loadCachedSegmentState];
 	
 	[self setupBlogName];
 	
