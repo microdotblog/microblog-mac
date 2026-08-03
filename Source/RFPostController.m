@@ -61,6 +61,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (strong, nonatomic, nullable) MBUploadProgress* videoUploader;
 @property (assign, nonatomic) NSInteger pendingAttachmentSlots;
 
+- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs;
+
 @end
 
 @implementation RFPostController
@@ -1817,6 +1819,88 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDraftDidUpdateNotification object:self];
 }
 
+- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs
+{
+	NSString* post_url = self.editingPost.url;
+	if (post_url.length == 0) {
+		[self hideProgressHeader];
+		[self sendUpdatedDraftNotification];
+		[NSAlert rf_showOneButtonAlert:@"Error Refreshing Draft" message:@"The draft was saved, but Micro.blog did not return its URL." button:@"OK" completionHandler:NULL];
+		return;
+	}
+
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"url": post_url,
+		@"mp-destination": destination_uid
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync (^{
+			NSString* error_message = nil;
+			NSString* content = nil;
+
+			if (response.httpError) {
+				error_message = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+			}
+			else if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+				error_message = response.parsedResponse[@"error_description"];
+			}
+			else if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+				id properties = [response.parsedResponse objectForKey:@"properties"];
+				if ([properties isKindOfClass:[NSDictionary class]]) {
+					id content_values = [properties objectForKey:@"content"];
+					if ([content_values isKindOfClass:[NSArray class]]) {
+						id first_content = [content_values firstObject];
+						if ([first_content isKindOfClass:[NSString class]]) {
+							content = first_content;
+						}
+					}
+				}
+			}
+
+			if (content != nil) {
+				NSSet* uploaded_urls = [NSSet setWithArray:photoURLs];
+				NSMutableArray* remaining_photos = [NSMutableArray array];
+				for (RFPhoto* photo in self.attachedPhotos) {
+					if (photo.isVideo || ![uploaded_urls containsObject:photo.publishedURL]) {
+						[remaining_photos addObject:photo];
+					}
+				}
+
+				self.attachedPhotos = remaining_photos;
+				[self.photosCollectionView reloadData];
+				self.photosHeightConstraint.animator.constant = (remaining_photos.count > 0) ? 100 : 0;
+
+				self.initialText = content;
+				self.editingPost.text = content;
+				self.textView.string = content;
+				[self updateRemainingChars];
+				[self updateTitleHeader];
+				[self updateGenerateEnabled];
+				self.view.window.documentEdited = NO;
+
+				[self hideProgressHeader];
+				[self sendUpdatedDraftNotification];
+			}
+			else {
+				if (error_message.length == 0) {
+					error_message = @"The draft was saved, but Micro.blog did not return its updated content.";
+				}
+				[self hideProgressHeader];
+				[self sendUpdatedDraftNotification];
+				[NSAlert rf_showOneButtonAlert:@"Error Refreshing Draft" message:error_message button:@"OK" completionHandler:NULL];
+			}
+		});
+	}];
+}
+
 - (void) sendUpdatedReplyNotification
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kReplyDidUpdateNotification object:self];
@@ -1951,6 +2035,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					[photo_values addObject:@{ @"value": photo.publishedURL, @"alt": photo.altText }];
 				}
 			}
+			NSArray* uploaded_photo_urls = [photo_urls copy];
 
 			if (self.editingPost) {
 				NSMutableDictionary* replace_info = [@{
@@ -1996,8 +2081,13 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 							[self closeWithoutSaving];
 						}
 						else {
-							[self hideProgressHeader];
-							[self sendUpdatedDraftNotification];
+							if (uploaded_photo_urls.count > 0) {
+								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls];
+							}
+							else {
+								[self hideProgressHeader];
+								[self sendUpdatedDraftNotification];
+							}
 						}
 					});
 				}];
@@ -2043,8 +2133,13 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 							self.editingPost = [[RFPost alloc] init];
 							self.editingPost.url = response.parsedResponse[@"url"];
 							self.editingPost.isDraft = YES;
-							[self hideProgressHeader];
-							[self sendUpdatedDraftNotification];
+							if (uploaded_photo_urls.count > 0) {
+								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls];
+							}
+							else {
+								[self hideProgressHeader];
+								[self sendUpdatedDraftNotification];
+							}
 						}
 					});
 				}];
