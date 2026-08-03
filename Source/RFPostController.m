@@ -1918,6 +1918,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			
 			NSMutableArray* photo_urls = [NSMutableArray array];
 			NSMutableArray* photo_alts = [NSMutableArray array];
+			NSMutableArray* photo_values = [NSMutableArray array];
 			NSMutableArray* video_urls = [NSMutableArray array];
 			NSMutableArray* video_alts = [NSMutableArray array];
 
@@ -1929,6 +1930,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 				else {
 					[photo_urls addObject:photo.publishedURL];
 					[photo_alts addObject:photo.altText];
+					[photo_values addObject:@{ @"value": photo.publishedURL, @"alt": photo.altText }];
 				}
 			}
 
@@ -1943,6 +1945,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						@"content": text,
 						@"summary": summary,
 						@"category": category_names,
+						@"photo": photo_values,
 						@"post-status": [self currentStatus]
 					}
 				};
