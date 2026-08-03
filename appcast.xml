@@ -5,6 +5,28 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.0.4</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Added a Scheduled tab in Posts, with green indicator labels for scheduled posts.</li>
+					<li>Improved network error messages, including clearer offline messages and HTTP status codes.</li>
+					<li>Fixed the Posts search field focus ring getting clipped.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Mon, 03 Aug 2026 09:12:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.0.4.zip" sparkle:shortVersionString="4.0.4" sparkle:version="248" length="18388384" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.0.3</title>
  			<description><![CDATA[
 				<style>
