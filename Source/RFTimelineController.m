@@ -400,6 +400,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	detail_field.font = [NSFont labelFontOfSize:[NSFont systemFontSize]];
 	detail_field.textColor = [NSColor secondaryLabelColor];
 	self.statusDetailTextField = detail_field;
+	bubble_view.statusDetailTextField = detail_field;
 	[bubble_view addSubview:detail_field];
 
 	self.statusProgressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
@@ -644,7 +645,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
 	if (!self.statusBubble.hidden) {
-		self.statusBubble.animator.alphaValue = 1.0;
+		MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
+		[bubble setWindowActive:YES];
 	}
 
 	[self applyForegroundJS:[self currentWebView]];
@@ -656,7 +658,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
 	if (!self.statusBubble.hidden) {
-		self.statusBubble.animator.alphaValue = 0.8;
+		MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
+		[bubble setWindowActive:NO];
 	}
 
 	[self applyBackgroundJS:[self currentWebView]];
@@ -1911,6 +1914,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
 	[bubble setProcessing:NO];
+	[bubble setWindowActive:self.window.isKeyWindow];
 
 	[self setStatusDetail:status];
 	self.statusProgressIndicator.indeterminate = NO;
@@ -1918,19 +1922,20 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	double progress_value = MIN (MAX (progress.doubleValue, 0.0), 1.0);
 	self.statusProgressIndicator.doubleValue = progress_value;
 	self.statusBubble.hidden = NO;
-	self.statusBubble.animator.alphaValue = self.window.isKeyWindow ? 1.0 : 0.8;
+	self.statusBubble.animator.alphaValue = 1.0;
 }
 
 - (void) showProcessingStatus
 {
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
 	[bubble setProcessing:YES];
+	[bubble setWindowActive:self.window.isKeyWindow];
 
 	[self setStatusDetail:@""];
 	self.statusProgressIndicator.indeterminate = YES;
 	[self.statusProgressIndicator startAnimation:nil];
 	self.statusBubble.hidden = NO;
-	self.statusBubble.animator.alphaValue = self.window.isKeyWindow ? 1.0 : 0.8;
+	self.statusBubble.animator.alphaValue = 1.0;
 }
 
 - (void) hidePublishingStatus:(BOOL)animate
