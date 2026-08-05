@@ -71,6 +71,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 @property (strong, nonatomic) NSView* contentWrapperView;
 @property (strong, nonatomic) NSVisualEffectView* toolbarScrimView;
 @property (strong, nonatomic) MBMessageBox* messageBox;
+@property (strong, nonatomic) NSLayoutConstraint* statusBubbleHeightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* statusProgressDetailTopConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* statusProgressCompactTopConstraint;
 
 @end
 
@@ -409,11 +412,15 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	self.statusProgressIndicator.wantsLayer = YES;
 	[bubble_view addSubview:self.statusProgressIndicator];
 
+	self.statusBubbleHeightConstraint = [status_wrapper.heightAnchor constraintEqualToConstant:86];
+	self.statusProgressDetailTopConstraint = [self.statusProgressIndicator.topAnchor constraintEqualToAnchor:detail_field.bottomAnchor constant:11];
+	self.statusProgressCompactTopConstraint = [self.statusProgressIndicator.topAnchor constraintEqualToAnchor:status_field.bottomAnchor constant:11];
+
 	[NSLayoutConstraint activateConstraints:@[
 		[status_wrapper.trailingAnchor constraintEqualToAnchor:self.contentWrapperView.trailingAnchor constant:-8],
 		[status_wrapper.bottomAnchor constraintEqualToAnchor:self.contentWrapperView.bottomAnchor constant:-8],
 		[status_wrapper.widthAnchor constraintEqualToConstant:320],
-		[status_wrapper.heightAnchor constraintEqualToConstant:86],
+		self.statusBubbleHeightConstraint,
 		[bubble_view.leadingAnchor constraintEqualToAnchor:status_wrapper.leadingAnchor],
 		[bubble_view.trailingAnchor constraintEqualToAnchor:status_wrapper.trailingAnchor],
 		[bubble_view.topAnchor constraintEqualToAnchor:status_wrapper.topAnchor],
@@ -426,7 +433,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[detail_field.topAnchor constraintEqualToAnchor:status_field.bottomAnchor constant:6],
 		[self.statusProgressIndicator.leadingAnchor constraintEqualToAnchor:status_field.leadingAnchor],
 		[self.statusProgressIndicator.trailingAnchor constraintEqualToAnchor:status_field.trailingAnchor],
-		[self.statusProgressIndicator.topAnchor constraintEqualToAnchor:detail_field.bottomAnchor constant:11],
+		self.statusProgressDetailTopConstraint,
 		[self.statusProgressIndicator.heightAnchor constraintEqualToConstant:8]
 	]];
 }
@@ -1883,12 +1890,29 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 }
 
+- (void) setStatusDetail:(NSString *)status
+{
+	BOOL has_detail = (status.length > 0);
+	self.statusDetailTextField.stringValue = status;
+	self.statusDetailTextField.hidden = !has_detail;
+	if (has_detail) {
+		self.statusProgressCompactTopConstraint.active = NO;
+		self.statusProgressDetailTopConstraint.active = YES;
+		self.statusBubbleHeightConstraint.constant = 86;
+	}
+	else {
+		self.statusProgressDetailTopConstraint.active = NO;
+		self.statusProgressCompactTopConstraint.active = YES;
+		self.statusBubbleHeightConstraint.constant = 62;
+	}
+}
+
 - (void) showPublishingStatus:(NSString *)status progress:(NSNumber *)progress
 {
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
 	[bubble setProcessing:NO];
 
-	self.statusDetailTextField.stringValue = status;
+	[self setStatusDetail:status];
 	self.statusProgressIndicator.indeterminate = NO;
 	[self.statusProgressIndicator stopAnimation:nil];
 	double progress_value = MIN (MAX (progress.doubleValue, 0.0), 1.0);
@@ -1902,7 +1926,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
 	[bubble setProcessing:YES];
 
-	self.statusDetailTextField.stringValue = @"";
+	[self setStatusDetail:@""];
 	self.statusProgressIndicator.indeterminate = YES;
 	[self.statusProgressIndicator startAnimation:nil];
 	self.statusBubble.hidden = NO;
