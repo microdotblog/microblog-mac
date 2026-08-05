@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.0.5</title>
+ 			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+ 				<p>Changes in this version:</p>
+ 				<ul>
+					<li>Moved publishing progress pane to bottom of window and expanded it to show more detailed status.</li>
+					<li>Fixed inline audio controls not being clickable because view would change.</li>
+					<li>Fixed problems editing drafts with attached photos. After saving, it will now show the editable HTML.</li>
+					<li>Fixed potential rare crash when loading Posts while photo thumbnails are loading.</li>
+				</ul>
+ 			]]></description>
+			<pubDate>Wed, 05 Aug 2026 17:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.0.5.zip" sparkle:shortVersionString="4.0.5" sparkle:version="250" length="18399132" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.0.4</title>
  			<description><![CDATA[
 				<style>
