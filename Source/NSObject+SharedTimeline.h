@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) setupCSS:(WebView *)webView;
 - (void) applyForegroundJS:(WebView *)webView;
 - (void) applyBackgroundJS:(WebView *)webView;
+- (void) pauseAudioInWebView:(WebView *)webView;
 
 @end
 

@@ -66,4 +66,10 @@
 	[webView stringByEvaluatingJavaScriptFromString:js];
 }
 
+- (void) pauseAudioInWebView:(WebView *)webView
+{
+	NSString* js = @"document.querySelectorAll('audio').forEach(function(audio) { audio.pause(); });";
+	[webView stringByEvaluatingJavaScriptFromString:js];
+}
+
 @end

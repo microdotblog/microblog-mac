@@ -1407,6 +1407,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	WebView* current_webview = [self currentWebView];
 	NSView* last_view = [self currentContainerView];
+	[self pauseAudioInWebView:current_webview];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:current_webview];
@@ -1437,8 +1438,11 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) popViewController
 {
+	WebView* current_webview = [self currentWebView];
 	NSViewController* controller = [self.navigationStack pop];
 	if (controller) {
+		[self pauseAudioInWebView:current_webview];
+
 		// restore fixed constraint
 		self.navigationRightConstraint.active = YES;
 		self.navigationPinnedConstraint.active = NO;
