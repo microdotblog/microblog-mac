@@ -1281,7 +1281,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 				});
 			}
 
-			if (check_seconds && check_seconds.integerValue > 2) { // sanity check value
+			if (check_seconds && check_seconds.integerValue >= 1) { // sanity check value
 				self.checkSeconds = check_seconds;
 			}
 
