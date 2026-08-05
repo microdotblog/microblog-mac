@@ -288,7 +288,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSImage* img = response.parsedResponse;
 				RFDispatchMain(^{
 					photo.thumbnailImage = img;
-					[collectionView mb_safeReloadAtIndexPath:indexPath];
+					if ((indexPath.item < self.photos.count) && ([self.photos objectAtIndex:indexPath.item] == photo)) {
+						[collectionView mb_safeReloadAtIndexPath:indexPath];
+					}
 				});
 			}
 		}];

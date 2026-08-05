@@ -46,6 +46,11 @@
 	}
 	
 	self.fillColor = [NSColor colorNamed:@"color_notification_background"];
+	self.wantsLayer = YES;
+	self.layer.shadowColor = [NSColor blackColor].CGColor;
+	self.layer.shadowOpacity = 0.3;
+	self.layer.shadowRadius = 6.0;
+	self.layer.shadowOffset = CGSizeMake (0.0, -2.0);
 }
 
 - (void) drawRect:(NSRect)dirtyRect
@@ -111,12 +116,29 @@
 	[self addTrackingArea:self.customTrackingArea];
 }
 
+- (NSView *) hitTest:(NSPoint)point
+{
+	NSView* hit_view = [super hitTest:point];
+	if (hit_view) {
+		return self;
+	}
+	else {
+		return nil;
+	}
+}
+
+- (BOOL) acceptsFirstMouse:(NSEvent *)event
+{
+	return YES;
+}
+
+- (void) mouseDown:(NSEvent *)event
+{
+}
+
 - (void) mouseUp:(NSEvent *)event
 {
-	// only allow clicks if the parent isn't dimmed or hidden
-	if (self.superview.alphaValue == 1.0) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:kShowLogsNotification object:self];
-	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:kShowLogsNotification object:self];
 }
 
 - (void) mouseEntered:(NSEvent *)event
