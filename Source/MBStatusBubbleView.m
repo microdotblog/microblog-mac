@@ -45,6 +45,7 @@
 		self.cornerRadius = 7;
 	}
 	
+	self.isWindowActive = YES;
 	self.fillColor = [NSColor colorNamed:@"color_notification_background"];
 	self.wantsLayer = YES;
 	self.layer.shadowColor = [NSColor blackColor].CGColor;
@@ -92,7 +93,8 @@
 	CGContextAddPath (context, path);
 	CGContextFillPath (context);
 
-	[[NSColor colorNamed:@"color_notification_border"] setStroke];
+	NSColor* border_color = self.isWindowActive ? [NSColor colorNamed:@"color_notification_border"] : [NSColor separatorColor];
+	[border_color setStroke];
 	CGContextSetLineWidth (context, 0.5);
 	CGContextAddPath (context, path);
 	CGContextStrokePath (context);
@@ -103,6 +105,23 @@
 - (void) setProcessing:(BOOL)isProcessing
 {
 	self.isProcessingVideo = isProcessing;
+	[self setNeedsDisplay:YES];
+}
+
+- (void) setWindowActive:(BOOL)isActive
+{
+	self.isWindowActive = isActive;
+	if (isActive) {
+		self.fillColor = [NSColor colorNamed:@"color_notification_background"];
+		self.statusMessageTextField.textColor = [NSColor colorNamed:@"color_notification_text"];
+		self.statusDetailTextField.textColor = [NSColor secondaryLabelColor];
+	}
+	else {
+		self.fillColor = [NSColor windowBackgroundColor];
+		self.statusMessageTextField.textColor = [NSColor disabledControlTextColor];
+		self.statusDetailTextField.textColor = [NSColor disabledControlTextColor];
+	}
+
 	[self setNeedsDisplay:YES];
 }
 
@@ -143,13 +162,20 @@
 
 - (void) mouseEntered:(NSEvent *)event
 {
-	self.fillColor = [NSColor colorNamed:@"color_notification_background_hover"];
-	[self setNeedsDisplay:YES];
+	if (self.isWindowActive) {
+		self.fillColor = [NSColor colorNamed:@"color_notification_background_hover"];
+		[self setNeedsDisplay:YES];
+	}
 }
 
 - (void) mouseExited:(NSEvent *)event
 {
-	self.fillColor = [NSColor colorNamed:@"color_notification_background"];
+	if (self.isWindowActive) {
+		self.fillColor = [NSColor colorNamed:@"color_notification_background"];
+	}
+	else {
+		self.fillColor = [NSColor windowBackgroundColor];
+	}
 	[self setNeedsDisplay:YES];
 }
 

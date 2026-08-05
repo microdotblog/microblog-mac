@@ -13,13 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBStatusBubbleView : NSView
 
 @property (strong, nonatomic) IBOutlet NSTextField* statusMessageTextField;
+@property (strong, nonatomic) IBOutlet NSTextField* statusDetailTextField;
 
 @property (strong, nonatomic) NSTrackingArea* customTrackingArea;
 @property (strong, nonatomic) NSColor* fillColor;
 @property (assign, nonatomic) CGFloat cornerRadius;
 @property (assign, nonatomic) BOOL isProcessingVideo;
+@property (assign, nonatomic) BOOL isWindowActive;
 
 - (void) setProcessing:(BOOL)isProcessing;
+- (void) setWindowActive:(BOOL)isActive;
 
 @end
 
