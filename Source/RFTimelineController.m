@@ -372,8 +372,12 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	]];
 	[profile_box setupAccountPopover];
 
-	NSView* status_wrapper = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 280, 104)];
+	NSView* status_wrapper = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 320, 86)];
+	status_wrapper.translatesAutoresizingMaskIntoConstraints = NO;
+	status_wrapper.alphaValue = 0.0;
+	status_wrapper.hidden = YES;
 	self.statusBubble = status_wrapper;
+	[self.contentWrapperView addSubview:status_wrapper positioned:NSWindowAbove relativeTo:nil];
 
 	MBStatusBubbleView* bubble_view = [[MBStatusBubbleView alloc] initWithFrame:status_wrapper.bounds];
 	bubble_view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -382,34 +386,48 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	NSTextField* status_field = [NSTextField labelWithString:@"status message"];
 	status_field.translatesAutoresizingMaskIntoConstraints = NO;
 	status_field.lineBreakMode = NSLineBreakByTruncatingTail;
-	status_field.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
+	status_field.font = [NSFont labelFontOfSize:[NSFont systemFontSize]];
 	status_field.textColor = [NSColor colorNamed:@"color_notification_text"];
 	bubble_view.statusMessageTextField = status_field;
 	[bubble_view addSubview:status_field];
 
-	self.statusProgressSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
-	self.statusProgressSpinner.translatesAutoresizingMaskIntoConstraints = NO;
-	self.statusProgressSpinner.indeterminate = YES;
-	self.statusProgressSpinner.controlSize = NSControlSizeSmall;
-	self.statusProgressSpinner.style = NSProgressIndicatorStyleSpinning;
-	self.statusProgressSpinner.wantsLayer = YES;
-	[bubble_view addSubview:self.statusProgressSpinner];
+	NSTextField* detail_field = [NSTextField labelWithString:@""];
+	detail_field.translatesAutoresizingMaskIntoConstraints = NO;
+	detail_field.lineBreakMode = NSLineBreakByTruncatingTail;
+	detail_field.font = [NSFont labelFontOfSize:[NSFont systemFontSize]];
+	detail_field.textColor = [NSColor secondaryLabelColor];
+	self.statusDetailTextField = detail_field;
+	[bubble_view addSubview:detail_field];
+
+	self.statusProgressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+	self.statusProgressIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+	self.statusProgressIndicator.indeterminate = NO;
+	self.statusProgressIndicator.controlSize = NSControlSizeSmall;
+	self.statusProgressIndicator.style = NSProgressIndicatorStyleBar;
+	self.statusProgressIndicator.minValue = 0.0;
+	self.statusProgressIndicator.maxValue = 1.0;
+	self.statusProgressIndicator.wantsLayer = YES;
+	[bubble_view addSubview:self.statusProgressIndicator];
 
 	[NSLayoutConstraint activateConstraints:@[
+		[status_wrapper.trailingAnchor constraintEqualToAnchor:self.contentWrapperView.trailingAnchor constant:-8],
+		[status_wrapper.bottomAnchor constraintEqualToAnchor:self.contentWrapperView.bottomAnchor constant:-8],
+		[status_wrapper.widthAnchor constraintEqualToConstant:320],
+		[status_wrapper.heightAnchor constraintEqualToConstant:86],
 		[bubble_view.leadingAnchor constraintEqualToAnchor:status_wrapper.leadingAnchor],
 		[bubble_view.trailingAnchor constraintEqualToAnchor:status_wrapper.trailingAnchor],
 		[bubble_view.topAnchor constraintEqualToAnchor:status_wrapper.topAnchor],
 		[bubble_view.bottomAnchor constraintEqualToAnchor:status_wrapper.bottomAnchor],
 		[status_field.leadingAnchor constraintEqualToAnchor:bubble_view.leadingAnchor constant:15],
-		[status_field.centerYAnchor constraintEqualToAnchor:bubble_view.centerYAnchor],
-		[status_field.widthAnchor constraintLessThanOrEqualToConstant:230],
-		[self.statusProgressSpinner.leadingAnchor constraintEqualToAnchor:status_field.trailingAnchor constant:11],
-		[self.statusProgressSpinner.trailingAnchor constraintEqualToAnchor:bubble_view.trailingAnchor constant:-15],
-		[self.statusProgressSpinner.centerYAnchor constraintEqualToAnchor:bubble_view.centerYAnchor],
-		[self.statusProgressSpinner.widthAnchor constraintEqualToConstant:12],
-		[self.statusProgressSpinner.heightAnchor constraintEqualToConstant:12],
-		[bubble_view.widthAnchor constraintGreaterThanOrEqualToConstant:130],
-		[bubble_view.widthAnchor constraintLessThanOrEqualToConstant:280]
+		[status_field.trailingAnchor constraintEqualToAnchor:bubble_view.trailingAnchor constant:-15],
+		[status_field.topAnchor constraintEqualToAnchor:bubble_view.topAnchor constant:15],
+		[detail_field.leadingAnchor constraintEqualToAnchor:status_field.leadingAnchor],
+		[detail_field.trailingAnchor constraintEqualToAnchor:status_field.trailingAnchor],
+		[detail_field.topAnchor constraintEqualToAnchor:status_field.bottomAnchor constant:6],
+		[self.statusProgressIndicator.leadingAnchor constraintEqualToAnchor:status_field.leadingAnchor],
+		[self.statusProgressIndicator.trailingAnchor constraintEqualToAnchor:status_field.trailingAnchor],
+		[self.statusProgressIndicator.topAnchor constraintEqualToAnchor:detail_field.bottomAnchor constant:11],
+		[self.statusProgressIndicator.heightAnchor constraintEqualToConstant:8]
 	]];
 }
 
@@ -618,11 +636,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	NSIndexSet* indexes = [self.tableView selectedRowIndexes];
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
-	if (self.statusBubble.alphaValue != 0.0) {
-		// delay changing alpha to avoid clicks right away
-		RFDispatchSeconds(1.0, ^{
-			self.statusBubble.alphaValue = 1.0;
-		});
+	if (!self.statusBubble.hidden) {
+		self.statusBubble.animator.alphaValue = 1.0;
 	}
 
 	[self applyForegroundJS:[self currentWebView]];
@@ -633,8 +648,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	NSIndexSet* indexes = [self.tableView selectedRowIndexes];
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
-	if (self.statusBubble.alphaValue != 0.0) {
-		self.statusBubble.alphaValue = 0.5;
+	if (!self.statusBubble.hidden) {
+		self.statusBubble.animator.alphaValue = 0.8;
 	}
 
 	[self applyBackgroundJS:[self currentWebView]];
@@ -1214,6 +1229,14 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 			NSNumber* check_seconds = [response.parsedResponse objectForKey:@"check_seconds"];
 			NSNumber* is_publishing = [response.parsedResponse objectForKey:@"is_publishing"];
 			NSNumber* is_processing = [response.parsedResponse objectForKey:@"is_processing"];
+			NSNumber* publishing_progress = [response.parsedResponse objectForKey:@"publishing_progress"];
+			NSString* publishing_status = [response.parsedResponse objectForKey:@"publishing_status"];
+			if (![publishing_progress isKindOfClass:[NSNumber class]]) {
+				publishing_progress = nil;
+			}
+			if (![publishing_status isKindOfClass:[NSString class]]) {
+				publishing_status = @"";
+			}
 			if (is_processing && [is_processing boolValue]) {
 				RFDispatchMainAsync (^{
 					[self showProcessingStatus];
@@ -1221,7 +1244,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 			}
 			else if (is_publishing && [is_publishing boolValue]) {
 				RFDispatchMainAsync (^{
-					[self showPublishingStatus];
+					[self showPublishingStatus:publishing_status progress:publishing_progress];
 				});
 			}
 			else if (count && count.integerValue > 0) {
@@ -1860,49 +1883,48 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 }
 
-- (void) showPublishingStatus
+- (void) showPublishingStatus:(NSString *)status progress:(NSNumber *)progress
 {
-	if (@available(macOS 15.0, *)) {
-		if (![self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
-			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:1];
-		}
-	}
-
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
 	[bubble setProcessing:NO];
 
-	[self.statusProgressSpinner startAnimation:nil];
-	self.statusBubble.animator.alphaValue = 1.0;
+	self.statusDetailTextField.stringValue = status;
+	self.statusProgressIndicator.indeterminate = NO;
+	[self.statusProgressIndicator stopAnimation:nil];
+	double progress_value = MIN (MAX (progress.doubleValue, 0.0), 1.0);
+	self.statusProgressIndicator.doubleValue = progress_value;
+	self.statusBubble.hidden = NO;
+	self.statusBubble.animator.alphaValue = self.window.isKeyWindow ? 1.0 : 0.8;
 }
 
 - (void) showProcessingStatus
 {
-	if (@available(macOS 15.0, *)) {
-		if (![self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
-			[self.window.toolbar insertItemWithItemIdentifier:@"StatusBubble" atIndex:0];
-		}
-	}
-
 	MBStatusBubbleView* bubble = [[self.statusBubble subviews] firstObject];
 	[bubble setProcessing:YES];
 
-	[self.statusProgressSpinner startAnimation:nil];
-	self.statusBubble.animator.alphaValue = 1.0;
+	self.statusDetailTextField.stringValue = @"";
+	self.statusProgressIndicator.indeterminate = YES;
+	[self.statusProgressIndicator startAnimation:nil];
+	self.statusBubble.hidden = NO;
+	self.statusBubble.animator.alphaValue = self.window.isKeyWindow ? 1.0 : 0.8;
 }
 
 - (void) hidePublishingStatus:(BOOL)animate
 {
-	if (@available(macOS 15.0, *)) {
-		if ([self.window.toolbar.itemIdentifiers containsObject:@"StatusBubble"]) {
-			[self.window.toolbar removeItemWithItemIdentifier:@"StatusBubble"];
-		}
-	}
-	[self.statusProgressSpinner stopAnimation:nil];
+	[self.statusProgressIndicator stopAnimation:nil];
 	if (animate) {
-		self.statusBubble.animator.alphaValue = 0.0;
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+			context.duration = 0.2;
+			self.statusBubble.animator.alphaValue = 0.0;
+		} completionHandler:^{
+			if (self.statusBubble.alphaValue == 0.0) {
+				self.statusBubble.hidden = YES;
+			}
+		}];
 	}
 	else {
 		self.statusBubble.alphaValue = 0.0;
+		self.statusBubble.hidden = YES;
 	}
 }
 
@@ -2323,7 +2345,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"ProfileBox", @"StatusBubble", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
+    return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -2344,14 +2366,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
-	if ([itemIdentifier isEqualToString:@"StatusBubble"]) {
-		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-		item.view = self.statusBubble;
-        item.minSize = NSMakeSize(80, self.statusBubble.bounds.size.height);
-        item.maxSize = self.statusBubble.bounds.size;
-		return item;
-	}
-    else if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
+    if ([itemIdentifier isEqualToString:@"ProfileBox"]) {
         NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
         item.view = self.profileBox;
 		item.bordered = NO;
