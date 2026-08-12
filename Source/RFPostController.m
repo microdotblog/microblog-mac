@@ -1771,6 +1771,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					[self setupBlogName];
 					[[NSNotificationCenter defaultCenter] postNotificationName:kAutosavedDraftDidCreateNotification object:self];
 				}
+				else {
+					NSDictionary* user_info = @{ kAutosavedDraftPostIDKey: self.editingPost.postID };
+					[[NSNotificationCenter defaultCenter] postNotificationName:kAutosavedDraftDidUpdateNotification object:self userInfo:user_info];
+				}
 			}
 			else {
 				NSInteger status_code = response.httpResponse.statusCode;

@@ -145,6 +145,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kAutosavedDraftDidCreateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autosavedDraftDidUpdateNotification:) name:kAutosavedDraftDidUpdateNotification object:nil];
 }
 
 - (void) setupTabs
@@ -363,6 +364,16 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	self.browserMenuItem.title = [NSString mb_openInBrowserString];
 }
 
+- (void) refreshPosts
+{
+	if (self.isShowingDrafts) {
+		[self fetchDrafts];
+	}
+	else {
+		[self fetchPosts];
+	}
+}
+
 - (void) fetchPosts
 {
 	self.hasLoadedPosts = NO;
@@ -568,6 +579,85 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 				}
 			});
 		}
+	}];
+}
+
+- (void) fetchDraftsQuietlyForPostID:(NSNumber *)postID
+{
+	if (postID.integerValue <= 0) {
+		return;
+	}
+
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSString* channel = @"default";
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid,
+		@"mp-channel": channel,
+		@"post-status": @"draft"
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			return;
+		}
+
+		NSMutableArray* new_posts = [NSMutableArray array];
+		NSArray* items = [response.parsedResponse objectForKey:@"items"];
+		for (NSDictionary* item in items) {
+			NSDictionary* props = [item objectForKey:@"properties"];
+			RFPost* post = [[RFPost alloc] initFromProperties:props];
+			post.channel = channel;
+			[new_posts addObject:post];
+		}
+
+		RFDispatchMainAsync(^{
+			NSString* current_destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+			if (![current_destination_uid isEqualToString:destination_uid]) {
+				return;
+			}
+
+			RFPost* updated_post = nil;
+			for (RFPost* post in new_posts) {
+				if (post.postID.integerValue == postID.integerValue) {
+					updated_post = post;
+					break;
+				}
+			}
+
+			self.draftPosts = new_posts;
+			self.hasLoadedDrafts = YES;
+
+			if (!self.isShowingDrafts || (updated_post == nil)) {
+				return;
+			}
+
+			NSInteger row = NSNotFound;
+			for (NSInteger i = 0; i < self.currentPosts.count; i++) {
+				RFPost* post = [self.currentPosts objectAtIndex:i];
+				if (post.postID.integerValue == postID.integerValue) {
+					row = i;
+					break;
+				}
+			}
+
+			if (row != NSNotFound) {
+				NSMutableArray* current_posts = [self.currentPosts mutableCopy];
+				[current_posts replaceObjectAtIndex:row withObject:updated_post];
+				self.currentPosts = current_posts;
+
+				RFPostCell* cell = (RFPostCell*) [self.tableView rowViewAtRow:row makeIfNecessary:NO];
+				if ([cell isKindOfClass:[RFPostCell class]]) {
+					NSString* search = self.searchField.stringValue ?: @"";
+					[cell setupWithPost:updated_post skipPhotos:NO search:search];
+				}
+			}
+		});
 	}];
 }
 
@@ -785,6 +875,16 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 {
 	[self fetchPosts];
 	[self fetchDrafts];
+}
+
+- (void) autosavedDraftDidUpdateNotification:(NSNotification *)notification
+{
+	if (self.isShowingPages) {
+		return;
+	}
+
+	NSNumber* post_id = notification.userInfo[kAutosavedDraftPostIDKey];
+	[self fetchDraftsQuietlyForPostID:post_id];
 }
 
 - (IBAction) segmentChanged:(NSSegmentedControl *)sender

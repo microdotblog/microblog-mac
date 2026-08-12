@@ -1060,7 +1060,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 	else if (self.selectedTimeline == kSelectionPosts) {
 		if ([self.rootController isKindOfClass:[RFAllPostsController class]]) {
-			[(RFAllPostsController *)self.rootController fetchPosts];
+			[(RFAllPostsController *)self.rootController refreshPosts];
 		}
 	}
 	else if (self.selectedTimeline == kSelectionPages) {

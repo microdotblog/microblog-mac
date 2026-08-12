@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray* currentPosts; // RFPost
 
 - (id) initShowingPages:(BOOL)isShowingPages;
+- (void) refreshPosts;
 - (void) fetchPosts;
 - (void) focusSearch;
 - (void) openRow:(id)sender;
