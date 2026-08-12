@@ -3155,8 +3155,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 				NSArray* categories = [response.parsedResponse objectForKey:@"categories"];
 				if (categories) {
-					self.categories = categories;
 					RFDispatchMain (^{
+						self.categories = categories;
 						if (self.editingPost && ([self.editingPost.categories count] > 0)) {
 							self.isShowingCategories = YES;
 						}
@@ -3183,29 +3183,34 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			self.destinations = [response.parsedResponse objectForKey:@"destination"];
-			[RFBlogsController saveCachedDestinationsFrom:self.destinations];
-
+			NSArray* destinations = [response.parsedResponse objectForKey:@"destination"];
 			NSArray* syndicate_to = [response.parsedResponse objectForKey:@"syndicate-to"];
-			if (syndicate_to) {
-				self.crosspostServices = syndicate_to;
+			RFDispatchMain (^{
+				self.destinations = destinations;
+				[RFBlogsController saveCachedDestinationsFrom:self.destinations];
 
-				// select all cross-post options by default (if not editing)
-				if (self.editingPost == nil) {
-					NSMutableArray* selected_uids = [NSMutableArray array];
-					for (NSDictionary* info in self.crosspostServices) {
-						[selected_uids addObject:info[@"uid"]];
-					}
-					self.selectedCrosspostUIDs = selected_uids;
-					RFDispatchMain (^{
-						if (self.isShowingCrosspostServices) {
-							[self updateCrosspostPane];
+				if (syndicate_to) {
+					self.crosspostServices = syndicate_to;
+
+					// select all cross-post options by default (if not editing)
+					if (self.editingPost == nil) {
+						NSMutableArray* selected_uids = [NSMutableArray array];
+						for (NSDictionary* info in self.crosspostServices) {
+							[selected_uids addObject:info[@"uid"]];
 						}
-						[self.crosspostCollectionView reloadData];
+						self.selectedCrosspostUIDs = selected_uids;
+					}
+
+					if (self.isShowingCrosspostServices) {
+						[self updateCrosspostPane];
+					}
+					[self.crosspostCollectionView reloadData];
+
+					if (self.editingPost == nil) {
 						[self serverAutosaveContentDidChange];
-					});
+					}
 				}
-			}
+			});
 		}
 	}];
 }
