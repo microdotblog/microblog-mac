@@ -18,6 +18,7 @@
 {
 	self = [super init];
 	if (self) {
+		self.postID = [[props objectForKey:@"uid"] firstObject];
 		self.title = [[props objectForKey:@"name"] firstObject];
 		self.text = [[props objectForKey:@"content"] firstObject];
 		self.summary = [[props objectForKey:@"summary"] firstObject];

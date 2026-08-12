@@ -110,6 +110,55 @@
 	if ([self.postController isPage]) {
 		self.windowFrameAutosaveName = @"NewPageWindow";
 	}
+
+	__weak RFPostWindowController* weak_self = self;
+	[self.postController startServerAutosaveWithStatusHandler:^(NSString* status) {
+		RFPostWindowController* strong_self = weak_self;
+		if (status.length > 0) {
+			[strong_self showAutosaveStatus:status];
+		}
+		else {
+			[strong_self hideAutosaveStatus];
+		}
+	}];
+}
+
+- (NSInteger) toolbarIndexBeforePreview
+{
+	NSInteger insert_index = self.window.toolbar.items.count;
+	for (NSInteger i = 0; i < self.window.toolbar.items.count; i++) {
+		NSToolbarItem* item = [self.window.toolbar.items objectAtIndex:i];
+		if ([item.itemIdentifier isEqualToString:@"Preview"]) {
+			insert_index = i;
+			break;
+		}
+	}
+	return insert_index;
+}
+
+- (void) showAutosaveStatus:(NSString *)status
+{
+	if (self.autosaveStatusField == nil) {
+		NSInteger insert_index = [self toolbarIndexBeforePreview];
+		[self.window.toolbar insertItemWithItemIdentifier:@"AutosaveStatus" atIndex:insert_index];
+	}
+	self.autosaveStatusField.stringValue = status;
+}
+
+- (void) hideAutosaveStatus
+{
+	NSInteger index_to_remove = NSNotFound;
+	for (NSInteger i = 0; i < self.window.toolbar.items.count; i++) {
+		NSToolbarItem* item = [self.window.toolbar.items objectAtIndex:i];
+		if ([item.itemIdentifier isEqualToString:@"AutosaveStatus"]) {
+			index_to_remove = i;
+			break;
+		}
+	}
+	if (index_to_remove != NSNotFound) {
+		[self.window.toolbar removeItemAtIndex:index_to_remove];
+	}
+	self.autosaveStatusField = nil;
 }
 
 - (void) adjustWindowHeight
@@ -295,6 +344,10 @@
 
 - (void) windowWillCloseNotification:(NSNotification *)notification
 {
+	[self.previewTimer invalidate];
+	[self.autosaveTimer invalidate];
+	[self.postController stopServerAutosave];
+
 	dispatch_async (dispatch_get_main_queue(), ^{
 		[self restoreCopyLinkMenuItemShortcutIfNeeded];
 	});
@@ -366,7 +419,7 @@
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"Preview", @"SendPost" ];
+	return @[ NSToolbarFlexibleSpaceItemIdentifier, @"Progress", @"AutosaveStatus", @"Preview", @"SendPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -387,6 +440,16 @@
 		
 		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		item.view = self.progressSpinner;
+		return item;
+	}
+	else if ([itemIdentifier isEqualToString:@"AutosaveStatus"]) {
+		self.autosaveStatusField = [NSTextField labelWithString:@""];
+		self.autosaveStatusField.textColor = [NSColor secondaryLabelColor];
+		self.autosaveStatusField.alignment = NSTextAlignmentRight;
+		[NSLayoutConstraint activateConstraints:@[ [self.autosaveStatusField.widthAnchor constraintGreaterThanOrEqualToConstant:120] ]];
+
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.view = self.autosaveStatusField;
 		return item;
 	}
 	else if ([itemIdentifier isEqualToString:@"Preview"]) {
