@@ -15,7 +15,6 @@
 #import "UUHttpSession.h"
 #import "HTMLParser.h"
 #import "RFMacros.h"
-#import "NSCollectionView+Extras.h"
 #import "NSAppearance+Extras.h"
 
 // https://github.com/zootreeves/Objective-C-HMTL-Parser (comments say it's MIT)
@@ -125,6 +124,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.textTopConstraint.constant = 35;
 	}
 	
+	self.photos = @[];
 	if (!skipPhotos) {
 		NSError* error = nil;
 		HTMLParser* p = [[HTMLParser alloc] initWithString:post.text error:&error];
@@ -278,7 +278,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 - (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(NSCollectionViewItem *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
 	RFPhoto* photo = [self.photos objectAtIndex:indexPath.item];
-//	RFPhotoCell* photo_item = (RFPhotoCell *)item;
+	RFPhotoCell* photo_item = (RFPhotoCell *)item;
 
 	if (photo.thumbnailImage == nil) {
 		NSString* url = [NSString stringWithFormat:@"https://cdn.micro.blog/photos/200/%@", photo.publishedURL];
@@ -288,8 +288,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				NSImage* img = response.parsedResponse;
 				RFDispatchMain(^{
 					photo.thumbnailImage = img;
-					if ((indexPath.item < self.photos.count) && ([self.photos objectAtIndex:indexPath.item] == photo)) {
-						[collectionView mb_safeReloadAtIndexPath:indexPath];
+					NSIndexPath* current_index_path = [collectionView indexPathForItem:photo_item];
+					if ([current_index_path isEqual:indexPath] && (indexPath.item < self.photos.count) && ([self.photos objectAtIndex:indexPath.item] == photo)) {
+						photo_item.thumbnailImageView.image = img;
 					}
 				});
 			}

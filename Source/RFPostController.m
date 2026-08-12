@@ -20,9 +20,7 @@
 #import "RFMicropub.h"
 #import "RFPost.h"
 #import "RFSettings.h"
-#import "RFAccount.h"
 #import "RFHighlightingTextStorage.h"
-#import "MBPostWindow.h"
 #import "MBUploadProgress.h"
 #import "UUString.h"
 #import "UUDate.h"
@@ -50,6 +48,8 @@ static CGFloat const kTextViewTitleHiddenTop = 14;
 static CGFloat const kTextViewTitleShownTop = 54;
 static NSTimeInterval const kInitialCategoryResetDelay = 1.0;
 static NSTimeInterval const kAttachmentProgressDelay = 0.05;
+static NSTimeInterval const kServerAutosaveDelay = 10.0;
+static NSTimeInterval const kServerAutosaveMinimumInterval = 30.0;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
@@ -60,8 +60,29 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (assign, nonatomic) BOOL resettingAutoComplete;
 @property (strong, nonatomic, nullable) MBUploadProgress* videoUploader;
 @property (assign, nonatomic) NSInteger pendingAttachmentSlots;
+@property (strong, nonatomic) NSTimer* serverAutosaveTimer;
+@property (strong, nonatomic) NSDate* serverAutosaveLastSavedAt;
+@property (strong, nonatomic) NSString* serverAutosaveSavedFingerprint;
+@property (strong, nonatomic) NSString* serverAutosaveFailedFingerprint;
+@property (strong, nonatomic) NSString* serverAutosaveSiteID;
+@property (strong, nonatomic) NSString* boundDestinationUID;
+@property (strong, nonatomic) NSString* savedEditorFingerprint;
+@property (assign, nonatomic) BOOL serverAutosaveStarted;
+@property (assign, nonatomic) BOOL serverAutosaveStopped;
+@property (assign, nonatomic) BOOL serverAutosaveRequestInFlight;
+@property (assign, nonatomic) BOOL serverAutosaveTerminalFailure;
+@property (assign, nonatomic) BOOL serverAutosavePausedForManualAction;
+@property (assign, nonatomic) BOOL serverAutosaveHasShownStatus;
+@property (copy, nonatomic) void (^serverAutosaveStatusHandler)(NSString* status);
+@property (copy, nonatomic) void (^pendingManualAction)(void);
 
 - (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs submittedText:(NSString *)submittedText;
+- (void) serverAutosaveContentDidChange;
+- (void) scheduleServerAutosaveAfterDelay:(NSTimeInterval)delay;
+- (void) performServerAutosave;
+- (void) performManualActionAfterAutosave:(void (^)(void))action;
+- (void) resumeServerAutosaveAfterManualAction;
+- (void) refreshServerAutosaveIdentityIfNeeded;
 
 @end
 
@@ -163,6 +184,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) dealloc
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetInitialCategoryDisplay) object:nil];
+	[self.serverAutosaveTimer invalidate];
 
 	for (RFPhoto* photo in self.attachedPhotos) {
 		[photo removeTemporaryVideo];
@@ -172,8 +194,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
-
-	[self restoreDraft];
 
 	[self setupTitle];
 	[self setupText];
@@ -256,7 +276,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 	else {
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
-			NSString* s = [RFSettings stringForKey:kCurrentDestinationName];
+			NSString* s = [self currentDestinationName];
 			if (s) {
 				self.blognameField.stringValue = s;
 			}
@@ -277,11 +297,16 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 		if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
 			__weak RFPostController* weak_self = self;
-			((RFHostnameField*) self.blognameField).mouseDownHandler = ^(RFHostnameField* field, NSEvent* event) {
-				#pragma unused(field)
-				#pragma unused(event)
-				[weak_self showBlogsMenu];
-			};
+			if (self.boundDestinationUID.length > 0) {
+				((RFHostnameField*) self.blognameField).mouseDownHandler = nil;
+			}
+			else {
+				((RFHostnameField*) self.blognameField).mouseDownHandler = ^(RFHostnameField* field, NSEvent* event) {
+					#pragma unused(field)
+					#pragma unused(event)
+					[weak_self showBlogsMenu];
+				};
+			}
 		}
 		else {
 			NSGestureRecognizer* click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(blogNameClicked:)];
@@ -290,7 +315,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 
 	if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
-		((RFHostnameField*) self.blognameField).showsChevron = [RFBlogsController hasMultipleCachedDestinations];
+		((RFHostnameField*) self.blognameField).showsChevron = (self.boundDestinationUID.length == 0) && [RFBlogsController hasMultipleCachedDestinations];
 	}
 }
 
@@ -415,35 +440,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 #pragma mark -
 
-- (void) restoreDraft
-{
-	// only restore draft if there aren't other post windows open already
-	if ([self countPostWindows] == 0) {
-		NSString* path = [RFAccount autosaveDraftFileForChannel:self.channel];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
-			self.initialText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-		}
-	}
-}
-
-- (NSInteger) countPostWindows
-{
-	NSInteger num_windows = 0;
-	
-	NSArray* windows = CFBridgingRelease (CGWindowListCopyWindowInfo (kCGWindowListOptionOnScreenOnly, kCGNullWindowID));
-	for (NSDictionary* info in windows) {
-		NSNumber* num = [info objectForKey:(NSString *)kCGWindowNumber];
-		NSWindow* win = [[NSApplication sharedApplication] windowWithWindowNumber:num.integerValue];
-		if (win) {
-			if ([win isKindOfClass:[MBPostWindow class]]) {
-				num_windows++;
-			}
-		}
-	}
-		
-	return num_windows;
-}
-
 - (BOOL) isPage
 {
 	return [self.channel isEqualToString:@"pages"];
@@ -462,7 +458,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 
 	if ([self.blognameField isKindOfClass:[RFHostnameField class]]) {
-		((RFHostnameField*) self.blognameField).showsChevron = (cached_destinations.count > 1);
+		((RFHostnameField*) self.blognameField).showsChevron = (self.boundDestinationUID.length == 0) && (cached_destinations.count > 1);
 	}
 }
 
@@ -685,7 +681,9 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) updateEditedState
 {
-	self.view.window.documentEdited = YES;
+	NSString* current_fingerprint = [self currentServerAutosaveFingerprint];
+	self.view.window.documentEdited = ![current_fingerprint isEqualToString:self.savedEditorFingerprint];
+	[self serverAutosaveContentDidChange];
 }
 
 - (void) updateGenerateEnabled
@@ -789,6 +787,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 {
 	self.isSent = YES;
 	self.isSending = NO;
+	[self stopServerAutosave];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPostStopProgressNotification object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:self];
@@ -881,6 +880,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.photosHeightConstraint.animator.constant = 100;
 
 	[self checkMediaEndpoint];
+	[self updateEditedState];
 }
 
 - (void) attachPhotos:(NSArray<NSURL*>*)photoURLs
@@ -972,6 +972,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.photosHeightConstraint.animator.constant = 100;
 
 	[self checkMediaEndpoint];
+	[self updateEditedState];
 
 	if (too_many_photos) {
 		[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
@@ -1039,11 +1040,16 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		self.summaryTextHeightConstraint.constant = 38;
 		[self updateGenerateEnabled];
 	}
+
+	if (notification != nil) {
+		[self updateEditedState];
+	}
 }
 
 - (IBAction) titleFieldDidChange:(id)sender
 {
 	[self updateRemainingChars];
+	[self updateEditedState];
 }
 
 - (void) attachFilesNotification:(NSNotification *)notification
@@ -1113,6 +1119,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[self setupBlogName];
 	[self downloadCategories];
 	[self downloadBlogs];
+	[self serverAutosaveContentDidChange];
 }
 
 - (void) categoryWasRenamedNotification:(NSNotification *)notification
@@ -1150,6 +1157,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (did_update_initial || did_update_categories || did_update_selected) {
 		[self updateCategoriesPane];
 		[self.categoriesCollectionView reloadData];
+		[self updateEditedState];
 	}
 }
 
@@ -1178,12 +1186,33 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (NSString *) currentDestinationUID
 {
+	if (self.boundDestinationUID.length > 0) {
+		return self.boundDestinationUID;
+	}
+
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
 	}
 
 	return destination_uid;
+}
+
+- (NSString *) currentDestinationName
+{
+	if (self.boundDestinationUID.length > 0) {
+		NSArray* destinations = self.destinations.count > 0 ? self.destinations : [RFBlogsController cachedDestinations];
+		for (NSDictionary* destination in destinations) {
+			if ([destination[@"uid"] isEqualToString:self.boundDestinationUID]) {
+				return destination[@"name"];
+			}
+		}
+
+		NSURL* url = [NSURL URLWithString:self.boundDestinationUID];
+		return url.host ?: self.boundDestinationUID;
+	}
+
+	return [RFSettings stringForKey:kCurrentDestinationName];
 }
 
 - (void) removeAttachedPhotoNotification:(NSNotification *)notification
@@ -1268,7 +1297,13 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) postingCheckboxChangedNotification:(NSNotification *)notification
 {
+	NSCollectionViewItem* item = notification.object;
+	if (![item isKindOfClass:[NSCollectionViewItem class]] || ((item.collectionView != self.categoriesCollectionView) && (item.collectionView != self.crosspostCollectionView))) {
+		return;
+	}
+
 	[self updateSelectedCheckboxes];
+	[self updateEditedState];
 }
 
 - (NSArray<NSString *> *)textView:(NSTextView *)textView completions:(NSArray<NSString *> *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(nullable NSInteger *)index
@@ -1464,6 +1499,324 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	return self.textStorage.string;
 }
 
+#pragma mark -
+
+- (void) startServerAutosaveWithStatusHandler:(void (^)(NSString* status))handler
+{
+	[self.serverAutosaveTimer invalidate];
+	self.serverAutosaveTimer = nil;
+	self.serverAutosaveStatusHandler = handler;
+	self.serverAutosaveStarted = YES;
+	self.serverAutosaveStopped = NO;
+	self.serverAutosaveTerminalFailure = NO;
+	self.serverAutosaveHasShownStatus = NO;
+	if (self.editingPost.isDraft && (self.boundDestinationUID.length == 0)) {
+		self.boundDestinationUID = [RFSettings stringForKey:kCurrentDestinationUID];
+		[self setupBlogName];
+	}
+	self.savedEditorFingerprint = [self currentServerAutosaveFingerprint];
+
+	if (self.editingPost && self.editingPost.isDraft && (self.editingPost.postID.integerValue > 0)) {
+		self.serverAutosaveSiteID = [self currentServerAutosaveSiteID];
+		self.serverAutosaveSavedFingerprint = self.savedEditorFingerprint;
+	}
+	else {
+		self.serverAutosaveSavedFingerprint = nil;
+	}
+
+	[self serverAutosaveContentDidChange];
+}
+
+- (void) stopServerAutosave
+{
+	self.serverAutosaveStopped = YES;
+	self.serverAutosaveStarted = NO;
+	self.serverAutosaveStatusHandler = nil;
+	self.pendingManualAction = nil;
+	[self.serverAutosaveTimer invalidate];
+	self.serverAutosaveTimer = nil;
+}
+
+- (NSString *) currentServerAutosaveSiteID
+{
+	NSString* site_value = [self currentDestinationUID];
+	if (site_value.length == 0) {
+		site_value = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+	if (site_value.length == 0) {
+		return nil;
+	}
+
+	NSString* url_s = site_value;
+	if (![url_s containsString:@"://"]) {
+		url_s = [@"https://" stringByAppendingString:url_s];
+	}
+	NSURL* url = [NSURL URLWithString:url_s];
+	return url.host.lowercaseString;
+}
+
+- (NSDictionary *) currentServerAutosavePayload
+{
+	[self updateSelectedCheckboxes];
+
+	return @{
+		@"title": [self currentTitle] ?: @"",
+		@"text": [self currentText] ?: @"",
+		@"summary": self.summaryTextView.string ?: @"",
+		@"categories": self.selectedCategories ?: @[],
+		@"crosspost_services": self.selectedCrosspostUIDs ?: @[],
+		@"attachment_count": @(self.attachedPhotos.count)
+	};
+}
+
+- (NSString *) serverAutosaveFingerprintForPayload:(NSDictionary *)payload siteID:(NSString *)siteID
+{
+	NSArray* values = @[
+		siteID ?: @"",
+		payload[@"title"] ?: @"",
+		payload[@"text"] ?: @"",
+		payload[@"summary"] ?: @"",
+		payload[@"categories"] ?: @[],
+		payload[@"crosspost_services"] ?: @[],
+		payload[@"attachment_count"] ?: @0
+	];
+	NSData* data = [NSJSONSerialization dataWithJSONObject:values options:0 error:NULL];
+	return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *) currentServerAutosaveFingerprint
+{
+	NSString* site_id = self.serverAutosaveSiteID ?: [self currentServerAutosaveSiteID];
+	return [self serverAutosaveFingerprintForPayload:[self currentServerAutosavePayload] siteID:site_id];
+}
+
+- (NSUInteger) serverAutosaveCharacterCountForText:(NSString *)text
+{
+	return [text lengthOfBytesUsingEncoding:NSUTF32LittleEndianStringEncoding] / 4;
+}
+
+- (BOOL) canPerformServerAutosave
+{
+	if (!self.serverAutosaveStarted || self.serverAutosaveStopped || self.serverAutosavePausedForManualAction || self.serverAutosaveTerminalFailure) {
+		return NO;
+	}
+	if (![self hasSnippetsBlog] || [self prefersExternalBlog] || self.isReply || [self isPage]) {
+		return NO;
+	}
+	if (self.editingPost && !self.editingPost.isDraft) {
+		return NO;
+	}
+	if (self.attachedPhotos.count > 0) {
+		return NO;
+	}
+
+	NSString* site_id = [self currentServerAutosaveSiteID];
+	if (site_id.length == 0) {
+		return NO;
+	}
+	if (self.serverAutosaveSiteID.length > 0 && ![self.serverAutosaveSiteID isEqualToString:site_id]) {
+		return NO;
+	}
+
+	NSString* text = [self currentText];
+	if ([text hasPrefix:@"@"]) {
+		return NO;
+	}
+
+	NSInteger draft_id = self.editingPost.postID.integerValue;
+	if (self.editingPost) {
+		return self.editingPost.isDraft && (draft_id > 0);
+	}
+	else {
+		return [self serverAutosaveCharacterCountForText:text] > 300;
+	}
+}
+
+- (void) serverAutosaveContentDidChange
+{
+	if (!self.serverAutosaveStarted || self.serverAutosaveStopped) {
+		return;
+	}
+
+	[self.serverAutosaveTimer invalidate];
+	self.serverAutosaveTimer = nil;
+
+	if (![self canPerformServerAutosave]) {
+		if ((self.attachedPhotos.count > 0) || [[self currentText] hasPrefix:@"@"]) {
+			if (self.serverAutosaveStatusHandler) {
+				self.serverAutosaveStatusHandler(nil);
+			}
+		}
+		return;
+	}
+
+	NSString* fingerprint = [self currentServerAutosaveFingerprint];
+	if ([fingerprint isEqualToString:self.serverAutosaveSavedFingerprint] || [fingerprint isEqualToString:self.serverAutosaveFailedFingerprint]) {
+		return;
+	}
+	if (self.serverAutosaveRequestInFlight) {
+		return;
+	}
+
+	NSTimeInterval delay = kServerAutosaveDelay;
+	if (self.editingPost.postID.integerValue > 0 && self.serverAutosaveLastSavedAt) {
+		NSTimeInterval elapsed = -[self.serverAutosaveLastSavedAt timeIntervalSinceNow];
+		NSTimeInterval remaining = kServerAutosaveMinimumInterval - elapsed;
+		if (remaining > delay) {
+			delay = remaining;
+		}
+	}
+	[self scheduleServerAutosaveAfterDelay:delay];
+}
+
+- (void) scheduleServerAutosaveAfterDelay:(NSTimeInterval)delay
+{
+	[self.serverAutosaveTimer invalidate];
+	__weak RFPostController* weak_self = self;
+	self.serverAutosaveTimer = [NSTimer scheduledTimerWithTimeInterval:MAX(delay, 0.0) repeats:NO block:^(NSTimer* timer) {
+		RFPostController* strong_self = weak_self;
+		strong_self.serverAutosaveTimer = nil;
+		[strong_self performServerAutosave];
+	}];
+}
+
+- (NSString *) serverAutosaveStatusForDate:(NSDate *)date
+{
+	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+	formatter.dateStyle = NSDateFormatterNoStyle;
+	formatter.timeStyle = NSDateFormatterShortStyle;
+	NSString* time_s = [formatter stringFromDate:date];
+	return [NSString stringWithFormat:@"Draft saved: %@", time_s];
+}
+
+- (void) performServerAutosave
+{
+	if (self.serverAutosaveRequestInFlight || ![self canPerformServerAutosave]) {
+		return;
+	}
+
+	NSString* site_id = self.serverAutosaveSiteID ?: [self currentServerAutosaveSiteID];
+	NSString* destination_uid = [self currentDestinationUID];
+	NSDictionary* payload = [self currentServerAutosavePayload];
+	NSString* fingerprint = [self serverAutosaveFingerprintForPayload:payload siteID:site_id];
+	if ([fingerprint isEqualToString:self.serverAutosaveSavedFingerprint]) {
+		return;
+	}
+
+	NSInteger draft_id = self.editingPost.postID.integerValue;
+	NSDictionary* args = @{
+		@"id": @(draft_id),
+		@"site_id": site_id,
+		@"title": payload[@"title"],
+		@"text": payload[@"text"],
+		@"summary": payload[@"summary"],
+		@"categories[]": payload[@"categories"],
+		@"crosspost_services[]": payload[@"crosspost_services"]
+	};
+
+	self.serverAutosaveRequestInFlight = YES;
+	RFClient* client = [[RFClient alloc] initWithPath:@"/pages/autosave"];
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			self.serverAutosaveRequestInFlight = NO;
+			if (self.serverAutosaveStopped) {
+				return;
+			}
+
+			NSDictionary* info = nil;
+			if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+				info = response.parsedResponse;
+			}
+			NSInteger saved_id = [info[@"id"] integerValue];
+			NSString* update_url = info[@"update_url"];
+			BOOL did_save = (response.httpError == nil) && (saved_id > 0) && [update_url isKindOfClass:[NSString class]] && (update_url.length > 0);
+
+			if (did_save) {
+				BOOL created_new_draft = (self.editingPost == nil);
+				if (self.editingPost == nil) {
+					self.editingPost = [[RFPost alloc] init];
+				}
+				self.editingPost.postID = @(saved_id);
+				self.editingPost.url = update_url;
+				self.editingPost.isDraft = YES;
+				self.editingPost.title = payload[@"title"];
+				self.editingPost.text = payload[@"text"];
+				self.editingPost.summary = payload[@"summary"];
+				self.editingPost.categories = payload[@"categories"];
+				self.editingPost.syndication = payload[@"crosspost_services"];
+				self.boundDestinationUID = destination_uid;
+				self.serverAutosaveSiteID = site_id;
+				self.serverAutosaveSavedFingerprint = fingerprint;
+				self.savedEditorFingerprint = fingerprint;
+				self.serverAutosaveFailedFingerprint = nil;
+				self.serverAutosaveTerminalFailure = NO;
+
+				NSDate* saved_at = [NSDate date];
+				NSString* saved_at_s = info[@"saved_at"];
+				if ([saved_at_s isKindOfClass:[NSString class]]) {
+					NSDate* server_date = [NSDate uuDateFromRfc3339String:saved_at_s];
+					if (server_date) {
+						saved_at = server_date;
+					}
+				}
+				self.serverAutosaveLastSavedAt = [NSDate date];
+				if ([[self currentServerAutosaveFingerprint] isEqualToString:fingerprint]) {
+					self.view.window.documentEdited = NO;
+				}
+				if (self.serverAutosaveStatusHandler) {
+					self.serverAutosaveHasShownStatus = YES;
+					self.serverAutosaveStatusHandler([self serverAutosaveStatusForDate:saved_at]);
+				}
+				if (created_new_draft) {
+					[self setupBlogName];
+					[[NSNotificationCenter defaultCenter] postNotificationName:kAutosavedDraftDidCreateNotification object:self];
+				}
+			}
+			else {
+				NSInteger status_code = response.httpResponse.statusCode;
+				self.serverAutosaveTerminalFailure = (status_code == 404) || (status_code == 409);
+				if (status_code == 422) {
+					self.serverAutosaveFailedFingerprint = fingerprint;
+				}
+			}
+
+			void (^manual_action)(void) = self.pendingManualAction;
+			self.pendingManualAction = nil;
+			if (manual_action) {
+				manual_action();
+			}
+			else if (did_save) {
+				[self serverAutosaveContentDidChange];
+			}
+			else if (!self.serverAutosaveTerminalFailure && (response.httpResponse.statusCode != 422)) {
+				[self scheduleServerAutosaveAfterDelay:kServerAutosaveMinimumInterval];
+			}
+		});
+	}];
+}
+
+- (void) performManualActionAfterAutosave:(void (^)(void))action
+{
+	self.serverAutosavePausedForManualAction = YES;
+	[self.serverAutosaveTimer invalidate];
+	self.serverAutosaveTimer = nil;
+	if (self.serverAutosaveRequestInFlight) {
+		self.pendingManualAction = action;
+	}
+	else {
+		action();
+	}
+}
+
+- (void) resumeServerAutosaveAfterManualAction
+{
+	if (self.serverAutosaveStopped) {
+		return;
+	}
+	self.serverAutosavePausedForManualAction = NO;
+	[self serverAutosaveContentDidChange];
+}
+
 - (NSString *) currentProcessedMarkup
 {
 	NSError* error = nil;
@@ -1585,7 +1938,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) showBlogsMenu
 {
-	if ([RFSettings boolForKey:kExternalBlogIsPreferred]) {
+	if ([RFSettings boolForKey:kExternalBlogIsPreferred] || (self.boundDestinationUID.length > 0)) {
 		return;
 	}
 
@@ -1670,8 +2023,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		// post button always publishes
 		self.isDraft = NO;
 		self.isSending = YES;
-		self.view.window.documentEdited = NO;
-		[self uploadPost];
+		[self performManualActionAfterAutosave:^{
+			self.view.window.documentEdited = NO;
+			[self uploadPost];
+		}];
 	}
 }
 
@@ -1690,8 +2045,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		// cmd-S saves to server
 		self.isDraft = YES;
 		self.isSending = YES;
-		self.view.window.documentEdited = NO;
-		[self uploadPost];
+		[self performManualActionAfterAutosave:^{
+			self.view.window.documentEdited = NO;
+			[self uploadPost];
+		}];
 	}
 }
 
@@ -1715,8 +2072,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			self.postedAt = self.dateController.date;
 			self.isDraft = NO;
 			self.isSending = YES;
-			self.view.window.documentEdited = NO;
-			[self uploadPost];
+			[self performManualActionAfterAutosave:^{
+				self.view.window.documentEdited = NO;
+				[self uploadPost];
+			}];
         }
         self.dateController = nil;
 	}];
@@ -1728,7 +2087,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	
 	NSString* s = [self currentText];
 	
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSString* destination_uid = [self currentDestinationUID];
 	NSURL* url = [NSURL URLWithString:destination_uid];
 
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/account/posts/%@/summarize", url.host];
@@ -1748,7 +2107,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) checkSummary
 {
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	NSString* destination_uid = [self currentDestinationUID];
 	NSURL* url = [NSURL URLWithString:destination_uid];
 
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/account/posts/%@/summarize", url.host];
@@ -1762,6 +2121,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					[self.summaryTimer invalidate];
 					[self.summaryProgress stopAnimation:nil];
 					[self summaryTextDidChange:nil];
+					[self updateEditedState];
 				}
 			}
 		});
@@ -1802,6 +2162,9 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 {
 	self.isSending = NO;
 	[self stopProgressAnimation];
+	if (self.serverAutosavePausedForManualAction) {
+		[self resumeServerAutosaveAfterManualAction];
+	}
 }
 
 - (void) startProgressAnimation
@@ -1816,7 +2179,51 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) sendUpdatedDraftNotification
 {
+	if (self.editingPost.isDraft && (self.boundDestinationUID.length == 0)) {
+		self.boundDestinationUID = [RFSettings stringForKey:kCurrentDestinationUID];
+		self.serverAutosaveSiteID = [self currentServerAutosaveSiteID];
+		[self setupBlogName];
+	}
+	if (!self.view.window.documentEdited) {
+		self.savedEditorFingerprint = [self currentServerAutosaveFingerprint];
+		self.serverAutosaveSavedFingerprint = self.savedEditorFingerprint;
+		self.serverAutosaveLastSavedAt = [NSDate date];
+	}
+	if (self.serverAutosaveHasShownStatus && self.serverAutosaveStatusHandler) {
+		self.serverAutosaveStatusHandler([self serverAutosaveStatusForDate:[NSDate date]]);
+	}
+	[self refreshServerAutosaveIdentityIfNeeded];
+	[self resumeServerAutosaveAfterManualAction];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDraftDidUpdateNotification object:self];
+}
+
+- (void) refreshServerAutosaveIdentityIfNeeded
+{
+	if (![self hasSnippetsBlog] || [self prefersExternalBlog] || !self.editingPost.isDraft || (self.editingPost.postID.integerValue > 0) || (self.editingPost.url.length == 0)) {
+		return;
+	}
+
+	NSString* destination_uid = [self currentDestinationUID];
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"url": self.editingPost.url,
+		@"mp-destination": destination_uid
+	};
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			if (self.serverAutosaveStopped || ![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+				return;
+			}
+			NSDictionary* properties = [response.parsedResponse objectForKey:@"properties"];
+			id uid = [[properties objectForKey:@"uid"] firstObject];
+			if ([uid respondsToSelector:@selector(integerValue)] && ([uid integerValue] > 0)) {
+				self.editingPost.postID = @([uid integerValue]);
+				self.serverAutosaveSiteID = [self currentServerAutosaveSiteID];
+				[self serverAutosaveContentDidChange];
+			}
+		});
+	}];
 }
 
 - (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs submittedText:(NSString *)submittedText
@@ -1829,10 +2236,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return;
 	}
 
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	if (destination_uid == nil) {
-		destination_uid = @"";
-	}
+	NSString* destination_uid = [self currentDestinationUID];
 
 	NSDictionary* args = @{
 		@"q": @"source",
@@ -2026,10 +2430,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		[self showProgressHeader:@"Now publishing to your microblog..."];
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-			if (destination_uid == nil) {
-				destination_uid = @"";
-			}
+			NSString* destination_uid = [self currentDestinationUID];
 			NSArray* category_names = self.selectedCategories;
 			NSArray* crosspost_uids = self.selectedCrosspostUIDs;
 			
@@ -2396,10 +2797,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		NSString* filename = photo.fileURL.lastPathComponent;
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
-			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-			if (destination_uid == nil) {
-				destination_uid = @"";
-			}
+			NSString* destination_uid = [self currentDestinationUID];
 			NSDictionary* args = @{
 				@"mp-destination": destination_uid
 			};
@@ -2648,10 +3046,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) fetchLatestUploadURLWithCompletion:(void (^)(NSString * _Nullable url))handler
 {
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	if (destination_uid == nil) {
-		destination_uid = @"";
-	}
+	NSString* destination_uid = [self currentDestinationUID];
 
 	NSDictionary* args = @{
 		@"q": @"source",
@@ -2708,6 +3103,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	[new_photos removeObjectAtIndex:indexPath.item];
 	self.attachedPhotos = new_photos;
 	[self.photosCollectionView deleteItemsAtIndexPaths:[NSSet setWithObject:indexPath]];
+	[self updateEditedState];
 
 	if (self.attachedPhotos.count == 0) {
 //		self.photosHeightConstraint.animator.constant = 0;
@@ -2748,10 +3144,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 {
 	if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 		RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-		NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-		if (destination_uid == nil) {
-			destination_uid = @"";
-		}
+		NSString* destination_uid = [self currentDestinationUID];
 
 		NSDictionary* args = @{
 			@"q": @"category",
@@ -2762,8 +3155,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 				NSArray* categories = [response.parsedResponse objectForKey:@"categories"];
 				if (categories) {
-					self.categories = categories;
 					RFDispatchMain (^{
+						self.categories = categories;
 						if (self.editingPost && ([self.editingPost.categories count] > 0)) {
 							self.isShowingCategories = YES;
 						}
@@ -2781,10 +3174,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) downloadBlogs
 {
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	if (destination_uid == nil) {
-		destination_uid = @"";
-	}
+	NSString* destination_uid = [self currentDestinationUID];
 
 	NSDictionary* args = @{
 		@"q": @"config",
@@ -2793,28 +3183,34 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			self.destinations = [response.parsedResponse objectForKey:@"destination"];
-			[RFBlogsController saveCachedDestinationsFrom:self.destinations];
-
+			NSArray* destinations = [response.parsedResponse objectForKey:@"destination"];
 			NSArray* syndicate_to = [response.parsedResponse objectForKey:@"syndicate-to"];
-			if (syndicate_to) {
-				self.crosspostServices = syndicate_to;
+			RFDispatchMain (^{
+				self.destinations = destinations;
+				[RFBlogsController saveCachedDestinationsFrom:self.destinations];
 
-				// select all cross-post options by default (if not editing)
-				if (self.editingPost == nil) {
-					NSMutableArray* selected_uids = [NSMutableArray array];
-					for (NSDictionary* info in self.crosspostServices) {
-						[selected_uids addObject:info[@"uid"]];
-					}
-					self.selectedCrosspostUIDs = selected_uids;
-					RFDispatchMain (^{
-						if (self.isShowingCrosspostServices) {
-							[self updateCrosspostPane];
+				if (syndicate_to) {
+					self.crosspostServices = syndicate_to;
+
+					// select all cross-post options by default (if not editing)
+					if (self.editingPost == nil) {
+						NSMutableArray* selected_uids = [NSMutableArray array];
+						for (NSDictionary* info in self.crosspostServices) {
+							[selected_uids addObject:info[@"uid"]];
 						}
-						[self.crosspostCollectionView reloadData];
-					});
+						self.selectedCrosspostUIDs = selected_uids;
+					}
+
+					if (self.isShowingCrosspostServices) {
+						[self updateCrosspostPane];
+					}
+					[self.crosspostCollectionView reloadData];
+
+					if (self.editingPost == nil) {
+						[self serverAutosaveContentDidChange];
+					}
 				}
-			}
+			});
 		}
 	}];
 }

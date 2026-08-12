@@ -84,5 +84,7 @@
 
 - (NSString *) currentTitle;
 - (NSString *) currentText;
+- (void) startServerAutosaveWithStatusHandler:(void (^)(NSString* status))handler;
+- (void) stopServerAutosave;
 
 @end
