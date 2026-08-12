@@ -213,8 +213,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 	if (self.initialCategoryName.length > 0) {
 		self.isShowingCategories = YES;
-		[self updateCategoriesPane];
 		[self.categoriesCollectionView reloadData];
+		[self updateCategoriesPane];
 	}
 
 	[self downloadCategories];
@@ -835,8 +835,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.isShowingCategories = !self.isShowingCategories;
 	[[NSUserDefaults standardUserDefaults] setBool:self.isShowingCategories forKey:kIsShowingCategories];
 
-	[self updateCategoriesPane];
 	[self.categoriesCollectionView reloadData];
+	[self updateCategoriesPane];
 
 	if (was_showing_categories && self.initialCategoryName.length > 0) {
 		[self performSelector:@selector(resetInitialCategoryDisplay) withObject:nil afterDelay:kInitialCategoryResetDelay];
@@ -850,8 +850,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
 	[[NSUserDefaults standardUserDefaults] setBool:self.isShowingCrosspostServices forKey:kIsShowingCrosspostServices];
 
-	[self updateCrosspostPane];
 	[self.crosspostCollectionView reloadData];
+	[self updateCrosspostPane];
 }
 
 - (IBAction) toggleSummary:(id)sender
@@ -1155,8 +1155,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 
 	if (did_update_initial || did_update_categories || did_update_selected) {
-		[self updateCategoriesPane];
 		[self.categoriesCollectionView reloadData];
+		[self updateCategoriesPane];
 		[self updateEditedState];
 	}
 }
@@ -3160,10 +3160,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						if (self.editingPost && ([self.editingPost.categories count] > 0)) {
 							self.isShowingCategories = YES;
 						}
+						[self.categoriesCollectionView reloadData];
 						if (self.isShowingCategories) {
 							[self updateCategoriesPane];
 						}
-						[self.categoriesCollectionView reloadData];
 					});
 				}
 			}
@@ -3201,10 +3201,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 						self.selectedCrosspostUIDs = selected_uids;
 					}
 
+					[self.crosspostCollectionView reloadData];
 					if (self.isShowingCrosspostServices) {
 						[self updateCrosspostPane];
 					}
-					[self.crosspostCollectionView reloadData];
 
 					if (self.editingPost == nil) {
 						[self serverAutosaveContentDidChange];
