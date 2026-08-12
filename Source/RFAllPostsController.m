@@ -646,15 +646,17 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 				}
 			}
 
-			if (row != NSNotFound) {
+			if ((row != NSNotFound) && (row < self.tableView.numberOfRows)) {
 				NSMutableArray* current_posts = [self.currentPosts mutableCopy];
 				[current_posts replaceObjectAtIndex:row withObject:updated_post];
 				self.currentPosts = current_posts;
 
-				RFPostCell* cell = (RFPostCell*) [self.tableView rowViewAtRow:row makeIfNecessary:NO];
+				RFPostCell* cell = (RFPostCell*) [self.tableView rowViewAtRow:row makeIfNecessary:YES];
 				if ([cell isKindOfClass:[RFPostCell class]]) {
 					NSString* search = self.searchField.stringValue ?: @"";
 					[cell setupWithPost:updated_post skipPhotos:NO search:search];
+					[cell layoutSubtreeIfNeeded];
+					[cell setNeedsDisplay:YES];
 				}
 			}
 		});
