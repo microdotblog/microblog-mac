@@ -65,6 +65,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (strong, nonatomic) NSString* serverAutosaveSavedFingerprint;
 @property (strong, nonatomic) NSString* serverAutosaveFailedFingerprint;
 @property (strong, nonatomic) NSString* serverAutosaveSiteID;
+@property (strong, nonatomic) NSString* savedEditorFingerprint;
 @property (assign, nonatomic) BOOL serverAutosaveStarted;
 @property (assign, nonatomic) BOOL serverAutosaveStopped;
 @property (assign, nonatomic) BOOL serverAutosaveRequestInFlight;
@@ -674,7 +675,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) updateEditedState
 {
-	self.view.window.documentEdited = YES;
+	NSString* current_fingerprint = [self currentServerAutosaveFingerprint];
+	self.view.window.documentEdited = ![current_fingerprint isEqualToString:self.savedEditorFingerprint];
 	[self serverAutosaveContentDidChange];
 }
 
@@ -1268,6 +1270,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) postingCheckboxChangedNotification:(NSNotification *)notification
 {
+	NSCollectionViewItem* item = notification.object;
+	if (![item isKindOfClass:[NSCollectionViewItem class]] || ((item.collectionView != self.categoriesCollectionView) && (item.collectionView != self.crosspostCollectionView))) {
+		return;
+	}
+
 	[self updateSelectedCheckboxes];
 	[self updateEditedState];
 }
@@ -1476,10 +1483,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.serverAutosaveStopped = NO;
 	self.serverAutosaveTerminalFailure = NO;
 	self.serverAutosaveHasShownStatus = NO;
+	self.savedEditorFingerprint = [self currentServerAutosaveFingerprint];
 
 	if (self.editingPost && self.editingPost.isDraft && (self.editingPost.postID.integerValue > 0)) {
 		self.serverAutosaveSiteID = [self currentServerAutosaveSiteID];
-		self.serverAutosaveSavedFingerprint = [self currentServerAutosaveFingerprint];
+		self.serverAutosaveSavedFingerprint = self.savedEditorFingerprint;
 	}
 	else {
 		self.serverAutosaveSavedFingerprint = nil;
@@ -1706,6 +1714,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 				self.editingPost.syndication = payload[@"crosspost_services"];
 				self.serverAutosaveSiteID = site_id;
 				self.serverAutosaveSavedFingerprint = fingerprint;
+				self.savedEditorFingerprint = fingerprint;
 				self.serverAutosaveFailedFingerprint = nil;
 				self.serverAutosaveTerminalFailure = NO;
 
@@ -2137,7 +2146,8 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) sendUpdatedDraftNotification
 {
 	if (!self.view.window.documentEdited) {
-		self.serverAutosaveSavedFingerprint = [self currentServerAutosaveFingerprint];
+		self.savedEditorFingerprint = [self currentServerAutosaveFingerprint];
+		self.serverAutosaveSavedFingerprint = self.savedEditorFingerprint;
 		self.serverAutosaveLastSavedAt = [NSDate date];
 	}
 	if (self.serverAutosaveHasShownStatus && self.serverAutosaveStatusHandler) {
