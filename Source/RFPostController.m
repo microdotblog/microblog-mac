@@ -72,6 +72,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 @property (assign, nonatomic) BOOL serverAutosaveRequestInFlight;
 @property (assign, nonatomic) BOOL serverAutosaveTerminalFailure;
 @property (assign, nonatomic) BOOL serverAutosavePausedForManualAction;
+@property (assign, nonatomic) BOOL serverAutosaveHasShownStatus;
 @property (copy, nonatomic) void (^serverAutosaveStatusHandler)(NSString* status);
 @property (copy, nonatomic) void (^pendingManualAction)(void);
 
@@ -1507,6 +1508,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.serverAutosaveStarted = YES;
 	self.serverAutosaveStopped = NO;
 	self.serverAutosaveTerminalFailure = NO;
+	self.serverAutosaveHasShownStatus = NO;
 
 	if (self.editingPost && self.editingPost.isDraft && (self.editingPost.postID.integerValue > 0)) {
 		self.serverAutosaveSiteID = [self currentServerAutosaveSiteID];
@@ -1753,6 +1755,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 					self.view.window.documentEdited = NO;
 				}
 				if (self.serverAutosaveStatusHandler) {
+					self.serverAutosaveHasShownStatus = YES;
 					self.serverAutosaveStatusHandler([self serverAutosaveStatusForDate:saved_at]);
 				}
 				if (created_new_draft) {
@@ -2169,6 +2172,9 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (!self.view.window.documentEdited) {
 		self.serverAutosaveSavedFingerprint = [self currentServerAutosaveFingerprint];
 		self.serverAutosaveLastSavedAt = [NSDate date];
+	}
+	if (self.serverAutosaveHasShownStatus && self.serverAutosaveStatusHandler) {
+		self.serverAutosaveStatusHandler([self serverAutosaveStatusForDate:[NSDate date]]);
 	}
 	[self refreshServerAutosaveIdentityIfNeeded];
 	[self resumeServerAutosaveAfterManualAction];

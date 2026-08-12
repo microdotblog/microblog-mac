@@ -142,7 +142,7 @@
 		NSInteger insert_index = [self toolbarIndexBeforePreview];
 		[self.window.toolbar insertItemWithItemIdentifier:@"AutosaveStatus" atIndex:insert_index];
 	}
-	self.autosaveStatusField.stringValue = status;
+	self.autosaveStatusField.stringValue = [status stringByAppendingString:@"\u2003\u2003"];
 }
 
 - (void) hideAutosaveStatus
