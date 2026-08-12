@@ -43,6 +43,7 @@
 #import "RFSettings.h"
 #import "RFAccount.h"
 #import "RFPhoto.h"
+#import "RFPost.h"
 #import "RFUpload.h"
 #import "UUString.h"
 #import "NSAlert+Extras.h"
@@ -53,6 +54,12 @@
 #import "MBMenus.h"
 #import "MBRobotsModel.h"
 #import "NSMenuItem+RSCore.h"
+
+@interface RFAppDelegate ()
+
+- (RFPostWindowController *) postWindowControllerForPost:(RFPost *)post;
+
+@end
 
 @implementation RFAppDelegate
 
@@ -437,6 +444,18 @@
 	NSString* micropub = [RFSettings stringForKey:kExternalMicropubMe];
 	NSString* xmlrpc = [RFSettings stringForKey:kExternalBlogEndpoint];
 	if (has_hosted || micropub || xmlrpc) {
+		if (post) {
+			RFPostWindowController* existing_controller = [self postWindowControllerForPost:post];
+			if (existing_controller) {
+				if (existing_controller.window.isMiniaturized) {
+					[existing_controller.window deminiaturize:nil];
+				}
+				[existing_controller showWindow:nil];
+				[existing_controller.window makeKeyAndOrderFront:nil];
+				return;
+			}
+		}
+
 		RFPostController* controller;
 		if (post) {
 			controller = [[RFPostController alloc] initWithPost:post];
@@ -453,6 +472,25 @@
 		[alert setInformativeText:@"Add a hosted blog on Micro.blog to post to, or sign in to a WordPress or compatible weblog in the preferences window."];
 		[alert runModal];
 	}
+}
+
+- (RFPostWindowController *) postWindowControllerForPost:(RFPost *)post
+{
+	for (RFPostWindowController* window_controller in self.postWindows) {
+		RFPost* open_post = window_controller.postController.editingPost;
+		if (open_post == nil) {
+			continue;
+		}
+
+		if ((post.url.length > 0) && [open_post.url isEqualToString:post.url]) {
+			return window_controller;
+		}
+		if ((post.postID != nil) && [open_post.postID isEqual:post.postID]) {
+			return window_controller;
+		}
+	}
+
+	return nil;
 }
 
 - (IBAction) showMainWindow:(id)sender
