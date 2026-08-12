@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSProgressIndicator* progressSpinner;
 @property (strong, nonatomic, nullable) NSTextField* autosaveStatusField;
 @property (strong, nonatomic) NSTimer* previewTimer;
-@property (strong, nonatomic) NSTimer* autosaveTimer;
 
 @property (assign, nonatomic) BOOL isSavingAndClosing;
 

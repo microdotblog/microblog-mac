@@ -20,9 +20,7 @@
 #import "RFMicropub.h"
 #import "RFPost.h"
 #import "RFSettings.h"
-#import "RFAccount.h"
 #import "RFHighlightingTextStorage.h"
-#import "MBPostWindow.h"
 #import "MBUploadProgress.h"
 #import "UUString.h"
 #import "UUDate.h"
@@ -194,8 +192,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) viewDidLoad
 {
 	[super viewDidLoad];
-
-	[self restoreDraft];
 
 	[self setupTitle];
 	[self setupText];
@@ -436,35 +432,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 }
 
 #pragma mark -
-
-- (void) restoreDraft
-{
-	// only restore draft if there aren't other post windows open already
-	if ([self countPostWindows] == 0) {
-		NSString* path = [RFAccount autosaveDraftFileForChannel:self.channel];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
-			self.initialText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-		}
-	}
-}
-
-- (NSInteger) countPostWindows
-{
-	NSInteger num_windows = 0;
-	
-	NSArray* windows = CFBridgingRelease (CGWindowListCopyWindowInfo (kCGWindowListOptionOnScreenOnly, kCGNullWindowID));
-	for (NSDictionary* info in windows) {
-		NSNumber* num = [info objectForKey:(NSString *)kCGWindowNumber];
-		NSWindow* win = [[NSApplication sharedApplication] windowWithWindowNumber:num.integerValue];
-		if (win) {
-			if ([win isKindOfClass:[MBPostWindow class]]) {
-				num_windows++;
-			}
-		}
-	}
-		
-	return num_windows;
-}
 
 - (BOOL) isPage
 {

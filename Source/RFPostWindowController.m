@@ -11,7 +11,6 @@
 #import "RFPostController.h"
 #import "MBPostWindow.h"
 #import "MBPreviewController.h"
-#import "RFAccount.h"
 #import "RFConstants.h"
 
 @implementation RFPostWindowController
@@ -99,14 +98,6 @@
 
 - (void) setupAutosave
 {
-	self.autosaveTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer* timer) {
-		NSString* s = [self.postController currentText];
-		if (s.length > 0) {
-			NSString* path = [RFAccount autosaveDraftFileForChannel:self.postController.channel];
-			[s writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-		}
-	}];
-	
 	if ([self.postController isPage]) {
 		self.windowFrameAutosaveName = @"NewPageWindow";
 	}
@@ -168,18 +159,6 @@
 	r.size.height -= 14;
 	r.origin.y += 14;
 	[self.window setFrame:r display:NO];
-}
-
-- (void) clearAutosaveDraft
-{
-	NSString* path = [RFAccount autosaveDraftFileForChannel:self.postController.channel];
-	NSFileManager* fm = [NSFileManager defaultManager];
-	BOOL is_dir = NO;
-	if ([fm fileExistsAtPath:path isDirectory:&is_dir]) {
-		if (!is_dir) {
-			[fm removeItemAtPath:path error:NULL];
-		}
-	}
 }
 
 - (BOOL) isFrontPostWindow
@@ -305,9 +284,7 @@
 			else if (returnCode == 1002) {
 				// don't save
 				[self.previewTimer invalidate];
-				[self.autosaveTimer invalidate];
 				[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
-				[self clearAutosaveDraft];
 				[self close];
 			}
 		}];
@@ -317,9 +294,7 @@
 	else {
 		// close because we can't save this as a draft
 		[self.previewTimer invalidate];
-		[self.autosaveTimer invalidate];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
-		[self clearAutosaveDraft];
 		[self close];
 		
 		return YES;
@@ -345,7 +320,6 @@
 - (void) windowWillCloseNotification:(NSNotification *)notification
 {
 	[self.previewTimer invalidate];
-	[self.autosaveTimer invalidate];
 	[self.postController stopServerAutosave];
 
 	dispatch_async (dispatch_get_main_queue(), ^{
@@ -408,9 +382,7 @@
 {
 	if (self.isSavingAndClosing) {
 		[self.previewTimer invalidate];
-		[self.autosaveTimer invalidate];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
-		[self clearAutosaveDraft];
 		[self close];
 	}
 }

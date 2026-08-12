@@ -13,7 +13,6 @@
 
 @property (strong) NSString* username;
 
-+ (NSString *) autosaveDraftFileForChannel:(NSString *)channel;
 + (NSString *) notesFolder;
 + (NSString *) backupsFolder;
 + (NSString *) logsFolder;
