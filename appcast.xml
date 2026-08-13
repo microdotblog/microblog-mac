@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.0.6</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Added auto-saving drafts when writing longer posts.</li>
+					<li>Fixed issues editing drafts and updating the Posts list.</li>
+					<li>Fixed potential crashes while reloading posts with photo thumbnails.</li>
+					<li>Fixed opening the same draft more than once so the window is brought to the front.</li>
+				</ul>
+			]]></description>
+			<pubDate>Wed, 12 Aug 2026 20:40:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.0.6.zip" sparkle:shortVersionString="4.0.6" sparkle:version="252" length="18410848" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.0.5</title>
  			<description><![CDATA[
 				<style>
