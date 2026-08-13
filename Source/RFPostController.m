@@ -728,16 +728,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	return YES;
 }
 
-- (void) updateSelectedCheckboxes
-{
-	if (self.isShowingCategories) {
-		self.selectedCategories = [self currentSelectedCategories];
-	}
-	if (self.isShowingCrosspostServices) {
-		self.selectedCrosspostUIDs = [self currentSelectedCrossposting];
-	}
-}
-
 - (CGFloat) widthForCheckboxTitle:(NSString *)title
 {
 	NSDictionary* attrs = @{NSFontAttributeName: [NSFont systemFontOfSize:13]};
@@ -824,7 +814,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) toggleCategories:(id)sender
 {
-	[self updateSelectedCheckboxes];
 	BOOL was_showing_categories = self.isShowingCategories;
 
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetInitialCategoryDisplay) object:nil];
@@ -845,8 +834,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) toggleCrossposting:(id)sender
 {
-	[self updateSelectedCheckboxes];
-
 	self.isShowingCrosspostServices = !self.isShowingCrosspostServices;
 	[[NSUserDefaults standardUserDefaults] setBool:self.isShowingCrosspostServices forKey:kIsShowingCrosspostServices];
 
@@ -856,8 +843,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (IBAction) toggleSummary:(id)sender
 {
-	[self updateSelectedCheckboxes];
-
 	self.isShowingSummary = !self.isShowingSummary;
 
 	[self updateSummaryPane];
@@ -1135,10 +1120,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return;
 	}
 
-	if (self.isShowingCategories) {
-		[self updateSelectedCheckboxes];
-	}
-
 	NSArray* updated_categories = [self categoriesByReplacingCategoryName:old_name withName:new_name inCategories:self.categories];
 	NSArray* updated_selected = [self categoriesByReplacingCategoryName:old_name withName:new_name inCategories:self.selectedCategories];
 	BOOL did_update_initial = [self.initialCategoryName isEqualToString:old_name];
@@ -1302,7 +1283,35 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return;
 	}
 
-	[self updateSelectedCheckboxes];
+	if ([item isKindOfClass:[RFCategoryCell class]]) {
+		RFCategoryCell* category_item = (RFCategoryCell *)item;
+		NSString* category_name = category_item.categoryCheckbox.title;
+		NSMutableArray* selected_categories = [self.selectedCategories mutableCopy] ?: [NSMutableArray array];
+		if (category_item.categoryCheckbox.state == NSControlStateValueOn) {
+			if (![selected_categories containsObject:category_name]) {
+				[selected_categories addObject:category_name];
+			}
+		}
+		else {
+			[selected_categories removeObject:category_name];
+		}
+		self.selectedCategories = [selected_categories copy];
+	}
+	else if ([item isKindOfClass:[MBCrosspostCell class]]) {
+		MBCrosspostCell* crosspost_item = (MBCrosspostCell *)item;
+		NSString* service_uid = crosspost_item.uid;
+		NSMutableArray* selected_uids = [self.selectedCrosspostUIDs mutableCopy] ?: [NSMutableArray array];
+		if (crosspost_item.nameCheckbox.state == NSControlStateValueOn) {
+			if (![selected_uids containsObject:service_uid]) {
+				[selected_uids addObject:service_uid];
+			}
+		}
+		else {
+			[selected_uids removeObject:service_uid];
+		}
+		self.selectedCrosspostUIDs = [selected_uids copy];
+	}
+
 	[self updateEditedState];
 }
 
@@ -1557,8 +1566,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (NSDictionary *) currentServerAutosavePayload
 {
-	[self updateSelectedCheckboxes];
-
 	return @{
 		@"title": [self currentTitle] ?: @"",
 		@"text": [self currentText] ?: @"",
@@ -1862,48 +1869,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 }
 
-- (NSArray *) currentSelectedCategories
-{
-	NSMutableArray* categories = [NSMutableArray array];
-	
-	if (self.isShowingCategories) {
-		NSUInteger num = [self.categoriesCollectionView numberOfItemsInSection:0];
-		for (NSUInteger i = 0; i < num; i++) {
-			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
-    		NSCollectionViewItem* item = [self.categoriesCollectionView itemAtIndexPath:index_path];
-    		if ([item isKindOfClass:[RFCategoryCell class]]) {
-				RFCategoryCell* cell = (RFCategoryCell *)item;
-				if (cell.categoryCheckbox.state == NSControlStateValueOn) {
-					[categories addObject:cell.categoryCheckbox.title];
-				}
-    		}
-		}
-	}
-	
-	return categories;
-}
-
-- (NSArray *) currentSelectedCrossposting
-{
-	NSMutableArray* uids = [NSMutableArray array];
-
-	if (self.isShowingCrosspostServices) {
-		NSUInteger num = [self.crosspostCollectionView numberOfItemsInSection:0];
-		for (NSUInteger i = 0; i < num; i++) {
-			NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
-			NSCollectionViewItem* item = [self.crosspostCollectionView itemAtIndexPath:index_path];
-			if ([item isKindOfClass:[MBCrosspostCell class]]) {
-				MBCrosspostCell* cell = (MBCrosspostCell *)item;
-				if (cell.nameCheckbox.state == NSControlStateValueOn) {
-					[uids addObject:cell.uid];
-				}
-			}
-		}
-	}
-
-	return uids;
-}
-
 #pragma mark -
 
 - (BOOL) checkVideoFile:(NSURL *)fileURL
@@ -2134,9 +2099,6 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) uploadPost
 {
-	// update selected categories and cross-posting if visible
-	[self updateSelectedCheckboxes];
-	
 	// upload photos and then text
 	NSString* s = [self currentText];
 	if ((s.length > 0) || (self.attachedPhotos.count > 0)) {

@@ -144,7 +144,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kAutosavedDraftDidCreateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autosavedDraftDidCreateNotification:) name:kAutosavedDraftDidCreateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autosavedDraftDidUpdateNotification:) name:kAutosavedDraftDidUpdateNotification object:nil];
 }
 
@@ -876,6 +876,15 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 - (void) draftDidUpdateNotification:(NSNotification *)notification
 {
 	[self fetchPosts];
+	[self fetchDrafts];
+}
+
+- (void) autosavedDraftDidCreateNotification:(NSNotification *)notification
+{
+	if (self.isShowingPages) {
+		return;
+	}
+
 	[self fetchDrafts];
 }
 

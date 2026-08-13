@@ -81,6 +81,7 @@
 - (NSString *) postButtonTitle;
 - (BOOL) isPage;
 - (void) refreshDestinationsCache;
+- (NSString *) currentDestinationUID;
 
 - (NSString *) currentTitle;
 - (NSString *) currentText;

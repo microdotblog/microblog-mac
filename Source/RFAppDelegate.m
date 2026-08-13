@@ -476,8 +476,11 @@
 
 - (RFPostWindowController *) postWindowControllerForPost:(RFPost *)post
 {
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+
 	for (RFPostWindowController* window_controller in self.postWindows) {
-		RFPost* open_post = window_controller.postController.editingPost;
+		RFPostController* post_controller = window_controller.postController;
+		RFPost* open_post = post_controller.editingPost;
 		if (open_post == nil) {
 			continue;
 		}
@@ -485,7 +488,11 @@
 		if ((post.url.length > 0) && [open_post.url isEqualToString:post.url]) {
 			return window_controller;
 		}
-		if ((post.postID != nil) && [open_post.postID isEqual:post.postID]) {
+
+		BOOL is_matching_draft = post.isDraft && open_post.isDraft;
+		BOOL is_matching_channel = [post_controller.channel isEqualToString:post.channel];
+		BOOL is_matching_destination = [[post_controller currentDestinationUID] isEqualToString:destination_uid];
+		if (is_matching_draft && is_matching_channel && is_matching_destination && (post.postID != nil) && [open_post.postID isEqual:post.postID]) {
 			return window_controller;
 		}
 	}
