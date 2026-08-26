@@ -2893,7 +2893,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	__block BOOL didCompleteUpload = NO;
 	__block BOOL reportedFailure = NO;
 
-	[uploader uploadFileInBackground:video_path completion:^(CGFloat percent) {
+	[uploader uploadFileInBackground:video_path completion:^(CGFloat percent, NSError* error) {
 		__strong typeof(self) strongSelf = weakSelf;
 		if (!strongSelf) {
 			return;
@@ -2901,9 +2901,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 		NSLog(@"Uploading video: %f", percent);
 
-		if (!didCompleteUpload && percent <= 0.0 && uploader.currentFileID == nil && !reportedFailure) {
+		if (error && !reportedFailure) {
 			reportedFailure = YES;
-			[strongSelf handleVideoUploadFailureWithMessage:@"The video file could not be opened." photo:photo];
+			NSString* message = [error mb_networkMessageWithResponse:nil];
+			[strongSelf handleVideoUploadFailureWithMessage:message photo:photo];
 			return;
 		}
 

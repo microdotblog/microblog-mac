@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) BOOL cancelRequested;
 @property (strong, nonatomic, nullable) NSFileHandle* fileHandle;
 
-- (void) uploadFileInBackground:(NSString *)path completion:(void (^)(CGFloat))handler;
-- (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat))handler;
+- (void) uploadFileInBackground:(NSString *)path completion:(void (^)(CGFloat percent, NSError* _Nullable error))handler;
+- (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat percent, NSError* _Nullable error))handler;
 - (void) uploadFinished:(void (^)(BOOL))handler;
 - (void) cancelUpload;
 
