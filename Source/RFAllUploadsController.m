@@ -27,7 +27,7 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
-static NSInteger const kInitialUploadsLimit = 20;
+static NSInteger const kInitialUploadsLimit = 30;
 static NSInteger const kUploadsLimit = 200;
 
 @interface RFAllUploadsController () <NSTextFieldDelegate>
