@@ -1138,7 +1138,8 @@ static NSInteger const kUploadsLimit = 200;
 					}
 
 					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
-					[self uploadPhoto:photo completion:^{
+					NSString* filename = [filepath lastPathComponent];
+					[self uploadPhoto:photo filename:filename completion:^{
 						[self finishUpload:filepath];
 						[self uploadNextPhoto:paths];
 					}];
@@ -1158,7 +1159,7 @@ static NSInteger const kUploadsLimit = 200;
 	}
 }
 
-- (void) uploadPhoto:(RFPhoto *)photo completion:(void (^)(void))handler
+- (void) uploadPhoto:(RFPhoto *)photo filename:(NSString *)filename completion:(void (^)(void))handler
 {
 	NSData* d = [photo jpegData];
 	if (d == nil) {
@@ -1181,7 +1182,7 @@ static NSInteger const kUploadsLimit = 200;
 	NSDictionary* args = @{
 		@"mp-destination": destination_uid
 	};
-	[client uploadImageData:d named:@"file" filename:nil httpMethod:@"POST" queryArguments:args isVideo:is_video isGIF:is_gif isPNG:is_png completion:^(UUHttpResponse* response) {
+	[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:is_video isGIF:is_gif isPNG:is_png completion:^(UUHttpResponse* response) {
 		NSDictionary* headers = response.httpResponse.allHeaderFields;
 		NSString* image_url = headers[@"Location"];
 		RFDispatchMainAsync (^{
