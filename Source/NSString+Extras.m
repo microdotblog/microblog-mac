@@ -49,6 +49,16 @@
 	return content_type;
 }
 
+- (NSString *) mb_escapedMultipartFilename
+{
+	NSString* s = [self lastPathComponent];
+	s = [s stringByReplacingOccurrencesOfString:@"\r" withString:@" "];
+	s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+	s = [s stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+	s = [s stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+	return s;
+}
+
 + (NSString *) mb_openInBrowserString
 {
 	NSString* browser_s = @"Open in Browser";

@@ -19,24 +19,24 @@ static NSString* const kMBUploadProgressErrorDomain = @"MBUploadProgressErrorDom
 
 @property (copy, nonatomic) NSString* destinationUID;
 
-- (void) uploadNextChunkWithClient:(RFClient *)client fileHandle:(NSFileHandle *)fileHandle fileID:(NSString *)fileID destinationUID:(NSString *)destinationUID fileSize:(unsigned long long)fileSize bytesUploaded:(unsigned long long)bytesUploaded completion:(void (^)(CGFloat percent, NSError* error))handler;
+- (void) uploadNextChunkWithClient:(RFClient *)client fileHandle:(NSFileHandle *)fileHandle fileID:(NSString *)fileID destinationUID:(NSString *)destinationUID fileSize:(unsigned long long)fileSize bytesUploaded:(unsigned long long)bytesUploaded completion:(void (^)(CGFloat percent, NSError * error))handler;
 - (NSError *) uploadErrorForResponse:(UUHttpResponse *)response;
 - (NSError *) uploadErrorWithDescription:(NSString *)description;
-- (void) failUploadWithError:(NSError *)error completion:(void (^)(CGFloat percent, NSError* handlerError))handler;
+- (void) failUploadWithError:(NSError *)error completion:(void (^)(CGFloat percent, NSError * handlerError))handler;
 - (void) closeFileHandle;
 
 @end
 
 @implementation MBUploadProgress
 
-- (void) uploadFileInBackground:(NSString *)path completion:(void (^)(CGFloat percent, NSError* error))handler
+- (void) uploadFileInBackground:(NSString *)path completion:(void (^)(CGFloat percent, NSError * error))handler
 {
 	RFDispatchThread(^{
 		[self uploadFile:path completion:handler];
 	});
 }
 
-- (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat percent, NSError* error))handler
+- (void) uploadFile:(NSString *)path completion:(void (^)(CGFloat percent, NSError * error))handler
 {
 	if (self.cancelRequested) {
 		return;
@@ -84,7 +84,7 @@ static NSString* const kMBUploadProgressErrorDomain = @"MBUploadProgressErrorDom
 	[self uploadNextChunkWithClient:client fileHandle:fileHandle fileID:fileID destinationUID:destination_uid fileSize:fileSize bytesUploaded:0 completion:handler];
 }
 
-- (void) uploadNextChunkWithClient:(RFClient *)client fileHandle:(NSFileHandle *)fileHandle fileID:(NSString *)fileID destinationUID:(NSString *)destinationUID fileSize:(unsigned long long)fileSize bytesUploaded:(unsigned long long)bytesUploaded completion:(void (^)(CGFloat percent, NSError* error))handler
+- (void) uploadNextChunkWithClient:(RFClient *)client fileHandle:(NSFileHandle *)fileHandle fileID:(NSString *)fileID destinationUID:(NSString *)destinationUID fileSize:(unsigned long long)fileSize bytesUploaded:(unsigned long long)bytesUploaded completion:(void (^)(CGFloat percent, NSError * error))handler
 {
 	@autoreleasepool {
 		if (self.cancelRequested) {
@@ -176,7 +176,7 @@ static NSString* const kMBUploadProgressErrorDomain = @"MBUploadProgressErrorDom
 	return [NSError errorWithDomain:kMBUploadProgressErrorDomain code:1 userInfo:@{ NSLocalizedDescriptionKey: description }];
 }
 
-- (void) failUploadWithError:(NSError *)error completion:(void (^)(CGFloat percent, NSError* handlerError))handler
+- (void) failUploadWithError:(NSError *)error completion:(void (^)(CGFloat percent, NSError * handlerError))handler
 {
 	[self closeFileHandle];
 	self.currentFileID = nil;
