@@ -29,6 +29,7 @@
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static NSInteger const kInitialUploadsLimit = 30;
 static NSInteger const kUploadsLimit = 200;
+static CGFloat const kUploadCellCornerRadius = 4.0;
 
 @interface RFAllUploadsController () <NSTextFieldDelegate>
 
@@ -315,7 +316,6 @@ static NSInteger const kUploadsLimit = 200;
 	if (![context isEqualToString:self.loadedUploadsContext]) {
 		self.loadedUploadsContext = nil;
 		[self replaceUploads:@[]];
-		self.blogNameButton.hidden = YES;
 		self.collectionView.alphaValue = 0.0;
 	}
 }
@@ -1448,6 +1448,9 @@ static NSInteger const kUploadsLimit = 200;
 {
 	NSUserInterfaceItemIdentifier identifier = self.photoCellIdentifier ?: kPhotoCellIdentifier;
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:identifier forIndexPath:indexPath];
+	item.view.wantsLayer = YES;
+	item.view.layer.cornerRadius = kUploadCellCornerRadius;
+	item.view.layer.masksToBounds = YES;
 	if (indexPath.item >= self.allPosts.count) {
 		item.url = nil;
 		item.poster_url = nil;
