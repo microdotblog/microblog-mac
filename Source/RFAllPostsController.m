@@ -387,7 +387,6 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	NSInteger request_id = self.postsRequestID;
 
 	self.currentPosts = @[];
-	self.blogNameButton.hidden = YES;
 	self.tableView.animator.alphaValue = 0.0;
 
 	if (search.length == 0) {

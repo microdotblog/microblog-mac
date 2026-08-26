@@ -25,15 +25,47 @@
 - (void) paste:(id)sender
 {
 	NSPasteboard* pb = [NSPasteboard generalPasteboard];
-	NSString* type = [pb availableTypeFromArray:@[
+	NSDictionary* options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES };
+	NSArray* urls = [pb readObjectsForClasses:@[[NSURL class]] options:options];
+	NSMutableArray* paths = [NSMutableArray array];
+	for (NSURL* url in urls) {
+		if (url.isFileURL && (url.path.length > 0)) {
+			[paths addObject:url.path];
+		}
+	}
+
+	if (paths.count > 0) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: paths }];
+		return;
+	}
+
+	NSArray* types = @[
 		NSPasteboardTypePNG,
 		NSPasteboardTypeTIFF
-	]];
-	if (type) {
-		NSData* data  = [pb dataForType:type];
+	];
+	NSPasteboardType type = nil;
+	NSPasteboardItem* image_item = nil;
+	for (NSPasteboardType candidate_type in types) {
+		for (NSPasteboardItem* item in pb.pasteboardItems) {
+			if ([item.types containsObject:candidate_type]) {
+				type = candidate_type;
+				image_item = item;
+				break;
+			}
+		}
+
+		if (image_item != nil) {
+			break;
+		}
+	}
+
+	if (image_item != nil) {
+		NSData* data = [image_item dataForType:type];
 		NSImage* image = [[NSImage alloc] initWithData:data];
-		[self handlePastedImage:image ofType:type];
-		return;
+		if (image != nil) {
+			[self handlePastedImage:image ofType:type];
+			return;
+		}
 	}
 }
 

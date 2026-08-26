@@ -33,9 +33,7 @@
 {
 	RFUpload* up = [[RFUpload alloc] initWithURL:self.url];
 	up.poster_url = self.poster_url;
-	if (![up isAudio]) {
-		[[self.htmlWithoutPlayerItem menu] removeItem:self.htmlWithoutPlayerItem];
-	}
+	self.htmlWithoutPlayerItem.hidden = ![up isAudio];
 }
 
 - (void) setupForCollection:(MBCollection *)collection

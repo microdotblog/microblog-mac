@@ -27,12 +27,22 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
+static NSInteger const kInitialUploadsLimit = 30;
+static NSInteger const kUploadsLimit = 200;
+static CGFloat const kUploadCellCornerRadius = 4.0;
 
 @interface RFAllUploadsController () <NSTextFieldDelegate>
 
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
 @property (assign, nonatomic) NSInteger uploadsRequestID;
+@property (assign, nonatomic) NSInteger collectionsRequestID;
+@property (assign, nonatomic) BOOL isFetchingUploads;
+@property (assign, nonatomic) BOOL isCheckingForNewUploads;
+@property (assign, nonatomic) BOOL needsUploadsRetry;
 @property (copy, nonatomic) NSString* currentSearch;
+@property (copy, nonatomic) NSString* loadedUploadsContext;
+
+- (void) fetchInitialUploads;
 
 @end
 
@@ -56,7 +66,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self setupNotifications];
 	self.searchField.delegate = self;
 	
-    [self fetchUploads];
+	[self fetchInitialUploads];
 	[self fetchCollections];
 }
 
@@ -193,26 +203,230 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self.collectionView layoutSubtreeIfNeeded];
 }
 
-- (void) fetchUploadsForSearch:(NSString *)search
+- (void) appendUploads:(NSArray *)uploads
+{
+	if (uploads.count == 0) {
+		return;
+	}
+
+	NSMutableArray* combined_uploads = self.allPosts ? [self.allPosts mutableCopy] : [NSMutableArray array];
+	NSMutableSet* existing_urls = [NSMutableSet set];
+	for (RFUpload* upload in combined_uploads) {
+		if (upload.url.length > 0) {
+			[existing_urls addObject:upload.url];
+		}
+	}
+
+	NSMutableSet* index_paths = [NSMutableSet set];
+	for (RFUpload* upload in uploads) {
+		if ((upload.url.length == 0) || [existing_urls containsObject:upload.url]) {
+			continue;
+		}
+
+		NSIndexPath* index_path = [NSIndexPath indexPathForItem:combined_uploads.count inSection:0];
+		[combined_uploads addObject:upload];
+		[existing_urls addObject:upload.url];
+		[index_paths addObject:index_path];
+	}
+
+	if (index_paths.count > 0) {
+		self.allPosts = combined_uploads;
+		[self.collectionView insertItemsAtIndexPaths:index_paths];
+	}
+}
+
+- (BOOL) responseWasSuccessful:(UUHttpResponse *)response
+{
+	NSInteger status_code = response.httpResponse.statusCode;
+	return (response.httpError == nil && status_code >= 200 && status_code < 300);
+}
+
+- (NSString *) errorMessageForResponse:(UUHttpResponse *)response fallback:(NSString *)fallback
+{
+	if (response.httpError) {
+		return [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+	}
+
+	NSInteger status_code = response.httpResponse.statusCode;
+	if (status_code > 0) {
+		NSString* status_text = [NSHTTPURLResponse localizedStringForStatusCode:status_code];
+		return [NSString stringWithFormat:@"The server returned HTTP %ld (%@).", (long)status_code, status_text];
+	}
+
+	return fallback;
+}
+
+- (NSArray *) uploadsFromResponse:(UUHttpResponse *)response
+{
+	if (![self responseWasSuccessful:response] || ![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		return nil;
+	}
+
+	NSArray* items = [response.parsedResponse objectForKey:@"items"];
+	if (![items isKindOfClass:[NSArray class]]) {
+		return nil;
+	}
+
+	NSMutableArray* new_posts = [NSMutableArray array];
+	for (NSDictionary* item in items) {
+		if (![item isKindOfClass:[NSDictionary class]]) {
+			continue;
+		}
+
+		RFUpload* upload = [[RFUpload alloc] init];
+		upload.url = [item objectForKey:@"url"];
+		upload.poster_url = [item objectForKey:@"poster"];
+		upload.alt = [item objectForKey:@"alt"];
+		upload.isAI = [[item objectForKey:@"microblog-ai"] boolValue];
+
+		NSDictionary* cdn = [item objectForKey:@"cdn"];
+		if (cdn) {
+			NSString* medium_url = [cdn objectForKey:@"medium"];
+			NSString* small_url = [cdn objectForKey:@"small"];
+			if (small_url) {
+				upload.thumbnail_url = small_url;
+			}
+			else if (medium_url) {
+				upload.thumbnail_url = medium_url;
+			}
+		}
+
+		upload.width = [[item objectForKey:@"width"] integerValue];
+		upload.height = [[item objectForKey:@"height"] integerValue];
+
+		NSString* date_s = [item objectForKey:@"published"];
+		upload.createdAt = [NSDate uuDateFromRfc3339String:date_s];
+
+		[new_posts addObject:upload];
+	}
+
+	return new_posts;
+}
+
+- (NSString *) uploadsContextForSearch:(NSString *)search destinationUID:(NSString *)destinationUID collectionURL:(NSString *)collectionURL
+{
+	return [@[ destinationUID ?: @"", collectionURL ?: @"", search ?: @"" ] componentsJoinedByString:@"\n"];
+}
+
+- (void) beginFetchingUploadsForContext:(NSString *)context
+{
+	self.isFetchingUploads = YES;
+	self.needsUploadsRetry = NO;
+
+	if (![context isEqualToString:self.loadedUploadsContext]) {
+		self.loadedUploadsContext = nil;
+		[self replaceUploads:@[]];
+		self.collectionView.alphaValue = 0.0;
+	}
+}
+
+- (void) finishFetchingUploads
+{
+	[self setupBlogName];
+	[self stopLoadingSidebarRow];
+	self.blogNameButton.hidden = NO;
+	self.collectionView.alphaValue = 1.0;
+}
+
+- (void) fetchRemainingInitialUploadsForDestination:(NSString *)destinationUID requestID:(NSInteger)requestID
+{
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destinationUID,
+		@"limit": @(kUploadsLimit - kInitialUploadsLimit),
+		@"offset": @(kInitialUploadsLimit)
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSArray* remaining_uploads = [self uploadsFromResponse:response];
+
+		RFDispatchMainAsync(^{
+			if (requestID != self.uploadsRequestID) {
+				return;
+			}
+
+			self.isFetchingUploads = NO;
+			if (remaining_uploads) {
+				self.needsUploadsRetry = NO;
+				[self appendUploads:remaining_uploads];
+			}
+			else {
+				self.needsUploadsRetry = YES;
+			}
+		});
+	}];
+}
+
+- (void) fetchInitialUploads
 {
 	self.uploadsRequestID++;
 	NSInteger request_id = self.uploadsRequestID;
-
-	[self registerPhotoCellIfNeededForSearch:search];
-
-	[self replaceUploads:@[]];
-	self.blogNameButton.hidden = YES;
-	self.collectionView.alphaValue = 0.0;
 
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
 	}
+	NSString* context = [self uploadsContextForSearch:@"" destinationUID:destination_uid collectionURL:nil];
+
+	[self registerPhotoCellIfNeededForSearch:@""];
+	[self beginFetchingUploadsForContext:context];
 
 	NSDictionary* args = @{
 		@"q": @"source",
 		@"mp-destination": destination_uid,
-		@"limit": @200
+		@"limit": @(kInitialUploadsLimit)
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSArray* initial_uploads = [self uploadsFromResponse:response];
+
+		RFDispatchMainAsync(^{
+			if (request_id != self.uploadsRequestID) {
+				return;
+			}
+
+			if (initial_uploads) {
+				self.loadedUploadsContext = context;
+				self.needsUploadsRetry = NO;
+				[self replaceUploads:initial_uploads];
+			}
+			else {
+				self.needsUploadsRetry = YES;
+			}
+
+			[self finishFetchingUploads];
+
+			if (initial_uploads.count == kInitialUploadsLimit) {
+				[self fetchRemainingInitialUploadsForDestination:destination_uid requestID:request_id];
+			}
+			else {
+				self.isFetchingUploads = NO;
+			}
+		});
+	}];
+}
+
+- (void) fetchUploadsForSearch:(NSString *)search
+{
+	self.uploadsRequestID++;
+	NSInteger request_id = self.uploadsRequestID;
+
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+	NSString* collection_url = self.selectedCollection.url;
+	NSString* context = [self uploadsContextForSearch:search destinationUID:destination_uid collectionURL:collection_url];
+
+	[self registerPhotoCellIfNeededForSearch:search];
+	[self beginFetchingUploadsForContext:context];
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid,
+		@"limit": @(kUploadsLimit)
 	};
 	
 	if (search.length > 0) {
@@ -222,65 +436,32 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		args = new_args;
 	}
 	
-	if (self.selectedCollection) {
+	if (collection_url.length > 0) {
 		NSMutableDictionary* new_args = [args mutableCopy];
-		[new_args setObject:self.selectedCollection.url forKey:@"microblog-collection"];
+		[new_args setObject:collection_url forKey:@"microblog-collection"];
 		args = new_args;
 	}
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		NSMutableArray* new_posts = nil;
-
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			new_posts = [NSMutableArray array];
-
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			for (NSDictionary* item in items) {
-				RFUpload* upload = [[RFUpload alloc] init];
-				upload.url = [item objectForKey:@"url"];
-				upload.poster_url = [item objectForKey:@"poster"];
-				upload.alt = [item objectForKey:@"alt"];
-				upload.isAI = [[item objectForKey:@"microblog-ai"] boolValue];
-				
-				NSDictionary* cdn = [item objectForKey:@"cdn"];
-				if (cdn) {
-					NSString* medium_url = [cdn objectForKey:@"medium"];
-					NSString* small_url = [cdn objectForKey:@"small"];
-					if (small_url) {
-						upload.thumbnail_url = small_url;
-					}
-					else if (medium_url) {
-						upload.thumbnail_url = medium_url;
-					}
-				}
-
-				upload.width = [[item objectForKey:@"width"] integerValue];
-				upload.height = [[item objectForKey:@"height"] integerValue];
-
-				NSString* date_s = [item objectForKey:@"published"];
-				upload.createdAt = [NSDate uuDateFromRfc3339String:date_s];
-
-				[new_posts addObject:upload];
-			}
-		}
+		NSArray* new_posts = [self uploadsFromResponse:response];
 			
 		RFDispatchMainAsync (^{
 			if (request_id != self.uploadsRequestID) {
 				return;
 			}
 
+			self.isFetchingUploads = NO;
 			if (new_posts) {
+				self.loadedUploadsContext = context;
+				self.needsUploadsRetry = NO;
 				[self replaceUploads:new_posts];
 			}
 			else {
-				[self.collectionView reloadData];
+				self.needsUploadsRetry = YES;
 			}
 
-			[self setupBlogName];
-			[self stopLoadingSidebarRow];
-			self.blogNameButton.hidden = NO;
-			self.collectionView.alphaValue = 1.0;
+			[self finishFetchingUploads];
 		});
 	}];
 }
@@ -304,6 +485,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	else {
 		// for short keywords we don't support, clear view
 		self.uploadsRequestID++;
+		self.isFetchingUploads = NO;
+		self.needsUploadsRetry = NO;
+		self.loadedUploadsContext = nil;
 		[self registerPhotoCellIfNeededForSearch:@""];
 		[self replaceUploads:@[]];
 		[self setupBlogName];
@@ -331,6 +515,13 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	if (self.selectedCollection || self.currentSearch.length > 0) {
 		return;
 	}
+	if (self.isFetchingUploads || self.isCheckingForNewUploads) {
+		return;
+	}
+	if (self.needsUploadsRetry) {
+		[self refreshUploadsForCurrentFilter];
+		return;
+	}
 
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
@@ -342,21 +533,21 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		@"mp-destination": destination_uid,
 		@"limit": @1
 	};
+	self.isCheckingForNewUploads = YES;
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			return;
-		}
-		
-		NSArray* items = [response.parsedResponse objectForKey:@"items"];
-		NSDictionary* first_item = [items firstObject];
-		NSString* latest_url = [first_item objectForKey:@"url"];
-		if (latest_url.length == 0) {
-			return;
-		}
+		NSArray* uploads = [self uploadsFromResponse:response];
+		RFUpload* latest_upload = [uploads firstObject];
+		NSString* latest_url = latest_upload.url;
 		
 		RFDispatchMainAsync(^{
+			self.isCheckingForNewUploads = NO;
+			NSString* current_destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+			if (self.isFetchingUploads || ![destination_uid isEqualToString:current_destination_uid] || self.selectedCollection || self.currentSearch.length > 0 || latest_url.length == 0) {
+				return;
+			}
+
 			RFUpload* first_upload = [self.allPosts firstObject];
 			NSString* current_url = first_upload.url;
 			if (![latest_url isEqualToString:current_url]) {
@@ -368,6 +559,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) fetchCollections
 {
+	self.collectionsRequestID++;
+	NSInteger request_id = self.collectionsRequestID;
+
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
@@ -380,8 +574,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if ([[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
+		if ([self responseWasSuccessful:response] && [[response parsedResponse] isKindOfClass:[NSDictionary class]]) {
 			NSArray* items = [[response parsedResponse] objectForKey:@"items"];
+			if (![items isKindOfClass:[NSArray class]]) {
+				return;
+			}
 			NSString* s = @"";
 			NSMutableDictionary* collection_names_by_url = [NSMutableDictionary dictionary];
 			if (items.count > 0) {
@@ -402,7 +599,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 				}
 			}
 
-			RFDispatchMain(^{
+			RFDispatchMainAsync(^{
+				NSString* current_destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+				if (request_id != self.collectionsRequestID || ![destination_uid isEqualToString:current_destination_uid]) {
+					return;
+				}
+
 				NSString* selected_url = self.selectedCollection.url;
 				NSString* selected_name = nil;
 				if (selected_url.length > 0) {
@@ -793,7 +995,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	__block BOOL didCompleteUpload = NO;
 	__block BOOL reportedFailure = NO;
 
-	[uploader uploadFileInBackground:path completion:^(CGFloat percent) {
+	[uploader uploadFileInBackground:path completion:^(CGFloat percent, NSError* error) {
 		__strong typeof(self) strongSelf = weakSelf;
 		if (!strongSelf) {
 			return;
@@ -803,11 +1005,12 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			return;
 		}
 
-		if (!didCompleteUpload && percent <= 0.0 && uploader.currentFileID == nil && !reportedFailure) {
+		if (error && !reportedFailure) {
 			reportedFailure = YES;
 			[strongSelf restoreProgressSpinnerAfterVideoUpload];
 			strongSelf.uploader = nil;
-			[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video file could not be opened." button:@"OK" completionHandler:NULL];
+			NSString* message = [error mb_networkMessageWithResponse:nil];
+			[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:message button:@"OK" completionHandler:NULL];
 			if (handler && !uploader.cancelRequested) {
 				handler();
 			}
@@ -915,20 +1118,33 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 		NSString* e = [[filepath pathExtension] lowercaseString];
 		if ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"]) {
-			NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
-			NSImage* scaled_img;
-			if ([RFSettings isPremium]) {
-				scaled_img = [img rf_scaleToSmallestDimension:3000];
-			}
-			else {
-				scaled_img = [img rf_scaleToSmallestDimension:1800];
-			}
-			RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
+			RFDispatchThread(^{
+				@autoreleasepool {
+					NSImage* img = [[NSImage alloc] initWithContentsOfFile:filepath];
+					NSImage* scaled_img;
+					if ([RFSettings isPremium]) {
+						scaled_img = [img rf_scaleToSmallestDimension:3000];
+					}
+					else {
+						scaled_img = [img rf_scaleToSmallestDimension:1800];
+					}
 
-			[self uploadPhoto:photo completion:^{
-				[self finishUpload:filepath];
-				[self uploadNextPhoto:paths];
-			}];
+					if (scaled_img == nil) {
+						RFDispatchMainAsync(^{
+							[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"The photo file could not be read." button:@"OK" completionHandler:NULL];
+							[self hideUploadProgress];
+						});
+						return;
+					}
+
+					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
+					NSString* filename = [filepath lastPathComponent];
+					[self uploadPhoto:photo filename:filename completion:^{
+						[self finishUpload:filepath];
+						[self uploadNextPhoto:paths];
+					}];
+				}
+			});
 		}
 		else {
 			[self uploadFile:filepath completion:^{
@@ -943,9 +1159,17 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	}
 }
 
-- (void) uploadPhoto:(RFPhoto *)photo completion:(void (^)(void))handler
+- (void) uploadPhoto:(RFPhoto *)photo filename:(NSString *)filename completion:(void (^)(void))handler
 {
 	NSData* d = [photo jpegData];
+	if (d == nil) {
+		RFDispatchMainAsync(^{
+			[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"The photo file could not be prepared for upload." button:@"OK" completionHandler:NULL];
+			[self hideUploadProgress];
+		});
+		return;
+	}
+
 	BOOL is_video = NO;
 	BOOL is_gif = NO;
 	BOOL is_png = NO;
@@ -958,11 +1182,16 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSDictionary* args = @{
 		@"mp-destination": destination_uid
 	};
-	[client uploadImageData:d named:@"file" filename:nil httpMethod:@"POST" queryArguments:args isVideo:is_video isGIF:is_gif isPNG:is_png completion:^(UUHttpResponse* response) {
+	[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:is_video isGIF:is_gif isPNG:is_png completion:^(UUHttpResponse* response) {
 		NSDictionary* headers = response.httpResponse.allHeaderFields;
 		NSString* image_url = headers[@"Location"];
 		RFDispatchMainAsync (^{
-			if (image_url == nil) {
+			if (![self responseWasSuccessful:response]) {
+				NSString* message = [self errorMessageForResponse:response fallback:@"The photo could not be uploaded."];
+				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:message button:@"OK" completionHandler:NULL];
+				[self hideUploadProgress];
+			}
+			else if (image_url == nil) {
 				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
 				[self hideUploadProgress];
 			}
@@ -975,37 +1204,48 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) uploadFile:(NSString *)path completion:(void (^)(void))handler
 {
-	NSData* d = [NSData dataWithContentsOfFile:path];
-	
-	NSString* filename = [path lastPathComponent];
-	NSString* content_type = [path mb_contentType];
+	RFDispatchThread(^{
+		@autoreleasepool {
+			NSData* d = [NSData dataWithContentsOfFile:path];
+			if (d == nil) {
+				RFDispatchMainAsync(^{
+					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The file could not be read." button:@"OK" completionHandler:NULL];
+					[self hideUploadProgress];
+				});
+				return;
+			}
 
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	if (destination_uid == nil) {
-		destination_uid = @"";
-	}
-	NSDictionary* args = @{
-		@"mp-destination": destination_uid
-	};
-	[client uploadFileData:d named:@"file" filename:filename contentType:content_type httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
-		NSDictionary* headers = response.httpResponse.allHeaderFields;
-		NSString* image_url = headers[@"Location"];
-		RFDispatchMainAsync ((^{
-			if (response.httpError) {
-				NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
-				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:msg button:@"OK" completionHandler:NULL];
-				[self hideUploadProgress];
+			NSString* filename = [path lastPathComponent];
+			NSString* content_type = [path mb_contentType];
+
+			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+			if (destination_uid == nil) {
+				destination_uid = @"";
 			}
-			else if (image_url == nil) {
-				[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
-				[self hideUploadProgress];
-			}
-			else {
-				handler();
-			}
-		}));
-	}];
+			NSDictionary* args = @{
+				@"mp-destination": destination_uid
+			};
+			[client uploadFileData:d named:@"file" filename:filename contentType:content_type httpMethod:@"POST" queryArguments:args completion:^(UUHttpResponse* response) {
+				NSDictionary* headers = response.httpResponse.allHeaderFields;
+				NSString* image_url = headers[@"Location"];
+				RFDispatchMainAsync ((^{
+					if (![self responseWasSuccessful:response]) {
+						NSString* message = [self errorMessageForResponse:response fallback:@"The file could not be uploaded."];
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:message button:@"OK" completionHandler:NULL];
+						[self hideUploadProgress];
+					}
+					else if (image_url == nil) {
+						[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
+						[self hideUploadProgress];
+					}
+					else {
+						handler();
+					}
+				}));
+			}];
+		}
+	});
 }
 
 - (void) finishUpload:(NSString *)path
@@ -1114,8 +1354,15 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 			[self.progressSpinner stopAnimation:nil];
 			self.blogNameButton.hidden = NO;
 
-			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+			if (![self responseWasSuccessful:response]) {
+				NSString* message = [self errorMessageForResponse:response fallback:@"The upload could not be deleted."];
+				[NSAlert rf_showOneButtonAlert:@"Error Deleting Upload" message:message button:@"OK" completionHandler:NULL];
+			}
+			else if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
 				NSString* msg = response.parsedResponse[@"error_description"];
+				if (msg.length == 0) {
+					msg = @"The upload could not be deleted.";
+				}
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Upload" message:msg button:@"OK" completionHandler:NULL];
 			}
 			else {
@@ -1201,6 +1448,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 {
 	NSUserInterfaceItemIdentifier identifier = self.photoCellIdentifier ?: kPhotoCellIdentifier;
 	RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:identifier forIndexPath:indexPath];
+	item.view.wantsLayer = YES;
+	item.view.layer.cornerRadius = kUploadCellCornerRadius;
+	item.view.layer.masksToBounds = YES;
 	if (indexPath.item >= self.allPosts.count) {
 		item.url = nil;
 		item.poster_url = nil;

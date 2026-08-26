@@ -245,8 +245,9 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 			}
 		}
 
+		NSString* escaped_filename = [actual_filename mb_escapedMultipartFilename];
 		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, actual_filename] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, escaped_filename] dataUsingEncoding:NSUTF8StringEncoding]];
 		[d appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", content_type] dataUsingEncoding:NSUTF8StringEncoding]];
 		[d appendData:imageData];
 		[d appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -285,8 +286,9 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	}
 
 	if (imageData) {
+		NSString* escaped_filename = [filename mb_escapedMultipartFilename];
 		[d appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, filename] dataUsingEncoding:NSUTF8StringEncoding]];
+		[d appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", imageName, escaped_filename] dataUsingEncoding:NSUTF8StringEncoding]];
 		[d appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
 		[d appendData:imageData];
 		[d appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];

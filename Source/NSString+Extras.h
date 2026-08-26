@@ -16,6 +16,7 @@
 - (NSString *) rf_stringEscapingQuotes;
 
 - (NSString *) mb_contentType;
+- (NSString *) mb_escapedMultipartFilename;
 + (NSString *) mb_openInBrowserString;
 
 @end
