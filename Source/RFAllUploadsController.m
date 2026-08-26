@@ -27,12 +27,16 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
+static NSInteger const kInitialUploadsLimit = 20;
+static NSInteger const kUploadsLimit = 200;
 
 @interface RFAllUploadsController () <NSTextFieldDelegate>
 
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
 @property (assign, nonatomic) NSInteger uploadsRequestID;
 @property (copy, nonatomic) NSString* currentSearch;
+
+- (void) fetchInitialUploads;
 
 @end
 
@@ -56,7 +60,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
     [self setupNotifications];
 	self.searchField.delegate = self;
 	
-    [self fetchUploads];
+	[self fetchInitialUploads];
 	[self fetchCollections];
 }
 
@@ -193,6 +197,152 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	[self.collectionView layoutSubtreeIfNeeded];
 }
 
+- (void) appendUploads:(NSArray *)uploads
+{
+	if (uploads.count == 0) {
+		return;
+	}
+
+	NSMutableArray* combined_uploads = self.allPosts ? [self.allPosts mutableCopy] : [NSMutableArray array];
+	NSMutableSet* existing_urls = [NSMutableSet set];
+	for (RFUpload* upload in combined_uploads) {
+		if (upload.url.length > 0) {
+			[existing_urls addObject:upload.url];
+		}
+	}
+
+	NSMutableSet* index_paths = [NSMutableSet set];
+	for (RFUpload* upload in uploads) {
+		if ((upload.url.length == 0) || [existing_urls containsObject:upload.url]) {
+			continue;
+		}
+
+		NSIndexPath* index_path = [NSIndexPath indexPathForItem:combined_uploads.count inSection:0];
+		[combined_uploads addObject:upload];
+		[existing_urls addObject:upload.url];
+		[index_paths addObject:index_path];
+	}
+
+	if (index_paths.count > 0) {
+		self.allPosts = combined_uploads;
+		[self.collectionView insertItemsAtIndexPaths:index_paths];
+	}
+}
+
+- (NSArray *) uploadsFromResponse:(UUHttpResponse *)response
+{
+	if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		return nil;
+	}
+
+	NSMutableArray* new_posts = [NSMutableArray array];
+	NSArray* items = [response.parsedResponse objectForKey:@"items"];
+	for (NSDictionary* item in items) {
+		RFUpload* upload = [[RFUpload alloc] init];
+		upload.url = [item objectForKey:@"url"];
+		upload.poster_url = [item objectForKey:@"poster"];
+		upload.alt = [item objectForKey:@"alt"];
+		upload.isAI = [[item objectForKey:@"microblog-ai"] boolValue];
+
+		NSDictionary* cdn = [item objectForKey:@"cdn"];
+		if (cdn) {
+			NSString* medium_url = [cdn objectForKey:@"medium"];
+			NSString* small_url = [cdn objectForKey:@"small"];
+			if (small_url) {
+				upload.thumbnail_url = small_url;
+			}
+			else if (medium_url) {
+				upload.thumbnail_url = medium_url;
+			}
+		}
+
+		upload.width = [[item objectForKey:@"width"] integerValue];
+		upload.height = [[item objectForKey:@"height"] integerValue];
+
+		NSString* date_s = [item objectForKey:@"published"];
+		upload.createdAt = [NSDate uuDateFromRfc3339String:date_s];
+
+		[new_posts addObject:upload];
+	}
+
+	return new_posts;
+}
+
+- (void) fetchRemainingInitialUploadsForDestination:(NSString *)destinationUID requestID:(NSInteger)requestID
+{
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destinationUID,
+		@"limit": @(kUploadsLimit - kInitialUploadsLimit),
+		@"offset": @(kInitialUploadsLimit)
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSArray* remaining_uploads = [self uploadsFromResponse:response];
+		if (remaining_uploads == nil) {
+			return;
+		}
+
+		RFDispatchMainAsync(^{
+			if (requestID != self.uploadsRequestID) {
+				return;
+			}
+
+			[self appendUploads:remaining_uploads];
+		});
+	}];
+}
+
+- (void) fetchInitialUploads
+{
+	self.uploadsRequestID++;
+	NSInteger request_id = self.uploadsRequestID;
+
+	[self registerPhotoCellIfNeededForSearch:@""];
+	[self replaceUploads:@[]];
+	self.blogNameButton.hidden = YES;
+	self.collectionView.alphaValue = 0.0;
+
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
+	if (destination_uid == nil) {
+		destination_uid = @"";
+	}
+
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-destination": destination_uid,
+		@"limit": @(kInitialUploadsLimit)
+	};
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSArray* initial_uploads = [self uploadsFromResponse:response];
+
+		RFDispatchMainAsync(^{
+			if (request_id != self.uploadsRequestID) {
+				return;
+			}
+
+			if (initial_uploads) {
+				[self replaceUploads:initial_uploads];
+			}
+			else {
+				[self.collectionView reloadData];
+			}
+
+			[self setupBlogName];
+			[self stopLoadingSidebarRow];
+			self.blogNameButton.hidden = NO;
+			self.collectionView.alphaValue = 1.0;
+
+			if (initial_uploads.count == kInitialUploadsLimit) {
+				[self fetchRemainingInitialUploadsForDestination:destination_uid requestID:request_id];
+			}
+		});
+	}];
+}
+
 - (void) fetchUploadsForSearch:(NSString *)search
 {
 	self.uploadsRequestID++;
@@ -212,7 +362,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 	NSDictionary* args = @{
 		@"q": @"source",
 		@"mp-destination": destination_uid,
-		@"limit": @200
+		@"limit": @(kUploadsLimit)
 	};
 	
 	if (search.length > 0) {
@@ -230,40 +380,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		NSMutableArray* new_posts = nil;
-
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			new_posts = [NSMutableArray array];
-
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
-			for (NSDictionary* item in items) {
-				RFUpload* upload = [[RFUpload alloc] init];
-				upload.url = [item objectForKey:@"url"];
-				upload.poster_url = [item objectForKey:@"poster"];
-				upload.alt = [item objectForKey:@"alt"];
-				upload.isAI = [[item objectForKey:@"microblog-ai"] boolValue];
-				
-				NSDictionary* cdn = [item objectForKey:@"cdn"];
-				if (cdn) {
-					NSString* medium_url = [cdn objectForKey:@"medium"];
-					NSString* small_url = [cdn objectForKey:@"small"];
-					if (small_url) {
-						upload.thumbnail_url = small_url;
-					}
-					else if (medium_url) {
-						upload.thumbnail_url = medium_url;
-					}
-				}
-
-				upload.width = [[item objectForKey:@"width"] integerValue];
-				upload.height = [[item objectForKey:@"height"] integerValue];
-
-				NSString* date_s = [item objectForKey:@"published"];
-				upload.createdAt = [NSDate uuDateFromRfc3339String:date_s];
-
-				[new_posts addObject:upload];
-			}
-		}
+		NSArray* new_posts = [self uploadsFromResponse:response];
 			
 		RFDispatchMainAsync (^{
 			if (request_id != self.uploadsRequestID) {
