@@ -74,6 +74,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 @property (strong, nonatomic) NSLayoutConstraint* statusBubbleHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressDetailTopConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressCompactTopConstraint;
+@property (assign, nonatomic) BOOL shouldSignInForTimeline;
+@property (assign, nonatomic) BOOL applicationWasInactive;
 
 @end
 
@@ -87,6 +89,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		self.checkSeconds = @5;
 		self.booksWindowControllers = [NSMutableArray array];
 		self.cachedUsernames = [NSMutableSet set];
+		self.shouldSignInForTimeline = YES;
 	}
 
 	return self;
@@ -530,6 +533,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openBookshelfNotification:) name:kOpenBookshelfNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActiveNotification:) name:NSApplicationDidBecomeActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidResignActiveNotification:) name:NSApplicationDidResignActiveNotification object:nil];
 
 //	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
@@ -748,12 +753,26 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self setupTimer];
 }
 
+- (void) appDidBecomeActiveNotification:(NSNotification *)notification
+{
+	if (self.applicationWasInactive) {
+		self.shouldSignInForTimeline = YES;
+		self.applicationWasInactive = NO;
+	}
+}
+
+- (void) appDidResignActiveNotification:(NSNotification *)notification
+{
+	self.applicationWasInactive = YES;
+}
+
 - (void) switchAccountNotification:(NSNotification *)notification
 {
 	NSString* username = [notification.userInfo objectForKey:kSwitchAccountUsernameKey];
 	[[NSUserDefaults standardUserDefaults] setObject:username forKey:kCurrentUsername];
 
 	[self setupUser];
+	self.shouldSignInForTimeline = YES;
 	[self showTimeline:nil];
 }
 
@@ -770,6 +789,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	if (!found) {
 		[self setupUser];
+		self.shouldSignInForTimeline = YES;
 		[self showTimeline:nil];
 	}
 
@@ -782,6 +802,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self setupUser];
 	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self setupCSS:[self currentWebView]];
+	self.shouldSignInForTimeline = YES;
 	[self showTimeline:nil];
 }
 
@@ -833,24 +854,30 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self closeOverlays];
 
-	NSString* username = [RFSettings stringForKey:kAccountUsername];
-	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
+	NSString* url;
+	if (self.shouldSignInForTimeline) {
+		NSString* username = [RFSettings stringForKey:kAccountUsername];
+		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 
-	CGFloat scroller_width = 0;
-	if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
-		scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
+		CGFloat scroller_width = 0;
+		if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
+			scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
+		}
+		CGFloat pane_width = self.webView.bounds.size.width;
+		int timezone_minutes = 0;
+
+		NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
+		if (text_size == 0) {
+			text_size = kTextSizeMedium;
+		}
+
+		long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
+		url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1&plainjs=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
+		self.shouldSignInForTimeline = NO;
 	}
-	CGFloat pane_width = self.webView.bounds.size.width;
-	int timezone_minutes = 0;
-
-	NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
-	if (text_size == 0) {
-		text_size = kTextSizeMedium;
+	else {
+		url = @"https://micro.blog/hybrid/timeline";
 	}
-
-	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
-
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1&plainjs=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
