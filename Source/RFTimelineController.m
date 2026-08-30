@@ -677,14 +677,14 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) postWasFavoritedNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_favorite');", post_id];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_favorite');", post_id];
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) postWasUnfavoritedNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_favorite');", post_id];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_favorite');", post_id];
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
@@ -850,7 +850,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1&plainjs=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
@@ -1586,7 +1586,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	});
 
 	// unselect after delay
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
 	RFDispatchSeconds (0.5, ^{
 		[current_webview stringByEvaluatingJavaScriptFromString:js];
 	});
@@ -1726,7 +1726,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (NSString *) topPostID
 {
 	// class: "post post_1234"
-	NSString* js = @"$('.post')[0].id.split('_')[1]";
+	NSString* js = @"document.querySelector('.post')?.id.split('_')[1] || ''";
 	NSString* post_id = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	return post_id;
 }
@@ -1755,10 +1755,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	NSString* js;
 	if (isSelected) {
-		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_selected');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_selected');", postID];
 	}
 	else {
-		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_selected');", postID];
 	}
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
@@ -1767,10 +1767,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	NSString* js;
 	if (isPressed) {
-		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_pressed');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_pressed');", postID];
 	}
 	else {
-		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
 	}
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
@@ -1782,29 +1782,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
-- (NSRect) rectOfPostID:(NSString *)postID
-{
-	NSString* top_js = [NSString stringWithFormat:@"$('#post_%@').position().top;", postID];
-	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
-	NSString* scroll_js = [NSString stringWithFormat:@"window.pageYOffset;"];
-
-	NSString* top_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:top_js];
-	NSString* height_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:height_js];
-	NSString* scroll_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:scroll_js];
-
-	CGFloat top_f = [self currentWebView].bounds.size.height - [top_s floatValue] - [height_s floatValue];
-	top_f += [scroll_s floatValue];
-
-	// adjust to full cell width
-	CGFloat left_f = 0.0;
-	CGFloat width_f = [self currentWebView].bounds.size.width;
-
-	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
-}
-
 - (NSString *) usernameOfPostID:(NSString *)postID
 {
-	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_username').text();", postID];
+	NSString* username_js = [NSString stringWithFormat:@"document.querySelector('#post_%@ .post_username')?.textContent || '';", postID];
 	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
@@ -1823,19 +1803,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (NSString *) linkOfPostID:(NSString *)postID
 {
-	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_link').text();", postID];
+	NSString* username_js = [NSString stringWithFormat:@"document.querySelector('#post_%@ .post_link')?.textContent || '';", postID];
 	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
-
-//- (RFOptionsPopoverType) popoverTypeOfPostID:(NSString *)postID
-//{
-//	NSString* is_favorite_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_favorite');", postID];
-//	NSString* is_deletable_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_deletable');", postID];
-//
-//	NSString* is_favorite_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_favorite_js];
-//	NSString* is_deletable_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_deletable_js];
-//}
 
 - (void) showURL:(NSURL *)url
 {

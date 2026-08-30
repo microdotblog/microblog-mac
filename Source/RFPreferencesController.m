@@ -572,7 +572,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	NSString* username = [RFSettings stringForKey:kAccountUsername];
 	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&fontsize=%ld", token, (long)tag];
+	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&fontsize=%ld&plainjs=1", token, (long)tag];
 	[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
 			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTimelineNotification object:self];
