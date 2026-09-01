@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString* selectedPostID;
 
 - (id) initWithURL:(NSString *)url;
+- (void) loadURL;
 
 @end
 

@@ -28,16 +28,15 @@
 {
 	[super viewDidLoad];
 
-	[self setupWebView];
-	[self setupNotifications];
-}
-
-- (void) setupWebView
-{
 	if ([NSAppearance rf_isDarkMode]) {
 		[self.webView setDrawsBackground:NO];
 	}
-	
+
+	[self setupNotifications];
+}
+
+- (void) loadURL
+{
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
 	[[self.webView mainFrame] loadRequest:request];
 }

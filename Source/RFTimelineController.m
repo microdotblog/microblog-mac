@@ -886,6 +886,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self selectSidebarRow:kSelectionTimeline];
 	[self startLoadingSidebarRow:kSelectionTimeline];
+	[controller loadURL];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -903,6 +904,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self selectSidebarRow:kSelectionMentions];
 	[self startLoadingSidebarRow:kSelectionMentions];
+	[controller loadURL];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -2022,11 +2024,20 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame
 {
+	if (frame != webView.mainFrame) {
+		return;
+	}
+
 	NSScrollView* scrollview = webView.mainFrame.frameView.documentView.enclosingScrollView;
 	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
 	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
 
 	[self setupCSS:webView];
+
+	if (webView != [self currentWebView]) {
+		return;
+	}
+
 	[self stopLoadingSidebarRow];
 	[self updateCachedUsers];
 }
