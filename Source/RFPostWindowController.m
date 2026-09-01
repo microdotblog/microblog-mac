@@ -427,7 +427,7 @@
 	else if ([itemIdentifier isEqualToString:@"Preview"]) {
 		NSString* title = @"Preview";
 		NSButton* b = [NSButton buttonWithTitle:title target:nil action:@selector(showPreview:)];
-		[NSLayoutConstraint activateConstraints:@[ [b.widthAnchor constraintGreaterThanOrEqualToConstant:70] ]];
+		[NSLayoutConstraint activateConstraints:@[ [b.widthAnchor constraintGreaterThanOrEqualToConstant:80] ]];
 		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		item.view = b;
 		return item;
@@ -435,7 +435,7 @@
 	else if ([itemIdentifier isEqualToString:@"SendPost"]) {
 		NSString* title = [self.postController postButtonTitle];
 		NSButton* b = [NSButton buttonWithTitle:title target:self.postController action:@selector(sendPost:)];
-		[NSLayoutConstraint activateConstraints:@[ [b.widthAnchor constraintGreaterThanOrEqualToConstant:50] ]];
+		[NSLayoutConstraint activateConstraints:@[ [b.widthAnchor constraintGreaterThanOrEqualToConstant:70] ]];
 		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		item.view = b;
 		return item;
