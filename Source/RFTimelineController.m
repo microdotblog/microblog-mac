@@ -1465,6 +1465,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) popViewController
 {
+	if ([self.navigationStack count] == 0) {
+		return;
+	}
+
 	WebView* current_webview = [self currentWebView];
 	NSViewController* controller = [self.navigationStack pop];
 	if (controller) {

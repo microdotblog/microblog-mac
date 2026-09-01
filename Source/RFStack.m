@@ -32,6 +32,10 @@
 
 - (id) pop
 {
+	if (self.stackArray.count == 0) {
+		return nil;
+	}
+
 	id result = [self.stackArray lastObject];
 	[self.stackArray removeLastObject];
 	return result;
