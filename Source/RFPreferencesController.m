@@ -306,8 +306,13 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 
 - (void) updateBackupDateField
 {
-	NSDate* last_backup = [[NSUserDefaults standardUserDefaults] objectForKey:kLastBackupDatePrefKey];
-	if ([last_backup isKindOfClass:[NSDate class]]) {
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	NSDate* last_backup = [defaults objectForKey:kLastBackupDatePrefKey];
+	BOOL has_last_backup = [last_backup isKindOfClass:[NSDate class]];
+	BOOL is_enabled = [defaults boolForKey:kSaveBackupsToFolderPrefKey];
+	self.backupDateField.hidden = !has_last_backup && !is_enabled;
+
+	if (has_last_backup) {
 		self.backupDateField.stringValue = [NSString stringWithFormat:@"Last backup: %@", [self localizedBackupDateString:last_backup]];
 	}
 	else {
@@ -653,6 +658,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 {
 	[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSControlStateValueOn) forKey:kSaveBackupsToFolderPrefKey];
 	[self updateBackupRecentsEnabled];
+	[self updateBackupDateField];
 }
 
 - (IBAction) backupsRecentsChanged:(id)sender
