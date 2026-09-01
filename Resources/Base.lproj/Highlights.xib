@@ -21,20 +21,21 @@
             <rect key="frame" x="0.0" y="0.0" width="500" height="543"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="60" horizontalPageScroll="10" verticalLineScroll="60" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" drawsBackground="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JbW-2g-UKv">
                     <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
-                    <clipView key="contentView" drawsBackground="NO" id="Z2x-kS-S6r">
+                    <color key="backgroundColor" name="color_highlight_row_background"/>
+                    <clipView key="contentView" drawsBackground="YES" id="Z2x-kS-S6r">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="60" usesAutomaticRowHeights="YES" viewBased="YES" id="N7o-iT-Tun" customClass="MBHighlightsTableView">
                                 <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <size key="intercellSpacing" width="17" height="0.0"/>
-                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <size key="intercellSpacing" width="0.0" height="0.0"/>
+                                <color key="backgroundColor" name="color_highlight_row_background"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="AutomaticTableColumnIdentifier.0" editable="NO" width="483" minWidth="40" maxWidth="1000" id="ctG-Yt-i04">
+                                    <tableColumn identifier="AutomaticTableColumnIdentifier.0" editable="NO" width="500" minWidth="40" maxWidth="1000" id="ctG-Yt-i04">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -47,11 +48,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView identifier="HighlightCell" id="Kiz-YJ-dsk" customClass="MBHighlightCell">
-                                                <rect key="frame" x="8" y="0.0" width="483" height="24"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="500" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FaL-Ew-LNU">
-                                                        <rect key="frame" x="0.0" y="4" width="483" height="16"/>
+                                                        <rect key="frame" x="0.0" y="4" width="500" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="bO2-Bj-oER">
                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -74,7 +75,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <nil key="backgroundColor"/>
+                        <color key="backgroundColor" name="color_highlight_row_background"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="GEH-YR-9tl">
                         <rect key="frame" x="-100" y="-100" width="500" height="16"/>
@@ -130,7 +131,7 @@
                         <constraint firstAttribute="height" constant="44" id="1Zr-8e-wi4"/>
                     </constraints>
                     <color key="borderColor" name="color_highlight_line"/>
-                    <color key="fillColor" name="color_header_alt_background"/>
+                    <color key="fillColor" name="color_highlights_header_background"/>
                 </box>
             </subviews>
             <constraints>
@@ -185,11 +186,14 @@
     <resources>
         <image name="chevron.left.circle.fill" catalog="system" width="15" height="15"/>
         <image name="safari" catalog="system" width="15" height="15"/>
-        <namedColor name="color_header_alt_background">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="color_highlights_header_background">
+            <color red="0.96862745098039216" green="0.95294117647058818" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="color_highlight_line">
             <color red="0.94499999284744263" green="0.92900002002716064" blue="0.82400000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="color_highlight_row_background">
+            <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
