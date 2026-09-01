@@ -33,6 +33,86 @@ static CGFloat const kToolbarHeight = 82;
 static NSString* const kAccountCellIdentifier = @"AccountCell";
 static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 
+@interface MBLinkTextField : NSTextField
+
+- (void) enumerateLinkRectsUsingBlock:(void (^)(NSRect linkRect, id link, BOOL* stop))block;
+
+@end
+
+@implementation MBLinkTextField
+
+- (void) mouseDown:(NSEvent *)event
+{
+	NSPoint click_point = [self convertPoint:event.locationInWindow fromView:nil];
+	__block id clicked_link = nil;
+	[self enumerateLinkRectsUsingBlock:^(NSRect linkRect, id link, BOOL* stop) {
+		if (NSPointInRect(click_point, linkRect)) {
+			clicked_link = link;
+			*stop = YES;
+		}
+	}];
+
+	if (clicked_link) {
+		NSURL* url = [clicked_link isKindOfClass:[NSURL class]] ? clicked_link : [NSURL URLWithString:[clicked_link description]];
+		if (url) {
+			[[NSWorkspace sharedWorkspace] openURL:url];
+		}
+	}
+	else {
+		[super mouseDown:event];
+	}
+}
+
+- (void) resetCursorRects
+{
+	[super resetCursorRects];
+	[self enumerateLinkRectsUsingBlock:^(NSRect linkRect, id link, BOOL* stop) {
+		[self addCursorRect:linkRect cursor:[NSCursor pointingHandCursor]];
+	}];
+}
+
+- (void) enumerateLinkRectsUsingBlock:(void (^)(NSRect linkRect, id link, BOOL* stop))block
+{
+	NSAttributedString* text = self.attributedStringValue;
+	NSRect text_rect = [self.cell titleRectForBounds:self.bounds];
+
+	NSTextStorage* text_storage = [[NSTextStorage alloc] initWithAttributedString:text];
+	NSLayoutManager* layout_manager = [[NSLayoutManager alloc] init];
+	NSTextContainer* text_container = [[NSTextContainer alloc] initWithContainerSize:text_rect.size];
+	text_container.lineFragmentPadding = 0.0;
+	text_container.lineBreakMode = self.cell.lineBreakMode;
+	[text_storage addLayoutManager:layout_manager];
+	[layout_manager addTextContainer:text_container];
+	[layout_manager ensureLayoutForTextContainer:text_container];
+
+	[text enumerateAttribute:NSLinkAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(id link, NSRange range, BOOL* attribute_stop) {
+		if (!link) {
+			return;
+		}
+
+		NSRange glyph_range = [layout_manager glyphRangeForCharacterRange:range actualCharacterRange:NULL];
+		[layout_manager enumerateEnclosingRectsForGlyphRange:glyph_range withinSelectedGlyphRange:NSMakeRange(NSNotFound, 0) inTextContainer:text_container usingBlock:^(NSRect rect, BOOL* rect_stop) {
+			NSRect link_rect = rect;
+			link_rect.origin.x += NSMinX(text_rect);
+			if (self.isFlipped) {
+				link_rect.origin.y += NSMinY(text_rect);
+			}
+			else {
+				link_rect.origin.y = NSMaxY(text_rect) - NSMaxY(rect);
+			}
+
+			BOOL stop = NO;
+			block(link_rect, link, &stop);
+			if (stop) {
+				*rect_stop = YES;
+				*attribute_stop = YES;
+			}
+		}];
+	}];
+}
+
+@end
+
 @interface RFPreferencesController ()
 
 @property (strong, nonatomic) MBRobotsController* robotsController;
@@ -73,6 +153,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	[self setupBackupCheckboxes];
 	[self setupBackupRecentsPopup];
 	[self setupBackupProgressBar];
+	[self setupBackupBarHelpField];
 	[self setupRobotsSettings];
 
 	[self updateRadioButtons];
@@ -195,6 +276,25 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 	self.backupProgressBar.doubleValue = 0.0;
 	self.backupStatusField.hidden = YES;
 	self.backupCancelButton.hidden = YES;
+}
+
+- (void) setupBackupBarHelpField
+{
+	NSMutableAttributedString* help_text = [self.backupBarHelpField.attributedStringValue mutableCopy];
+	NSRange link_range = [help_text.string rangeOfString:@"blogarchive.org"];
+	if (link_range.location != NSNotFound) {
+		NSURL* link_url = [NSURL URLWithString:@"https://blogarchive.org/"];
+		NSDictionary* link_attributes = @{
+			NSLinkAttributeName: link_url,
+			NSForegroundColorAttributeName: [NSColor linkColor],
+			NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)
+		};
+		[help_text addAttributes:link_attributes range:link_range];
+		self.backupBarHelpField.allowsEditingTextAttributes = NO;
+		self.backupBarHelpField.selectable = NO;
+		self.backupBarHelpField.attributedStringValue = help_text;
+		[self.backupBarHelpField.window invalidateCursorRectsForView:self.backupBarHelpField];
+	}
 }
 
 - (void) setupRobotsSettings
