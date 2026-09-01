@@ -22,6 +22,8 @@ static NSTimeInterval const MBHighlightsUnphasedGestureTimeout = 0.25;
 @property (assign) BOOL isTrackingSwipeBack;
 @property (assign) BOOL didTriggerSwipeBack;
 @property (assign) NSTimeInterval lastUnphasedScrollTimestamp;
+@property (assign) NSPoint swipeBackScrollOrigin;
+@property (assign) BOOL hasSwipeBackScrollOrigin;
 
 @end
 
@@ -67,6 +69,15 @@ static NSTimeInterval const MBHighlightsUnphasedGestureTimeout = 0.25;
 - (void) scrollWheel:(NSEvent *)event
 {
 	if (event.momentumPhase != NSEventPhaseNone) {
+		if (self.didTriggerSwipeBack) {
+			[self restoreSwipeBackScrollPosition];
+			BOOL finished_momentum = ((event.momentumPhase & NSEventPhaseEnded) || (event.momentumPhase & NSEventPhaseCancelled));
+			if (finished_momentum) {
+				[self resetSwipeBackTracking];
+			}
+			return;
+		}
+
 		[super scrollWheel:event];
 		return;
 	}
@@ -75,18 +86,15 @@ static NSTimeInterval const MBHighlightsUnphasedGestureTimeout = 0.25;
 	if (!has_gesture_phase) {
 		NSTimeInterval elapsed = event.timestamp - self.lastUnphasedScrollTimestamp;
 		if (!self.isTrackingSwipeBack || (elapsed > MBHighlightsUnphasedGestureTimeout)) {
-			[self resetSwipeBackTracking];
-			self.isTrackingSwipeBack = YES;
+			[self beginSwipeBackTracking];
 		}
 		self.lastUnphasedScrollTimestamp = event.timestamp;
 	}
 	else if ((event.phase & NSEventPhaseBegan) || (event.phase & NSEventPhaseMayBegin)) {
-		[self resetSwipeBackTracking];
-		self.isTrackingSwipeBack = YES;
+		[self beginSwipeBackTracking];
 	}
 	else if ((event.phase & NSEventPhaseChanged) && !self.isTrackingSwipeBack) {
-		[self resetSwipeBackTracking];
-		self.isTrackingSwipeBack = YES;
+		[self beginSwipeBackTracking];
 	}
 
 	if (self.isTrackingSwipeBack && !self.didTriggerSwipeBack) {
@@ -97,15 +105,18 @@ static NSTimeInterval const MBHighlightsUnphasedGestureTimeout = 0.25;
 		BOOL is_horizontal = (self.accumulatedSwipeBackDelta > (self.accumulatedVerticalDelta * MBHighlightsSwipeBackHorizontalDominance));
 		if (passed_threshold && is_horizontal) {
 			self.didTriggerSwipeBack = YES;
+			[self restoreSwipeBackScrollPosition];
 			[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
+			[self restoreSwipeBackScrollPosition];
 			return;
 		}
 	}
 
 	BOOL finished_gesture = ((event.phase & NSEventPhaseEnded) || (event.phase & NSEventPhaseCancelled));
 	if (self.didTriggerSwipeBack) {
+		[self restoreSwipeBackScrollPosition];
 		if (finished_gesture) {
-			[self resetSwipeBackTracking];
+			self.isTrackingSwipeBack = NO;
 		}
 		return;
 	}
@@ -138,6 +149,27 @@ static NSTimeInterval const MBHighlightsUnphasedGestureTimeout = 0.25;
 	}
 }
 
+- (void) beginSwipeBackTracking
+{
+	[self resetSwipeBackTracking];
+	self.isTrackingSwipeBack = YES;
+
+	NSClipView* clip_view = self.enclosingScrollView.contentView;
+	if (clip_view) {
+		self.swipeBackScrollOrigin = clip_view.bounds.origin;
+		self.hasSwipeBackScrollOrigin = YES;
+	}
+}
+
+- (void) restoreSwipeBackScrollPosition
+{
+	if (self.hasSwipeBackScrollOrigin) {
+		NSScrollView* scroll_view = self.enclosingScrollView;
+		[scroll_view.contentView scrollToPoint:self.swipeBackScrollOrigin];
+		[scroll_view reflectScrolledClipView:scroll_view.contentView];
+	}
+}
+
 - (void) resetSwipeBackTracking
 {
 	self.accumulatedSwipeBackDelta = 0.0;
@@ -145,6 +177,7 @@ static NSTimeInterval const MBHighlightsUnphasedGestureTimeout = 0.25;
 	self.isTrackingSwipeBack = NO;
 	self.didTriggerSwipeBack = NO;
 	self.lastUnphasedScrollTimestamp = 0.0;
+	self.hasSwipeBackScrollOrigin = NO;
 }
 
 @end
