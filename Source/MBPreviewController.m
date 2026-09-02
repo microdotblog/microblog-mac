@@ -190,6 +190,18 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	return nil;
 }
 
+- (nullable HTMLNode *) articleWithPermalinkInNode:(HTMLNode *)node
+{
+	NSArray* article_tags = [node findChildTags:@"article"];
+	for (HTMLNode* article_node in article_tags) {
+		if ([self permalinkInNode:article_node requiringPublishedDate:YES]) {
+			return article_node;
+		}
+	}
+
+	return nil;
+}
+
 - (void) downloadHomePage:(NSURL *)blogURL completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
 	// create request to ignore cache and always fetch latest page
@@ -215,13 +227,8 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 		NSString* permalink = [self permalinkInNode:entry1 requiringPublishedDate:NO];
 		if ((entry1 == nil) && (permalink == nil)) {
-			NSArray* article_tags = [root1 findChildTags:@"article"];
-			for (HTMLNode* article_node in article_tags) {
-				permalink = [self permalinkInNode:article_node requiringPublishedDate:YES];
-				if (permalink) {
-					break;
-				}
-			}
+			HTMLNode* article_node = [self articleWithPermalinkInNode:root1];
+			permalink = [self permalinkInNode:article_node requiringPublishedDate:YES];
 		}
 
 		NSURL* entry_url = nil;
@@ -289,6 +296,9 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 		HTMLNode* root2 = [parser2 body];
 		HTMLNode* entry2 = [root2 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+		if (entry2 == nil) {
+			entry2 = [self articleWithPermalinkInNode:root2];
+		}
 		if (entry2 == nil) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self showWarning:@"This theme does not support previews"];
