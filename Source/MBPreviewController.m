@@ -166,6 +166,30 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	self.warningField.attributedStringValue = [self makeString:text withIcon:@"exclamationmark.triangle"];
 }
 
+- (nullable NSString *) permalinkInNode:(HTMLNode *)node requiringPublishedDate:(BOOL)requiringPublishedDate
+{
+	// find the first post permalink, optionally requiring a published date to avoid unrelated u-url links
+	NSArray* a_tags = [node findChildTags:@"a"];
+	for (HTMLNode* link_node in a_tags) {
+		NSString* class_attr = [link_node getAttributeNamed:@"class"];
+		if (class_attr && ([class_attr rangeOfString:@"u-url"].location != NSNotFound)) {
+			if (requiringPublishedDate) {
+				HTMLNode* date_node = [link_node findChildWithAttribute:@"class" matchingName:@"dt-published" allowPartial:YES];
+				if (date_node == nil) {
+					continue;
+				}
+			}
+
+			NSString* permalink = [link_node getAttributeNamed:@"href"];
+			if (permalink.length > 0) {
+				return permalink;
+			}
+		}
+	}
+
+	return nil;
+}
+
 - (void) downloadHomePage:(NSURL *)blogURL completion:(void (^)(NSString* updatedHTML, NSURL* baseURL))completion
 {
 	// create request to ignore cache and always fetch latest page
@@ -188,36 +212,38 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 		HTMLParser* parser1 = [[HTMLParser alloc] initWithString:htmlString error:&parseError];
 		HTMLNode* root1 = [parser1 body];
 		HTMLNode* entry1 = [root1 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
-		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			if (entry1 == nil) {
-				self.warningField.hidden = NO;
-				[self showWarning:@"This theme does not support previews"];
-			}
-			else {
-				self.warningField.hidden = YES;
-			}
-		});
 
-		// look for all <a> tags inside the entry element
-		NSArray* a_tags = [entry1 findChildTags:@"a"];
-		NSString* permalink = nil;
-		for (HTMLNode* link_node in a_tags) {
-			NSString* class_attr = [link_node getAttributeNamed:@"class"];
-			if (class_attr && ([class_attr rangeOfString:@"u-url"].location != NSNotFound)) {
-				permalink = [link_node getAttributeNamed:@"href"];
-				break;
+		NSString* permalink = [self permalinkInNode:entry1 requiringPublishedDate:NO];
+		if ((entry1 == nil) && (permalink == nil)) {
+			NSArray* article_tags = [root1 findChildTags:@"article"];
+			for (HTMLNode* article_node in article_tags) {
+				permalink = [self permalinkInNode:article_node requiringPublishedDate:YES];
+				if (permalink) {
+					break;
+				}
 			}
 		}
-		if (permalink) {
-			NSURL* entryURL = [NSURL URLWithString:permalink];
-			[self downloadPermalink:entryURL originalHost:blogURL.host completion:completion];
+
+		NSURL* entry_url = nil;
+		if (permalink.length > 0) {
+			entry_url = [[NSURL URLWithString:permalink relativeToURL:blogURL] absoluteURL];
+		}
+		if (entry_url) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				self.warningField.hidden = YES;
+			});
+			[self downloadPermalink:entry_url originalHost:blogURL.host completion:completion];
 			return;
 		}
 
 		// no valid link found
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self showWarning:@"Error parsing permalink in template"];
+			if ((entry1 == nil) && (permalink.length == 0)) {
+				[self showWarning:@"This theme does not support previews"];
+			}
+			else {
+				[self showWarning:@"Error parsing permalink in template"];
+			}
 			completion(nil, nil);
 		});
 	}];
@@ -263,6 +289,13 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 		HTMLNode* root2 = [parser2 body];
 		HTMLNode* entry2 = [root2 findChildWithAttribute:@"class" matchingName:@"h-entry" allowPartial:YES];
+		if (entry2 == nil) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self showWarning:@"This theme does not support previews"];
+				completion(nil, nil);
+			});
+			return;
+		}
 
 		// remove existing blog post children
 		for (HTMLNode* child in [entry2 children]) {
