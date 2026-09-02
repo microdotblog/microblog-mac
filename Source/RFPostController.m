@@ -243,6 +243,13 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.textStorage = [[RFHighlightingTextStorage alloc] init];
 	[self.textStorage addLayoutManager:self.textView.layoutManager];
 
+	NSMutableParagraphStyle* paragraph_style = [self.textView.defaultParagraphStyle mutableCopy];
+	if (!paragraph_style) {
+		paragraph_style = [[NSMutableParagraphStyle alloc] init];
+	}
+	paragraph_style.lineSpacing = 2.0;
+	self.textView.defaultParagraphStyle = paragraph_style;
+
 	self.textUndoManager = [[NSUndoManager alloc] init];
 	
 	if (self.replyUsername) {
@@ -254,8 +261,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
 	self.textView.typingAttributes = @{
-		NSFontAttributeName: normal_font
+		NSFontAttributeName: normal_font,
+		NSParagraphStyleAttributeName: paragraph_style
 	};
+	[self.textStorage addAttribute:NSParagraphStyleAttributeName value:paragraph_style range:NSMakeRange (0, self.textStorage.length)];
 	
 	self.textView.delegate = self;
 	self.textView.textStorage.delegate = self;
