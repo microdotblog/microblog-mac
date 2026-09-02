@@ -26,7 +26,7 @@
 	NSString* date_s = [highlight.createdAt uuIso8601DateString];
 	self.dateField.stringValue = date_s;
 
-	[self updateTextColorsForSelected:self.isSelected];
+	[self updateTextColors];
 }
 
 - (void) drawBackgroundInRect:(NSRect)dirtyRect
@@ -52,7 +52,7 @@
 		}
 	}
 
-	[self updateTextColorsForSelected:YES];
+	[self updateTextColors];
 	[background_color set];
 	NSRectFill (self.bounds);
 }
@@ -60,12 +60,18 @@
 - (void) setSelected:(BOOL)selected
 {
 	[super setSelected:selected];
-	[self updateTextColorsForSelected:selected];
+	[self updateTextColors];
 }
 
-- (void) updateTextColorsForSelected:(BOOL)selected
+- (void) setEmphasized:(BOOL)emphasized
 {
-	if (selected) {
+	[super setEmphasized:emphasized];
+	[self updateTextColors];
+}
+
+- (void) updateTextColors
+{
+	if (self.selected && self.emphasized) {
 		self.selectionTextField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 		self.titleField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 		self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
