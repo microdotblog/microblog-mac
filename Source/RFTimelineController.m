@@ -75,6 +75,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 @property (strong, nonatomic) NSLayoutConstraint* statusBubbleHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressDetailTopConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressCompactTopConstraint;
+@property (strong, nonatomic) WebView* initialHybridWebView;
+@property (strong, nonatomic) WebView* signInWebView;
 @property (assign, nonatomic) BOOL shouldSignInForTimeline;
 @property (assign, nonatomic) BOOL applicationWasInactive;
 @property (assign, nonatomic) BOOL hasCompletedInitialHybridLoad;
@@ -850,8 +852,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self closeOverlays];
 
+	BOOL should_sign_in = self.shouldSignInForTimeline;
 	NSString* url;
-	if (self.shouldSignInForTimeline) {
+	if (should_sign_in) {
 		NSString* username = [RFSettings stringForKey:kAccountUsername];
 		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 
@@ -869,7 +872,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 		long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
 		url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1&plainjs=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
-		self.shouldSignInForTimeline = NO;
 	}
 	else {
 		url = @"https://micro.blog/hybrid/timeline";
@@ -878,6 +880,12 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
+	if (!self.hasCompletedInitialHybridLoad) {
+		self.initialHybridWebView = controller.webView;
+	}
+	if (should_sign_in) {
+		self.signInWebView = controller.webView;
+	}
 	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionTimeline];
@@ -1328,6 +1336,14 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self updateToolbarScrimVisibility];
 
 	if (self.rootController) {
+		WebView* closing_webview = [self currentWebView];
+		if (closing_webview == self.signInWebView) {
+			self.signInWebView = nil;
+		}
+		if (closing_webview == self.initialHybridWebView) {
+			[self completeInitialHybridLoad];
+		}
+
 		[self.rootController.view removeFromSuperview];
 		self.rootController = nil;
 	}
@@ -2026,6 +2042,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		return;
 	}
 	self.hasCompletedInitialHybridLoad = YES;
+	self.initialHybridWebView = nil;
 
 	[self setupTimer];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kInitialHybridLoadDidCompleteNotification object:self];
@@ -2045,13 +2062,28 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self setupCSS:webView];
 
-	if (webView != [self currentWebView]) {
-		return;
+	NSURLResponse* loaded_response = frame.dataSource.response;
+	NSURL* loaded_url = loaded_response.URL;
+	if (loaded_url == nil) {
+		loaded_url = frame.dataSource.request.URL;
+	}
+	if ([loaded_url.host isEqualToString:@"micro.blog"] && [loaded_url.path hasPrefix:@"/hybrid/"]) {
+		BOOL is_successful_response = YES;
+		if ([loaded_response isKindOfClass:[NSHTTPURLResponse class]]) {
+			NSInteger status_code = [(NSHTTPURLResponse *)loaded_response statusCode];
+			is_successful_response = (status_code >= 200) && (status_code < 300);
+		}
+
+		// A successful sign-in redirects to the requested hybrid page.
+		if ((webView == self.signInWebView) && is_successful_response && ![loaded_url.path isEqualToString:@"/hybrid/signin"]) {
+			self.shouldSignInForTimeline = NO;
+			self.signInWebView = nil;
+		}
+		[self completeInitialHybridLoad];
 	}
 
-	NSURL* loaded_url = frame.dataSource.request.URL;
-	if ([loaded_url.host isEqualToString:@"micro.blog"] && [loaded_url.path hasPrefix:@"/hybrid/"]) {
-		[self completeInitialHybridLoad];
+	if (webView != [self currentWebView]) {
+		return;
 	}
 
 	[self stopLoadingSidebarRow];
@@ -2060,11 +2092,14 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) showWebViewError:(NSError *)error webView:(WebView *)webView frame:(WebFrame *)frame
 {
-	if ((frame != webView.mainFrame) || (webView != [self currentWebView])) {
+	if (frame != webView.mainFrame) {
 		return;
 	}
 
 	if ([error.domain isEqualToString:NSURLErrorDomain] && (error.code == NSURLErrorCancelled)) {
+		if (webView == self.initialHybridWebView) {
+			[self completeInitialHybridLoad];
+		}
 		return;
 	}
 
@@ -2084,7 +2119,14 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		return;
 	}
 
+	if (webView == self.signInWebView) {
+		self.signInWebView = nil;
+	}
 	[self completeInitialHybridLoad];
+
+	if (webView != [self currentWebView]) {
+		return;
+	}
 
 	[self stopLoadingSidebarRow];
 
@@ -2127,6 +2169,11 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
 		NSInteger status_code = [url_response statusCode];
 		if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
+			if (sender == self.signInWebView) {
+				self.signInWebView = nil;
+			}
+			[self completeInitialHybridLoad];
+
 			[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
 
 			NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];
