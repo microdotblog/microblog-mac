@@ -124,13 +124,11 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		self.textTopConstraint.constant = 35;
 	}
 	
-	self.photos = @[];
+	NSMutableArray* new_photos = [NSMutableArray array];
 	if (!skipPhotos) {
 		NSError* error = nil;
 		HTMLParser* p = [[HTMLParser alloc] initWithString:post.text error:&error];
 		if (error == nil) {
-			NSMutableArray* new_photos = [NSMutableArray array];
-			
 			HTMLNode* body = [p body];
 			NSArray* img_tags = [body findChildTags:@"img"];
 			for (HTMLNode* img_tag in img_tags) {
@@ -148,10 +146,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 					[new_photos addObject:photo];
 				}
 			}
-
-			self.photos = new_photos;
 		}
 	}
+	self.photos = new_photos;
 	
 	if (self.photos.count == 0) {
 		self.dateTopConstraint.constant = 5;
@@ -277,6 +274,10 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 
 - (void) collectionView:(NSCollectionView *)collectionView willDisplayItem:(NSCollectionViewItem *)item forRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (indexPath.item >= self.photos.count) {
+		return;
+	}
+
 	RFPhoto* photo = [self.photos objectAtIndex:indexPath.item];
 	RFPhotoCell* photo_item = (RFPhotoCell *)item;
 
