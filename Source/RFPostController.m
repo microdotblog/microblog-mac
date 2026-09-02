@@ -31,7 +31,6 @@
 #import "NSError+Extras.h"
 #import "NSImage+Extras.h"
 #import "NSString+Extras.h"
-#import "NSCollectionView+Extras.h"
 #import "NSAppearance+Extras.h"
 #import "MMMarkdown.h"
 #import "RFAutoCompleteCache.h"
@@ -243,6 +242,13 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.textStorage = [[RFHighlightingTextStorage alloc] init];
 	[self.textStorage addLayoutManager:self.textView.layoutManager];
 
+	NSMutableParagraphStyle* paragraph_style = [self.textView.defaultParagraphStyle mutableCopy];
+	if (!paragraph_style) {
+		paragraph_style = [[NSMutableParagraphStyle alloc] init];
+	}
+	paragraph_style.lineSpacing = 2.0;
+	self.textView.defaultParagraphStyle = paragraph_style;
+
 	self.textUndoManager = [[NSUndoManager alloc] init];
 	
 	if (self.replyUsername) {
@@ -254,8 +260,10 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
 	self.textView.typingAttributes = @{
-		NSFontAttributeName: normal_font
+		NSFontAttributeName: normal_font,
+		NSParagraphStyleAttributeName: paragraph_style
 	};
+	[self.textStorage addAttribute:NSParagraphStyleAttributeName value:paragraph_style range:NSMakeRange (0, self.textStorage.length)];
 	
 	self.textView.delegate = self;
 	self.textView.textStorage.delegate = self;
@@ -1392,12 +1400,17 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			RFClient* client = [[RFClient alloc] initWithURL:photo.publishedURL];
 			[client getWithCompletion:^(UUHttpResponse* response) {
 				RFDispatchMainAsync (^{
-					[item.progressSpinner stopAnimation:nil];
+					NSIndexPath* current_index_path = [collectionView indexPathForItem:item];
+					BOOL is_current_photo = [current_index_path isEqual:indexPath] && (indexPath.item < self.attachedPhotos.count) && ([self.attachedPhotos objectAtIndex:indexPath.item] == photo);
+					if (is_current_photo) {
+						[item.progressSpinner stopAnimation:nil];
+					}
 					if (response.httpError == nil) {
 						NSImage* img = [[NSImage alloc] initWithData:[response rawResponse]];
-						item.thumbnailImageView.image = img;
 						photo.thumbnailImage = img;
-						[collectionView mb_safeReloadAtIndexPath:indexPath];
+						if (is_current_photo) {
+							item.thumbnailImageView.image = img;
+						}
 					}
 				});
 			}];

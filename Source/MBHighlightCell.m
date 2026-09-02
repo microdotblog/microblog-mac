@@ -25,47 +25,59 @@
 	
 	NSString* date_s = [highlight.createdAt uuIso8601DateString];
 	self.dateField.stringValue = date_s;
+
+	[self updateTextColors];
 }
 
 - (void) drawBackgroundInRect:(NSRect)dirtyRect
 {
-	CGRect r = self.bounds;
-	[[NSColor colorNamed:@"color_highlight_background"] set];
+	NSRect r = self.bounds;
+	[[NSColor colorNamed:@"color_highlight_row_background"] set];
 	NSRectFill (r);
 }
 
 - (void) drawSelectionInRect:(NSRect)dirtyRect
 {
-	CGRect r = self.bounds;
+	NSColor* background_color = [NSColor selectedContentBackgroundColor];
 	if ([self.superview isKindOfClass:[NSTableView class]]) {
 		NSTableView* table = (NSTableView *)self.superview;
 		if (![table.window isKeyWindow]) {
-			self.titleField.textColor = [NSColor colorNamed:@"color_date_text"];
-			self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
-			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
+			background_color = [NSColor colorNamed:@"color_row_unfocused_selection"];
 		}
 		else if (table.window.firstResponder == table) {
-			self.titleField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
-			self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
-			[[NSColor selectedContentBackgroundColor] set];
+			background_color = [NSColor selectedContentBackgroundColor];
 		}
 		else {
-			[[NSColor colorNamed:@"color_row_unfocused_selection"] set];
+			background_color = [NSColor colorNamed:@"color_row_unfocused_selection"];
 		}
 	}
-	
-	NSRectFill (r);
+
+	[self updateTextColors];
+	[background_color set];
+	NSRectFill (self.bounds);
 }
 
 - (void) setSelected:(BOOL)selected
 {
 	[super setSelected:selected];
+	[self updateTextColors];
+}
 
-	if (selected) {
+- (void) setEmphasized:(BOOL)emphasized
+{
+	[super setEmphasized:emphasized];
+	[self updateTextColors];
+}
+
+- (void) updateTextColors
+{
+	if (self.selected && self.emphasized) {
+		self.selectionTextField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 		self.titleField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 		self.dateField.textColor = [NSColor colorNamed:@"color_date_text_selected"];
 	}
 	else {
+		self.selectionTextField.textColor = [NSColor colorNamed:@"color_highlight_text"];
 		self.titleField.textColor = [NSColor colorNamed:@"color_date_text"];
 		self.dateField.textColor = [NSColor colorNamed:@"color_date_text"];
 	}

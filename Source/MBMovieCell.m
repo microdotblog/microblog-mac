@@ -13,6 +13,45 @@
 #import "RFConstants.h"
 #import "NSString+Extras.h"
 
+static CGFloat const kPosterCornerRadius = 4.0;
+
+@implementation MBMoviePosterImageView
+
+- (NSRect) displayedImageRect
+{
+	NSSize image_size = self.image.size;
+	NSRect bounds = NSInsetRect(self.bounds, 1.0, 1.0);
+	if ((image_size.width <= 0) || (image_size.height <= 0) || (bounds.size.width <= 0) || (bounds.size.height <= 0)) {
+		return NSZeroRect;
+	}
+
+	CGFloat scale = MIN(bounds.size.width / image_size.width, bounds.size.height / image_size.height);
+	if (self.imageScaling == NSImageScaleProportionallyDown) {
+		scale = MIN(scale, 1.0);
+	}
+
+	NSSize displayed_size = NSMakeSize(image_size.width * scale, image_size.height * scale);
+	CGFloat y = NSMidY(bounds) - (displayed_size.height / 2.0);
+	return NSMakeRect(NSMinX(bounds), y, displayed_size.width, displayed_size.height);
+}
+
+- (void) drawRect:(NSRect)dirtyRect
+{
+	NSRect image_rect = [self displayedImageRect];
+	if (NSIsEmptyRect(image_rect)) {
+		[super drawRect:dirtyRect];
+		return;
+	}
+
+	[NSGraphicsContext saveGraphicsState];
+	[[NSBezierPath bezierPathWithRoundedRect:image_rect xRadius:kPosterCornerRadius yRadius:kPosterCornerRadius] addClip];
+	[NSGraphicsContext currentContext].imageInterpolation = NSImageInterpolationHigh;
+	[self.image drawInRect:image_rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+	[NSGraphicsContext restoreGraphicsState];
+}
+
+@end
+
 @interface MBMovieCell ()
 
 @property (assign, nonatomic) CGFloat statusLeftDefaultConstant;

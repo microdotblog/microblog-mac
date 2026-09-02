@@ -53,6 +53,7 @@
 @property (strong, nonatomic) IBOutlet NSButton* backupCancelButton;
 @property (strong, nonatomic) IBOutlet NSTextField* backupRecentsField;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* backupRecentsPopup;
+@property (strong, nonatomic) IBOutlet NSTextField* backupBarHelpField;
 
 @property (strong, nonatomic) IBOutlet NSButton* robotsCheckbox;
 @property (strong, nonatomic) IBOutlet NSButton* robotsGlobalCheckbox;

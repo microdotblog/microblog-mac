@@ -28,16 +28,15 @@
 {
 	[super viewDidLoad];
 
-	[self setupWebView];
-	[self setupNotifications];
-}
-
-- (void) setupWebView
-{
 	if ([NSAppearance rf_isDarkMode]) {
 		[self.webView setDrawsBackground:NO];
 	}
-	
+
+	[self setupNotifications];
+}
+
+- (void) loadURL
+{
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
 	[[self.webView mainFrame] loadRequest:request];
 }
@@ -143,7 +142,7 @@
 - (NSString *) topPostID
 {
 	// class: "post post_1234"
-	NSString* js = @"$('.post')[0].id.split('_')[1]";
+	NSString* js = @"document.querySelector('.post')?.id.split('_')[1] || ''";
 	NSString* post_id = [self.webView stringByEvaluatingJavaScriptFromString:js];
 	return post_id;
 }
@@ -172,10 +171,10 @@
 {
 	NSString* js;
 	if (isSelected) {
-		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_selected');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_selected');", postID];
 	}
 	else {
-		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_selected');", postID];
 	}
 	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
@@ -184,10 +183,10 @@
 {
 	NSString* js;
 	if (isPressed) {
-		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_pressed');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_pressed');", postID];
 	}
 	else {
-		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
 	}
 	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
@@ -198,26 +197,4 @@
 	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@').scrollIntoView({ behavior: 'smooth', block: 'nearest' });", self.selectedPostID];
 	[self.webView stringByEvaluatingJavaScriptFromString:js];
 }
-
-- (NSRect) rectOfPostID:(NSString *)postID
-{
-	NSString* top_js = [NSString stringWithFormat:@"$('#post_%@').position().top;", postID];
-	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
-	NSString* scroll_js = [NSString stringWithFormat:@"window.pageYOffset;"];
-
-	NSString* top_s = [self.webView stringByEvaluatingJavaScriptFromString:top_js];
-	NSString* height_s = [self.webView stringByEvaluatingJavaScriptFromString:height_js];
-	NSString* scroll_s = [self.webView stringByEvaluatingJavaScriptFromString:scroll_js];
-	
-//	CGFloat top_f = self.webView.bounds.size.height - [top_s floatValue] - [height_s floatValue];
-	CGFloat top_f = [top_s floatValue] - [height_s floatValue];
-	top_f += [scroll_s floatValue];
-	
-	// adjust to full cell width
-	CGFloat left_f = 0.0;
-	CGFloat width_f = self.webView.bounds.size.width;
-	
-	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
-}
-
 @end

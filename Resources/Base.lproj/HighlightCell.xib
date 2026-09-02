@@ -18,7 +18,7 @@
                     <rect key="frame" x="18" y="67" width="348" height="19"/>
                     <textFieldCell key="cell" refusesFirstResponder="YES" title="Selection text" id="iBb-RZ-eA9">
                         <font key="font" metaFont="system" size="15"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="color_highlight_text"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -76,6 +76,9 @@
     <resources>
         <namedColor name="color_date_text">
             <color red="0.60399997234344482" green="0.60399997234344482" blue="0.60399997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="color_highlight_text">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="color_highlight_line">
             <color red="0.94499999284744263" green="0.92900002002716064" blue="0.82400000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

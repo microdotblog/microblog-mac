@@ -69,11 +69,19 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 @interface RFTimelineController ()
 
 @property (strong, nonatomic) NSView* contentWrapperView;
+@property (strong, nonatomic) NSView* timelineLayoutView;
 @property (strong, nonatomic) NSVisualEffectView* toolbarScrimView;
 @property (strong, nonatomic) MBMessageBox* messageBox;
 @property (strong, nonatomic) NSLayoutConstraint* statusBubbleHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressDetailTopConstraint;
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressCompactTopConstraint;
+@property (strong, nonatomic) WebView* initialHybridWebView;
+@property (strong, nonatomic) WebView* signInWebView;
+@property (assign, nonatomic) BOOL shouldSignInForTimeline;
+@property (assign, nonatomic) BOOL applicationWasInactive;
+@property (assign, nonatomic) BOOL hasCompletedInitialHybridLoad;
+
+- (void) completeInitialHybridLoad;
 
 @end
 
@@ -87,6 +95,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		self.checkSeconds = @5;
 		self.booksWindowControllers = [NSMutableArray array];
 		self.cachedUsernames = [NSMutableSet set];
+		self.shouldSignInForTimeline = YES;
 	}
 
 	return self;
@@ -108,7 +117,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self setupWebView];
 	[self setupUser];
 	[self setupNotifications];
-	[self setupTimer];
 }
 
 - (void) setupWindowAppearance
@@ -260,13 +268,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	self.containerView = [[MBTimelineBackgroundView alloc] initWithFrame:NSMakeRect(230, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
 	self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
 
-	self.webView = [[WebView alloc] initWithFrame:NSZeroRect frameName:nil groupName:nil];
-	self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.webView.preferences setDefaultFontSize:16];
-	[self.webView.preferences setDefaultFixedFontSize:13];
-	[self.webView.preferences setMinimumFontSize:0];
-	[self.webView.preferences setJavaEnabled:NO];
-	[self.containerView addSubview:self.webView];
+	self.timelineLayoutView = [[NSView alloc] initWithFrame:NSZeroRect];
+	self.timelineLayoutView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.containerView addSubview:self.timelineLayoutView];
 
 	MBMessageBox* message_box = [[MBMessageBox alloc] initWithFrame:NSZeroRect];
 	message_box.translatesAutoresizingMaskIntoConstraints = NO;
@@ -304,8 +308,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[message_content addSubview:self.messageSpinner];
 
 	self.messageTopConstraint = [message_box.topAnchor constraintEqualToAnchor:self.containerView.topAnchor constant:-1];
-	self.timelineLeftConstraint = [self.webView.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor];
-	self.timelineRightConstraint = [self.webView.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor];
+	self.timelineLeftConstraint = [self.timelineLayoutView.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor];
+	self.timelineRightConstraint = [self.timelineLayoutView.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor];
 
 	[NSLayoutConstraint activateConstraints:@[
 		[message_box.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor constant:-1],
@@ -314,8 +318,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[message_box.heightAnchor constraintEqualToConstant:34],
 		self.timelineLeftConstraint,
 		self.timelineRightConstraint,
-		[self.webView.topAnchor constraintEqualToAnchor:message_box.bottomAnchor],
-		[self.webView.bottomAnchor constraintEqualToAnchor:self.containerView.bottomAnchor],
+		[self.timelineLayoutView.topAnchor constraintEqualToAnchor:message_box.bottomAnchor],
+		[self.timelineLayoutView.bottomAnchor constraintEqualToAnchor:self.containerView.bottomAnchor],
 		[refresh_button.leadingAnchor constraintEqualToAnchor:message_content.leadingAnchor],
 		[refresh_button.trailingAnchor constraintEqualToAnchor:message_content.trailingAnchor],
 		[refresh_button.topAnchor constraintEqualToAnchor:message_content.topAnchor],
@@ -480,8 +484,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	self.messageTopConstraint.constant = -35;
 	self.messageBox.hidden = YES;
 
-//	[self setupWebDelegates:self.webView];
-//	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self showTimeline:nil];
 }
 
@@ -530,6 +532,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAccountsNotification:) name:kRefreshAccountsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeAppearanceDidChangeNotification:) name:kDarkModeAppearanceDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openBookshelfNotification:) name:kOpenBookshelfNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActiveNotification:) name:NSApplicationDidBecomeActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidResignActiveNotification:) name:NSApplicationDidResignActiveNotification object:nil];
 
 //	[NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
 }
@@ -677,14 +681,14 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) postWasFavoritedNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_favorite');", post_id];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_favorite');", post_id];
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) postWasUnfavoritedNotification:(NSNotification *)notification
 {
 	NSString* post_id = [notification.userInfo objectForKey:kPostNotificationPostIDKey];
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_favorite');", post_id];
+	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_favorite');", post_id];
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
@@ -748,12 +752,26 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self setupTimer];
 }
 
+- (void) appDidBecomeActiveNotification:(NSNotification *)notification
+{
+	if (self.applicationWasInactive) {
+		self.shouldSignInForTimeline = YES;
+		self.applicationWasInactive = NO;
+	}
+}
+
+- (void) appDidResignActiveNotification:(NSNotification *)notification
+{
+	self.applicationWasInactive = YES;
+}
+
 - (void) switchAccountNotification:(NSNotification *)notification
 {
 	NSString* username = [notification.userInfo objectForKey:kSwitchAccountUsernameKey];
 	[[NSUserDefaults standardUserDefaults] setObject:username forKey:kCurrentUsername];
 
 	[self setupUser];
+	self.shouldSignInForTimeline = YES;
 	[self showTimeline:nil];
 }
 
@@ -770,6 +788,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	if (!found) {
 		[self setupUser];
+		self.shouldSignInForTimeline = YES;
 		[self showTimeline:nil];
 	}
 
@@ -780,8 +799,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
 {
 	[self setupUser];
-	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self setupCSS:[self currentWebView]];
+	self.shouldSignInForTimeline = YES;
 	[self showTimeline:nil];
 }
 
@@ -833,32 +852,45 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self closeOverlays];
 
-	NSString* username = [RFSettings stringForKey:kAccountUsername];
-	NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
+	BOOL should_sign_in = self.shouldSignInForTimeline;
+	NSString* url;
+	if (should_sign_in) {
+		NSString* username = [RFSettings stringForKey:kAccountUsername];
+		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 
-	CGFloat scroller_width = 0;
-	if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
-		scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
+		CGFloat scroller_width = 0;
+		if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
+			scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
+		}
+		CGFloat pane_width = self.containerView.bounds.size.width;
+		int timezone_minutes = 0;
+
+		NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
+		if (text_size == 0) {
+			text_size = kTextSizeMedium;
+		}
+
+		long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
+		url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1&plainjs=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 	}
-	CGFloat pane_width = self.webView.bounds.size.width;
-	int timezone_minutes = 0;
-
-	NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
-	if (text_size == 0) {
-		text_size = kTextSizeMedium;
+	else {
+		url = @"https://micro.blog/hybrid/timeline";
 	}
-
-	long darkmode = [NSAppearance rf_isDarkMode] ? 1 : 0;
-
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/signin?token=%@&width=%f&minutes=%d&desktop=1&fontsize=%ld&darkmode=%ld&fontsystem=1&show_actions=1&show_tags=1", token, pane_width - scroller_width, timezone_minutes, (long)text_size, darkmode];
 
 	MBSimpleTimelineController* controller = [[MBSimpleTimelineController alloc] initWithURL:url];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
+	if (!self.hasCompletedInitialHybridLoad) {
+		self.initialHybridWebView = controller.webView;
+	}
+	if (should_sign_in) {
+		self.signInWebView = controller.webView;
+	}
 	[self showRootController:controller];
 
 	[self selectSidebarRow:kSelectionTimeline];
 	[self startLoadingSidebarRow:kSelectionTimeline];
+	[controller loadURL];
 }
 
 - (IBAction) showMentions:(id)sender
@@ -876,6 +908,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	[self selectSidebarRow:kSelectionMentions];
 	[self startLoadingSidebarRow:kSelectionMentions];
+	[controller loadURL];
 }
 
 - (IBAction) showFavorites:(id)sender
@@ -1297,13 +1330,20 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) closeOverlays
 {
 	[self.window makeFirstResponder:nil];
-	self.webView.hidden = YES;
 	[self popToRootViewController];
 
 	[self hideMessageField];
 	[self updateToolbarScrimVisibility];
 
 	if (self.rootController) {
+		WebView* closing_webview = [self currentWebView];
+		if (closing_webview == self.signInWebView) {
+			self.signInWebView = nil;
+		}
+		if (closing_webview == self.initialHybridWebView) {
+			[self completeInitialHybridLoad];
+		}
+
 		[self.rootController.view removeFromSuperview];
 		self.rootController = nil;
 	}
@@ -1358,7 +1398,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		return bookmarks_controller.webView;
 	}
 	else {
-		return self.webView;
+		return nil;
 	}
 }
 
@@ -1368,17 +1408,11 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		NSViewController* controller = [self.navigationStack peek];
 		return controller.view;
 	}
-	else if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
-		return ((RFDiscoverController *)self.rootController).view;
-	}
-	else if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
-		return ((MBBookmarksController *)self.rootController).view;
-	}
-	else if ([self.rootController isKindOfClass:[MBSimpleTimelineController class]]) {
-		return ((MBSimpleTimelineController *)self.rootController).view;
+	else if (self.rootController) {
+		return self.rootController.view;
 	}
 	else {
-		return self.webView;
+		return self.timelineLayoutView;
 	}
 }
 
@@ -1410,7 +1444,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self pauseAudioInWebView:current_webview];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:current_webview];
+	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:last_view];
 
 	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
@@ -1438,6 +1472,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) popViewController
 {
+	if ([self.navigationStack count] == 0) {
+		return;
+	}
+
 	WebView* current_webview = [self currentWebView];
 	NSViewController* controller = [self.navigationStack pop];
 	if (controller) {
@@ -1537,12 +1575,12 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	self.rootController = controller;
 
-	NSRect r = self.webView.bounds;
+	NSRect r = self.timelineLayoutView.bounds;
 	self.rootController.view.frame = r;
 	self.rootController.view.alphaValue = 0.0;
 
 	self.rootController.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.containerView addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.webView];
+	[self.containerView addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.timelineLayoutView];
 
 	self.rootController.view.animator.alphaValue = 1.0;
 	[self addResizeConstraintsToOverlay:self.rootController.view containerView:self.containerView];
@@ -1574,22 +1612,31 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	// select and remember webview for unselection
 	WebView* current_webview = [self currentWebView];
-	[self setPressed:YES withPostID:postID];
+	NSView* current_container = [self currentContainerView];
+	BOOL can_press_post = (current_webview == current_container) || [current_webview isDescendantOf:current_container];
+	if (can_press_post) {
+		[self setPressed:YES withPostID:postID];
+	}
 
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
 
-	// give the selection a moment to be visible before animating away
-	RFDispatchSeconds (0.1, ^{
-		[self pushViewController:controller];
-	});
+	if (can_press_post) {
+		// give the selection a moment to be visible before animating away
+		RFDispatchSeconds (0.1, ^{
+			[self pushViewController:controller];
+		});
 
-	// unselect after delay
-	NSString* js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
-	RFDispatchSeconds (0.5, ^{
-		[current_webview stringByEvaluatingJavaScriptFromString:js];
-	});
+		// unselect after delay
+		NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
+		RFDispatchSeconds (0.5, ^{
+			[current_webview stringByEvaluatingJavaScriptFromString:js];
+		});
+	}
+	else {
+		[self pushViewController:controller];
+	}
 }
 
 - (void) showShareWithPostID:(NSString *)postID
@@ -1726,7 +1773,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (NSString *) topPostID
 {
 	// class: "post post_1234"
-	NSString* js = @"$('.post')[0].id.split('_')[1]";
+	NSString* js = @"document.querySelector('.post')?.id.split('_')[1] || ''";
 	NSString* post_id = [[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 	return post_id;
 }
@@ -1755,10 +1802,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	NSString* js;
 	if (isSelected) {
-		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_selected');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_selected');", postID];
 	}
 	else {
-		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_selected');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_selected');", postID];
 	}
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
@@ -1767,10 +1814,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	NSString* js;
 	if (isPressed) {
-		js = [NSString stringWithFormat:@"$('#post_%@').addClass('is_pressed');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.add('is_pressed');", postID];
 	}
 	else {
-		js = [NSString stringWithFormat:@"$('#post_%@').removeClass('is_pressed');", postID];
+		js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
 	}
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
@@ -1782,29 +1829,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[[self currentWebView] stringByEvaluatingJavaScriptFromString:js];
 }
 
-- (NSRect) rectOfPostID:(NSString *)postID
-{
-	NSString* top_js = [NSString stringWithFormat:@"$('#post_%@').position().top;", postID];
-	NSString* height_js = [NSString stringWithFormat:@"$('#post_%@').height();", postID];
-	NSString* scroll_js = [NSString stringWithFormat:@"window.pageYOffset;"];
-
-	NSString* top_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:top_js];
-	NSString* height_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:height_js];
-	NSString* scroll_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:scroll_js];
-
-	CGFloat top_f = [self currentWebView].bounds.size.height - [top_s floatValue] - [height_s floatValue];
-	top_f += [scroll_s floatValue];
-
-	// adjust to full cell width
-	CGFloat left_f = 0.0;
-	CGFloat width_f = [self currentWebView].bounds.size.width;
-
-	return NSMakeRect (left_f, top_f, width_f, [height_s floatValue]);
-}
-
 - (NSString *) usernameOfPostID:(NSString *)postID
 {
-	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_username').text();", postID];
+	NSString* username_js = [NSString stringWithFormat:@"document.querySelector('#post_%@ .post_username')?.textContent || '';", postID];
 	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
@@ -1823,19 +1850,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (NSString *) linkOfPostID:(NSString *)postID
 {
-	NSString* username_js = [NSString stringWithFormat:@"$('#post_%@').find('.post_link').text();", postID];
+	NSString* username_js = [NSString stringWithFormat:@"document.querySelector('#post_%@ .post_link')?.textContent || '';", postID];
 	NSString* username_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:username_js];
 	return [username_s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
-
-//- (RFOptionsPopoverType) popoverTypeOfPostID:(NSString *)postID
-//{
-//	NSString* is_favorite_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_favorite');", postID];
-//	NSString* is_deletable_js = [NSString stringWithFormat:@"$('#post_%@').hasClass('is_deletable');", postID];
-//
-//	NSString* is_favorite_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_favorite_js];
-//	NSString* is_deletable_s = [[self currentWebView] stringByEvaluatingJavaScriptFromString:is_deletable_js];
-//}
 
 - (void) showURL:(NSURL *)url
 {
@@ -2018,24 +2036,70 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 #pragma mark -
 
+- (void) completeInitialHybridLoad
+{
+	if (self.hasCompletedInitialHybridLoad) {
+		return;
+	}
+	self.hasCompletedInitialHybridLoad = YES;
+	self.initialHybridWebView = nil;
+
+	[self setupTimer];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kInitialHybridLoadDidCompleteNotification object:self];
+}
+
+#pragma mark -
+
 - (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame
 {
+	if (frame != webView.mainFrame) {
+		return;
+	}
+
 	NSScrollView* scrollview = webView.mainFrame.frameView.documentView.enclosingScrollView;
 	[scrollview setVerticalScrollElasticity:NSScrollElasticityAllowed];
 	[scrollview setHorizontalScrollElasticity:NSScrollElasticityNone];
 
 	[self setupCSS:webView];
+
+	NSURLResponse* loaded_response = frame.dataSource.response;
+	NSURL* loaded_url = loaded_response.URL;
+	if (loaded_url == nil) {
+		loaded_url = frame.dataSource.request.URL;
+	}
+	if ([loaded_url.host isEqualToString:@"micro.blog"] && [loaded_url.path hasPrefix:@"/hybrid/"]) {
+		BOOL is_successful_response = YES;
+		if ([loaded_response isKindOfClass:[NSHTTPURLResponse class]]) {
+			NSInteger status_code = [(NSHTTPURLResponse *)loaded_response statusCode];
+			is_successful_response = (status_code >= 200) && (status_code < 300);
+		}
+
+		// A successful sign-in redirects to the requested hybrid page.
+		if ((webView == self.signInWebView) && is_successful_response && ![loaded_url.path isEqualToString:@"/hybrid/signin"]) {
+			self.shouldSignInForTimeline = NO;
+			self.signInWebView = nil;
+		}
+		[self completeInitialHybridLoad];
+	}
+
+	if (webView != [self currentWebView]) {
+		return;
+	}
+
 	[self stopLoadingSidebarRow];
 	[self updateCachedUsers];
 }
 
 - (void) showWebViewError:(NSError *)error webView:(WebView *)webView frame:(WebFrame *)frame
 {
-	if ((frame != webView.mainFrame) || (webView != [self currentWebView])) {
+	if (frame != webView.mainFrame) {
 		return;
 	}
 
 	if ([error.domain isEqualToString:NSURLErrorDomain] && (error.code == NSURLErrorCancelled)) {
+		if (webView == self.initialHybridWebView) {
+			[self completeInitialHybridLoad];
+		}
 		return;
 	}
 
@@ -2052,6 +2116,15 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 
 	if (![failing_url.host isEqualToString:@"micro.blog"] || ![failing_url.path hasPrefix:@"/hybrid/"]) {
+		return;
+	}
+
+	if (webView == self.signInWebView) {
+		self.signInWebView = nil;
+	}
+	[self completeInitialHybridLoad];
+
+	if (webView != [self currentWebView]) {
 		return;
 	}
 
@@ -2096,6 +2169,11 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		NSHTTPURLResponse* url_response = (NSHTTPURLResponse *)response;
 		NSInteger status_code = [url_response statusCode];
 		if ((status_code == 500) && [[[url_response URL] host] isEqualToString:@"micro.blog"]) {
+			if (sender == self.signInWebView) {
+				self.signInWebView = nil;
+			}
+			[self completeInitialHybridLoad];
+
 			[[sender mainFrame] loadHTMLString:@"" baseURL:nil];
 
 			NSString* msg = [NSString stringWithFormat:@"If the error continues, try restarting Micro.blog or choosing File → Sign Out. (HTTP code: %ld)", (long)status_code];

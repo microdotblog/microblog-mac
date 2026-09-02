@@ -167,6 +167,20 @@
 	[self copyLink:sender];
 }
 
+- (IBAction) showConversation:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if ((row < 0) || (row >= self.currentReplies.count)) {
+		return;
+	}
+
+	RFPost* post = [self.currentReplies objectAtIndex:row];
+	NSString* post_id = [post.postID description];
+	if (post_id.length > 0) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kShowConversationNotification object:self userInfo:@{ kShowConversationPostIDKey: post_id }];
+	}
+}
+
 - (void) openPost:(RFPost *)post
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
@@ -254,7 +268,16 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if (item.action == @selector(copyLinkOrHTML:)) {
+	if (item.action == @selector(showConversation:)) {
+		NSInteger row = self.tableView.selectedRow;
+		if ((row < 0) || (row >= self.currentReplies.count)) {
+			return NO;
+		}
+
+		RFPost* post = [self.currentReplies objectAtIndex:row];
+		return (post.postID != nil);
+	}
+	else if (item.action == @selector(copyLinkOrHTML:)) {
 		[item setTitle:@"Copy Link"];
 		NSInteger row = self.tableView.selectedRow;
 		return (row >= 0);

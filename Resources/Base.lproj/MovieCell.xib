@@ -22,7 +22,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wFV-JM-ycp">
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wFV-JM-ycp" customClass="MBMoviePosterImageView">
                     <rect key="frame" x="48" y="14" width="50" height="68"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="68" id="6Mv-CY-o3C"/>

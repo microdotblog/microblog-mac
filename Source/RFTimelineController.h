@@ -26,7 +26,6 @@ typedef NSInteger RFSelectedTimelineType;
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSSplitView* splitView;
 @property (strong, nonatomic) IBOutlet NSView* containerView;
-@property (strong, nonatomic) IBOutlet WebView* webView;
 @property (strong, nonatomic) IBOutlet NSTextField* usernameField;
 @property (strong, nonatomic) IBOutlet RFRoundedImageView* profileImageView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* messageTopConstraint;
