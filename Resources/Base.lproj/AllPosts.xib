@@ -171,6 +171,13 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="jGG-Zb-2rI"/>
+                <menuItem title="Show Conversation" id="SmK-Yn-o6Q">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="showConversation:" target="-1" id="5Yf-b3-Zh0"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Ygf-gc-RPR"/>
                 <menuItem title="Open in Browser" image="safari" catalog="system" id="ttN-BC-piQ">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>

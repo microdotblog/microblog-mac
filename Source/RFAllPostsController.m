@@ -19,6 +19,7 @@
 #import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
+#import "NSError+Extras.h"
 
 static NSInteger const kRecentPostsInitialLimit = 15;
 static NSInteger const kRecentPostsBackgroundLimit = 100;
@@ -32,7 +33,7 @@ static NSString* const kSegmentStateCacheKey = @"PostsSegmentStateByHostname";
 static NSInteger const kSegmentStateDrafts = 1 << 0;
 static NSInteger const kSegmentStateScheduled = 1 << 1;
 
-@interface RFAllPostsController ()
+@interface RFAllPostsController () <NSMenuDelegate>
 
 @property (assign, nonatomic) BOOL isObservingWindowNotifications;
 @property (assign, nonatomic) NSInteger postsRequestID;
@@ -40,6 +41,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 @property (assign, nonatomic) BOOL hasLoadedPosts;
 @property (assign, nonatomic) BOOL hasLoadedDrafts;
 @property (assign, nonatomic) BOOL hasCachedSegmentState;
+@property (assign, nonatomic) BOOL isFindingConversation;
 @property (strong, nonatomic) NSArray* scheduledPosts;
 @property (strong, nonatomic) NSTimer* scheduledPostsTimer;
 
@@ -120,6 +122,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"PostCell" bundle:nil] forIdentifier:@"PostCell"];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
+	self.tableView.menu.delegate = self;
 	self.tableView.alphaValue = 0.0;
 }
 
@@ -708,6 +711,77 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[self copyLink:sender];
 }
 
+- (IBAction) showConversation:(id)sender
+{
+	NSInteger row = self.tableView.clickedRow;
+	if (row < 0) {
+		row = self.tableView.selectedRow;
+	}
+	if ((row < 0) || (row >= self.currentPosts.count)) {
+		return;
+	}
+
+	RFPost* post = [self.currentPosts objectAtIndex:row];
+	if (post.url.length == 0) {
+		return;
+	}
+
+	self.isFindingConversation = YES;
+	[self.progressSpinner startAnimation:nil];
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/conversation.js"];
+	NSDictionary* args = @{
+		@"url": post.url,
+		@"format": @"jsonfeed"
+	};
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		NSString* item_id = nil;
+		NSString* error_message = nil;
+
+		if (response.httpError) {
+			if (response.httpResponse.statusCode == 404) {
+				error_message = @"Micro.blog could not find a conversation for this post.";
+			}
+			else {
+				error_message = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+			}
+		}
+		else if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			id home_url_value = [response.parsedResponse objectForKey:@"home_page_url"];
+			NSString* home_url_s = [home_url_value isKindOfClass:[NSString class]] ? home_url_value : nil;
+			NSURL* home_url = [NSURL URLWithString:home_url_s];
+			NSString* possible_id = home_url.lastPathComponent;
+			NSCharacterSet* non_digits = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+			BOOL is_microblog_url = [home_url.host.lowercaseString isEqualToString:@"micro.blog"];
+			BOOL has_valid_id = (possible_id.length > 0) && ([possible_id rangeOfCharacterFromSet:non_digits].location == NSNotFound) && (possible_id.integerValue > 0);
+			if (is_microblog_url && has_valid_id) {
+				item_id = possible_id;
+			}
+			else {
+				error_message = @"Micro.blog returned an invalid conversation URL for this post.";
+			}
+		}
+		else {
+			error_message = @"Micro.blog returned an unexpected response for this post.";
+		}
+
+		RFDispatchMainAsync(^{
+			self.isFindingConversation = NO;
+			[self.progressSpinner stopAnimation:nil];
+
+			if (self.view.window == nil) {
+				return;
+			}
+			else if (item_id.length > 0) {
+				[[NSNotificationCenter defaultCenter] postNotificationName:kShowConversationNotification object:self userInfo:@{ kShowConversationPostIDKey: item_id }];
+			}
+			else {
+				[NSAlert rf_showOneButtonAlert:@"Could Not Show Conversation" message:error_message button:@"OK" completionHandler:NULL];
+			}
+		});
+	}];
+}
+
 - (void) openPost:(RFPost *)post
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kOpenPostingNotification object:self userInfo:@{ kOpenPostingPostKey: post }];
@@ -936,9 +1010,52 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[self.tableView reloadData];
 }
 
+- (BOOL) canShowConversation
+{
+	NSInteger row = self.tableView.clickedRow;
+	if (row < 0) {
+		row = self.tableView.selectedRow;
+	}
+	if ((row < 0) || (row >= self.currentPosts.count)) {
+		return NO;
+	}
+
+	RFPost* post = [self.currentPosts objectAtIndex:row];
+	BOOL is_published = (post.postedAt != nil) && ([post.postedAt compare:[NSDate date]] != NSOrderedDescending);
+	return !self.isShowingPages && !post.isDraft && is_published && (post.url.length > 0) && !self.isFindingConversation;
+}
+
+- (void) menuNeedsUpdate:(NSMenu *)menu
+{
+	NSMenuItem* conversation_item = nil;
+	for (NSMenuItem* item in menu.itemArray) {
+		if (item.action == @selector(showConversation:)) {
+			conversation_item = item;
+			break;
+		}
+	}
+
+	if (conversation_item) {
+		BOOL can_show = [self canShowConversation];
+		conversation_item.hidden = !can_show;
+		conversation_item.enabled = can_show;
+
+		NSInteger item_index = [menu indexOfItem:conversation_item];
+		if ((item_index >= 0) && ((item_index + 1) < menu.numberOfItems)) {
+			NSMenuItem* divider_item = [menu itemAtIndex:(item_index + 1)];
+			if ([divider_item isSeparatorItem]) {
+				divider_item.hidden = !can_show;
+			}
+		}
+	}
+}
+
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if (item.action == @selector(copyLinkOrHTML:)) {
+	if (item.action == @selector(showConversation:)) {
+		return [self canShowConversation];
+	}
+	else if (item.action == @selector(copyLinkOrHTML:)) {
 		[item setTitle:@"Copy Link"];
 		NSInteger row = self.tableView.selectedRow;
 		return (row >= 0);

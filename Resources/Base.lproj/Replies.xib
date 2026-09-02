@@ -169,6 +169,13 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="7hz-VC-ewq"/>
+                <menuItem title="Show Conversation" id="nu3-BW-uoN">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="showConversation:" target="-2" id="kS4-wm-WXG"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="dcP-pN-nQk"/>
                 <menuItem title="Open in Browser" image="safari" catalog="system" id="luX-bu-V6z">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>

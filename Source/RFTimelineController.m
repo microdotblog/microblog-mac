@@ -1397,14 +1397,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		NSViewController* controller = [self.navigationStack peek];
 		return controller.view;
 	}
-	else if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
-		return ((RFDiscoverController *)self.rootController).view;
-	}
-	else if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
-		return ((MBBookmarksController *)self.rootController).view;
-	}
-	else if ([self.rootController isKindOfClass:[MBSimpleTimelineController class]]) {
-		return ((MBSimpleTimelineController *)self.rootController).view;
+	else if (self.rootController) {
+		return self.rootController.view;
 	}
 	else {
 		return self.webView;
@@ -1439,7 +1433,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self pauseAudioInWebView:current_webview];
 	[self.navigationStack push:controller];
 	controller.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:current_webview];
+	[self.containerView addSubview:controller.view positioned:NSWindowAbove relativeTo:last_view];
 
 	[self addFixedConstraintsToView:controller.view containerView:last_view];
 	[controller.view setNeedsLayout:YES];
@@ -1607,22 +1601,31 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	// select and remember webview for unselection
 	WebView* current_webview = [self currentWebView];
-	[self setPressed:YES withPostID:postID];
+	NSView* current_container = [self currentContainerView];
+	BOOL can_press_post = (current_webview == current_container) || [current_webview isDescendantOf:current_container];
+	if (can_press_post) {
+		[self setPressed:YES withPostID:postID];
+	}
 
 	RFConversationController* controller = [[RFConversationController alloc] initWithPostID:postID];
 	[controller view];
 	[self setupWebDelegates:controller.webView];
 
-	// give the selection a moment to be visible before animating away
-	RFDispatchSeconds (0.1, ^{
-		[self pushViewController:controller];
-	});
+	if (can_press_post) {
+		// give the selection a moment to be visible before animating away
+		RFDispatchSeconds (0.1, ^{
+			[self pushViewController:controller];
+		});
 
-	// unselect after delay
-	NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
-	RFDispatchSeconds (0.5, ^{
-		[current_webview stringByEvaluatingJavaScriptFromString:js];
-	});
+		// unselect after delay
+		NSString* js = [NSString stringWithFormat:@"document.getElementById('post_%@')?.classList.remove('is_pressed');", postID];
+		RFDispatchSeconds (0.5, ^{
+			[current_webview stringByEvaluatingJavaScriptFromString:js];
+		});
+	}
+	else {
+		[self pushViewController:controller];
+	}
 }
 
 - (void) showShareWithPostID:(NSString *)postID
