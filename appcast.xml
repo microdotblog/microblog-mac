@@ -5,6 +5,32 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.0.8</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Improved speed of app launch, timeline loading, and Categories pane.</li>
+					<li>Improved colors and selection appearance in bookmark highlights, and made swipe-back navigation more reliable.</li>
+					<li>Improved line spacing and syntax highlighting for HTML and links in the post editor.</li>
+					<li>Added "Show Conversation" to the right-click context menu in Posts and Replies.</li>
+					<li>Fixed post preview support to work with more blog themes.</li>
+					<li>Fixed showing a next backup date when automatic backups are disabled.</li>
+					<li>Fixed potential crashes and thumbnail display issues when loading posts with photos.</li>
+				</ul>
+			]]></description>
+			<pubDate>Wed, 02 Sep 2026 11:45:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.0.8.zip" sparkle:shortVersionString="4.0.8" sparkle:version="255" length="18471232" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.0.7</title>
 			<description><![CDATA[
 				<style>
