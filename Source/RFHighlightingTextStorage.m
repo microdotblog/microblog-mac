@@ -459,7 +459,7 @@
 			is_value = NO;
 			tag_start = i;
 		}
-		else if (c == '>') {
+		else if ((c == '>') && !is_quote) {
 			if (is_value) {
 				is_tag = NO;
 				is_attr = YES;
@@ -475,6 +475,7 @@
 				current_r.length = i - tag_start + 1;
 				[self safe_addAttribute:NSForegroundColorAttributeName value:tag_c range:current_r];
 			}
+			[self safe_addAttribute:NSForegroundColorAttributeName value:tag_c range:NSMakeRange (i, 1)];
 		}
 	}
 	
