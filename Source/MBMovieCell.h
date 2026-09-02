@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBMovie;
 @class RFRoundedImageView;
 
+@interface MBMoviePosterImageView : NSImageView
+
+@end
+
 @interface MBMovieCell : NSTableRowView
 
 @property (strong, nonatomic) IBOutlet NSImageView* posterImageView;
