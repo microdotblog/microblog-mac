@@ -69,6 +69,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 @interface RFTimelineController ()
 
 @property (strong, nonatomic) NSView* contentWrapperView;
+@property (strong, nonatomic) NSView* timelineLayoutView;
 @property (strong, nonatomic) NSVisualEffectView* toolbarScrimView;
 @property (strong, nonatomic) MBMessageBox* messageBox;
 @property (strong, nonatomic) NSLayoutConstraint* statusBubbleHeightConstraint;
@@ -76,6 +77,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 @property (strong, nonatomic) NSLayoutConstraint* statusProgressCompactTopConstraint;
 @property (assign, nonatomic) BOOL shouldSignInForTimeline;
 @property (assign, nonatomic) BOOL applicationWasInactive;
+@property (assign, nonatomic) BOOL hasCompletedInitialHybridLoad;
+
+- (void) completeInitialHybridLoad;
 
 @end
 
@@ -111,7 +115,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[self setupWebView];
 	[self setupUser];
 	[self setupNotifications];
-	[self setupTimer];
 }
 
 - (void) setupWindowAppearance
@@ -263,13 +266,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	self.containerView = [[MBTimelineBackgroundView alloc] initWithFrame:NSMakeRect(230, 0, self.window.contentView.bounds.size.width - 230, self.window.contentView.bounds.size.height)];
 	self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
 
-	self.webView = [[WebView alloc] initWithFrame:NSZeroRect frameName:nil groupName:nil];
-	self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.webView.preferences setDefaultFontSize:16];
-	[self.webView.preferences setDefaultFixedFontSize:13];
-	[self.webView.preferences setMinimumFontSize:0];
-	[self.webView.preferences setJavaEnabled:NO];
-	[self.containerView addSubview:self.webView];
+	self.timelineLayoutView = [[NSView alloc] initWithFrame:NSZeroRect];
+	self.timelineLayoutView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.containerView addSubview:self.timelineLayoutView];
 
 	MBMessageBox* message_box = [[MBMessageBox alloc] initWithFrame:NSZeroRect];
 	message_box.translatesAutoresizingMaskIntoConstraints = NO;
@@ -307,8 +306,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	[message_content addSubview:self.messageSpinner];
 
 	self.messageTopConstraint = [message_box.topAnchor constraintEqualToAnchor:self.containerView.topAnchor constant:-1];
-	self.timelineLeftConstraint = [self.webView.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor];
-	self.timelineRightConstraint = [self.webView.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor];
+	self.timelineLeftConstraint = [self.timelineLayoutView.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor];
+	self.timelineRightConstraint = [self.timelineLayoutView.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor];
 
 	[NSLayoutConstraint activateConstraints:@[
 		[message_box.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor constant:-1],
@@ -317,8 +316,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[message_box.heightAnchor constraintEqualToConstant:34],
 		self.timelineLeftConstraint,
 		self.timelineRightConstraint,
-		[self.webView.topAnchor constraintEqualToAnchor:message_box.bottomAnchor],
-		[self.webView.bottomAnchor constraintEqualToAnchor:self.containerView.bottomAnchor],
+		[self.timelineLayoutView.topAnchor constraintEqualToAnchor:message_box.bottomAnchor],
+		[self.timelineLayoutView.bottomAnchor constraintEqualToAnchor:self.containerView.bottomAnchor],
 		[refresh_button.leadingAnchor constraintEqualToAnchor:message_content.leadingAnchor],
 		[refresh_button.trailingAnchor constraintEqualToAnchor:message_content.trailingAnchor],
 		[refresh_button.topAnchor constraintEqualToAnchor:message_content.topAnchor],
@@ -483,8 +482,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	self.messageTopConstraint.constant = -35;
 	self.messageBox.hidden = YES;
 
-//	[self setupWebDelegates:self.webView];
-//	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self showTimeline:nil];
 }
 
@@ -800,7 +797,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
 {
 	[self setupUser];
-	[self.webView setDrawsBackground:![NSAppearance rf_isDarkMode]];
 	[self setupCSS:[self currentWebView]];
 	self.shouldSignInForTimeline = YES;
 	[self showTimeline:nil];
@@ -863,7 +859,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		if (NSScroller.preferredScrollerStyle == NSScrollerStyleLegacy) {
 			scroller_width = [NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy];
 		}
-		CGFloat pane_width = self.webView.bounds.size.width;
+		CGFloat pane_width = self.containerView.bounds.size.width;
 		int timezone_minutes = 0;
 
 		NSInteger text_size = [[NSUserDefaults standardUserDefaults] integerForKey:kTextSizePrefKey];
@@ -1326,7 +1322,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) closeOverlays
 {
 	[self.window makeFirstResponder:nil];
-	self.webView.hidden = YES;
 	[self popToRootViewController];
 
 	[self hideMessageField];
@@ -1387,7 +1382,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		return bookmarks_controller.webView;
 	}
 	else {
-		return self.webView;
+		return nil;
 	}
 }
 
@@ -1401,7 +1396,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		return self.rootController.view;
 	}
 	else {
-		return self.webView;
+		return self.timelineLayoutView;
 	}
 }
 
@@ -1564,12 +1559,12 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 {
 	self.rootController = controller;
 
-	NSRect r = self.webView.bounds;
+	NSRect r = self.timelineLayoutView.bounds;
 	self.rootController.view.frame = r;
 	self.rootController.view.alphaValue = 0.0;
 
 	self.rootController.view.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.containerView addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.webView];
+	[self.containerView addSubview:self.rootController.view positioned:NSWindowAbove relativeTo:self.timelineLayoutView];
 
 	self.rootController.view.animator.alphaValue = 1.0;
 	[self addResizeConstraintsToOverlay:self.rootController.view containerView:self.containerView];
@@ -2025,6 +2020,19 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 #pragma mark -
 
+- (void) completeInitialHybridLoad
+{
+	if (self.hasCompletedInitialHybridLoad) {
+		return;
+	}
+	self.hasCompletedInitialHybridLoad = YES;
+
+	[self setupTimer];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kInitialHybridLoadDidCompleteNotification object:self];
+}
+
+#pragma mark -
+
 - (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame
 {
 	if (frame != webView.mainFrame) {
@@ -2039,6 +2047,11 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	if (webView != [self currentWebView]) {
 		return;
+	}
+
+	NSURL* loaded_url = frame.dataSource.request.URL;
+	if ([loaded_url.host isEqualToString:@"micro.blog"] && [loaded_url.path hasPrefix:@"/hybrid/"]) {
+		[self completeInitialHybridLoad];
 	}
 
 	[self stopLoadingSidebarRow];
@@ -2070,6 +2083,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	if (![failing_url.host isEqualToString:@"micro.blog"] || ![failing_url.path hasPrefix:@"/hybrid/"]) {
 		return;
 	}
+
+	[self completeInitialHybridLoad];
 
 	[self stopLoadingSidebarRow];
 

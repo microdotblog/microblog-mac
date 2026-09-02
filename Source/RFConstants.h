@@ -161,6 +161,7 @@ static NSString* const kSelectPhotoCellKey = @"cell"; // RFPhotoCell
 
 static NSString* const kTimelineDidStartLoading = @"TimelineDidStartLoading";
 static NSString* const kTimelineDidStopLoading = @"TimelineDidStopLoading";
+static NSString* const kInitialHybridLoadDidCompleteNotification = @"InitialHybridLoadDidComplete";
 static NSString* const kTimelineSidebarRowKey = @"row";
 
 static NSString* const kShowHighlightsNotification = @"MBShowHighlightsNotification";

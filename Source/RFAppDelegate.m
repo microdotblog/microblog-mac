@@ -57,7 +57,14 @@
 
 @interface RFAppDelegate ()
 
+@property (assign, nonatomic) BOOL hasPerformedDeferredLaunchSetup;
+@property (assign, nonatomic) BOOL hasPerformedDeferredAccountSetup;
+@property (assign, nonatomic) BOOL hasCompletedInitialActivation;
+
 - (RFPostWindowController *) postWindowControllerForPost:(RFPost *)post;
+- (void) performDeferredLaunchSetup;
+- (void) performDeferredAccountSetup;
+- (void) verifyAppToken:(NSString *)token showTimelineOnSuccess:(BOOL)showTimelineOnSuccess;
 
 @end
 
@@ -69,15 +76,9 @@
 		[NSMenuItem rs_disableIcons];
 	}
 
-	[self removeSandboxedContainer];
-	
 	[self setupDefaults];
 	[self setupNotifications];
 	[self setupAppearance];
-	[self setupFollowerAutoComplete];
-	[self setupBackups];
-	[self setupDistributedWork];
-	[self setupStats];
 
 	self.postWindows = [NSMutableArray array];
 	self.photoWindows = [NSMutableArray array];
@@ -88,7 +89,12 @@
 - (void) applicationDidBecomeActive:(NSNotification *)notification
 {
 	[self showMainWindow:nil];
-	[self setupBookmarks];
+	if (!self.hasCompletedInitialActivation) {
+		self.hasCompletedInitialActivation = YES;
+	}
+	else if (self.hasPerformedDeferredAccountSetup) {
+		[self setupBookmarks];
+	}
 }
 
 - (void) applicationDidResignActive:(NSNotification *)notification
@@ -232,13 +238,22 @@
 		NSString* token = [SAMKeychain passwordForService:@"Micro.blog" account:username];
 		if (token) {
 			show_timeline = YES;
-			[self verifyAppToken:token];
+			self.timelineController = [[RFTimelineController alloc] init];
+			[self.timelineController showWindow:nil];
+
+			RFDispatchMainAsync(^{
+				[self verifyAppToken:token showTimelineOnSuccess:NO];
+			});
 		}
 	}
 	
 	if (!show_timeline) {
 		self.welcomeController = [[RFWelcomeController alloc] init];
 		[self.welcomeController showWindow:nil];
+
+		RFDispatchMainAsync(^{
+			[self performDeferredLaunchSetup];
+		});
 	}
 }
 
@@ -273,6 +288,34 @@
 	[self.statsController sendStats];
 }
 
+- (void) performDeferredLaunchSetup
+{
+	if (self.hasPerformedDeferredLaunchSetup) {
+		return;
+	}
+	self.hasPerformedDeferredLaunchSetup = YES;
+
+	RFDispatchThread(^{
+		[self removeSandboxedContainer];
+	});
+
+	[self setupBackups];
+	[self setupDistributedWork];
+}
+
+- (void) performDeferredAccountSetup
+{
+	if (self.hasPerformedDeferredAccountSetup) {
+		return;
+	}
+	self.hasPerformedDeferredAccountSetup = YES;
+
+	[self setupFollowerAutoComplete];
+	[self setupStats];
+	[self setupBookmarks];
+	[self setupTimezone];
+}
+
 - (void) setupNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signOutNotification:) name:kSignOutNotification object:nil];
@@ -290,6 +333,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogsNotification:) name:kShowLogsNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showInfoNotification:) name:kShowInfoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timezoneDidChangeNotification:) name:NSSystemTimeZoneDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialHybridLoadDidCompleteNotification:) name:kInitialHybridLoadDidCompleteNotification object:nil];
 }
 
 - (void) setupAppearance
@@ -775,6 +819,14 @@
 	[self setupTimezone];
 }
 
+- (void) initialHybridLoadDidCompleteNotification:(NSNotification *)notification
+{
+	RFDispatchMainAsync(^{
+		[self performDeferredLaunchSetup];
+		[self performDeferredAccountSetup];
+	});
+}
+
 - (void) postWasUnselectedNotification:(NSNotification *)notification
 {
 //	NSString* post_id = [notification.userInfo objectForKey:kShowReplyPostIDKey];
@@ -890,6 +942,11 @@
 
 - (void) verifyAppToken:(NSString *)token
 {
+	[self verifyAppToken:token showTimelineOnSuccess:YES];
+}
+
+- (void) verifyAppToken:(NSString *)token showTimelineOnSuccess:(BOOL)showTimelineOnSuccess
+{
 	RFClient* client = [[RFClient alloc] initWithPath:@"/account/verify"];
 	NSDictionary* args = @{
 		@"token": token
@@ -933,9 +990,13 @@
 			[RFSettings setBool:[is_using_ai boolValue] forKey:kIsUsingAI account:a];
 
 			RFDispatchMainAsync (^{
-				[self loadTimelineWithToken:token account:a];
-				[self setupBookmarks];
-				[self setupTimezone];
+				if (showTimelineOnSuccess) {
+					[self loadTimelineWithToken:token account:a];
+					if (self.hasPerformedDeferredAccountSetup) {
+						[self setupBookmarks];
+						[self setupTimezone];
+					}
+				}
 				[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 			});
 		}
