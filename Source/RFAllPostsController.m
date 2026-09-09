@@ -42,6 +42,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 @property (assign, nonatomic) BOOL hasLoadedDrafts;
 @property (assign, nonatomic) BOOL hasCachedSegmentState;
 @property (assign, nonatomic) BOOL isFindingConversation;
+@property (assign, nonatomic) BOOL isSearching;
 @property (strong, nonatomic) NSArray* scheduledPosts;
 @property (strong, nonatomic) NSTimer* scheduledPostsTimer;
 
@@ -431,6 +432,17 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+			RFDispatchMainAsync(^{
+				NSString* current_search = self.searchField.stringValue ?: @"";
+				if ((requestID == self.postsRequestID) && [current_search isEqualToString:search]) {
+					self.isSearching = NO;
+					[self updateLoadingSidebarRow];
+				}
+			});
+			return;
+		}
+
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			NSMutableArray* new_posts = [NSMutableArray array];
 
@@ -498,7 +510,8 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 				[self restoreSelectionForPostURL:selected_url];
 
 				[self setupBlogName];
-				[self stopLoadingSidebarRow];
+				self.isSearching = NO;
+				[self updateLoadingSidebarRow];
 
 				[self.progressSpinner stopAnimation:nil];
 				self.blogNameButton.hidden = NO;
@@ -670,6 +683,23 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
 }
 
+- (void) startLoadingSidebarRow
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStartLoading object:self userInfo:@{
+		kTimelineSidebarRowKey: @(kTimelinePostsSidebarRow)
+	}];
+}
+
+- (void) updateLoadingSidebarRow
+{
+	if (!self.isShowingPages && (self.isFindingConversation || self.isSearching)) {
+		[self startLoadingSidebarRow];
+	}
+	else {
+		[self stopLoadingSidebarRow];
+	}
+}
+
 #pragma mark -
 
 - (IBAction) openRow:(id)sender
@@ -727,7 +757,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	}
 
 	self.isFindingConversation = YES;
-	[self.progressSpinner startAnimation:nil];
+	[self updateLoadingSidebarRow];
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/conversation.js"];
 	NSDictionary* args = @{
@@ -767,7 +797,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 		RFDispatchMainAsync(^{
 			self.isFindingConversation = NO;
-			[self.progressSpinner stopAnimation:nil];
+			[self updateLoadingSidebarRow];
 
 			if (self.view.window == nil) {
 				return;
@@ -855,6 +885,12 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 - (IBAction) search:(id)sender
 {
 	NSString* s = [sender stringValue];
+	if (s.length < 4) {
+		self.postsRequestID++;
+		self.isSearching = NO;
+		[self updateLoadingSidebarRow];
+	}
+
 	if (s.length == 0) {
 		self.currentPosts = self.allPosts;
 		[self.tableView reloadData];
@@ -881,6 +917,8 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 		[self disableTabs];
 	}
 	else {
+		self.isSearching = !self.isShowingPages;
+		[self updateLoadingSidebarRow];
 		[self fetchPostsForSearch:[sender stringValue]];
 		[self disableTabs];
 	}
