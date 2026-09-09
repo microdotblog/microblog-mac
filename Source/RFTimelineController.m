@@ -1086,7 +1086,12 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[self showMentions:nil];
 	}
 	else if (self.selectedTimeline == kSelectionFavorites) {
-		[self showFavorites:nil];
+		if ([self.rootController isKindOfClass:[MBBookmarksController class]] && [(MBBookmarksController *)self.rootController showingLinks]) {
+			[(MBBookmarksController *)self.rootController reloadLinks];
+		}
+		else {
+			[self showFavorites:nil];
+		}
 	}
 	else if (self.selectedTimeline == kSelectionDiscover) {
 		[self showDiscover:nil];

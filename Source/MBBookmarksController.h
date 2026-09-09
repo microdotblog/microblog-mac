@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong) NSNumber* highlightsCount;
 @property (strong) NSArray* tags; // NSString
+@property (assign, nonatomic, readonly) BOOL showingLinks;
+
+- (void) reloadLinks;
 
 @end
 

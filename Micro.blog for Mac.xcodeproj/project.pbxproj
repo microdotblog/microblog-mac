@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0DE20260909000000000001 /* MBBookmarkLink.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000011 /* MBBookmarkLink.m */; };
+		C0DE20260909000000000002 /* MBBookmarkLinkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000012 /* MBBookmarkLinkCell.m */; };
+		C0DE20260909000000000003 /* MBBookmarkLinksController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000013 /* MBBookmarkLinksController.m */; };
 		4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CCF2B27944300BBF456 /* MBNotesController.m */; };
 		4B001CD32B27955900BBF456 /* MBNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CD22B27955900BBF456 /* MBNote.m */; };
 		4B001CD62B27957800BBF456 /* MBNoteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CD52B27957800BBF456 /* MBNoteCell.m */; };
@@ -309,6 +312,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C0DE20260909000000000011 /* MBBookmarkLink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBBookmarkLink.m; sourceTree = "<group>"; };
+		C0DE20260909000000000021 /* MBBookmarkLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBBookmarkLink.h; sourceTree = "<group>"; };
+		C0DE20260909000000000012 /* MBBookmarkLinkCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBBookmarkLinkCell.m; sourceTree = "<group>"; };
+		C0DE20260909000000000022 /* MBBookmarkLinkCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBBookmarkLinkCell.h; sourceTree = "<group>"; };
+		C0DE20260909000000000013 /* MBBookmarkLinksController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBBookmarkLinksController.m; sourceTree = "<group>"; };
+		C0DE20260909000000000023 /* MBBookmarkLinksController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBBookmarkLinksController.h; sourceTree = "<group>"; };
 		4B001CCE2B27944300BBF456 /* MBNotesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesController.h; path = Source/MBNotesController.h; sourceTree = "<group>"; };
 		4B001CCF2B27944300BBF456 /* MBNotesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesController.m; path = Source/MBNotesController.m; sourceTree = "<group>"; };
 		4B001CD12B27955900BBF456 /* MBNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNote.h; path = Source/MBNote.h; sourceTree = "<group>"; };
@@ -1064,6 +1073,12 @@
 				4B1F2A252BC2219C00B52EAC /* MBTimelineWindow.m */,
 				4BE23F9C2A70117F00E24718 /* MBBookmarksController.h */,
 				4BE23F9D2A70117F00E24718 /* MBBookmarksController.m */,
+				C0DE20260909000000000021 /* MBBookmarkLink.h */,
+				C0DE20260909000000000011 /* MBBookmarkLink.m */,
+				C0DE20260909000000000022 /* MBBookmarkLinkCell.h */,
+				C0DE20260909000000000012 /* MBBookmarkLinkCell.m */,
+				C0DE20260909000000000023 /* MBBookmarkLinksController.h */,
+				C0DE20260909000000000013 /* MBBookmarkLinksController.m */,
 				4BF1A1202BBEF57B00256D3C /* MBSimpleTimelineController.h */,
 				4BF1A1212BBEF57B00256D3C /* MBSimpleTimelineController.m */,
 				4B5606D52A73F78700843D59 /* MBBookmark.h */,
@@ -1779,6 +1794,9 @@
 				4BF7E5272836CAC400500C59 /* MBBooksWindowController.m in Sources */,
 				4B5EE2862063FD9300C87A78 /* RFAccount.m in Sources */,
 				4BE23F9E2A70117F00E24718 /* MBBookmarksController.m in Sources */,
+				C0DE20260909000000000001 /* MBBookmarkLink.m in Sources */,
+				C0DE20260909000000000002 /* MBBookmarkLinkCell.m in Sources */,
+				C0DE20260909000000000003 /* MBBookmarkLinksController.m in Sources */,
 				4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */,
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
