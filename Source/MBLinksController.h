@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@interface MBBookmarkLinksController : NSViewController
+@interface MBLinksController : NSViewController
 
 @property (assign, nonatomic, readonly) BOOL loading;
 @property (copy, nonatomic) void (^loadingDidChange)(void);

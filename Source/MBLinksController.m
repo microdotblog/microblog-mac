@@ -1,32 +1,12 @@
-#import "MBBookmarkLinksController.h"
+#import "MBLinksController.h"
+#import "MBLinksTableView.h"
 #import "MBBookmarkLink.h"
 #import "MBBookmarkLinkCell.h"
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "NSString+Extras.h"
 
-@interface MBBookmarkLinksTableView : NSTableView
-@end
-
-@implementation MBBookmarkLinksTableView
-
-- (void) drawContextMenuHighlightForRow:(NSInteger)row
-{
-	// Use the selected row background instead of a context-menu outline.
-}
-
-- (void) willOpenMenu:(NSMenu *)menu withEvent:(NSEvent *)event
-{
-	NSInteger row = self.clickedRow;
-	if (row >= 0) {
-		[self.window makeFirstResponder:self];
-		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
-	}
-}
-
-@end
-
-@interface MBBookmarkLinksController() <NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate>
+@interface MBLinksController() <NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate>
 @property (strong, nonatomic) NSTableView* tableView;
 @property (strong, nonatomic) NSTextField* messageLabel;
 @property (strong, nonatomic) NSButton* retryButton;
@@ -38,7 +18,7 @@
 @property (assign, nonatomic, readwrite) BOOL loading;
 @end
 
-@implementation MBBookmarkLinksController
+@implementation MBLinksController
 
 - (void) loadView
 {
@@ -56,7 +36,7 @@
 	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
 	scroll_view.hasVerticalScroller = YES;
 	scroll_view.borderType = NSNoBorder;
-	self.tableView = [[MBBookmarkLinksTableView alloc] initWithFrame:scroll_view.bounds];
+	self.tableView = [[MBLinksTableView alloc] initWithFrame:scroll_view.bounds];
 	self.tableView.headerView = nil;
 	self.tableView.rowHeight = 152;
 	self.tableView.intercellSpacing = NSMakeSize(0, 0);
@@ -174,7 +154,7 @@
 			cell.thumbnailView.image = cached;
 		}
 		else {
-			__weak MBBookmarkLinksController* weak_self = self;
+			__weak MBLinksController* weak_self = self;
 			__weak MBBookmarkLinkCell* weak_cell = cell;
 			[[self.imageSession dataTaskWithURL:link.thumbnailURL completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
 				NSImage* image = (!error && [(NSHTTPURLResponse *)response statusCode] == 200) ? [[NSImage alloc] initWithData:data] : nil;

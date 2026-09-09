@@ -15,7 +15,7 @@
 #import "RFSettings.h"
 #import "NSString+Extras.h"
 #import "NSAppearance+Extras.h"
-#import "MBBookmarkLinksController.h"
+#import "MBLinksController.h"
 #import "MBHighlightsController.h"
 
 typedef NS_ENUM(NSInteger, MBBookmarksTab) {
@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, MBBookmarksTab) {
 
 @interface MBBookmarksController()
 @property (strong, nonatomic) NSSegmentedControl* tabsControl;
-@property (strong, nonatomic) MBBookmarkLinksController* linksController;
+@property (strong, nonatomic) MBLinksController* linksController;
 @property (strong, nonatomic) MBHighlightsController* highlightsController;
 @property (assign, nonatomic) MBBookmarksTab selectedTab;
 @property (assign, nonatomic) BOOL loadingBookmarks;
@@ -83,6 +83,7 @@ typedef NS_ENUM(NSInteger, MBBookmarksTab) {
 {
 	self.tabsControl = [NSSegmentedControl segmentedControlWithLabels:@[@"Bookmarks", @"Highlights", @"Links"] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(selectTab:)];
 	self.tabsControl.selectedSegment = MBBookmarksTabBookmarks;
+	self.tabsControl.hidden = ![RFSettings isPremium];
 	self.tabsControl.translatesAutoresizingMaskIntoConstraints = NO;
 	NSView* bar = self.headerBox.contentView;
 	[bar addSubview:self.tabsControl];
@@ -133,6 +134,10 @@ typedef NS_ENUM(NSInteger, MBBookmarksTab) {
 
 - (void) showTab:(MBBookmarksTab)tab
 {
+	if (![RFSettings isPremium]) {
+		tab = MBBookmarksTabBookmarks;
+	}
+
 	__weak MBBookmarksController* weak_self = self;
 	if (tab == MBBookmarksTabHighlights && self.highlightsController == nil) {
 		self.highlightsController = [[MBHighlightsController alloc] init];
@@ -142,7 +147,7 @@ typedef NS_ENUM(NSInteger, MBBookmarksTab) {
 		[self addContentController:self.highlightsController];
 	}
 	else if (tab == MBBookmarksTabLinks && self.linksController == nil) {
-		self.linksController = [[MBBookmarkLinksController alloc] init];
+		self.linksController = [[MBLinksController alloc] init];
 		self.linksController.loadingDidChange = ^{
 			[weak_self updateLoadingSidebarRow];
 		};
