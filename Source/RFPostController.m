@@ -53,7 +53,7 @@ static NSTimeInterval const kServerAutosaveDelay = 10.0;
 static NSTimeInterval const kServerAutosaveMinimumInterval = 30.0;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
-static const CGFloat kPhotoLibraryTrayHeight = 205;
+static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 @interface RFPhotoLibraryThumbnailView : NSImageView
 @end
@@ -82,7 +82,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 
 - (void) loadView
 {
-	RFPhotoLibraryThumbnailView* image_view = [[RFPhotoLibraryThumbnailView alloc] initWithFrame:NSMakeRect(0, 0, 150, 150)];
+	RFPhotoLibraryThumbnailView* image_view = [[RFPhotoLibraryThumbnailView alloc] initWithFrame:NSMakeRect(0, 0, 100, 100)];
 	self.view = image_view;
 	self.imageView = image_view;
 }
@@ -117,7 +117,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 
 - (void) loadView
 {
-	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 500, 150)];
+	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 500, 100)];
 	scroll_view.borderType = NSNoBorder;
 	scroll_view.drawsBackground = YES;
 	scroll_view.backgroundColor = self.backgroundColor;
@@ -129,7 +129,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	scroll_view.verticalScrollElasticity = NSScrollElasticityNone;
 	NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
 	layout.scrollDirection = NSCollectionViewScrollDirectionHorizontal;
-	layout.itemSize = NSMakeSize(150, 150);
+	layout.itemSize = NSMakeSize(100, 100);
 	layout.minimumLineSpacing = 10;
 	layout.minimumInteritemSpacing = 5;
 	self.collectionView = [[NSCollectionView alloc] initWithFrame:scroll_view.bounds];
@@ -242,7 +242,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	options.networkAccessAllowed = YES;
 	CGFloat scale = self.view.window.backingScaleFactor ?: 2;
 	__weak RFPhotoLibraryItem* weak_item = item;
-	item.imageRequest = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:NSMakeSize(150 * scale, 150 * scale) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(NSImage* image, NSDictionary* info) {
+	item.imageRequest = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:NSMakeSize(100 * scale, 100 * scale) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(NSImage* image, NSDictionary* info) {
 		RFDispatchMainAsync(^{
 			RFPhotoLibraryItem* current_item = weak_item;
 			if ([current_item.assetIdentifier isEqualToString:asset.localIdentifier] && image) {
@@ -279,7 +279,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 @property (strong, nonatomic) NSView* libraryTray;
 @property (strong, nonatomic) NSBox* libraryBackground;
 @property (strong, nonatomic) NSLayoutConstraint* libraryTrayHeight;
+@property (strong, nonatomic) NSLayoutConstraint* libraryAttachmentSpacing;
 @property (strong, nonatomic) NSTextField* libraryStatus;
+@property (strong, nonatomic) NSProgressIndicator* libraryProgress;
 @property (strong, nonatomic) NSMutableArray* libraryImportQueue;
 @property (strong, nonatomic) NSMutableArray* libraryTemporaryURLs;
 @property (strong, nonatomic) NSMutableSet* libraryPendingIdentifiers;
@@ -566,7 +568,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	
 	if ([NSAppearance mb_isLiquidGlass]) {
 		// add more padding because rounded corners
-		self.photoButtonLeftConstraint.constant = 14;
+		self.photoButtonLeftConstraint.constant = 10;
 		self.characterCountRightConstraint.constant = 14;
 	}
 }
@@ -921,6 +923,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 
 - (void) updateEditedState
 {
+	[self updateLibraryAttachmentSpacing];
 	NSString* current_fingerprint = [self currentServerAutosaveFingerprint];
 	self.view.window.documentEdited = ![current_fingerprint isEqualToString:self.savedEditorFingerprint];
 	[self serverAutosaveContentDidChange];
@@ -1033,6 +1036,8 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 
 - (void) finishClose
 {
+	[self.libraryProgress stopAnimation:nil];
+	self.libraryProgress.hidden = YES;
 	self.hasClosed = YES;
 	self.libraryPicker.selectAsset = nil;
 	self.libraryBrowser.delegate = nil;
@@ -1207,6 +1212,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		}
 	}
 
+	BOOL did_attach = (new_photos.count > self.attachedPhotos.count);
 	self.attachedPhotos = new_photos;
 	[self.photosCollectionView reloadData];
 
@@ -1217,6 +1223,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 
 	if (too_many_photos) {
 		[NSAlert rf_showOneButtonAlert:@"Only 10 Items Added" message:@"The first 10 items were added to your post." button:@"OK" completionHandler:NULL];
+	}
+	if (did_attach && (self.libraryImportQueue.count == 0) && (self.libraryTrayHeight.constant > 0)) {
+		[self choosePhoto:nil];
 	}
 }
 
@@ -1252,6 +1261,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		context.duration = [NSWorkspace sharedWorkspace].accessibilityDisplayShouldReduceMotion ? 0 : 0.18;
 		context.allowsImplicitAnimation = YES;
 		self.libraryTrayHeight.constant = showing ? kPhotoLibraryTrayHeight : 0;
+		[self updateLibraryAttachmentSpacing];
 		[self.view layoutSubtreeIfNeeded];
 	} completionHandler:^{
 		// A second click can reverse the animation before this completion runs.
@@ -1261,6 +1271,11 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	if (!showing) {
 		[self.view.window makeFirstResponder:self.textView];
 	}
+}
+
+- (void) updateLibraryAttachmentSpacing
+{
+	self.libraryAttachmentSpacing.constant = ((self.libraryTrayHeight.constant > 0) && (self.attachedPhotos.count > 0)) ? 10 : 0;
 }
 
 - (void) setupLibraryTray
@@ -1316,8 +1331,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		}
 	}
 	self.libraryTrayHeight = [tray.heightAnchor constraintEqualToConstant:0];
+	self.libraryAttachmentSpacing = [tray.topAnchor constraintEqualToAnchor:photos_view.bottomAnchor];
 	[NSLayoutConstraint activateConstraints:@[
-		[tray.topAnchor constraintEqualToAnchor:photos_view.bottomAnchor],
+		self.libraryAttachmentSpacing,
 		[tray.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
 		[tray.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
 		[self.photoButton.topAnchor constraintEqualToAnchor:tray.bottomAnchor constant:1],
@@ -1359,12 +1375,21 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	self.libraryStatus.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.libraryStatus setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
 	[tray addSubview:self.libraryStatus];
+	self.libraryProgress = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+	self.libraryProgress.style = NSProgressIndicatorStyleSpinning;
+	self.libraryProgress.controlSize = NSControlSizeSmall;
+	self.libraryProgress.indeterminate = YES;
+	self.libraryProgress.displayedWhenStopped = NO;
+	self.libraryProgress.hidden = YES;
+	self.libraryProgress.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.libraryProgress setAccessibilityLabel:@"Loading photo"];
+	[tray addSubview:self.libraryProgress];
 	// Keep thumbnails at their full size while the tray slides open and clips them.
 	[NSLayoutConstraint activateConstraints:@[
-		[picker_container.heightAnchor constraintEqualToConstant:150],
+		[picker_container.heightAnchor constraintEqualToConstant:100],
 		[picker_container.bottomAnchor constraintEqualToAnchor:files_button.topAnchor constant:-16],
 		[picker_container.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor constant:10],
-		[picker_container.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
+		[picker_container.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor],
 		[picker_view.topAnchor constraintEqualToAnchor:picker_container.topAnchor],
 		[picker_view.bottomAnchor constraintEqualToAnchor:picker_container.bottomAnchor],
 		[picker_view.leadingAnchor constraintEqualToAnchor:picker_container.leadingAnchor],
@@ -1378,7 +1403,11 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		[self.libraryStatus.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
 		[self.libraryStatus.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
 		[self.libraryStatus.widthAnchor constraintGreaterThanOrEqualToConstant:0],
-		[self.libraryStatus.heightAnchor constraintEqualToConstant:14]
+		[self.libraryStatus.heightAnchor constraintEqualToConstant:14],
+		[self.libraryProgress.leadingAnchor constraintEqualToAnchor:browse_button.trailingAnchor constant:10],
+		[self.libraryProgress.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
+		[self.libraryProgress.widthAnchor constraintEqualToConstant:16],
+		[self.libraryProgress.heightAnchor constraintEqualToConstant:16]
 	]];
 }
 
@@ -1407,9 +1436,8 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	if (window.screen == nil) {
 		return;
 	}
-	CGFloat attachment_space = (self.attachedPhotos.count == 0) ? 100 : 0;
-	CGFloat extra_height = MAX(0, kPhotoLibraryTrayHeight + attachment_space + 180 - self.textView.enclosingScrollView.frame.size.height);
-	if ((extra_height <= 0) || (window.styleMask & NSWindowStyleMaskFullScreen)) {
+	CGFloat minimum_editor_height = (self.attachedPhotos.count == 0) ? 300 : 200;
+	if ((self.textView.enclosingScrollView.frame.size.height >= minimum_editor_height) || (window.styleMask & NSWindowStyleMaskFullScreen)) {
 		return;
 	}
 	NSRect visible_frame = window.screen.visibleFrame;
@@ -1456,7 +1484,10 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		return;
 	}
 	self.libraryImportInProgress = YES;
-	self.libraryStatus.stringValue = @"Loading photo…";
+	self.libraryStatus.stringValue = @"";
+	self.libraryStatus.hidden = YES;
+	self.libraryProgress.hidden = NO;
+	[self.libraryProgress startAnimation:nil];
 	if ([self.libraryImportQueue.firstObject isKindOfClass:[PHAsset class]]) {
 		PHAsset* asset = self.libraryImportQueue.firstObject;
 		PHImageRequestOptions* options = [[PHImageRequestOptions alloc] init];
@@ -1506,6 +1537,11 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		[self.libraryPendingIdentifiers removeObject:identifier];
 	}
 	self.libraryImportInProgress = NO;
+	if (self.hasClosed || (self.libraryImportQueue.count == 0)) {
+		[self.libraryProgress stopAnimation:nil];
+		self.libraryProgress.hidden = YES;
+		self.libraryStatus.hidden = NO;
+	}
 	if (self.hasClosed) {
 		if (url) {
 			[[NSFileManager defaultManager] removeItemAtURL:url error:NULL];
@@ -1516,7 +1552,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 	if (image.isValid) {
 		[self.libraryTemporaryURLs addObject:url];
 		[self attachPhotos:@[url]];
-		self.libraryStatus.stringValue = @"Photo added";
+		self.libraryStatus.stringValue = @"";
 		self.libraryStatus.toolTip = nil;
 		[self.view.window makeFirstResponder:self.textView];
 	}
@@ -1927,6 +1963,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 205;
 		
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 		[item disableMenu];
+		item.view.wantsLayer = YES;
+		item.view.layer.cornerRadius = 4;
+		item.view.layer.masksToBounds = YES;
 
 		if (photo.thumbnailImage != nil) {
 			item.thumbnailImageView.image = photo.thumbnailImage;
