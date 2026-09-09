@@ -53,13 +53,231 @@ static NSTimeInterval const kServerAutosaveDelay = 10.0;
 static NSTimeInterval const kServerAutosaveMinimumInterval = 30.0;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
+static const CGFloat kPhotoLibraryTrayHeight = 205;
+
+@interface RFPhotoLibraryThumbnailView : NSImageView
+@end
+
+@implementation RFPhotoLibraryThumbnailView
+
+- (void) drawRect:(NSRect)dirtyRect
+{
+	[[NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:4 yRadius:4] addClip];
+	NSImage* image = self.image;
+	if ((image.size.width > 0) && (image.size.height > 0)) {
+		CGFloat side = MIN(image.size.width, image.size.height);
+		NSRect source = NSMakeRect((image.size.width - side) / 2, (image.size.height - side) / 2, side, side);
+		[image drawInRect:self.bounds fromRect:source operation:NSCompositingOperationSourceOver fraction:1 respectFlipped:YES hints:nil];
+	}
+}
+
+@end
+
+@interface RFPhotoLibraryItem : NSCollectionViewItem
+@property (copy, nonatomic) NSString* assetIdentifier;
+@property (assign, nonatomic) PHImageRequestID imageRequest;
+@end
+
+@implementation RFPhotoLibraryItem
+
+- (void) loadView
+{
+	RFPhotoLibraryThumbnailView* image_view = [[RFPhotoLibraryThumbnailView alloc] initWithFrame:NSMakeRect(0, 0, 150, 150)];
+	self.view = image_view;
+	self.imageView = image_view;
+}
+
+- (void) prepareForReuse
+{
+	[super prepareForReuse];
+	[[PHImageManager defaultManager] cancelImageRequest:self.imageRequest];
+	self.assetIdentifier = nil;
+	self.imageView.image = nil;
+}
+
+- (void) dealloc
+{
+	[[PHImageManager defaultManager] cancelImageRequest:self.imageRequest];
+}
+
+@end
+
+@interface RFPhotoLibraryController : NSViewController <NSCollectionViewDataSource, NSCollectionViewDelegate, PHPhotoLibraryChangeObserver>
+@property (strong, nonatomic) NSColor* backgroundColor;
+@property (strong, nonatomic) NSCollectionView* collectionView;
+@property (strong, nonatomic) NSTextField* messageLabel;
+@property (strong, nonatomic) NSButton* settingsButton;
+@property (strong, nonatomic) PHFetchResult* assets;
+@property (copy, nonatomic) void (^selectAsset)(PHAsset* asset);
+@property (assign, nonatomic) BOOL observing;
+@property (assign, nonatomic) BOOL requestingAccess;
+@end
+
+@implementation RFPhotoLibraryController
+
+- (void) loadView
+{
+	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 500, 150)];
+	scroll_view.borderType = NSNoBorder;
+	scroll_view.drawsBackground = YES;
+	scroll_view.backgroundColor = self.backgroundColor;
+	scroll_view.contentView.drawsBackground = YES;
+	scroll_view.contentView.backgroundColor = self.backgroundColor;
+	scroll_view.hasHorizontalScroller = YES;
+	scroll_view.scrollerStyle = NSScrollerStyleOverlay;
+	scroll_view.horizontalScrollElasticity = NSScrollElasticityAllowed;
+	scroll_view.verticalScrollElasticity = NSScrollElasticityNone;
+	NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
+	layout.scrollDirection = NSCollectionViewScrollDirectionHorizontal;
+	layout.itemSize = NSMakeSize(150, 150);
+	layout.minimumLineSpacing = 10;
+	layout.minimumInteritemSpacing = 5;
+	self.collectionView = [[NSCollectionView alloc] initWithFrame:scroll_view.bounds];
+	self.collectionView.collectionViewLayout = layout;
+	self.collectionView.backgroundColors = @[self.backgroundColor];
+	self.collectionView.selectable = YES;
+	self.collectionView.dataSource = self;
+	self.collectionView.delegate = self;
+	[self.collectionView registerClass:[RFPhotoLibraryItem class] forItemWithIdentifier:@"LibraryPhoto"];
+	scroll_view.documentView = self.collectionView;
+	NSView* container = [[NSView alloc] initWithFrame:scroll_view.frame];
+	self.view = container;
+	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
+	[container addSubview:scroll_view];
+	self.messageLabel = [NSTextField wrappingLabelWithString:@""];
+	self.messageLabel.textColor = [NSColor secondaryLabelColor];
+	self.messageLabel.alignment = NSTextAlignmentCenter;
+	self.messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	[container addSubview:self.messageLabel];
+	self.settingsButton = [NSButton buttonWithTitle:@"Open Photos Settings…" target:self action:@selector(openPhotoSettings:)];
+	self.settingsButton.controlSize = NSControlSizeSmall;
+	self.settingsButton.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
+	self.settingsButton.translatesAutoresizingMaskIntoConstraints = NO;
+	self.settingsButton.hidden = YES;
+	[container addSubview:self.settingsButton];
+	[NSLayoutConstraint activateConstraints:@[
+		[scroll_view.topAnchor constraintEqualToAnchor:container.topAnchor],
+		[scroll_view.bottomAnchor constraintEqualToAnchor:container.bottomAnchor],
+		[scroll_view.leadingAnchor constraintEqualToAnchor:container.leadingAnchor],
+		[scroll_view.trailingAnchor constraintEqualToAnchor:container.trailingAnchor],
+		[self.messageLabel.centerYAnchor constraintEqualToAnchor:container.centerYAnchor constant:-14],
+		[self.messageLabel.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:20],
+		[self.messageLabel.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-20],
+		[self.settingsButton.topAnchor constraintEqualToAnchor:self.messageLabel.bottomAnchor constant:10],
+		[self.settingsButton.centerXAnchor constraintEqualToAnchor:container.centerXAnchor]
+	]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:NSApp];
+}
+
+- (void) openPhotoSettings:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"x-apple.systempreferences:com.apple.preference.security?Privacy_Photos"]];
+}
+
+- (void) applicationDidBecomeActive:(NSNotification *)notification
+{
+	if (self.view.window && !self.view.hiddenOrHasHiddenAncestor) {
+		[self refreshPhotos];
+	}
+}
+
+- (void) refreshPhotos
+{
+	PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelReadWrite];
+	self.settingsButton.hidden = YES;
+	if (status == PHAuthorizationStatusNotDetermined) {
+		self.messageLabel.hidden = NO;
+		self.messageLabel.stringValue = @"Allow Photos access to show recent photos here, or use Browse Library…";
+		if (!self.requestingAccess) {
+			self.requestingAccess = YES;
+			[PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(PHAuthorizationStatus newStatus) {
+				RFDispatchMainAsync(^{
+					self.requestingAccess = NO;
+					[self refreshPhotos];
+				});
+			}];
+		}
+		return;
+	}
+	if ((status != PHAuthorizationStatusAuthorized) && (status != PHAuthorizationStatusLimited)) {
+		self.assets = nil;
+		[self.collectionView reloadData];
+		self.messageLabel.hidden = NO;
+		self.settingsButton.hidden = (status == PHAuthorizationStatusRestricted);
+		self.messageLabel.stringValue = @"Photos access is off. Allow access in Settings to show recent photos, or use Browse Library… below.";
+		return;
+	}
+	if (!self.observing) {
+		[[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+		self.observing = YES;
+	}
+	PHFetchOptions* options = [[PHFetchOptions alloc] init];
+	options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+	options.fetchLimit = 200;
+	self.assets = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
+	[self.collectionView reloadData];
+	self.messageLabel.stringValue = @"No photos available. Use Browse Library… to choose photos.";
+	self.messageLabel.hidden = (self.assets.count > 0);
+}
+
+- (void) photoLibraryDidChange:(PHChange *)changeInstance
+{
+	RFDispatchMainAsync(^{ [self refreshPhotos]; });
+}
+
+- (NSInteger) collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+	return self.assets.count;
+}
+
+- (NSCollectionViewItem *) collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+	RFPhotoLibraryItem* item = (RFPhotoLibraryItem *)[collectionView makeItemWithIdentifier:@"LibraryPhoto" forIndexPath:indexPath];
+	PHAsset* asset = [self.assets objectAtIndex:indexPath.item];
+	[[PHImageManager defaultManager] cancelImageRequest:item.imageRequest];
+	item.assetIdentifier = asset.localIdentifier;
+	item.imageView.image = nil;
+	[item.imageView setAccessibilityLabel:@"Attach photo"];
+	PHImageRequestOptions* options = [[PHImageRequestOptions alloc] init];
+	options.networkAccessAllowed = YES;
+	CGFloat scale = self.view.window.backingScaleFactor ?: 2;
+	__weak RFPhotoLibraryItem* weak_item = item;
+	item.imageRequest = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:NSMakeSize(150 * scale, 150 * scale) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(NSImage* image, NSDictionary* info) {
+		RFDispatchMainAsync(^{
+			RFPhotoLibraryItem* current_item = weak_item;
+			if ([current_item.assetIdentifier isEqualToString:asset.localIdentifier] && image) {
+				current_item.imageView.image = image;
+			}
+		});
+	}];
+	return item;
+}
+
+- (void) collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet *)indexPaths
+{
+	NSIndexPath* index_path = indexPaths.anyObject;
+	[collectionView deselectAll:nil];
+	if (index_path && (index_path.item < self.assets.count) && self.selectAsset) {
+		self.selectAsset([self.assets objectAtIndex:index_path.item]);
+	}
+}
+
+- (void) dealloc
+{
+	if (self.observing) {
+		[[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+	}
+}
+
+@end
 
 @interface RFPostController() <PHPickerViewControllerDelegate>
 
-@property (strong, nonatomic) PHPickerViewController* libraryPicker;
+@property (strong, nonatomic) RFPhotoLibraryController* libraryPicker;
 @property (strong, nonatomic) PHPickerViewController* libraryBrowser;
 @property (strong, nonatomic) id libraryKeyMonitor;
 @property (strong, nonatomic) NSView* libraryTray;
+@property (strong, nonatomic) NSBox* libraryBackground;
 @property (strong, nonatomic) NSLayoutConstraint* libraryTrayHeight;
 @property (strong, nonatomic) NSTextField* libraryStatus;
 @property (strong, nonatomic) NSMutableArray* libraryImportQueue;
@@ -816,7 +1034,7 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 - (void) finishClose
 {
 	self.hasClosed = YES;
-	self.libraryPicker.delegate = nil;
+	self.libraryPicker.selectAsset = nil;
 	self.libraryBrowser.delegate = nil;
 	if (self.libraryKeyMonitor) {
 		[NSEvent removeMonitor:self.libraryKeyMonitor];
@@ -1020,15 +1238,26 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	if (self.libraryTray == nil) {
 		[self setupLibraryTray];
 	}
-	BOOL showing = self.libraryTray.hidden;
+	BOOL showing = (self.libraryTrayHeight.constant == 0);
 	if (showing) {
 		[self makeRoomForLibraryTray];
+		[self.libraryPicker refreshPhotos];
 	}
-	self.libraryTray.hidden = !showing;
-	self.libraryTrayHeight.constant = showing ? 260 : 0;
+	self.libraryTray.hidden = NO;
+	self.libraryBackground.hidden = NO;
 	self.photoButton.contentTintColor = showing ? [NSColor controlAccentColor] : nil;
 	self.photoButton.toolTip = showing ? @"Hide Photos" : @"Show Photos";
 	[self.view layoutSubtreeIfNeeded];
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+		context.duration = [NSWorkspace sharedWorkspace].accessibilityDisplayShouldReduceMotion ? 0 : 0.18;
+		context.allowsImplicitAnimation = YES;
+		self.libraryTrayHeight.constant = showing ? kPhotoLibraryTrayHeight : 0;
+		[self.view layoutSubtreeIfNeeded];
+	} completionHandler:^{
+		// A second click can reverse the animation before this completion runs.
+		self.libraryTray.hidden = (self.libraryTrayHeight.constant == 0);
+		self.libraryBackground.hidden = self.libraryTray.hidden;
+	}];
 	if (!showing) {
 		[self.view.window makeFirstResponder:self.textView];
 	}
@@ -1041,13 +1270,38 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	self.libraryPendingIdentifiers = [NSMutableSet set];
 	NSView* tray = [[NSView alloc] initWithFrame:NSZeroRect];
 	tray.translatesAutoresizingMaskIntoConstraints = NO;
+	tray.wantsLayer = YES;
+	tray.layer.masksToBounds = YES;
 	tray.hidden = YES;
 	self.libraryTray = tray;
 	[self.view addSubview:tray];
+	NSBox* background = [[NSBox alloc] initWithFrame:NSZeroRect];
+	background.boxType = NSBoxCustom;
+	background.borderWidth = 0;
+	background.cornerRadius = 0;
+	background.transparent = NO;
+	background.titlePosition = NSNoTitle;
+	background.fillColor = [NSColor colorWithName:nil dynamicProvider:^NSColor* (NSAppearance* appearance) {
+		NSString* match = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+		if ([match isEqualToString:NSAppearanceNameDarkAqua]) {
+			return [NSColor colorWithWhite:0.16 alpha:1];
+		}
+		return [NSColor colorWithSRGBRed:247.0 / 255 green:247.0 / 255 blue:247.0 / 255 alpha:1];
+	}];
+	background.translatesAutoresizingMaskIntoConstraints = NO;
+	background.hidden = YES;
+	self.libraryBackground = background;
+	[self.view addSubview:background positioned:NSWindowBelow relativeTo:nil];
+	[NSLayoutConstraint activateConstraints:@[
+		[background.topAnchor constraintEqualToAnchor:tray.topAnchor],
+		[background.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+		[background.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor],
+		[background.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor]
+	]];
 	__weak RFPostController* weak_self = self;
 	self.libraryKeyMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown handler:^NSEvent* (NSEvent* event) {
 		RFPostController* strong_self = weak_self;
-		if ((event.keyCode == 53) && (event.window == strong_self.view.window) && !strong_self.libraryTray.hidden && (strong_self.libraryBrowser == nil) && (event.window.attachedSheet == nil)) {
+		if ((event.keyCode == 53) && (event.window == strong_self.view.window) && (strong_self.libraryTrayHeight.constant > 0) && (strong_self.libraryBrowser == nil) && (event.window.attachedSheet == nil)) {
 			[strong_self choosePhoto:nil];
 			return nil;
 		}
@@ -1070,54 +1324,60 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		self.libraryTrayHeight
 	]];
 
-	PHPickerConfiguration* configuration = [[PHPickerConfiguration alloc] initWithPhotoLibrary:[PHPhotoLibrary sharedPhotoLibrary]];
-	configuration.filter = [PHPickerFilter imagesFilter];
-	configuration.selection = PHPickerConfigurationSelectionContinuous;
-	configuration.selectionLimit = 10;
-	configuration.mode = PHPickerModeCompact;
-	configuration.disabledCapabilities = PHPickerCapabilitiesSelectionActions | PHPickerCapabilitiesStagingArea;
-	configuration.edgesWithoutContentMargins = NSDirectionalRectEdgeAll;
-	self.libraryPicker = [[PHPickerViewController alloc] initWithConfiguration:configuration];
-	self.libraryPicker.delegate = self;
+	self.libraryPicker = [[RFPhotoLibraryController alloc] init];
+	self.libraryPicker.backgroundColor = background.fillColor;
+	self.libraryPicker.selectAsset = ^(PHAsset* asset) {
+		[weak_self enqueueLibraryPhoto:asset identifier:asset.localIdentifier];
+		[weak_self importNextLibraryPhoto];
+	};
 	[self addChildViewController:self.libraryPicker];
 	NSView* picker_view = self.libraryPicker.view;
 	picker_view.translatesAutoresizingMaskIntoConstraints = NO;
-	[tray addSubview:picker_view];
+	NSView* picker_container = [[NSView alloc] initWithFrame:NSZeroRect];
+	picker_container.translatesAutoresizingMaskIntoConstraints = NO;
+	picker_container.wantsLayer = YES;
+	picker_container.layer.masksToBounds = YES;
+	[tray addSubview:picker_container];
+	[picker_container addSubview:picker_view];
 
 	NSButton* files_button = [NSButton buttonWithTitle:@"Choose Files…" target:self action:@selector(choosePhotoFiles:)];
+	files_button.controlSize = NSControlSizeSmall;
+	files_button.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
+	[files_button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
 	files_button.translatesAutoresizingMaskIntoConstraints = NO;
 	[tray addSubview:files_button];
 	NSButton* browse_button = [NSButton buttonWithTitle:@"Browse Library…" target:self action:@selector(browsePhotoLibrary:)];
+	browse_button.controlSize = NSControlSizeSmall;
+	browse_button.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
+	[browse_button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
 	browse_button.translatesAutoresizingMaskIntoConstraints = NO;
 	[tray addSubview:browse_button];
-	NSButton* close_button = [NSButton buttonWithTitle:@"Hide Photos" target:self action:@selector(choosePhoto:)];
-	close_button.keyEquivalent = @"\033";
-	close_button.translatesAutoresizingMaskIntoConstraints = NO;
-	[tray addSubview:close_button];
 	self.libraryStatus = [NSTextField labelWithString:@""];
 	self.libraryStatus.font = [NSFont systemFontOfSize:11];
 	self.libraryStatus.textColor = [NSColor secondaryLabelColor];
 	self.libraryStatus.lineBreakMode = NSLineBreakByTruncatingTail;
 	self.libraryStatus.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.libraryStatus setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
 	[tray addSubview:self.libraryStatus];
-	// The tray collapses to zero height while hidden.
-	NSLayoutConstraint* picker_bottom = [picker_view.bottomAnchor constraintEqualToAnchor:self.libraryStatus.topAnchor constant:-4];
-	picker_bottom.priority = NSLayoutPriorityDefaultHigh;
+	// Keep thumbnails at their full size while the tray slides open and clips them.
 	[NSLayoutConstraint activateConstraints:@[
-		[picker_view.topAnchor constraintEqualToAnchor:tray.topAnchor],
-		[picker_view.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor],
-		[picker_view.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor],
-		picker_bottom,
+		[picker_container.heightAnchor constraintEqualToConstant:150],
+		[picker_container.bottomAnchor constraintEqualToAnchor:files_button.topAnchor constant:-16],
+		[picker_container.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor constant:10],
+		[picker_container.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
+		[picker_view.topAnchor constraintEqualToAnchor:picker_container.topAnchor],
+		[picker_view.bottomAnchor constraintEqualToAnchor:picker_container.bottomAnchor],
+		[picker_view.leadingAnchor constraintEqualToAnchor:picker_container.leadingAnchor],
+		[picker_view.trailingAnchor constraintEqualToAnchor:picker_container.trailingAnchor],
 		[files_button.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor constant:10],
 		[files_button.bottomAnchor constraintEqualToAnchor:tray.bottomAnchor constant:-6],
 		[browse_button.leadingAnchor constraintEqualToAnchor:files_button.trailingAnchor constant:8],
 		[browse_button.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
-		[browse_button.trailingAnchor constraintLessThanOrEqualToAnchor:close_button.leadingAnchor constant:-8],
-		[close_button.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
-		[close_button.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
-		[self.libraryStatus.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor constant:10],
+		[browse_button.trailingAnchor constraintLessThanOrEqualToAnchor:tray.trailingAnchor constant:-10],
+		[self.libraryStatus.leadingAnchor constraintEqualToAnchor:browse_button.trailingAnchor constant:10],
 		[self.libraryStatus.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
-		[self.libraryStatus.bottomAnchor constraintEqualToAnchor:files_button.topAnchor constant:-4],
+		[self.libraryStatus.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
+		[self.libraryStatus.widthAnchor constraintGreaterThanOrEqualToConstant:0],
 		[self.libraryStatus.heightAnchor constraintEqualToConstant:14]
 	]];
 }
@@ -1148,13 +1408,13 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		return;
 	}
 	CGFloat attachment_space = (self.attachedPhotos.count == 0) ? 100 : 0;
-	CGFloat extra_height = MAX(0, 260 + attachment_space + 180 - self.textView.enclosingScrollView.frame.size.height);
+	CGFloat extra_height = MAX(0, kPhotoLibraryTrayHeight + attachment_space + 180 - self.textView.enclosingScrollView.frame.size.height);
 	if ((extra_height <= 0) || (window.styleMask & NSWindowStyleMaskFullScreen)) {
 		return;
 	}
 	NSRect visible_frame = window.screen.visibleFrame;
 	NSRect frame = window.frame;
-	CGFloat height = MIN(frame.size.height + extra_height, visible_frame.size.height);
+	CGFloat height = MIN(frame.size.height + 100, visible_frame.size.height);
 	frame.origin.y = MAX(NSMinY(visible_frame), NSMaxY(frame) - height);
 	frame.size.height = height;
 	[window setFrame:frame display:YES animate:YES];
@@ -1167,27 +1427,27 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 		self.libraryBrowser = nil;
 	}
 	for (PHPickerResult* result in results) {
-		// Treat each click as an attachment, rather than a selection awaiting confirmation.
-		if (result.assetIdentifier) {
-			[picker deselectAssetsWithIdentifiers:@[result.assetIdentifier]];
+		if ([result.itemProvider hasItemConformingToTypeIdentifier:UTTypeImage.identifier]) {
+			[self enqueueLibraryPhoto:result identifier:result.assetIdentifier];
 		}
-		if (self.isSending || self.hasClosed || ![result.itemProvider hasItemConformingToTypeIdentifier:UTTypeImage.identifier]) {
-			continue;
-		}
-		if (result.assetIdentifier && [self.libraryPendingIdentifiers containsObject:result.assetIdentifier]) {
-			continue;
-		}
-		if (self.attachedPhotos.count + self.pendingAttachmentSlots >= 10) {
-			self.libraryStatus.stringValue = @"10-photo limit reached";
-			continue;
-		}
-		if (result.assetIdentifier) {
-			[self.libraryPendingIdentifiers addObject:result.assetIdentifier];
-		}
-		[self.libraryImportQueue addObject:result];
-		self.pendingAttachmentSlots++;
 	}
 	[self importNextLibraryPhoto];
+}
+
+- (void) enqueueLibraryPhoto:(id)photo identifier:(NSString *)identifier
+{
+	if (self.isSending || self.hasClosed || (identifier && [self.libraryPendingIdentifiers containsObject:identifier])) {
+		return;
+	}
+	if (self.attachedPhotos.count + self.pendingAttachmentSlots >= 10) {
+		self.libraryStatus.stringValue = @"10-photo limit reached";
+		return;
+	}
+	if (identifier) {
+		[self.libraryPendingIdentifiers addObject:identifier];
+	}
+	[self.libraryImportQueue addObject:photo];
+	self.pendingAttachmentSlots++;
 }
 
 - (void) importNextLibraryPhoto
@@ -1197,6 +1457,28 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 	}
 	self.libraryImportInProgress = YES;
 	self.libraryStatus.stringValue = @"Loading photo…";
+	if ([self.libraryImportQueue.firstObject isKindOfClass:[PHAsset class]]) {
+		PHAsset* asset = self.libraryImportQueue.firstObject;
+		PHImageRequestOptions* options = [[PHImageRequestOptions alloc] init];
+		options.networkAccessAllowed = YES;
+		options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+		options.version = PHImageRequestOptionsVersionCurrent;
+		[[PHImageManager defaultManager] requestImageDataAndOrientationForAsset:asset options:options resultHandler:^(NSData* data, NSString* dataUTI, CGImagePropertyOrientation orientation, NSDictionary* info) {
+			NSError* error = info[PHImageErrorKey];
+			NSURL* copied_url = nil;
+			if (data) {
+				UTType* image_type = dataUTI ? [UTType typeWithIdentifier:dataUTI] : nil;
+				NSString* extension = image_type.preferredFilenameExtension ?: @"img";
+				NSString* filename = [[[NSUUID UUID] UUIDString] stringByAppendingPathExtension:extension];
+				NSURL* target = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:filename]];
+				if ([data writeToURL:target options:NSDataWritingAtomic error:&error]) {
+					copied_url = target;
+				}
+			}
+			RFDispatchMainAsync(^{ [self finishLibraryPhotoImport:copied_url identifier:asset.localIdentifier error:error]; });
+		}];
+		return;
+	}
 	PHPickerResult* result = self.libraryImportQueue.firstObject;
 	NSItemProvider* provider = result.itemProvider;
 	[provider loadFileRepresentationForTypeIdentifier:UTTypeImage.identifier completionHandler:^(NSURL* url, NSError* error) {
@@ -1211,35 +1493,41 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 			}
 		}
 		RFDispatchMainAsync(^{
-			self.pendingAttachmentSlots--;
-			[self.libraryImportQueue removeObjectAtIndex:0];
-			if (result.assetIdentifier) {
-				[self.libraryPendingIdentifiers removeObject:result.assetIdentifier];
-			}
-			self.libraryImportInProgress = NO;
-			if (self.hasClosed) {
-				if (copied_url) {
-					[[NSFileManager defaultManager] removeItemAtURL:copied_url error:NULL];
-				}
-				return;
-			}
-			NSImage* image = copied_url ? [[NSImage alloc] initWithContentsOfURL:copied_url] : nil;
-			if (image.isValid) {
-				[self.libraryTemporaryURLs addObject:copied_url];
-				[self attachPhotos:@[copied_url]];
-				self.libraryStatus.stringValue = @"Photo added";
-				[self.view.window makeFirstResponder:self.textView];
-			}
-			else {
-				if (copied_url) {
-					[[NSFileManager defaultManager] removeItemAtURL:copied_url error:NULL];
-				}
-				self.libraryStatus.stringValue = @"Could not load photo. Click to retry.";
-				self.libraryStatus.toolTip = import_error.localizedDescription;
-			}
-			[self importNextLibraryPhoto];
+			[self finishLibraryPhotoImport:copied_url identifier:result.assetIdentifier error:import_error];
 		});
 	}];
+}
+
+- (void) finishLibraryPhotoImport:(NSURL *)url identifier:(NSString *)identifier error:(NSError *)error
+{
+	self.pendingAttachmentSlots--;
+	[self.libraryImportQueue removeObjectAtIndex:0];
+	if (identifier) {
+		[self.libraryPendingIdentifiers removeObject:identifier];
+	}
+	self.libraryImportInProgress = NO;
+	if (self.hasClosed) {
+		if (url) {
+			[[NSFileManager defaultManager] removeItemAtURL:url error:NULL];
+		}
+		return;
+	}
+	NSImage* image = url ? [[NSImage alloc] initWithContentsOfURL:url] : nil;
+	if (image.isValid) {
+		[self.libraryTemporaryURLs addObject:url];
+		[self attachPhotos:@[url]];
+		self.libraryStatus.stringValue = @"Photo added";
+		self.libraryStatus.toolTip = nil;
+		[self.view.window makeFirstResponder:self.textView];
+	}
+	else {
+		if (url) {
+			[[NSFileManager defaultManager] removeItemAtURL:url error:NULL];
+		}
+		self.libraryStatus.stringValue = @"Could not load photo. Click to retry.";
+		self.libraryStatus.toolTip = error.localizedDescription;
+	}
+	[self importNextLibraryPhoto];
 }
 
 - (IBAction) choosePhotoFiles:(id)sender
