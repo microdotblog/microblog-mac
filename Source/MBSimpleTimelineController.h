@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id) initWithURL:(NSString *)url;
 - (void) loadURL;
+- (void) setupNotifications;
+- (IBAction) reply:(id)sender;
 
 @end
 

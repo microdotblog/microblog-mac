@@ -164,6 +164,7 @@ static NSString* const kTimelineDidStopLoading = @"TimelineDidStopLoading";
 static NSString* const kInitialHybridLoadDidCompleteNotification = @"InitialHybridLoadDidComplete";
 static NSString* const kTimelineSidebarRowKey = @"row";
 static NSInteger const kTimelinePostsSidebarRow = 5;
+static NSInteger const kTimelineBookmarksSidebarRow = 2;
 
 static NSString* const kShowHighlightsNotification = @"MBShowHighlightsNotification";
 

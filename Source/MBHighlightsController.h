@@ -14,9 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSMenuItem* browserMenuItem;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;
+@property (assign, nonatomic, readonly) BOOL loading;
+@property (copy, nonatomic, nullable) void (^loadingDidChange)(void);
 
 @property (strong) NSArray* currentHighlights; // MBHighlight
+
+- (void) fetchHighlights;
 
 @end
 

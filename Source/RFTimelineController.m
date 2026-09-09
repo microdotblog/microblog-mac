@@ -1077,7 +1077,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (IBAction) refreshTimeline:(id)sender
 {
-	[self.messageSpinner startAnimation:nil];
+	if (self.selectedTimeline != kSelectionFavorites) {
+		[self.messageSpinner startAnimation:nil];
+	}
 
 	if (self.selectedTimeline == kSelectionTimeline) {
 		[self showTimeline:nil];
@@ -1086,8 +1088,8 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[self showMentions:nil];
 	}
 	else if (self.selectedTimeline == kSelectionFavorites) {
-		if ([self.rootController isKindOfClass:[MBBookmarksController class]] && [(MBBookmarksController *)self.rootController showingLinks]) {
-			[(MBBookmarksController *)self.rootController reloadLinks];
+		if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
+			[(MBBookmarksController *)self.rootController refresh];
 		}
 		else {
 			[self showFavorites:nil];
@@ -1378,6 +1380,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		RFTopicController* topic_controller = (RFTopicController *)controller;
 		return topic_controller.webView;
 	}
+	else if ([controller isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)controller;
+		return bookmarks_controller.showingBookmarks ? bookmarks_controller.webView : nil;
+	}
 	else if ([controller isKindOfClass:[MBSimpleTimelineController class]]) {
 		MBSimpleTimelineController* simple_controller = (MBSimpleTimelineController *)controller;
 		return simple_controller.webView;
@@ -1386,9 +1392,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		RFDiscoverController* discover_controller = (RFDiscoverController *)controller;
 		return discover_controller.webView;
 	}
-	else if ([controller isKindOfClass:[MBBookmarksController class]]) {
-		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)controller;
-		return bookmarks_controller.webView;
+	else if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)self.rootController;
+		return bookmarks_controller.showingBookmarks ? bookmarks_controller.webView : nil;
 	}
 	else if ([self.rootController isKindOfClass:[MBSimpleTimelineController class]]) {
 		MBSimpleTimelineController* simple_controller = (MBSimpleTimelineController *)self.rootController;
@@ -1397,10 +1403,6 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	else if ([self.rootController isKindOfClass:[RFDiscoverController class]]) {
 		RFDiscoverController* discover_controller = (RFDiscoverController *)self.rootController;
 		return discover_controller.webView;
-	}
-	else if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
-		MBBookmarksController* bookmarks_controller = (MBBookmarksController *)self.rootController;
-		return bookmarks_controller.webView;
 	}
 	else {
 		return nil;
@@ -1506,6 +1508,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 			}
 			else {
 				[self.window makeFirstResponder:self.rootController];
+				if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
+					[(MBBookmarksController *)self.rootController focusContent];
+				}
 			}
 		}];
 	}
@@ -1593,6 +1598,9 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 	RFDispatchMainAsync(^{
 		[self.window makeFirstResponder:controller];
+		if ([controller isKindOfClass:[MBBookmarksController class]]) {
+			[(MBBookmarksController *)controller focusContent];
+		}
 	});
 }
 
@@ -1607,10 +1615,10 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) showHighlights
 {
-	NSViewController* controller = [[MBHighlightsController alloc] init];
-	[controller view];
-
-	[self pushViewController:controller];
+	if (![self.rootController isKindOfClass:[MBBookmarksController class]]) {
+		[self showFavorites:nil];
+	}
+	[(MBBookmarksController *)self.rootController showHighlights];
 }
 
 - (void) showConversationWithPostID:(NSString *)postID
@@ -2087,6 +2095,12 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 		[self completeInitialHybridLoad];
 	}
 
+	// The bookmarks page may finish loading after switching to a native tab.
+	if ([self.rootController isKindOfClass:[MBBookmarksController class]] && webView == [(MBBookmarksController *)self.rootController webView]) {
+		[(MBBookmarksController *)self.rootController bookmarksDidFinishLoading];
+		[self updateCachedUsers];
+		return;
+	}
 	if (webView != [self currentWebView]) {
 		return;
 	}
@@ -2129,11 +2143,17 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 	[self completeInitialHybridLoad];
 
+	// The bookmarks page may finish loading after switching to a native tab.
+	if ([self.rootController isKindOfClass:[MBBookmarksController class]] && webView == [(MBBookmarksController *)self.rootController webView]) {
+		[(MBBookmarksController *)self.rootController bookmarksDidFinishLoading];
+	}
 	if (webView != [self currentWebView]) {
 		return;
 	}
 
-	[self stopLoadingSidebarRow];
+	if (![self.rootController isKindOfClass:[MBBookmarksController class]]) {
+		[self stopLoadingSidebarRow];
+	}
 
 	NSAlert* alert = [[NSAlert alloc] init];
 	[alert addButtonWithTitle:@"OK"];

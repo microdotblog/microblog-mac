@@ -14,18 +14,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBBookmarksController : MBSimpleTimelineController
 
-@property (strong, nonatomic) IBOutlet NSButton* highlightsCountButton;
+@property (strong, nonatomic) IBOutlet NSBox* headerBox;
 @property (strong, nonatomic) IBOutlet NSButton* currentTagCloseButton;
 @property (strong, nonatomic) IBOutlet NSTextField* currentTagField;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* tagsButton;
 @property (strong, nonatomic) IBOutlet WebView* webView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint* highlightsTopConstraint;
 
-@property (strong) NSNumber* highlightsCount;
 @property (strong) NSArray* tags; // NSString
-@property (assign, nonatomic, readonly) BOOL showingLinks;
+@property (assign, nonatomic, readonly) BOOL showingBookmarks;
 
-- (void) reloadLinks;
+- (void) refresh;
+- (void) showHighlights;
+- (void) focusContent;
+- (void) bookmarksDidFinishLoading;
 
 @end
 

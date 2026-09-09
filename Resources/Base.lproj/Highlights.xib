@@ -10,7 +10,6 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBHighlightsController">
             <connections>
                 <outlet property="browserMenuItem" destination="nTi-sh-Y0s" id="PE9-za-Nvb"/>
-                <outlet property="progressSpinner" destination="qSq-cZ-guW" id="sog-6v-xYb"/>
                 <outlet property="tableView" destination="N7o-iT-Tun" id="YTM-7g-e0h"/>
                 <outlet property="view" destination="c22-O7-iKe" id="DLd-Y7-JYT"/>
             </connections>
@@ -86,62 +85,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
-                <box autoresizesSubviews="NO" boxType="custom" borderType="none" translatesAutoresizingMaskIntoConstraints="NO" id="iLe-1W-Cas" customClass="MBOutlineHeaderBox">
-                    <rect key="frame" x="0.0" y="500" width="500" height="44"/>
-                    <view key="contentView" id="rs8-VO-drM">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lws-QZ-DsH">
-                                <rect key="frame" x="10" y="3.5" width="30" height="36.5"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="chevron.left.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Y6U-kn-dJg">
-                                    <behavior key="behavior" lightByContents="YES"/>
-                                    <font key="font" metaFont="system" size="16"/>
-                                </buttonCell>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="gta-Qs-Eyo"/>
-                                    <constraint firstAttribute="height" constant="30" id="wK2-z9-TZo"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="back:" target="-2" id="tda-aA-au5"/>
-                                </connections>
-                            </button>
-                            <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="qSq-cZ-guW">
-                                <rect key="frame" x="392" y="14" width="16" height="16"/>
-                            </progressIndicator>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="stB-hV-4dc">
-                                <rect key="frame" x="416" y="14" width="68" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Highlights" id="iTj-Au-auc">
-                                    <font key="font" metaFont="systemMedium" size="13"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="stB-hV-4dc" firstAttribute="centerY" secondItem="rs8-VO-drM" secondAttribute="centerY" id="0Pn-tA-Osh"/>
-                            <constraint firstItem="Lws-QZ-DsH" firstAttribute="centerY" secondItem="rs8-VO-drM" secondAttribute="centerY" id="ODT-37-0QJ"/>
-                            <constraint firstItem="qSq-cZ-guW" firstAttribute="centerY" secondItem="rs8-VO-drM" secondAttribute="centerY" id="Z5z-Xc-cwG"/>
-                            <constraint firstItem="Lws-QZ-DsH" firstAttribute="leading" secondItem="rs8-VO-drM" secondAttribute="leading" constant="10" id="hCC-4C-O27"/>
-                            <constraint firstAttribute="trailing" secondItem="stB-hV-4dc" secondAttribute="trailing" constant="18" id="rDx-jn-3zg"/>
-                            <constraint firstItem="stB-hV-4dc" firstAttribute="leading" secondItem="qSq-cZ-guW" secondAttribute="trailing" constant="10" id="zci-T1-t5b"/>
-                        </constraints>
-                    </view>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="1Zr-8e-wi4"/>
-                    </constraints>
-                    <color key="borderColor" name="color_highlight_line"/>
-                    <color key="fillColor" name="color_highlights_header_background"/>
-                </box>
             </subviews>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="JbW-2g-UKv" secondAttribute="trailing" id="AVr-BG-lJU"/>
-                <constraint firstItem="JbW-2g-UKv" firstAttribute="top" secondItem="iLe-1W-Cas" secondAttribute="bottom" id="D7I-gN-sCO"/>
+                <constraint firstItem="JbW-2g-UKv" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="D7I-gN-sCO"/>
                 <constraint firstAttribute="bottom" secondItem="JbW-2g-UKv" secondAttribute="bottom" id="F2s-d3-O4t"/>
-                <constraint firstAttribute="trailing" secondItem="iLe-1W-Cas" secondAttribute="trailing" id="GtE-nl-0cY"/>
-                <constraint firstItem="iLe-1W-Cas" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="-1" id="VkZ-o9-4Du"/>
                 <constraint firstItem="JbW-2g-UKv" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="XPH-IL-lny"/>
-                <constraint firstItem="iLe-1W-Cas" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="bU2-PG-VfI"/>
             </constraints>
             <point key="canvasLocation" x="63" y="156.5"/>
         </customView>

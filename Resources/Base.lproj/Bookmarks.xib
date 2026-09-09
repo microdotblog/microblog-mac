@@ -11,8 +11,7 @@
             <connections>
                 <outlet property="currentTagCloseButton" destination="Bv2-Qf-nrK" id="M5C-83-LHW"/>
                 <outlet property="currentTagField" destination="oyw-LX-dfu" id="XKa-0A-vIV"/>
-                <outlet property="highlightsCountButton" destination="DDH-Ir-Y8s" id="8x6-cU-VbG"/>
-                <outlet property="highlightsTopConstraint" destination="JcL-kO-GiP" id="wT0-gk-vgQ"/>
+                <outlet property="headerBox" destination="afl-rL-umg" id="8x6-cU-VbG"/>
                 <outlet property="tagsButton" destination="19n-45-pjW" id="g0J-pZ-wvb"/>
                 <outlet property="view" destination="c22-O7-iKe" id="Gyx-G8-w6m"/>
                 <outlet property="webView" destination="dJ3-8Q-iCM" id="8m6-O6-Azn"/>
@@ -30,16 +29,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="454" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DDH-Ir-Y8s">
-                                <rect key="frame" x="18" y="5" width="235" height="34"/>
-                                <buttonCell key="cell" type="square" title="50 highlights" bezelStyle="shadowlessSquare" alignment="left" imageScaling="proportionallyDown" inset="2" id="Glx-TU-9Vh">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="showHighlights:" target="-2" id="mPH-Mr-dXR"/>
-                                </connections>
-                            </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="19n-45-pjW">
                                 <rect key="frame" x="386" y="10" width="50" height="24"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" id="XxI-f7-TCr">
@@ -58,9 +47,9 @@
                                     <action selector="selectTag:" target="-2" id="l6r-mw-bB1"/>
                                 </connections>
                             </popUpButton>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-LX-dfu">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-LX-dfu">
                                 <rect key="frame" x="319" y="14" width="61" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="tag name" id="7BV-Sg-PE6">
+                                <textFieldCell key="cell" lineBreakMode="truncatingTail" title="" id="7BV-Sg-PE6">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -82,23 +71,19 @@
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="oyw-LX-dfu" secondAttribute="trailing" constant="8" symbolic="YES" id="JfF-Qu-ud1"/>
                             <constraint firstAttribute="trailing" secondItem="19n-45-pjW" secondAttribute="trailing" constant="18" id="KiJ-eQ-agP"/>
-                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="leading" secondItem="bBM-c5-6vi" secondAttribute="leading" constant="18" id="LIb-hE-eB9"/>
-                            <constraint firstItem="Bv2-Qf-nrK" firstAttribute="centerY" secondItem="oyw-LX-dfu" secondAttribute="centerY" id="M3H-Y7-ebv"/>
-                            <constraint firstItem="Bv2-Qf-nrK" firstAttribute="leading" secondItem="DDH-Ir-Y8s" secondAttribute="trailing" constant="38" id="OQs-4M-7Pc"/>
-                            <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="Pnf-vK-gmG"/>
-                            <constraint firstItem="DDH-Ir-Y8s" firstAttribute="top" secondItem="bBM-c5-6vi" secondAttribute="top" constant="5" id="eym-nk-GAq"/>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="top" constant="22" id="Pnf-vK-gmG"/>
+                            <constraint firstItem="Bv2-Qf-nrK" firstAttribute="centerY" secondItem="19n-45-pjW" secondAttribute="centerY" id="tag-close-center"/>
                             <constraint firstItem="oyw-LX-dfu" firstAttribute="leading" secondItem="Bv2-Qf-nrK" secondAttribute="trailing" id="fDz-Wo-wgu"/>
-                            <constraint firstItem="oyw-LX-dfu" firstAttribute="centerY" secondItem="bBM-c5-6vi" secondAttribute="centerY" id="vKC-HH-AvB"/>
-                            <constraint firstAttribute="bottom" secondItem="DDH-Ir-Y8s" secondAttribute="bottom" constant="5" id="wVb-yW-N8Q"/>
+                            <constraint firstItem="oyw-LX-dfu" firstAttribute="centerY" secondItem="Bv2-Qf-nrK" secondAttribute="centerY" id="M3H-Y7-ebv"/>
+                            <constraint firstItem="19n-45-pjW" firstAttribute="leading" secondItem="oyw-LX-dfu" secondAttribute="trailing" constant="8" id="tag-trailing"/>
                         </constraints>
                     </view>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="0Lk-f9-ac3"/>
                     </constraints>
-                    <color key="borderColor" name="color_highlight_line"/>
-                    <color key="fillColor" name="color_highlight_background"/>
+                    <color key="borderColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
+                    <color key="fillColor" name="color_timeline_background"/>
                 </box>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="dJ3-8Q-iCM" customClass="WebView">
                     <rect key="frame" x="0.0" y="0.0" width="454" height="484"/>
@@ -119,11 +104,8 @@
     <resources>
         <image name="tag" catalog="system" width="17" height="17"/>
         <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
-        <namedColor name="color_highlight_background">
-            <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="color_highlight_line">
-            <color red="0.94499999284744263" green="0.92900002002716064" blue="0.82400000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="color_timeline_background">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

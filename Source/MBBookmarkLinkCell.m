@@ -27,21 +27,27 @@
 		[self addSubview:self.titleLabel];
 		self.urlLabel = [NSTextField labelWithString:@""];
 		self.urlLabel.font = [NSFont systemFontOfSize:13];
-		self.urlLabel.textColor = [NSColor linkColor];
+		self.urlLabel.textColor = [NSColor textColor];
 		self.urlLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
 		self.urlLabel.translatesAutoresizingMaskIntoConstraints = NO;
 		[self addSubview:self.urlLabel];
+		NSLayoutGuide* text_group = [[NSLayoutGuide alloc] init];
+		[self addLayoutGuide:text_group];
 		[NSLayoutConstraint activateConstraints:@[
 			[self.thumbnailView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16],
 			[self.thumbnailView.topAnchor constraintEqualToAnchor:self.topAnchor constant:12],
 			[self.thumbnailView.widthAnchor constraintEqualToConstant:120],
 			[self.thumbnailView.heightAnchor constraintEqualToConstant:120],
-			[self.titleLabel.leadingAnchor constraintEqualToAnchor:self.thumbnailView.trailingAnchor constant:16],
-			[self.titleLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16],
-			[self.titleLabel.topAnchor constraintEqualToAnchor:self.thumbnailView.topAnchor],
+			[text_group.leadingAnchor constraintEqualToAnchor:self.thumbnailView.trailingAnchor constant:16],
+			[text_group.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16],
+			[text_group.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+			[self.titleLabel.leadingAnchor constraintEqualToAnchor:text_group.leadingAnchor],
+			[self.titleLabel.trailingAnchor constraintEqualToAnchor:text_group.trailingAnchor],
+			[self.titleLabel.topAnchor constraintEqualToAnchor:text_group.topAnchor],
 			[self.urlLabel.leadingAnchor constraintEqualToAnchor:self.titleLabel.leadingAnchor],
 			[self.urlLabel.trailingAnchor constraintEqualToAnchor:self.titleLabel.trailingAnchor],
-			[self.urlLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:8]
+			[self.urlLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:8],
+			[self.urlLabel.bottomAnchor constraintEqualToAnchor:text_group.bottomAnchor]
 		]];
 	}
 	return self;
@@ -51,9 +57,14 @@
 {
 	self.link = link;
 	self.titleLabel.stringValue = link.title.length ? link.title : link.url.host;
-	self.urlLabel.stringValue = link.url.absoluteString;
+	NSString* display_url = link.url.absoluteString;
+	NSRange scheme_range = [display_url rangeOfString:@"://"];
+	if (scheme_range.location != NSNotFound) {
+		display_url = [display_url substringFromIndex:NSMaxRange(scheme_range)];
+	}
+	self.urlLabel.stringValue = display_url;
 	self.toolTip = link.url.absoluteString;
-	self.thumbnailView.image = [NSImage imageWithSystemSymbolName:@"link" accessibilityDescription:@"Web page"];
+	self.thumbnailView.image = nil;
 }
 
 - (void) layout
@@ -63,6 +74,14 @@
 		self.titleLabel.preferredMaxLayoutWidth = text_width;
 	}
 	[super layout];
+}
+
+- (void) setBackgroundStyle:(NSBackgroundStyle)backgroundStyle
+{
+	[super setBackgroundStyle:backgroundStyle];
+	BOOL selected = backgroundStyle == NSBackgroundStyleEmphasized;
+	self.titleLabel.textColor = selected ? [NSColor alternateSelectedControlTextColor] : [NSColor labelColor];
+	self.urlLabel.textColor = selected ? [NSColor alternateSelectedControlTextColor] : [NSColor textColor];
 }
 
 @end

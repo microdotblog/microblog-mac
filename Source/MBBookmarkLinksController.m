@@ -3,10 +3,31 @@
 #import "MBBookmarkLinkCell.h"
 #import "RFClient.h"
 #import "RFMacros.h"
+#import "NSString+Extras.h"
+
+@interface MBBookmarkLinksTableView : NSTableView
+@end
+
+@implementation MBBookmarkLinksTableView
+
+- (void) drawContextMenuHighlightForRow:(NSInteger)row
+{
+	// Use the selected row background instead of a context-menu outline.
+}
+
+- (void) willOpenMenu:(NSMenu *)menu withEvent:(NSEvent *)event
+{
+	NSInteger row = self.clickedRow;
+	if (row >= 0) {
+		[self.window makeFirstResponder:self];
+		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+	}
+}
+
+@end
 
 @interface MBBookmarkLinksController() <NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate>
 @property (strong, nonatomic) NSTableView* tableView;
-@property (strong, nonatomic) NSProgressIndicator* progress;
 @property (strong, nonatomic) NSTextField* messageLabel;
 @property (strong, nonatomic) NSButton* retryButton;
 @property (strong, nonatomic) NSArray* links;
@@ -14,6 +35,7 @@
 @property (strong, nonatomic) NSURLSession* imageSession;
 @property (strong, nonatomic) NSMutableSet* deletingIDs;
 @property (assign, nonatomic) NSUInteger loadGeneration;
+@property (assign, nonatomic, readwrite) BOOL loading;
 @end
 
 @implementation MBBookmarkLinksController
@@ -34,7 +56,7 @@
 	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
 	scroll_view.hasVerticalScroller = YES;
 	scroll_view.borderType = NSNoBorder;
-	self.tableView = [[NSTableView alloc] initWithFrame:scroll_view.bounds];
+	self.tableView = [[MBBookmarkLinksTableView alloc] initWithFrame:scroll_view.bounds];
 	self.tableView.headerView = nil;
 	self.tableView.rowHeight = 152;
 	self.tableView.intercellSpacing = NSMakeSize(0, 0);
@@ -53,11 +75,6 @@
 	self.tableView.menu = menu;
 	scroll_view.documentView = self.tableView;
 	[self.view addSubview:scroll_view];
-	self.progress = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
-	self.progress.style = NSProgressIndicatorStyleSpinning;
-	self.progress.displayedWhenStopped = NO;
-	self.progress.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.view addSubview:self.progress];
 	self.messageLabel = [NSTextField wrappingLabelWithString:@""];
 	self.messageLabel.alignment = NSTextAlignmentCenter;
 	self.messageLabel.textColor = [NSColor secondaryLabelColor];
@@ -72,8 +89,6 @@
 		[scroll_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
 		[scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
 		[scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-		[self.progress.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-		[self.progress.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:20],
 		[self.messageLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:60],
 		[self.messageLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
 		[self.messageLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20],
@@ -82,20 +97,33 @@
 	]];
 }
 
+- (void) focusContent
+{
+	[self.view.window makeFirstResponder:self.tableView];
+}
+
+- (void) setLoading:(BOOL)loading
+{
+	_loading = loading;
+	if (self.loadingDidChange) {
+		self.loadingDidChange();
+	}
+}
+
 - (void) reloadLinks
 {
 	[self view];
 	NSUInteger generation = ++self.loadGeneration;
 	self.messageLabel.hidden = YES;
 	self.retryButton.hidden = YES;
-	[self.progress startAnimation:nil];
+	self.loading = YES;
 	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/links"];
 	[client getWithCompletion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync(^{
 			if (generation != self.loadGeneration) {
 				return;
 			}
-			[self.progress stopAnimation:nil];
+			self.loading = NO;
 			NSDictionary* feed = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
 			if (response.httpError || response.httpResponse.statusCode != 200 || ![feed[@"items"] isKindOfClass:[NSArray class]]) {
 				self.messageLabel.stringValue = @"Could not load saved links. Please try again.";
@@ -172,9 +200,12 @@
 		return;
 	}
 	MBBookmarkLink* link = self.links[row];
-	NSArray* titles = @[@"Open in Browser", @"Copy Link", @"Delete Link…"];
+	NSArray* titles = @[[NSString mb_openInBrowserString], @"Copy Link", @"Delete"];
 	NSArray* actions = @[@"openLink:", @"copyLink:", @"deleteLink:"];
 	for (NSUInteger i = 0; i < titles.count; i++) {
+		if (i == 2) {
+			[menu addItem:[NSMenuItem separatorItem]];
+		}
 		NSMenuItem* item = [menu addItemWithTitle:titles[i] action:NSSelectorFromString(actions[i]) keyEquivalent:@""];
 		item.target = self;
 		item.representedObject = link;
@@ -184,10 +215,20 @@
 
 - (void) openSelectedLink:(id)sender
 {
-	NSInteger row = self.tableView.clickedRow;
+	NSInteger row = sender == self.tableView ? self.tableView.clickedRow : self.tableView.selectedRow;
 	if (row >= 0 && row < self.links.count) {
 		MBBookmarkLink* link = self.links[row];
 		[[NSWorkspace sharedWorkspace] openURL:link.url];
+	}
+}
+
+- (void) keyDown:(NSEvent *)event
+{
+	if ([event.characters isEqualToString:@"\r"]) {
+		[self openSelectedLink:nil];
+	}
+	else {
+		[super keyDown:event];
 	}
 }
 

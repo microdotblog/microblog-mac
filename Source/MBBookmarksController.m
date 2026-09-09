@@ -16,13 +16,20 @@
 #import "NSString+Extras.h"
 #import "NSAppearance+Extras.h"
 #import "MBBookmarkLinksController.h"
+#import "MBHighlightsController.h"
 
-static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
+typedef NS_ENUM(NSInteger, MBBookmarksTab) {
+	MBBookmarksTabBookmarks,
+	MBBookmarksTabHighlights,
+	MBBookmarksTabLinks
+};
 
 @interface MBBookmarksController()
-@property (strong, nonatomic) NSButton* linksButton;
+@property (strong, nonatomic) NSSegmentedControl* tabsControl;
 @property (strong, nonatomic) MBBookmarkLinksController* linksController;
-@property (assign, nonatomic, readwrite) BOOL showingLinks;
+@property (strong, nonatomic) MBHighlightsController* highlightsController;
+@property (assign, nonatomic) MBBookmarksTab selectedTab;
+@property (assign, nonatomic) BOOL loadingBookmarks;
 @end
 
 @implementation MBBookmarksController
@@ -40,154 +47,194 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 {
 	[super viewDidLoad];
 
-	[self setupNotifications];
-	[self setupWebView];
-	[self setupHighlightsButton];
+	[self setupTabs];
 	[self hideCurrentTag];
-	[self setupLinksButton];
+	[self setupWebView];
 
-	[self fetchHighlights];
+	[self fetchTags];
 }
 
 - (void) setupNotifications
 {
+	[super setupNotifications];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectTagNotification:) name:kSelectTagNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBookmarksNotification:) name:kRefreshBookmarksNotification object:nil];
 }
 
 - (void) setupWebView
 {
+	self.loadingBookmarks = YES;
+	[self updateLoadingSidebarRow];
+	self.selectedPostID = nil;
 	if ([NSAppearance rf_isDarkMode]) {
 		[self.webView setDrawsBackground:NO];
 	}
 	
 	NSString* url = @"https://micro.blog/hybrid/bookmarks";
+	if (self.currentTagField.stringValue.length > 0) {
+		url = [url stringByAppendingFormat:@"?tag=%@", [self.currentTagField.stringValue rf_urlEncoded]];
+	}
 	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 	[[self.webView mainFrame] loadRequest:request];
 }
 
-- (void) setupHighlightsButton
+- (void) setupTabs
 {
-	// we cache the last highlights count to avoid flickering between blank and new value
-	NSInteger num = [[NSUserDefaults standardUserDefaults] integerForKey:kHighlightsCountPrefKey];
-	NSString* s;
-	if (num == 1) {
-		s = @"1 highlight";
-		[self.highlightsCountButton setTitle:s];
-	}
-	else if (num > 1) {
-		s = [NSString stringWithFormat:@"%ld highlights", (long)num];
-		[self.highlightsCountButton setTitle:s];
-	}
-	else {
-		self.highlightsCountButton.hidden = YES;
-	}
+	self.tabsControl = [NSSegmentedControl segmentedControlWithLabels:@[@"Bookmarks", @"Highlights", @"Links"] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(selectTab:)];
+	self.tabsControl.selectedSegment = MBBookmarksTabBookmarks;
+	self.tabsControl.translatesAutoresizingMaskIntoConstraints = NO;
+	NSView* bar = self.headerBox.contentView;
+	[bar addSubview:self.tabsControl];
+	[NSLayoutConstraint activateConstraints:@[
+		[self.tabsControl.leadingAnchor constraintEqualToAnchor:bar.leadingAnchor constant:18],
+		[self.tabsControl.centerYAnchor constraintEqualToAnchor:self.tagsButton.centerYAnchor],
+		[self.tabsControl.trailingAnchor constraintLessThanOrEqualToAnchor:self.currentTagCloseButton.leadingAnchor constant:-12]
+	]];
+}
+
+- (BOOL) showingBookmarks
+{
+	return self.selectedTab == MBBookmarksTabBookmarks;
 }
 
 - (void) hideCurrentTag
 {
 	self.currentTagField.stringValue = @"";
-	self.currentTagField.hidden = YES;
-	self.currentTagCloseButton.hidden = YES;
+	[self updateTagControls];
 }
 
-- (void) setupLinksButton
+- (void) updateTagControls
 {
-	self.linksButton = [NSButton buttonWithTitle:@"Links" target:self action:@selector(toggleLinks:)];
-	self.linksButton.bezelStyle = self.tagsButton.bezelStyle;
-	self.linksButton.controlSize = self.tagsButton.controlSize;
-	self.linksButton.font = self.tagsButton.font;
-	[self.linksButton setButtonType:NSButtonTypePushOnPushOff];
-	self.linksButton.alternateTitle = @"Links";
-	// Keep the tags button's subtle bezel instead of the default blue toggle fill.
-	[(NSButtonCell *)self.linksButton.cell setShowsStateBy:NSContentsCellMask];
-	self.linksButton.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.linksButton setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
-	NSView* bar = self.tagsButton.superview;
-	[bar addSubview:self.linksButton];
-	for (NSLayoutConstraint* constraint in [bar.constraints copy]) {
-		if (constraint.firstItem == self.tagsButton && constraint.firstAttribute == NSLayoutAttributeLeading && constraint.secondItem == self.currentTagField) {
-			constraint.active = NO;
-		}
-	}
+	BOOL has_tag = self.showingBookmarks && self.currentTagField.stringValue.length > 0;
+	self.currentTagField.hidden = !has_tag;
+	self.currentTagCloseButton.hidden = !has_tag;
+	self.tagsButton.hidden = !self.showingBookmarks;
+}
+
+- (void) addContentController:(NSViewController *)controller
+{
+	[self addChildViewController:controller];
+	NSView* content_view = controller.view;
+	content_view.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.view addSubview:content_view];
 	[NSLayoutConstraint activateConstraints:@[
-		[self.linksButton.trailingAnchor constraintEqualToAnchor:self.tagsButton.leadingAnchor constant:-8],
-		[self.linksButton.leadingAnchor constraintEqualToAnchor:self.currentTagField.trailingAnchor constant:8],
-		[self.linksButton.centerYAnchor constraintEqualToAnchor:self.tagsButton.centerYAnchor],
-		[self.linksButton.heightAnchor constraintEqualToAnchor:self.tagsButton.heightAnchor]
+		[content_view.topAnchor constraintEqualToAnchor:self.webView.topAnchor],
+		[content_view.bottomAnchor constraintEqualToAnchor:self.webView.bottomAnchor],
+		[content_view.leadingAnchor constraintEqualToAnchor:self.webView.leadingAnchor],
+		[content_view.trailingAnchor constraintEqualToAnchor:self.webView.trailingAnchor]
 	]];
 }
 
-- (void) toggleLinks:(id)sender
+- (void) selectTab:(id)sender
 {
-	[self setLinksVisible:!self.showingLinks];
+	[self showTab:self.tabsControl.selectedSegment];
 }
 
-- (void) setLinksVisible:(BOOL)visible
+- (void) showTab:(MBBookmarksTab)tab
 {
-	if (visible && self.linksController == nil) {
-		self.linksController = [[MBBookmarkLinksController alloc] init];
-		[self addChildViewController:self.linksController];
-		NSView* links_view = self.linksController.view;
-		links_view.translatesAutoresizingMaskIntoConstraints = NO;
-		[self.view addSubview:links_view];
-		[NSLayoutConstraint activateConstraints:@[
-			[links_view.topAnchor constraintEqualToAnchor:self.webView.topAnchor],
-			[links_view.bottomAnchor constraintEqualToAnchor:self.webView.bottomAnchor],
-			[links_view.leadingAnchor constraintEqualToAnchor:self.webView.leadingAnchor],
-			[links_view.trailingAnchor constraintEqualToAnchor:self.webView.trailingAnchor]
-		]];
+	__weak MBBookmarksController* weak_self = self;
+	if (tab == MBBookmarksTabHighlights && self.highlightsController == nil) {
+		self.highlightsController = [[MBHighlightsController alloc] init];
+		self.highlightsController.loadingDidChange = ^{
+			[weak_self updateLoadingSidebarRow];
+		};
+		[self addContentController:self.highlightsController];
 	}
-	self.showingLinks = visible;
-	self.linksButton.state = visible ? NSControlStateValueOn : NSControlStateValueOff;
-	self.linksButton.font = visible ? [NSFont systemFontOfSize:self.tagsButton.font.pointSize weight:NSFontWeightSemibold] : self.tagsButton.font;
-	self.webView.hidden = visible;
-	self.linksController.view.hidden = !visible;
-	self.currentTagField.hidden = visible || self.currentTagField.stringValue.length == 0;
-	self.currentTagCloseButton.hidden = self.currentTagField.hidden;
-	if (visible) {
-		self.selectedPostID = nil;
+	else if (tab == MBBookmarksTabLinks && self.linksController == nil) {
+		self.linksController = [[MBBookmarkLinksController alloc] init];
+		self.linksController.loadingDidChange = ^{
+			[weak_self updateLoadingSidebarRow];
+		};
+		[self addContentController:self.linksController];
 		[self.linksController reloadLinks];
-		[self.view.window makeFirstResponder:self.linksController.view];
+	}
+
+	self.selectedTab = tab;
+	self.tabsControl.selectedSegment = tab;
+	self.webView.hidden = !self.showingBookmarks;
+	self.highlightsController.view.hidden = (tab != MBBookmarksTabHighlights);
+	self.linksController.view.hidden = (tab != MBBookmarksTabLinks);
+	[self updateTagControls];
+	[self focusContent];
+}
+
+- (void) focusContent
+{
+	if (self.selectedTab == MBBookmarksTabHighlights) {
+		[self.view.window makeFirstResponder:self.highlightsController.tableView];
+	}
+	else if (self.selectedTab == MBBookmarksTabLinks) {
+		[self.linksController focusContent];
 	}
 	else {
 		[self.view.window makeFirstResponder:self.webView];
 	}
 }
 
-- (void) reloadLinks
+- (void) keyDown:(NSEvent *)event
 {
-	[self.linksController reloadLinks];
+	if (self.showingBookmarks) {
+		[super keyDown:event];
+	}
 }
 
-- (void) fetchHighlights
+- (void) moveUp:(id)sender
 {
-	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/highlights"];
-	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			NSDictionary* mb = [response.parsedResponse objectForKey:@"_microblog"];
-			NSNumber* num = [mb objectForKey:@"count"];
-			
-			RFDispatchMainAsync ((^{
-				self.highlightsCount = num;
-				if ([num integerValue] > 0) {
-					[[NSUserDefaults standardUserDefaults] setObject:num forKey:kHighlightsCountPrefKey];
-					NSString* s;
-					if ([num integerValue] == 1) {
-						s = @"1 highlight";
-					}
-					else {
-						s = [NSString stringWithFormat:@"%@ highlights", num];
-					}
-					[self.highlightsCountButton setTitle:s];
-					self.highlightsCountButton.hidden = NO;
-				}
-				
-				// then fetch tags
-				[self fetchTags];
-			}));
-		}
+	if (self.showingBookmarks) {
+		[super moveUp:sender];
+	}
+}
+
+- (void) moveDown:(id)sender
+{
+	if (self.showingBookmarks) {
+		[super moveDown:sender];
+	}
+}
+
+- (IBAction) reply:(id)sender
+{
+	if (self.showingBookmarks) {
+		[super reply:sender];
+	}
+}
+
+- (void) showHighlights
+{
+	[self showTab:MBBookmarksTabHighlights];
+}
+
+- (void) refresh
+{
+	if (self.selectedTab == MBBookmarksTabHighlights) {
+		[self.highlightsController fetchHighlights];
+	}
+	else if (self.selectedTab == MBBookmarksTabLinks) {
+		[self.linksController reloadLinks];
+	}
+	else {
+		[self setupWebView];
+		[self fetchTags];
+	}
+}
+
+- (void) bookmarksDidFinishLoading
+{
+	self.loadingBookmarks = NO;
+	[self updateLoadingSidebarRow];
+}
+
+- (void) updateLoadingSidebarRow
+{
+	if (self.view.window == nil) {
+		return;
+	}
+	// The web page and native tabs can load at the same time.
+	BOOL loading = self.loadingBookmarks || self.highlightsController.loading || self.linksController.loading;
+	NSString* name = loading ? kTimelineDidStartLoading : kTimelineDidStopLoading;
+	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:@{
+		kTimelineSidebarRowKey: @(kTimelineBookmarksSidebarRow)
 	}];
 }
 
@@ -203,49 +250,37 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 			}
 
 			RFDispatchMainAsync (^{
-				// now that we have both highlights and tags, update bar
-				if ((new_tags.count == 0) && (self.highlightsCount.integerValue == 0)) {
-					[self hideHighlightsBar];
+				self.tags = new_tags;
+				NSMenu* menu = self.tagsButton.menu;
+				// Keep the popup's icon item, replacing the fetched menu entries on refresh.
+				while (menu.numberOfItems > 1) {
+					[menu removeItemAtIndex:1];
 				}
-				else {
-					self.tags = new_tags;
-					NSMenu* menu = self.tagsButton.menu;
-					NSMenuItem* item;
-					
-					item = [menu addItemWithTitle:@"Recent Tags" action:NULL keyEquivalent:@""];
-					[item setEnabled:NO];
-					
+				if (self.tags.count > 0) {
+					NSMenuItem* heading = [menu addItemWithTitle:@"Recent Tags" action:NULL keyEquivalent:@""];
+					heading.enabled = NO;
 					for (NSString* tag_name in self.tags) {
 						[self.tagsButton addItemWithTitle:tag_name];
 					}
-
 					[menu addItem:[NSMenuItem separatorItem]];
-					
-					[self.tagsButton addItemWithTitle:@"All Tags"];
-					item = [self.tagsButton lastItem];
-					[item setRepresentedObject:@"all_tags"];
-					[item setKeyEquivalent:@"T"];
-					[item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
-
-					item = [menu addItemWithTitle:@"New Bookmark" action:@selector(newBookmark:) keyEquivalent:@"b"];
-					[item setTarget:[NSApp delegate]];
-					[item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
-
-					self.tagsButton.hidden = NO;
 				}
+				[self.tagsButton addItemWithTitle:@"All Tags"];
+				NSMenuItem* item = self.tagsButton.lastItem;
+				item.representedObject = @"all_tags";
+				item.keyEquivalent = @"T";
+				item.keyEquivalentModifierMask = NSEventModifierFlagCommand | NSEventModifierFlagShift;
+
+				item = [menu addItemWithTitle:@"New Bookmark" action:@selector(newBookmark:) keyEquivalent:@"b"];
+				item.target = [NSApp delegate];
+				item.keyEquivalentModifierMask = NSEventModifierFlagCommand | NSEventModifierFlagShift;
 			});
 		}
 	}];
 }
 
-- (IBAction) showHighlights:(id)sender
-{
-	[[NSNotificationCenter defaultCenter] postNotificationName:kShowHighlightsNotification object:self];
-}
-
 - (IBAction) selectTag:(id)sender
 {
-	[self setLinksVisible:NO];
+	[self showTab:MBBookmarksTabBookmarks];
 	NSMenuItem* item = [sender selectedItem];
 	if ([[item representedObject] isEqualToString:@"all_tags"]) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:kShowTagsNotification object:self];
@@ -261,24 +296,12 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 	[self setupWebView];
 }
 
-- (void) hideHighlightsBar
-{
-	// Links remains available even when there are no tags or highlights.
-	self.highlightsTopConstraint.constant = -1;
-	self.tagsButton.hidden = YES;
-}
-
 - (void) selectTagWithName:(NSString *)tagName
 {
-	[self setLinksVisible:NO];
-	NSString* url = [NSString stringWithFormat:@"https://micro.blog/hybrid/bookmarks?tag=%@", [tagName rf_urlEncoded]];
-
-	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	[[self.webView mainFrame] loadRequest:request];
-	
+	[self showTab:MBBookmarksTabBookmarks];
 	self.currentTagField.stringValue = tagName;
-	self.currentTagField.hidden = NO;
-	self.currentTagCloseButton.hidden = NO;
+	[self updateTagControls];
+	[self setupWebView];
 }
 
 - (void) selectTagNotification:(NSNotification *)notification
@@ -290,9 +313,13 @@ static NSString* const kHighlightsCountPrefKey = @"HighlightsCount";
 - (void) refreshBookmarksNotification:(NSNotification *)notification
 {
 	[self setupWebView];
-	if (self.showingLinks) {
-		[self reloadLinks];
+	if (self.linksController) {
+		[self.linksController reloadLinks];
 	}
+	if (self.highlightsController) {
+		[self.highlightsController fetchHighlights];
+	}
+	[self fetchTags];
 }
 
 @end

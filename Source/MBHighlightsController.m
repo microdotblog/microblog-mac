@@ -16,6 +16,12 @@
 #import "NSString+Extras.h"
 #import "UUDate.h"
 
+@interface MBHighlightsController()
+@property (strong, nonatomic) NSTextField* messageLabel;
+@property (assign, nonatomic) NSUInteger loadGeneration;
+@property (assign, nonatomic, readwrite) BOOL loading;
+@end
+
 @implementation MBHighlightsController
 
 - (id) init
@@ -33,6 +39,16 @@
 	
 	[self setupTable];
 	[self setupBrowser];
+	self.messageLabel = [NSTextField wrappingLabelWithString:@""];
+	self.messageLabel.textColor = [NSColor secondaryLabelColor];
+	self.messageLabel.alignment = NSTextAlignmentCenter;
+	self.messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.view addSubview:self.messageLabel];
+	[NSLayoutConstraint activateConstraints:@[
+		[self.messageLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:60],
+		[self.messageLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
+		[self.messageLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20]
+	]];
 	
 	[self fetchHighlights];
 }
@@ -43,8 +59,6 @@
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
 	self.tableView.alphaValue = 0.0;
-
-	self.view.window.initialFirstResponder = self.tableView;
 }
 
 - (void) setupBrowser
@@ -52,13 +66,33 @@
 	self.browserMenuItem.title = [NSString mb_openInBrowserString];
 }
 
+- (void) setLoading:(BOOL)loading
+{
+	_loading = loading;
+	if (self.loadingDidChange) {
+		self.loadingDidChange();
+	}
+}
+
 - (void) fetchHighlights
 {
-	[self.progressSpinner startAnimation:nil];
+	NSUInteger generation = ++self.loadGeneration;
+	self.messageLabel.hidden = YES;
+	self.loading = YES;
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/posts/bookmarks/highlights"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		RFDispatchMainAsync (^{
+			if (generation != self.loadGeneration) {
+				return;
+			}
+			self.loading = NO;
+			NSDictionary* feed = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+			if (response.httpError || response.httpResponse.statusCode != 200 || ![feed[@"items"] isKindOfClass:[NSArray class]]) {
+				self.messageLabel.stringValue = @"Could not load highlights. Please try refreshing.";
+				self.messageLabel.hidden = NO;
+				return;
+			}
 			NSMutableArray* new_highlights = [NSMutableArray array];
 			for (NSDictionary* info in [response.parsedResponse objectForKey:@"items"]) {
 				MBHighlight* h = [[MBHighlight alloc] init];
@@ -72,19 +106,18 @@
 				[new_highlights addObject:h];
 			}
 			
-			RFDispatchMainAsync (^{
-				self.currentHighlights = new_highlights;
-				[self.tableView reloadData];
-				self.tableView.animator.alphaValue = 1.0;
-				[self.progressSpinner stopAnimation:nil];
-			});
-		}
+			self.currentHighlights = new_highlights;
+			[self.tableView reloadData];
+			self.tableView.animator.alphaValue = 1.0;
+			self.messageLabel.stringValue = @"No highlights yet.";
+			self.messageLabel.hidden = new_highlights.count > 0;
+		});
 	}];
 }
 
 - (void) deleteHighlight:(MBHighlight *)highlight
 {
-	[self.progressSpinner startAnimation:nil];
+	self.loading = YES;
 	
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/posts/bookmarks/highlights/%@", highlight.highlightID];
 	[client deleteWithObject:nil completion:^(UUHttpResponse *response) {
@@ -95,11 +128,6 @@
 }
 
 #pragma mark -
-
-- (IBAction) back:(id)sender
-{
-	[[NSNotificationCenter defaultCenter] postNotificationName:kPopNavigationNotification object:self];
-}
 
 - (IBAction) delete:(id)sender
 {
@@ -209,8 +237,7 @@
 		[self startNewPost:nil];
 	}
 	else {
-		// try to bubble it up to the top to be handled
-		[[NSApplication sharedApplication] tryToPerform:@selector(newDocument:) with:sender];
+		[NSApp sendAction:@selector(newDocument:) to:NSApp.delegate from:sender];
 	}
 }
 

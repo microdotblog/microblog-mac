@@ -33,7 +33,10 @@
 
 - (void) timelineDidStopLoading:(NSNotification *)notification
 {
-	[self.progressSpinner stopAnimation:nil];
+	NSNumber* row = notification.userInfo[kTimelineSidebarRowKey];
+	if (row == nil || row.integerValue == self.sidebarRow) {
+		[self.progressSpinner stopAnimation:nil];
+	}
 }
 
 //- (NSBackgroundStyle) interiorBackgroundStyle
