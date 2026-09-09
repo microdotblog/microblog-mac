@@ -39,6 +39,8 @@
 #import "MBDateController.h"
 #import "SDAVAssetExportSession.h"
 #import <AVFoundation/AVFoundation.h>
+@import PhotosUI;
+@import UniformTypeIdentifiers;
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static NSString* const kCategoryCellIdentifier = @"CategoryCell";
@@ -52,7 +54,19 @@ static NSTimeInterval const kServerAutosaveMinimumInterval = 30.0;
 static const NSInteger kVideoProcessingMaxAttempts = 30;
 static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
-@interface RFPostController()
+@interface RFPostController() <PHPickerViewControllerDelegate>
+
+@property (strong, nonatomic) PHPickerViewController* libraryPicker;
+@property (strong, nonatomic) PHPickerViewController* libraryBrowser;
+@property (strong, nonatomic) id libraryKeyMonitor;
+@property (strong, nonatomic) NSView* libraryTray;
+@property (strong, nonatomic) NSLayoutConstraint* libraryTrayHeight;
+@property (strong, nonatomic) NSTextField* libraryStatus;
+@property (strong, nonatomic) NSMutableArray* libraryImportQueue;
+@property (strong, nonatomic) NSMutableArray* libraryTemporaryURLs;
+@property (strong, nonatomic) NSMutableSet* libraryPendingIdentifiers;
+@property (assign, nonatomic) BOOL libraryImportInProgress;
+@property (assign, nonatomic) BOOL hasClosed;
 
 @property (strong, nonatomic) NSString* activeReplacementString;
 @property (strong, atomic) NSMutableArray* autoCompleteData;
@@ -728,6 +742,11 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (BOOL) validateReadyToUploadPost
 {
+	if (self.libraryImportQueue.count > 0) {
+		[NSAlert rf_showOneButtonAlert:@"Photos Still Loading" message:@"Please wait for your selected photos to finish loading before posting." button:@"OK" completionHandler:NULL];
+		return NO;
+	}
+
 	if ([self hasPendingVideoTranscodes]) {
 		[NSAlert rf_showOneButtonAlert:@"Video Still Processing" message:@"Please wait for the video preview to finish before posting." button:@"OK" completionHandler:NULL];
 		return NO;
@@ -796,6 +815,17 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 
 - (void) finishClose
 {
+	self.hasClosed = YES;
+	self.libraryPicker.delegate = nil;
+	self.libraryBrowser.delegate = nil;
+	if (self.libraryKeyMonitor) {
+		[NSEvent removeMonitor:self.libraryKeyMonitor];
+		self.libraryKeyMonitor = nil;
+	}
+	for (NSURL* url in self.libraryTemporaryURLs) {
+		[[NSFileManager defaultManager] removeItemAtURL:url error:NULL];
+	}
+	[self.libraryTemporaryURLs removeAllObjects];
 	if (!self.isReply && !self.isSent && !self.editingPost) {
 //		NSString* title = [self currentTitle];
 //		NSString* draft = [self currentText];
@@ -986,6 +1016,233 @@ static const NSTimeInterval kVideoProcessingPollInterval = 2.0;
 }
 
 - (IBAction) choosePhoto:(id)sender
+{
+	if (self.libraryTray == nil) {
+		[self setupLibraryTray];
+	}
+	BOOL showing = self.libraryTray.hidden;
+	if (showing) {
+		[self makeRoomForLibraryTray];
+	}
+	self.libraryTray.hidden = !showing;
+	self.libraryTrayHeight.constant = showing ? 260 : 0;
+	self.photoButton.contentTintColor = showing ? [NSColor controlAccentColor] : nil;
+	self.photoButton.toolTip = showing ? @"Hide Photos" : @"Show Photos";
+	[self.view layoutSubtreeIfNeeded];
+	if (!showing) {
+		[self.view.window makeFirstResponder:self.textView];
+	}
+}
+
+- (void) setupLibraryTray
+{
+	self.libraryImportQueue = [NSMutableArray array];
+	self.libraryTemporaryURLs = [NSMutableArray array];
+	self.libraryPendingIdentifiers = [NSMutableSet set];
+	NSView* tray = [[NSView alloc] initWithFrame:NSZeroRect];
+	tray.translatesAutoresizingMaskIntoConstraints = NO;
+	tray.hidden = YES;
+	self.libraryTray = tray;
+	[self.view addSubview:tray];
+	__weak RFPostController* weak_self = self;
+	self.libraryKeyMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown handler:^NSEvent* (NSEvent* event) {
+		RFPostController* strong_self = weak_self;
+		if ((event.keyCode == 53) && (event.window == strong_self.view.window) && !strong_self.libraryTray.hidden && (strong_self.libraryBrowser == nil) && (event.window.attachedSheet == nil)) {
+			[strong_self choosePhoto:nil];
+			return nil;
+		}
+		return event;
+	}];
+
+	// Insert the browser between the attached photos and the bottom button bar.
+	NSView* photos_view = self.photosCollectionView.enclosingScrollView;
+	for (NSLayoutConstraint* constraint in [self.view.constraints copy]) {
+		if ((constraint.firstItem == self.photoButton) && (constraint.firstAttribute == NSLayoutAttributeTop) && (constraint.secondItem == photos_view)) {
+			constraint.active = NO;
+		}
+	}
+	self.libraryTrayHeight = [tray.heightAnchor constraintEqualToConstant:0];
+	[NSLayoutConstraint activateConstraints:@[
+		[tray.topAnchor constraintEqualToAnchor:photos_view.bottomAnchor],
+		[tray.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[tray.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[self.photoButton.topAnchor constraintEqualToAnchor:tray.bottomAnchor constant:1],
+		self.libraryTrayHeight
+	]];
+
+	PHPickerConfiguration* configuration = [[PHPickerConfiguration alloc] initWithPhotoLibrary:[PHPhotoLibrary sharedPhotoLibrary]];
+	configuration.filter = [PHPickerFilter imagesFilter];
+	configuration.selection = PHPickerConfigurationSelectionContinuous;
+	configuration.selectionLimit = 10;
+	configuration.mode = PHPickerModeCompact;
+	configuration.disabledCapabilities = PHPickerCapabilitiesSelectionActions | PHPickerCapabilitiesStagingArea;
+	configuration.edgesWithoutContentMargins = NSDirectionalRectEdgeAll;
+	self.libraryPicker = [[PHPickerViewController alloc] initWithConfiguration:configuration];
+	self.libraryPicker.delegate = self;
+	[self addChildViewController:self.libraryPicker];
+	NSView* picker_view = self.libraryPicker.view;
+	picker_view.translatesAutoresizingMaskIntoConstraints = NO;
+	[tray addSubview:picker_view];
+
+	NSButton* files_button = [NSButton buttonWithTitle:@"Choose Files…" target:self action:@selector(choosePhotoFiles:)];
+	files_button.translatesAutoresizingMaskIntoConstraints = NO;
+	[tray addSubview:files_button];
+	NSButton* browse_button = [NSButton buttonWithTitle:@"Browse Library…" target:self action:@selector(browsePhotoLibrary:)];
+	browse_button.translatesAutoresizingMaskIntoConstraints = NO;
+	[tray addSubview:browse_button];
+	NSButton* close_button = [NSButton buttonWithTitle:@"Hide Photos" target:self action:@selector(choosePhoto:)];
+	close_button.keyEquivalent = @"\033";
+	close_button.translatesAutoresizingMaskIntoConstraints = NO;
+	[tray addSubview:close_button];
+	self.libraryStatus = [NSTextField labelWithString:@""];
+	self.libraryStatus.font = [NSFont systemFontOfSize:11];
+	self.libraryStatus.textColor = [NSColor secondaryLabelColor];
+	self.libraryStatus.lineBreakMode = NSLineBreakByTruncatingTail;
+	self.libraryStatus.translatesAutoresizingMaskIntoConstraints = NO;
+	[tray addSubview:self.libraryStatus];
+	// The tray collapses to zero height while hidden.
+	NSLayoutConstraint* picker_bottom = [picker_view.bottomAnchor constraintEqualToAnchor:self.libraryStatus.topAnchor constant:-4];
+	picker_bottom.priority = NSLayoutPriorityDefaultHigh;
+	[NSLayoutConstraint activateConstraints:@[
+		[picker_view.topAnchor constraintEqualToAnchor:tray.topAnchor],
+		[picker_view.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor],
+		[picker_view.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor],
+		picker_bottom,
+		[files_button.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor constant:10],
+		[files_button.bottomAnchor constraintEqualToAnchor:tray.bottomAnchor constant:-6],
+		[browse_button.leadingAnchor constraintEqualToAnchor:files_button.trailingAnchor constant:8],
+		[browse_button.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
+		[browse_button.trailingAnchor constraintLessThanOrEqualToAnchor:close_button.leadingAnchor constant:-8],
+		[close_button.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
+		[close_button.centerYAnchor constraintEqualToAnchor:files_button.centerYAnchor],
+		[self.libraryStatus.leadingAnchor constraintEqualToAnchor:tray.leadingAnchor constant:10],
+		[self.libraryStatus.trailingAnchor constraintEqualToAnchor:tray.trailingAnchor constant:-10],
+		[self.libraryStatus.bottomAnchor constraintEqualToAnchor:files_button.topAnchor constant:-4],
+		[self.libraryStatus.heightAnchor constraintEqualToConstant:14]
+	]];
+}
+
+- (IBAction) browsePhotoLibrary:(id)sender
+{
+	NSInteger remaining_slots = 10 - (NSInteger)self.attachedPhotos.count - self.pendingAttachmentSlots;
+	if ((remaining_slots <= 0) || self.isSending) {
+		self.libraryStatus.stringValue = @"No more photos can be added right now.";
+		return;
+	}
+	PHPickerConfiguration* configuration = [[PHPickerConfiguration alloc] init];
+	configuration.filter = [PHPickerFilter imagesFilter];
+	configuration.selectionLimit = remaining_slots;
+	self.libraryBrowser = [[PHPickerViewController alloc] initWithConfiguration:configuration];
+	self.libraryBrowser.delegate = self;
+	NSSize browser_size = NSMakeSize(680, 500);
+	self.libraryBrowser.preferredContentSize = browser_size;
+	[self.libraryBrowser.view setFrameSize:browser_size];
+	[self presentViewControllerAsSheet:self.libraryBrowser];
+}
+
+- (void) makeRoomForLibraryTray
+{
+	[self.view layoutSubtreeIfNeeded];
+	NSWindow* window = self.view.window;
+	if (window.screen == nil) {
+		return;
+	}
+	CGFloat attachment_space = (self.attachedPhotos.count == 0) ? 100 : 0;
+	CGFloat extra_height = MAX(0, 260 + attachment_space + 180 - self.textView.enclosingScrollView.frame.size.height);
+	if ((extra_height <= 0) || (window.styleMask & NSWindowStyleMaskFullScreen)) {
+		return;
+	}
+	NSRect visible_frame = window.screen.visibleFrame;
+	NSRect frame = window.frame;
+	CGFloat height = MIN(frame.size.height + extra_height, visible_frame.size.height);
+	frame.origin.y = MAX(NSMinY(visible_frame), NSMaxY(frame) - height);
+	frame.size.height = height;
+	[window setFrame:frame display:YES animate:YES];
+}
+
+- (void) picker:(PHPickerViewController *)picker didFinishPicking:(NSArray *)results
+{
+	if (picker == self.libraryBrowser) {
+		[self dismissViewController:picker];
+		self.libraryBrowser = nil;
+	}
+	for (PHPickerResult* result in results) {
+		// Treat each click as an attachment, rather than a selection awaiting confirmation.
+		if (result.assetIdentifier) {
+			[picker deselectAssetsWithIdentifiers:@[result.assetIdentifier]];
+		}
+		if (self.isSending || self.hasClosed || ![result.itemProvider hasItemConformingToTypeIdentifier:UTTypeImage.identifier]) {
+			continue;
+		}
+		if (result.assetIdentifier && [self.libraryPendingIdentifiers containsObject:result.assetIdentifier]) {
+			continue;
+		}
+		if (self.attachedPhotos.count + self.pendingAttachmentSlots >= 10) {
+			self.libraryStatus.stringValue = @"10-photo limit reached";
+			continue;
+		}
+		if (result.assetIdentifier) {
+			[self.libraryPendingIdentifiers addObject:result.assetIdentifier];
+		}
+		[self.libraryImportQueue addObject:result];
+		self.pendingAttachmentSlots++;
+	}
+	[self importNextLibraryPhoto];
+}
+
+- (void) importNextLibraryPhoto
+{
+	if (self.libraryImportInProgress || self.hasClosed || (self.libraryImportQueue.count == 0)) {
+		return;
+	}
+	self.libraryImportInProgress = YES;
+	self.libraryStatus.stringValue = @"Loading photo…";
+	PHPickerResult* result = self.libraryImportQueue.firstObject;
+	NSItemProvider* provider = result.itemProvider;
+	[provider loadFileRepresentationForTypeIdentifier:UTTypeImage.identifier completionHandler:^(NSURL* url, NSError* error) {
+		// Provider URLs are only valid during this callback; retain our own copy.
+		NSURL* copied_url = nil;
+		NSError* import_error = error;
+		if (url) {
+			NSString* filename = [[[NSUUID UUID] UUIDString] stringByAppendingPathExtension:url.pathExtension];
+			NSURL* target = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:filename]];
+			if ([[NSFileManager defaultManager] copyItemAtURL:url toURL:target error:&import_error]) {
+				copied_url = target;
+			}
+		}
+		RFDispatchMainAsync(^{
+			self.pendingAttachmentSlots--;
+			[self.libraryImportQueue removeObjectAtIndex:0];
+			if (result.assetIdentifier) {
+				[self.libraryPendingIdentifiers removeObject:result.assetIdentifier];
+			}
+			self.libraryImportInProgress = NO;
+			if (self.hasClosed) {
+				if (copied_url) {
+					[[NSFileManager defaultManager] removeItemAtURL:copied_url error:NULL];
+				}
+				return;
+			}
+			NSImage* image = copied_url ? [[NSImage alloc] initWithContentsOfURL:copied_url] : nil;
+			if (image.isValid) {
+				[self.libraryTemporaryURLs addObject:copied_url];
+				[self attachPhotos:@[copied_url]];
+				self.libraryStatus.stringValue = @"Photo added";
+				[self.view.window makeFirstResponder:self.textView];
+			}
+			else {
+				if (copied_url) {
+					[[NSFileManager defaultManager] removeItemAtURL:copied_url error:NULL];
+				}
+				self.libraryStatus.stringValue = @"Could not load photo. Click to retry.";
+				self.libraryStatus.toolTip = import_error.localizedDescription;
+			}
+			[self importNextLibraryPhoto];
+		});
+	}];
+}
+
+- (IBAction) choosePhotoFiles:(id)sender
 {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
 	panel.allowedFileTypes = @[ @"public.image", @"public.movie" ];

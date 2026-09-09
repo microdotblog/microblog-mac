@@ -321,6 +321,7 @@
 {
 	[self.previewTimer invalidate];
 	[self.postController stopServerAutosave];
+	[self.postController finishClose];
 
 	dispatch_async (dispatch_get_main_queue(), ^{
 		[self restoreCopyLinkMenuItemShortcutIfNeeded];
