@@ -1356,7 +1356,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	[tray addSubview:picker_container];
 	[picker_container addSubview:picker_view];
 
-	NSButton* files_button = [NSButton buttonWithTitle:@"Choose Files…" target:self action:@selector(choosePhotoFiles:)];
+	NSButton* files_button = [NSButton buttonWithTitle:@"Open File…" target:self action:@selector(choosePhotoFiles:)];
 	files_button.controlSize = NSControlSizeSmall;
 	files_button.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
 	[files_button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
