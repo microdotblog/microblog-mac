@@ -36,5 +36,6 @@ static NSString* const kAttachPhotoKey = @"photo";
 - (NSDictionary *) videoSettingsForSize:(CGSize)size;
 - (NSDictionary *) audioSettings;
 - (void) removeTemporaryVideo;
+- (void) removeUploadWithCompletion:(void (^)(void))handler;
 
 @end

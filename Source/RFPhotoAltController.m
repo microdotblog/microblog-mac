@@ -98,7 +98,7 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 	self.isCancelled = YES;
 	if (self.photo.publishedURL && !self.photo.isUndeletable) {
 		// if already uploaded, we need to also delete it
-		[self removeUpload:self.photo.publishedURL completion:^{
+		[self removeUploadWithCompletion:^{
 			[[NSNotificationCenter defaultCenter] postNotificationName:kRemoveAttachedPhotoNotification object:self userInfo:@{ kRemoveAttachedPhotoIndexPath: self.indexPath }];
 			[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 		}];
@@ -327,7 +327,7 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 	return result;
 }
 
-- (void) removeUpload:(NSString *)url completion:(void (^)(void))handler
+- (void) removeUploadWithCompletion:(void (^)(void))handler
 {
 	[self.progressSpinner startAnimation:nil];
 	self.progressStatusField.stringValue = @"Removing...";
@@ -336,16 +336,7 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 	self.cancelButton.enabled = NO;
 	self.removeButton.enabled = NO;
 
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
-	NSMutableDictionary* args = [[RFSettings networkingArgsForDestination] mutableCopy];
-	[args setObject:@"delete" forKey:@"action"];
-	[args setObject:self.photo.publishedURL forKey:@"url"];
-	
-	[client postWithParams:args completion:^(UUHttpResponse* response) {
-		RFDispatchMainAsync(^{
-			handler();
-		});
-	}];
+	[self.photo removeUploadWithCompletion:handler];
 }
 
 @end

@@ -7,6 +7,9 @@
 //
 
 #import "RFPhoto.h"
+#import "RFClient.h"
+#import "RFSettings.h"
+#import "RFMacros.h"
 
 #import "SDAVAssetExportSession.h"
 
@@ -146,6 +149,24 @@ static CGFloat const kMaxVideoLandscapeHeight = 1080.0;
 			}
 		}
 	}
+}
+
+- (void) removeUploadWithCompletion:(void (^)(void))handler
+{
+	if (self.publishedURL.length == 0 || self.isUndeletable) {
+		handler();
+		return;
+	}
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	NSMutableDictionary* args = [[RFSettings networkingArgsForDestination] mutableCopy];
+	args[@"action"] = @"delete";
+	args[@"url"] = self.publishedURL;
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			handler();
+		});
+	}];
 }
 
 @end

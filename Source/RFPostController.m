@@ -1963,6 +1963,18 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 		
 		RFPhotoCell* item = (RFPhotoCell *)[collectionView makeItemWithIdentifier:kPhotoCellIdentifier forIndexPath:indexPath];
 		[item disableMenu];
+		// The Uploads selection overlay has its own menu/notification behavior.
+		item.selectionOverlayView.hidden = YES;
+		NSMenu* menu = [[NSMenu alloc] initWithTitle:@"Attached Photo"];
+		NSMenuItem* edit_item = [menu addItemWithTitle:@"Edit Description" action:@selector(editAttachedPhotoAccessibilityText:) keyEquivalent:@""];
+		edit_item.target = self;
+		edit_item.representedObject = photo;
+		NSMenuItem* remove_item = [menu addItemWithTitle:@"Remove" action:@selector(removeAttachedPhoto:) keyEquivalent:@""];
+		remove_item.target = self;
+		remove_item.representedObject = photo;
+		item.view.menu = menu;
+		item.thumbnailImageView.menu = menu;
+		item.iconView.menu = menu;
 		item.view.wantsLayer = YES;
 		item.view.layer.cornerRadius = 4;
 		item.view.layer.masksToBounds = YES;
@@ -2029,7 +2041,11 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 {
 	if (collectionView == self.photosCollectionView) {
 		NSIndexPath* index_path = [indexPaths anyObject];
-		[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
+		NSEvent* event = NSApp.currentEvent;
+		BOOL context_click = event.type == NSEventTypeRightMouseDown || event.type == NSEventTypeRightMouseUp || (event.modifierFlags & NSEventModifierFlagControl);
+		if (!context_click) {
+			[self performSelector:@selector(clickedPhotoAtIndex:) withObject:index_path afterDelay:0.1];
+		}
 		[collectionView deselectAll:nil];
 	}
 }
@@ -3649,8 +3665,34 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	}];
 }
 
+- (void) editAttachedPhotoAccessibilityText:(NSMenuItem *)sender
+{
+	NSUInteger index = [self.attachedPhotos indexOfObjectIdenticalTo:sender.representedObject];
+	if (index != NSNotFound) {
+		[self clickedPhotoAtIndex:[NSIndexPath indexPathForItem:index inSection:0]];
+	}
+}
+
+- (void) removeAttachedPhoto:(NSMenuItem *)sender
+{
+	RFPhoto* photo = sender.representedObject;
+	if ([self.attachedPhotos indexOfObjectIdenticalTo:photo] == NSNotFound) {
+		return;
+	}
+	[photo removeUploadWithCompletion:^{
+		// Other attachments may have changed while deleting the upload.
+		NSUInteger index = [self.attachedPhotos indexOfObjectIdenticalTo:photo];
+		if (index != NSNotFound) {
+			[self removePhotoAtIndex:[NSIndexPath indexPathForItem:index inSection:0]];
+		}
+	}];
+}
+
 - (void) clickedPhotoAtIndex:(NSIndexPath *)indexPath
 {
+	if (indexPath == nil || indexPath.item >= self.attachedPhotos.count || self.altController != nil) {
+		return;
+	}
 	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
 	self.altController = [[RFPhotoAltController alloc] initWithPhoto:photo atIndex:indexPath];
 	[self.view.window beginSheet:self.altController.window completionHandler:^(NSModalResponse returnCode) {
