@@ -66,6 +66,7 @@ static NSInteger const kSelectionBookshelves = 11;
 static NSInteger const kSelectionMovies = 12;
 static NSInteger const kSelectionNotes = 13;
 static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
+static BOOL const kReaderWindowEnabled = NO;
 
 @interface RFTimelineController ()
 
@@ -2177,7 +2178,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
 {
 	if ([[actionInformation objectForKey:WebActionNavigationTypeKey] integerValue] == WebNavigationTypeLinkClicked) {
-		if (![self openBookmarkReaderForURL:request.URL webView:webView]) {
+		if (![self openBookmarkURL:request.URL webView:webView]) {
 			[self showURL:request.URL];
 		}
 		[listener ignore];
@@ -2191,14 +2192,19 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 	}
 }
 
-- (BOOL) openBookmarkReaderForURL:(NSURL *)url webView:(WebView *)webView
+- (BOOL) openBookmarkURL:(NSURL *)url webView:(WebView *)webView
 {
 	if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
 		MBBookmarksController* controller = (MBBookmarksController *)self.rootController;
 		if (controller.showingBookmarks && webView == controller.webView) {
 			NSString* bookmark_id = [MBReaderController bookmarkIDForURL:url];
 			if (bookmark_id) {
-				[MBReaderController showReaderWithBookmarkID:bookmark_id];
+				if (kReaderWindowEnabled) {
+					[MBReaderController showReaderWithBookmarkID:bookmark_id];
+				}
+				else {
+					[[NSWorkspace sharedWorkspace] openURL:url];
+				}
 				return YES;
 			}
 		}
@@ -2208,7 +2214,7 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 
 - (void) webView:(WebView *)webView decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id<WebPolicyDecisionListener>)listener
 {
-	if ([self openBookmarkReaderForURL:request.URL webView:webView]) {
+	if ([self openBookmarkURL:request.URL webView:webView]) {
 		[listener ignore];
 	}
 	else {
