@@ -5,6 +5,27 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.1</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Added a photo picker to quickly attach recent photos from your Photos library when writing a new post.</li>
+					<li>Redesigned Bookmarks pane with tabs for Bookmarks, Highlights, and Links for Micro.blog Premium subscribers.</li>
+				</ul>
+			]]></description>
+			<pubDate>Wed, 09 Sep 2026 21:15:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.1.zip" sparkle:shortVersionString="4.1" sparkle:version="256" length="18527485" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.0.8</title>
 			<description><![CDATA[
 				<style>
