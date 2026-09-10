@@ -25,6 +25,7 @@
 #import "RFDiscoverController.h"
 #import "RFUserController.h"
 #import "MBHighlightsController.h"
+#import "MBReaderController.h"
 #import "MBBookmarksController.h"
 #import "RFRoundedImageView.h"
 #import "SAMKeychain.h"
@@ -2176,11 +2177,38 @@ static NSString* const kTimelineWindowFrameAutosaveName = @"TimelineWindow";
 - (void) webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
 {
 	if ([[actionInformation objectForKey:WebActionNavigationTypeKey] integerValue] == WebNavigationTypeLinkClicked) {
-		[self showURL:request.URL];
+		if (![self openBookmarkReaderForURL:request.URL webView:webView]) {
+			[self showURL:request.URL];
+		}
 		[listener ignore];
 	}
 	else if ([request.URL.scheme isEqualToString:@"microblog"]) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:kOpenMicroblogURLNotification object:self userInfo:@{ kOpenMicroblogURLKey: request.URL }];
+		[listener ignore];
+	}
+	else {
+		[listener use];
+	}
+}
+
+- (BOOL) openBookmarkReaderForURL:(NSURL *)url webView:(WebView *)webView
+{
+	if ([self.rootController isKindOfClass:[MBBookmarksController class]]) {
+		MBBookmarksController* controller = (MBBookmarksController *)self.rootController;
+		if (controller.showingBookmarks && webView == controller.webView) {
+			NSString* bookmark_id = [MBReaderController bookmarkIDForURL:url];
+			if (bookmark_id) {
+				[MBReaderController showReaderWithBookmarkID:bookmark_id];
+				return YES;
+			}
+		}
+	}
+	return NO;
+}
+
+- (void) webView:(WebView *)webView decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id<WebPolicyDecisionListener>)listener
+{
+	if ([self openBookmarkReaderForURL:request.URL webView:webView]) {
 		[listener ignore];
 	}
 	else {
