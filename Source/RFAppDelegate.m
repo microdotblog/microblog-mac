@@ -974,7 +974,7 @@
 			return;
 		}
 
-		RFDispatchMainAsync(^{
+		dispatch_async(dispatch_get_main_queue(), ^{
 			RFAccount* a = [[RFAccount alloc] init];
 			a.username = info[@"username"];
 			[RFSettings addAccount:a];
