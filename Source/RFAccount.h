@@ -13,6 +13,7 @@
 
 @property (strong) NSString* username;
 
++ (NSDictionary *) accountInfoFromVerificationResponse:(id)response;
 + (NSString *) notesFolder;
 + (NSString *) backupsFolder;
 + (NSString *) logsFolder;
