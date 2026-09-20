@@ -26,6 +26,11 @@
 	[self setupVersion];
 }
 
+- (IBAction) openMovieDatabase:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.themoviedb.org/"]];
+}
+
 - (void) setupVersion
 {
 	NSBundle* bundle = [NSBundle mainBundle];

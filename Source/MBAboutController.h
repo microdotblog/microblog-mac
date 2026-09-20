@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTextField* versionField;
 
+- (IBAction) openMovieDatabase:(id)sender;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -46,14 +46,20 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="h3c-4k-QWj">
+                    <button toolTip="Visit The Movie Database" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="h3c-4k-QWj">
                         <rect key="frame" x="27" y="20" width="93" height="48"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="93" id="BFX-jT-wCR"/>
                             <constraint firstAttribute="height" constant="48" id="xHq-KX-Xda"/>
                         </constraints>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="tmdb" id="iGa-er-Tyd"/>
-                    </imageView>
+                        <buttonCell key="cell" type="momentaryChange" bezelStyle="regularSquare" title="The Movie Database" image="tmdb" imagePosition="only" alignment="center" imageScaling="proportionallyDown" id="iGa-er-Tyd">
+                            <behavior key="behavior" pushIn="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="openMovieDatabase:" target="-2" id="mBd-op-en1"/>
+                        </connections>
+                    </button>
                     <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="kJg-AO-LvE">
                         <rect key="frame" x="138" y="22" width="293" height="40"/>
                         <constraints>
