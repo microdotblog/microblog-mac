@@ -952,54 +952,53 @@
 		@"token": token
 	};
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
-		NSString* error = nil;
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			error = [response.parsedResponse objectForKey:@"error"];
-		}
-		if (response.parsedResponse == nil) {
-			RFDispatchMainAsync (^{
-				[self showSigninError:nil];
-			});
-		}
-		else if (error) {
-			RFDispatchMainAsync ((^{
+		NSInteger status = response.httpResponse.statusCode;
+		BOOL http_success = !response.httpError && (status >= 200) && (status < 300);
+		NSDictionary* payload = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+		id error = payload[@"error"];
+		// Only an explicit API rejection should suggest signing out, not a server/network failure.
+		if ((http_success || (status == 401) || (status == 403)) && [error isKindOfClass:[NSString class]] && [error length] > 0) {
+			RFDispatchMainAsync(^{
 				[self showSigninError:error];
-			}));
-		}
-		else {
-			NSString* full_name = [response.parsedResponse objectForKey:@"full_name"];
-			NSString* username = [response.parsedResponse objectForKey:@"username"];
-			NSString* email = [response.parsedResponse objectForKey:@"email"];
-			NSString* gravatar_url = [response.parsedResponse objectForKey:@"gravatar_url"];
-			NSNumber* has_site = [response.parsedResponse objectForKey:@"has_site"];
-			NSNumber* is_premium = [response.parsedResponse objectForKey:@"is_premium"];
-			NSNumber* is_using_ai = [response.parsedResponse objectForKey:@"is_using_ai"];
-			NSString* default_site = [response.parsedResponse objectForKey:@"default_site"];
-			
-			RFAccount* a = [[RFAccount alloc] init];
-			a.username = username;
-			[RFSettings addAccount:a];
-			
-			[RFSettings setString:full_name forKey:kAccountFullName account:a];
-			[RFSettings setString:username forKey:kAccountUsername account:a];
-			[RFSettings setString:default_site forKey:kAccountDefaultSite account:a];
-			[RFSettings setString:email forKey:kAccountEmail account:a];
-			[RFSettings setString:gravatar_url forKey:kAccountGravatarURL account:a];
-			[RFSettings setBool:[has_site boolValue] forKey:kHasSnippetsBlog account:a];
-			[RFSettings setBool:[is_premium boolValue] forKey:kIsPremium account:a];
-			[RFSettings setBool:[is_using_ai boolValue] forKey:kIsUsingAI account:a];
-
-			RFDispatchMainAsync (^{
-				if (showTimelineOnSuccess) {
-					[self loadTimelineWithToken:token account:a];
-					if (self.hasPerformedDeferredAccountSetup) {
-						[self setupBookmarks];
-						[self setupTimezone];
-					}
-				}
-				[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 			});
+			return;
 		}
+		NSDictionary* info = http_success ? [RFAccount accountInfoFromVerificationResponse:payload] : nil;
+		if (info == nil) {
+			// Launch-time refresh failures leave the saved account and open timeline alone.
+			if (showTimelineOnSuccess) {
+				RFDispatchMainAsync(^{
+					[NSAlert rf_showOneButtonAlert:@"Unable to Verify Account" message:@"Micro.blog could not verify your account right now. Please try again shortly. Your saved account has not been changed." button:@"OK" completionHandler:NULL];
+				});
+			}
+			return;
+		}
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			RFAccount* a = [[RFAccount alloc] init];
+			a.username = info[@"username"];
+			[RFSettings addAccount:a];
+			NSDictionary* string_settings = @{ @"full_name": kAccountFullName, @"username": kAccountUsername, @"default_site": kAccountDefaultSite, @"email": kAccountEmail, @"gravatar_url": kAccountGravatarURL };
+			for (NSString* key in string_settings) {
+				if (info[key]) {
+					[RFSettings setString:info[key] forKey:string_settings[key] account:a];
+				}
+			}
+			NSDictionary* boolean_settings = @{ @"has_site": kHasSnippetsBlog, @"is_premium": kIsPremium, @"is_using_ai": kIsUsingAI };
+			for (NSString* key in boolean_settings) {
+				if (info[key]) {
+					[RFSettings setBool:[info[key] boolValue] forKey:boolean_settings[key] account:a];
+				}
+			}
+			if (showTimelineOnSuccess) {
+				[self loadTimelineWithToken:token account:a];
+				if (self.hasPerformedDeferredAccountSetup) {
+					[self setupBookmarks];
+					[self setupTimezone];
+				}
+			}
+			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
+		});
 	}];
 }
 

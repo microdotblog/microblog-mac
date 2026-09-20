@@ -10,6 +10,37 @@
 
 @implementation RFAccount
 
++ (NSDictionary *) accountInfoFromVerificationResponse:(id)response
+{
+	if (![response isKindOfClass:[NSDictionary class]]) {
+		return nil;
+	}
+	id username = response[@"username"];
+	if (![username isKindOfClass:[NSString class]] || ([username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)) {
+		return nil;
+	}
+	id error = response[@"error"];
+	if (error && (error != [NSNull null])) {
+		return nil;
+	}
+	NSMutableDictionary* info = [NSMutableDictionary dictionaryWithObject:username forKey:@"username"];
+	NSArray* string_keys = @[ @"full_name", @"email", @"gravatar_url", @"default_site" ];
+	NSArray* boolean_keys = @[ @"has_site", @"is_premium", @"is_using_ai" ];
+	for (NSString* key in [string_keys arrayByAddingObjectsFromArray:boolean_keys]) {
+		id value = response[key];
+		// Omitted or null optional fields must not overwrite existing account settings.
+		if (!value || (value == [NSNull null])) {
+			continue;
+		}
+		Class expected_class = [string_keys containsObject:key] ? [NSString class] : [NSNumber class];
+		if (![value isKindOfClass:expected_class]) {
+			return nil;
+		}
+		info[key] = value;
+	}
+	return info;
+}
+
 + (NSString *) notesFolder
 {
 	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
