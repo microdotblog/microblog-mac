@@ -17,6 +17,7 @@
 #import "NSAppearance+Extras.h"
 #import "MBLinksController.h"
 #import "MBHighlightsController.h"
+#import "RFTimelineController.h"
 
 typedef NS_ENUM(NSInteger, MBBookmarksTab) {
 	MBBookmarksTabBookmarks,
@@ -134,6 +135,9 @@ typedef NS_ENUM(NSInteger, MBBookmarksTab) {
 
 - (void) showTab:(MBBookmarksTab)tab
 {
+	if ([self.view.window.windowController isKindOfClass:[RFTimelineController class]]) {
+		[(RFTimelineController *)self.view.window.windowController hideHoveredLink];
+	}
 	if (![RFSettings isPremium]) {
 		tab = MBBookmarksTabBookmarks;
 	}

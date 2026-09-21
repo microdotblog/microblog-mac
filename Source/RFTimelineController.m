@@ -41,6 +41,7 @@
 #import "MBTimelineBackgroundView.h"
 #import "MBMessageBox.h"
 #import "MBStatusBubbleView.h"
+#import "MBLinkHoverBubble.h"
 #import "RFAccountPopoverBox.h"
 #import "NSObject+SharedTimeline.h"
 #import "MBBooksWindowController.h"
@@ -82,6 +83,9 @@ static BOOL const kReaderWindowEnabled = NO;
 @property (assign, nonatomic) BOOL shouldSignInForTimeline;
 @property (assign, nonatomic) BOOL applicationWasInactive;
 @property (assign, nonatomic) BOOL hasCompletedInitialHybridLoad;
+@property (strong, nonatomic) MBLinkHoverBubble* linkHoverBubble;
+@property (strong, nonatomic) NSTrackingArea* linkHoverTrackingArea;
+@property (weak, nonatomic) WebView* hoveredWebView;
 
 - (void) completeInitialHybridLoad;
 
@@ -186,6 +190,15 @@ static BOOL const kReaderWindowEnabled = NO;
 	scrim_view.hidden = YES;
 	self.toolbarScrimView = scrim_view;
 	[content_view addSubview:scrim_view];
+
+	self.linkHoverBubble = [[MBLinkHoverBubble alloc] initWithFrame:NSZeroRect];
+	[content_view addSubview:self.linkHoverBubble];
+	[NSLayoutConstraint activateConstraints:@[
+		[self.linkHoverBubble.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor constant:14],
+		[self.linkHoverBubble.bottomAnchor constraintEqualToAnchor:content_view.safeAreaLayoutGuide.bottomAnchor constant:-14],
+		[self.linkHoverBubble.trailingAnchor constraintLessThanOrEqualToAnchor:content_view.trailingAnchor constant:-14],
+		[self.linkHoverBubble.widthAnchor constraintLessThanOrEqualToConstant:450]
+	]];
 
 	[NSLayoutConstraint activateConstraints:@[
 		[self.containerView.leadingAnchor constraintEqualToAnchor:content_view.leadingAnchor],
@@ -660,6 +673,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 - (void) windowDidResignKey:(NSNotification *)notification
 {
+	[self hideHoveredLink];
 	NSIndexSet* indexes = [self.tableView selectedRowIndexes];
 	[self.tableView reloadData];
 	[self.tableView selectRowIndexes:indexes byExtendingSelection:NO];
@@ -676,6 +690,7 @@ static BOOL const kReaderWindowEnabled = NO;
 	if ([notification.object isKindOfClass:[NSView class]]) {
 		NSView* view = (NSView *)notification.object;
 		if ([view isDescendantOf:[self currentWebView]]) {
+			[self hideHoveredLink];
 		}
 	}
 }
@@ -1338,6 +1353,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 - (void) closeOverlays
 {
+	[self hideHoveredLink];
 	[self.window makeFirstResponder:nil];
 	[self popToRootViewController];
 
@@ -1427,6 +1443,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 - (void) pushViewController:(NSViewController *)controller
 {
+	[self hideHoveredLink];
 	if ([self.navigationStack count] == 0) {
 		if (self.overlayLeftConstraint) {
 			self.navigationLeftConstraint = self.overlayLeftConstraint;
@@ -1481,6 +1498,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 - (void) popViewController
 {
+	[self hideHoveredLink];
 	if ([self.navigationStack count] == 0) {
 		return;
 	}
@@ -1585,6 +1603,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 - (void) showRootController:(NSViewController *)controller
 {
+	[self hideHoveredLink];
 	self.rootController = controller;
 
 	NSRect r = self.timelineLayoutView.bounds;
@@ -2064,6 +2083,63 @@ static BOOL const kReaderWindowEnabled = NO;
 }
 
 #pragma mark -
+
+- (void) hideHoveredLink
+{
+	self.linkHoverBubble.hidden = YES;
+	self.linkHoverBubble.textField.stringValue = @"";
+	if (self.linkHoverTrackingArea) {
+		[self.hoveredWebView removeTrackingArea:self.linkHoverTrackingArea];
+		self.linkHoverTrackingArea = nil;
+	}
+	self.hoveredWebView = nil;
+}
+
+- (void) mouseExited:(NSEvent *)event
+{
+	if (event.trackingArea == self.linkHoverTrackingArea) {
+		[self hideHoveredLink];
+	}
+}
+
+- (void) webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags
+{
+	if (sender != [self currentWebView]) {
+		return;
+	}
+	NSURL* url = elementInformation[WebElementLinkURLKey];
+	// Check the raw href; WebElementLinkURLKey resolves "#" to the page URL.
+	DOMNode* node = elementInformation[WebElementDOMNodeKey];
+	while (node) {
+		if ([node isKindOfClass:[DOMElement class]] && [node.nodeName caseInsensitiveCompare:@"a"] == NSOrderedSame) {
+			if ([[(DOMElement *)node getAttribute:@"href"] isEqualToString:@"#"]) {
+				[self hideHoveredLink];
+				return;
+			}
+			break;
+		}
+		node = node.parentNode;
+	}
+	if (url.absoluteString.length == 0 || !self.window.isKeyWindow) {
+		[self hideHoveredLink];
+		return;
+	}
+	if (self.hoveredWebView != sender) {
+		[self hideHoveredLink];
+		self.hoveredWebView = sender;
+		self.linkHoverTrackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect | NSTrackingAssumeInside owner:self userInfo:nil];
+		[sender addTrackingArea:self.linkHoverTrackingArea];
+	}
+	self.linkHoverBubble.textField.stringValue = url.absoluteString;
+	self.linkHoverBubble.hidden = NO;
+}
+
+- (void) webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame
+{
+	if (sender == [self currentWebView] && frame == sender.mainFrame) {
+		[self hideHoveredLink];
+	}
+}
 
 - (void) webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame
 {
