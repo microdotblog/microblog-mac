@@ -62,6 +62,10 @@
 	if (scheme_range.location != NSNotFound) {
 		display_url = [display_url substringFromIndex:NSMaxRange(scheme_range)];
 	}
+	NSURLComponents* components = [NSURLComponents componentsWithURL:link.url resolvingAgainstBaseURL:NO];
+	if ([components.percentEncodedPath isEqualToString:@"/"] && (components.query == nil) && (components.fragment == nil) && [display_url hasSuffix:@"/"]) {
+		display_url = [display_url substringToIndex:display_url.length - 1];
+	}
 	self.urlLabel.stringValue = display_url;
 	self.toolTip = link.url.absoluteString;
 	self.thumbnailView.image = nil;
