@@ -1066,7 +1066,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) focusSearch
 {
-	[self.searchField becomeFirstResponder];
+	[self.view.window makeFirstResponder:self.searchField];
 }
 
 - (void) deselectAll

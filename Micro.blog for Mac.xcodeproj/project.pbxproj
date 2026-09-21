@@ -292,6 +292,7 @@
 		4BFFD3DB22001F6A00372D03 /* RFCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DA22001F6A00372D03 /* RFCategoryCell.m */; };
 		4BFFD3DE22001FCC00372D03 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BFFD3DC22001FCC00372D03 /* CategoryCell.xib */; };
 		B58490F8EC324B23B9D4D5E3 /* Source/MBLinksTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF51A5152064983898D864E /* Source/MBLinksTableView.m */; };
+		E8353D03F1A941E3A1A01811 /* MBNotesTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E8353D03F1A941E3A1A01812 /* MBNotesTextView.m */; };
 		C0DE20260909000000000001 /* Source/MBBookmarkLink.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000011 /* Source/MBBookmarkLink.m */; };
 		C0DE20260909000000000002 /* Source/MBBookmarkLinkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000012 /* Source/MBBookmarkLinkCell.m */; };
 		C0DE20260909000000000003 /* Source/MBLinksController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000013 /* Source/MBLinksController.m */; };
@@ -315,6 +316,8 @@
 
 /* Begin PBXFileReference section */
 		39268092AFA742EE8436658E /* Source/MBLinksTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBLinksTableView.h; sourceTree = "<group>"; };
+		E8353D03F1A941E3A1A01812 /* MBNotesTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBNotesTextView.m; sourceTree = "<group>"; };
+		E8353D03F1A941E3A1A01813 /* MBNotesTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBNotesTextView.h; sourceTree = "<group>"; };
 		4B001CCE2B27944300BBF456 /* MBNotesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesController.h; path = Source/MBNotesController.h; sourceTree = "<group>"; };
 		4B001CCF2B27944300BBF456 /* MBNotesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesController.m; path = Source/MBNotesController.m; sourceTree = "<group>"; };
 		4B001CD12B27955900BBF456 /* MBNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNote.h; path = Source/MBNote.h; sourceTree = "<group>"; };
@@ -1087,6 +1090,8 @@
 				C0DE20260909000000000024 /* Source/MBReaderController.h */,
 				C0DE20260909000000000014 /* Source/MBReaderController.m */,
 				39268092AFA742EE8436658E /* Source/MBLinksTableView.h */,
+				E8353D03F1A941E3A1A01813 /* MBNotesTextView.h */,
+				E8353D03F1A941E3A1A01812 /* MBNotesTextView.m */,
 				C0DE20260909000000000013 /* Source/MBLinksController.m */,
 				5BF51A5152064983898D864E /* Source/MBLinksTableView.m */,
 				4BF1A1202BBEF57B00256D3C /* MBSimpleTimelineController.h */,
@@ -1809,6 +1814,7 @@
 				C0DE20260909000000000003 /* Source/MBLinksController.m in Sources */,
 				C0DE20260909000000000004 /* Source/MBReaderController.m in Sources */,
 				B58490F8EC324B23B9D4D5E3 /* Source/MBLinksTableView.m in Sources */,
+				E8353D03F1A941E3A1A01811 /* MBNotesTextView.m in Sources */,
 				4B2CAB421F93F00000D9B10E /* RFFriendsController.m in Sources */,
 				4B2CAB0E1F90667300D9B10E /* tagask.c in Sources */,
 				4B2CAB3C1F93A04600D9B10E /* NSAlert+Extras.m in Sources */,
