@@ -43,6 +43,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 @property (copy, nonatomic) NSString* loadedUploadsContext;
 
 - (void) fetchInitialUploads;
+- (void) uploadFiles:(NSArray *)paths;
 
 @end
 
@@ -771,8 +772,16 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 
 - (void) uploadFilesNotification:(NSNotification *)notification
 {
-	NSArray* paths = [notification.userInfo objectForKey:kUploadFilesPathsKey];
+	// Older controllers may still be alive while their network requests finish.
+	id sender = notification.object;
+	if (sender == nil || (sender != self && sender != self.collectionView && sender != self.collectionView.enclosingScrollView)) {
+		return;
+	}
+	[self uploadFiles:notification.userInfo[kUploadFilesPathsKey]];
+}
 
+- (void) uploadFiles:(NSArray *)paths
+{
 	if ([paths count] > 10) {
 		[NSAlert rf_showOneButtonAlert:@"Could Not Upload Files" message:@"Only 10 files can be uploaded at once." button:@"OK" completionHandler:NULL];
 		return;
@@ -942,7 +951,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 			}
 		}
 		if ([selected_paths count] > 0) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:kUploadFilesNotification object:self userInfo:@{ kUploadFilesPathsKey: selected_paths }];
+			[self uploadFiles:selected_paths];
 		}
 	}
 }

@@ -670,7 +670,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) setupNotifications
 {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(attachFilesNotification:) name:kAttachFilesNotification object:self.textView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAttachedPhotoNotification:) name:kRemoveAttachedPhotoNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAutoCompleteNotification:) name:kFoundUserAutoCompleteNotification object:self.textView];
