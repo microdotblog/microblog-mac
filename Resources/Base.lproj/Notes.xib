@@ -134,7 +134,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="242" height="466"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
+                                            <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1">
                                                 <rect key="frame" x="0.0" y="0.0" width="232" height="456"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>

@@ -38,6 +38,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 @property (assign, nonatomic) NSInteger notesFetchRequestID;
 @property (strong, nonatomic, nullable) MBNote* noteCreatedWhileFetching;
 @property (strong, nonatomic) NSMutableSet* noteIDsChangedWhilePaging;
+@property (strong, nonatomic) NSUndoManager* textUndoManager;
 
 @end
 
@@ -49,6 +50,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (self) {
 		self.editedNotes = [NSMutableSet set];
 		self.noteIDsChangedWhilePaging = [NSMutableSet set];
+		self.textUndoManager = [[NSUndoManager alloc] init];
 	}
 	
 	return self;
@@ -844,7 +846,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 				[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:nil];
 			}
 			
-			self.detailTextView.string = @"";
+			[self setDetailText:@"" forNote:nil];
 			self.selectedNote = nil;
 			[self setDetailBook:@"" title:@""];
 		});
@@ -989,7 +991,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[self fetchNotesWithNotebookID:@(notebook_id) completion:^{
 	}];
 	
-	self.detailTextView.string = @"";
+	[self setDetailText:@"" forNote:nil];
 	self.selectedNote = nil;
 	[self setDetailBook:@"" title:@""];
 }
@@ -1217,7 +1219,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) setDetailText:(NSString *)text forNote:(MBNote *)note
 {
+	// The editor is reused across notes; undo must never restore another note's text.
+	[self.detailTextView breakUndoCoalescing];
 	[self.detailTextView setString:text];
+	[self.textUndoManager removeAllActions];
 	if (note && note.isShared) {
 		[self.sharedLinkButton setTitle:note.sharedURL];
 		self.sharedHeightConstraint.constant = 40;
@@ -1287,6 +1292,11 @@ static NSString* const kNotesSettingsType = @"Setting";
 }
 
 #pragma mark -
+
+- (NSUndoManager *) undoManagerForTextView:(NSTextView *)textView
+{
+	return self.textUndoManager;
+}
 
 - (void) textDidChange:(NSNotification *)notification
 {
