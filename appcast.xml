@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.1.1</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Added a URL preview when hovering over links in the timeline.</li>
+					<li>Fixed Undo and Redo when editing notes.</li>
+					<li>Fixed command-F to focus the notes search field while editing.</li>
+					<li>Fixed a potential launch crash and handling other errors.</li>
+				</ul>
+			]]></description>
+			<pubDate>Mon, 21 Sep 2026 10:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.1.1.zip" sparkle:shortVersionString="4.1.1" sparkle:version="258" length="18323251" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.1</title>
 			<description><![CDATA[
 				<style>
