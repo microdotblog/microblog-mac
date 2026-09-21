@@ -17,7 +17,7 @@
 				</style>
 				<p>Changes in this version:</p>
 				<ul>
-					<li>Added a URL preview when hovering over links in the timeline.</li>
+					<li>Added a URL status bar when hovering over links in the timeline.</li>
 					<li>Fixed Undo and Redo when editing notes.</li>
 					<li>Fixed command-F to focus the notes search field while editing.</li>
 					<li>Fixed a potential launch crash and handling other errors.</li>
