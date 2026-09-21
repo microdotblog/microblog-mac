@@ -83,6 +83,8 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 - (IBAction) okPressed:(id)sender
 {
 	self.isCancelled = YES;
+	[self.altTextTimer invalidate];
+	self.altTextTimer = nil;
 	self.photo.altText = [self.descriptionField string];
 	[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
@@ -90,13 +92,17 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 - (IBAction) cancelPressed:(id)sender
 {
 	self.isCancelled = YES;
+	[self.altTextTimer invalidate];
+	self.altTextTimer = nil;
 	[self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction) removePressed:(id)sender
 {
 	self.isCancelled = YES;
-	if (self.photo.publishedURL && !self.photo.isUndeletable) {
+	[self.altTextTimer invalidate];
+	self.altTextTimer = nil;
+	if ((self.photo.publishedURL.length > 0 || self.photo.isUploadingForAltText) && !self.photo.isUndeletable) {
 		// if already uploaded, we need to also delete it
 		[self removeUploadWithCompletion:^{
 			[[NSNotificationCenter defaultCenter] postNotificationName:kRemoveAttachedPhotoNotification object:self userInfo:@{ kRemoveAttachedPhotoIndexPath: self.indexPath }];
@@ -142,40 +148,19 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Uploading...";
 
-	NSData* d = nil;
-	NSString* filename = self.photo.fileURL.lastPathComponent;
-	if (self.photo.isGIF || self.photo.isPNG) {
-		d = [NSData dataWithContentsOfURL:self.photo.fileURL];
-	}
-	if (!d) {
-		d = [self.photo jpegData];
-	}
-	if (!d) {
-		[self.progressSpinner stopAnimation:nil];
-		self.progressStatusField.stringValue = @"Failed to load image";
-		return;
-	}
-	
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
-	NSDictionary* args = [RFSettings networkingArgsForDestination];
-
-	[client uploadImageData:d named:@"file" filename:filename httpMethod:@"POST" queryArguments:args isVideo:self.photo.isVideo isGIF:self.photo.isGIF isPNG:self.photo.isPNG completion:^(UUHttpResponse* response) {
-		if (self.isCancelled) {
+	__weak RFPhotoAltController* weak_self = self;
+	[self.photo uploadForAltTextWithCompletion:^(BOOL success) {
+		RFPhotoAltController* controller = weak_self;
+		if (controller == nil || controller.isCancelled) {
 			return;
 		}
-
-		NSDictionary *headers = response.httpResponse.allHeaderFields;
-		NSString* image_url = headers[@"Location"];
-		RFDispatchMainAsync(^{
-			if (image_url.length > 0) {
-				self.photo.publishedURL = image_url;
-				[self waitForAltText];
-			}
-			else {
-				[self.progressSpinner stopAnimation:nil];
-				self.progressStatusField.stringValue = @"Upload failed";
-			}
-		});
+		if (success) {
+			[controller waitForAltText];
+		}
+		else {
+			[controller.progressSpinner stopAnimation:nil];
+			controller.progressStatusField.stringValue = @"Upload failed";
+		}
 	}];
 }
 
@@ -251,6 +236,9 @@ static NSString* const kLocalAltTextPrompt = @"Describe what's in this image in 
 
 - (void) waitForAltText
 {
+	if (self.isCancelled) {
+		return;
+	}
 	[self.progressSpinner startAnimation:nil];
 	self.progressStatusField.hidden = NO;
 	self.progressStatusField.stringValue = @"Generating text...";

@@ -16,6 +16,11 @@
 static CGFloat const kMaxVideoLandscapeWidth = 1920.0;
 static CGFloat const kMaxVideoLandscapeHeight = 1080.0;
 
+@interface RFPhoto ()
+@property (assign, readwrite) BOOL isUploadingForAltText;
+@property (strong) NSMutableArray* altUploadCompletions;
+@end
+
 @implementation RFPhoto
 
 #if 0 // 10.13
@@ -151,8 +156,58 @@ static CGFloat const kMaxVideoLandscapeHeight = 1080.0;
 	}
 }
 
+- (void) uploadForAltTextWithCompletion:(void (^)(BOOL success))handler
+{
+	if (self.isUploadingForAltText) {
+		[self.altUploadCompletions addObject:[handler copy]];
+		return;
+	}
+	if (self.publishedURL.length > 0) {
+		handler(YES);
+		return;
+	}
+	NSData* data = nil;
+	if (self.isGIF || self.isPNG) {
+		data = [NSData dataWithContentsOfURL:self.fileURL];
+	}
+	if (!data) {
+		data = [self jpegData];
+	}
+	if (!data) {
+		handler(NO);
+		return;
+	}
+	self.isUploadingForAltText = YES;
+	self.altUploadCompletions = [NSMutableArray arrayWithObject:[handler copy]];
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	[client uploadImageData:data named:@"file" filename:self.fileURL.lastPathComponent httpMethod:@"POST" queryArguments:[RFSettings networkingArgsForDestination] isVideo:self.isVideo isGIF:self.isGIF isPNG:self.isPNG completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			NSString* url = response.httpResponse.allHeaderFields[@"Location"];
+			NSInteger status = response.httpResponse.statusCode;
+			BOOL success = !response.httpError && status >= 200 && status < 300 && url.length > 0;
+			if (success) {
+				self.publishedURL = url;
+			}
+			self.isUploadingForAltText = NO;
+			NSArray* completions = [self.altUploadCompletions copy];
+			self.altUploadCompletions = nil;
+			for (void (^completion)(BOOL) in completions) {
+				completion(success);
+			}
+		});
+	}];
+}
+
 - (void) removeUploadWithCompletion:(void (^)(void))handler
 {
+	if (self.isUploadingForAltText) {
+		// Wait for the URL so removing during upload also removes the server copy.
+		__weak RFPhoto* weak_self = self;
+		[self.altUploadCompletions addObject:[^(BOOL success) {
+			[weak_self removeUploadWithCompletion:handler];
+		} copy]];
+		return;
+	}
 	if (self.publishedURL.length == 0 || self.isUndeletable) {
 		handler();
 		return;

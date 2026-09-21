@@ -27,6 +27,9 @@ static NSString* const kAttachPhotoKey = @"photo";
 @property (assign) BOOL isPNG;
 @property (assign) BOOL isUndeletable; // a photo already published that we shouldn't touch
 @property (strong) NSString* tempVideoPath;
+@property (assign, readonly) BOOL isUploadingForAltText;
+
+- (void) uploadForAltTextWithCompletion:(void (^)(BOOL success))handler;
 
 //- (id) initWithAsset:(PHAsset *)asset;
 - (id) initWithThumbnail:(NSImage *)image;

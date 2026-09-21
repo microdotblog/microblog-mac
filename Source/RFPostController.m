@@ -963,6 +963,12 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (BOOL) validateReadyToUploadPost
 {
+	for (RFPhoto* photo in self.attachedPhotos) {
+		if (photo.isUploadingForAltText) {
+			[NSAlert rf_showOneButtonAlert:@"Photo Still Uploading" message:@"Please wait for the accessibility photo upload to finish before posting or saving." button:@"OK" completionHandler:NULL];
+			return NO;
+		}
+	}
 	if (self.libraryImportQueue.count > 0) {
 		[NSAlert rf_showOneButtonAlert:@"Photos Still Loading" message:@"Please wait for your selected photos to finish loading before posting." button:@"OK" completionHandler:NULL];
 		return NO;
@@ -1787,8 +1793,13 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) removeAttachedPhotoNotification:(NSNotification *)notification
 {
-	NSIndexPath* index_path = [notification.userInfo objectForKey:kRemoveAttachedPhotoIndexPath];
-	[self removePhotoAtIndex:index_path];
+	if (notification.object != self.altController || self.altController == nil) {
+		return;
+	}
+	NSUInteger index = [self.attachedPhotos indexOfObjectIdenticalTo:self.altController.photo];
+	if (index != NSNotFound) {
+		[self removePhotoAtIndex:[NSIndexPath indexPathForItem:index inSection:0]];
+	}
 }
 
 - (void) handleAutoCompleteNotification:(NSNotification *)notification
@@ -2716,7 +2727,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	NSString* s = [self currentText];
 	if ((s.length > 0) || (self.attachedPhotos.count > 0)) {
 		if (self.attachedPhotos.count > 0) {
-			if (([s characterAtIndex:0] == '@') && [self hasSnippetsBlog] && ![self prefersExternalBlog]) {
+			if ([s hasPrefix:@"@"] && [self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 				NSString* msg = @"When replying to another Micro.blog user, photos are not currently supported. Start the post with different text and @-mention the user elsewhere in the post to make this a microblog post with inline photos on your site.";
 				[NSAlert rf_showOneButtonAlert:@"Replies Can't Use Photos" message:msg button:@"OK" completionHandler:NULL];
 				[self hideProgressHeader];
@@ -3702,6 +3713,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) removePhotoAtIndex:(NSIndexPath *)indexPath
 {
+	if (indexPath == nil || indexPath.item >= self.attachedPhotos.count) {
+		return;
+	}
 	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
 	[photo removeTemporaryVideo];
 

@@ -41,6 +41,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 @property (assign, nonatomic) BOOL needsUploadsRetry;
 @property (copy, nonatomic) NSString* currentSearch;
 @property (copy, nonatomic) NSString* loadedUploadsContext;
+@property (assign, nonatomic) NSInteger activePhotoUploadBatches;
 
 - (void) fetchInitialUploads;
 - (void) uploadFiles:(NSArray *)paths;
@@ -325,7 +326,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 {
 	[self setupBlogName];
 	[self stopLoadingSidebarRow];
-	self.blogNameButton.hidden = NO;
+	self.blogNameButton.hidden = self.activePhotoUploadBatches > 0 || self.uploader != nil;
 	self.collectionView.alphaValue = 1.0;
 }
 
@@ -493,7 +494,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 		[self replaceUploads:@[]];
 		[self setupBlogName];
 		[self stopLoadingSidebarRow];
-		self.blogNameButton.hidden = NO;
+		self.blogNameButton.hidden = self.activePhotoUploadBatches > 0 || self.uploader != nil;
 		self.collectionView.alphaValue = 1.0;
 	}
 }
@@ -823,8 +824,8 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 		}
 
 		NSMutableArray* new_photos = [regular_paths mutableCopy];
-		[self uploadNextPhoto:new_photos];
 		[self showUploadProgress];
+		[self uploadNextPhoto:new_photos];
 	};
 
 	if ([video_urls count] > 0) {
@@ -1088,7 +1089,10 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 	self.progressSpinner.displayedWhenStopped = NO;
 	[self.progressSpinner stopAnimation:nil];
 	self.progressCancelButton.hidden = YES;
-	self.blogNameButton.hidden = NO;
+	self.blogNameButton.hidden = self.activePhotoUploadBatches > 0;
+	if (self.activePhotoUploadBatches > 0) {
+		[self.progressSpinner startAnimation:nil];
+	}
 }
 
 - (BOOL) isVideoFileURL:(NSURL *)url
@@ -1275,14 +1279,18 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 
 - (void) showUploadProgress
 {
+	self.activePhotoUploadBatches++;
 	self.blogNameButton.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 }
 
 - (void) hideUploadProgress
 {
-	[self.progressSpinner stopAnimation:nil];
-	self.blogNameButton.hidden = NO;
+	self.activePhotoUploadBatches = MAX(0, self.activePhotoUploadBatches - 1);
+	if (self.activePhotoUploadBatches == 0 && self.uploader == nil) {
+		[self.progressSpinner stopAnimation:nil];
+		self.blogNameButton.hidden = NO;
+	}
 }
 
 - (void) focusSearch
@@ -1360,8 +1368,10 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 	
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
-			[self.progressSpinner stopAnimation:nil];
-			self.blogNameButton.hidden = NO;
+			if (self.activePhotoUploadBatches == 0 && self.uploader == nil) {
+				[self.progressSpinner stopAnimation:nil];
+				self.blogNameButton.hidden = NO;
+			}
 
 			if (![self responseWasSuccessful:response]) {
 				NSString* message = [self errorMessageForResponse:response fallback:@"The upload could not be deleted."];
