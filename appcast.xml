@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.1.2</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Improved reliability when editing accessibility text or removing photos during upload.</li>
+					<li>Fixed duplicate photo uploads and attachment issues with multiple post windows.</li>
+					<li>Fixed a crash when posting photos without text.</li>
+					<li>Fixed upload progress bars with multiple uploads.</li>
+				</ul>
+			]]></description>
+			<pubDate>Mon, 21 Sep 2026 10:00:00 -0600</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.1.2.zip" sparkle:shortVersionString="4.1.2" sparkle:version="260" length="18324710" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.1.1</title>
 			<description><![CDATA[
 				<style>
