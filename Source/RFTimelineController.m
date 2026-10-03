@@ -1153,6 +1153,11 @@ static BOOL const kReaderWindowEnabled = NO;
 			[(MBNotesController *)self.rootController fetchNotes];
 		}
 	}
+	else if (self.selectedTimeline == kSelectionBookshelves) {
+		if ([self.rootController isKindOfClass:[RFBookshelvesController class]]) {
+			[(RFBookshelvesController *)self.rootController refresh];
+		}
+	}
 
 	RFDispatchSeconds (1.5, ^{
 		[self hideMessageField];

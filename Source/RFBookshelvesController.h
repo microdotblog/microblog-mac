@@ -16,8 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSPopUpButton* goalsPopup;
-@property (strong, nonatomic) IBOutlet NSTextField* goalSummaryField;
-@property (strong, nonatomic) IBOutlet NSButton* editButton;
+@property (strong, nonatomic) IBOutlet NSTextField* goalsLabel;
 @property (strong, nonatomic) IBOutlet NSWindow* editSheet;
 @property (strong, nonatomic) IBOutlet NSTextField* editTitleField;
 @property (strong, nonatomic) IBOutlet NSTextField* editGoalField;
@@ -27,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) MBGoal* selectedGoal;
 
 + (NSAttributedString *) attributedTitleForGoal:(MBGoal *)goal;
+- (void) refresh;
 
 @end
 

@@ -297,6 +297,7 @@
 		C0DE20260909000000000003 /* Source/MBLinksController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000013 /* Source/MBLinksController.m */; };
 		C0DE20260909000000000004 /* Source/MBReaderController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000014 /* Source/MBReaderController.m */; };
 		C0DE20261003000000000001 /* Source/MBAudioNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000002 /* Source/MBAudioNoteController.m */; };
+		C0DE20261003000000000011 /* Source/MBCalendarController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000012 /* Source/MBCalendarController.m */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 		E8353D03F1A941E3A1A01811 /* Source/MBNotesTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E8353D03F1A941E3A1A01812 /* Source/MBNotesTextView.m */; };
@@ -815,6 +816,8 @@
 		C0DE20260909000000000024 /* Source/MBReaderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBReaderController.h; sourceTree = "<group>"; };
 		C0DE20261003000000000002 /* Source/MBAudioNoteController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBAudioNoteController.m; sourceTree = "<group>"; };
 		C0DE20261003000000000003 /* Source/MBAudioNoteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBAudioNoteController.h; sourceTree = "<group>"; };
+		C0DE20261003000000000012 /* Source/MBCalendarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBCalendarController.m; sourceTree = "<group>"; };
+		C0DE20261003000000000013 /* Source/MBCalendarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBCalendarController.h; sourceTree = "<group>"; };
 		C549E91F21EEB6D600730675 /* RFUserCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserCache.h; path = Source/RFUserCache.h; sourceTree = "<group>"; };
 		C549E92021EEB6D600730675 /* RFUserCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserCache.m; path = Source/RFUserCache.m; sourceTree = "<group>"; };
 		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
@@ -1112,6 +1115,8 @@
 				4B5606D92A73F92F00843D59 /* MBTokenField.m */,
 				4BF7E50E28343DFE00500C59 /* RFBookshelvesController.h */,
 				4BF7E50F28343DFE00500C59 /* RFBookshelvesController.m */,
+				C0DE20261003000000000013 /* Source/MBCalendarController.h */,
+				C0DE20261003000000000012 /* Source/MBCalendarController.m */,
 				4BF7E51928354F9500500C59 /* RFBookshelfCell.h */,
 				4BF7E51A28354F9500500C59 /* RFBookshelfCell.m */,
 				4BF7E51C2835850600500C59 /* RFBookshelf.h */,
@@ -1847,6 +1852,7 @@
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
 				4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */,
 				C0DE20261003000000000001 /* Source/MBAudioNoteController.m in Sources */,
+				C0DE20261003000000000011 /* Source/MBCalendarController.m in Sources */,
 				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
 				4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,

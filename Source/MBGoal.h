@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MBGoal : NSObject
 
 @property (strong) NSNumber* goalID;
+@property (strong) NSNumber* year;
 @property (strong) NSString* title;
 @property (strong) NSString* text;
 @property (strong) NSNumber* goalValue;

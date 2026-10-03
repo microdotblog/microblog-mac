@@ -9,6 +9,7 @@
 #import "RFBookshelvesController.h"
 
 #import "MBBooksWindowController.h"
+#import "MBCalendarController.h"
 #import "RFBookshelfCell.h"
 #import "RFBookshelf.h"
 #import "MBGoal.h"
@@ -16,9 +17,16 @@
 #import "RFMacros.h"
 #import "RFConstants.h"
 
-@interface MBGoalPopUpButtonCell : NSPopUpButtonCell
+static NSInteger const kTimelineBookshelvesSidebarRow = 11;
 
-@property (nonatomic, strong) NSAttributedString *overrideTitle;
+@interface RFBookshelvesController ()
+@property (strong, nonatomic) NSSegmentedControl* tabsControl;
+@property (strong, nonatomic) NSLayoutConstraint* goalsPopupWidthConstraint;
+@property (strong, nonatomic) MBCalendarController* calendarController;
+@property (assign, nonatomic) BOOL showingCalendar;
+@end
+
+@interface MBGoalPopUpButtonCell : NSPopUpButtonCell
 
 @end
 
@@ -30,7 +38,7 @@
 	NSMenuItem* item = [self selectedItem];
 	MBGoal* g = item.representedObject;
 	if (!g) {
-		return frame;
+		return [super drawTitle:title withFrame:frame inView:controlView];
 	}
 	NSAttributedString* s = [RFBookshelvesController attributedTitleForGoal:g];
 	
@@ -86,6 +94,7 @@
 	[self setupTable];
 	[self setupNotifications];
 	[self setupPlaceholder];
+	[self setupTabs];
 	
 	[self fetchBookshelves];
 	[self fetchGoals];
@@ -108,10 +117,79 @@
 
 - (void) setupPlaceholder
 {
+	// Size the closed popup independently of the menu's two-line goal entries.
+	NSPopUpButtonCell* cell = self.goalsPopup.cell;
+	cell.usesItemFromMenu = NO;
+	cell.menuItem = [[NSMenuItem alloc] initWithTitle:@"Loading Goals…" action:NULL keyEquivalent:@""];
 	// placeholder for current year while loading
-	self.goalsPopup.title = @"Reading 2025";
 	self.goalsPopup.enabled = NO;
 	self.goalsPopup.hidden = NO;
+}
+
+- (void) setupTabs
+{
+	NSView* header = self.goalsPopup.superview;
+	self.tabsControl = [NSSegmentedControl segmentedControlWithLabels:@[ @"Bookshelves", @"Calendar" ] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(selectTab:)];
+	self.tabsControl.selectedSegment = 0;
+	self.tabsControl.translatesAutoresizingMaskIntoConstraints = NO;
+	[header addSubview:self.tabsControl];
+	self.goalsPopupWidthConstraint = [self.goalsPopup.widthAnchor constraintEqualToConstant:180];
+	[NSLayoutConstraint activateConstraints:@[
+		[self.tabsControl.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:18],
+		[self.tabsControl.centerYAnchor constraintEqualToAnchor:self.goalsPopup.centerYAnchor],
+		[self.tabsControl.trailingAnchor constraintLessThanOrEqualToAnchor:self.goalsLabel.leadingAnchor constant:-18],
+		self.goalsPopupWidthConstraint
+	]];
+}
+
+- (void) selectTab:(NSSegmentedControl *)sender
+{
+	BOOL show_calendar = sender.selectedSegment == 1;
+	if (self.showingCalendar == show_calendar) {
+		return;
+	}
+	self.showingCalendar = show_calendar;
+	if (self.showingCalendar && !self.calendarController) {
+		self.calendarController = [[MBCalendarController alloc] init];
+		[self addChildViewController:self.calendarController];
+		NSView* calendar_view = self.calendarController.view;
+		NSScrollView* shelves_view = self.tableView.enclosingScrollView;
+		calendar_view.translatesAutoresizingMaskIntoConstraints = NO;
+		[shelves_view.superview addSubview:calendar_view];
+		[NSLayoutConstraint activateConstraints:@[
+			[calendar_view.leadingAnchor constraintEqualToAnchor:shelves_view.leadingAnchor],
+			[calendar_view.trailingAnchor constraintEqualToAnchor:shelves_view.trailingAnchor],
+			[calendar_view.topAnchor constraintEqualToAnchor:shelves_view.topAnchor],
+			[calendar_view.bottomAnchor constraintEqualToAnchor:shelves_view.bottomAnchor]
+		]];
+		__weak RFBookshelvesController* weak_self = self;
+		self.calendarController.loadingDidChange = ^{
+			RFBookshelvesController* controller = weak_self;
+			if (controller.showingCalendar && controller.view.window) {
+				NSString* name = controller.calendarController.loading ? kTimelineDidStartLoading : kTimelineDidStopLoading;
+				[[NSNotificationCenter defaultCenter] postNotificationName:name object:controller userInfo:@{ kTimelineSidebarRowKey: @(kTimelineBookshelvesSidebarRow) }];
+			}
+		};
+	}
+	self.tableView.enclosingScrollView.hidden = self.showingCalendar;
+	self.calendarController.view.hidden = !self.showingCalendar;
+	if (self.showingCalendar) {
+		[self.calendarController reloadCalendar];
+	}
+	else {
+		[self stopLoadingSidebarRow];
+	}
+}
+
+- (void) refresh
+{
+	if (self.showingCalendar) {
+		[self.calendarController reloadCalendar];
+	}
+	else {
+		[self fetchBookshelves];
+	}
+	[self fetchGoals];
 }
 
 #pragma mark -
@@ -161,35 +239,36 @@
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books/goals"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			__block BOOL is_first = YES;
 			NSMutableArray* new_goals = [NSMutableArray array];
 
 			NSArray* items = [response.parsedResponse objectForKey:@"items"];
 			for (NSDictionary* item in items) {
 				MBGoal* g = [[MBGoal alloc] init];
 				g.goalID = [item objectForKey:@"id"];
+				g.year = [[item objectForKey:@"_microblog"] objectForKey:@"goal_year"];
 				g.title = [item objectForKey:@"title"];
 				g.text = [item objectForKey:@"content_text"];
 				g.goalValue = [[item objectForKey:@"_microblog"] objectForKey:@"goal_value"];
 				g.goalProgress = [[item objectForKey:@"_microblog"] objectForKey:@"goal_progress"];
 
 				[new_goals addObject:g];
-				
-				RFDispatchMainAsync (^{
-					if (is_first) {
-						self.selectedGoal = g;
-						self.goalSummaryField.stringValue = g.text;
-						self.goalSummaryField.hidden = NO;
-						is_first = NO;
-					}
-				});
 			}
+			[new_goals sortUsingComparator:^NSComparisonResult(MBGoal* first, MBGoal* second) {
+				return [@(second.year.integerValue) compare:@(first.year.integerValue)];
+			}];
 			
 			RFDispatchMainAsync (^{
 				self.goals = new_goals;
+				NSNumber* selected_id = self.selectedGoal.goalID;
+				self.selectedGoal = new_goals.firstObject;
+				for (MBGoal* goal in new_goals) {
+					if ([goal.goalID isEqual:selected_id]) {
+						self.selectedGoal = goal;
+						break;
+					}
+				}
 				[self populatePopup:self.goalsPopup withGoals:self.goals];
-				self.goalsPopup.enabled = YES;
-				self.editButton.enabled = YES;
+				self.goalsPopup.enabled = new_goals.count > 0;
 			});
 		}
 	}];
@@ -212,7 +291,9 @@
 
 - (void) stopLoadingSidebarRow
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+	if (!self.showingCalendar || !self.calendarController.loading) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{ kTimelineSidebarRowKey: @(kTimelineBookshelvesSidebarRow) }];
+	}
 }
 
 - (void) refreshBookshelf:(RFBookshelf *)bookshelf
@@ -274,16 +355,62 @@
 - (void) populatePopup:(NSPopUpButton *)popup withGoals:(NSArray *)goals
 {
 	[popup removeAllItems];
+	popup.menu.autoenablesItems = NO;
 
 	for (MBGoal* g in goals) {
-		NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@"" action:NULL keyEquivalent:@""];
-		item.attributedTitle = [[self class] attributedTitleForGoal:g];
+		NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:g.title action:NULL keyEquivalent:@""];
+		item.attributedTitle = [[self class] attributedMenuTitleForGoal:g];
 		item.representedObject = g;
 		item.enabled = YES;
 		[popup.menu addItem:item];
 	}
 
-	[popup selectItemAtIndex:0];
+	if (goals.count > 0) {
+		[popup.menu addItem:[NSMenuItem separatorItem]];
+		NSMenuItem* edit_item = [popup.menu addItemWithTitle:@"Edit Goal…" action:@selector(editGoal:) keyEquivalent:@""];
+		edit_item.target = self;
+		MBGoal* newest_goal = goals.firstObject;
+		edit_item.toolTip = [NSString stringWithFormat:@"Edit %@", newest_goal.title];
+		[self selectCurrentGoalInPopup];
+	}
+	else {
+		[popup addItemWithTitle:@"No Goals"];
+		((NSPopUpButtonCell *)popup.cell).menuItem = [[NSMenuItem alloc] initWithTitle:@"No Goals" action:NULL keyEquivalent:@""];
+		self.goalsPopupWidthConstraint.constant = 170;
+	}
+}
+
+- (void) selectCurrentGoalInPopup
+{
+	if (!self.selectedGoal) {
+		return;
+	}
+	for (NSMenuItem* item in self.goalsPopup.itemArray) {
+		if (item.representedObject == self.selectedGoal) {
+			[self.goalsPopup selectItem:item];
+			NSMenuItem* display_item = [[NSMenuItem alloc] initWithTitle:self.selectedGoal.title action:NULL keyEquivalent:@""];
+			display_item.attributedTitle = [[self class] attributedTitleForGoal:self.selectedGoal];
+			((NSPopUpButtonCell *)self.goalsPopup.cell).menuItem = display_item;
+			// 6-point leading inset, 6-point gap, 10-point arrows, 8-point trailing inset.
+			self.goalsPopupWidthConstraint.constant = MAX(170, ceil(display_item.attributedTitle.size.width) + 30);
+			[self.goalsPopup invalidateIntrinsicContentSize];
+			break;
+		}
+	}
+}
+
++ (NSAttributedString *) attributedMenuTitleForGoal:(MBGoal *)goal
+{
+	NSMutableAttributedString* title = [[self attributedTitleForGoal:goal] mutableCopy];
+	// Keep this spacing in the menu only; the closed popup uses the compact title.
+	NSMutableParagraphStyle* paragraph_style = [[NSMutableParagraphStyle alloc] init];
+	paragraph_style.paragraphSpacing = 4;
+	[title addAttribute:NSParagraphStyleAttributeName value:paragraph_style range:NSMakeRange(0, title.length)];
+	[title appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", goal.text] attributes:@{
+		NSFontAttributeName: [NSFont menuFontOfSize:11],
+		NSForegroundColorAttributeName: [NSColor secondaryLabelColor]
+	}]];
+	return title;
 }
 
 + (NSAttributedString *) attributedTitleForGoal:(MBGoal *)goal
@@ -334,20 +461,32 @@
 
 - (IBAction) goalsPopupChanged:(NSPopUpButton *)sender
 {
-	self.selectedGoal = [self.goals objectAtIndex:sender.indexOfSelectedItem];
-	self.goalSummaryField.stringValue = self.selectedGoal.text;
+	NSMenuItem* item = sender.selectedItem;
+	if ([item.representedObject isKindOfClass:[MBGoal class]]) {
+		self.selectedGoal = item.representedObject;
+		[self selectCurrentGoalInPopup];
+	}
+	else if (item.action == @selector(editGoal:)) {
+		[self editGoal:item];
+	}
 }
 
 - (IBAction) editGoal:(id)sender
 {
-	self.editTitleField.stringValue = self.selectedGoal.title;
-	self.editGoalField.stringValue = [self.selectedGoal.goalValue stringValue];
+	// Selecting the command must not replace the compact popup's selected goal.
+	[self selectCurrentGoalInPopup];
+	MBGoal* goal = self.goals.firstObject;
+	if (!goal || !self.view.window || self.view.window.attachedSheet) {
+		return;
+	}
+	self.editTitleField.stringValue = goal.title;
+	self.editGoalField.stringValue = [goal.goalValue stringValue];
 	
 	[self.editSheet makeFirstResponder:self.editGoalField];
 
 	[self.view.window beginSheet:self.editSheet completionHandler:^(NSModalResponse returnCode) {
 		if (returnCode == NSModalResponseOK) {
-			[self sendGoal:self.selectedGoal];
+			[self sendGoal:goal];
 		}
 	}];
 }
