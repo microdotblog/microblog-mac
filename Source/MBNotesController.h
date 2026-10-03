@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) fetchNotes;
 - (void) startNewNote;
+- (void) recordAudioNote;
 - (void) focusSearch;
 - (void) deselectAll;
 

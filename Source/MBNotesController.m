@@ -7,6 +7,7 @@
 //
 
 #import "MBNotesController.h"
+#import "MBAudioNoteController.h"
 
 #import "MBNote.h"
 #import "MBNotebook.h"
@@ -39,6 +40,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 @property (strong, nonatomic, nullable) MBNote* noteCreatedWhileFetching;
 @property (strong, nonatomic) NSMutableSet* noteIDsChangedWhilePaging;
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
+@property (strong, nonatomic) NSMutableSet* audioNoteControllers;
+@property (strong, nonatomic) NSMutableArray* audioNotesCreatedWhileFetching;
 
 @end
 
@@ -51,6 +54,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 		self.editedNotes = [NSMutableSet set];
 		self.noteIDsChangedWhilePaging = [NSMutableSet set];
 		self.textUndoManager = [[NSUndoManager alloc] init];
+		self.audioNoteControllers = [NSMutableSet set];
+		self.audioNotesCreatedWhileFetching = [NSMutableArray array];
 	}
 	
 	return self;
@@ -298,6 +303,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 	self.isFetchingNotes = YES;
 	self.isPagingNotesInBackground = YES;
+	[self.audioNotesCreatedWhileFetching removeAllObjects];
 	[self.noteIDsChangedWhilePaging removeAllObjects];
 	self.notesFetchRequestID++;
 	NSInteger request_id = self.notesFetchRequestID;
@@ -334,6 +340,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	void (^background_handler)(void) = ^{
 		self.isPagingNotesInBackground = NO;
 		self.noteCreatedWhileFetching = nil;
+		[self.audioNotesCreatedWhileFetching removeAllObjects];
 		[self.noteIDsChangedWhilePaging removeAllObjects];
 	};
 
@@ -412,22 +419,20 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (NSArray *) notesArrayByIncludingNewNoteIfNeeded:(NSArray *)notes forNotebookID:(NSNumber *)notebookID
 {
-	if (self.noteCreatedWhileFetching == nil) {
+	NSMutableArray* created_notes = [self.audioNotesCreatedWhileFetching mutableCopy];
+	if (self.noteCreatedWhileFetching) {
+		[created_notes addObject:self.noteCreatedWhileFetching];
+	}
+	if (created_notes.count == 0) {
 		return notes;
 	}
-	if (![self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
-		return notes;
-	}
-
 	NSMutableArray* new_notes = [notes mutableCopy];
-	for (NSInteger i = new_notes.count - 1; i >= 0; i--) {
-		MBNote* n = [new_notes objectAtIndex:i];
-		if ((n == self.noteCreatedWhileFetching) || (n.noteID && self.noteCreatedWhileFetching.noteID && [n.noteID isEqualToNumber:self.noteCreatedWhileFetching.noteID])) {
-			[new_notes removeObjectAtIndex:i];
+	for (MBNote* note in created_notes) {
+		if ([note.notebookID isEqualToNumber:notebookID]) {
+			[new_notes removeObjectIdenticalTo:note];
+			[self mergeNotes:@[note] intoNotesArray:new_notes atOffset:0];
 		}
 	}
-
-	[new_notes insertObject:self.noteCreatedWhileFetching atIndex:0];
 	return new_notes;
 }
 
@@ -1045,6 +1050,79 @@ static NSString* const kNotesSettingsType = @"Setting";
 		// focus note editor
 		[self.view.window makeFirstResponder:self.detailTextView];
 	}];
+}
+
+- (void) recordAudioNote
+{
+	NSWindow* parent_window = self.view.window;
+	if (!parent_window) {
+		return;
+	}
+	if (self.view.window.attachedSheet) {
+		NSBeep();
+		return;
+	}
+	if (self.secretKey.length == 0 || self.currentNotebook.notebookID == nil) {
+		NSAlert* alert = [[NSAlert alloc] init];
+		alert.messageText = @"Notes Not Ready";
+		alert.informativeText = @"Set up your notes encryption key and wait for your notebooks to load before recording.";
+		[alert beginSheetModalForWindow:self.view.window completionHandler:nil];
+		return;
+	}
+	__weak MBNotesController* weak_self = self;
+	__weak NSWindow* weak_window = parent_window;
+	__block __weak MBAudioNoteController* weak_controller;
+	MBAudioNoteController* controller = [[MBAudioNoteController alloc] initWithNotebookID:self.currentNotebook.notebookID secretKey:self.secretKey completion:^(MBNote* note, NSString* text, NSString* error) {
+		MBNotesController* notes_controller = weak_self;
+		if (!notes_controller) {
+			return;
+		}
+		[notes_controller.audioNoteControllers removeObject:weak_controller];
+		if (note) {
+			[notes_controller didCreateAudioNote:note];
+		}
+		else if (error) {
+			NSAlert* alert = [[NSAlert alloc] init];
+			alert.messageText = @"Error Creating Audio Note";
+			alert.informativeText = error;
+			[alert addButtonWithTitle:@"OK"];
+			if (text.length > 0) {
+				[alert addButtonWithTitle:@"Copy Transcript"];
+			}
+			// The user may have left Notes while the transcript was processing.
+			if (!weak_window) {
+				return;
+			}
+			[alert beginSheetModalForWindow:weak_window completionHandler:^(NSModalResponse response) {
+				if (response == NSAlertSecondButtonReturn) {
+					[NSPasteboard.generalPasteboard clearContents];
+					[NSPasteboard.generalPasteboard setString:text forType:NSPasteboardTypeString];
+				}
+			}];
+		}
+	}];
+	weak_controller = controller;
+	[self.audioNoteControllers addObject:controller];
+	[controller beginSheetForWindow:parent_window];
+}
+
+- (void) didCreateAudioNote:(MBNote *)note
+{
+	MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
+	[db saveNote:note];
+	[db close];
+	if (![self.currentNotebook.notebookID isEqualToNumber:note.notebookID]) {
+		return;
+	}
+	if (self.isFetchingNotes || self.isPagingNotesInBackground) {
+		[self.audioNotesCreatedWhileFetching addObject:note];
+		[self.noteIDsChangedWhilePaging addObject:note.noteID];
+	}
+	NSMutableArray* notes = self.allNotes ? [self.allNotes mutableCopy] : [NSMutableArray array];
+	[self mergeNotes:@[note] intoNotesArray:notes atOffset:0];
+	self.allNotes = notes;
+	// Keep the user's current editor selection and search rather than stealing focus.
+	[self updateCurrentNotesForSearch:self.searchField.stringValue preservingSelectedNoteID:self.selectedNote.noteID];
 }
 
 - (void) notesKeyUpdatedNotification:(NSNotification *)notification

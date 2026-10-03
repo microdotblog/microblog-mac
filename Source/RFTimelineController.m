@@ -7,6 +7,7 @@
 //
 
 #import "RFTimelineController.h"
+#import "RFAppDelegate.h"
 
 #import "MBSimpleTimelineController.h"
 #import "RFMenuCell.h"
@@ -2037,35 +2038,39 @@ static BOOL const kReaderWindowEnabled = NO;
 - (void) updateToolbarForSidebarSelection
 {
 	NSToolbar* toolbar = self.window.toolbar;
-	BOOL should_show_upload = self.selectedTimeline == kSelectionUploads;
-	BOOL upload_exists = NO;
-
-	// check if the UploadButton already exists in the toolbar
-	for (NSToolbarItem* item in toolbar.items) {
-		if ([item.itemIdentifier isEqualToString:@"UploadButton"]) {
-			upload_exists = YES;
-			break;
+	NSArray* contextual_items = @[ @"UploadButton", @"RecordAudioNote", @"NewNote" ];
+	NSArray* desired_items = @[];
+	if (self.selectedTimeline == kSelectionUploads) {
+		desired_items = @[ @"UploadButton" ];
+	}
+	else if (self.selectedTimeline == kSelectionNotes) {
+		desired_items = @[ @"RecordAudioNote", @"NewNote" ];
+	}
+	for (NSInteger i = toolbar.items.count - 1; i >= 0; i--) {
+		NSString* identifier = toolbar.items[i].itemIdentifier;
+		if ([contextual_items containsObject:identifier] && ![desired_items containsObject:identifier]) {
+			[toolbar removeItemAtIndex:i];
 		}
 	}
-
-	if (should_show_upload && !upload_exists) {
-		NSInteger insert_index = toolbar.items.count - 1;
-		[toolbar insertItemWithItemIdentifier:@"UploadButton" atIndex:insert_index];
-	}
-	else if (!should_show_upload && upload_exists) {
-		// remove the UploadButton if it's there
-		NSInteger index_to_remove = NSNotFound;
+	for (NSString* identifier in desired_items) {
+		BOOL exists = NO;
+		NSInteger insert_index = toolbar.items.count;
 		for (NSInteger i = 0; i < toolbar.items.count; i++) {
-			NSToolbarItem* item = [toolbar.items objectAtIndex:i];
-			if ([item.itemIdentifier isEqualToString:@"UploadButton"]) {
-				index_to_remove = i;
-				break;
+			NSString* existing_id = toolbar.items[i].itemIdentifier;
+			exists |= [existing_id isEqualToString:identifier];
+			if ([existing_id isEqualToString:@"NewPost"]) {
+				insert_index = i;
 			}
 		}
-		if (index_to_remove != NSNotFound) {
-			[toolbar removeItemAtIndex:index_to_remove];
+		if (!exists) {
+			[toolbar insertItemWithItemIdentifier:identifier atIndex:insert_index];
 		}
 	}
+}
+
+- (void) recordAudioNote:(id)sender
+{
+	[self.notesController recordAudioNote];
 }
 
 #pragma mark -
@@ -2591,7 +2596,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-    return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"NewPost" ];
+	return @[ @"ProfileBox", NSToolbarFlexibleSpaceItemIdentifier, @"UploadButton", @"RecordAudioNote", @"NewNote", @"NewPost" ];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -2603,6 +2608,10 @@ static BOOL const kReaderWindowEnabled = NO;
 
 	if (self.selectedTimeline == kSelectionUploads) {
 		[items addObject:@"UploadButton"];
+	}
+	else if (self.selectedTimeline == kSelectionNotes) {
+		[items addObject:@"RecordAudioNote"];
+		[items addObject:@"NewNote"];
 	}
 
 	[items addObject:@"NewPost"];
@@ -2642,6 +2651,22 @@ static BOOL const kReaderWindowEnabled = NO;
 			return item;
 		}
     }
+	else if ([itemIdentifier isEqualToString:@"RecordAudioNote"]) {
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.label = @"Dictate...";
+		item.toolTip = @"Dictate Note";
+		NSImage* image = [NSImage imageWithSystemSymbolName:@"microphone" accessibilityDescription:@"Dictate Note"];
+		NSButton* button = [NSButton buttonWithTitle:@"Dictate..." image:image target:self action:@selector(recordAudioNote:)];
+		button.imagePosition = NSImageLeft;
+		item.view = button;
+		return item;
+	}
+	else if ([itemIdentifier isEqualToString:@"NewNote"]) {
+		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.label = @"New Note";
+		item.view = [NSButton buttonWithTitle:@"New Note" target:nil action:@selector(newNote:)];
+		return item;
+	}
 	else if ([itemIdentifier isEqualToString:@"UploadButton"]) {
 		NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		NSButton *uploadButton = [NSButton buttonWithTitle:@"Upload..." target:nil action:@selector(promptForUpload:)];

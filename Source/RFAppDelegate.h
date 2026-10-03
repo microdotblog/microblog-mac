@@ -52,6 +52,7 @@
 @property (strong, nonatomic) NSMutableArray* photoWindows; // RFPhotoZoomController
 
 - (IBAction) newBookmark:(id)sender;
+- (IBAction) newNote:(id)sender;
 - (void) showPostController:(RFPostController *)controller;
 
 @end
