@@ -401,15 +401,27 @@ static NSInteger const kTimelineBookshelvesSidebarRow = 11;
 
 + (NSAttributedString *) attributedMenuTitleForGoal:(MBGoal *)goal
 {
-	NSMutableAttributedString* title = [[self attributedTitleForGoal:goal] mutableCopy];
+	NSMutableAttributedString* content = [[self attributedTitleForGoal:goal] mutableCopy];
 	// Keep this spacing in the menu only; the closed popup uses the compact title.
 	NSMutableParagraphStyle* paragraph_style = [[NSMutableParagraphStyle alloc] init];
 	paragraph_style.paragraphSpacing = 4;
-	[title addAttribute:NSParagraphStyleAttributeName value:paragraph_style range:NSMakeRange(0, title.length)];
-	[title appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", goal.text] attributes:@{
+	[content addAttribute:NSParagraphStyleAttributeName value:paragraph_style range:NSMakeRange(0, content.length)];
+	[content appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", goal.text] attributes:@{
 		NSFontAttributeName: [NSFont menuFontOfSize:11],
 		NSForegroundColorAttributeName: [NSColor secondaryLabelColor]
 	}]];
+	// AppKit ignores spacing before the first and after the last paragraph.
+	// Small blank lines provide outer padding without moving the labels apart.
+	NSMutableParagraphStyle* padding_style = [[NSMutableParagraphStyle alloc] init];
+	padding_style.minimumLineHeight = 3;
+	padding_style.maximumLineHeight = 3;
+	NSDictionary* padding_attributes = @{
+		NSFontAttributeName: [NSFont menuFontOfSize:3],
+		NSParagraphStyleAttributeName: padding_style
+	};
+	NSMutableAttributedString* title = [[NSMutableAttributedString alloc] initWithString:@" \n" attributes:padding_attributes];
+	[title appendAttributedString:content];
+	[title appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n " attributes:padding_attributes]];
 	return title;
 }
 
