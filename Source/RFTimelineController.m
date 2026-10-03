@@ -812,6 +812,7 @@ static BOOL const kReaderWindowEnabled = NO;
 
 	// add the arrow if we now have multiple accounts
 	self.switchAccountView.hidden = ([RFSettings accounts].count <= 1);
+	[self updateToolbarForSidebarSelection];
 }
 
 - (void) darkModeAppearanceDidChangeNotification:(NSNotification *)notification
@@ -1091,6 +1092,12 @@ static BOOL const kReaderWindowEnabled = NO;
 {
 	[self showNotesWithRefresh:NO];
 	[self.notesController startNewNote];
+}
+
+- (void) showNotesAndRecordAudioNote
+{
+	[self showNotesWithRefresh:NO];
+	[self.notesController recordAudioNote];
 }
 
 - (IBAction) refreshTimeline:(id)sender
@@ -2044,7 +2051,7 @@ static BOOL const kReaderWindowEnabled = NO;
 		desired_items = @[ @"UploadButton" ];
 	}
 	else if (self.selectedTimeline == kSelectionNotes) {
-		desired_items = @[ @"RecordAudioNote", @"NewNote" ];
+		desired_items = [RFSettings boolForKey:kIsUsingAI] ? @[ @"RecordAudioNote", @"NewNote" ] : @[ @"NewNote" ];
 	}
 	for (NSInteger i = toolbar.items.count - 1; i >= 0; i--) {
 		NSString* identifier = toolbar.items[i].itemIdentifier;
@@ -2058,8 +2065,9 @@ static BOOL const kReaderWindowEnabled = NO;
 		for (NSInteger i = 0; i < toolbar.items.count; i++) {
 			NSString* existing_id = toolbar.items[i].itemIdentifier;
 			exists |= [existing_id isEqualToString:identifier];
-			if ([existing_id isEqualToString:@"NewPost"]) {
+			if ([existing_id isEqualToString:@"NewPost"] || ([identifier isEqualToString:@"RecordAudioNote"] && [existing_id isEqualToString:@"NewNote"])) {
 				insert_index = i;
+				break;
 			}
 		}
 		if (!exists) {
@@ -2610,7 +2618,9 @@ static BOOL const kReaderWindowEnabled = NO;
 		[items addObject:@"UploadButton"];
 	}
 	else if (self.selectedTimeline == kSelectionNotes) {
-		[items addObject:@"RecordAudioNote"];
+		if ([RFSettings boolForKey:kIsUsingAI]) {
+			[items addObject:@"RecordAudioNote"];
+		}
 		[items addObject:@"NewNote"];
 	}
 
@@ -2655,10 +2665,7 @@ static BOOL const kReaderWindowEnabled = NO;
 		NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 		item.label = @"Dictate...";
 		item.toolTip = @"Dictate Note";
-		NSImage* image = [NSImage imageWithSystemSymbolName:@"microphone" accessibilityDescription:@"Dictate Note"];
-		NSButton* button = [NSButton buttonWithTitle:@"Dictate..." image:image target:self action:@selector(recordAudioNote:)];
-		button.imagePosition = NSImageLeft;
-		item.view = button;
+		item.view = [NSButton buttonWithTitle:@"Dictate..." target:self action:@selector(recordAudioNote:)];
 		return item;
 	}
 	else if ([itemIdentifier isEqualToString:@"NewNote"]) {

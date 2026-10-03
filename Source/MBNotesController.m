@@ -42,6 +42,8 @@ static NSString* const kNotesSettingsType = @"Setting";
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
 @property (strong, nonatomic) NSMutableSet* audioNoteControllers;
 @property (strong, nonatomic) NSMutableArray* audioNotesCreatedWhileFetching;
+@property (assign, nonatomic) BOOL isShowingNotesProgress;
+@property (assign, nonatomic) BOOL isWaitingToRecordAudioNote;
 
 @end
 
@@ -208,7 +210,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 		return;
 	}
 
-	[self.progressSpinner startAnimation:nil];
+	[self startNotesProgress];
 	self.isFetchingNotes = YES;
 
 	[self fetchNotebooksWithCompletion:^{
@@ -220,6 +222,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 		else {
 			self.shouldStartNewNoteAfterFetch = NO;
 			self.isFetchingNotes = NO;
+			[self stopNotesProgress];
 		}
 	}];
 }
@@ -451,8 +454,34 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 
 	self.notebooksPopup.enabled = YES;
-	[self.progressSpinner stopAnimation:nil];
+	[self stopNotesProgress];
 	[self stopLoadingSidebarRow];
+}
+
+- (void) startNotesProgress
+{
+	self.isShowingNotesProgress = YES;
+	[self updateProgressSpinner];
+}
+
+- (void) stopNotesProgress
+{
+	self.isShowingNotesProgress = NO;
+	[self updateProgressSpinner];
+}
+
+- (void) updateProgressSpinner
+{
+	BOOL should_spin = self.isShowingNotesProgress;
+	for (MBAudioNoteController* controller in self.audioNoteControllers) {
+		should_spin |= controller.isProcessing;
+	}
+	if (should_spin) {
+		[self.progressSpinner startAnimation:nil];
+	}
+	else {
+		[self.progressSpinner stopAnimation:nil];
+	}
 }
 
 - (NSNumber *) currentSelectedNoteID
@@ -834,12 +863,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	RFClient* client = [[RFClient alloc] initWithFormat:@"/notes/%@", note.noteID];
 
-	[self.progressSpinner startAnimation:nil];
+	[self startNotesProgress];
 	
 	[client deleteWithObject:nil completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
 			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
-				[self.progressSpinner stopAnimation:nil];
+				[self stopNotesProgress];
 				NSString* msg = response.parsedResponse[@"error"];
 				[NSAlert rf_showOneButtonAlert:@"Error Deleting Note" message:msg button:@"OK" completionHandler:NULL];
 			}
@@ -860,7 +889,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) syncNote:(MBNote *)note completion:(void (^)(void))handler
 {
-	[self.progressSpinner startAnimation:nil];
+	[self startNotesProgress];
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes"];
 	NSString* s = note.text;
@@ -912,7 +941,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			[db saveNote:note];
 			[db close];
 			
-			[self.progressSpinner stopAnimation:nil];
+			[self stopNotesProgress];
 			[self reloadRowForNote:note onlyRecentNotes:NO];
 			if (handler) {
 				handler();
@@ -991,7 +1020,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 		}
 	}
 
-	[self.progressSpinner startAnimation:nil];
+	[self startNotesProgress];
 
 	[self fetchNotesWithNotebookID:@(notebook_id) completion:^{
 	}];
@@ -1054,6 +1083,17 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) recordAudioNote
 {
+	if (self.isWaitingToRecordAudioNote) {
+		return;
+	}
+	[self recordAudioNoteWaitingIfNeeded:YES];
+}
+
+- (void) recordAudioNoteWaitingIfNeeded:(BOOL)canWait
+{
+	if (![RFSettings boolForKey:kIsUsingAI]) {
+		return;
+	}
 	NSWindow* parent_window = self.view.window;
 	if (!parent_window) {
 		return;
@@ -1063,6 +1103,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 		return;
 	}
 	if (self.secretKey.length == 0 || self.currentNotebook.notebookID == nil) {
+		if (canWait) {
+			self.isWaitingToRecordAudioNote = YES;
+			NSString* username = [RFSettings stringForKey:kAccountUsername];
+			__weak MBNotesController* weak_self = self;
+			__weak NSWindow* weak_window = parent_window;
+			RFDispatchSeconds(1.0, ^{
+				MBNotesController* controller = weak_self;
+				controller.isWaitingToRecordAudioNote = NO;
+				// Do not open a sheet after leaving Notes, closing the window, or switching accounts.
+				if (!controller || !weak_window.isVisible || controller.view.window != weak_window || ![username isEqualToString:[RFSettings stringForKey:kAccountUsername]]) {
+					return;
+				}
+				[controller recordAudioNoteWaitingIfNeeded:NO];
+			});
+			return;
+		}
 		NSAlert* alert = [[NSAlert alloc] init];
 		alert.messageText = @"Notes Not Ready";
 		alert.informativeText = @"Set up your notes encryption key and wait for your notebooks to load before recording.";
@@ -1078,6 +1134,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 			return;
 		}
 		[notes_controller.audioNoteControllers removeObject:weak_controller];
+		[notes_controller updateProgressSpinner];
 		if (note) {
 			[notes_controller didCreateAudioNote:note];
 		}
@@ -1102,6 +1159,9 @@ static NSString* const kNotesSettingsType = @"Setting";
 		}
 	}];
 	weak_controller = controller;
+	controller.processingStartedHandler = ^{
+		[weak_self updateProgressSpinner];
+	};
 	[self.audioNoteControllers addObject:controller];
 	[controller beginSheetForWindow:parent_window];
 }
@@ -1190,7 +1250,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (IBAction) shareOrUnshare:(id)sender
 {
-    [self.progressSpinner startAnimation:nil];
+	[self startNotesProgress];
     
     if (self.selectedNote.isShared) {
         self.selectedNote.isUnsharing = YES;
@@ -1199,7 +1259,7 @@ static NSString* const kNotesSettingsType = @"Setting";
             self.selectedNote.isUnsharing = NO;
 
             [self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-                [self.progressSpinner stopAnimation:nil];
+				[self stopNotesProgress];
                 [self updateDetailSharingFooter];
                 [self setupMenuForNote:self.selectedNote];
             }];
@@ -1213,7 +1273,7 @@ static NSString* const kNotesSettingsType = @"Setting";
             self.selectedNote.isSharing = NO;
 
             [self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-                [self.progressSpinner stopAnimation:nil];
+				[self stopNotesProgress];
                 [self updateDetailSharingFooter];
                 [self setupMenuForNote:self.selectedNote];
             }];

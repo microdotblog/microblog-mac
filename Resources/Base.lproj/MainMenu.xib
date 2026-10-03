@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -101,10 +101,17 @@
                                     <action selector="newBookmark:" target="Voe-Tx-rLC" id="GIh-25-pmA"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="YN5-zB-hOD"/>
                             <menuItem title="New Note" image="note" catalog="system" keyEquivalent="n" id="pAK-jG-U2O">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="newNote:" target="-1" id="7Ka-v1-QNo"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Dictate Note..." id="aoG-gS-jWI">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="dictateNote:" target="Voe-Tx-rLC" id="qI1-Nm-8vc"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="GPE-K0-Iig"/>

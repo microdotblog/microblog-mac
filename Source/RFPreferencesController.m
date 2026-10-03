@@ -362,6 +362,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 				BOOL is_enabled = [is_using_ai boolValue];
 				[RFSettings setBool:is_enabled forKey:kIsUsingAI];
 				self.robotsGlobalCheckbox.state = is_enabled ? NSControlStateValueOn : NSControlStateValueOff;
+				[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 			}
 		});
 	}];
@@ -786,6 +787,7 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 {
 	BOOL is_using_ai = (self.robotsGlobalCheckbox.state == NSControlStateValueOn);
 	[RFSettings setBool:is_using_ai forKey:kIsUsingAI];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshAccountsNotification object:self];
 
 	self.robotsGlobalSpinner.hidden = NO;
 	[self.robotsGlobalSpinner startAnimation:nil];

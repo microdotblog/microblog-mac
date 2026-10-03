@@ -418,7 +418,10 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if (item.action == @selector(exportWordPress:)) {
+	if (item.action == @selector(dictateNote:)) {
+		return [RFSettings boolForKey:kIsUsingAI];
+	}
+	else if (item.action == @selector(exportWordPress:)) {
 		if (![RFSettings isUsingMicroblog]) {
 			return NO;
 		}
@@ -579,6 +582,15 @@
 {
 	[self showMainWindow:nil];
 	[self.timelineController showNotesAndStartNewNote];
+}
+
+- (IBAction) dictateNote:(id)sender
+{
+	if (![RFSettings boolForKey:kIsUsingAI]) {
+		return;
+	}
+	[self showMainWindow:nil];
+	[self.timelineController showNotesAndRecordAudioNote];
 }
 
 - (IBAction) importBlogArchive:(id)sender

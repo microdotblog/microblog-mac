@@ -53,6 +53,7 @@
 
 - (IBAction) newBookmark:(id)sender;
 - (IBAction) newNote:(id)sender;
+- (IBAction) dictateNote:(id)sender;
 - (void) showPostController:(RFPostController *)controller;
 
 @end

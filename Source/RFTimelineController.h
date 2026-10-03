@@ -75,6 +75,7 @@ typedef NSInteger RFSelectedTimelineType;
 - (void) showConversationWithPostID:(NSString *)postID;
 - (void) showProfileWithUsername:(NSString *)username;
 - (void) showNotesAndStartNewNote;
+- (void) showNotesAndRecordAudioNote;
 - (void) newCategory:(id)sender;
 - (BOOL) canCreateNewCategory;
 - (void) setSelected:(BOOL)isSelected withPostID:(NSString *)postID;

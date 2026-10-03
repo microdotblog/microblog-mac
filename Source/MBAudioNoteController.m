@@ -27,6 +27,18 @@
 
 - (void) drawRect:(NSRect)dirtyRect
 {
+	NSBezierPath* background = [NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:8 yRadius:8];
+	NSColor* background_color = [NSColor colorWithName:nil dynamicProvider:^NSColor* (NSAppearance* appearance) {
+		NSString* match = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+		if ([match isEqualToString:NSAppearanceNameDarkAqua]) {
+			return [NSColor colorWithWhite:0.16 alpha:1];
+		}
+		return [NSColor colorWithSRGBRed:247.0 / 255 green:247.0 / 255 blue:247.0 / 255 alpha:1];
+	}];
+	[background_color setFill];
+	[background fill];
+	[NSGraphicsContext saveGraphicsState];
+	[background addClip];
 	[[NSColor controlAccentColor] setFill];
 	CGFloat step = self.bounds.size.width / 100.0;
 	for (NSInteger i = 0; i < 100; i++) {
@@ -36,10 +48,7 @@
 		NSRect bar = NSMakeRect(i * step, (self.bounds.size.height - height) / 2, MAX(2, step - 2), height);
 		[[NSBezierPath bezierPathWithRoundedRect:bar xRadius:1 yRadius:1] fill];
 	}
-	[[NSColor secondaryLabelColor] setStroke];
-	NSBezierPath* border = [NSBezierPath bezierPathWithRect:NSInsetRect(self.bounds, 0.5, 0.5)];
-	border.lineWidth = 1;
-	[border stroke];
+	[NSGraphicsContext restoreGraphicsState];
 }
 
 @end
@@ -114,7 +123,7 @@
 	self.inputsPopup.accessibilityLabel = @"Microphone input";
 	NSButton* cancel_button = [NSButton buttonWithTitle:@"Cancel" target:self action:@selector(cancel:)];
 	cancel_button.keyEquivalent = @"\e";
-	self.uploadButton = [NSButton buttonWithTitle:@"Upload" target:self action:@selector(upload:)];
+	self.uploadButton = [NSButton buttonWithTitle:@"Save Note" target:self action:@selector(upload:)];
 	self.uploadButton.keyEquivalent = @"\r";
 	self.uploadButton.enabled = NO;
 	self.progressSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
@@ -127,11 +136,11 @@
 		[content addSubview:view];
 	}
 	[NSLayoutConstraint activateConstraints:@[
-		[self.statusField.leadingAnchor constraintEqualToAnchor:content.leadingAnchor constant:24],
+		[self.statusField.leadingAnchor constraintEqualToAnchor:content.leadingAnchor constant:20],
 		[self.statusField.topAnchor constraintEqualToAnchor:content.topAnchor constant:20],
-		[self.statusField.trailingAnchor constraintEqualToAnchor:content.trailingAnchor constant:-24],
-		[self.waveformView.leadingAnchor constraintEqualToAnchor:content.leadingAnchor constant:24],
-		[self.waveformView.trailingAnchor constraintEqualToAnchor:content.trailingAnchor constant:-24],
+		[self.statusField.trailingAnchor constraintEqualToAnchor:content.trailingAnchor constant:-20],
+		[self.waveformView.leadingAnchor constraintEqualToAnchor:content.leadingAnchor constant:20],
+		[self.waveformView.trailingAnchor constraintEqualToAnchor:content.trailingAnchor constant:-20],
 		[self.waveformView.topAnchor constraintEqualToAnchor:self.statusField.bottomAnchor constant:12],
 		[self.waveformView.bottomAnchor constraintEqualToAnchor:self.inputsPopup.topAnchor constant:-20],
 		[self.inputsPopup.leadingAnchor constraintEqualToAnchor:content.leadingAnchor constant:20],
@@ -461,12 +470,25 @@
 
 - (void) beginPolling
 {
+	if (self.finished || self.pollingStartedAt) {
+		return;
+	}
 	self.pollingStartedAt = [NSDate date];
+	void (^handler)(void) = self.processingStartedHandler;
+	self.processingStartedHandler = nil;
+	if (handler) {
+		handler();
+	}
 	__weak MBAudioNoteController* weak_self = self;
 	self.pollTimer = [NSTimer timerWithTimeInterval:2 repeats:YES block:^(NSTimer* timer) {
 		[weak_self pollForTranscript];
 	}];
 	[[NSRunLoop mainRunLoop] addTimer:self.pollTimer forMode:NSRunLoopCommonModes];
+}
+
+- (BOOL) isProcessing
+{
+	return self.pollingStartedAt != nil && !self.finished;
 }
 
 - (void) pollForTranscript
@@ -615,6 +637,7 @@
 		return;
 	}
 	self.finished = YES;
+	self.processingStartedHandler = nil;
 	self.cancelled = YES;
 	[self.pollTimer invalidate];
 	self.pollTimer = nil;

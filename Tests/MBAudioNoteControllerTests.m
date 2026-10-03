@@ -118,7 +118,6 @@ static MBAudioNoteTestController* Controller(void (^completion)(MBNote*, NSStrin
 {
 	MBAudioNoteTestController* controller = [[MBAudioNoteTestController alloc] initWithNotebookID:@42 secretKey:@"test-key" completion:completion];
 	[controller setValue:@"our-task" forKey:@"audioID"];
-	[controller setValue:[NSDate date] forKey:@"pollingStartedAt"];
 	return controller;
 }
 
@@ -208,6 +207,11 @@ int main(int argc, const char* argv[])
 			[window.contentView layoutSubtreeIfNeeded];
 			NSCAssert(status_field.frame.size.height < 24, @"Single-line status must not reserve extra vertical space");
 			NSCAssert(fabs(NSMinY(status_field.frame) - NSMaxY(waveform.frame) - 12) < 0.1, @"Waveform must sit 12 points below the status label");
+			NSRect status_alignment = [status_field alignmentRectForFrame:status_field.frame];
+			NSRect popup_alignment = [popup alignmentRectForFrame:popup.frame];
+			NSRect button_alignment = [upload_button alignmentRectForFrame:upload_button.frame];
+			NSCAssert(fabs(NSMinX(status_alignment) - NSMinX(popup_alignment)) < 0.1 && fabs(NSMinX(waveform.frame) - NSMinX(popup_alignment)) < 0.1, @"Status, waveform and microphone popup must align on the left");
+			NSCAssert(fabs(NSMaxX(waveform.frame) - NSMaxX(button_alignment)) < 0.1, @"Waveform and Save Note button must align on the right");
 			NSCAssert(popup.frame.origin.x < upload_button.frame.origin.x && popup.frame.origin.y < waveform.frame.origin.y, @"Input left, buttons right, waveform above");
 			NSBitmapImageRep* rep = [window.contentView bitmapImageRepForCachingDisplayInRect:window.contentView.bounds];
 			[window.contentView cacheDisplayInRect:window.contentView.bounds toBitmapImageRep:rep];
@@ -225,18 +229,29 @@ int main(int argc, const char* argv[])
 			saved_note = note;
 			NSCAssert(error == nil, @"Unexpected failure: %@", error);
 		});
+		NSCAssert(!controller.isProcessing, @"Recording/uploading must not start header processing progress");
+		__block NSInteger processing_starts = 0;
+		__weak MBAudioNoteController* weak_controller = controller;
+		controller.processingStartedHandler = ^{
+			processing_starts++;
+			NSCAssert(weak_controller.isProcessing, @"Notify header after entering processing state");
+		};
 		[controller beginPolling];
+		[controller beginPolling];
+		NSCAssert(processing_starts == 1, @"Processing progress must start only once");
 		NSCAssert([[controller valueForKey:@"pollTimer"] timeInterval] == 2, @"Poll interval must be two seconds");
 		[controller pollForTranscript];
 		[controller pollForTranscript];
 		NSCAssert(gRequests.count == 1, @"Polls must not overlap");
 		CompleteRequest(gRequests.lastObject, 503, @{ @"error": @"Unavailable" });
+		NSCAssert(controller.isProcessing, @"Transient polling failure must keep header progress running");
 		[controller pollForTranscript];
 		CompleteRequest(gRequests.lastObject, 200, @{ @"tasks": @[ @{ @"id": @"another-task", @"status": @"completed", @"text": @"Not our note" }, @{ @"id": @"our-task", @"status": @"processing" } ] });
 		NSCAssert(gRequests.count == 2 && completion_count == 0, @"Must ignore other tasks and wait for processing");
 		[controller processTasksResponse:CompletedTask()];
 		[controller processTasksResponse:CompletedTask()];
 		NSDictionary* save_request = gRequests.lastObject;
+		NSCAssert(controller.isProcessing, @"Keep processing progress through encrypted note creation");
 		NSCAssert(gRequests.count == 3 && [save_request[@"path"] isEqual:@"/notes"], @"Completed task must save once");
 		NSDictionary* expected_params = @{ @"text": @"encrypted:test-key:Recorded words", @"is_encrypted": @YES, @"notebook_id": @42 };
 		NSCAssert([save_request[@"params"] isEqual:expected_params], @"Must encrypt with captured key and notebook, never POST plaintext");
@@ -245,12 +260,15 @@ int main(int argc, const char* argv[])
 		[controller pollForTranscript];
 		NSCAssert(completion_count == 1 && [saved_note.noteID isEqual:@101] && saved_note.isEncrypted && [saved_note.text isEqual:@"Recorded words"], @"Exactly one saved note");
 		NSCAssert([controller valueForKey:@"pollTimer"] == nil, @"Completion must stop polling");
+		NSCAssert(!controller.isProcessing, @"Successful completion must end header processing progress");
 		[gRequests removeAllObjects];
 
 		__block NSString* failure;
 		controller = Controller(^(MBNote* note, NSString* text, NSString* error) { failure = error; });
+		[controller beginPolling];
 		[controller processTasksResponse:@{ @"tasks": @[ @{ @"id": @"our-task", @"status": @"failed", @"error": @"Transcription failed" } ] }];
 		NSCAssert([failure isEqual:@"Transcription failed"] && gRequests.count == 0, @"Failed task must not save");
+		NSCAssert(!controller.isProcessing, @"Transcription failure must end header processing progress");
 		controller = Controller(^(MBNote* note, NSString* text, NSString* error) { failure = error; });
 		[controller processTasksResponse:@{ @"tasks": @[ @{ @"id": @"our-task", @"status": @"completed", @"text": @" \n" } ] }];
 		NSCAssert(failure.length > 0 && gRequests.count == 0, @"Empty transcript must not save");
@@ -276,9 +294,11 @@ int main(int argc, const char* argv[])
 		[gRequests removeAllObjects];
 
 		controller = Controller(nil);
+		[controller beginPolling];
 		[controller pollForTranscript];
 		NSDictionary* pending_request = gRequests.lastObject;
 		[controller cancel:nil];
+		NSCAssert(!controller.isProcessing, @"Cancellation must end header processing progress");
 		CompleteRequest(pending_request, 200, CompletedTask());
 		NSCAssert(gRequests.count == 1, @"Late poll after Cancel must not save");
 		[gRequests removeAllObjects];
