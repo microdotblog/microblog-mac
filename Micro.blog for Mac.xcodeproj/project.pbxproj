@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C0DE20261003000000000001 /* MBAudioNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000002 /* MBAudioNoteController.m */; };
 		4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CCF2B27944300BBF456 /* MBNotesController.m */; };
 		4B001CD32B27955900BBF456 /* MBNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CD22B27955900BBF456 /* MBNote.m */; };
 		4B001CD62B27957800BBF456 /* MBNoteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B001CD52B27957800BBF456 /* MBNoteCell.m */; };
@@ -297,6 +296,7 @@
 		C0DE20260909000000000002 /* Source/MBBookmarkLinkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000012 /* Source/MBBookmarkLinkCell.m */; };
 		C0DE20260909000000000003 /* Source/MBLinksController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000013 /* Source/MBLinksController.m */; };
 		C0DE20260909000000000004 /* Source/MBReaderController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20260909000000000014 /* Source/MBReaderController.m */; };
+		C0DE20261003000000000001 /* Source/MBAudioNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000002 /* Source/MBAudioNoteController.m */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 		E8353D03F1A941E3A1A01811 /* Source/MBNotesTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E8353D03F1A941E3A1A01812 /* Source/MBNotesTextView.m */; };
@@ -317,8 +317,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C0DE20261003000000000002 /* MBAudioNoteController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBAudioNoteController.m; sourceTree = "<group>"; };
-		C0DE20261003000000000003 /* MBAudioNoteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBAudioNoteController.h; sourceTree = "<group>"; };
 		39268092AFA742EE8436658E /* Source/MBLinksTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBLinksTableView.h; sourceTree = "<group>"; };
 		4B001CCE2B27944300BBF456 /* MBNotesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBNotesController.h; path = Source/MBNotesController.h; sourceTree = "<group>"; };
 		4B001CCF2B27944300BBF456 /* MBNotesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBNotesController.m; path = Source/MBNotesController.m; sourceTree = "<group>"; };
@@ -815,6 +813,8 @@
 		C0DE20260909000000000022 /* Source/MBBookmarkLinkCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBBookmarkLinkCell.h; sourceTree = "<group>"; };
 		C0DE20260909000000000023 /* Source/MBLinksController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBLinksController.h; sourceTree = "<group>"; };
 		C0DE20260909000000000024 /* Source/MBReaderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBReaderController.h; sourceTree = "<group>"; };
+		C0DE20261003000000000002 /* Source/MBAudioNoteController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBAudioNoteController.m; sourceTree = "<group>"; };
+		C0DE20261003000000000003 /* Source/MBAudioNoteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBAudioNoteController.h; sourceTree = "<group>"; };
 		C549E91F21EEB6D600730675 /* RFUserCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserCache.h; path = Source/RFUserCache.h; sourceTree = "<group>"; };
 		C549E92021EEB6D600730675 /* RFUserCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserCache.m; path = Source/RFUserCache.m; sourceTree = "<group>"; };
 		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
@@ -1135,8 +1135,8 @@
 				4BC120002FD21A2400000001 /* MBCategory.h */,
 				4BC120012FD21A2400000001 /* MBCategory.m */,
 				4B001CCE2B27944300BBF456 /* MBNotesController.h */,
-				C0DE20261003000000000003 /* MBAudioNoteController.h */,
-				C0DE20261003000000000002 /* MBAudioNoteController.m */,
+				C0DE20261003000000000003 /* Source/MBAudioNoteController.h */,
+				C0DE20261003000000000002 /* Source/MBAudioNoteController.m */,
 				4B001CCF2B27944300BBF456 /* MBNotesController.m */,
 				4B35A5BE2FBFA58700E5F46C /* MBNotesDatabase.h */,
 				4B35A5BF2FBFA58700E5F46C /* MBNotesDatabase.m */,
@@ -1846,7 +1846,7 @@
 				4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */,
 				4B2CAB091F90667300D9B10E /* fileio.c in Sources */,
 				4B001CD02B27944300BBF456 /* MBNotesController.m in Sources */,
-				C0DE20261003000000000001 /* MBAudioNoteController.m in Sources */,
+				C0DE20261003000000000001 /* Source/MBAudioNoteController.m in Sources */,
 				4B5DDAB024E2ECD6007674FF /* RFUploadsScrollView.m in Sources */,
 				4B5B00A72E4D473400D4362A /* NSLocale+Format.m in Sources */,
 				4B7F0AF11BAF4C27004553A6 /* RFAppDelegate.m in Sources */,
@@ -2499,7 +2499,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 260;
+				CURRENT_PROJECT_VERSION = 261;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2516,7 +2516,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 4.1.2;
+				MARKETING_VERSION = 4.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
@@ -2536,7 +2536,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 260;
+				CURRENT_PROJECT_VERSION = 261;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2553,7 +2553,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 4.1.2;
+				MARKETING_VERSION = 4.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.mac;
 				PRODUCT_NAME = Micro.blog;
