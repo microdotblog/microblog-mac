@@ -7,17 +7,26 @@
 #import "RFClient.h"
 #import "RFSettings.h"
 #import "MBBook.h"
+#import "RFConstants.h"
 #import <stdatomic.h>
 
 // Link production calendar/bookshelf controllers with these network doubles.
 // Pass the built app bundle and optional calendar JSON fixture as arguments.
 static NSMutableArray* requests;
+static NSMutableArray* page_requests;
+static NSMutableArray* page_posts;
 static NSString* username = @"test-account";
+static NSString* destination_uid = @"test-destination";
+static NSString* blog_hostname = @"calendar.test";
+static BOOL has_hosted_blog = YES;
+static NSString* last_page_error;
 static NSBundle* app_bundle;
 static NSMutableArray* opened_urls;
 static NSString* image_cache_root;
 static NSData* image_response_data;
 static atomic_int image_request_count;
+NSString* const kUUHttpSessionErrorDomain = @"TestHttpError";
+NSString* const kUUHttpSessionHttpErrorCodeKey = @"status";
 
 @interface MBBook (CalendarTestCache)
 + (NSString *) calendarTestCachePath:(NSString *)filename inFolder:(NSString *)folderName;
@@ -77,7 +86,20 @@ static atomic_int image_request_count;
 @end
 
 @implementation RFSettings
-+ (NSString *) stringForKey:(NSString *)key { return username; }
++ (NSString *) stringForKey:(NSString *)key
+{
+	if ([key isEqual:kCurrentDestinationUID]) {
+		return destination_uid;
+	}
+	if ([key isEqual:kCurrentDestinationName] || [key isEqual:kAccountDefaultSite]) {
+		return blog_hostname;
+	}
+	return username;
+}
++ (BOOL) boolForKey:(NSString *)key
+{
+	return has_hosted_blog;
+}
 @end
 @implementation UUHttpResponse
 @end
@@ -105,11 +127,16 @@ static atomic_int image_request_count;
 }
 - (UUHttpRequest *) getWithQueryArguments:(NSDictionary *)args completion:(void (^)(UUHttpResponse* response))handler
 {
+	if ([self.path isEqual:@"/micropub"] && [args[@"mp-channel"] isEqual:@"pages"]) {
+		[page_requests addObject:@{ @"path": self.path, @"args": args, @"completion": [handler copy] }];
+		return nil;
+	}
 	return [self getWithCompletion:handler];
 }
 - (UUHttpRequest *) postWithParams:(NSDictionary *)params completion:(void (^)(UUHttpResponse* response))handler
 {
-	[requests addObject:@{ @"path": self.path, @"params": params, @"completion": [handler copy] }];
+	NSMutableArray* target = [params[@"mp-channel"] isEqual:@"pages"] ? page_posts : requests;
+	[target addObject:@{ @"path": self.path, @"params": params, @"completion": [handler copy] }];
 	return nil;
 }
 @end
@@ -119,6 +146,10 @@ static atomic_int image_request_count;
 - (NSImage *) imageForURL:(NSString *)url;
 - (NSImage *) calendarTestImageForURL:(NSString *)url;
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row;
++ (NSNumber *) responseContainsCalendarPage:(id)response;
+- (void) checkCalendarPage;
+- (void) addCalendarPage:(id)sender;
+- (void) showPageCreationError:(NSString *)message;
 @end
 @interface MBCalendarMonthView (Testing)
 - (void) drawImage:(NSImage *)image inRect:(NSRect)rect fill:(BOOL)shouldFill dimmed:(BOOL)dimmed;
@@ -130,6 +161,16 @@ static atomic_int image_request_count;
 	return [[self valueForKey:@"images"] objectForKey:url];
 }
 @end
+
+@interface CalendarPageTestController : MBCalendarController
+@end
+@implementation CalendarPageTestController
+- (void) showPageCreationError:(NSString *)message
+{
+	last_page_error = message;
+}
+@end
+
 @interface RFBookshelvesController (Testing)
 - (void) selectTab:(NSSegmentedControl *)sender;
 - (void) setupTable;
@@ -157,14 +198,19 @@ static void Pump(void)
 	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
 }
 
-static void Reply(NSUInteger index, NSInteger status, id payload)
+static void ReplyRequest(NSDictionary* request, NSInteger status, id payload)
 {
 	UUHttpResponse* response = [UUHttpResponse new];
 	response.httpResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@"https://micro.blog/books/calendar"] statusCode:status HTTPVersion:@"HTTP/1.1" headerFields:nil];
 	response.parsedResponse = payload;
-	void (^handler)(UUHttpResponse*) = requests[index][@"completion"];
+	void (^handler)(UUHttpResponse*) = request[@"completion"];
 	handler(response);
 	Pump();
+}
+
+static void Reply(NSUInteger index, NSInteger status, id payload)
+{
+	ReplyRequest(requests[index], status, payload);
 }
 
 static NSBitmapImageRep* Render(NSView* view, NSString* path)
@@ -235,6 +281,8 @@ int main(int argc, const char* argv[])
 	@autoreleasepool {
 		[NSApplication sharedApplication];
 		requests = [NSMutableArray array];
+		page_requests = [NSMutableArray array];
+		page_posts = [NSMutableArray array];
 		opened_urls = [NSMutableArray array];
 		image_cache_root = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"CalendarCacheTests-" stringByAppendingString:NSUUID.UUID.UUIDString]];
 		method_exchangeImplementations(class_getClassMethod(MBBook.class, @selector(pathForCachedImage:inFolder:)), class_getClassMethod(MBBook.class, @selector(calendarTestCachePath:inFolder:)));
@@ -561,7 +609,106 @@ int main(int argc, const char* argv[])
 			NSCAssert(!shelves.goalsPopup.enabled && [((NSPopUpButtonCell *)shelves.goalsPopup.cell).menuItem.title isEqual:@"No Goals"] && shelves.selectedGoal == nil && shelves.goalsPopup.numberOfItems == 1, @"Empty goals must have a disabled placeholder without an edit command");
 			[window orderOut:nil];
 		}
-		NSLog(@"Passed calendar parsing, request lifecycle, book selection, browser URL, cover rendering, and optional bookshelf layout/toggle checks.");
+		NSDictionary* ordinary_page = @{ @"properties": @{ @"content": @[ @"An ordinary page." ] } };
+		NSDictionary* calendar_page = @{ @"properties": @{ @"content": @[ @"Intro\n{{< bookcalendar view=\"list\" >}}" ] } };
+		NSCAssert(([MBCalendarController responseContainsCalendarPage:@{ @"items": @[ ordinary_page, calendar_page ] }].boolValue), @"Calendar shortcode anywhere in source text must be detected");
+		NSCAssert([MBCalendarController responseContainsCalendarPage:@{ @"items": @[ @{ @"properties": @{ @"content": @[ @{ @"text": @"{{< bookcalendar >}}" } ] } } ] }].boolValue, @"Object-form Micropub content must be supported");
+		NSCAssert([MBCalendarController responseContainsCalendarPage:@{ @"items": @[ NSNull.null ] }] == nil, @"Malformed source responses must not offer a duplicate page");
+		CalendarPageTestController* page_controller = [CalendarPageTestController new];
+		NSWindow* page_window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 700, 500) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:NO];
+		page_window.contentViewController = page_controller;
+		[page_controller setValue:months forKey:@"months"];
+		NSTableView* page_table = [page_controller valueForKey:@"tableView"];
+		[page_table reloadData];
+		[page_controller checkCalendarPage];
+		NSDictionary* page_request = page_requests.lastObject;
+		NSCAssert([page_request[@"args"][@"q"] isEqual:@"source"] && [page_request[@"args"][@"mp-channel"] isEqual:@"pages"] && [page_request[@"args"][@"mp-destination"] isEqual:destination_uid], @"Page checks must use source/pages for the selected blog");
+		NSView* publish_header = [page_controller valueForKey:@"publishHeader"];
+		NSButton* publish_button = [page_controller valueForKey:@"publishButton"];
+		NSProgressIndicator* publish_spinner = [page_controller valueForKey:@"publishSpinner"];
+		NSLayoutConstraint* header_height = [page_controller valueForKey:@"publishHeaderHeightConstraint"];
+		NSCAssert(publish_header.hidden && header_height.constant == 0, @"Header must stay collapsed until every page has been checked");
+		ReplyRequest(page_request, 200, @{ @"items": @[ calendar_page ] });
+		NSCAssert(publish_header.hidden, @"Existing calendar pages must suppress the publication header");
+
+		[page_controller checkCalendarPage];
+		ReplyRequest(page_requests.lastObject, 502, nil);
+		NSCAssert(publish_header.hidden, @"Page lookup failures must not offer to create duplicates");
+		[page_controller checkCalendarPage];
+		NSMutableArray* many_pages = [NSMutableArray array];
+		for (NSInteger i = 0; i < 100; i++) {
+			[many_pages addObject:ordinary_page];
+		}
+		ReplyRequest(page_requests.lastObject, 200, @{ @"items": many_pages });
+		NSCAssert(publish_header.hidden && [page_requests.lastObject[@"args"][@"offset"] integerValue] == 100, @"Full source batches must fetch the next page before showing the header");
+		ReplyRequest(page_requests.lastObject, 200, @{ @"items": @[ calendar_page ] });
+		NSCAssert(publish_header.hidden, @"A calendar shortcode in later source batches must also suppress the header");
+		[page_controller checkCalendarPage];
+		ReplyRequest(page_requests.lastObject, 200, @{ @"items": @[ ordinary_page ] });
+		NSCAssert(!publish_header.hidden && header_height.constant == 48 && publish_button.enabled, @"Checked blogs without a calendar page must show the publication header");
+		NSTextField* publish_label = [page_controller valueForKey:@"publishLabel"];
+		NSCAssert([publish_label.stringValue isEqual:@"Publish calendar as a page on calendar.test?"], @"Publication prompt must name the selected blog");
+		[page_window orderFront:nil];
+		Pump();
+		for (NSNumber* width in @[ @700, @440 ]) {
+			[page_window setContentSize:NSMakeSize(width.doubleValue, 500)];
+			Pump();
+			[page_window.contentView layoutSubtreeIfNeeded];
+			NSCAssert(NSMaxX(publish_label.frame) <= NSMinX(publish_spinner.frame) - 11 && NSMaxX(publish_button.frame) <= NSWidth(publish_header.bounds) - 15, @"Header label, spinner, and button must not overlap on narrow windows");
+			Render(page_window.contentView, [NSString stringWithFormat:@"/private/tmp/microblog-calendar-publish-%@.png", width]);
+		}
+		page_window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+		Pump();
+		Render(page_window.contentView, @"/private/tmp/microblog-calendar-publish-dark.png");
+		page_window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
+		Pump();
+
+		ClickMonth(page_table, 0, NSMakePoint(30, 150), 1);
+		NSUInteger page_post_count = page_posts.count;
+		[page_controller addCalendarPage:nil];
+		[page_controller addCalendarPage:nil];
+		NSDictionary* page_post = page_posts.lastObject;
+		NSCAssert(page_posts.count == page_post_count + 1 && !publish_button.enabled && !publish_spinner.hidden, @"Publishing must disable Add Page, show its spinner, and reject duplicate clicks");
+		NSCAssert([page_post[@"path"] isEqual:@"/micropub"] && [page_post[@"params"][@"name"] isEqual:@"Book calendar"] && [page_post[@"params"][@"content"] isEqual:@"{{< bookcalendar view=\"list\" >}}"] && [page_post[@"params"][@"mp-channel"] isEqual:@"pages"] && [page_post[@"params"][@"mp-destination"] isEqual:destination_uid], @"Page creation must match the existing standalone Pages contract");
+		ReplyRequest(page_post, 400, @{ @"error": @"invalid_request", @"error_description": @"Please try again." });
+		NSCAssert(publish_button.enabled && !publish_header.hidden && publish_spinner.hidden && [last_page_error isEqual:@"Please try again."], @"Failed publication must stop the spinner, retain the header, and allow retry with an error message");
+		__block NSInteger page_refresh_notifications = 0;
+		id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kClosePostingNotification object:page_controller queue:nil usingBlock:^(NSNotification* notification) {
+			page_refresh_notifications++;
+		}];
+		[page_controller addCalendarPage:nil];
+		ReplyRequest(page_posts.lastObject, 202, @{ @"url": @"https://calendar.test/book-calendar/" });
+		NSCAssert(!publish_button.enabled && page_refresh_notifications == 1, @"Successful publication must keep Add Page disabled during the collapse and refresh the Pages pane");
+		for (NSInteger i = 0; i < 10 && !publish_header.hidden; i++) {
+			Pump();
+		}
+		NSCAssert(publish_header.hidden && header_height.constant == 0 && publish_spinner.hidden, @"Successful publication must hide the header after its collapse animation");
+		AssertSelection(page_controller, 0, 0);
+		[[NSNotificationCenter defaultCenter] removeObserver:observer];
+
+		[page_controller checkCalendarPage];
+		NSDictionary* stale_page_request = page_requests.lastObject;
+		destination_uid = @"other-destination";
+		blog_hostname = @"other.test";
+		[page_controller checkCalendarPage];
+		NSDictionary* current_page_request = page_requests.lastObject;
+		ReplyRequest(stale_page_request, 200, @{ @"items": @[] });
+		NSCAssert(publish_header.hidden, @"Source responses for an old destination must be ignored");
+		ReplyRequest(current_page_request, 200, @{ @"items": @[] });
+		NSCAssert([publish_label.stringValue containsString:@"other.test"], @"Changing blogs must update the publication hostname");
+		destination_uid = @"third-destination";
+		page_post_count = page_posts.count;
+		[page_controller addCalendarPage:nil];
+		NSCAssert(page_posts.count == page_post_count && publish_header.hidden, @"A blog change before Add Page must trigger a new check, not publish to the wrong blog");
+		has_hosted_blog = NO;
+		NSUInteger page_request_count = page_requests.count;
+		[page_controller checkCalendarPage];
+		NSCAssert(page_requests.count == page_request_count && publish_header.hidden, @"Accounts without a hosted blog must not be offered a shortcode page");
+		has_hosted_blog = YES;
+		destination_uid = @"test-destination";
+		blog_hostname = @"calendar.test";
+		[page_window orderOut:nil];
+		NSLog(@"Passed calendar parsing, lifecycle, selection, disk caching, standalone page publishing, and optional bookshelf layout/toggle checks.");
 	}
 	return 0;
 }

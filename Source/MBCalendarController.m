@@ -4,6 +4,8 @@
 #import "RFMacros.h"
 #import "MBCalendarMonthView.h"
 #import "MBBook.h"
+#import "RFConstants.h"
+#import "NSError+Extras.h"
 #import <CommonCrypto/CommonDigest.h>
 
 static NSInteger CalendarNumber(id value)
@@ -22,6 +24,15 @@ static NSInteger CalendarNumber(id value)
 @property (assign, nonatomic) NSUInteger loadGeneration;
 @property (assign, nonatomic, readwrite) BOOL loading;
 @property (strong, nonatomic) NSIndexPath* selectedBookIndexPath;
+@property (strong, nonatomic) NSView* publishHeader;
+@property (strong, nonatomic) NSTextField* publishLabel;
+@property (strong, nonatomic) NSButton* publishButton;
+@property (strong, nonatomic) NSProgressIndicator* publishSpinner;
+@property (strong, nonatomic) NSLayoutConstraint* publishHeaderHeightConstraint;
+@property (assign, nonatomic) NSUInteger pageCheckGeneration;
+@property (assign, nonatomic) BOOL publishingPage;
+@property (copy, nonatomic) NSString* pageUsername;
+@property (copy, nonatomic) NSString* pageDestinationUID;
 
 - (void) calendarMouseDown:(NSEvent *)event;
 - (BOOL) calendarKeyDown:(NSEvent *)event;
@@ -43,6 +54,22 @@ static NSInteger CalendarNumber(id value)
 	if (![(MBCalendarController *)self.delegate calendarKeyDown:event]) {
 		[super keyDown:event];
 	}
+}
+
+@end
+
+@interface MBCalendarPublishHeaderView : NSView
+@end
+
+@implementation MBCalendarPublishHeaderView
+
+- (void) drawRect:(NSRect)dirtyRect
+{
+	[[NSColor textBackgroundColor] setFill];
+	NSRectFill(self.bounds);
+
+	[[NSColor separatorColor] setFill];
+	NSRectFillUsingOperation(NSMakeRect(NSMinX(self.bounds), NSMinY(self.bounds), NSWidth(self.bounds), 1), NSCompositingOperationSourceOver);
 }
 
 @end
@@ -89,6 +116,31 @@ static NSInteger CalendarNumber(id value)
 	scroll_view.documentView = self.tableView;
 	[self.view addSubview:scroll_view];
 
+	self.publishHeader = [[MBCalendarPublishHeaderView alloc] initWithFrame:NSZeroRect];
+	self.publishHeader.translatesAutoresizingMaskIntoConstraints = NO;
+	self.publishHeader.hidden = YES;
+	[self.view addSubview:self.publishHeader];
+	self.publishHeaderHeightConstraint = [self.publishHeader.heightAnchor constraintEqualToConstant:0];
+
+	self.publishLabel = [NSTextField labelWithString:@""];
+	self.publishLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+	self.publishLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.publishLabel setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+	[self.publishHeader addSubview:self.publishLabel];
+
+	self.publishButton = [NSButton buttonWithTitle:@"Add Page" target:self action:@selector(addCalendarPage:)];
+	self.publishButton.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.publishButton setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
+	[self.publishHeader addSubview:self.publishButton];
+
+	self.publishSpinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+	self.publishSpinner.style = NSProgressIndicatorStyleSpinning;
+	self.publishSpinner.controlSize = NSControlSizeSmall;
+	self.publishSpinner.displayedWhenStopped = NO;
+	self.publishSpinner.hidden = YES;
+	self.publishSpinner.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.publishHeader addSubview:self.publishSpinner];
+
 	self.messageLabel = [NSTextField wrappingLabelWithString:@""];
 	self.messageLabel.alignment = NSTextAlignmentCenter;
 	self.messageLabel.textColor = [NSColor secondaryLabelColor];
@@ -101,23 +153,232 @@ static NSInteger CalendarNumber(id value)
 	[self.view addSubview:self.retryButton];
 
 	[NSLayoutConstraint activateConstraints:@[
-		[scroll_view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		[self.publishHeader.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		[self.publishHeader.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[self.publishHeader.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		self.publishHeaderHeightConstraint,
+		[self.publishLabel.leadingAnchor constraintEqualToAnchor:self.publishHeader.leadingAnchor constant:16],
+		[self.publishLabel.centerYAnchor constraintEqualToAnchor:self.publishHeader.centerYAnchor],
+		[self.publishLabel.trailingAnchor constraintLessThanOrEqualToAnchor:self.publishSpinner.leadingAnchor constant:-12],
+		[self.publishSpinner.widthAnchor constraintEqualToConstant:16],
+		[self.publishSpinner.heightAnchor constraintEqualToConstant:16],
+		[self.publishSpinner.centerYAnchor constraintEqualToAnchor:self.publishHeader.centerYAnchor],
+		[self.publishSpinner.trailingAnchor constraintEqualToAnchor:self.publishButton.leadingAnchor constant:-8],
+		[self.publishButton.trailingAnchor constraintEqualToAnchor:self.publishHeader.trailingAnchor constant:-16],
+		[self.publishButton.centerYAnchor constraintEqualToAnchor:self.publishHeader.centerYAnchor],
+
+		[scroll_view.topAnchor constraintEqualToAnchor:self.publishHeader.bottomAnchor],
 		[scroll_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
 		[scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
 		[scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
 
-		[self.messageLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:60],
+		[self.messageLabel.topAnchor constraintEqualToAnchor:scroll_view.topAnchor constant:60],
 		[self.messageLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
 		[self.messageLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20],
 
 		[self.retryButton.topAnchor constraintEqualToAnchor:self.messageLabel.bottomAnchor constant:12],
 		[self.retryButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor]
 	]];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePostingNotification:) name:kClosePostingNotification object:nil];
 }
 
 - (void) dealloc
 {
 	[self.imageSession invalidateAndCancel];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) setPublishHeaderVisible:(BOOL)visible animated:(BOOL)animated
+{
+	if (visible) {
+		self.publishHeader.hidden = NO;
+	}
+	if (animated) {
+		[self.view layoutSubtreeIfNeeded];
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+			context.duration = 0.2;
+			self.publishHeaderHeightConstraint.animator.constant = visible ? 48 : 0;
+		} completionHandler:^{
+			if (self.publishHeaderHeightConstraint.constant == 0) {
+				self.publishHeader.hidden = YES;
+			}
+		}];
+	}
+	else {
+		self.publishHeaderHeightConstraint.constant = visible ? 48 : 0;
+		self.publishHeader.hidden = !visible;
+	}
+}
+
+// A nil result means the response could not be checked safely.
++ (NSNumber *) responseContainsCalendarPage:(id)response
+{
+	if (![response isKindOfClass:NSDictionary.class] || response[@"error"] || ![response[@"items"] isKindOfClass:NSArray.class]) {
+		return nil;
+	}
+	for (id item in response[@"items"]) {
+		if (![item isKindOfClass:NSDictionary.class] || ![item[@"properties"] isKindOfClass:NSDictionary.class]) {
+			return nil;
+		}
+		id contents = item[@"properties"][@"content"];
+		if (![contents isKindOfClass:NSArray.class]) {
+			return nil;
+		}
+		for (id content in contents) {
+			NSString* text = [content isKindOfClass:NSString.class] ? content : nil;
+			if ([content isKindOfClass:NSDictionary.class]) {
+				text = [content[@"text"] isKindOfClass:NSString.class] ? content[@"text"] : content[@"html"];
+			}
+			if (![text isKindOfClass:NSString.class]) {
+				return nil;
+			}
+			if ([text containsString:@"{{< bookcalendar"]) {
+				return @YES;
+			}
+		}
+	}
+	return @NO;
+}
+
+- (BOOL) pageDestinationIsCurrent
+{
+	return [self.pageUsername isEqualToString:[RFSettings stringForKey:kAccountUsername]] && [self.pageDestinationUID isEqualToString:[RFSettings stringForKey:kCurrentDestinationUID] ?: @""];
+}
+
+- (void) checkCalendarPage
+{
+	self.pageCheckGeneration++;
+	if (self.publishingPage) {
+		if (![self pageDestinationIsCurrent]) {
+			[self setPublishHeaderVisible:NO animated:NO];
+		}
+		return;
+	}
+	[self setPublishHeaderVisible:NO animated:NO];
+	self.pageUsername = [RFSettings stringForKey:kAccountUsername];
+	self.pageDestinationUID = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+	NSString* hostname = [RFSettings stringForKey:kCurrentDestinationName];
+	if (hostname.length == 0) {
+		hostname = [RFSettings stringForKey:kAccountDefaultSite];
+	}
+	if (![RFSettings boolForKey:kHasSnippetsBlog] || hostname.length == 0) {
+		return;
+	}
+	self.publishLabel.stringValue = [NSString stringWithFormat:@"Publish calendar as a page on %@?", hostname];
+	self.publishLabel.toolTip = self.publishLabel.stringValue;
+	self.publishButton.enabled = YES;
+	[self fetchCalendarPagesAtOffset:0 generation:self.pageCheckGeneration];
+}
+
+- (void) fetchCalendarPagesAtOffset:(NSInteger)offset generation:(NSUInteger)generation
+{
+	NSDictionary* args = @{
+		@"q": @"source",
+		@"mp-channel": @"pages",
+		@"mp-destination": self.pageDestinationUID,
+		@"limit": @100,
+		@"offset": @(offset)
+	};
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	__weak MBCalendarController* weak_self = self;
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			MBCalendarController* controller = weak_self;
+			if (!controller || generation != controller.pageCheckGeneration || ![controller pageDestinationIsCurrent]) {
+				return;
+			}
+			NSNumber* contains_calendar = [[controller class] responseContainsCalendarPage:response.parsedResponse];
+			if (response.httpError || response.httpResponse.statusCode != 200 || contains_calendar == nil || contains_calendar.boolValue) {
+				return;
+			}
+			NSArray* items = response.parsedResponse[@"items"];
+			if (items.count == 100) {
+				[controller fetchCalendarPagesAtOffset:offset + items.count generation:generation];
+			}
+			else {
+				[controller setPublishHeaderVisible:YES animated:NO];
+			}
+		});
+	}];
+}
+
+- (void) updatedBlogNotification:(NSNotification *)notification
+{
+	[self checkCalendarPage];
+}
+
+- (void) closePostingNotification:(NSNotification *)notification
+{
+	if (notification.object != self) {
+		[self checkCalendarPage];
+	}
+}
+
+- (void) addCalendarPage:(id)sender
+{
+	if (self.publishingPage || !self.publishButton.enabled || self.publishHeaderHeightConstraint.constant == 0) {
+		return;
+	}
+	if (![self pageDestinationIsCurrent]) {
+		[self checkCalendarPage];
+		return;
+	}
+	self.pageCheckGeneration++;
+	self.publishingPage = YES;
+	self.publishButton.enabled = NO;
+	self.publishSpinner.hidden = NO;
+	[self.publishSpinner startAnimation:nil];
+
+	NSDictionary* args = @{
+		@"name": @"Book calendar",
+		@"content": @"{{< bookcalendar view=\"list\" >}}",
+		@"mp-channel": @"pages",
+		@"mp-destination": self.pageDestinationUID,
+		@"mp-syndicate-to[]": @[ @"" ],
+		@"post-status": @"published"
+	};
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	__weak MBCalendarController* weak_self = self;
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		RFDispatchMainAsync(^{
+			MBCalendarController* controller = weak_self;
+			if (!controller) {
+				return;
+			}
+			controller.publishingPage = NO;
+			[controller.publishSpinner stopAnimation:nil];
+			controller.publishSpinner.hidden = YES;
+			if (![controller pageDestinationIsCurrent]) {
+				[controller checkCalendarPage];
+				return;
+			}
+			NSDictionary* result = [response.parsedResponse isKindOfClass:NSDictionary.class] ? response.parsedResponse : nil;
+			NSInteger status = response.httpResponse.statusCode;
+			if (!response.httpError && status >= 200 && status < 300 && !result[@"error"]) {
+				[controller setPublishHeaderVisible:NO animated:YES];
+				[[NSNotificationCenter defaultCenter] postNotificationName:kClosePostingNotification object:controller];
+			}
+			else {
+				controller.publishButton.enabled = YES;
+				NSString* message = [result[@"error_description"] isKindOfClass:NSString.class] ? result[@"error_description"] : [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+				[controller showPageCreationError:message ?: @"The calendar page could not be created. Please try again."];
+			}
+		});
+	}];
+}
+
+- (void) showPageCreationError:(NSString *)message
+{
+	if (!self.view.window) {
+		return;
+	}
+	NSAlert* alert = [[NSAlert alloc] init];
+	alert.messageText = @"Error Adding Calendar Page";
+	alert.informativeText = message;
+	[alert addButtonWithTitle:@"OK"];
+	[alert beginSheetModalForWindow:self.view.window completionHandler:nil];
 }
 
 + (NSArray *) monthsFromResponse:(id)response
@@ -202,6 +463,7 @@ static NSInteger CalendarNumber(id value)
 			controller.messageLabel.hidden = months.count > 0;
 		});
 	}];
+	[self checkCalendarPage];
 }
 
 - (void) retryLoading:(id)sender
