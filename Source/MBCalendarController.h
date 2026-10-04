@@ -6,5 +6,6 @@
 @property (copy, nonatomic) void (^loadingDidChange)(void);
 
 - (void) reloadCalendar;
+- (void) focusContent;
 
 @end

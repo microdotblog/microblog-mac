@@ -175,6 +175,7 @@ static NSInteger const kTimelineBookshelvesSidebarRow = 11;
 	self.calendarController.view.hidden = !self.showingCalendar;
 	if (self.showingCalendar) {
 		[self.calendarController reloadCalendar];
+		[self.calendarController focusContent];
 	}
 	else {
 		[self stopLoadingSidebarRow];

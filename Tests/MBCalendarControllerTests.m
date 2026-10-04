@@ -6,6 +6,8 @@
 #import "RFBookshelfCell.h"
 #import "RFClient.h"
 #import "RFSettings.h"
+#import "MBBook.h"
+#import <stdatomic.h>
 
 // Link production calendar/bookshelf controllers with these network doubles.
 // Pass the built app bundle and optional calendar JSON fixture as arguments.
@@ -13,6 +15,45 @@ static NSMutableArray* requests;
 static NSString* username = @"test-account";
 static NSBundle* app_bundle;
 static NSMutableArray* opened_urls;
+static NSString* image_cache_root;
+static NSData* image_response_data;
+static atomic_int image_request_count;
+
+@interface MBBook (CalendarTestCache)
++ (NSString *) calendarTestCachePath:(NSString *)filename inFolder:(NSString *)folderName;
+@end
+@implementation MBBook (CalendarTestCache)
++ (NSString *) calendarTestCachePath:(NSString *)filename inFolder:(NSString *)folderName
+{
+	NSString* folder = [image_cache_root stringByAppendingPathComponent:folderName];
+	[[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:YES attributes:nil error:nil];
+	return [folder stringByAppendingPathComponent:filename];
+}
+@end
+
+@interface CalendarImageTestProtocol : NSURLProtocol
+@end
+@implementation CalendarImageTestProtocol
++ (BOOL) canInitWithRequest:(NSURLRequest *)request
+{
+	return YES;
+}
++ (NSURLRequest *) canonicalRequestForRequest:(NSURLRequest *)request
+{
+	return request;
+}
+- (void) startLoading
+{
+	atomic_fetch_add(&image_request_count, 1);
+	NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:self.request.URL statusCode:200 HTTPVersion:@"HTTP/1.1" headerFields:nil];
+	[self.client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+	[self.client URLProtocol:self didLoadData:image_response_data];
+	[self.client URLProtocolDidFinishLoading:self];
+}
+- (void) stopLoading
+{
+}
+@end
 
 @interface NSWorkspace (CalendarTestBrowser)
 - (BOOL) calendarTestOpenURL:(NSURL *)url;
@@ -144,12 +185,96 @@ static void ClickMonth(NSTableView* table, NSInteger row, NSPoint point, NSInteg
 	[hit_view mouseDown:event];
 }
 
+static void PressKey(NSTableView* table, unichar key, NSEventModifierFlags modifiers)
+{
+	NSString* characters = [NSString stringWithCharacters:&key length:1];
+	NSEvent* event = [NSEvent keyEventWithType:NSEventTypeKeyDown location:NSZeroPoint modifierFlags:modifiers timestamp:0 windowNumber:table.window.windowNumber context:nil characters:characters charactersIgnoringModifiers:characters isARepeat:NO keyCode:0];
+	[table keyDown:event];
+}
+
+static void AssertSelection(MBCalendarController* controller, NSUInteger row, NSUInteger bookIndex)
+{
+	NSIndexPath* expected = [[NSIndexPath indexPathWithIndex:row] indexPathByAddingIndex:bookIndex];
+	NSCAssert([[controller valueForKey:@"selectedBookIndexPath"] isEqual:expected], @"Keyboard selection must match month %lu, book %lu", row, bookIndex);
+	NSTableView* table = [controller valueForKey:@"tableView"];
+	MBCalendarMonthView* cell = [table viewAtColumn:0 row:row makeIfNecessary:YES];
+	NSCAssert(cell.selectedBookIndex == bookIndex, @"Keyboard selection must update the visible card");
+}
+
+static MBCalendarController* ImageCacheController(NSArray* months)
+{
+	MBCalendarController* controller = [MBCalendarController new];
+	[controller view];
+	[controller setValue:months forKey:@"months"];
+	NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+	configuration.protocolClasses = @[ CalendarImageTestProtocol.class ];
+	configuration.URLCache = nil;
+	[controller setValue:[NSURLSession sessionWithConfiguration:configuration] forKey:@"imageSession"];
+	return controller;
+}
+
+static NSImage* WaitForImage(MBCalendarController* controller, NSString* url)
+{
+	[controller imageForURL:url];
+	NSCache* images = [controller valueForKey:@"images"];
+	for (NSInteger i = 0; i < 100 && ![images objectForKey:url]; i++) {
+		Pump();
+	}
+	NSImage* image = [images objectForKey:url];
+	NSCAssert(image.isValid, @"Image must finish loading from disk or network");
+	return image;
+}
+
 int main(int argc, const char* argv[])
 {
 	@autoreleasepool {
 		[NSApplication sharedApplication];
 		requests = [NSMutableArray array];
 		opened_urls = [NSMutableArray array];
+		image_cache_root = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"CalendarCacheTests-" stringByAppendingString:NSUUID.UUID.UUIDString]];
+		method_exchangeImplementations(class_getClassMethod(MBBook.class, @selector(pathForCachedImage:inFolder:)), class_getClassMethod(MBBook.class, @selector(calendarTestCachePath:inFolder:)));
+		NSImage* cache_fixture = [NSImage imageWithSize:NSMakeSize(20, 30) flipped:NO drawingHandler:^BOOL(NSRect rect) {
+			[[NSColor redColor] setFill];
+			NSRectFill(rect);
+			return YES;
+		}];
+		image_response_data = cache_fixture.TIFFRepresentation;
+		MBBook* cached_book = [MBBook new];
+		cached_book.isbn = @"9781250462657";
+		[cached_book setCachedCover:cache_fixture];
+		NSCAssert([cached_book cachedCover].isValid, @"Existing book cover cache must persist images by ISBN");
+		cached_book.isbn = @"../invalid";
+		NSCAssert([cached_book pathForCachedCover] == nil, @"Invalid ISBN paths must not escape the cover folder");
+		cached_book.isbn = @"9781250462657";
+		NSString* cover_url = @"https://calendar.test/cover.jpg";
+		NSString* background_url = @"https://calendar.test/background.jpg";
+		NSArray* cache_months = @[ @{ @"background_url": background_url, @"books": @[ @{ @"cover_url": cover_url, @"isbn": cached_book.isbn } ] } ];
+		MBCalendarController* cache_controller = ImageCacheController(cache_months);
+		WaitForImage(cache_controller, cover_url);
+		NSCAssert(atomic_load(&image_request_count) == 0, @"Calendar must reuse existing bookshelf covers without a download");
+		WaitForImage(cache_controller, background_url);
+		NSCAssert(atomic_load(&image_request_count) == 1, @"Missing background must download once");
+		NSString* background_folder = [image_cache_root stringByAppendingPathComponent:@"Book Backgrounds"];
+		NSArray* background_files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:background_folder error:nil];
+		NSCAssert(background_files.count == 1, @"Backgrounds must be persisted in Book Backgrounds");
+		cache_controller = ImageCacheController(cache_months);
+		WaitForImage(cache_controller, cover_url);
+		WaitForImage(cache_controller, background_url);
+		NSCAssert(atomic_load(&image_request_count) == 1, @"A new controller must load covers and backgrounds from disk, not network");
+		[[NSFileManager defaultManager] removeItemAtPath:[cached_book pathForCachedCover] error:nil];
+		cache_controller = ImageCacheController(cache_months);
+		WaitForImage(cache_controller, cover_url);
+		NSCAssert(atomic_load(&image_request_count) == 2 && [cached_book cachedCover].isValid, @"Calendar downloads must populate the shared ISBN cover cache");
+		NSString* background_path = [background_folder stringByAppendingPathComponent:background_files.firstObject];
+		[[@"invalid image" dataUsingEncoding:NSUTF8StringEncoding] writeToFile:background_path atomically:YES];
+		cache_controller = ImageCacheController(cache_months);
+		WaitForImage(cache_controller, background_url);
+		NSCAssert(atomic_load(&image_request_count) == 3, @"Corrupt cached images must be downloaded again");
+		[(NSCache *)[cache_controller valueForKey:@"images"] removeAllObjects];
+		WaitForImage(cache_controller, background_url);
+		NSCAssert(atomic_load(&image_request_count) == 3, @"Memory eviction must fall back to disk without downloading");
+		[[NSFileManager defaultManager] removeItemAtPath:image_cache_root error:nil];
+
 		method_exchangeImplementations(class_getInstanceMethod(NSWorkspace.class, @selector(openURL:)), class_getInstanceMethod(NSWorkspace.class, @selector(calendarTestOpenURL:)));
 		MBCalendarMonthView* month_view = [MBCalendarMonthView new];
 		for (NSNumber* height in @[ @100, @200 ]) {
@@ -224,6 +349,51 @@ int main(int argc, const char* argv[])
 		NSCAssert(opened_urls.count == 1 && [[opened_urls.lastObject absoluteString] isEqual:@"https://micro.blog/books/9781250462657"], @"Double clicks must open the ISBN page using the normal browser flow");
 		ClickMonth(table, 1, NSMakePoint(30, 80), 2);
 		NSCAssert(second_month.selectedBookIndex == NSNotFound && opened_urls.count == 1, @"Clicking a month header must clear selection without opening a book");
+
+		NSDictionary* empty_month = @{ @"year": @2026, @"month": @8, @"books": @[] };
+		NSArray* keyboard_months = @[ empty_month, click_months[0], empty_month, click_months[1], empty_month ];
+		[controller setValue:keyboard_months forKey:@"months"];
+		[table reloadData];
+		[click_window setContentSize:NSMakeSize(600, 200)];
+		[click_window.contentView layoutSubtreeIfNeeded];
+		[controller focusContent];
+		NSCAssert(click_window.firstResponder == table, @"Calendar focus must go to its keyboard-enabled table");
+		PressKey(table, NSUpArrowFunctionKey, 0);
+		PressKey(table, '\r', 0);
+		NSCAssert([controller valueForKey:@"selectedBookIndexPath"] == nil && opened_urls.count == 1, @"Up and Return without selection must not select or open a book");
+		PressKey(table, NSDownArrowFunctionKey, 0);
+		AssertSelection(controller, 1, 0);
+		PressKey(table, NSUpArrowFunctionKey, 0);
+		AssertSelection(controller, 1, 0);
+		PressKey(table, '\r', 0);
+		NSCAssert(opened_urls.count == 2 && [[opened_urls.lastObject absoluteString] isEqual:@"https://micro.blog/books/9781250462657"], @"Return must open the same URL as double-click");
+		PressKey(table, NSDownArrowFunctionKey, 0);
+		AssertSelection(controller, 1, 1);
+		PressKey(table, '\r', 0);
+		NSCAssert(opened_urls.count == 2, @"Return on a book without ISBN must not open a browser");
+		PressKey(table, NSDownArrowFunctionKey, 0);
+		AssertSelection(controller, 3, 0);
+		NSRect selected_rect = [table rectOfRow:3];
+		selected_rect.origin.y += 116;
+		selected_rect.size.height = 144;
+		NSCAssert(NSContainsRect(table.visibleRect, selected_rect), @"Keyboard navigation must scroll the individual book into view");
+		PressKey(table, NSDownArrowFunctionKey, 0);
+		AssertSelection(controller, 3, 0);
+		PressKey(table, NSUpArrowFunctionKey, 0);
+		AssertSelection(controller, 1, 1);
+		PressKey(table, NSUpArrowFunctionKey, 0);
+		AssertSelection(controller, 1, 0);
+		PressKey(table, NSDownArrowFunctionKey, NSEventModifierFlagCommand);
+		AssertSelection(controller, 1, 0);
+		NSCAssert(fabs(NSMaxY(table.visibleRect) - NSHeight(table.bounds)) < 1, @"Command–Down must scroll to the bottom without changing selection");
+		PressKey(table, NSUpArrowFunctionKey, NSEventModifierFlagCommand);
+		NSCAssert(NSMinY(table.visibleRect) == 0, @"Command–Up must scroll to the top");
+		[controller setValue:nil forKey:@"selectedBookIndexPath"];
+		[controller setValue:@[ empty_month ] forKey:@"months"];
+		[table reloadData];
+		PressKey(table, NSDownArrowFunctionKey, 0);
+		NSCAssert([controller valueForKey:@"selectedBookIndexPath"] == nil, @"An empty calendar must not select nonexistent books");
+
 		[controller setValue:months forKey:@"months"];
 		[table reloadData];
 		click_window.contentViewController = nil;
@@ -298,6 +468,7 @@ int main(int argc, const char* argv[])
 			[shelves selectTab:tabs];
 			MBCalendarController* calendar = [shelves valueForKey:@"calendarController"];
 			NSCAssert(calendar.view.superview != nil && shelves.tableView.enclosingScrollView.hidden && calendar.loading, @"Calendar must replace only the shelf content while loading");
+			NSCAssert(window.firstResponder == [calendar valueForKey:@"tableView"], @"Switching to Calendar must allow Down to select the first book without clicking first");
 			Reply(requests.count - 1, 200, fixture);
 			NSMutableSet* requested_images = [calendar valueForKey:@"requestedImages"];
 			NSCache* images = [calendar valueForKey:@"images"];

@@ -17,31 +17,45 @@
 
 - (NSString *) pathForCachedCover
 {
+	if (self.isbn.length == 0 || ![self.isbn.lastPathComponent isEqualToString:self.isbn]) {
+		return nil;
+	}
 	NSString* filename = [NSString stringWithFormat:@"%@.tif", self.isbn];
+	return [[self class] pathForCachedImage:filename inFolder:@"Book Covers"];
+}
+
++ (NSString *) pathForCachedImage:(NSString *)filename inFolder:(NSString *)folderName
+{
+	if (filename.length == 0 || ![filename.lastPathComponent isEqualToString:filename]) {
+		return nil;
+	}
 
 	NSArray* paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString* support_folder = [paths firstObject];
 
-	NSError* error = nil;
 	NSString* microblog_folder = [support_folder stringByAppendingPathComponent:@"Micro.blog"];
-	[[NSFileManager defaultManager] createDirectoryAtPath:microblog_folder withIntermediateDirectories:YES attributes:nil error:&error];
-	
-	NSString* covers_folder = [microblog_folder stringByAppendingPathComponent:@"Book Covers"];
-	[[NSFileManager defaultManager] createDirectoryAtPath:covers_folder withIntermediateDirectories:YES attributes:nil error:&error];
+	NSString* cache_folder = [microblog_folder stringByAppendingPathComponent:folderName];
+	if (![[NSFileManager defaultManager] createDirectoryAtPath:cache_folder withIntermediateDirectories:YES attributes:nil error:nil]) {
+		return nil;
+	}
 
-	return [covers_folder stringByAppendingPathComponent:filename];
+	return [cache_folder stringByAppendingPathComponent:filename];
 }
 
 - (NSImage *) cachedCover
 {
-	NSImage* img = [[NSImage alloc] initWithContentsOfFile:[self pathForCachedCover]];
+	NSString* path = [self pathForCachedCover];
+	NSImage* img = path ? [[NSImage alloc] initWithContentsOfFile:path] : nil;
 	return img;
 }
 
 - (void) setCachedCover:(NSImage *)image;
 {
 	NSData* d = [image TIFFRepresentation];
-	[d writeToFile:[self pathForCachedCover] atomically:NO];
+	NSString* path = [self pathForCachedCover];
+	if (path) {
+		[d writeToFile:path atomically:YES];
+	}
 }
 
 @end

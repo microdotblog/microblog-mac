@@ -162,7 +162,7 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 		BOOL selected = self.selectedBookIndex == i;
 		if (selected) {
 			BOOL dark_mode = [[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqualToString:NSAppearanceNameDarkAqua];
-			[[NSColor colorWithWhite:dark_mode ? 0.18 : 0.96 alpha:1] setFill];
+			[[NSColor colorWithWhite:dark_mode ? 0.18 : 0.92 alpha:1] setFill];
 			NSRectFill(NSMakeRect(card.origin.x, top, card.size.width, 144));
 		}
 

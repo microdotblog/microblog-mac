@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *) microblogURL;
 - (NSString *) pathForCachedCover;
++ (NSString *) pathForCachedImage:(NSString *)filename inFolder:(NSString *)folderName;
 - (NSImage *) cachedCover;
 - (void) setCachedCover:(NSImage *)image;
 

@@ -121,6 +121,7 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 		[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
 			if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
 				NSImage* img = response.parsedResponse;
+				[b setCachedCover:img];
 				RFDispatchMain(^{
 					b.coverImage = img;
 					[collectionView mb_safeReloadAtIndexPath:indexPath];
