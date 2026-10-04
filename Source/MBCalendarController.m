@@ -19,6 +19,20 @@ static NSInteger CalendarNumber(id value)
 @property (strong, nonatomic) NSURLSession* imageSession;
 @property (assign, nonatomic) NSUInteger loadGeneration;
 @property (assign, nonatomic, readwrite) BOOL loading;
+@property (strong, nonatomic) NSIndexPath* selectedBookIndexPath;
+
+- (void) calendarMouseDown:(NSEvent *)event;
+@end
+
+// Keep native scrolling, but select a book inside the month rather than the whole card.
+@interface MBCalendarTableView : NSTableView
+@end
+
+@implementation MBCalendarTableView
+- (void) mouseDown:(NSEvent *)event
+{
+	[(MBCalendarController *)self.delegate calendarMouseDown:event];
+}
 @end
 
 @implementation MBCalendarController
@@ -40,7 +54,7 @@ static NSInteger CalendarNumber(id value)
 	scroll_view.hasVerticalScroller = YES;
 	scroll_view.autohidesScrollers = YES;
 	scroll_view.borderType = NSNoBorder;
-	self.tableView = [[NSTableView alloc] initWithFrame:scroll_view.bounds];
+	self.tableView = [[MBCalendarTableView alloc] initWithFrame:scroll_view.bounds];
 	self.tableView.headerView = nil;
 	self.tableView.style = NSTableViewStyleFullWidth;
 	self.tableView.intercellSpacing = NSZeroSize;
@@ -140,6 +154,7 @@ static NSInteger CalendarNumber(id value)
 			}
 			NSArray* months = [[controller class] monthsFromResponse:response.parsedResponse];
 			if (response.httpError || response.httpResponse.statusCode != 200 || months == nil) {
+				controller.selectedBookIndexPath = nil;
 				controller.months = @[];
 				[controller.tableView reloadData];
 				controller.messageLabel.stringValue = @"Could not load your book calendar. Please try again.";
@@ -148,6 +163,7 @@ static NSInteger CalendarNumber(id value)
 				return;
 			}
 			controller.months = months;
+			controller.selectedBookIndexPath = nil;
 			[controller.requestedImages removeAllObjects];
 			[controller.tableView reloadData];
 			controller.messageLabel.stringValue = @"No finished books yet.";
@@ -174,6 +190,37 @@ static NSInteger CalendarNumber(id value)
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
 	return NO;
+}
+
+- (void) calendarMouseDown:(NSEvent *)event
+{
+	[self.view.window makeFirstResponder:self.tableView];
+	NSPoint point = [self.tableView convertPoint:event.locationInWindow fromView:nil];
+	NSInteger row = [self.tableView rowAtPoint:point];
+	MBCalendarMonthView* cell = row >= 0 ? [self.tableView viewAtColumn:0 row:row makeIfNecessary:YES] : nil;
+	NSInteger book_index = cell ? [cell bookIndexAtPoint:[cell convertPoint:event.locationInWindow fromView:nil]] : NSNotFound;
+	if (self.selectedBookIndexPath) {
+		NSInteger old_row = [self.selectedBookIndexPath indexAtPosition:0];
+		MBCalendarMonthView* old_cell = [self.tableView viewAtColumn:0 row:old_row makeIfNecessary:NO];
+		old_cell.selectedBookIndex = NSNotFound;
+	}
+	self.selectedBookIndexPath = nil;
+	if (book_index != NSNotFound) {
+		self.selectedBookIndexPath = [[NSIndexPath indexPathWithIndex:row] indexPathByAddingIndex:book_index];
+		cell.selectedBookIndex = book_index;
+		if (event.clickCount == 2) {
+			[self openBook:self.months[row][@"books"][book_index]];
+		}
+	}
+}
+
+- (void) openBook:(NSDictionary *)book
+{
+	NSString* isbn = [book[@"isbn"] isKindOfClass:[NSString class]] ? [book[@"isbn"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : @"";
+	if (isbn.length > 0) {
+		NSURL* url = [[NSURL URLWithString:@"https://micro.blog/books/"] URLByAppendingPathComponent:isbn];
+		[[NSWorkspace sharedWorkspace] openURL:url];
+	}
 }
 
 - (NSImage *) imageForURL:(NSString *)url
@@ -212,6 +259,7 @@ static NSInteger CalendarNumber(id value)
 		cell.identifier = @"Month";
 	}
 	cell.month = self.months[row];
+	cell.selectedBookIndex = self.selectedBookIndexPath && [self.selectedBookIndexPath indexAtPosition:0] == row ? [self.selectedBookIndexPath indexAtPosition:1] : NSNotFound;
 	__weak MBCalendarController* weak_self = self;
 	cell.imageForURL = ^NSImage* (NSString* url) {
 		return [weak_self imageForURL:url];

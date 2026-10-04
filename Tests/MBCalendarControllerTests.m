@@ -12,6 +12,18 @@
 static NSMutableArray* requests;
 static NSString* username = @"test-account";
 static NSBundle* app_bundle;
+static NSMutableArray* opened_urls;
+
+@interface NSWorkspace (CalendarTestBrowser)
+- (BOOL) calendarTestOpenURL:(NSURL *)url;
+@end
+@implementation NSWorkspace (CalendarTestBrowser)
+- (BOOL) calendarTestOpenURL:(NSURL *)url
+{
+	[opened_urls addObject:url];
+	return YES;
+}
+@end
 
 @interface NSColor (CalendarTestAssets)
 + (NSColor *) calendarTestColorNamed:(NSString *)name;
@@ -68,7 +80,7 @@ static NSBundle* app_bundle;
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row;
 @end
 @interface MBCalendarMonthView (Testing)
-- (void) drawImage:(NSImage *)image inRect:(NSRect)rect fill:(BOOL)shouldFill;
+- (void) drawImage:(NSImage *)image inRect:(NSRect)rect fill:(BOOL)shouldFill dimmed:(BOOL)dimmed;
 @end
 @implementation MBCalendarController (Testing)
 - (NSImage *) calendarTestImageForURL:(NSString *)url
@@ -114,12 +126,22 @@ static void Reply(NSUInteger index, NSInteger status, id payload)
 	Pump();
 }
 
-static void Render(NSView* view, NSString* path)
+static NSBitmapImageRep* Render(NSView* view, NSString* path)
 {
 	[view layoutSubtreeIfNeeded];
 	NSBitmapImageRep* rep = [view bitmapImageRepForCachingDisplayInRect:view.bounds];
 	[view cacheDisplayInRect:view.bounds toBitmapImageRep:rep];
 	[[rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}] writeToFile:path atomically:YES];
+	return rep;
+}
+
+static void ClickMonth(NSTableView* table, NSInteger row, NSPoint point, NSInteger clickCount)
+{
+	NSView* cell = [table viewAtColumn:0 row:row makeIfNecessary:YES];
+	NSPoint location = [cell convertPoint:point toView:nil];
+	NSEvent* event = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDown location:location modifierFlags:0 timestamp:0 windowNumber:table.window.windowNumber context:nil eventNumber:1 clickCount:clickCount pressure:1];
+	NSView* hit_view = [table hitTest:[table.superview convertPoint:location fromView:nil]];
+	[hit_view mouseDown:event];
 }
 
 int main(int argc, const char* argv[])
@@ -127,6 +149,8 @@ int main(int argc, const char* argv[])
 	@autoreleasepool {
 		[NSApplication sharedApplication];
 		requests = [NSMutableArray array];
+		opened_urls = [NSMutableArray array];
+		method_exchangeImplementations(class_getInstanceMethod(NSWorkspace.class, @selector(openURL:)), class_getInstanceMethod(NSWorkspace.class, @selector(calendarTestOpenURL:)));
 		MBCalendarMonthView* month_view = [MBCalendarMonthView new];
 		for (NSNumber* height in @[ @100, @200 ]) {
 			NSImage* cover = [NSImage imageWithSize:NSMakeSize(100, height.doubleValue) flipped:NO drawingHandler:^BOOL(NSRect rect) {
@@ -139,11 +163,12 @@ int main(int argc, const char* argv[])
 			[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:bitmap]];
 			[[NSColor whiteColor] setFill];
 			NSRectFill(NSMakeRect(0, 0, 100, 128));
-			[month_view drawImage:cover inRect:NSMakeRect(10, 12, 64, 104) fill:NO];
+			[month_view drawImage:cover inRect:NSMakeRect(10, 12, 64, 104) fill:NO dimmed:YES];
 			[NSGraphicsContext restoreGraphicsState];
 			NSInteger corner_x = height.integerValue == 100 ? 10 : 16;
 			NSInteger corner_y = height.integerValue == 100 ? 32 : 12;
 			NSCAssert([bitmap colorAtX:corner_x y:corner_y].greenComponent > 0.9 && [bitmap colorAtX:42 y:64].greenComponent < 0.1, @"Square and tall covers must round their actual fitted corners without cropping the center");
+			NSCAssert([bitmap colorAtX:42 y:64].redComponent > 0.75 && [bitmap colorAtX:42 y:64].redComponent < 0.9, @"Selected cover must receive a dark overlay confined to the rounded image");
 		}
 		NSDictionary* book = @{ @"title": @"A Finished Book", @"author": @"An Author", @"day": @2, @"finished_label": @"Oct 2", @"page_count": @384 };
 		NSDictionary* fixture = @{ @"months": @[ @{ @"year": @2026, @"month": @10, @"books": @[ book ], @"book_count": @1, @"page_count": @384, @"background_color": @"#d2a530" } ] };
@@ -171,7 +196,37 @@ int main(int argc, const char* argv[])
 		NSTableView* table = [controller valueForKey:@"tableView"];
 		NSCAssert([controller imageForURL:@""] == nil && [controller imageForURL:@"file:///private/tmp/cover.jpg"] == nil, @"Missing and non-HTTP image URLs must not start downloads");
 		NSCAssert(!controller.loading && loading_changes == 2 && table.numberOfRows == months.count, @"Successful response must render months and stop progress");
-		NSCAssert(![controller tableView:table shouldSelectRow:0] && table.menu == nil && table.doubleAction == NULL, @"Calendar rows must be read-only");
+		NSCAssert(![controller tableView:table shouldSelectRow:0] && table.menu == nil, @"Whole month cards must not be selected by the table");
+		NSWindow* click_window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 600, 700) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:NO];
+		click_window.contentViewController = controller;
+		NSDictionary* linked_book = @{ @"title": @"First book", @"isbn": @"9781250462657" };
+		NSDictionary* missing_isbn_book = @{ @"title": @"Second book", @"isbn": NSNull.null };
+		NSArray* click_months = @[
+			@{ @"year": @2026, @"month": @10, @"books": @[ linked_book, missing_isbn_book ] },
+			@{ @"year": @2026, @"month": @9, @"books": @[ linked_book ] }
+		];
+		[controller setValue:click_months forKey:@"months"];
+		[table reloadData];
+		[click_window.contentView layoutSubtreeIfNeeded];
+		MBCalendarMonthView* first_month = [table viewAtColumn:0 row:0 makeIfNecessary:YES];
+		NSCAssert([first_month bookIndexAtPoint:NSMakePoint(30, 116)] == 0 && [first_month bookIndexAtPoint:NSMakePoint(30, 260)] == 1, @"Each book must have an independent hit region");
+		NSCAssert([first_month bookIndexAtPoint:NSMakePoint(30, 115)] == NSNotFound && [first_month bookIndexAtPoint:NSMakePoint(10, 150)] == NSNotFound && [first_month bookIndexAtPoint:NSMakePoint(30, 404)] == NSNotFound, @"Headers, outer insets, and space after books must not select a book");
+		ClickMonth(table, 0, NSMakePoint(30, 150), 1);
+		NSCAssert(first_month.selectedBookIndex == 0 && opened_urls.count == 0, @"Single clicks must select without opening the browser");
+		ClickMonth(table, 0, NSMakePoint(300, 300), 1);
+		NSCAssert(first_month.selectedBookIndex == 1, @"Clicking the text portion must select the second book");
+		ClickMonth(table, 0, NSMakePoint(300, 300), 2);
+		NSCAssert(opened_urls.count == 0, @"Missing ISBN must not open a browser page");
+		ClickMonth(table, 1, NSMakePoint(30, 150), 1);
+		MBCalendarMonthView* second_month = [table viewAtColumn:0 row:1 makeIfNecessary:YES];
+		NSCAssert(first_month.selectedBookIndex == NSNotFound && second_month.selectedBookIndex == 0, @"Only one book across all months may be selected");
+		ClickMonth(table, 1, NSMakePoint(30, 150), 2);
+		NSCAssert(opened_urls.count == 1 && [[opened_urls.lastObject absoluteString] isEqual:@"https://micro.blog/books/9781250462657"], @"Double clicks must open the ISBN page using the normal browser flow");
+		ClickMonth(table, 1, NSMakePoint(30, 80), 2);
+		NSCAssert(second_month.selectedBookIndex == NSNotFound && opened_urls.count == 1, @"Clicking a month header must clear selection without opening a book");
+		[controller setValue:months forKey:@"months"];
+		[table reloadData];
+		click_window.contentViewController = nil;
 		[controller reloadCalendar];
 		[controller reloadCalendar];
 		Reply(1, 200, @{ @"months": @[] });
@@ -274,6 +329,16 @@ int main(int argc, const char* argv[])
 				NSCAssert(fabs(NSMinX(segments) - 18) < 0.1 && NSMaxX(segments) <= NSMinX(label) - 17 && NSMaxX(label) < NSMinX(popup), @"Segments must align left and goals right without overlap");
 				Render(window.contentView, [NSString stringWithFormat:@"/private/tmp/microblog-calendar-%@.png", width]);
 			}
+			[window setContentSize:NSMakeSize(700, 720)];
+			Pump();
+			NSTableView* calendar_table = [calendar valueForKey:@"tableView"];
+			ClickMonth(calendar_table, 0, NSMakePoint(30, 150), 1);
+			Render(window.contentView, @"/private/tmp/microblog-calendar-selected.png");
+			MBCalendarMonthView* selected_cell = [calendar_table viewAtColumn:0 row:0 makeIfNecessary:YES];
+			NSBitmapImageRep* selected_pixels = Render(selected_cell, @"/private/tmp/microblog-calendar-selected-month.png");
+			CGFloat scale = selected_pixels.pixelsWide / NSWidth(selected_cell.bounds);
+			NSColor* selected_color = [[selected_pixels colorAtX:20 * scale y:150 * scale] colorUsingColorSpace:NSColorSpace.deviceRGBColorSpace];
+			NSCAssert(selected_color.redComponent > 0.9 && selected_color.redComponent < 0.99, @"Selected book background must be light gray, not white");
 			tabs.selectedSegment = 0;
 			[shelves selectTab:tabs];
 			NSCAssert(!shelves.tableView.enclosingScrollView.hidden && calendar.view.hidden, @"Toggle must restore the existing shelf view");
@@ -281,6 +346,7 @@ int main(int argc, const char* argv[])
 			[shelves selectTab:tabs];
 			NSCAssert([shelves valueForKey:@"calendarController"] == calendar, @"Repeated toggles must reuse the existing calendar controller");
 			Reply(requests.count - 1, 200, fixture);
+			NSCAssert([calendar valueForKey:@"selectedBookIndexPath"] == nil, @"Reloading must clear index-based book selection");
 			for (NSDictionary* month in months) {
 				if ([month[@"background_url"] isKindOfClass:[NSString class]]) {
 					[requested_images addObject:month[@"background_url"]];
@@ -295,7 +361,7 @@ int main(int argc, const char* argv[])
 			NSCAssert(!shelves.goalsPopup.enabled && [((NSPopUpButtonCell *)shelves.goalsPopup.cell).menuItem.title isEqual:@"No Goals"] && shelves.selectedGoal == nil && shelves.goalsPopup.numberOfItems == 1, @"Empty goals must have a disabled placeholder without an edit command");
 			[window orderOut:nil];
 		}
-		NSLog(@"Passed calendar parsing, request lifecycle, read-only behavior, and optional bookshelf layout/toggle checks.");
+		NSLog(@"Passed calendar parsing, request lifecycle, book selection, browser URL, cover rendering, and optional bookshelf layout/toggle checks.");
 	}
 	return 0;
 }
