@@ -25,10 +25,12 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	if (finished.length) {
 		[parts addObject:[@"Finished " stringByAppendingString:finished]];
 	}
+
 	NSInteger pages = CalendarNumber(book[@"page_count"]);
 	if (pages > 0) {
 		[parts addObject:[NSString stringWithFormat:@"%ld %@", (long)pages, pages == 1 ? @"page" : @"pages"]];
 	}
+
 	return [parts componentsJoinedByString:@" · "];
 }
 
@@ -40,6 +42,7 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	if (self) {
 		_selectedBookIndex = NSNotFound;
 	}
+
 	return self;
 }
 
@@ -54,6 +57,7 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	if (point.x < 16 || point.x >= NSWidth(self.bounds) - 16 || point.y < 116) {
 		return NSNotFound;
 	}
+
 	NSInteger index = (NSInteger)((point.y - 116) / 144);
 	return index < [self.month[@"books"] count] ? index : NSNotFound;
 }
@@ -61,10 +65,12 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 - (void) setMonth:(NSDictionary *)month
 {
 	_month = month;
+
 	NSMutableArray* descriptions = [NSMutableArray arrayWithObject:[NSString stringWithFormat:@"%@ %ld", CalendarMonthName(month, NO), (long)CalendarNumber(month[@"year"])]];
 	for (NSDictionary* book in month[@"books"]) {
 		[descriptions addObject:[NSString stringWithFormat:@"%@, %@, %@", CalendarString(book[@"title"]), CalendarString(book[@"author"]), CalendarBookDetails(book)]];
 	}
+
 	self.accessibilityElement = YES;
 	self.accessibilityRole = NSAccessibilityGroupRole;
 	self.accessibilityLabel = [descriptions componentsJoinedByString:@". "];
@@ -81,6 +87,7 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
 	style.alignment = alignment;
 	style.lineBreakMode = NSLineBreakByTruncatingTail;
+
 	[text drawInRect:rect withAttributes:@{
 		NSFontAttributeName: font,
 		NSForegroundColorAttributeName: color,
@@ -93,6 +100,7 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	if (!image.isValid || image.size.width <= 0 || image.size.height <= 0) {
 		return;
 	}
+
 	NSRect source = NSMakeRect(0, 0, image.size.width, image.size.height);
 	if (shouldFill) {
 		CGFloat scale = MAX(rect.size.width / source.size.width, rect.size.height / source.size.height);
@@ -104,16 +112,19 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 		NSSize size = NSMakeSize(source.size.width * scale, source.size.height * scale);
 		rect = NSMakeRect(NSMidX(rect) - size.width / 2, NSMidY(rect) - size.height / 2, size.width, size.height);
 	}
+
 	[NSGraphicsContext saveGraphicsState];
 	if (!shouldFill) {
 		// Round the fitted cover itself, not its larger layout box.
 		[[NSBezierPath bezierPathWithRoundedRect:rect xRadius:4 yRadius:4] addClip];
 	}
+
 	[image drawInRect:rect fromRect:source operation:NSCompositingOperationSourceOver fraction:1 respectFlipped:YES hints:nil];
 	if (dimmed) {
 		[[NSColor colorWithWhite:0 alpha:0.18] setFill];
 		NSRectFillUsingOperation(rect, NSCompositingOperationSourceOver);
 	}
+
 	[NSGraphicsContext restoreGraphicsState];
 }
 
@@ -125,6 +136,7 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	[outline addClip];
 	[[NSColor textBackgroundColor] setFill];
 	NSRectFill(card);
+
 	NSRect header = NSMakeRect(card.origin.x, card.origin.y, card.size.width, 100);
 	NSString* color = CalendarString(self.month[@"background_color"]);
 	NSColor* background = color.length ? [NSColor mb_colorFromString:color] : [NSColor darkGrayColor];
@@ -133,44 +145,54 @@ static NSString* CalendarBookDetails(NSDictionary* book)
 	[self drawImage:self.imageForURL(CalendarString(self.month[@"background_url"])) inRect:header fill:YES dimmed:NO];
 	[[NSColor colorWithWhite:0 alpha:0.45] setFill];
 	NSRectFillUsingOperation(header, NSCompositingOperationSourceOver);
+
 	NSString* heading = [NSString stringWithFormat:@"%@ %ld", CalendarMonthName(self.month, NO).uppercaseString, (long)CalendarNumber(self.month[@"year"])];
 	NSInteger count = CalendarNumber(self.month[@"book_count"]);
 	NSInteger pages = CalendarNumber(self.month[@"page_count"]);
 	NSString* summary = [NSString stringWithFormat:@"%ld %@ · %ld %@", (long)count, count == 1 ? @"book" : @"books", (long)pages, pages == 1 ? @"page" : @"pages"];
 	[self drawText:heading inRect:NSMakeRect(card.origin.x + 24, card.origin.y + 22, card.size.width - 48, 30) font:[NSFont boldSystemFontOfSize:22] color:NSColor.whiteColor alignment:NSTextAlignmentLeft];
 	[self drawText:summary inRect:NSMakeRect(card.origin.x + 24, card.origin.y + 60, card.size.width - 48, 20) font:[NSFont systemFontOfSize:13] color:NSColor.whiteColor alignment:NSTextAlignmentLeft];
+
 	NSArray* books = self.month[@"books"];
 	NSString* short_month = CalendarMonthName(self.month, YES).uppercaseString;
 	for (NSUInteger i = 0; i < books.count; i++) {
 		NSDictionary* book = books[i];
 		CGFloat top = NSMaxY(header) + i * 144;
+
 		BOOL selected = self.selectedBookIndex == i;
 		if (selected) {
 			BOOL dark_mode = [[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqualToString:NSAppearanceNameDarkAqua];
 			[[NSColor colorWithWhite:dark_mode ? 0.18 : 0.96 alpha:1] setFill];
 			NSRectFill(NSMakeRect(card.origin.x, top, card.size.width, 144));
 		}
+
 		CGFloat date_width = card.size.width < 450 ? 54 : 76;
 		CGFloat cover_left = card.origin.x + date_width + 16;
 		CGFloat text_left = cover_left + 64 + 20;
 		CGFloat text_width = MAX(1, NSMaxX(card) - text_left - 20);
+
 		[[NSColor separatorColor] setFill];
 		NSRectFillUsingOperation(NSMakeRect(card.origin.x + date_width, top, 1, 144), NSCompositingOperationSourceOver);
 		if (i > 0) {
 			NSRectFillUsingOperation(NSMakeRect(card.origin.x, top, card.size.width, 1), NSCompositingOperationSourceOver);
 		}
+
 		[self drawText:short_month inRect:NSMakeRect(card.origin.x, top + 44, date_width, 20) font:[NSFont systemFontOfSize:12] color:NSColor.secondaryLabelColor alignment:NSTextAlignmentCenter];
 		NSInteger day = CalendarNumber(book[@"day"]);
 		NSString* day_string = day > 0 && day <= 31 ? [NSString stringWithFormat:@"%ld", (long)day] : @"";
 		[self drawText:day_string inRect:NSMakeRect(card.origin.x, top + 64, date_width, 36) font:[NSFont systemFontOfSize:26] color:NSColor.labelColor alignment:NSTextAlignmentCenter];
+
 		NSRect cover_rect = NSMakeRect(cover_left, top + 20, 64, 104);
 		[self drawImage:self.imageForURL(CalendarString(book[@"cover_url"])) inRect:cover_rect fill:NO dimmed:selected];
+
 		NSString* title = CalendarString(book[@"title"]);
 		[self drawText:title inRect:NSMakeRect(text_left, top + 36, text_width, 36) font:[NSFont boldSystemFontOfSize:16] color:NSColor.labelColor alignment:NSTextAlignmentLeft];
 		[self drawText:CalendarString(book[@"author"]) inRect:NSMakeRect(text_left, top + 76, text_width, 18) font:[NSFont systemFontOfSize:13] color:NSColor.secondaryLabelColor alignment:NSTextAlignmentLeft];
 		[self drawText:CalendarBookDetails(book) inRect:NSMakeRect(text_left, top + 96, text_width, 18) font:[NSFont systemFontOfSize:12] color:NSColor.secondaryLabelColor alignment:NSTextAlignmentLeft];
 	}
+
 	[NSGraphicsContext restoreGraphicsState];
+
 	[[NSColor separatorColor] setStroke];
 	outline.lineWidth = 0.5;
 	[outline stroke];

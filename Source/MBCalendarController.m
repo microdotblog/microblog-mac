@@ -29,10 +29,12 @@ static NSInteger CalendarNumber(id value)
 @end
 
 @implementation MBCalendarTableView
+
 - (void) mouseDown:(NSEvent *)event
 {
 	[(MBCalendarController *)self.delegate calendarMouseDown:event];
 }
+
 @end
 
 @implementation MBCalendarController
@@ -44,16 +46,19 @@ static NSInteger CalendarNumber(id value)
 	self.images = [[NSCache alloc] init];
 	self.images.countLimit = 200;
 	self.requestedImages = [NSMutableSet set];
+
 	NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
 	configuration.HTTPCookieStorage = nil;
 	configuration.HTTPShouldSetCookies = NO;
 	configuration.timeoutIntervalForRequest = 30;
 	self.imageSession = [NSURLSession sessionWithConfiguration:configuration];
+
 	NSScrollView* scroll_view = [[NSScrollView alloc] initWithFrame:self.view.bounds];
 	scroll_view.translatesAutoresizingMaskIntoConstraints = NO;
 	scroll_view.hasVerticalScroller = YES;
 	scroll_view.autohidesScrollers = YES;
 	scroll_view.borderType = NSNoBorder;
+
 	self.tableView = [[MBCalendarTableView alloc] initWithFrame:scroll_view.bounds];
 	self.tableView.headerView = nil;
 	self.tableView.style = NSTableViewStyleFullWidth;
@@ -64,30 +69,37 @@ static NSInteger CalendarNumber(id value)
 	self.tableView.backgroundColor = [NSColor controlBackgroundColor];
 	self.tableView.dataSource = self;
 	self.tableView.delegate = self;
+
 	NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:@"Month"];
 	column.width = 600;
 	column.minWidth = 0;
 	column.maxWidth = CGFLOAT_MAX;
 	[self.tableView addTableColumn:column];
+
 	scroll_view.documentView = self.tableView;
 	[self.view addSubview:scroll_view];
+
 	self.messageLabel = [NSTextField wrappingLabelWithString:@""];
 	self.messageLabel.alignment = NSTextAlignmentCenter;
 	self.messageLabel.textColor = [NSColor secondaryLabelColor];
 	self.messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.view addSubview:self.messageLabel];
+
 	self.retryButton = [NSButton buttonWithTitle:@"Retry" target:self action:@selector(retryLoading:)];
 	self.retryButton.translatesAutoresizingMaskIntoConstraints = NO;
 	self.retryButton.hidden = YES;
 	[self.view addSubview:self.retryButton];
+
 	[NSLayoutConstraint activateConstraints:@[
 		[scroll_view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
 		[scroll_view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
 		[scroll_view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
 		[scroll_view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+
 		[self.messageLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:60],
 		[self.messageLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
 		[self.messageLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20],
+
 		[self.retryButton.topAnchor constraintEqualToAnchor:self.messageLabel.bottomAnchor constant:12],
 		[self.retryButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor]
 	]];
@@ -103,11 +115,13 @@ static NSInteger CalendarNumber(id value)
 	if (![response isKindOfClass:[NSDictionary class]] || ![response[@"months"] isKindOfClass:[NSArray class]]) {
 		return nil;
 	}
+
 	NSMutableArray* months = [NSMutableArray array];
 	for (id item in response[@"months"]) {
 		if (![item isKindOfClass:[NSDictionary class]] || CalendarNumber(item[@"year"]) == 0 || CalendarNumber(item[@"month"]) < 1 || CalendarNumber(item[@"month"]) > 12 || ![item[@"books"] isKindOfClass:[NSArray class]]) {
 			continue;
 		}
+
 		NSMutableDictionary* month = [item mutableCopy];
 		NSMutableArray* books = [NSMutableArray array];
 		for (id book in item[@"books"]) {
@@ -115,12 +129,14 @@ static NSInteger CalendarNumber(id value)
 				[books addObject:book];
 			}
 		}
+
 		month[@"books"] = books;
 		if (![month[@"book_count"] isKindOfClass:[NSNumber class]]) {
 			month[@"book_count"] = @(books.count);
 		}
 		[months addObject:month];
 	}
+
 	return months;
 }
 
@@ -137,9 +153,11 @@ static NSInteger CalendarNumber(id value)
 	[self view];
 	NSUInteger generation = ++self.loadGeneration;
 	NSString* username = [RFSettings stringForKey:kAccountUsername];
+
 	self.messageLabel.hidden = YES;
 	self.retryButton.hidden = YES;
 	self.loading = YES;
+
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books/calendar"];
 	__weak MBCalendarController* weak_self = self;
 	[client getWithCompletion:^(UUHttpResponse* response) {
@@ -148,10 +166,12 @@ static NSInteger CalendarNumber(id value)
 			if (!controller || generation != controller.loadGeneration) {
 				return;
 			}
+
 			controller.loading = NO;
 			if (![username isEqualToString:[RFSettings stringForKey:kAccountUsername]]) {
 				return;
 			}
+
 			NSArray* months = [[controller class] monthsFromResponse:response.parsedResponse];
 			if (response.httpError || response.httpResponse.statusCode != 200 || months == nil) {
 				controller.selectedBookIndexPath = nil;
@@ -162,10 +182,12 @@ static NSInteger CalendarNumber(id value)
 				controller.retryButton.hidden = NO;
 				return;
 			}
+
 			controller.months = months;
 			controller.selectedBookIndexPath = nil;
 			[controller.requestedImages removeAllObjects];
 			[controller.tableView reloadData];
+
 			controller.messageLabel.stringValue = @"No finished books yet.";
 			controller.messageLabel.hidden = months.count > 0;
 		});
@@ -199,15 +221,18 @@ static NSInteger CalendarNumber(id value)
 	NSInteger row = [self.tableView rowAtPoint:point];
 	MBCalendarMonthView* cell = row >= 0 ? [self.tableView viewAtColumn:0 row:row makeIfNecessary:YES] : nil;
 	NSInteger book_index = cell ? [cell bookIndexAtPoint:[cell convertPoint:event.locationInWindow fromView:nil]] : NSNotFound;
+
 	if (self.selectedBookIndexPath) {
 		NSInteger old_row = [self.selectedBookIndexPath indexAtPosition:0];
 		MBCalendarMonthView* old_cell = [self.tableView viewAtColumn:0 row:old_row makeIfNecessary:NO];
 		old_cell.selectedBookIndex = NSNotFound;
 	}
+
 	self.selectedBookIndexPath = nil;
 	if (book_index != NSNotFound) {
 		self.selectedBookIndexPath = [[NSIndexPath indexPathWithIndex:row] indexPathByAddingIndex:book_index];
 		cell.selectedBookIndex = book_index;
+
 		if (event.clickCount == 2) {
 			[self openBook:self.months[row][@"books"][book_index]];
 		}
@@ -230,14 +255,17 @@ static NSInteger CalendarNumber(id value)
 	if (image || ![@[ @"https", @"http" ] containsObject:image_url.scheme.lowercaseString] || image_url.host.length == 0 || [self.requestedImages containsObject:url]) {
 		return image;
 	}
+
 	[self.requestedImages addObject:url];
 	__weak MBCalendarController* weak_self = self;
 	[[self.imageSession dataTaskWithURL:image_url completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
 		NSImage* downloaded = !error && [(NSHTTPURLResponse *)response statusCode] == 200 && data.length < 15 * 1024 * 1024 ? [[NSImage alloc] initWithData:data] : nil;
+
 		RFDispatchMainAsync(^{
 			MBCalendarController* controller = weak_self;
 			if (controller && downloaded.isValid) {
 				[controller.images setObject:downloaded forKey:url];
+
 				// Repaint visible cards without rebuilding the table or moving its scroll position.
 				controller.tableView.needsDisplay = YES;
 				for (NSView* row_view in controller.tableView.subviews) {
@@ -248,6 +276,7 @@ static NSInteger CalendarNumber(id value)
 			}
 		});
 	}] resume];
+
 	return nil;
 }
 
@@ -258,12 +287,15 @@ static NSInteger CalendarNumber(id value)
 		cell = [[MBCalendarMonthView alloc] initWithFrame:NSZeroRect];
 		cell.identifier = @"Month";
 	}
+
 	cell.month = self.months[row];
 	cell.selectedBookIndex = self.selectedBookIndexPath && [self.selectedBookIndexPath indexAtPosition:0] == row ? [self.selectedBookIndexPath indexAtPosition:1] : NSNotFound;
+
 	__weak MBCalendarController* weak_self = self;
 	cell.imageForURL = ^NSImage* (NSString* url) {
 		return [weak_self imageForURL:url];
 	};
+
 	return cell;
 }
 
