@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import <objc/runtime.h>
 #import "MBCalendarController.h"
+#import "MBCalendarMonthView.h"
 #import "RFBookshelvesController.h"
 #import "RFBookshelfCell.h"
 #import "RFClient.h"
@@ -66,6 +67,9 @@ static NSBundle* app_bundle;
 - (NSImage *) calendarTestImageForURL:(NSString *)url;
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row;
 @end
+@interface MBCalendarMonthView (Testing)
+- (void) drawImage:(NSImage *)image inRect:(NSRect)rect fill:(BOOL)shouldFill;
+@end
 @implementation MBCalendarController (Testing)
 - (NSImage *) calendarTestImageForURL:(NSString *)url
 {
@@ -123,6 +127,24 @@ int main(int argc, const char* argv[])
 	@autoreleasepool {
 		[NSApplication sharedApplication];
 		requests = [NSMutableArray array];
+		MBCalendarMonthView* month_view = [MBCalendarMonthView new];
+		for (NSNumber* height in @[ @100, @200 ]) {
+			NSImage* cover = [NSImage imageWithSize:NSMakeSize(100, height.doubleValue) flipped:NO drawingHandler:^BOOL(NSRect rect) {
+				[[NSColor colorWithDeviceRed:1 green:0 blue:0 alpha:1] setFill];
+				NSRectFill(rect);
+				return YES;
+			}];
+			NSBitmapImageRep* bitmap = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:100 pixelsHigh:128 bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace bytesPerRow:0 bitsPerPixel:0];
+			[NSGraphicsContext saveGraphicsState];
+			[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:bitmap]];
+			[[NSColor whiteColor] setFill];
+			NSRectFill(NSMakeRect(0, 0, 100, 128));
+			[month_view drawImage:cover inRect:NSMakeRect(10, 12, 64, 104) fill:NO];
+			[NSGraphicsContext restoreGraphicsState];
+			NSInteger corner_x = height.integerValue == 100 ? 10 : 16;
+			NSInteger corner_y = height.integerValue == 100 ? 32 : 12;
+			NSCAssert([bitmap colorAtX:corner_x y:corner_y].greenComponent > 0.9 && [bitmap colorAtX:42 y:64].greenComponent < 0.1, @"Square and tall covers must round their actual fitted corners without cropping the center");
+		}
 		NSDictionary* book = @{ @"title": @"A Finished Book", @"author": @"An Author", @"day": @2, @"finished_label": @"Oct 2", @"page_count": @384 };
 		NSDictionary* fixture = @{ @"months": @[ @{ @"year": @2026, @"month": @10, @"books": @[ book ], @"book_count": @1, @"page_count": @384, @"background_color": @"#d2a530" } ] };
 		if (argc > 2) {
@@ -132,6 +154,9 @@ int main(int argc, const char* argv[])
 		NSCAssert(fixture != nil, @"Fixture must parse");
 		NSArray* months = [MBCalendarController monthsFromResponse:fixture];
 		NSCAssert(months.count > 0, @"Fixture must contain calendar months");
+		month_view.month = months.firstObject;
+		NSString* first_title = [months.firstObject[@"books"] firstObject][@"title"];
+		NSCAssert(month_view.accessibilityElement && [month_view.accessibilityRole isEqual:NSAccessibilityGroupRole] && [month_view.accessibilityLabel containsString:first_title], @"Extracted month view must retain its accessible book description");
 		NSCAssert([MBCalendarController monthsFromResponse:@{}] == nil, @"Missing months is an error, not an empty calendar");
 		NSCAssert([MBCalendarController monthsFromResponse:@{ @"months": @[] }].count == 0, @"Empty calendars must be accepted");
 		NSArray* malformed = @[ NSNull.null, @{ @"year": @2026, @"month": @13, @"books": @[] }, @{ @"year": @2026, @"month": @10, @"books": @[ NSNull.null, book ] } ];
