@@ -238,6 +238,9 @@ static NSInteger CalendarNumber(id value)
 	NSInteger book_index = cell ? [cell bookIndexAtPoint:[cell convertPoint:event.locationInWindow fromView:nil]] : NSNotFound;
 
 	NSIndexPath* index_path = book_index != NSNotFound ? [[NSIndexPath indexPathWithIndex:row] indexPathByAddingIndex:book_index] : nil;
+	if ((event.modifierFlags & NSEventModifierFlagCommand) && [index_path isEqual:self.selectedBookIndexPath]) {
+		index_path = nil;
+	}
 	[self selectBookAtIndexPath:index_path];
 	if (index_path && event.clickCount == 2) {
 		[self openBook:self.months[row][@"books"][book_index]];

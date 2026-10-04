@@ -149,7 +149,8 @@ static NSInteger const kTimelineBookshelvesSidebarRow = 11;
 		return;
 	}
 	self.showingCalendar = show_calendar;
-	if (self.showingCalendar && !self.calendarController) {
+	BOOL first_load = self.showingCalendar && !self.calendarController;
+	if (first_load) {
 		self.calendarController = [[MBCalendarController alloc] init];
 		[self addChildViewController:self.calendarController];
 		NSView* calendar_view = self.calendarController.view;
@@ -174,7 +175,12 @@ static NSInteger const kTimelineBookshelvesSidebarRow = 11;
 	self.tableView.enclosingScrollView.hidden = self.showingCalendar;
 	self.calendarController.view.hidden = !self.showingCalendar;
 	if (self.showingCalendar) {
-		[self.calendarController reloadCalendar];
+		if (first_load) {
+			[self.calendarController reloadCalendar];
+		}
+		else {
+			self.calendarController.loadingDidChange();
+		}
 		[self.calendarController focusContent];
 	}
 	else {

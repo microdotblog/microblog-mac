@@ -176,13 +176,18 @@ static NSBitmapImageRep* Render(NSView* view, NSString* path)
 	return rep;
 }
 
-static void ClickMonth(NSTableView* table, NSInteger row, NSPoint point, NSInteger clickCount)
+static void ClickMonthWithModifiers(NSTableView* table, NSInteger row, NSPoint point, NSInteger clickCount, NSEventModifierFlags modifiers)
 {
 	NSView* cell = [table viewAtColumn:0 row:row makeIfNecessary:YES];
 	NSPoint location = [cell convertPoint:point toView:nil];
-	NSEvent* event = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDown location:location modifierFlags:0 timestamp:0 windowNumber:table.window.windowNumber context:nil eventNumber:1 clickCount:clickCount pressure:1];
+	NSEvent* event = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDown location:location modifierFlags:modifiers timestamp:0 windowNumber:table.window.windowNumber context:nil eventNumber:1 clickCount:clickCount pressure:1];
 	NSView* hit_view = [table hitTest:[table.superview convertPoint:location fromView:nil]];
 	[hit_view mouseDown:event];
+}
+
+static void ClickMonth(NSTableView* table, NSInteger row, NSPoint point, NSInteger clickCount)
+{
+	ClickMonthWithModifiers(table, row, point, clickCount, 0);
 }
 
 static void PressKey(NSTableView* table, unichar key, NSEventModifierFlags modifiers)
@@ -349,6 +354,12 @@ int main(int argc, const char* argv[])
 		NSCAssert(opened_urls.count == 1 && [[opened_urls.lastObject absoluteString] isEqual:@"https://micro.blog/books/9781250462657"], @"Double clicks must open the ISBN page using the normal browser flow");
 		ClickMonth(table, 1, NSMakePoint(30, 80), 2);
 		NSCAssert(second_month.selectedBookIndex == NSNotFound && opened_urls.count == 1, @"Clicking a month header must clear selection without opening a book");
+		ClickMonthWithModifiers(table, 0, NSMakePoint(30, 150), 1, NSEventModifierFlagCommand);
+		NSCAssert(first_month.selectedBookIndex == 0, @"Command-click on an unselected book must select it");
+		ClickMonthWithModifiers(table, 0, NSMakePoint(300, 300), 1, NSEventModifierFlagCommand);
+		NSCAssert(first_month.selectedBookIndex == 1, @"Command-click on a different book must move the selection");
+		ClickMonthWithModifiers(table, 0, NSMakePoint(300, 300), 1, NSEventModifierFlagCommand);
+		NSCAssert(first_month.selectedBookIndex == NSNotFound && [controller valueForKey:@"selectedBookIndexPath"] == nil && opened_urls.count == 1, @"Command-click on the selected book must deselect it without opening a browser");
 
 		NSDictionary* empty_month = @{ @"year": @2026, @"month": @8, @"books": @[] };
 		NSArray* keyboard_months = @[ empty_month, click_months[0], empty_month, click_months[1], empty_month ];
@@ -469,6 +480,12 @@ int main(int argc, const char* argv[])
 			MBCalendarController* calendar = [shelves valueForKey:@"calendarController"];
 			NSCAssert(calendar.view.superview != nil && shelves.tableView.enclosingScrollView.hidden && calendar.loading, @"Calendar must replace only the shelf content while loading");
 			NSCAssert(window.firstResponder == [calendar valueForKey:@"tableView"], @"Switching to Calendar must allow Down to select the first book without clicking first");
+			NSUInteger calendar_request = requests.count - 1;
+			tabs.selectedSegment = 0;
+			[shelves selectTab:tabs];
+			tabs.selectedSegment = 1;
+			[shelves selectTab:tabs];
+			NSCAssert(requests.count == calendar_request + 1 && calendar.loading, @"Switching tabs during the first load must reuse the pending request");
 			Reply(requests.count - 1, 200, fixture);
 			NSMutableSet* requested_images = [calendar valueForKey:@"requestedImages"];
 			NSCache* images = [calendar valueForKey:@"images"];
@@ -510,13 +527,25 @@ int main(int argc, const char* argv[])
 			CGFloat scale = selected_pixels.pixelsWide / NSWidth(selected_cell.bounds);
 			NSColor* selected_color = [[selected_pixels colorAtX:20 * scale y:150 * scale] colorUsingColorSpace:NSColorSpace.deviceRGBColorSpace];
 			NSCAssert(selected_color.redComponent > 0.9 && selected_color.redComponent < 0.99, @"Selected book background must be light gray, not white");
+			[window setContentSize:NSMakeSize(700, 300)];
+			Pump();
+			PressKey(calendar_table, NSDownArrowFunctionKey, NSEventModifierFlagCommand);
+			NSPoint scroll_position = calendar_table.visibleRect.origin;
+			NSUInteger request_count = requests.count;
 			tabs.selectedSegment = 0;
 			[shelves selectTab:tabs];
 			NSCAssert(!shelves.tableView.enclosingScrollView.hidden && calendar.view.hidden, @"Toggle must restore the existing shelf view");
 			tabs.selectedSegment = 1;
 			[shelves selectTab:tabs];
 			NSCAssert([shelves valueForKey:@"calendarController"] == calendar, @"Repeated toggles must reuse the existing calendar controller");
-			Reply(requests.count - 1, 200, fixture);
+			Pump();
+			NSCAssert(requests.count == request_count && !calendar.loading, @"Returning to Calendar must not refresh it");
+			AssertSelection(calendar, 0, 0);
+			NSCAssert(NSEqualPoints(calendar_table.visibleRect.origin, scroll_position), @"Tab switches must preserve calendar scroll position");
+			[shelves refresh];
+			NSCAssert(calendar.loading && [requests[request_count][@"path"] isEqual:@"/books/calendar"], @"Explicit refresh must still reload the calendar");
+			Reply(request_count, 200, fixture);
+			Reply(request_count + 1, 200, goals_fixture);
 			NSCAssert([calendar valueForKey:@"selectedBookIndexPath"] == nil, @"Reloading must clear index-based book selection");
 			for (NSDictionary* month in months) {
 				if ([month[@"background_url"] isKindOfClass:[NSString class]]) {
