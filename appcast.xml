@@ -5,6 +5,27 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.2</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Added new “Dictate Note” button to record and transcribe audio into a private note.</li>
+					<li>Added a “Calendar” tab to the Bookshelves pane, with option to publish as a page on your blog.</li>
+				</ul>
+			]]></description>
+			<pubDate>Sun, 04 Oct 2026 11:44:35 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.2.zip" sparkle:shortVersionString="4.2" sparkle:version="262" length="18407309" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.1.2</title>
 			<description><![CDATA[
 				<style>
