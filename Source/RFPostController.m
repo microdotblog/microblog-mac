@@ -2955,6 +2955,38 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	self.remainingField.attributedStringValue = attr;
 }
 
+- (NSString *) replyErrorMessageForResponse:(UUHttpResponse *)response
+{
+	NSDictionary* result = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+	id server_error = result[@"error"];
+	BOOL has_server_error = server_error != nil && server_error != [NSNull null];
+	NSInteger status_code = response.httpResponse.statusCode;
+	BOOL http_success = status_code >= 200 && status_code < 300;
+	if (!has_server_error && !response.httpError && http_success) {
+		return nil;
+	}
+
+	// Replies return a message in "error"; Micropub uses "error_description".
+	for (NSString* key in @[ @"error_description", @"error" ]) {
+		id value = result[key];
+		if ([value isKindOfClass:[NSString class]]) {
+			NSString* message = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			if (message.length > 0) {
+				return message;
+			}
+		}
+	}
+
+	if (response.httpError) {
+		return [response.httpError mb_networkMessageWithResponse:http_success ? nil : response.httpResponse];
+	}
+	if (!http_success && status_code > 0) {
+		NSError* error = [NSError errorWithDomain:kUUHttpSessionErrorDomain code:UUHttpSessionErrorHttpError userInfo:nil];
+		return [error mb_networkMessageWithResponse:response.httpResponse];
+	}
+	return @"The reply could not be sent. Please try again.";
+}
+
 - (void) uploadText:(NSString *)text
 {
 	if (self.isReply) {
@@ -2967,14 +2999,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 			};
 			[client postWithParams:args completion:^(UUHttpResponse* response) {
 				RFDispatchMainAsync (^{
-					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+					NSString* msg = [self replyErrorMessageForResponse:response];
+					if (msg) {
 						[self hideProgressHeader];
-						NSString* msg = response.parsedResponse[@"error_description"];
-						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
-					}
-					else if (response.httpError) {
-						[self hideProgressHeader];
-						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
@@ -2996,14 +3023,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 			
 			[client postWithObject:info completion:^(UUHttpResponse* response) {
 				RFDispatchMainAsync (^{
-					if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
+					NSString* msg = [self replyErrorMessageForResponse:response];
+					if (msg) {
 						[self hideProgressHeader];
-						NSString* msg = response.parsedResponse[@"error_description"];
-						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
-					}
-					else if (response.httpError) {
-						[self hideProgressHeader];
-						NSString* msg = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 						[NSAlert rf_showOneButtonAlert:@"Error Sending Reply" message:msg button:@"OK" completionHandler:NULL];
 					}
 					else {
