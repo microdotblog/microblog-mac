@@ -281,8 +281,41 @@
 		return YES;
 	}
 	else {
+		NSPoint drop_point = [self convertPoint:sender.draggingLocation fromView:nil];
+		NSUInteger insertion_index = [self characterIndexForInsertionAtPoint:drop_point];
+		if ([self insertDraggedImageHTMLFromPasteboard:pb atIndex:insertion_index]) {
+			return YES;
+		}
 		return [super performDragOperation:sender];
 	}
+}
+
+- (BOOL) insertDraggedImageHTMLFromPasteboard:(NSPasteboard *)pasteboard atIndex:(NSUInteger)insertionIndex
+{
+	NSString* text = self.string;
+	if (!self.isEditable || text.length == 0 || insertionIndex != text.length) {
+		return NO;
+	}
+	unichar last_char = [text characterAtIndex:text.length - 1];
+	if ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:last_char]) {
+		return NO;
+	}
+
+	NSMutableArray* image_tags = [NSMutableArray array];
+	for (NSPasteboardItem* item in pasteboard.pasteboardItems) {
+		NSString* html = [item stringForType:NSPasteboardTypeString];
+		if (![html hasPrefix:@"<img "]) {
+			return NO;
+		}
+		[image_tags addObject:html];
+	}
+	if (image_tags.count == 0) {
+		return NO;
+	}
+
+	NSString* html = [@"\n\n" stringByAppendingString:[image_tags componentsJoinedByString:@"\n"]];
+	[self insertText:html replacementRange:NSMakeRange(insertionIndex, 0)];
+	return YES;
 }
 
 - (void) findAutocomplete:(NSRange)range newString:(NSString*)incomingString
