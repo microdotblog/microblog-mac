@@ -8,6 +8,7 @@ names = %w[uploadFiles uploadNextPhoto uploadPhoto uploadFile activePhotoUploadB
 methods = names.map do |name|
 	uploads[/^- \([^\n]+\) #{name}\b[^;\n]*\n\{.*?^\}/m] or abort "Missing #{name}"
 end.join("\n")
+waiting_key = uploads.lines.find { |line| line.start_with?('static NSString* const kUploadWaitingForResponseKey') } or abort 'Missing upload processing state key'
 
 source = <<~OBJC
 	#import <Cocoa/Cocoa.h>
@@ -18,6 +19,7 @@ source = <<~OBJC
 	static NSMutableArray* requests;
 	static NSInteger alerts;
 	static BOOL preparation_fails;
+	#{waiting_key}
 	@interface RFSettings : NSObject
 	+ (BOOL) isPremium;
 	+ (NSString *) stringForKey:(NSString *)key;
@@ -82,15 +84,15 @@ source = <<~OBJC
 	}
 	@end
 	@interface TestIndicator : NSObject
-	@property BOOL indeterminate, displayedWhenStopped, hidden;
+	@property BOOL indeterminate, displayedWhenStopped, hidden, animating;
 	@property NSInteger style;
 	@property double minValue, maxValue, doubleValue;
 	- (void) startAnimation:(id)sender;
 	- (void) stopAnimation:(id)sender;
 	@end
 	@implementation TestIndicator
-	- (void) startAnimation:(id)sender {}
-	- (void) stopAnimation:(id)sender {}
+	- (void) startAnimation:(id)sender { self.animating = YES; }
+	- (void) stopAnimation:(id)sender { self.animating = NO; }
 	@end
 	@interface TestController : NSObject
 	@property (strong) NSMutableArray* photoUploadProgress;
@@ -135,8 +137,14 @@ source = <<~OBJC
 	static void expect(TestController* controller, double fraction)
 	{
 		NSCAssert(!controller.progressSpinner.indeterminate && controller.progressSpinner.style == NSProgressIndicatorStyleBar, @"Determinate photo bar");
+		NSCAssert(!controller.progressSpinner.animating, @"Stop indeterminate animation when resuming byte progress");
 		NSCAssert(fabs(controller.progressSpinner.doubleValue - fraction) < 0.001, @"Expected %.3f, got %.3f", fraction, controller.progressSpinner.doubleValue);
 		NSCAssert(controller.blogNameButton.hidden && controller.progressCancelButton.hidden, @"Correct controls while uploading photos");
+	}
+	static void expect_processing(TestController* controller)
+	{
+		NSCAssert(controller.progressSpinner.indeterminate && controller.progressSpinner.animating && controller.progressSpinner.style == NSProgressIndicatorStyleBar, @"Animate the indeterminate bar while waiting for the server");
+		NSCAssert(controller.blogNameButton.hidden && controller.progressCancelButton.hidden, @"Keep upload UI visible until the server responds");
 	}
 	int main(int argc, const char* argv[])
 	{
@@ -152,15 +160,17 @@ source = <<~OBJC
 			advance(0, 25);
 			expect(controller, 0.125);
 			advance(0, 100);
+			expect_processing(controller);
+			NSCAssert(controller.finishes == 0 && controller.refreshes == 0, @"Sending all bytes is not upload completion");
 			finish(0, 201, YES);
 			expect(controller, 0.5);
 			advance(1, 50);
 			expect(controller, 0.75);
 			advance(1, 100);
 			advance(1, 100);
-			expect(controller, 1);
+			expect_processing(controller);
 			finish(1, 201, YES);
-			NSCAssert(controller.activePhotoUploadBatches == 0 && !controller.blogNameButton.hidden && controller.progressSpinner.indeterminate, @"Final completion restores UI");
+			NSCAssert(controller.activePhotoUploadBatches == 0 && !controller.blogNameButton.hidden && controller.progressSpinner.indeterminate && !controller.progressSpinner.animating, @"Final completion restores UI");
 			NSCAssert(controller.finishes == 2 && controller.refreshes == 1 && alerts == 0, @"Each file finishes once; batch refreshes once");
 
 			[controller uploadFiles:@[@"photo.jpg"]];
@@ -168,31 +178,52 @@ source = <<~OBJC
 			advance(2, 60);
 			advance(3, 20);
 			expect(controller, 0.4);
+			advance(2, 100);
+			expect(controller, 0.6);
 			[controller configureProgressSpinnerForVideoUpload];
 			controller.uploader = [NSObject new];
 			controller.progressSpinner.doubleValue = 0.33;
-			advance(2, 80);
+			advance(2, 100);
 			NSCAssert(controller.progressSpinner.doubleValue == 0.33 && !controller.progressCancelButton.hidden, @"Photos do not overwrite active video progress");
 			controller.uploader = nil;
 			[controller restoreProgressSpinnerAfterVideoUpload];
-			expect(controller, 0.5);
+			expect(controller, 0.6);
 			finish(2, 502, YES);
 			NSCAssert(controller.activePhotoUploadBatches == 1, @"Failure only finishes its own batch");
 			expect(controller, 0.2);
 			advance(2, 99);
 			expect(controller, 0.2);
 			advance(3, 100);
+			expect_processing(controller);
 			finish(3, 201, YES);
 
 			[controller uploadFiles:@[@"photo.jpg"]];
+			advance(4, 100);
+			expect_processing(controller);
+			[controller uploadFiles:@[png]];
+			expect(controller, 0.5);
+			advance(5, 100);
+			expect_processing(controller);
+			[controller configureProgressSpinnerForVideoUpload];
+			controller.uploader = [NSObject new];
+			controller.progressSpinner.doubleValue = 0.7;
+			advance(4, 100);
+			NSCAssert(!controller.progressSpinner.indeterminate && controller.progressSpinner.doubleValue == 0.7, @"Server processing does not override video progress");
+			controller.uploader = nil;
+			[controller restoreProgressSpinnerAfterVideoUpload];
+			expect_processing(controller);
+			finish(5, 502, NO);
+			expect_processing(controller);
 			finish(4, 201, NO);
 			[controller uploadFiles:@[png]];
-			finish(5, 0, NO);
+			advance(6, 100);
+			expect_processing(controller);
+			finish(6, 0, NO);
 			[controller uploadFiles:@[@"unreadable.jpg"]];
 			[controller uploadFiles:@[@"unreadable.png"]];
 			preparation_fails = YES;
 			[controller uploadFiles:@[@"photo.jpg"]];
-			NSCAssert(alerts == 6 && controller.activePhotoUploadBatches == 0 && !controller.blogNameButton.hidden, @"HTTP, missing URL, transport, and preparation failures clean up UI");
+			NSCAssert(alerts == 7 && controller.activePhotoUploadBatches == 0 && !controller.blogNameButton.hidden && !controller.progressSpinner.animating, @"HTTP, missing URL, transport, and preparation failures clean up UI");
 			NSCAssert(controller.finishes == 3 && controller.refreshes == 2, @"Failed files never count as successful uploads");
 			NSLog(@"Uploads progress, overlapping batches, video ownership, and failure cleanup tests passed.");
 		}

@@ -34,6 +34,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 static NSTimeInterval const kUploadsCheckInterval = 10.0;
 static NSTimeInterval const kRecentUploadsCheckInterval = 5.0;
 static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
+static NSString* const kUploadWaitingForResponseKey = @"MBUploadWaitingForResponse";
 
 @interface MBUploadDescriptionNotice : NSView
 @end
@@ -718,7 +719,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	} completionHandler:nil];
 
 	__weak typeof(self) weak_self = self;
-	self.descriptionNoticeTimer = [NSTimer scheduledTimerWithTimeInterval:10 repeats:NO block:^(NSTimer* timer) {
+	self.descriptionNoticeTimer = [NSTimer scheduledTimerWithTimeInterval:5 repeats:NO block:^(NSTimer* timer) {
 		RFAllUploadsController* controller = weak_self;
 		if (controller == nil || controller.descriptionNoticeGeneration != generation) {
 			return;
@@ -1322,11 +1323,14 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 		NSProgress* file_progress = [NSProgress discreteProgressWithTotalUnitCount:1];
 		[progress addChild:file_progress withPendingUnitCount:1];
+		[progress setUserInfoObject:@NO forKey:kUploadWaitingForResponseKey];
+		[self updatePhotoUploadProgress];
 		UUHttpSessionUploadProgressHandler progress_handler = ^(int64_t bytes_sent, int64_t total_bytes) {
 			RFDispatchMainAsync(^{
 				if ([self.photoUploadProgress containsObject:progress]) {
 					file_progress.totalUnitCount = total_bytes;
 					file_progress.completedUnitCount = MIN(bytes_sent, total_bytes);
+					[progress setUserInfoObject:@(bytes_sent >= total_bytes) forKey:kUploadWaitingForResponseKey];
 					[self updatePhotoUploadProgress];
 				}
 			});
@@ -1522,13 +1526,16 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 	double completed_files = 0;
 	int64_t total_files = 0;
+	// Keep showing byte progress if another batch is still sending a file.
+	BOOL waiting_for_server = YES;
 	for (NSProgress* progress in self.photoUploadProgress) {
 		completed_files += progress.fractionCompleted * progress.totalUnitCount;
 		total_files += progress.totalUnitCount;
+		waiting_for_server &= [progress.userInfo[kUploadWaitingForResponseKey] boolValue];
 	}
 
 	[self.progressSpinner stopAnimation:nil];
-	self.progressSpinner.indeterminate = NO;
+	self.progressSpinner.indeterminate = waiting_for_server;
 	self.progressSpinner.style = NSProgressIndicatorStyleBar;
 	self.progressSpinner.displayedWhenStopped = YES;
 	self.progressSpinner.minValue = 0.0;
@@ -1537,6 +1544,9 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	self.progressSpinner.hidden = NO;
 	self.progressCancelButton.hidden = YES;
 	self.blogNameButton.hidden = YES;
+	if (waiting_for_server) {
+		[self.progressSpinner startAnimation:nil];
+	}
 }
 
 - (void) focusSearch

@@ -92,10 +92,10 @@ source = <<~OBJC
 			NSCAssert(NSMinX(label_alignment) >= 12 && NSMinY(label_alignment) >= 10, @"Padding inside the rounded box");
 			NSCAssert([notice hitTest:NSMakePoint(15, 15)] == nil, @"Never block photo clicks underneath");
 			NSTimeInterval seconds_remaining = controller.descriptionNoticeTimer.fireDate.timeIntervalSinceNow;
-			NSCAssert(seconds_remaining > 9 && seconds_remaining <= 10, @"Wait ten seconds before fading");
+			NSCAssert(seconds_remaining > 4 && seconds_remaining <= 5, @"Wait five seconds before fading");
 			NSTimer* old_timer = controller.descriptionNoticeTimer;
 			[controller showDescriptionReadyNotice];
-			NSCAssert(!old_timer.valid && controller.descriptionNoticeTimer != old_timer, @"Another completion restarts the ten-second timer");
+			NSCAssert(!old_timer.valid && controller.descriptionNoticeTimer != old_timer, @"Another completion restarts the five-second timer");
 
 			for (NSAppearanceName name in @[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]) {
 				NSApp.appearance = [NSAppearance appearanceNamed:name];
