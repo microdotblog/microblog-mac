@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.2.1</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Improved progress bar in Uploads pane to show actual progress of upload.</li>
+					<li>Added automatically refreshing generated photo description in Uploads, with brief message.</li>
+					<li>Added blank line before photo when dragging from Uploads to the end of a new post.</li>
+					<li>Fixed a potential crash when a reply fails to send and improved error messages.</li>
+					<li>Fixed unnecessary Day One confirmation messages when the journal name hasn’t changed.</li>
+				</ul>
+			]]></description>
+			<pubDate>Sat, 17 Oct 2026 16:11:35 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.2.1.zip" sparkle:shortVersionString="4.2.1" sparkle:version="263" length="18397315" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.2</title>
 			<description><![CDATA[
 				<style>
