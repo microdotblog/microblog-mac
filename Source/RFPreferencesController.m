@@ -1286,20 +1286,29 @@ static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;
 
 - (void) saveDayOneJournal
 {
-    NSString* journalName = self.dayOneJournalNameField.stringValue;
-    NSString* alertMessage = @"Day One will import to the default journal (first in list).";
-
-    if (journalName.length > 0) {
-        alertMessage = [NSString stringWithFormat:@"Day One will import to \"%@\". Make sure it exists.", journalName];
-    }
-
-    [self hideDayOneReturnButton];
-    [RFSettings setString:journalName forKey:kDayOneJournalName account:self.selectedAccount];
-
-    RFDispatchMainAsync (^{
-		[self showMessage:alertMessage];
-//        [NSAlert rf_showOneButtonAlert:@"Day One Journal" message:alertMessage button:@"OK" completionHandler:NULL];
-    });
+	NSString* new_journal_name = self.dayOneJournalNameField.stringValue;
+	NSString* old_journal_name = [RFSettings stringForKey:kDayOneJournalName account:self.selectedAccount];
+	BOOL has_changed = ![new_journal_name isEqualToString:old_journal_name];
+	
+	// save the new value regardless of whether it changed
+	[RFSettings setString:new_journal_name forKey:kDayOneJournalName account:self.selectedAccount];
+	
+	// determine the message based on the new value
+	NSString* alertMessage = @"Day One will import to the default journal (first in list).";
+	if (new_journal_name.length > 0) {
+		alertMessage = [NSString stringWithFormat:@"Day One will import to \"%@\". Make sure it exists.", new_journal_name];
+	}
+	
+	if (has_changed) {
+		// only show the message if the value actually changed
+		[self hideDayOneReturnButton];
+		RFDispatchMainAsync (^{
+			[self showMessage:alertMessage];
+		});
+	} else {
+		// hide message if the value didn't change
+		[self hideDayOneReturnButton];
+	}
 }
 
 @end
