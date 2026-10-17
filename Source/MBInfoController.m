@@ -78,6 +78,9 @@
 	NSString* url = [notification.userInfo objectForKey:kInfoURLKey];
 	NSString* text = [notification.userInfo objectForKey:kInfoTextKey];
 	NSNumber* is_ai = [notification.userInfo objectForKey:kInfoAIKey];
+	if ([notification.userInfo[kInfoBackgroundUpdateKey] boolValue] && (![self.url isEqualToString:url] || [self isEditing])) {
+		return;
+	}
 	
 	[self hideEditing];
 	[self setupWithURL:url text:text isAI:[is_ai boolValue]];

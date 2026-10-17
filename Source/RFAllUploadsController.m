@@ -30,6 +30,9 @@ static NSString* const kPhotoCellIdentifier = @"PhotoCell";
 static NSInteger const kInitialUploadsLimit = 30;
 static NSInteger const kUploadsLimit = 200;
 static CGFloat const kUploadCellCornerRadius = 4.0;
+static NSTimeInterval const kUploadsCheckInterval = 10.0;
+static NSTimeInterval const kRecentUploadsCheckInterval = 5.0;
+static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 @interface RFAllUploadsController () <NSTextFieldDelegate>
 
@@ -42,9 +45,11 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 @property (copy, nonatomic) NSString* currentSearch;
 @property (copy, nonatomic) NSString* loadedUploadsContext;
 @property (assign, nonatomic) NSInteger activePhotoUploadBatches;
+@property (strong, nonatomic) NSDate* lastUploadFinishedAt;
 
 - (void) fetchInitialUploads;
 - (void) uploadFiles:(NSArray *)paths;
+- (void) didFinishUpload;
 
 @end
 
@@ -503,7 +508,23 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 {
 	[self invalidateUploadsTimer];
 	
-	self.uploadsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(checkForNewUploads:) userInfo:nil repeats:YES];
+	self.uploadsTimer = [NSTimer scheduledTimerWithTimeInterval:[self uploadsCheckInterval] target:self selector:@selector(checkForNewUploads:) userInfo:nil repeats:YES];
+}
+
+- (NSTimeInterval) uploadsCheckInterval
+{
+	if (self.lastUploadFinishedAt && -self.lastUploadFinishedAt.timeIntervalSinceNow < kRecentUploadsCheckDuration) {
+		return kRecentUploadsCheckInterval;
+	}
+	return kUploadsCheckInterval;
+}
+
+- (void) didFinishUpload
+{
+	self.lastUploadFinishedAt = [NSDate date];
+	if (self.uploadsTimer) {
+		[self startUploadsTimer];
+	}
 }
 
 - (void) invalidateUploadsTimer
@@ -514,6 +535,12 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 
 - (void) checkForNewUploads:(NSTimer *)timer
 {
+	if (self.uploadsTimer == nil) {
+		return;
+	}
+	if (self.uploadsTimer.timeInterval != [self uploadsCheckInterval]) {
+		[self startUploadsTimer];
+	}
 	if (self.selectedCollection || self.currentSearch.length > 0) {
 		return;
 	}
@@ -533,9 +560,11 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 	NSDictionary* args = @{
 		@"q": @"source",
 		@"mp-destination": destination_uid,
-		@"limit": @1
+		@"limit": @(kInitialUploadsLimit)
 	};
 	self.isCheckingForNewUploads = YES;
+	NSInteger request_id = self.uploadsRequestID;
+	NSTimer* polling_timer = self.uploadsTimer;
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
@@ -546,7 +575,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 		RFDispatchMainAsync(^{
 			self.isCheckingForNewUploads = NO;
 			NSString* current_destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
-			if (self.isFetchingUploads || ![destination_uid isEqualToString:current_destination_uid] || self.selectedCollection || self.currentSearch.length > 0 || latest_url.length == 0) {
+			if (self.uploadsTimer != polling_timer || request_id != self.uploadsRequestID || self.isFetchingUploads || ![destination_uid isEqualToString:current_destination_uid] || self.selectedCollection || self.currentSearch.length > 0 || latest_url.length == 0) {
 				return;
 			}
 
@@ -555,8 +584,48 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 			if (![latest_url isEqualToString:current_url]) {
 				[self refreshUploadsForCurrentFilter];
 			}
+			else {
+				[self updateAccessibilityTextForUploads:uploads];
+			}
 		});
 	}];
+}
+
+- (void) updateAccessibilityTextForUploads:(NSArray *)uploads
+{
+	NSMutableDictionary* uploads_by_url = [NSMutableDictionary dictionary];
+	for (RFUpload* upload in uploads) {
+		if (upload.url.length > 0) {
+			uploads_by_url[upload.url] = upload;
+		}
+	}
+
+	for (NSUInteger i = 0; i < self.allPosts.count; i++) {
+		RFUpload* upload = self.allPosts[i];
+		RFUpload* updated_upload = uploads_by_url[upload.url];
+		if (updated_upload == nil) {
+			continue;
+		}
+
+		NSString* alt = updated_upload.alt ?: @"";
+		if ([(upload.alt ?: @"") isEqualToString:alt] && upload.isAI == updated_upload.isAI) {
+			continue;
+		}
+
+		upload.alt = alt;
+		upload.isAI = updated_upload.isAI;
+		NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
+		RFPhotoCell* item = (RFPhotoCell *)[self.collectionView itemAtIndexPath:index_path];
+		item.alt = alt;
+		item.isAI = upload.isAI;
+
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateInfoNotification object:self userInfo:@{
+			kInfoURLKey: upload.url,
+			kInfoTextKey: alt,
+			kInfoAIKey: @(upload.isAI),
+			kInfoBackgroundUpdateKey: @YES
+		}];
+	}
 }
 
 - (void) fetchCollections
@@ -756,6 +825,10 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
 	[self setupBlogName];
+	self.lastUploadFinishedAt = nil;
+	if (self.uploadsTimer) {
+		[self startUploadsTimer];
+	}
 
 	self.selectedCollection = nil;
 	self.currentSearch = @"";
@@ -1053,6 +1126,7 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The video upload failed. Please try again." button:@"OK" completionHandler:NULL];
 				}
 				else {
+					[innerSelf didFinishUpload];
 					[innerSelf refreshUploadsForCurrentFilter];
 				}
 
@@ -1263,6 +1337,8 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 
 - (void) finishUpload:(NSString *)path
 {
+	[self didFinishUpload];
+
 	// clean up if a temp file
 	NSFileManager* fm = [NSFileManager defaultManager];
 	BOOL is_dir = NO;
