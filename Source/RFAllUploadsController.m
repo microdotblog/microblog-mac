@@ -75,7 +75,8 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 @property (assign, nonatomic) BOOL needsUploadsRetry;
 @property (copy, nonatomic) NSString* currentSearch;
 @property (copy, nonatomic) NSString* loadedUploadsContext;
-@property (assign, nonatomic) NSInteger activePhotoUploadBatches;
+@property (readonly, nonatomic) NSInteger activePhotoUploadBatches;
+@property (strong, nonatomic) NSMutableArray* photoUploadProgress;
 @property (strong, nonatomic) NSDate* lastUploadFinishedAt;
 @property (strong, nonatomic) MBUploadDescriptionNotice* descriptionNotice;
 @property (strong, nonatomic) NSTimer* descriptionNoticeTimer;
@@ -1012,8 +1013,9 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 		}
 
 		NSMutableArray* new_photos = [regular_paths mutableCopy];
-		[self showUploadProgress];
-		[self uploadNextPhoto:new_photos];
+		NSProgress* progress = [NSProgress discreteProgressWithTotalUnitCount:new_photos.count];
+		[self showUploadProgress:progress];
+		[self uploadNextPhoto:new_photos progress:progress];
 	};
 
 	if ([video_urls count] > 0) {
@@ -1205,8 +1207,8 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 		if (error && !reportedFailure) {
 			reportedFailure = YES;
-			[strongSelf restoreProgressSpinnerAfterVideoUpload];
 			strongSelf.uploader = nil;
+			[strongSelf restoreProgressSpinnerAfterVideoUpload];
 			NSString* message = [error mb_networkMessageWithResponse:nil];
 			[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:message button:@"OK" completionHandler:NULL];
 			if (handler && !uploader.cancelRequested) {
@@ -1245,8 +1247,8 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 					[innerSelf refreshUploadsForCurrentFilter];
 				}
 
-				[innerSelf restoreProgressSpinnerAfterVideoUpload];
 				innerSelf.uploader = nil;
+				[innerSelf restoreProgressSpinnerAfterVideoUpload];
 
 				if (handler && !uploader.cancelRequested) {
 					handler();
@@ -1280,7 +1282,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	self.progressCancelButton.hidden = YES;
 	self.blogNameButton.hidden = self.activePhotoUploadBatches > 0;
 	if (self.activePhotoUploadBatches > 0) {
-		[self.progressSpinner startAnimation:nil];
+		[self updatePhotoUploadProgress];
 	}
 }
 
@@ -1312,11 +1314,34 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	return NO;
 }
 
-- (void) uploadNextPhoto:(NSMutableArray *)paths
+- (void) uploadNextPhoto:(NSMutableArray *)paths progress:(NSProgress *)progress
 {
 	NSString* filepath = [paths lastObject];
 	if (filepath) {
 		[paths removeLastObject];
+
+		NSProgress* file_progress = [NSProgress discreteProgressWithTotalUnitCount:1];
+		[progress addChild:file_progress withPendingUnitCount:1];
+		UUHttpSessionUploadProgressHandler progress_handler = ^(int64_t bytes_sent, int64_t total_bytes) {
+			RFDispatchMainAsync(^{
+				if ([self.photoUploadProgress containsObject:progress]) {
+					file_progress.totalUnitCount = total_bytes;
+					file_progress.completedUnitCount = MIN(bytes_sent, total_bytes);
+					[self updatePhotoUploadProgress];
+				}
+			});
+		};
+		void (^completion)(BOOL) = ^(BOOL success) {
+			if (success) {
+				file_progress.completedUnitCount = file_progress.totalUnitCount;
+				[self updatePhotoUploadProgress];
+				[self finishUpload:filepath];
+				[self uploadNextPhoto:paths progress:progress];
+			}
+			else {
+				[self hideUploadProgress:progress];
+			}
+		};
 
 		NSString* e = [[filepath pathExtension] lowercaseString];
 		if ([e isEqualToString:@"jpg"] || [e isEqualToString:@"jpeg"]) {
@@ -1334,40 +1359,34 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 					if (scaled_img == nil) {
 						RFDispatchMainAsync(^{
 							[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"The photo file could not be read." button:@"OK" completionHandler:NULL];
-							[self hideUploadProgress];
+							completion(NO);
 						});
 						return;
 					}
 
 					RFPhoto* photo = [[RFPhoto alloc] initWithThumbnail:scaled_img];
 					NSString* filename = [filepath lastPathComponent];
-					[self uploadPhoto:photo filename:filename completion:^{
-						[self finishUpload:filepath];
-						[self uploadNextPhoto:paths];
-					}];
+					[self uploadPhoto:photo filename:filename progress:progress_handler completion:completion];
 				}
 			});
 		}
 		else {
-			[self uploadFile:filepath completion:^{
-				[self finishUpload:filepath];
-				[self uploadNextPhoto:paths];
-			}];
+			[self uploadFile:filepath progress:progress_handler completion:completion];
 		}
 	}
 	else {
-		[self hideUploadProgress];
+		[self hideUploadProgress:progress];
 		[self refreshUploadsForCurrentFilter];
 	}
 }
 
-- (void) uploadPhoto:(RFPhoto *)photo filename:(NSString *)filename completion:(void (^)(void))handler
+- (void) uploadPhoto:(RFPhoto *)photo filename:(NSString *)filename progress:(UUHttpSessionUploadProgressHandler)progressHandler completion:(void (^)(BOOL success))handler
 {
 	NSData* d = [photo jpegData];
 	if (d == nil) {
 		RFDispatchMainAsync(^{
 			[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"The photo file could not be prepared for upload." button:@"OK" completionHandler:NULL];
-			[self hideUploadProgress];
+			handler(NO);
 		});
 		return;
 	}
@@ -1377,6 +1396,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	BOOL is_png = NO;
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+	client.uploadProgressHandler = progressHandler;
 	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 	if (destination_uid == nil) {
 		destination_uid = @"";
@@ -1391,20 +1411,20 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 			if (![self responseWasSuccessful:response]) {
 				NSString* message = [self errorMessageForResponse:response fallback:@"The photo could not be uploaded."];
 				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:message button:@"OK" completionHandler:NULL];
-				[self hideUploadProgress];
+				handler(NO);
 			}
 			else if (image_url == nil) {
 				[NSAlert rf_showOneButtonAlert:@"Error Uploading Photo" message:@"Photo URL was blank." button:@"OK" completionHandler:NULL];
-				[self hideUploadProgress];
+				handler(NO);
 			}
 			else {
-				handler();
+				handler(YES);
 			}
 		});
 	}];
 }
 
-- (void) uploadFile:(NSString *)path completion:(void (^)(void))handler
+- (void) uploadFile:(NSString *)path progress:(UUHttpSessionUploadProgressHandler)progressHandler completion:(void (^)(BOOL success))handler
 {
 	RFDispatchThread(^{
 		@autoreleasepool {
@@ -1412,7 +1432,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 			if (d == nil) {
 				RFDispatchMainAsync(^{
 					[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"The file could not be read." button:@"OK" completionHandler:NULL];
-					[self hideUploadProgress];
+					handler(NO);
 				});
 				return;
 			}
@@ -1421,6 +1441,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 			NSString* content_type = [path mb_contentType];
 
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub/media"];
+			client.uploadProgressHandler = progressHandler;
 			NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
 			if (destination_uid == nil) {
 				destination_uid = @"";
@@ -1435,14 +1456,14 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 					if (![self responseWasSuccessful:response]) {
 						NSString* message = [self errorMessageForResponse:response fallback:@"The file could not be uploaded."];
 						[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:message button:@"OK" completionHandler:NULL];
-						[self hideUploadProgress];
+						handler(NO);
 					}
 					else if (image_url == nil) {
 						[NSAlert rf_showOneButtonAlert:@"Error Uploading File" message:@"Uploaded URL was blank." button:@"OK" completionHandler:NULL];
-						[self hideUploadProgress];
+						handler(NO);
 					}
 					else {
-						handler();
+						handler(YES);
 					}
 				}));
 			}];
@@ -1468,20 +1489,54 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	}
 }
 
-- (void) showUploadProgress
+- (NSInteger) activePhotoUploadBatches
 {
-	self.activePhotoUploadBatches++;
-	self.blogNameButton.hidden = YES;
-	[self.progressSpinner startAnimation:nil];
+	return self.photoUploadProgress.count;
 }
 
-- (void) hideUploadProgress
+- (void) showUploadProgress:(NSProgress *)progress
 {
-	self.activePhotoUploadBatches = MAX(0, self.activePhotoUploadBatches - 1);
-	if (self.activePhotoUploadBatches == 0 && self.uploader == nil) {
-		[self.progressSpinner stopAnimation:nil];
-		self.blogNameButton.hidden = NO;
+	if (self.photoUploadProgress == nil) {
+		self.photoUploadProgress = [NSMutableArray array];
 	}
+	[self.photoUploadProgress addObject:progress];
+	[self updatePhotoUploadProgress];
+}
+
+- (void) hideUploadProgress:(NSProgress *)progress
+{
+	[self.photoUploadProgress removeObject:progress];
+	[self updatePhotoUploadProgress];
+}
+
+- (void) updatePhotoUploadProgress
+{
+	// Video uploads own the shared indicator until they finish.
+	if (self.uploader != nil) {
+		return;
+	}
+	if (self.activePhotoUploadBatches == 0) {
+		[self restoreProgressSpinnerAfterVideoUpload];
+		return;
+	}
+
+	double completed_files = 0;
+	int64_t total_files = 0;
+	for (NSProgress* progress in self.photoUploadProgress) {
+		completed_files += progress.fractionCompleted * progress.totalUnitCount;
+		total_files += progress.totalUnitCount;
+	}
+
+	[self.progressSpinner stopAnimation:nil];
+	self.progressSpinner.indeterminate = NO;
+	self.progressSpinner.style = NSProgressIndicatorStyleBar;
+	self.progressSpinner.displayedWhenStopped = YES;
+	self.progressSpinner.minValue = 0.0;
+	self.progressSpinner.maxValue = 1.0;
+	self.progressSpinner.doubleValue = total_files > 0 ? completed_files / total_files : 0;
+	self.progressSpinner.hidden = NO;
+	self.progressCancelButton.hidden = YES;
+	self.blogNameButton.hidden = YES;
 }
 
 - (void) focusSearch

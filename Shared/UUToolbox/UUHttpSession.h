@@ -16,6 +16,7 @@
 @class  UUHttpResponse;
 
 typedef void (^UUHttpSessionResponseHandler)(UUHttpResponse* response);
+typedef void (^UUHttpSessionUploadProgressHandler)(int64_t bytesSent, int64_t totalBytes);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Construct a UUHttpRequest to pass to UUHttpSession
@@ -31,6 +32,8 @@ typedef void (^UUHttpSessionResponseHandler)(UUHttpResponse* response);
 @property (atomic, assign) NSTimeInterval	timeout;
 @property (atomic, strong) NSURLCredential* credentials;
 @property (atomic, assign) BOOL				processMimeTypes;
+// Called on the session queue. Set before executing the request.
+@property (atomic, copy) UUHttpSessionUploadProgressHandler uploadProgressHandler;
 
 @property (atomic, strong, readonly) NSURLRequest*    httpRequest;
 

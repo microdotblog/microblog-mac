@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) NSString* path;
 @property (strong, nonatomic) NSString* url;
+@property (copy, nonatomic) UUHttpSessionUploadProgressHandler uploadProgressHandler;
 
 - (instancetype) initWithURL:(NSString *)url;
 - (instancetype) initWithPath:(NSString *)path;

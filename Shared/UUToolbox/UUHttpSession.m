@@ -27,13 +27,21 @@ const NSTimeInterval kUUDefaultHttpRequestTimeout = 60.0f;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface UUHttpRequest ()
+@interface UUHttpRequest () <NSURLSessionTaskDelegate>
 
 @property (atomic, strong, readwrite) NSURLRequest* httpRequest;
 
 @end
 
 @implementation UUHttpRequest
+
+- (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+	UUHttpSessionUploadProgressHandler handler = self.uploadProgressHandler;
+	if (handler && totalBytesExpectedToSend > 0) {
+		handler(totalBytesSent, totalBytesExpectedToSend);
+	}
+}
 
 - (id) initWithUrl:(NSString*)url
 {
@@ -279,11 +287,18 @@ const NSTimeInterval kUUDefaultHttpRequestTimeout = 60.0f;
     
     UUDebugLog(@"Begin Request\n\nMethod: %@\nURL: %@\nHeaders:\n%@\n\n", request.httpRequest.HTTPMethod, request.httpRequest.URL, request.httpRequest.allHTTPHeaderFields);
     
-    NSURLSessionTask* task = [self.urlSession dataTaskWithRequest:request.httpRequest
-                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
-    {
-        [self handleResponse:request data:data response:response error:error completion:completionHandler];
-    }];
+	void (^completion)(NSData*, NSURLResponse*, NSError*) = ^(NSData* data, NSURLResponse* response, NSError* error) {
+		[self handleResponse:request data:data response:response error:error completion:completionHandler];
+	};
+
+	NSURLSessionTask* task;
+	if (request.uploadProgressHandler) {
+		task = [self.urlSession uploadTaskWithRequest:request.httpRequest fromData:request.body completionHandler:completion];
+		task.delegate = request;
+	}
+	else {
+		task = [self.urlSession dataTaskWithRequest:request.httpRequest completionHandler:completion];
+	}
     
     
     [self.activeTasks addObject:task];

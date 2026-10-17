@@ -269,6 +269,7 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	NSMutableDictionary* headers = [request.headerFields mutableCopy];
 	[headers setObject:multipart_type forKey:@"Content-Type"];
 	request.headerFields = headers;
+	request.uploadProgressHandler = self.uploadProgressHandler;
 
 	return [UUHttpSession executeRequest:request completionHandler:handler];
 }
@@ -310,6 +311,7 @@ static NSString* const kServerSchemeAndHostname = @"https://micro.blog";
 	NSMutableDictionary* headers = [request.headerFields mutableCopy];
 	[headers setObject:content_type forKey:@"Content-Type"];
 	request.headerFields = headers;
+	request.uploadProgressHandler = self.uploadProgressHandler;
 
 	return [UUHttpSession executeRequest:request completionHandler:handler];
 }
