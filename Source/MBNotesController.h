@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBVersionsController;
 @class MBBookCoverView;
 
-@interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSTextViewDelegate>
+@interface MBNotesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSTextViewDelegate, NSMenuItemValidation>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;

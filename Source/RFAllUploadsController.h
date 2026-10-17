@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MBCollection;
 @class MBUploadProgress;
 
-@interface RFAllUploadsController : NSViewController <NSCollectionViewDelegate, NSCollectionViewDataSource>
+@interface RFAllUploadsController : NSViewController <NSCollectionViewDelegate, NSCollectionViewDataSource, NSMenuItemValidation>
 
 @property (strong, nonatomic) IBOutlet NSCollectionView* collectionView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;

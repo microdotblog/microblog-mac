@@ -28,7 +28,7 @@
 @class MBStatsController;
 @class RFPostController;
 
-@interface RFAppDelegate : NSObject <NSApplicationDelegate>
+@interface RFAppDelegate : NSObject <NSApplicationDelegate, NSMenuItemValidation>
 
 @property (strong, nonatomic) RFTimelineController* timelineController;
 @property (strong, nonatomic) RFWelcomeController* welcomeController;

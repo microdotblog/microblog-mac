@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RFRepliesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+@interface RFRepliesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;

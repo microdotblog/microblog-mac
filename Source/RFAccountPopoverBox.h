@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface RFAccountPopoverBox : NSBox
+@interface RFAccountPopoverBox : NSBox <NSMenuItemValidation>
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* triangleWidthConstraint;
 
