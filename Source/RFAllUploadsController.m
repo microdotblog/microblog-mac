@@ -24,6 +24,7 @@
 #import "NSError+Extras.h"
 #import "NSString+Extras.h"
 #import "NSCollectionView+Extras.h"
+#import "NSAppearance+Extras.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static NSString* const kPhotoCellIdentifier = @"PhotoCell";
@@ -33,6 +34,36 @@ static CGFloat const kUploadCellCornerRadius = 4.0;
 static NSTimeInterval const kUploadsCheckInterval = 10.0;
 static NSTimeInterval const kRecentUploadsCheckInterval = 5.0;
 static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
+
+@interface MBUploadDescriptionNotice : NSView
+@end
+
+@implementation MBUploadDescriptionNotice
+
+- (BOOL) wantsUpdateLayer
+{
+	return YES;
+}
+
+- (void) updateLayer
+{
+	[self.effectiveAppearance performAsCurrentDrawingAppearance:^{
+		self.layer.backgroundColor = [[NSColor colorNamed:@"color_notification_background"] colorWithAlphaComponent:0.9].CGColor;
+	}];
+}
+
+- (void) viewDidChangeEffectiveAppearance
+{
+	[super viewDidChangeEffectiveAppearance];
+	self.needsDisplay = YES;
+}
+
+- (NSView *) hitTest:(NSPoint)point
+{
+	return nil;
+}
+
+@end
 
 @interface RFAllUploadsController () <NSTextFieldDelegate>
 
@@ -46,6 +77,9 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 @property (copy, nonatomic) NSString* loadedUploadsContext;
 @property (assign, nonatomic) NSInteger activePhotoUploadBatches;
 @property (strong, nonatomic) NSDate* lastUploadFinishedAt;
+@property (strong, nonatomic) MBUploadDescriptionNotice* descriptionNotice;
+@property (strong, nonatomic) NSTimer* descriptionNoticeTimer;
+@property (assign, nonatomic) NSInteger descriptionNoticeGeneration;
 
 - (void) fetchInitialUploads;
 - (void) uploadFiles:(NSArray *)paths;
@@ -105,6 +139,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	}
 	
 	[self invalidateUploadsTimer];
+	[self hideDescriptionReadyNotice];
 	[self.uploader cancelUpload];
 	self.uploader = nil;
 }
@@ -116,6 +151,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 	}
 
 	[self invalidateUploadsTimer];
+	[self.descriptionNoticeTimer invalidate];
 	[self.uploader cancelUpload];
 	self.uploader = nil;
 }
@@ -581,11 +617,9 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 			RFUpload* first_upload = [self.allPosts firstObject];
 			NSString* current_url = first_upload.url;
+			[self updateAccessibilityTextForUploads:uploads];
 			if (![latest_url isEqualToString:current_url]) {
 				[self refreshUploadsForCurrentFilter];
-			}
-			else {
-				[self updateAccessibilityTextForUploads:uploads];
 			}
 		});
 	}];
@@ -593,6 +627,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 - (void) updateAccessibilityTextForUploads:(NSArray *)uploads
 {
+	BOOL found_description = NO;
 	NSMutableDictionary* uploads_by_url = [NSMutableDictionary dictionary];
 	for (RFUpload* upload in uploads) {
 		if (upload.url.length > 0) {
@@ -612,6 +647,9 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 			continue;
 		}
 
+		if (updated_upload.isAI && alt.length > 0) {
+			found_description = YES;
+		}
 		upload.alt = alt;
 		upload.isAI = updated_upload.isAI;
 		NSIndexPath* index_path = [NSIndexPath indexPathForItem:i inSection:0];
@@ -626,6 +664,82 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 			kInfoBackgroundUpdateKey: @YES
 		}];
 	}
+	if (found_description) {
+		[self showDescriptionReadyNotice];
+	}
+}
+
+- (void) setupDescriptionReadyNotice
+{
+	MBUploadDescriptionNotice* notice = [[MBUploadDescriptionNotice alloc] initWithFrame:NSZeroRect];
+	notice.translatesAutoresizingMaskIntoConstraints = NO;
+	notice.wantsLayer = YES;
+	notice.layer.cornerRadius = [NSAppearance mb_isLiquidGlass] ? 18 : 7;
+	notice.layer.masksToBounds = YES;
+	notice.hidden = YES;
+	[self.view addSubview:notice positioned:NSWindowAbove relativeTo:nil];
+	self.descriptionNotice = notice;
+
+	NSTextField* label = [NSTextField labelWithString:@"Finished generating photo description."];
+	label.translatesAutoresizingMaskIntoConstraints = NO;
+	label.font = [NSFont labelFontOfSize:[NSFont systemFontSize]];
+	label.textColor = [NSColor colorNamed:@"color_notification_text"];
+	label.lineBreakMode = NSLineBreakByTruncatingTail;
+	[label setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+	[notice addSubview:label];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[notice.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10],
+		[notice.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.view.leadingAnchor constant:18],
+		[notice.topAnchor constraintEqualToAnchor:self.collectionView.enclosingScrollView.topAnchor constant:10],
+		[label.leadingAnchor constraintEqualToAnchor:notice.leadingAnchor constant:12],
+		[label.trailingAnchor constraintEqualToAnchor:notice.trailingAnchor constant:-12],
+		[label.topAnchor constraintEqualToAnchor:notice.topAnchor constant:10],
+		[label.bottomAnchor constraintEqualToAnchor:notice.bottomAnchor constant:-10]
+	]];
+}
+
+- (void) showDescriptionReadyNotice
+{
+	if (self.descriptionNotice == nil) {
+		[self setupDescriptionReadyNotice];
+	}
+	[self.descriptionNoticeTimer invalidate];
+	self.descriptionNoticeGeneration++;
+	NSInteger generation = self.descriptionNoticeGeneration;
+	if (self.descriptionNotice.hidden) {
+		self.descriptionNotice.alphaValue = 0.0;
+	}
+	self.descriptionNotice.hidden = NO;
+	[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+		context.duration = 0.3;
+		self.descriptionNotice.animator.alphaValue = 1.0;
+	} completionHandler:nil];
+
+	__weak typeof(self) weak_self = self;
+	self.descriptionNoticeTimer = [NSTimer scheduledTimerWithTimeInterval:10 repeats:NO block:^(NSTimer* timer) {
+		RFAllUploadsController* controller = weak_self;
+		if (controller == nil || controller.descriptionNoticeGeneration != generation) {
+			return;
+		}
+		controller.descriptionNoticeTimer = nil;
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext* context) {
+			context.duration = 0.3;
+			controller.descriptionNotice.animator.alphaValue = 0.0;
+		} completionHandler:^{
+			if (controller.descriptionNoticeGeneration == generation) {
+				controller.descriptionNotice.hidden = YES;
+			}
+		}];
+	}];
+}
+
+- (void) hideDescriptionReadyNotice
+{
+	[self.descriptionNoticeTimer invalidate];
+	self.descriptionNoticeTimer = nil;
+	self.descriptionNoticeGeneration++;
+	self.descriptionNotice.hidden = YES;
 }
 
 - (void) fetchCollections
@@ -824,6 +938,7 @@ static NSTimeInterval const kRecentUploadsCheckDuration = 60.0;
 
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
+	[self hideDescriptionReadyNotice];
 	[self setupBlogName];
 	self.lastUploadFinishedAt = nil;
 	if (self.uploadsTimer) {

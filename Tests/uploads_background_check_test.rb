@@ -95,7 +95,7 @@ source = <<~OBJC
 	@property (strong) NSObject* selectedCollection;
 	@property (copy) NSString* currentSearch;
 	@property BOOL isFetchingUploads, isCheckingForNewUploads, needsUploadsRetry;
-	@property NSInteger uploadsRequestID, refreshes;
+	@property NSInteger uploadsRequestID, refreshes, notices;
 	- (void) startUploadsTimer;
 	- (NSTimeInterval) uploadsCheckInterval;
 	- (void) didFinishUpload;
@@ -104,11 +104,13 @@ source = <<~OBJC
 	- (void) updateAccessibilityTextForUploads:(NSArray *)uploads;
 	- (void) refreshUploadsForCurrentFilter;
 	- (NSArray *) uploadsFromResponse:(UUHttpResponse *)response;
+	- (void) showDescriptionReadyNotice;
 	@end
 	@implementation TestController
 	#{methods}
 	- (void) refreshUploadsForCurrentFilter { self.refreshes++; self.uploadsRequestID++; }
 	- (NSArray *) uploadsFromResponse:(UUHttpResponse *)response { return response.uploads; }
+	- (void) showDescriptionReadyNotice { self.notices++; }
 	@end
 	@interface TestInfoController : NSObject
 	@property (copy) NSString* url;
@@ -181,17 +183,21 @@ source = <<~OBJC
 			NSCAssert(first.isAI && cell.isAI && [cell.alt isEqualToString:first.alt], @"Update the live cell metadata");
 			NSCAssert(controller.refreshes == 0 && first.cachedImage == cached_image, @"Do not reset selection or thumbnail cache for metadata changes");
 			NSCAssert(info.updates == 1 && [info.text isEqualToString:first.alt], @"Refresh the matching open Info window only");
+			NSCAssert(controller.notices == 1, @"One completion notice for a batch of generated descriptions");
 
 			[controller checkForNewUploads:controller.uploadsTimer];
 			Complete(@[ Upload(first.url, first.alt, YES), Upload(second.url, second.alt, YES) ]);
 			NSCAssert(info.updates == 1, @"Unchanged metadata causes no UI updates");
+			NSCAssert(controller.notices == 1, @"Do not repeat the notice on subsequent polls");
 			info.editing = YES;
 			[controller checkForNewUploads:controller.uploadsTimer];
 			Complete(@[ Upload(first.url, @"Updated text", NO) ]);
 			NSCAssert(info.editing && info.updates == 1 && [first.alt isEqualToString:@"Updated text"], @"Background updates must not interrupt description editing");
+			NSCAssert(controller.notices == 1, @"Manual description changes do not announce generation");
 			info.editing = NO;
 			[controller updateAccessibilityTextForUploads:@[ Upload(first.url, first.alt, YES) ]];
 			NSCAssert(info.updates == 2 && info.isAI, @"Detect provenance changes even if the text stays the same");
+			NSCAssert(controller.notices == 2, @"A newly generated description restarts the notice");
 
 			controller.lastUploadFinishedAt = [NSDate dateWithTimeIntervalSinceNow:-61];
 			old_timer = controller.uploadsTimer;
