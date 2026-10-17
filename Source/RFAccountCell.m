@@ -10,6 +10,7 @@
 
 #import "RFAccount.h"
 #import "RFRoundedImageView.h"
+#import "RFUserCache.h"
 
 @implementation RFAccountCell
 

@@ -27,8 +27,6 @@
 #import "NSAlert+Extras.h"
 #import <CoreImage/CoreImage.h>
 
-static CGFloat const kWordPressMenusHeight = 100;
-static CGFloat const kDayOneSettingsPadding = 15;
 static CGFloat const kToolbarHeight = 82;
 static NSString* const kAccountCellIdentifier = @"AccountCell";
 static double const kBytesPerGB = 1024.0 * 1024.0 * 1024.0;

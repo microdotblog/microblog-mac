@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -119,7 +119,7 @@
                             <action selector="showBackupPane:" target="-2" id="tz2-x1-ACA"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="E213A7E5-BBA4-4BDE-92B3-9432F6330E8C" label="AI" paletteLabel="AI" tag="-1" image="wand.and.rays" catalog="system" selectable="YES" id="EoP-VJ-vM0">
+                    <toolbarItem implicitItemIdentifier="E213A7E5-BBA4-4BDE-92B3-9432F6330E8C" label="AI" paletteLabel="AI" tag="-1" image="robot_outline" selectable="YES" id="EoP-VJ-vM0">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
@@ -494,7 +494,7 @@
                     <rect key="frame" x="115" y="351" width="255" height="50"/>
                     <clipView key="contentView" id="36G-UF-f9m">
                         <rect key="frame" x="0.0" y="0.0" width="255" height="50"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <collectionView selectable="YES" allowsEmptySelection="NO" id="4NN-qZ-kGJ" customClass="RFAccountsCollectionView">
                                 <rect key="frame" x="0.0" y="0.0" width="255" height="50"/>
@@ -927,7 +927,7 @@
         <image name="folder.fill" catalog="system" width="18" height="14"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="note" catalog="system" width="16" height="14"/>
-        <image name="wand.and.rays" catalog="system" width="16" height="16"/>
+        <image name="robot_outline" width="50" height="50"/>
         <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
     </resources>
 </document>
