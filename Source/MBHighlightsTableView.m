@@ -8,6 +8,8 @@
 
 #import "MBHighlightsTableView.h"
 
+#import "MBResponderExtras.h"
+
 @implementation MBHighlightsTableView
 
 - (void) drawContextMenuHighlightForRow:(NSInteger)row

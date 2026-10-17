@@ -8,7 +8,7 @@
 
 #import "RFPostTableView.h"
 
-#import "RFAllPostsController.h"
+#import "MBResponderExtras.h"
 
 @implementation RFPostTableView
 

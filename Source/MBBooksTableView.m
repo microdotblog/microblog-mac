@@ -8,7 +8,7 @@
 
 #import "MBBooksTableView.h"
 
-#import "RFAllPostsController.h"
+#import "MBResponderExtras.h"
 
 @implementation MBBooksTableView
 

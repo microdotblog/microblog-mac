@@ -30,7 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) refreshPosts;
 - (void) fetchPosts;
 - (void) focusSearch;
-- (void) openRow:(id)sender;
 
 @end
 
