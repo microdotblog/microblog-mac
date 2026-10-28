@@ -185,7 +185,7 @@
 
 - (BOOL) isNeedingSavePrompt
 {
-	return ![self.postController isReply] && self.window.isDocumentEdited && ([self.postController currentText].length > 0);
+	return ![self.postController isReply] && self.window.isDocumentEdited && ([self.postController currentText].length > 0 || self.postController.attachedPhotos.count > 0);
 }
 
 - (NSMenuItem *) copyLinkMenuItemInEditMenu
@@ -256,6 +256,9 @@
 
 - (BOOL) windowShouldClose:(NSWindow *)sender
 {
+	if (self.postController.isSending) {
+		return NO;
+	}
 	if ([self isNeedingSavePrompt]) {
 		NSAlert* alert = [[NSAlert alloc] init];
 		
@@ -280,6 +283,9 @@
 				// save (if published, will revert to draft)
 				self.isSavingAndClosing = YES;
 				[self.postController save:nil];
+				if (!self.postController.isSending) {
+					self.isSavingAndClosing = NO;
+				}
 			}
 			else if (returnCode == 1002) {
 				// don't save
@@ -361,6 +367,13 @@
 
 - (void) postStopProgressNotification:(NSNotification *)notification
 {
+	// Successful saves notify us synchronously after stopping progress. Clear a
+	// pending close on the next turn if an error left the editor open instead.
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (!self.postController.isSending) {
+			self.isSavingAndClosing = NO;
+		}
+	});
 	[self.progressSpinner stopAnimation:nil];
 	self.progressSpinner.hidden = YES;
 
@@ -381,7 +394,9 @@
 
 - (void) draftDidUpdateNotification:(NSNotification *)notification
 {
-	if (self.isSavingAndClosing) {
+	BOOL should_close = self.isSavingAndClosing && !self.window.isDocumentEdited && self.postController.attachedPhotos.count == 0;
+	self.isSavingAndClosing = NO;
+	if (should_close) {
 		[self.previewTimer invalidate];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kPostWindowDidCloseNotification object:self];
 		[self close];

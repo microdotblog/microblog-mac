@@ -22,6 +22,7 @@ source = <<~OBJC
 	@interface NSMenuItem : NSObject
 	@property SEL action;
 	@property NSInteger state;
+	@property (strong) id representedObject;
 	@end
 	@implementation NSMenuItem
 	@end
@@ -30,11 +31,17 @@ source = <<~OBJC
 	@end
 	@implementation RFPost
 	@end
+	@interface RFPhoto : NSObject
+	@property (copy) NSString* publishedURL;
+	@end
+	@implementation RFPhoto
+	@end
 	@interface TestController : NSObject
 	@property BOOL isSending, isReply, page;
 	@property BOOL isShowingTitle, isShowingCategories, isShowingCrosspostServices, isShowingSummary;
 	@property (copy) NSString* text;
 	@property (strong) NSArray* attachedPhotos;
+	@property (strong) NSArray* pendingSavedMediaURLs;
 	@property (strong) RFPost* editingPost;
 	- (BOOL) isPage;
 	- (NSString *) currentText;
@@ -98,6 +105,20 @@ source = <<~OBJC
 			expect_all(controller, YES);
 			controller.text = @"";
 			expect_all(controller, NO);
+			RFPhoto* photo = [RFPhoto new];
+			photo.publishedURL = @"https://example.com/photo.jpg";
+			NSMenuItem* photo_item = [NSMenuItem new];
+			photo_item.representedObject = photo;
+			for (NSString* action in @[@"removeAttachedPhoto:", @"editAttachedPhotoAccessibilityText:"]) {
+				photo_item.action = NSSelectorFromString(action);
+				NSCAssert([controller validateMenuItem:photo_item], @"Unsaved attachments may be edited and removed");
+				controller.pendingSavedMediaURLs = @[photo.publishedURL];
+				NSCAssert(![controller validateMenuItem:photo_item], @"Committed attachments awaiting source refresh cannot be edited or removed");
+				controller.pendingSavedMediaURLs = @[];
+				controller.isSending = YES;
+				NSCAssert(![controller validateMenuItem:photo_item], @"An in-flight upload disables attachment mutations");
+				controller.isSending = NO;
+			}
 			NSLog(@"Post menu validation passed for empty, text-only, photo-only, sending, Pages, Replies, and drafts.");
 		}
 		return 0;

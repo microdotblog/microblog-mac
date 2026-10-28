@@ -287,6 +287,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 @property (strong, nonatomic) NSMutableSet* libraryPendingIdentifiers;
 @property (assign, nonatomic) BOOL libraryImportInProgress;
 @property (assign, nonatomic) BOOL hasClosed;
+@property (assign, nonatomic) BOOL isEditingExistingPost;
 
 @property (strong, nonatomic) NSString* activeReplacementString;
 @property (strong, atomic) NSMutableArray* autoCompleteData;
@@ -308,8 +309,10 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 @property (assign, nonatomic) BOOL serverAutosaveHasShownStatus;
 @property (copy, nonatomic) void (^serverAutosaveStatusHandler)(NSString* status);
 @property (copy, nonatomic) void (^pendingManualAction)(void);
+@property (copy, nonatomic) NSArray* pendingSavedMediaURLs;
+@property (copy, nonatomic) NSDictionary* pendingSavedMediaPayload;
 
-- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs submittedText:(NSString *)submittedText;
+- (void) refreshSavedDraftMediaWithCompletion:(void (^)(void))completionHandler;
 - (void) serverAutosaveContentDidChange;
 - (void) scheduleServerAutosaveAfterDelay:(NSTimeInterval)delay;
 - (void) performServerAutosave;
@@ -342,6 +345,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	self = [self init];
 	if (self) {
 		self.editingPost = post;
+		self.isEditingExistingPost = YES;
 		self.initialText = post.text;
 		self.isReply = post.isReply;
 		if (post.isReply) {
@@ -506,9 +510,12 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	
 	[self updateRemainingChars];
 	
-	if (self.isReply || self.editingPost || [self isPage]) {
-		self.photoButton.hidden = YES;
-	}
+	self.photoButton.hidden = ![self canAttachPhotos];
+}
+
+- (BOOL) canAttachPhotos
+{
+	return !self.isReply && ![self isPage] && (!self.editingPost || ([self hasSnippetsBlog] && ![self prefersExternalBlog]));
 }
 
 - (void) setupBlogName
@@ -720,6 +727,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
+	if (item.action == @selector(removeAttachedPhoto:) || item.action == @selector(editAttachedPhotoAccessibilityText:)) {
+		return !self.isSending && ![self.pendingSavedMediaURLs containsObject:[item.representedObject publishedURL]];
+	}
 	if (item.action == @selector(sendPost:) || item.action == @selector(save:) || item.action == @selector(schedulePost:)) {
 		if (self.isSending || ([self currentText].length == 0 && self.attachedPhotos.count == 0)) {
 			return NO;
@@ -975,7 +985,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 			return NO;
 		}
 	}
-	if (self.libraryImportQueue.count > 0) {
+	if (self.libraryImportQueue.count > 0 || self.pendingAttachmentSlots > 0) {
 		[NSAlert rf_showOneButtonAlert:@"Photos Still Loading" message:@"Please wait for your selected photos to finish loading before posting." button:@"OK" completionHandler:NULL];
 		return NO;
 	}
@@ -1128,6 +1138,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) attachExternalPhoto:(NSString *)url altText:(NSString *)altText
 {
+	if (self.isSending || self.hasClosed) {
+		return;
+	}
 	RFPhoto* new_photo = [[RFPhoto alloc] init];
 	new_photo.publishedURL = url;
 	new_photo.altText = altText;
@@ -1141,8 +1154,23 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	[self updateEditedState];
 }
 
-- (void) attachPhotos:(NSArray<NSURL*>*)photoURLs
+- (BOOL) validatePhotoURLsForAttachment:(NSArray *)photoURLs
 {
+	if (self.isSending || self.hasClosed) {
+		return NO;
+	}
+	if (self.isEditingExistingPost && [self hasVideoURLs:photoURLs]) {
+		[NSAlert rf_showOneButtonAlert:@"Photos Only" message:@"Only photos can be attached while editing an existing post." button:@"OK" completionHandler:NULL];
+		return NO;
+	}
+	return YES;
+}
+
+- (void) attachPhotos:(NSArray *)photoURLs
+{
+	if (![self validatePhotoURLsForAttachment:photoURLs]) {
+		return;
+	}
 	NSMutableArray* new_photos = [self.attachedPhotos mutableCopy];
 	BOOL too_many_photos = NO;
 
@@ -1256,6 +1284,10 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (IBAction) choosePhoto:(id)sender
 {
+	if (self.isSending || ![self canAttachPhotos]) {
+		return;
+	}
+
 	if (self.libraryTray == nil) {
 		[self setupLibraryTray];
 	}
@@ -1580,8 +1612,11 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (IBAction) choosePhotoFiles:(id)sender
 {
+	if (self.isSending) {
+		return;
+	}
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
-	panel.allowedFileTypes = @[ @"public.image", @"public.movie" ];
+	panel.allowedContentTypes = self.isEditingExistingPost ? @[ UTTypeImage ] : @[ UTTypeImage, UTTypeMovie ];
 	panel.allowsMultipleSelection = NO;
 	
 	[panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
@@ -1640,6 +1675,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) attachFilesNotification:(NSNotification *)notification
 {
+	if (self.isSending || self.hasClosed) {
+		return;
+	}
 	NSArray* paths = [notification.userInfo objectForKey:kAttachFilesPathsKey];
 	NSMutableArray* urls = [NSMutableArray array];
 	for (NSString* filepath in paths) {
@@ -1647,6 +1685,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 		if (url != nil) {
 			[urls addObject:url];
 		}
+	}
+	if (![self validatePhotoURLsForAttachment:urls]) {
+		return;
 	}
 
 	if ([urls count] > 0) {
@@ -1702,6 +1743,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) updatedBlogNotification:(NSNotification *)notification
 {
+	self.photoButton.hidden = ![self canAttachPhotos];
 	[self setupBlogName];
 	[self downloadCategories];
 	[self downloadBlogs];
@@ -2196,12 +2238,13 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (NSDictionary *) currentServerAutosavePayload
 {
+	// Text storage can expose a live string. Keep request snapshots immutable.
 	return @{
-		@"title": [self currentTitle] ?: @"",
-		@"text": [self currentText] ?: @"",
-		@"summary": self.summaryTextView.string ?: @"",
-		@"categories": self.selectedCategories ?: @[],
-		@"crosspost_services": self.selectedCrosspostUIDs ?: @[],
+		@"title": [[self currentTitle] copy] ?: @"",
+		@"text": [[self currentText] copy] ?: @"",
+		@"summary": [self.summaryTextView.string copy] ?: @"",
+		@"categories": [self.selectedCategories copy] ?: @[],
+		@"crosspost_services": [self.selectedCrosspostUIDs copy] ?: @[],
 		@"attachment_count": @(self.attachedPhotos.count)
 	};
 }
@@ -2243,7 +2286,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	if (self.editingPost && !self.editingPost.isDraft) {
 		return NO;
 	}
-	if (self.attachedPhotos.count > 0) {
+	if (self.attachedPhotos.count > 0 || self.pendingSavedMediaURLs.count > 0) {
 		return NO;
 	}
 
@@ -2438,6 +2481,16 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) performManualActionAfterAutosave:(void (^)(void))action
 {
+	// A successful save may still be waiting for its generated photo HTML.
+	// Reconcile that save before sending another update with the same photos.
+	if (self.pendingSavedMediaURLs.count > 0) {
+		[self refreshSavedDraftMediaWithCompletion:^{
+			self.isSending = YES;
+			[self performManualActionAfterAutosave:action];
+		}];
+		return;
+	}
+
 	self.serverAutosavePausedForManualAction = YES;
 	[self.serverAutosaveTimer invalidate];
 	self.serverAutosaveTimer = nil;
@@ -2757,6 +2810,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 - (void) hideProgressHeader
 {
 	self.isSending = NO;
+	if (self.attachedPhotos.count > 0 || self.pendingSavedMediaURLs.count > 0) {
+		self.view.window.documentEdited = YES;
+	}
 	[self stopProgressAnimation];
 	if (self.serverAutosavePausedForManualAction) {
 		[self resumeServerAutosaveAfterManualAction];
@@ -2822,15 +2878,70 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	}];
 }
 
-- (void) refreshSavedDraftAfterUploadingPhotoURLs:(NSArray *)photoURLs submittedText:(NSString *)submittedText
+- (void) finishSavingDraftWithPhotoURLs:(NSArray *)photoURLs submittedPayload:(NSDictionary *)submittedPayload
 {
-	NSString* post_url = self.editingPost.url;
-	if (post_url.length == 0) {
+	self.editingPost.isDraft = YES;
+	self.boundDestinationUID = submittedPayload[@"destination_uid"] ?: [self currentDestinationUID];
+	self.serverAutosaveSiteID = [self currentServerAutosaveSiteID];
+	[self setupBlogName];
+	NSArray* video_urls = submittedPayload[@"video_urls"] ?: @[];
+	NSArray* media_urls = [photoURLs arrayByAddingObjectsFromArray:video_urls];
+	if (media_urls.count == 0) {
 		[self hideProgressHeader];
 		[self sendUpdatedDraftNotification];
+		return;
+	}
+
+	self.pendingSavedMediaURLs = media_urls;
+	NSMutableDictionary* pending_payload = [submittedPayload mutableCopy];
+	pending_payload[@"photo_urls"] = photoURLs;
+	self.pendingSavedMediaPayload = pending_payload;
+	for (RFPhoto* photo in self.attachedPhotos) {
+		if ([media_urls containsObject:photo.publishedURL]) {
+			// These uploads now belong to the saved post, even if refreshing fails.
+			photo.isUndeletable = YES;
+		}
+	}
+	[self refreshSavedDraftMediaWithCompletion:nil];
+}
+
+- (NSString *) attachmentHTMLFromSavedContent:(NSString *)content photoURLs:(NSArray *)photoURLs videoURLs:(NSArray *)videoURLs
+{
+	if (photoURLs.count == 0 && videoURLs.count == 0) {
+		return nil;
+	}
+	// The server may normalize URLs or @mentions in the submitted text. Match
+	// only the appended images, in order, instead of assuming an unchanged prefix.
+	NSMutableString* pattern = [NSMutableString string];
+	for (NSString* url in photoURLs) {
+		NSString* escaped_url = [NSRegularExpression escapedPatternForString:url];
+		[pattern appendFormat:@"<img\\s+src=\"%@\"(?:[^\"'>]|\"[^\"]*\"|'[^']*')*>\\s*", escaped_url];
+	}
+	// New posts can also contain videos after the photos. Keep their existing
+	// save flow working, including a composer that was autosaved before upload.
+	for (NSString* url in videoURLs) {
+		NSString* escaped_url = [NSRegularExpression escapedPatternForString:url];
+		[pattern appendFormat:@"<video\\s+(?:[^\"'>]|\"[^\"]*\"|'[^']*')*src=\"%@\"\\s*>\\s*</video>\\s*", escaped_url];
+	}
+	[pattern appendString:@"\\z"];
+	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:NULL];
+	NSTextCheckingResult* match = [regex firstMatchInString:content options:0 range:NSMakeRange(0, content.length)];
+	return match ? [content substringWithRange:match.range] : nil;
+}
+
+- (void) refreshSavedDraftMediaWithCompletion:(void (^)(void))completionHandler
+{
+	NSArray* media_urls = self.pendingSavedMediaURLs;
+	NSDictionary* submitted_payload = self.pendingSavedMediaPayload;
+	NSString* submitted_text = submitted_payload[@"text"];
+	NSString* post_url = self.editingPost.url;
+	if (post_url.length == 0) {
+		self.view.window.documentEdited = YES;
+		[self hideProgressHeader];
 		[NSAlert rf_showOneButtonAlert:@"Error Refreshing Draft" message:@"The draft was saved, but Micro.blog did not return its URL." button:@"OK" completionHandler:NULL];
 		return;
 	}
+	[self showProgressHeader:@"Refreshing saved photos..."];
 
 	NSString* destination_uid = [self currentDestinationUID];
 
@@ -2843,6 +2954,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync (^{
+			if (self.hasClosed) {
+				return;
+			}
 			NSString* error_message = nil;
 			NSString* content = nil;
 
@@ -2850,7 +2964,10 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 				error_message = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
 			}
 			else if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
-				error_message = response.parsedResponse[@"error_description"];
+				id description = response.parsedResponse[@"error_description"];
+				if ([description isKindOfClass:[NSString class]]) {
+					error_message = description;
+				}
 			}
 			else if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 				id properties = [response.parsedResponse objectForKey:@"properties"];
@@ -2865,33 +2982,36 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 				}
 			}
 
-			if ((content != nil) && ![content hasPrefix:submittedText]) {
-				error_message = @"The draft was saved, but its updated content could not be merged with newer edits in this window.";
-				content = nil;
-			}
-			else if ((content != nil) && (content.length == submittedText.length)) {
+			NSString* appended_html = content ? [self attachmentHTMLFromSavedContent:content photoURLs:submitted_payload[@"photo_urls"] videoURLs:submitted_payload[@"video_urls"]] : nil;
+			if (content != nil && appended_html.length == 0) {
 				error_message = @"The draft was saved, but Micro.blog did not include the photo HTML in its updated content.";
 				content = nil;
 			}
 
 			if (content != nil) {
 				NSString* current_text = [self currentText];
-				BOOL had_new_edits = self.view.window.documentEdited || ![current_text isEqualToString:submittedText];
-				NSString* appended_html = [content substringFromIndex:submittedText.length];
 				NSRange selected_range = self.textView.selectedRange;
+				NSString* saved_text = [(submitted_text.length > 0 ? [submitted_text stringByAppendingString:@"\n\n"] : @"") stringByAppendingString:appended_html];
+				BOOL already_appended = ![submitted_text hasSuffix:appended_html] && [current_text hasSuffix:appended_html];
 
-				if ((appended_html.length > 0) && ![current_text hasSuffix:appended_html]) {
+				// Keep the original text and any newer edits intact. Appending only
+				// the media also preserves the ranges used by the editor's undo history.
+				if (!already_appended) {
+					NSString* insertion = [(current_text.length > 0 ? @"\n\n" : @"") stringByAppendingString:appended_html];
 					[self.textUndoManager disableUndoRegistration];
-					[self.textView.textStorage replaceCharactersInRange:NSMakeRange(current_text.length, 0) withString:appended_html];
+					[self.textView.textStorage replaceCharactersInRange:NSMakeRange(current_text.length, 0) withString:insertion];
 					[self.textUndoManager enableUndoRegistration];
 					self.textView.selectedRange = selected_range;
 				}
 
-				NSSet* uploaded_urls = [NSSet setWithArray:photoURLs];
+				NSSet* uploaded_urls = [NSSet setWithArray:media_urls];
 				NSMutableArray* remaining_photos = [NSMutableArray array];
 				for (RFPhoto* photo in self.attachedPhotos) {
-					if (photo.isVideo || ![uploaded_urls containsObject:photo.publishedURL]) {
+					if (![uploaded_urls containsObject:photo.publishedURL]) {
 						[remaining_photos addObject:photo];
+					}
+					else {
+						[photo removeTemporaryVideo];
 					}
 				}
 
@@ -2899,22 +3019,35 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 				[self.photosCollectionView reloadData];
 				self.photosHeightConstraint.animator.constant = (remaining_photos.count > 0) ? 100 : 0;
 
-				self.initialText = content;
+				self.initialText = saved_text;
 				self.editingPost.text = content;
+				self.pendingSavedMediaURLs = nil;
+				self.pendingSavedMediaPayload = nil;
+				NSMutableDictionary* saved_payload = [submitted_payload mutableCopy];
+				saved_payload[@"text"] = saved_text;
+				saved_payload[@"attachment_count"] = @0;
+				self.savedEditorFingerprint = [self serverAutosaveFingerprintForPayload:saved_payload siteID:[self currentServerAutosaveSiteID]];
+				self.serverAutosaveSavedFingerprint = self.savedEditorFingerprint;
+				self.view.window.documentEdited = ![[self currentServerAutosaveFingerprint] isEqualToString:self.savedEditorFingerprint];
+				[self updateLibraryAttachmentSpacing];
 				[self updateRemainingChars];
 				[self updateTitleHeader];
 				[self updateGenerateEnabled];
-				self.view.window.documentEdited = had_new_edits;
 
 				[self hideProgressHeader];
-				[self sendUpdatedDraftNotification];
+				if (completionHandler) {
+					completionHandler();
+				}
+				else {
+					[self sendUpdatedDraftNotification];
+				}
 			}
 			else {
 				if (error_message.length == 0) {
 					error_message = @"The draft was saved, but Micro.blog did not return its updated content.";
 				}
+				self.view.window.documentEdited = YES;
 				[self hideProgressHeader];
-				[self sendUpdatedDraftNotification];
 				[NSAlert rf_showOneButtonAlert:@"Error Refreshing Draft" message:error_message button:@"OK" completionHandler:NULL];
 			}
 		});
@@ -3049,6 +3182,8 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 		if ([self hasSnippetsBlog] && ![self prefersExternalBlog]) {
 			RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 			NSString* destination_uid = [self currentDestinationUID];
+			NSMutableDictionary* submitted_payload = [[self currentServerAutosavePayload] mutableCopy];
+			submitted_payload[@"destination_uid"] = destination_uid;
 			NSArray* category_names = self.selectedCategories;
 			NSArray* crosspost_uids = self.selectedCrosspostUIDs;
 			
@@ -3071,10 +3206,16 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 				else {
 					[photo_urls addObject:photo.publishedURL];
 					[photo_alts addObject:photo.altText];
-					[photo_values addObject:@{ @"value": photo.publishedURL, @"alt": photo.altText }];
+					// Micro.blog's update API inserts alt text directly into the HTML.
+					NSString* escaped_alt = [photo.altText stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
+					escaped_alt = [escaped_alt stringByReplacingOccurrencesOfString:@"\"" withString:@"&quot;"];
+					escaped_alt = [escaped_alt stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+					escaped_alt = [escaped_alt stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+					[photo_values addObject:@{ @"value": photo.publishedURL, @"alt": escaped_alt }];
 				}
 			}
 			NSArray* uploaded_photo_urls = [photo_urls copy];
+			submitted_payload[@"video_urls"] = [video_urls copy];
 
 			if (self.editingPost) {
 				NSMutableDictionary* replace_info = [@{
@@ -3086,6 +3227,9 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 				} mutableCopy];
 				if (photo_values.count > 0) {
 					[replace_info setObject:photo_values forKey:@"photo"];
+				}
+				if (video_urls.count > 0) {
+					[replace_info setObject:video_urls forKey:@"video"];
 				}
 
 				NSDictionary* info = @{
@@ -3120,13 +3264,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 							[self closeWithoutSaving];
 						}
 						else {
-							if (uploaded_photo_urls.count > 0) {
-								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls submittedText:text];
-							}
-							else {
-								[self hideProgressHeader];
-								[self sendUpdatedDraftNotification];
-							}
+							[self finishSavingDraftWithPhotoURLs:uploaded_photo_urls submittedPayload:submitted_payload];
 						}
 					});
 				}];
@@ -3172,13 +3310,7 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 							self.editingPost = [[RFPost alloc] init];
 							self.editingPost.url = response.parsedResponse[@"url"];
 							self.editingPost.isDraft = YES;
-							if (uploaded_photo_urls.count > 0) {
-								[self refreshSavedDraftAfterUploadingPhotoURLs:uploaded_photo_urls submittedText:text];
-							}
-							else {
-								[self hideProgressHeader];
-								[self sendUpdatedDraftNotification];
-							}
+							[self finishSavingDraftWithPhotoURLs:uploaded_photo_urls submittedPayload:submitted_payload];
 						}
 					});
 				}];
@@ -3714,7 +3846,13 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) removeAttachedPhoto:(NSMenuItem *)sender
 {
+	if (self.isSending) {
+		return;
+	}
 	RFPhoto* photo = sender.representedObject;
+	if ([self.pendingSavedMediaURLs containsObject:photo.publishedURL]) {
+		return;
+	}
 	if ([self.attachedPhotos indexOfObjectIdenticalTo:photo] == NSNotFound) {
 		return;
 	}
@@ -3729,10 +3867,13 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) clickedPhotoAtIndex:(NSIndexPath *)indexPath
 {
-	if (indexPath == nil || indexPath.item >= self.attachedPhotos.count || self.altController != nil) {
+	if (self.isSending || indexPath == nil || indexPath.item >= self.attachedPhotos.count || self.altController != nil) {
 		return;
 	}
 	RFPhoto* photo = [self.attachedPhotos objectAtIndex:indexPath.item];
+	if ([self.pendingSavedMediaURLs containsObject:photo.publishedURL]) {
+		return;
+	}
 	self.altController = [[RFPhotoAltController alloc] initWithPhoto:photo atIndex:indexPath];
 	[self.view.window beginSheet:self.altController.window completionHandler:^(NSModalResponse returnCode) {
         self.altController = nil;
