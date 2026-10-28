@@ -720,6 +720,12 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
+	if (item.action == @selector(sendPost:) || item.action == @selector(save:) || item.action == @selector(schedulePost:)) {
+		if (self.isSending || ([self currentText].length == 0 && self.attachedPhotos.count == 0)) {
+			return NO;
+		}
+	}
+
 	if (item.action == @selector(toggleTitleField:)) {
 		if ([self isPage]) {
 			[item setState:NSControlStateValueOn];
