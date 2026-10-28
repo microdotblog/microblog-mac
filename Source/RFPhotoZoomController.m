@@ -821,7 +821,11 @@ static CGFloat const kPhotoZoomStep = 1.25;
 		item.paletteLabel = @"Copy HTML";
 		item.target = self;
 		item.action = @selector(copyHTML:);
-		self.htmlCopyButton = [NSButton buttonWithTitle:@"Copy HTML" target:self action:@selector(copyHTML:)];
+		self.htmlCopyButton = [NSButton buttonWithTitle:@"✓ Copied" target:self action:@selector(copyHTML:)];
+		CGFloat minimum_width = self.htmlCopyButton.fittingSize.width;
+		self.htmlCopyButton.title = @"Copy HTML";
+		minimum_width = MAX(minimum_width, self.htmlCopyButton.fittingSize.width);
+		[self.htmlCopyButton.widthAnchor constraintGreaterThanOrEqualToConstant:ceil(minimum_width)].active = YES;
 		item.view = self.htmlCopyButton;
 		return item;
 	}
