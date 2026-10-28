@@ -6,12 +6,12 @@
 //  Copyright © 2025 Micro.blog. All rights reserved.
 //
 
-#import "RFPhotoZoomController.h"
+#import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBVideoZoomController : RFPhotoZoomController
+@interface MBVideoZoomController : NSWindowController <NSWindowDelegate>
 
 @property (strong, nonatomic) IBOutlet WKWebView* webView;
 

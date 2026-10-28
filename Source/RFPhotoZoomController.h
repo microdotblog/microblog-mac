@@ -12,15 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RFPhotoZoomController : NSWindowController <NSWindowDelegate>
 
-@property (strong, nonatomic) IBOutlet NSImageView* imageView;
-@property (strong, nonatomic) IBOutlet NSProgressIndicator* spinner;
-@property (strong, nonatomic) IBOutlet NSButton* htmlCopyButton;
-
 @property (strong, nonatomic) NSString* photoURL;
 @property (strong, nonatomic) NSString* photoAlt;
 @property (assign, nonatomic) BOOL isAllowCopy;
+@property (strong, nonatomic, readonly, nullable) NSURL* imageURL;
 
-- (id) initWithURL:(NSString *)photoURL altText:(NSString *)photoAlt allowCopy:(BOOL)allowCopy;
++ (nullable NSURL *) normalizedImageURL:(nullable NSURL *)imageURL;
+- (instancetype) initWithURL:(NSString *)photoURL altText:(nullable NSString *)photoAlt allowCopy:(BOOL)allowCopy;
+- (IBAction) copyHTML:(id)sender;
 
 @end
 

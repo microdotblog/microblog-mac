@@ -56,9 +56,4 @@
 	return YES;
 }
 
-- (void) downloadPhoto
-{
-	// override parent behavior to avoid trying to download the video
-}
-
 @end

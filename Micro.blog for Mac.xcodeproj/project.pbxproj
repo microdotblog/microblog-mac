@@ -213,7 +213,6 @@
 		4BB5B50821EE52140095F903 /* NSAppearance+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5B50721EE52140095F903 /* NSAppearance+Extras.m */; };
 		4BB69068209A113500CD5E1E /* Instagram.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB69066209A113500CD5E1E /* Instagram.xib */; };
 		4BB6906B209A123300CD5E1E /* RFInstagramController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB6906A209A123300CD5E1E /* RFInstagramController.m */; };
-		4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB7448D21E84A4400371388 /* PhotoZoom.xib */; };
 		4BB7449221E84AC500371388 /* RFPhotoZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB7449121E84AC500371388 /* RFPhotoZoomController.m */; };
 		4BB744A221EA4E1800371388 /* RFPhotoAltController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB744A121EA4E1800371388 /* RFPhotoAltController.m */; };
 		4BB744A521EA4E3800371388 /* PhotoAlt.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BB744A321EA4E3800371388 /* PhotoAlt.xib */; };
@@ -683,7 +682,6 @@
 		4BB69067209A113500CD5E1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Instagram.xib; sourceTree = "<group>"; };
 		4BB69069209A123300CD5E1E /* RFInstagramController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFInstagramController.h; path = Source/RFInstagramController.h; sourceTree = "<group>"; };
 		4BB6906A209A123300CD5E1E /* RFInstagramController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFInstagramController.m; path = Source/RFInstagramController.m; sourceTree = "<group>"; };
-		4BB7448E21E84A4400371388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PhotoZoom.xib; sourceTree = "<group>"; };
 		4BB7449021E84AC500371388 /* RFPhotoZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoZoomController.h; path = Source/RFPhotoZoomController.h; sourceTree = "<group>"; };
 		4BB7449121E84AC500371388 /* RFPhotoZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFPhotoZoomController.m; path = Source/RFPhotoZoomController.m; sourceTree = "<group>"; };
 		4BB744A021EA4E1800371388 /* RFPhotoAltController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFPhotoAltController.h; path = Source/RFPhotoAltController.h; sourceTree = "<group>"; };
@@ -1414,7 +1412,6 @@
 				4B5EE27E206330D100C87A78 /* BlogCell.xib */,
 				4BF5372F2247BDCD00CF9D66 /* PostCell.xib */,
 				4B2F97262E00B97B00A834C8 /* SelectiveUsernameCell.xib */,
-				4BB7448D21E84A4400371388 /* PhotoZoom.xib */,
 				4B0E6A042EDD21F000946A13 /* VideoZoom.xib */,
 				4B9F063E2767BC400007F21D /* Date.xib */,
 				4BB744A321EA4E3800371388 /* PhotoAlt.xib */,
@@ -1603,7 +1600,6 @@
 				4B1970762EB553BD00BFFD8E /* MovieCell.xib in Resources */,
 				4B79E2962D0B56BE00A22861 /* EditCollectionCell.xib in Resources */,
 				4B2CAB261F90818C00D9B10E /* Wordpress.xib in Resources */,
-				4BB7448F21E84A4400371388 /* PhotoZoom.xib in Resources */,
 				4B5A250A1F83FE4D007C548F /* Welcome.xib in Resources */,
 				4B36915729A2BAD800561D9A /* CrosspostCell.xib in Resources */,
 				4B001CE22B27962800BBF456 /* NoteCell.xib in Resources */,
@@ -2222,14 +2218,6 @@
 				4BB69067209A113500CD5E1E /* Base */,
 			);
 			name = Instagram.xib;
-			sourceTree = "<group>";
-		};
-		4BB7448D21E84A4400371388 /* PhotoZoom.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4BB7448E21E84A4400371388 /* Base */,
-			);
-			name = PhotoZoom.xib;
 			sourceTree = "<group>";
 		};
 		4BB744A321EA4E3800371388 /* PhotoAlt.xib */ = {
