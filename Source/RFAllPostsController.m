@@ -380,6 +380,11 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 - (void) fetchPosts
 {
+	if (self.searchField.stringValue.length >= 4) {
+		[self search:self.searchField];
+		return;
+	}
+
 	self.hasLoadedPosts = NO;
 	[self updateSegmentedControlVisibility];
 	[self fetchPostsForSearch:@""];
@@ -389,9 +394,6 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 {
 	self.postsRequestID++;
 	NSInteger request_id = self.postsRequestID;
-
-	self.currentPosts = @[];
-	self.tableView.animator.alphaValue = 0.0;
 
 	if (search.length == 0) {
 		[self fetchPostsForSearch:search limit:kRecentPostsInitialLimit offset:0 existingPosts:nil requestID:request_id fetchMore:YES];
@@ -432,12 +434,16 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		if (response.httpError || ![response.parsedResponse isKindOfClass:[NSDictionary class]] || ![response.parsedResponse[@"items"] isKindOfClass:[NSArray class]]) {
 			RFDispatchMainAsync(^{
 				NSString* current_search = self.searchField.stringValue ?: @"";
-				if ((requestID == self.postsRequestID) && [current_search isEqualToString:search]) {
+				BOOL is_local_search = (search.length == 0 && current_search.length < 4);
+				if ((requestID == self.postsRequestID) && ([current_search isEqualToString:search] || is_local_search)) {
 					self.isSearching = NO;
 					[self updateLoadingSidebarRow];
+					[self.progressSpinner stopAnimation:nil];
+					self.blogNameButton.hidden = NO;
+					self.tableView.animator.alphaValue = 1.0;
 				}
 			});
 			return;
@@ -462,7 +468,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 				NSArray* posts_to_show = new_posts;
 				NSString* selected_url = nil;
 				NSInteger selected_row = self.tableView.selectedRow;
-				if ((existingPosts.count > 0) && (selected_row >= 0) && (selected_row < self.currentPosts.count)) {
+				if ((selected_row >= 0) && (selected_row < self.currentPosts.count)) {
 					RFPost* selected_post = [self.currentPosts objectAtIndex:selected_row];
 					selected_url = selected_post.url;
 				}
@@ -483,20 +489,24 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 				}
 
 				NSString* current_search = self.searchField.stringValue ?: @"";
-				if (self.isShowingDrafts || ![current_search isEqualToString:search]) {
+				BOOL is_local_search = (search.length == 0 && current_search.length > 0 && current_search.length < 4);
+				if (self.isShowingDrafts || (![current_search isEqualToString:search] && !is_local_search)) {
 					return;
 				}
 
 				BOOL is_appending_posts = (existingPosts.count > 0);
 				NSInteger existing_count = self.currentPosts.count;
-				if (self.isShowingScheduled) {
+				if (is_local_search) {
+					self.currentPosts = [self postsMatchingSearch:current_search];
+				}
+				else if (self.isShowingScheduled) {
 					self.currentPosts = self.scheduledPosts;
 				}
 				else {
 					self.currentPosts = posts_to_show;
 				}
 
-				if (self.isShowingScheduled || (was_showing_scheduled && !self.isShowingScheduled)) {
+				if (is_local_search || self.isShowingScheduled || (was_showing_scheduled && !self.isShowingScheduled)) {
 					[self.tableView reloadData];
 				}
 				else if (is_appending_posts && new_posts.count > 0) {
@@ -889,6 +899,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 		self.postsRequestID++;
 		self.isSearching = NO;
 		[self updateLoadingSidebarRow];
+		self.tableView.animator.alphaValue = 1.0;
 	}
 
 	if (s.length == 0) {
@@ -898,20 +909,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	}
 	else if (s.length < 4) {
 		// for short queries, just filter local recent posts
-		NSString* q = [[sender stringValue] lowercaseString];
-		if (q.length == 0) {
-			self.currentPosts = self.allPosts;
-		}
-		else {
-			NSMutableArray* filtered_posts = [NSMutableArray array];
-			for (RFPost* post in self.allPosts) {
-				if ([[post.title lowercaseString] containsString:q] || [[post.text lowercaseString] containsString:q]) {
-					[filtered_posts addObject:post];
-				}
-			}
-	
-			self.currentPosts = filtered_posts;
-		}
+		self.currentPosts = [self postsMatchingSearch:s];
 	
 		[self.tableView reloadData];
 		[self disableTabs];
@@ -922,6 +920,18 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 		[self fetchPostsForSearch:[sender stringValue]];
 		[self disableTabs];
 	}
+}
+
+- (NSArray *) postsMatchingSearch:(NSString *)search
+{
+	NSString* query = search.lowercaseString;
+	NSMutableArray* filtered_posts = [NSMutableArray array];
+	for (RFPost* post in self.allPosts) {
+		if ([post.title.lowercaseString containsString:query] || [post.text.lowercaseString containsString:query]) {
+			[filtered_posts addObject:post];
+		}
+	}
+	return filtered_posts;
 }
 
 - (IBAction) blogNameClicked:(id)sender
