@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.3</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Redesigned the photo window with toolbar zoom controls, pinch-to-zoom, and drag-to-pan.</li>
+					<li>Added photo attachment button when editing posts.</li>
+					<li>Fixed Posts search results disappearing after editing a post.</li>
+					<li>Fixed button spacing in the scheduling window and disabled some menus for empty posts.</li>
+				</ul>
+			]]></description>
+			<pubDate>Thu, 29 Oct 2026 14:12:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.3.zip" sparkle:shortVersionString="4.3" sparkle:version="265" length="18411267" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.2.1</title>
 			<description><![CDATA[
 				<style>
