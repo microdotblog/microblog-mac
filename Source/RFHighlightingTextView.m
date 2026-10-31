@@ -10,6 +10,7 @@
 #import "RFAutoCompleteCache.h"
 #import "RFConstants.h"
 #import "RFSettings.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 @implementation RFHighlightingTextView
 
@@ -92,11 +93,9 @@
 - (NSArray *) readablePasteboardTypes
 {
 	// get default types for this view
-	NSMutableArray *types = [[super readablePasteboardTypes] mutableCopy];
+	NSMutableArray* types = [[super readablePasteboardTypes] mutableCopy];
 
-	// add PNG and TIFF
-	[types addObject:NSPasteboardTypePNG];
-	[types addObject:NSPasteboardTypeTIFF];
+	[types addObjectsFromArray:@[ UTTypeGIF.identifier, UTTypeJPEG.identifier, NSPasteboardTypePNG, NSPasteboardTypeTIFF ]];
 	
 	return types;
 }
@@ -122,65 +121,59 @@
 	}
 
 	NSArray* types = @[
+		UTTypeGIF.identifier,
+		UTTypeJPEG.identifier,
 		NSPasteboardTypePNG,
 		NSPasteboardTypeTIFF
 	];
-	NSPasteboardType type = nil;
-	NSPasteboardItem* image_item = nil;
 	for (NSPasteboardType candidate_type in types) {
 		for (NSPasteboardItem* item in pb.pasteboardItems) {
 			if ([item.types containsObject:candidate_type]) {
-				type = candidate_type;
-				image_item = item;
-				break;
+				NSData* data = [item dataForType:candidate_type];
+				if ([self attachPastedImageData:data ofType:candidate_type]) {
+					return;
+				}
 			}
-		}
-
-		if (image_item != nil) {
-			break;
-		}
-	}
-
-	if (image_item != nil) {
-		NSData* data = [image_item dataForType:type];
-		NSImage* image = [[NSImage alloc] initWithData:data];
-		if (image != nil) {
-			[self handlePastedImage:image ofType:type];
-			return;
 		}
 	}
 
 	[super paste:sender];
 }
 
-- (void) handlePastedImage:(NSImage *)image ofType:(NSString *)type
+- (BOOL) attachPastedImageData:(NSData *)imageData ofType:(NSPasteboardType)type
 {
-	NSMutableArray* paths = [NSMutableArray array];
+	if (imageData.length == 0) {
+		return NO;
+	}
+	NSImage* image = [[NSImage alloc] initWithData:imageData];
+	if (!image.isValid) {
+		return NO;
+	}
 	
-	// we're gonna use JPEG for TIFF data, PNG for PNG
-	NSString* filename;
-	NSBitmapImageFileType img_type;
+	// Keep encoded formats intact, especially GIF's animation frames.
+	NSData* file_data = imageData;
+	NSString* extension = @"png";
+	if ([type isEqualToString:UTTypeGIF.identifier]) {
+		extension = @"gif";
+	}
+	else if ([type isEqualToString:UTTypeJPEG.identifier]) {
+		extension = @"jpg";
+	}
+	else if ([type isEqualToString:NSPasteboardTypeTIFF]) {
+		extension = @"jpg";
+		NSBitmapImageRep* img_rep = [[NSBitmapImageRep alloc] initWithData:imageData];
+		file_data = [img_rep representationUsingType:NSBitmapImageFileTypeJPEG properties:@{}];
+	}
+
 	NSString* shorter_uuid = [[[NSUUID UUID].UUIDString substringToIndex:8] lowercaseString];
-	if ([type isEqualToString:NSPasteboardTypePNG]) {
-		filename = [NSString stringWithFormat:@"Paste-%@.png", shorter_uuid];
-		img_type = NSBitmapImageFileTypePNG;
+	NSString* filename = [NSString stringWithFormat:@"Paste-%@.%@", shorter_uuid, extension];
+	NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+	if (file_data.length == 0 || ![file_data writeToFile:path atomically:YES]) {
+		return NO;
 	}
-	else {
-		filename = [NSString stringWithFormat:@"Paste-%@.jpg", shorter_uuid];
-		img_type = NSBitmapImageFileTypeJPEG;
-	}
-	
-	// write image to temp file
-	NSString* temp_folder = NSTemporaryDirectory();
-	NSString* path = [temp_folder stringByAppendingPathComponent:filename];
-	NSBitmapImageRep* img_rep = [[NSBitmapImageRep alloc] initWithData:[image TIFFRepresentation]];
-	NSData* d = [img_rep representationUsingType:img_type properties:@{}];
-	if ([d writeToFile:path atomically:YES]) {
-		[paths addObject:path];
-	}
-	
-	// attach
-	[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: paths }];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:kAttachFilesNotification object:self userInfo:@{ kAttachFilesPathsKey: @[ path ] }];
+	return YES;
 }
 
 #pragma mark -
