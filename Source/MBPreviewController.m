@@ -62,6 +62,7 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) setupWindow
 {
+	self.window.delegate = self;
 	[self.window setBackgroundColor:[NSColor colorNamed:@"color_preview_background"]];
 }
 
@@ -515,8 +516,30 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 #pragma mark -
 
+- (void) pauseVideos
+{
+	NSString* js = @"document.querySelectorAll('video').forEach(video => video.pause());";
+	[self.webview evaluateJavaScript:js completionHandler:nil];
+}
+
+- (void) windowWillClose:(NSNotification *)notification
+{
+	[self pauseVideos];
+}
+
+- (void) windowDidChangeOcclusionState:(NSNotification *)notification
+{
+	if (!(self.window.occlusionState & NSWindowOcclusionStateVisible)) {
+		[self pauseVideos];
+	}
+}
+
 - (void) webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
 {
+	if (!(self.window.occlusionState & NSWindowOcclusionStateVisible)) {
+		[self pauseVideos];
+	}
+
 	if (self.webview.alphaValue == 0.0) {
 		self.webview.animator.alphaValue = 1.0;
 	}

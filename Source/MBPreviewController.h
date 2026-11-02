@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBPreviewController : NSWindowController <WKNavigationDelegate>
+@interface MBPreviewController : NSWindowController <NSWindowDelegate, WKNavigationDelegate>
 
 @property (strong, nonatomic) IBOutlet WKWebView* webview;
 @property (strong, nonatomic) IBOutlet NSButton* useThemeCheckbox;
