@@ -11,6 +11,7 @@
 #import "MBCategory.h"
 #import "MBCategoryCell.h"
 #import "MBCategoriesTableView.h"
+#import "MBSeparatorView.h"
 #import "MBSplitView.h"
 #import "RFPostCell.h"
 #import "RFPostTableView.h"
@@ -126,9 +127,8 @@ static CGFloat const kCategoriesMinimumPaneHeight = 120.0;
 	self.blogNameButton = blog_name_button;
 	[header_view addSubview:blog_name_button];
 
-	NSBox* header_separator = [[NSBox alloc] initWithFrame:NSZeroRect];
+	MBSeparatorView* header_separator = [[MBSeparatorView alloc] initWithFrame:NSZeroRect];
 	header_separator.translatesAutoresizingMaskIntoConstraints = NO;
-	header_separator.boxType = NSBoxSeparator;
 	[header_view addSubview:header_separator];
 
 	MBSplitView* split_view = [[MBSplitView alloc] initWithFrame:NSZeroRect];

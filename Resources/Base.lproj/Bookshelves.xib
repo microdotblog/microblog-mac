@@ -92,12 +92,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hbF-ds-dXl">
-                                <rect key="frame" x="0.0" y="449" width="440" height="5"/>
+                            <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hbF-ds-dXl" customClass="MBSeparatorView">
+                                <rect key="frame" x="0.0" y="451" width="440" height="1"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="oyz-oa-WOe"/>
                                 </constraints>
-                            </box>
+                            </customView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Eko-fD-FxQ">
                                 <rect key="frame" x="16" y="466" width="43" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Goals:" id="HgM-OG-1Ly">

@@ -52,12 +52,12 @@
                         <constraint firstAttribute="height" constant="16" id="Qgy-go-2R8"/>
                     </constraints>
                 </progressIndicator>
-                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-Fs-AYI">
-                    <rect key="frame" x="0.0" y="373" width="480" height="5"/>
+                <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-Fs-AYI" customClass="MBSeparatorView">
+                    <rect key="frame" x="0.0" y="375" width="480" height="1"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="fJb-1p-qvm"/>
                     </constraints>
-                </box>
+                </customView>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aey-yi-VLC">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="375"/>
                     <clipView key="contentView" id="se6-7M-SL3">

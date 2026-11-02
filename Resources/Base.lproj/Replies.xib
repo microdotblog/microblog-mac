@@ -35,12 +35,12 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="v42-K4-VVS">
-                                <rect key="frame" x="-1" y="355" width="468" height="5"/>
+                            <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v42-K4-VVS" customClass="MBSeparatorView">
+                                <rect key="frame" x="-1" y="357" width="468" height="1"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="C7U-a3-j64"/>
                                 </constraints>
-                            </box>
+                            </customView>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXp-jh-SPs">
                                 <rect key="frame" x="-1" y="-1" width="468" height="358"/>
                                 <clipView key="contentView" id="YzZ-5e-l05">

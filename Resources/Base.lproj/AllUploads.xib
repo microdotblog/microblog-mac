@@ -49,9 +49,9 @@
                                     <action selector="cancelUpload:" target="-2" id="A6e-jC-ohP"/>
                                 </connections>
                             </button>
-                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="HkM-wg-aGS">
-                                <rect key="frame" x="0.0" y="415" width="398" height="5"/>
-                            </box>
+                            <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HkM-wg-aGS" customClass="MBSeparatorView">
+                                <rect key="frame" x="0.0" y="417" width="398" height="1"/>
+                            </customView>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0M-mM-qt9" customClass="RFHostnameButton">
                                 <rect key="frame" x="18" y="425" width="132" height="32"/>
                                 <buttonCell key="cell" type="bevel" title="username.micro.blog" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="IKr-Xc-dLy">

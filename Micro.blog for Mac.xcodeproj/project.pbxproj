@@ -184,6 +184,7 @@
 		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
 		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
 		4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */; };
+		4B9CD0032FF1000000AA5E01 /* MBSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */; };
 		4B88CFAF2BBD92950091BB19 /* Logs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFAD2BBD92950091BB19 /* Logs.xib */; };
 		4B88CFB22BBD92DA0091BB19 /* MBLogsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */; };
 		4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB42BBD95360091BB19 /* MBLogCell.m */; };
@@ -627,6 +628,8 @@
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
 		4B88CFA72BBCB6AE0091BB19 /* MBOutlineHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBOutlineHeaderBox.h; path = Source/MBOutlineHeaderBox.h; sourceTree = "<group>"; };
 		4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBOutlineHeaderBox.m; path = Source/MBOutlineHeaderBox.m; sourceTree = "<group>"; };
+		4B9CD0012FF1000000AA5E01 /* MBSeparatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSeparatorView.h; path = Source/MBSeparatorView.h; sourceTree = "<group>"; };
+		4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSeparatorView.m; path = Source/MBSeparatorView.m; sourceTree = "<group>"; };
 		4B88CFAE2BBD92950091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Logs.xib; sourceTree = "<group>"; };
 		4B88CFB02BBD92DA0091BB19 /* MBLogsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLogsController.h; path = Source/MBLogsController.h; sourceTree = "<group>"; };
 		4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLogsController.m; path = Source/MBLogsController.m; sourceTree = "<group>"; };
@@ -1275,6 +1278,8 @@
 				4BEFA48421EFE799006B1691 /* RFHeaderBox.m */,
 				4B88CFA72BBCB6AE0091BB19 /* MBOutlineHeaderBox.h */,
 				4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */,
+				4B9CD0012FF1000000AA5E01 /* MBSeparatorView.h */,
+				4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */,
 				4B8FBDF21F86820500906C86 /* NSString+Extras.h */,
 				4B8FBDF31F86820500906C86 /* NSString+Extras.m */,
 				4B9FDCFC2B7B069C00DE799A /* NSColor+Extras.h */,
@@ -1733,6 +1738,7 @@
 				4B5D867E2E6CC74A00697E41 /* SAMKeychain+Helper.m in Sources */,
 				4B2CAAC61F90652800D9B10E /* RFXMLLinkParser.m in Sources */,
 				4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */,
+				4B9CD0032FF1000000AA5E01 /* MBSeparatorView.m in Sources */,
 				4B6F8EA32EF01A7C00A1B2C3 /* MBSplitView.m in Sources */,
 				4B5606D12A7318D200843D59 /* MBEditTagsController.m in Sources */,
 				4B2CAB0B1F90667300D9B10E /* attrget.c in Sources */,

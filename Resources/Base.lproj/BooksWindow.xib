@@ -94,12 +94,12 @@
                             <action selector="search:" target="-2" id="9qd-Qp-maA"/>
                         </connections>
                     </searchField>
-                    <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="rdo-mY-zgu">
-                        <rect key="frame" x="0.0" y="382" width="491" height="5"/>
+                    <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rdo-mY-zgu" customClass="MBSeparatorView">
+                        <rect key="frame" x="0.0" y="384" width="491" height="1"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="8e0-Sz-SnC"/>
                         </constraints>
-                    </box>
+                    </customView>
                     <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-qI-4Gk">
                         <rect key="frame" x="197" y="404" width="16" height="16"/>
                     </progressIndicator>

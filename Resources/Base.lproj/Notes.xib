@@ -51,12 +51,12 @@
                         <action selector="search:" target="-2" id="ifZ-jm-Vjd"/>
                     </connections>
                 </searchField>
-                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hLb-A7-1dk">
-                    <rect key="frame" x="0.0" y="549" width="486" height="5"/>
+                <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hLb-A7-1dk" customClass="MBSeparatorView">
+                    <rect key="frame" x="0.0" y="551" width="486" height="1"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="ycX-9v-Sws"/>
                     </constraints>
-                </box>
+                </customView>
                 <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XG2-RC-yYo">
                     <rect key="frame" x="135" y="566" width="16" height="16"/>
                 </progressIndicator>
