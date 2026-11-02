@@ -57,6 +57,7 @@
 {
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BookCell" bundle:nil] forIdentifier:@"BookCell"];
 	[self.tableView setTarget:self];
+	[self.tableView setDoubleAction:@selector(openRow:)];
 	self.window.initialFirstResponder = self.tableView;
 }
 
@@ -483,6 +484,11 @@
 		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", [s rf_urlEncoded]]];
 		[[NSWorkspace sharedWorkspace] openURL:url];
 	}
+}
+
+- (IBAction) openRow:(id)sender
+{
+	[self openInBrowser:sender];
 }
 
 - (IBAction) openInBrowser:(id)sender
