@@ -5,6 +5,29 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.3.1</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Fixed pasting GIF and JPEG images into posts, preserving animation in GIFs.</li>
+					<li>Fixed a thin white gap between list headers and selected rows in several panes.</li>
+					<li>Fixed preview window to pause video playback when window is closed.</li>
+					<li>Updated bookshelf window to open books on web when double-clicked.</li>
+				</ul>
+			]]></description>
+			<pubDate>Mon, 02 Nov 2026 11:05:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.3.1.zip" sparkle:shortVersionString="4.3.1" sparkle:version="266" length="18412163" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.3</title>
 			<description><![CDATA[
 				<style>
