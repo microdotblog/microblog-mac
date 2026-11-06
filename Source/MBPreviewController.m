@@ -8,6 +8,8 @@
 
 #import "MBPreviewController.h"
 
+#import "MBNotesController.h"
+#import "RFTimelineController.h"
 #import "RFPhoto.h"
 #import "RFSettings.h"
 #import "RFConstants.h"
@@ -32,6 +34,17 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	}
 	
 	return self;
+}
+
+- (void) dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) showWindow:(id)sender
+{
+	[super showWindow:sender];
+	[self renderPreview];
 }
 
 - (void) windowDidLoad
@@ -77,6 +90,9 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editorWindowTextDidChangeNotification:) name:kEditorWindowTextDidChangeNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillQuitNotification:) name:NSApplicationWillTerminateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedBlogNotification:) name:kUpdatedBlogNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(previewSourceDidChangeNotification:) name:NSWindowDidBecomeMainNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(previewSourceDidChangeNotification:) name:NSTableViewSelectionDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(previewSourceDidChangeNotification:) name:NSTextDidChangeNotification object:nil];
 }
 
 - (void) setupUsingTheme
@@ -391,12 +407,24 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 - (void) editorWindowTextDidChangeNotification:(NSNotification *)notification
 {
 	if ([self.window isVisible]) {
-		NSString* title = [notification.userInfo objectForKey:kEditorWindowTextTitleKey];
-		NSString* markdown = [notification.userInfo objectForKey:kEditorWindowTextMarkdownKey];
-		NSArray* photos = [notification.userInfo objectForKey:kEditorWindowTextPhotosKey];
-
-		[self renderPreviewTitle:title markdown:markdown photos:photos];
+		[self renderPreview];
 	}
+}
+
+- (void) previewSourceDidChangeNotification:(NSNotification *)notification
+{
+	if (![self.window isVisible]) {
+		return;
+	}
+
+	// Wait for the notes selection delegate and main-window state to update.
+	dispatch_async(dispatch_get_main_queue(), ^{
+		MBNotesController* notes_controller = [self notesControllerForPreview];
+		BOOL is_window_change = [notification.name isEqualToString:NSWindowDidBecomeMainNotification];
+		if (self.window.isVisible && (is_window_change || notification.object == notes_controller.tableView || notification.object == notes_controller.detailTextView)) {
+			[self renderPreview];
+		}
+	});
 }
 
 - (void) appWillQuitNotification:(NSNotification *)notification
@@ -412,7 +440,26 @@ static NSArray* gCurrentPreviewPhotos = nil; // RFPhoto
 
 - (void) renderPreview
 {
-	[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown photos:gCurrentPreviewPhotos];
+	MBNotesController* notes_controller = [self notesControllerForPreview];
+	if (notes_controller.selectedNote != nil) {
+		[self renderPreviewTitle:@"" markdown:notes_controller.detailTextView.string ?: @"" photos:@[]];
+	}
+	else {
+		[self renderPreviewTitle:gCurrentPreviewTitle markdown:gCurrentPreviewMarkdown photos:gCurrentPreviewPhotos];
+	}
+}
+
+- (MBNotesController *) notesControllerForPreview
+{
+	// The Preview panel can become key without replacing the main document window.
+	NSWindowController* window_controller = NSApp.mainWindow.windowController;
+	if ([window_controller isKindOfClass:[RFTimelineController class]]) {
+		NSViewController* root_controller = ((RFTimelineController *)window_controller).rootController;
+		if ([root_controller isKindOfClass:[MBNotesController class]]) {
+			return (MBNotesController *)root_controller;
+		}
+	}
+	return nil;
 }
 
 - (void) renderPreviewTitle:(NSString *)title markdown:(NSString *)markdown photos:(NSArray *)photos
