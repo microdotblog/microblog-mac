@@ -21,6 +21,7 @@
 #import "RFPost.h"
 #import "RFSettings.h"
 #import "RFHighlightingTextStorage.h"
+#import "MBMarkdownTextView.h"
 #import "MBUploadProgress.h"
 #import "UUString.h"
 #import "UUDate.h"
@@ -477,8 +478,8 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 
 - (void) setupText
 {
-	self.textStorage = [[RFHighlightingTextStorage alloc] init];
-	[self.textStorage addLayoutManager:self.textView.layoutManager];
+	[(MBMarkdownTextView *)self.textView setupMarkdownWithFontSize:kDefaultFontSize];
+	self.textStorage = (RFHighlightingTextStorage *)self.textView.textStorage;
 
 	NSMutableParagraphStyle* paragraph_style = [self.textView.defaultParagraphStyle mutableCopy];
 	if (!paragraph_style) {
@@ -505,8 +506,6 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	
 	self.textView.delegate = self;
 	self.textView.textStorage.delegate = self;
-	self.textView.automaticQuoteSubstitutionEnabled = NO;
-	self.textView.automaticDashSubstitutionEnabled = NO;
 	
 	[self updateRemainingChars];
 	

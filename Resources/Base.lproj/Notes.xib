@@ -134,7 +134,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="242" height="466"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1" customClass="MBNotesTextView">
+                                            <textView wantsLayer="YES" importsGraphics="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="YbT-7i-Zi1" customClass="MBNotesTextView">
                                                 <rect key="frame" x="0.0" y="0.0" width="232" height="456"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -326,7 +326,7 @@
     <resources>
         <image name="safari" catalog="system" width="15" height="15"/>
         <namedColor name="color_highlight_background">
-            <color red="0.99599999189376831" green="0.97600001096725464" blue="0.85500001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.998" green="0.988" blue="0.928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="color_table_background">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

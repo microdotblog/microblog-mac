@@ -16,19 +16,10 @@
 
 - (BOOL) shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(nullable NSString *)replacementString
 {
-	// if the incoming range length is absurdly large, reject it
-	if (affectedCharRange.length > self.string.length) {
-		self.isIgnoringAutocomplete = YES;
+	self.isIgnoringAutocomplete = ![super shouldChangeTextInRange:affectedCharRange replacementString:replacementString];
+	if (self.isIgnoringAutocomplete) {
 		return NO;
 	}
-
-	// also guard on location
-	if (affectedCharRange.location > self.string.length) {
-		return NO;
-	}
-
-	self.isIgnoringAutocomplete = NO;
-	self.restoredSelection = NSMakeRange (affectedCharRange.location + replacementString.length, 0);
 
 	if (replacementString.length == 1) {
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -36,14 +27,7 @@
 		});
 	}
 
-	return [super shouldChangeTextInRange:affectedCharRange replacementString:replacementString];
-}
-
-- (void) didChangeText
-{
-	[super didChangeText];
-	
-	self.selectedRange = self.restoredSelection;
+	return YES;
 }
 
 - (void) insertCompletion:(NSString *)word forPartialWordRange:(NSRange)charRange movement:(NSInteger)movement isFinal:(BOOL)isFinal
@@ -74,17 +58,6 @@
 		// insert the full username
 		NSString* s = [NSString stringWithFormat:@"%@ ", word];
 		[super insertCompletion:s forPartialWordRange:fullRange movement:movement isFinal:isFinal];
-	}
-}
-
-- (NSPasteboardType) preferredPasteboardTypeFromArray:(NSArray<NSPasteboardType> *)availableTypes
-						  restrictedToTypesFromArray:(NSArray<NSPasteboardType> *)allowedTypes
-{
-	if ([availableTypes containsObject:NSPasteboardTypeString]) {
-		return NSPasteboardTypeString;
-	}
-	else {
-		return [super preferredPasteboardTypeFromArray:availableTypes restrictedToTypesFromArray:allowedTypes];
 	}
 }
 

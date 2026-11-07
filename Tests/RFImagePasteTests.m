@@ -5,7 +5,8 @@
 #import "RFHighlightingTextView.h"
 #import "RFConstants.h"
 
-// Link with RFHighlightingTextView.m, Cocoa, ImageIO, and UniformTypeIdentifiers.
+// Link with RFHighlightingTextView.m, MBMarkdownTextView.m, RFHighlightingTextStorage.m,
+// Cocoa, ImageIO, and UniformTypeIdentifiers.
 // A private pasteboard keeps the user's clipboard and account untouched.
 @interface RFSettings : NSObject
 + (void) addTemporaryFolder:(NSString *)path;

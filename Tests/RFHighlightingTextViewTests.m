@@ -1,7 +1,8 @@
 #import <Cocoa/Cocoa.h>
 #import "RFHighlightingTextView.h"
 
-// Link with RFHighlightingTextView.m and Cocoa. No account or networking is used.
+// Link with RFHighlightingTextView.m, MBMarkdownTextView.m, RFHighlightingTextStorage.m, and Cocoa.
+// No account or networking is used.
 @interface RFSettings : NSObject
 + (void) addTemporaryFolder:(NSString *)path;
 @end

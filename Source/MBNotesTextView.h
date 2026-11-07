@@ -1,5 +1,5 @@
-#import <Cocoa/Cocoa.h>
+#import "MBMarkdownTextView.h"
 
-@interface MBNotesTextView : NSTextView <NSMenuItemValidation>
+@interface MBNotesTextView : MBMarkdownTextView <NSMenuItemValidation>
 
 @end

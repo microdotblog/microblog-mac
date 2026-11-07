@@ -7,6 +7,7 @@
 //
 
 #import "MBNotesController.h"
+#import "MBNotesTextView.h"
 #import "MBAudioNoteController.h"
 
 #import "MBNote.h"
@@ -157,7 +158,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) setupDetail
 {
-	[self.detailTextView setFont:[NSFont systemFontOfSize:14]];
+	[(MBNotesTextView *)self.detailTextView setupMarkdownWithFontSize:14];
 	[self setDetailText:@"" forNote:nil];
 	[self setDetailBook:@"" title:@""];
 }
@@ -789,9 +790,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 			base_color = self.currentNotebook.darkColor;
 		}
 		else {
-			base_color = self.currentNotebook.lightColor;
+			base_color = [self.currentNotebook.lightColor blendedColorWithFraction:0.5 ofColor:[NSColor whiteColor]];
 		}
+		base_color = base_color ?: [NSColor colorNamed:@"color_highlight_background"];
 		self.detailTextView.backgroundColor = base_color;
+		self.detailTextView.enclosingScrollView.backgroundColor = base_color;
+		self.detailTextView.enclosingScrollView.contentView.backgroundColor = base_color;
 
 		// darken the base color for the book header and shared footer
 		NSColor* darker_color = [base_color blendedColorWithFraction:0.05 ofColor:[NSColor blackColor]];

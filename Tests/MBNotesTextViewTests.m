@@ -14,7 +14,8 @@
 }
 @end
 
-// Link with MBNotesTextView.m and Cocoa. Pass --window to test focus without opening Micro.blog.
+// Link with MBNotesTextView.m, MBMarkdownTextView.m, RFHighlightingTextStorage.m, and Cocoa.
+// Pass --window to test focus without opening Micro.blog.
 int main(int argc, const char* argv[])
 {
 	@autoreleasepool {

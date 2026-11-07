@@ -11,12 +11,19 @@
 @implementation RFHighlightingTextStorage
 {
 	NSMutableAttributedString *_imp;
+	CGFloat _fontSize;
 }
 
 - (id) init
 {
+	return [self initWithFontSize:kDefaultFontSize];
+}
+
+- (instancetype) initWithFontSize:(CGFloat)fontSize
+{
 	self = [super init];
 	if (self) {
+		_fontSize = fontSize;
 		_imp = [[NSMutableAttributedString alloc] init];
 	}
 	
@@ -93,7 +100,7 @@
 
 - (void) processBold
 {
-	NSFont* bold_font = [NSFont boldSystemFontOfSize:kDefaultFontSize];
+	NSFont* bold_font = [NSFont boldSystemFontOfSize:_fontSize];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_bold = NO;
 	for (NSInteger i = 0; i < self.string.length; i++) {
@@ -124,7 +131,7 @@
 
 - (void) processItalic
 {
-	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
+	NSFont* normal_font = [NSFont systemFontOfSize:_fontSize];
 	NSFont* italic_font = [[NSFontManager sharedFontManager] convertFont:normal_font toHaveTrait:NSFontItalicTrait];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_italic = NO;
@@ -234,7 +241,7 @@
 {
 	NSColor* title_c = [NSColor colorWithRed:0.2 green:0.478 blue:0.718 alpha:1.0];
 	NSColor* url_c = [NSColor colorWithWhite:0.502 alpha:1.0];
-	NSFont* light_font = [NSFont systemFontOfSize:kDefaultFontSize weight:NSFontWeightLight];
+	NSFont* light_font = [NSFont systemFontOfSize:_fontSize weight:NSFontWeightLight];
 	
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_title = NO;
@@ -351,7 +358,7 @@
 
 - (void) processHeaders
 {
-	NSFont* header_font = [NSFont boldSystemFontOfSize:kDefaultFontSize];
+	NSFont* header_font = [NSFont boldSystemFontOfSize:_fontSize];
 	NSColor* header_c = [NSColor colorNamed:@"color_syntax_headers"];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_header = NO;
@@ -397,7 +404,7 @@
 	NSColor* tag_c = [NSColor colorNamed:@"color_syntax_tags"];
 	NSColor* attr_c = [NSColor colorNamed:@"color_syntax_attr_name"];
 	NSColor* value_c = [NSColor colorNamed:@"color_syntax_attr_value"];
-	NSFont* light_font = [NSFont systemFontOfSize:kDefaultFontSize weight:NSFontWeightLight];
+	NSFont* light_font = [NSFont systemFontOfSize:_fontSize weight:NSFontWeightLight];
 	NSRange current_r = NSMakeRange (0, 0);
 	BOOL is_tag = NO;
 	BOOL is_attr = NO;
@@ -503,7 +510,7 @@
 {
 	// clear fonts and colors
 	NSRange paragraph_r = NSMakeRange (0, self.string.length);
-	NSFont* normal_font = [NSFont systemFontOfSize:kDefaultFontSize];
+	NSFont* normal_font = [NSFont systemFontOfSize:_fontSize];
 	NSColor* normal_color = [NSColor textColor];
 	
 	[self safe_removeAttribute:NSForegroundColorAttributeName range:paragraph_r];

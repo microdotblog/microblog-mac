@@ -12,4 +12,6 @@ static CGFloat const kDefaultFontSize = 16.0;
 
 @interface RFHighlightingTextStorage : NSTextStorage
 
+- (instancetype) initWithFontSize:(CGFloat)fontSize;
+
 @end

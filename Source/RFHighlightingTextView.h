@@ -6,11 +6,10 @@
 //  Copyright © 2017 Riverfold Software. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "MBMarkdownTextView.h"
 
-@interface RFHighlightingTextView : NSTextView <NSDraggingDestination>
+@interface RFHighlightingTextView : MBMarkdownTextView <NSDraggingDestination>
 
-@property (assign, nonatomic) NSRange restoredSelection;
 @property (assign, nonatomic) BOOL isIgnoringAutocomplete;
 
 @end
