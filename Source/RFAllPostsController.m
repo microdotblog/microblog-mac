@@ -16,6 +16,8 @@
 #import "RFConstants.h"
 #import "RFMacros.h"
 #import "MBMenus.h"
+#import "MBNote.h"
+#import "SAMKeychain+Helper.h"
 #import "UUDate.h"
 #import "NSString+Extras.h"
 #import "NSAlert+Extras.h"
@@ -32,6 +34,68 @@ static CGFloat const kScheduledSegmentWidth = 90.0;
 static NSString* const kSegmentStateCacheKey = @"PostsSegmentStateByHostname";
 static NSInteger const kSegmentStateDrafts = 1 << 0;
 static NSInteger const kSegmentStateScheduled = 1 << 1;
+static NSString* const kPostConversionDidFinishNotification = @"MBPostConversionDidFinishNotification";
+// The Posts controller is replaced when switching sidebar panes.
+static BOOL sConvertingPostToNote = NO;
+
+static NSString* RFPostResponseError(UUHttpResponse* response)
+{
+	NSDictionary* result = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+	if (result[@"error"]) {
+		id description = result[@"error_description"];
+		if ([description isKindOfClass:[NSString class]] && [description length] > 0) {
+			return description;
+		}
+		id error = result[@"error"];
+		if ([error isKindOfClass:[NSString class]] && [error length] > 0) {
+			return error;
+		}
+	}
+
+	NSInteger status = response.httpResponse.statusCode;
+	BOOL http_success = (status >= 200 && status < 300);
+	if (response.httpError || !http_success || result[@"error"]) {
+		return [response.httpError mb_networkMessageWithResponse:http_success ? nil : response.httpResponse] ?: @"Micro.blog returned an unexpected response.";
+	}
+	return nil;
+}
+
+static id RFPostSourceValue(NSDictionary* properties, NSString* key)
+{
+	id values = properties[key];
+	return [values isKindOfClass:[NSArray class]] ? [values firstObject] : nil;
+}
+
+static NSString* RFPostNoteText(id source, NSNumber* postID)
+{
+	id properties = [source isKindOfClass:[NSDictionary class]] ? source[@"properties"] : nil;
+	if (![properties isKindOfClass:[NSDictionary class]] || ![postID isEqual:RFPostSourceValue(properties, @"uid")]) {
+		return nil;
+	}
+	if (![@"draft" isEqual:RFPostSourceValue(properties, @"post-status")]) {
+		return nil;
+	}
+
+	id names = properties[@"name"];
+	if (names && ![names isKindOfClass:[NSArray class]]) {
+		return nil;
+	}
+	id body = RFPostSourceValue(properties, @"content");
+	id title = RFPostSourceValue(properties, @"name");
+	if (![body isKindOfClass:[NSString class]] || (title && title != [NSNull null] && ![title isKindOfClass:[NSString class]])) {
+		return nil;
+	}
+	if ([title isKindOfClass:[NSString class]] && [title length] > 0) {
+		NSString* heading = [[title componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@" "];
+		return [NSString stringWithFormat:@"# %@\n\n%@", heading, body];
+	}
+	return body;
+}
+
+static NSString* RFPostNoteKey(void)
+{
+	return [MBNote cleanKey:[SAMKeychain mb_passwordForService:@"Micro.blog Notes" account:@""]];
+}
 
 @interface RFAllPostsController () <NSMenuDelegate>
 
@@ -150,6 +214,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(draftDidUpdateNotification:) name:kDraftDidUpdateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autosavedDraftDidCreateNotification:) name:kAutosavedDraftDidCreateNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autosavedDraftDidUpdateNotification:) name:kAutosavedDraftDidUpdateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postConversionDidFinishNotification:) name:kPostConversionDidFinishNotification object:nil];
 }
 
 - (void) setupTabs
@@ -690,7 +755,8 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 - (void) stopLoadingSidebarRow
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:@{}];
+	NSDictionary* info = self.isShowingPages ? @{} : @{ kTimelineSidebarRowKey: @(kTimelinePostsSidebarRow) };
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTimelineDidStopLoading object:self userInfo:info];
 }
 
 - (void) startLoadingSidebarRow
@@ -702,7 +768,7 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 - (void) updateLoadingSidebarRow
 {
-	if (!self.isShowingPages && (self.isFindingConversation || self.isSearching)) {
+	if (!self.isShowingPages && (self.isFindingConversation || self.isSearching || sConvertingPostToNote)) {
 		[self startLoadingSidebarRow];
 	}
 	else {
@@ -861,35 +927,173 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 
 - (void) deletePost:(RFPost *)post
 {
-	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
-	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID];
-	if (destination_uid == nil) {
-		destination_uid = @"";
-	}
-
-	NSDictionary* args = @{
-		@"action": @"delete",
-		@"mp-destination": destination_uid,
-		@"url": post.url,
-	};
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
 
 	[self.progressSpinner startAnimation:nil];
 	self.blogNameButton.hidden = YES;
 
+	[self deletePostAtURL:post.url destinationUID:destination_uid completion:^(NSString* error) {
+		if (error) {
+			[self.progressSpinner stopAnimation:nil];
+			self.blogNameButton.hidden = NO;
+			[NSAlert rf_showOneButtonAlert:@"Error Deleting Post" message:error button:@"OK" completionHandler:NULL];
+		}
+		else {
+			[self fetchPosts];
+			[self fetchDrafts];
+		}
+	}];
+}
+
+- (void) deletePostAtURL:(NSString *)url destinationUID:(NSString *)destinationUID completion:(void (^)(NSString *error))completion
+{
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	NSDictionary* args = @{
+		@"action": @"delete",
+		@"mp-destination": destinationUID,
+		@"url": url,
+	};
+
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
-		RFDispatchMainAsync (^{
-			if (response.parsedResponse && [response.parsedResponse isKindOfClass:[NSDictionary class]] && response.parsedResponse[@"error"]) {
-				[self.progressSpinner stopAnimation:nil];
-				self.blogNameButton.hidden = NO;
-				NSString* msg = response.parsedResponse[@"error_description"];
-				[NSAlert rf_showOneButtonAlert:@"Error Deleting Post" message:msg button:@"OK" completionHandler:NULL];
-			}
-			else {
-				[self fetchPosts];
-				[self fetchDrafts];
-			}
+		RFDispatchMainAsync(^{
+			completion(RFPostResponseError(response));
 		});
 	}];
+}
+
+- (RFPost *) draftAtContextMenuRow
+{
+	NSInteger row = self.tableView.clickedRow;
+	if (row < 0) {
+		row = self.tableView.selectedRow;
+	}
+	if (self.isShowingPages || row < 0 || row >= self.currentPosts.count) {
+		return nil;
+	}
+
+	RFPost* post = self.currentPosts[row];
+	return post.isDraft ? post : nil;
+}
+
+- (RFPost *) postToConvertToNote
+{
+	RFPost* post = [self draftAtContextMenuRow];
+	if (!post || sConvertingPostToNote || ![post.url isKindOfClass:[NSString class]] || post.url.length == 0 || ![post.postID isKindOfClass:[NSNumber class]] || post.postID.longLongValue <= 0) {
+		return nil;
+	}
+	return [MBNote hasSecretKey] ? post : nil;
+}
+
+- (IBAction) convertToNote:(id)sender
+{
+	RFPost* post = [self postToConvertToNote];
+	NSString* username = [RFSettings stringForKey:kAccountUsername];
+	if (!post || username.length == 0 || !self.view.window || self.view.window.attachedSheet) {
+		return;
+	}
+	NSString* destination_uid = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+
+	NSAlert* sheet = [[NSAlert alloc] init];
+	sheet.messageText = @"Convert to Note?";
+	sheet.informativeText = @"The blog post text will be saved as a note to your default notebook and then the original post will be deleted.";
+	[sheet addButtonWithTitle:@"Convert"];
+	[sheet addButtonWithTitle:@"Cancel"];
+	[sheet beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSAlertFirstButtonReturn && !sConvertingPostToNote && [username isEqualToString:[RFSettings stringForKey:kAccountUsername]]) {
+			[self convertPostToNote:post username:username destinationUID:destination_uid];
+		}
+	}];
+}
+
+- (void) convertPostToNote:(RFPost *)post username:(NSString *)username destinationUID:(NSString *)destinationUID
+{
+	sConvertingPostToNote = YES;
+	[self updateLoadingSidebarRow];
+
+	NSString* url = post.url;
+	NSNumber* post_id = post.postID;
+	RFClient* client = [[RFClient alloc] initWithPath:@"/micropub"];
+	NSDictionary* args = @{ @"q": @"source", @"url": url, @"mp-destination": destinationUID };
+	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (![username isEqualToString:[RFSettings stringForKey:kAccountUsername]]) {
+				[self finishPostConversionWithError:nil noteSaved:NO];
+				return;
+			}
+
+			NSString* error = RFPostResponseError(response);
+			NSString* text = RFPostNoteText(response.parsedResponse, post_id);
+			if (error || text.length == 0) {
+				[self finishPostConversionWithError:error ?: @"Micro.blog did not return a draft with text for this post." noteSaved:NO];
+				return;
+			}
+			[self saveNoteWithText:text replacingPostAtURL:url username:username destinationUID:destinationUID];
+		});
+	}];
+}
+
+- (void) saveNoteWithText:(NSString *)text replacingPostAtURL:(NSString *)url username:(NSString *)username destinationUID:(NSString *)destinationUID
+{
+	NSString* secret_key = RFPostNoteKey();
+	NSCharacterSet* non_hex = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdefABCDEF"] invertedSet];
+	BOOL valid_key = (secret_key.length == 32 || secret_key.length == 48 || secret_key.length == 64) && [secret_key rangeOfCharacterFromSet:non_hex].location == NSNotFound;
+	NSString* encrypted_text = valid_key ? [MBNote encryptText:text withKey:secret_key] : nil;
+	if (encrypted_text.length == 0) {
+		[self finishPostConversionWithError:@"The post could not be encrypted. Check your Notes key." noteSaved:NO];
+		return;
+	}
+
+	RFClient* client = [[RFClient alloc] initWithPath:@"/notes"];
+	NSDictionary* args = @{ @"text": encrypted_text, @"is_encrypted": @YES };
+	[client postWithParams:args completion:^(UUHttpResponse* response) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			NSString* error = RFPostResponseError(response);
+			NSDictionary* result = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+			id note_id = result[@"id"];
+			id metadata = result[@"_microblog"];
+			BOOL saved = !error && [note_id isKindOfClass:[NSNumber class]] && [note_id longLongValue] > 0
+				&& [encrypted_text isEqual:result[@"content_text"]] && [metadata isKindOfClass:[NSDictionary class]]
+				&& [@YES isEqual:metadata[@"is_encrypted"]];
+			if (!saved) {
+				[self finishPostConversionWithError:error ?: @"Micro.blog could not confirm the encrypted note was saved." noteSaved:NO];
+				return;
+			}
+			if (![username isEqualToString:[RFSettings stringForKey:kAccountUsername]] || ![secret_key isEqualToString:RFPostNoteKey()]) {
+				[self finishPostConversionWithError:@"The account or Notes key changed. The original post was kept." noteSaved:YES];
+				return;
+			}
+
+			[[NSNotificationCenter defaultCenter] postNotificationName:kRefreshNotesNotification object:self];
+			[self deletePostAtURL:url destinationUID:destinationUID completion:^(NSString* deleteError) {
+				NSString* message = deleteError ? [NSString stringWithFormat:@"Micro.blog could not confirm the original post was deleted.\n\n%@", deleteError] : nil;
+				[self finishPostConversionWithError:message noteSaved:YES];
+				NSString* current_destination = [RFSettings stringForKey:kCurrentDestinationUID] ?: @"";
+				if ([username isEqualToString:[RFSettings stringForKey:kAccountUsername]] && [destinationUID isEqualToString:current_destination]) {
+					[[NSNotificationCenter defaultCenter] postNotificationName:kPostConversionDidFinishNotification object:self];
+				}
+			}];
+		});
+	}];
+}
+
+- (void) finishPostConversionWithError:(NSString *)error noteSaved:(BOOL)noteSaved
+{
+	sConvertingPostToNote = NO;
+	[self updateLoadingSidebarRow];
+
+	if (error) {
+		NSString* title = noteSaved ? @"Note Saved" : @"Could Not Convert to Note";
+		NSString* message = noteSaved ? error : [error stringByAppendingString:@"\n\nThe original post was kept."];
+		[NSAlert rf_showOneButtonAlert:title message:message button:@"OK" completionHandler:NULL];
+	}
+}
+
+- (void) postConversionDidFinishNotification:(NSNotification *)notification
+{
+	if (!self.isShowingPages && self.view.window) {
+		[self fetchPosts];
+		[self fetchDrafts];
+	}
 }
 
 - (IBAction) search:(id)sender
@@ -1079,7 +1283,10 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 	for (NSMenuItem* item in menu.itemArray) {
 		if (item.action == @selector(showConversation:)) {
 			conversation_item = item;
-			break;
+		}
+		else if (item.action == @selector(convertToNote:)) {
+			item.hidden = ([self draftAtContextMenuRow] == nil);
+			item.enabled = ([self postToConvertToNote] != nil);
 		}
 	}
 
@@ -1102,6 +1309,9 @@ static NSInteger const kSegmentStateScheduled = 1 << 1;
 {
 	if (item.action == @selector(showConversation:)) {
 		return [self canShowConversation];
+	}
+	else if (item.action == @selector(convertToNote:)) {
+		return ([self postToConvertToNote] != nil);
 	}
 	else if (item.action == @selector(copyLinkOrHTML:)) {
 		[item setTitle:@"Copy Link"];

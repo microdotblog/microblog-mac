@@ -164,6 +164,12 @@
                         <action selector="openRow:" target="-1" id="stD-ud-gX6"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Convert to Note" id="VvL-iu-h9T">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="convertToNote:" target="-2" id="v0W-i7-9xM"/>
+                    </connections>
+                </menuItem>
                 <menuItem title="Delete" id="d4S-TR-RX3">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
