@@ -5,6 +5,30 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.3.2</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Added Markdown syntax highlighting in the notes editor and viewing notes in the Preview window.</li>
+					<li>Added “Convert to Note” when right-clicking a draft post. Saves a note and then deletes the original draft.</li>
+					<li>Updated “New Post…” from notes to use a Markdown header as the post title.</li>
+					<li>Fixed issues when creating and editing notes during syncing, including duplicate blank notes and refresh problems.</li>
+					<li>Lightened the yellow background in Notes and Bookmarks → Highlights.</li>
+				</ul>
+			]]></description>
+			<pubDate>Sun, 08 Nov 2026 09:15:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.3.2.zip" sparkle:shortVersionString="4.3.2" sparkle:version="267" length="18433623" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.3.1</title>
 			<description><![CDATA[
 				<style>
