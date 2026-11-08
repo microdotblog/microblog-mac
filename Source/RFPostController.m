@@ -474,6 +474,10 @@ static const CGFloat kPhotoLibraryTrayHeight = 155;
 	if (self.editingPost) {
 		self.titleField.stringValue = self.editingPost.title;
 	}
+	else if (self.initialTitle.length > 0) {
+		self.titleField.stringValue = self.initialTitle;
+		self.isShowingTitle = YES;
+	}
 }
 
 - (void) setupText

@@ -154,7 +154,8 @@
 	}
 	else if ([url.host isEqualToString:@"post"]) {
 		NSString* text = [[[url absoluteString] uuFindQueryStringArg:@"text"] uuUrlDecoded];
-		[self showPostWithText:text];
+		NSString* title = [[[url absoluteString] uuFindQueryStringArg:@"title"] uuUrlDecoded];
+		[self showPostWithText:text title:title];
 	}
 	else if ([url.host isEqualToString:@"reply"]) {
 		NSString* username = [self.timelineController usernameOfPostID:param];
@@ -1097,7 +1098,13 @@
 
 - (void) showPostWithText:(NSString *)text
 {
+	[self showPostWithText:text title:nil];
+}
+
+- (void) showPostWithText:(NSString *)text title:(NSString *)title
+{
 	RFPostController* controller = [[RFPostController alloc] initWithText:text];
+	controller.initialTitle = title;
 	[self showPostController:controller];
 }
 

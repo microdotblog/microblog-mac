@@ -1251,12 +1251,28 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (IBAction) startNewPost:(id)sender
 {
 	NSInteger row = self.tableView.selectedRow;
-	if (row >= 0) {
+	if (row >= 0 && row < self.currentNotes.count) {
 		MBNote* n = [self.currentNotes objectAtIndex:row];
-		
-		NSString* s = n.text;
-		
-		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@", [s rf_urlEncoded]]];
+		NSString* body = n.text ?: @"";
+		NSString* title = @"";
+
+		if (body.length > 0) {
+			NSUInteger line_end, contents_end;
+			[body getLineStart:NULL end:&line_end contentsEnd:&contents_end forRange:NSMakeRange(0, 0)];
+			NSString* first_line = [body substringToIndex:contents_end];
+			NSRegularExpression* heading = [NSRegularExpression regularExpressionWithPattern:@"^#{1,6}[\\t ]+(.+?)(?:[\\t ]+#+)?[\\t ]*$" options:0 error:NULL];
+			NSTextCheckingResult* match = [heading firstMatchInString:first_line options:0 range:NSMakeRange(0, first_line.length)];
+			if (match) {
+				title = [[first_line substringWithRange:[match rangeAtIndex:1]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+				if (title.length > 0) {
+					body = [body substringFromIndex:line_end];
+				}
+			}
+		}
+
+		NSRange start = [body rangeOfCharacterFromSet:[[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet]];
+		body = (start.location == NSNotFound) ? @"" : [body substringFromIndex:start.location];
+		NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"microblog://post?text=%@&title=%@", [body rf_urlEncoded], [title rf_urlEncoded]]];
 		[[NSWorkspace sharedWorkspace] openURL:url];
 	}
 }
