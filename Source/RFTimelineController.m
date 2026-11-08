@@ -1631,6 +1631,14 @@ static BOOL const kReaderWindowEnabled = NO;
 	[self updateToolbarScrimVisibility];
 
 	RFDispatchMainAsync(^{
+		if (self.rootController != controller || controller.view.window != self.window) {
+			return;
+		}
+		// Actions such as New Note may have already focused an editor in this pane.
+		NSResponder* responder = self.window.firstResponder;
+		if ([responder isKindOfClass:[NSView class]] && [(NSView *)responder isDescendantOf:controller.view]) {
+			return;
+		}
 		[self.window makeFirstResponder:controller];
 		if ([controller isKindOfClass:[MBBookmarksController class]]) {
 			[(MBBookmarksController *)controller focusContent];

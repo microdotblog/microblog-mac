@@ -36,16 +36,17 @@ static NSString* const kNotesSettingsType = @"Setting";
 @interface MBNotesController ()
 
 @property (assign, nonatomic) BOOL isFetchingNotes;
-@property (assign, nonatomic) BOOL isPagingNotesInBackground;
-@property (assign, nonatomic) BOOL shouldStartNewNoteAfterFetch;
 @property (assign, nonatomic) NSInteger notesFetchRequestID;
-@property (strong, nonatomic, nullable) MBNote* noteCreatedWhileFetching;
-@property (strong, nonatomic) NSMutableSet* noteIDsChangedWhilePaging;
+@property (strong, nonatomic) NSMutableArray* localNotes;
+@property (strong, nonatomic, nullable) NSArray* pendingNotesList;
+@property (strong, nonatomic) NSMutableSet* syncingNotes;
+@property (strong, nonatomic) NSMutableSet* failedNotes;
+@property (strong, nonatomic) NSMapTable* noteSyncCompletions;
+@property (assign, nonatomic) BOOL isUpdatingNotesList;
 @property (strong, nonatomic) NSMutableSet* deletingNoteIDs;
 @property (strong, nonatomic) NSMutableSet* deletedNoteIDs;
 @property (strong, nonatomic) NSUndoManager* textUndoManager;
 @property (strong, nonatomic) NSMutableSet* audioNoteControllers;
-@property (strong, nonatomic) NSMutableArray* audioNotesCreatedWhileFetching;
 @property (assign, nonatomic) BOOL isShowingNotesProgress;
 @property (assign, nonatomic) BOOL isWaitingToRecordAudioNote;
 
@@ -58,12 +59,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 	self = [super initWithNibName:@"Notes" bundle:nil];
 	if (self) {
 		self.editedNotes = [NSMutableSet set];
-		self.noteIDsChangedWhilePaging = [NSMutableSet set];
+		self.localNotes = [NSMutableArray array];
+		self.syncingNotes = [NSMutableSet set];
+		self.failedNotes = [NSMutableSet set];
+		self.noteSyncCompletions = [NSMapTable strongToStrongObjectsMapTable];
 		self.deletingNoteIDs = [NSMutableSet set];
 		self.deletedNoteIDs = [NSMutableSet set];
 		self.textUndoManager = [[NSUndoManager alloc] init];
 		self.audioNoteControllers = [NSMutableSet set];
-		self.audioNotesCreatedWhileFetching = [NSMutableArray array];
 	}
 	
 	return self;
@@ -116,27 +119,29 @@ static NSString* const kNotesSettingsType = @"Setting";
 	else {
 		// try to find key on iCloud
 		[self fetchKeyFromCloudWithCompletion:^(NSString* key) {
-			if (key == nil) {
-				// a bit hacky, prompt for new key
-				RFDispatchSeconds(1.0, ^{
-					self.notesKeyController = [[MBNotesKeyController alloc] init];
-					[self.view.window beginSheet:self.notesKeyController.window completionHandler:^(NSModalResponse returnCode) {
-						self.notesKeyController = nil;
-					}];
-				});
-			}
-			else {
-				NSString* key_with_prefix = key;
-				if ([key containsString:@"mkey"]) {
-					self.secretKey = [key substringFromIndex:4];
+			RFDispatchMainAsync(^{
+				if (key == nil) {
+					// a bit hacky, prompt for new key
+					RFDispatchSeconds(1.0, ^{
+						self.notesKeyController = [[MBNotesKeyController alloc] init];
+						[self.view.window beginSheet:self.notesKeyController.window completionHandler:^(NSModalResponse returnCode) {
+							self.notesKeyController = nil;
+						}];
+					});
 				}
 				else {
-					self.secretKey = key;
-					key_with_prefix = [@"mkey" stringByAppendingString:key];
+					NSString* key_with_prefix = key;
+					if ([key containsString:@"mkey"]) {
+						self.secretKey = [key substringFromIndex:4];
+					}
+					else {
+						self.secretKey = key;
+						key_with_prefix = [@"mkey" stringByAppendingString:key];
+					}
+					[SAMKeychain setPassword:key_with_prefix forService:@"Micro.blog Notes" account:@""];
+					[self fetchNotes];
 				}
-				[SAMKeychain setPassword:key_with_prefix forService:@"Micro.blog Notes" account:@""];
-				[self fetchNotes];
-			}
+			});
 		}];
 	}
 }
@@ -218,15 +223,23 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 	[self startNotesProgress];
 	self.isFetchingNotes = YES;
+	self.notesFetchRequestID++;
+	self.pendingNotesList = nil;
 
 	[self fetchNotebooksWithCompletion:^{
 		if (self.currentNotebook) {
+			// Notes created during the initial notebook request are already editable.
+			for (MBNote* note in self.localNotes) {
+				if (!note.notebookID) {
+					note.notebookID = self.currentNotebook.notebookID;
+				}
+			}
+			[self syncFromTimer:nil];
 			[self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:nil finishedCompletion:^{
 				[self saveNotesToDisk];
 			}];
 		}
 		else {
-			self.shouldStartNewNoteAfterFetch = NO;
 			self.isFetchingNotes = NO;
 			[self stopNotesProgress];
 		}
@@ -240,11 +253,13 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 
 	NSMutableArray* new_notebooks = [[NSMutableArray alloc] init];
+	NSInteger request_id = self.notesFetchRequestID;
 	
 	RFClient* notebooks_client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
 	[notebooks_client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			for (NSDictionary* item in [response.parsedResponse objectForKey:@"items"]) {
+		id items = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse[@"items"] : nil;
+		if (!response.httpError && [items isKindOfClass:[NSArray class]] && [items count] > 0) {
+			for (NSDictionary* item in items) {
 				NSDictionary* mb = [item objectForKey:@"_microblog"];
 				NSNumber* notebook_id = [item objectForKey:@"id"];
 				NSString* notebook_name = [item objectForKey:@"title"];
@@ -257,23 +272,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 				nb.lightColor = [NSColor mb_colorFromString:light_color];
 				nb.darkColor = [NSColor mb_colorFromString:dark_color];
 				[new_notebooks addObject:nb];
-				
-				// assume first notebook
-				if (self.currentNotebook == nil) {
-					self.currentNotebook = nb;
-					[self updateDetailsColor];
-				}
-				
-				// if saved notebook, use that
-				NSNumber* saved_notebook_id = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentNotebookIDPrefKey];
-				if (saved_notebook_id && [saved_notebook_id isEqualToNumber:nb.notebookID]) {
-					self.currentNotebook = nb;
-					[self updateDetailsColor];
-				}
 			}
 			
 			RFDispatchMainAsync(^{
+				if (request_id != self.notesFetchRequestID) {
+					return;
+				}
 				self.notebooks = new_notebooks;
+				NSNumber* notebook_id = self.currentNotebook.notebookID ?: [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentNotebookIDPrefKey];
+				self.currentNotebook = new_notebooks.firstObject;
+				for (MBNotebook* nb in new_notebooks) {
+					if (notebook_id && [nb.notebookID isEqualToNumber:notebook_id]) {
+						self.currentNotebook = nb;
+						break;
+					}
+				}
+				[self updateDetailsColor];
 
 				[self.notebooksPopup removeAllItems];
 				
@@ -293,7 +307,9 @@ static NSString* const kNotesSettingsType = @"Setting";
 		}
 		else {
 			RFDispatchMainAsync(^{
-				handler();
+				if (request_id == self.notesFetchRequestID) {
+					handler();
+				}
 			});
 		}
 	}];
@@ -311,26 +327,21 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 
 	self.isFetchingNotes = YES;
-	self.isPagingNotesInBackground = YES;
-	[self.audioNotesCreatedWhileFetching removeAllObjects];
-	[self.noteIDsChangedWhilePaging removeAllObjects];
+
+	// Keep pending edits across refreshes; protect new changes until this fetch finishes.
+	NSIndexSet* saved_indexes = [self.localNotes indexesOfObjectsPassingTest:^BOOL(MBNote* note, NSUInteger index, BOOL* stop) {
+		return note.noteID && ![self.editedNotes containsObject:note] && ![self.syncingNotes containsObject:note];
+	}];
+	[self.localNotes removeObjectsAtIndexes:saved_indexes];
 	self.notesFetchRequestID++;
+	self.pendingNotesList = nil;
 	NSInteger request_id = self.notesFetchRequestID;
 
 	NSMutableArray* cached_notes = [[self cachedNotesWithNotebookID:notebookID] mutableCopy];
 	NSMutableSet* cached_note_ids = [self noteIDsFromNotes:cached_notes];
 	NSMutableSet* server_note_ids = [NSMutableSet set];
 
-	if (cached_notes.count > 0) {
-		self.allNotes = cached_notes;
-		self.currentNotes = cached_notes;
-		if (self.searchField.stringValue.length > 0) {
-			[self runSearch:self.searchField.stringValue];
-		}
-		else {
-			[self.tableView reloadData];
-		}
-	}
+	[self updateNotesListWithArray:cached_notes notebookID:notebookID];
 
 	__block BOOL did_finish_initial_load = NO;
 	void (^initial_handler)(void) = ^{
@@ -346,14 +357,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 		}
 	};
 
-	void (^background_handler)(void) = ^{
-		self.isPagingNotesInBackground = NO;
-		self.noteCreatedWhileFetching = nil;
-		[self.audioNotesCreatedWhileFetching removeAllObjects];
-		[self.noteIDsChangedWhilePaging removeAllObjects];
-	};
-
-	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:cached_notes cachedNoteIDs:cached_note_ids serverNoteIDs:server_note_ids requestID:request_id completion:initial_handler backgroundCompletion:background_handler finishedCompletion:finishedHandler];
+	[self fetchNotesWithNotebookID:notebookID offset:0 notesArray:cached_notes cachedNoteIDs:cached_note_ids serverNoteIDs:server_note_ids requestID:request_id completion:initial_handler finishedCompletion:finishedHandler];
 }
 
 - (NSArray *) cachedNotesWithNotebookID:(NSNumber *)notebookID
@@ -437,31 +441,20 @@ static NSString* const kNotesSettingsType = @"Setting";
 	[db close];
 }
 
-- (NSArray *) notesArrayByIncludingNewNoteIfNeeded:(NSArray *)notes forNotebookID:(NSNumber *)notebookID
+- (NSArray *) notesArrayByIncludingLocalNotes:(NSArray *)notes forNotebookID:(NSNumber *)notebookID
 {
-	NSMutableArray* created_notes = [self.audioNotesCreatedWhileFetching mutableCopy];
-	if (self.noteCreatedWhileFetching) {
-		[created_notes addObject:self.noteCreatedWhileFetching];
-	}
-	if (created_notes.count == 0) {
-		return notes;
-	}
 	NSMutableArray* new_notes = [notes mutableCopy];
-	for (MBNote* note in created_notes) {
+	for (MBNote* note in self.localNotes) {
 		if ([note.notebookID isEqualToNumber:notebookID]) {
-			[new_notes removeObjectIdenticalTo:note];
-			[self mergeNotes:@[note] intoNotesArray:new_notes atOffset:0];
+			NSIndexSet* indexes = [new_notes indexesOfObjectsPassingTest:^BOOL(MBNote* candidate, NSUInteger index, BOOL* stop) {
+				return (candidate == note) || (note.noteID && [candidate.noteID isEqualToNumber:note.noteID]);
+			}];
+			NSUInteger index = indexes.count ? indexes.firstIndex : 0;
+			[new_notes removeObjectsAtIndexes:indexes];
+			[new_notes insertObject:note atIndex:index];
 		}
 	}
 	return new_notes;
-}
-
-- (void) startNewNoteAfterFirstBatchIfNeeded
-{
-	if (self.shouldStartNewNoteAfterFetch) {
-		self.shouldStartNewNoteAfterFetch = NO;
-		[self createNewNote];
-	}
 }
 
 - (void) finishInitialNotesLoadWithCompletion:(void (^)(void))handler
@@ -489,7 +482,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) updateProgressSpinner
 {
-	BOOL should_spin = self.isShowingNotesProgress;
+	BOOL should_spin = self.isShowingNotesProgress || self.syncingNotes.count > 0;
 	for (MBAudioNoteController* controller in self.audioNoteControllers) {
 		should_spin |= controller.isProcessing;
 	}
@@ -503,36 +496,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (NSNumber *) currentSelectedNoteID
 {
-	NSInteger selected_row = self.tableView.selectedRow;
-	if ((selected_row >= 0) && (selected_row < self.currentNotes.count)) {
-		MBNote* note = [self.currentNotes objectAtIndex:selected_row];
-		return note.noteID;
-	}
-
 	return self.selectedNote.noteID;
-}
-
-- (void) restoreSelectionWithNoteID:(NSNumber *)noteID focusDetail:(BOOL)shouldFocus
-{
-	if (noteID == nil) {
-		return;
-	}
-
-	for (NSInteger i = 0; i < self.currentNotes.count; i++) {
-		MBNote* note = [self.currentNotes objectAtIndex:i];
-		if ([note.noteID isEqualToNumber:noteID]) {
-			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:i];
-			[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-			if (shouldFocus) {
-				[self.view.window makeFirstResponder:self.detailTextView];
-			}
-			break;
-		}
-	}
 }
 
 - (void) updateCurrentNotesForSearch:(NSString *)search preservingSelectedNoteID:(NSNumber *)selectedID
 {
+	MBNote* selected_note = self.selectedNote;
 	NSString* s = [search lowercaseString];
 	if (s.length == 0) {
 		self.currentNotes = self.allNotes;
@@ -548,35 +517,46 @@ static NSString* const kNotesSettingsType = @"Setting";
 		self.currentNotes = filtered_notes;
 	}
 
+	// Reloading can send selection notifications while the row indexes are changing.
+	// Restore by object identity first, including notes that do not have a server ID yet.
+	self.isUpdatingNotesList = YES;
 	[self.tableView reloadData];
-	[self restoreSelectionWithNoteID:selectedID focusDetail:NO];
-}
-
-- (void) updateNotesListWithArray:(NSMutableArray *)array selectedNoteID:(NSNumber *)selectedID notebookID:(NSNumber *)notebookID offset:(NSInteger)offset
-{
-	NSNumber* selected_id = [self currentSelectedNoteID];
-	if (selected_id == nil) {
-		selected_id = selectedID;
-	}
-
-	NSArray* updated_notes = [self notesArrayByIncludingNewNoteIfNeeded:array forNotebookID:notebookID];
-	self.allNotes = [self notesByExcludingDeletedNotes:updated_notes];
-	[self updateCurrentNotesForSearch:self.searchField.stringValue preservingSelectedNoteID:selected_id];
-	if (offset == 0) {
-		[self startNewNoteAfterFirstBatchIfNeeded];
-	}
-
-	if ((selected_id == nil) && self.noteCreatedWhileFetching && [self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
-		NSInteger row = [self.currentNotes indexOfObjectIdenticalTo:self.noteCreatedWhileFetching];
-		if (row != NSNotFound) {
-			NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
-			[self.tableView selectRowIndexes:index_set byExtendingSelection:NO];
-			[self.view.window makeFirstResponder:self.detailTextView];
+	NSUInteger selected_row = NSNotFound;
+	for (NSUInteger i = 0; i < self.currentNotes.count; i++) {
+		MBNote* note = self.currentNotes[i];
+		if ((note == selected_note) || (selectedID && [note.noteID isEqualToNumber:selectedID])) {
+			selected_row = i;
+			break;
 		}
 	}
+	if (selected_row == NSNotFound) {
+		[self.tableView deselectAll:nil];
+	}
+	else {
+		[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:selected_row] byExtendingSelection:NO];
+	}
+	self.isUpdatingNotesList = NO;
+	[self updateSelectedNote];
 }
 
-- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array cachedNoteIDs:(NSMutableSet *)cachedNoteIDs serverNoteIDs:(NSMutableSet *)serverNoteIDs requestID:(NSInteger)requestID completion:(void (^)(void))handler backgroundCompletion:(void (^)(void))backgroundHandler finishedCompletion:(void (^)(void))finishedHandler
+- (void) updateNotesListWithArray:(NSArray *)array notebookID:(NSNumber *)notebookID
+{
+	// A GET can include a newly created note before its POST returns the ID.
+	// Wait to display that list so it cannot appear as a second, disconnected row.
+	for (MBNote* note in self.syncingNotes) {
+		if (!note.noteID && [note.notebookID isEqualToNumber:notebookID]) {
+			self.pendingNotesList = [array copy];
+			return;
+		}
+	}
+	self.pendingNotesList = nil;
+	NSNumber* selected_id = [self currentSelectedNoteID];
+	NSArray* updated_notes = [self notesArrayByIncludingLocalNotes:array forNotebookID:notebookID];
+	self.allNotes = [self notesByExcludingDeletedNotes:updated_notes];
+	[self updateCurrentNotesForSearch:self.searchField.stringValue preservingSelectedNoteID:selected_id];
+}
+
+- (void) fetchNotesWithNotebookID:(NSNumber *)notebookID offset:(NSInteger)offset notesArray:(NSMutableArray *)array cachedNoteIDs:(NSMutableSet *)cachedNoteIDs serverNoteIDs:(NSMutableSet *)serverNoteIDs requestID:(NSInteger)requestID completion:(void (^)(void))handler finishedCompletion:(void (^)(void))finishedHandler
 {
 	if (self.secretKey == nil) {
 		return;
@@ -588,14 +568,6 @@ static NSString* const kNotesSettingsType = @"Setting";
 	}
 
 	NSInteger count = 100;
-	
-	// remember selection if there is one
-	NSNumber* selected_id = nil;
-	NSInteger selected_row = [self.tableView selectedRow];
-	if ((selected_row >= 0) && (selected_row < self.currentNotes.count)) {
-		MBNote* n = [self.currentNotes objectAtIndex:selected_row];
-		selected_id = n.noteID;
-	}
 	
 	NSDictionary* args = @{
 		@"count": @(count),
@@ -626,18 +598,13 @@ static NSString* const kNotesSettingsType = @"Setting";
 			}
 			if (!decoded_notes) {
 				if (offset == 0) {
-					self.shouldStartNewNoteAfterFetch = NO;
 					[self finishInitialNotesLoadWithCompletion:handler];
-				}
-				if (backgroundHandler) {
-					backgroundHandler();
 				}
 				return;
 			}
 
 			NSArray* new_notes = [self notesByExcludingDeletedNotes:decoded_notes];
 			BOOL all_notes_cached = YES;
-			NSNumber* selected_note_id = self.selectedNote.noteID;
 			for (MBNote* n in new_notes) {
 				BOOL note_is_cached = (n.noteID && [cachedNoteIDs containsObject:n.noteID]);
 				if (!note_is_cached) {
@@ -646,16 +613,14 @@ static NSString* const kNotesSettingsType = @"Setting";
 				if (n.noteID) {
 					[serverNoteIDs addObject:n.noteID];
 				}
-
-				if (selected_note_id && [n.noteID isEqualToNumber:selected_note_id]) {
-					self.selectedNote.sharedURL = n.sharedURL;
-					[self updateDetailSharingFooter];
-					[self setupMenuForNote:self.selectedNote];
-				}
 			}
 
 			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
-			[db saveNotes:new_notes];
+			// An older server page must not overwrite an edit or a completed local save.
+			NSArray* cache_notes = [new_notes filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MBNote* note, NSDictionary* bindings) {
+				return [self findNote:note inArray:self.localNotes] == nil;
+			}]];
+			[db saveNotes:cache_notes];
 			[db close];
 			
 			for (MBNote* note in new_notes) {
@@ -669,21 +634,15 @@ static NSString* const kNotesSettingsType = @"Setting";
 			BOOL reached_end = (items.count < count);
 			if (reached_end) {
 				NSMutableSet* note_ids_to_keep = [serverNoteIDs mutableCopy];
-				[note_ids_to_keep unionSet:self.noteIDsChangedWhilePaging];
-				if (self.noteCreatedWhileFetching.noteID && [self.noteCreatedWhileFetching.notebookID isEqualToNumber:notebookID]) {
-					[note_ids_to_keep addObject:self.noteCreatedWhileFetching.noteID];
-				}
+				[note_ids_to_keep unionSet:[self noteIDsFromNotes:self.localNotes]];
 				[note_ids_to_keep minusSet:self.deletedNoteIDs];
 
 				[self deleteCachedNotesWithNotebookID:notebookID notInNoteIDs:note_ids_to_keep];
 				[self removeNotesFromArray:array notInNoteIDs:note_ids_to_keep];
-				[self updateNotesListWithArray:array selectedNoteID:selected_id notebookID:notebookID offset:offset];
+				[self updateNotesListWithArray:array notebookID:notebookID];
 
 				if (offset == 0) {
 					[self finishInitialNotesLoadWithCompletion:handler];
-				}
-				if (backgroundHandler) {
-					backgroundHandler();
 				}
 				if (finishedHandler) {
 					finishedHandler();
@@ -691,13 +650,13 @@ static NSString* const kNotesSettingsType = @"Setting";
 			}
 			else {
 				if (offset == 0) {
-					[self updateNotesListWithArray:array selectedNoteID:selected_id notebookID:notebookID offset:offset];
+					[self updateNotesListWithArray:array notebookID:notebookID];
 					[self finishInitialNotesLoadWithCompletion:handler];
 				}
 
 				NSLog(@"Fetching another page of notes, offset: %ld, all cached: %@", (long)offset, all_notes_cached ? @"yes" : @"no");
 				NSInteger new_offset = offset + count;
-				[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array cachedNoteIDs:cachedNoteIDs serverNoteIDs:serverNoteIDs requestID:requestID completion:handler backgroundCompletion:backgroundHandler finishedCompletion:finishedHandler];
+				[self fetchNotesWithNotebookID:notebookID offset:new_offset notesArray:array cachedNoteIDs:cachedNoteIDs serverNoteIDs:serverNoteIDs requestID:requestID completion:handler finishedCompletion:finishedHandler];
 			}
 		});
 	}];
@@ -918,9 +877,12 @@ static NSString* const kNotesSettingsType = @"Setting";
 {
 	// Keep the ID for this session so older fetch and save responses cannot restore the note.
 	[self.deletedNoteIDs addObject:noteID];
-	[self.noteIDsChangedWhilePaging removeObject:noteID];
-	if ([self.noteCreatedWhileFetching.noteID isEqualToNumber:noteID]) {
-		self.noteCreatedWhileFetching = nil;
+	self.localNotes = [[self notesByExcludingDeletedNotes:self.localNotes] mutableCopy];
+	for (MBNote* note in [self.failedNotes copy]) {
+		if ([note.noteID isEqualToNumber:noteID]) {
+			[self.failedNotes removeObject:note];
+			[self.noteSyncCompletions removeObjectForKey:note];
+		}
 	}
 
 	@synchronized (self.editedNotes) {
@@ -948,65 +910,107 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (note.noteID && [self.deletedNoteIDs containsObject:note.noteID]) {
 		return;
 	}
-	[self startNotesProgress];
+	if (![self.localNotes containsObject:note]) {
+		[self.localNotes addObject:note];
+	}
+	if (handler) {
+		NSMutableArray* completions = [self.noteSyncCompletions objectForKey:note];
+		if (!completions) {
+			completions = [NSMutableArray array];
+			[self.noteSyncCompletions setObject:completions forKey:note];
+		}
+		[completions addObject:[handler copy]];
+	}
+	if (!note.notebookID || [self.syncingNotes containsObject:note]) {
+		[self.editedNotes addObject:note];
+		return;
+	}
+
+	// One request per live note, especially before the first POST assigns its ID.
+	MBNote* saved_note = [note copy];
+	NSArray* completions = [[self.noteSyncCompletions objectForKey:note] copy];
+	[self.noteSyncCompletions removeObjectForKey:note];
+	[self.editedNotes removeObject:note];
+	[self.failedNotes removeObject:note];
+	[self.syncingNotes addObject:note];
+	[self updateProgressSpinner];
+
+	NSString* text = saved_note.text ?: @"";
+	if (saved_note.isEncrypted) {
+		text = [MBNote encryptText:text withKey:self.secretKey];
+	}
+	NSMutableDictionary* args = [@{
+		@"text": text,
+		@"is_encrypted": @(saved_note.isEncrypted),
+		@"notebook_id": saved_note.notebookID
+	} mutableCopy];
+	if (saved_note.noteID) {
+		args[@"id"] = saved_note.noteID;
+	}
+	if (saved_note.isSharing) {
+		args[@"is_sharing"] = @YES;
+	}
+	else if (saved_note.isUnsharing) {
+		args[@"is_unsharing"] = @YES;
+	}
 
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes"];
-	NSString* s = note.text;
-	
-	if (note.isEncrypted) {
-		s = [MBNote encryptText:s withKey:self.secretKey];
-	}
-	
-	NSDictionary* args;
-	
-	if (note.noteID == nil) {
-		args = @{
-			@"text": s,
-			@"is_encrypted": @(YES),
-			@"notebook_id": note.notebookID
-		};
-	}
-	else {
-		args = @{
-			@"id": note.noteID,
-			@"text": s,
-			@"is_encrypted": [NSNumber numberWithBool:note.isEncrypted],
-			@"notebook_id": note.notebookID
-		};
-	}
-	
-	if (note.isSharing) {
-		NSMutableDictionary* new_args = [args mutableCopy];
-		[new_args setObject:[NSNumber numberWithBool:YES] forKey:@"is_sharing"];
-		args = new_args;
-	}
-	else if (note.isUnsharing) {
-		NSMutableDictionary* new_args = [args mutableCopy];
-		[new_args setObject:[NSNumber numberWithBool:YES] forKey:@"is_unsharing"];
-		args = new_args;
-	}
-	
 	[client postWithParams:args completion:^(UUHttpResponse* response) {
 		RFDispatchMainAsync(^{
+			[self.syncingNotes removeObject:note];
+			[self updateProgressSpinner];
 			if (note.noteID && [self.deletedNoteIDs containsObject:note.noteID]) {
+				[self.noteSyncCompletions removeObjectForKey:note];
 				return;
 			}
-			if (note.noteID == nil) {
-				note.noteID = [response.parsedResponse objectForKey:@"id"];
-			}
-			note.updatedAt = [NSDate date];
-			if (self.isPagingNotesInBackground && note.noteID) {
-				[self.noteIDsChangedWhilePaging addObject:note.noteID];
+
+			NSDictionary* result = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+			NSNumber* note_id = result[@"id"];
+			if (response.httpError || result[@"error"] || ![note_id isKindOfClass:[NSNumber class]] || note_id.longLongValue <= 0 || (note.noteID && ![note.noteID isEqualToNumber:note_id])) {
+				[self.editedNotes addObject:note];
+				[self.failedNotes addObject:note];
+				NSMutableArray* pending = [NSMutableArray arrayWithArray:completions ?: @[]];
+				[pending addObjectsFromArray:[self.noteSyncCompletions objectForKey:note] ?: @[]];
+				[self.noteSyncCompletions setObject:pending forKey:note];
+				if (self.pendingNotesList && [self.currentNotebook.notebookID isEqualToNumber:note.notebookID]) {
+					[self updateNotesListWithArray:self.pendingNotesList notebookID:note.notebookID];
+				}
+				NSString* message = @"Your changes are still in this window. Retry saving now, or continue editing to try again.";
+				[NSAlert rf_showTwoButtonAlert:@"Error Saving Note" message:message okButton:@"Retry" cancelButton:@"Cancel" completionHandler:^(NSModalResponse returnCode) {
+					if (returnCode == NSAlertFirstButtonReturn) {
+						[self syncNote:note completion:nil];
+					}
+				}];
+				return;
 			}
 
+			BOOL is_new_note = (note.noteID == nil);
+			note.noteID = note_id;
+			note.updatedAt = [NSDate date];
+			saved_note.noteID = note_id;
+			saved_note.updatedAt = note.updatedAt;
+			NSDictionary* metadata = result[@"_microblog"];
+			if ([metadata isKindOfClass:[NSDictionary class]]) {
+				note.isShared = [metadata[@"is_shared"] boolValue];
+				note.sharedURL = [metadata[@"shared_url"] isKindOfClass:[NSString class]] ? metadata[@"shared_url"] : nil;
+				saved_note.isShared = note.isShared;
+				saved_note.sharedURL = note.sharedURL;
+			}
+
+			// Cache only the text this request actually saved, not newer unsent typing.
 			MBNotesDatabase* db = [[MBNotesDatabase alloc] init];
-			[db saveNote:note];
+			[db saveNote:saved_note];
 			[db close];
-			
-			[self stopNotesProgress];
+			if (is_new_note && [self.currentNotebook.notebookID isEqualToNumber:note.notebookID]) {
+				// The server list may have included this note before its create response arrived.
+				[self updateNotesListWithArray:self.pendingNotesList ?: self.allNotes notebookID:note.notebookID];
+			}
 			[self reloadRowForNote:note onlyRecentNotes:NO];
-			if (handler) {
-				handler();
+			for (void (^completion)(void) in completions) {
+				completion();
+			}
+			if ([self.editedNotes containsObject:note]) {
+				[self syncNote:note completion:nil];
 			}
 		});
 	}];
@@ -1014,42 +1018,22 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) syncFromTimer:(NSTimer *)timer
 {
-	@synchronized (self.editedNotes) {
-		if (self.editedNotes.count > 0) {
-			for (MBNote* n in self.editedNotes) {
-				[self syncNote:n completion:nil];
-			}
-			
-			[self.editedNotes removeAllObjects];
+	for (MBNote* note in [self.editedNotes copy]) {
+		if (![self.syncingNotes containsObject:note] && ![self.failedNotes containsObject:note]) {
+			[self syncNote:note completion:nil];
 		}
 	}
 }
 
 - (void) reloadRowForNote:(MBNote *)note onlyRecentNotes:(BOOL)onlyRecentNotes
 {
-	NSInteger recent_limit = 5;
-	NSInteger use_limit = self.currentNotes.count;
-	if (onlyRecentNotes && (use_limit > recent_limit)) {
-		use_limit = recent_limit;
-	}
-	
+	NSInteger use_limit = onlyRecentNotes ? MIN(5, self.currentNotes.count) : self.currentNotes.count;
 	for (NSInteger i = 0; i < use_limit; i++) {
-		MBNote* n = [self.currentNotes objectAtIndex:i];
-		if (note.noteID && [n.noteID isEqualToNumber:note.noteID]) {
-			// copy the edited note and insert into array
-			MBNote* note_copy = [note copy];
-			NSMutableArray* new_notes = [self.currentNotes mutableCopy];
-			[new_notes replaceObjectAtIndex:i withObject:note_copy];
-			
-			// update the cell view
+		if (self.currentNotes[i] == note) {
 			id cell = [self.tableView rowViewAtRow:i makeIfNecessary:NO];
 			if ([cell isKindOfClass:[MBNoteCell class]]) {
-				MBNoteCell* view = (MBNoteCell *)cell;
-				[view setupWithNote:note_copy];
+				[(MBNoteCell *)cell setupWithNote:note];
 			}
-			
-			self.currentNotes = new_notes;
-			
 			break;
 		}
 	}
@@ -1057,24 +1041,18 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (MBNote *) findNote:(MBNote *)note inArray:(NSArray *)array
 {
-	NSNumber* note_id = note.noteID;
-	if (!note_id) {
-		return nil;
-	}
-
-	MBNote* result = nil;
-	
-	for (MBNote* n in array) {
-		if ([n.noteID isEqualToNumber:note_id]) {
-			return n;
+	for (MBNote* candidate in array) {
+		if ((candidate == note) || (note.noteID && [candidate.noteID isEqualToNumber:note.noteID])) {
+			return candidate;
 		}
 	}
-	
-	return result;
+	return nil;
 }
 
 - (IBAction) currentNotebookChanged:(id)sender
 {
+	[self syncFromTimer:nil];
+	[self deselectAll];
 	NSMenuItem* item = [sender selectedItem];
 	NSInteger notebook_id = item.tag;
 	
@@ -1089,12 +1067,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 	[self startNotesProgress];
 
-	[self fetchNotesWithNotebookID:@(notebook_id) completion:^{
-	}];
-	
-	[self setDetailText:@"" forNote:nil];
-	self.selectedNote = nil;
-	[self setDetailBook:@"" title:@""];
+	[self fetchNotesWithNotebookID:@(notebook_id) completion:nil];
 }
 
 - (void) startNewNoteNotification:(NSNotification *)notification
@@ -1108,44 +1081,33 @@ static NSString* const kNotesSettingsType = @"Setting";
 		return;
 	}
 
-	if (self.isFetchingNotes || (self.currentNotebook == nil) || (self.allNotes == nil)) {
-		self.shouldStartNewNoteAfterFetch = YES;
-		if (!self.isFetchingNotes) {
-			[self fetchNotes];
-		}
-	}
-	else {
-		[self createNewNote];
+	[self createNewNote];
+	if (!self.currentNotebook && !self.isFetchingNotes) {
+		[self fetchNotes];
 	}
 }
 
 - (void) createNewNote
 {
-	MBNote* n = [[MBNote alloc] init];
-	n.text = @"";
-	n.notebookID = self.currentNotebook.notebookID;
-	n.isEncrypted = YES;
-	n.createdAt = [NSDate date];
-	
-	NSMutableArray* new_notes = self.allNotes ? [self.allNotes mutableCopy] : [NSMutableArray array];
-	[new_notes insertObject:n atIndex:0];
-	
-	if (self.isFetchingNotes || self.isPagingNotesInBackground) {
-		self.noteCreatedWhileFetching = n;
-	}
+	[self syncFromTimer:nil];
+	MBNote* note = [[MBNote alloc] init];
+	note.text = @"";
+	note.notebookID = self.currentNotebook.notebookID;
+	note.isEncrypted = YES;
+	note.createdAt = [NSDate date];
+	[self.localNotes addObject:note];
 
-	self.allNotes = new_notes;
-	self.currentNotes = new_notes;
-	[self.tableView reloadData];
-	
-	[self syncNote:n completion:^{
-		// select new note
-		NSIndexSet* index = [NSIndexSet indexSetWithIndex:0];
-		[self.tableView selectRowIndexes:index byExtendingSelection:NO];
-		
-		// focus note editor
-		[self.view.window makeFirstResponder:self.detailTextView];
-	}];
+	// Make the new note editable immediately, before its first save returns.
+	self.searchField.stringValue = @"";
+	NSMutableArray* notes = self.allNotes ? [self.allNotes mutableCopy] : [NSMutableArray array];
+	[notes insertObject:note atIndex:0];
+	self.allNotes = notes;
+	[self updateCurrentNotesForSearch:@"" preservingSelectedNoteID:self.selectedNote.noteID];
+	[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+	[self updateSelectedNote];
+	[self.tableView scrollRowToVisible:0];
+	[self.view.window makeFirstResponder:self.detailTextView];
+	[self syncNote:note completion:nil];
 }
 
 - (void) recordAudioNote
@@ -1241,10 +1203,7 @@ static NSString* const kNotesSettingsType = @"Setting";
 	if (![self.currentNotebook.notebookID isEqualToNumber:note.notebookID]) {
 		return;
 	}
-	if (self.isFetchingNotes || self.isPagingNotesInBackground) {
-		[self.audioNotesCreatedWhileFetching addObject:note];
-		[self.noteIDsChangedWhilePaging addObject:note.noteID];
-	}
+	[self.localNotes addObject:note];
 	NSMutableArray* notes = self.allNotes ? [self.allNotes mutableCopy] : [NSMutableArray array];
 	[self mergeNotes:@[note] intoNotesArray:notes atOffset:0];
 	self.allNotes = notes;
@@ -1317,35 +1276,25 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (IBAction) shareOrUnshare:(id)sender
 {
-	[self startNotesProgress];
-    
-    if (self.selectedNote.isShared) {
-        self.selectedNote.isUnsharing = YES;
-        [self syncNote:self.selectedNote completion:^{
-            self.selectedNote.isShared = NO;
-            self.selectedNote.isUnsharing = NO;
-
-            [self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-				[self stopNotesProgress];
-                [self updateDetailSharingFooter];
-                [self setupMenuForNote:self.selectedNote];
-            }];
-        }];
-    }
-    else {
-        self.selectedNote.isSharing = YES;
-        self.selectedNote.isEncrypted = NO;
-        [self syncNote:self.selectedNote completion:^{
-            self.selectedNote.isShared = YES;
-            self.selectedNote.isSharing = NO;
-
-            [self fetchNotesWithNotebookID:self.currentNotebook.notebookID completion:^{
-				[self stopNotesProgress];
-                [self updateDetailSharingFooter];
-                [self setupMenuForNote:self.selectedNote];
-            }];
-        }];
-    }
+	MBNote* note = self.selectedNote;
+	if (!note || note.isSharing || note.isUnsharing) {
+		return;
+	}
+	BOOL should_share = !note.isShared;
+	note.isSharing = should_share;
+	note.isUnsharing = !should_share;
+	if (should_share) {
+		note.isEncrypted = NO;
+	}
+	[self syncNote:note completion:^{
+		note.isShared = should_share;
+		note.isSharing = NO;
+		note.isUnsharing = NO;
+		if (self.selectedNote == note) {
+			[self updateDetailSharingFooter];
+			[self setupMenuForNote:note];
+		}
+	}];
 }
 
 - (IBAction) openInBrowser:(id)sender
@@ -1427,9 +1376,10 @@ static NSString* const kNotesSettingsType = @"Setting";
 	// The editor is reused across notes; undo must never restore another note's text.
 	[self.detailTextView breakUndoCoalescing];
 	[self.detailTextView setString:text];
+	self.detailTextView.editable = (note != nil);
 	[self.textUndoManager removeAllActions];
 	if (note && note.isShared) {
-		[self.sharedLinkButton setTitle:note.sharedURL];
+		[self.sharedLinkButton setTitle:note.sharedURL ?: @""];
 		self.sharedHeightConstraint.constant = 40;
 	}
 	else {
@@ -1475,25 +1425,29 @@ static NSString* const kNotesSettingsType = @"Setting";
 
 - (void) tableViewSelectionDidChange:(NSNotification *)notification
 {
-	// force a sync if selection is changing
-	[self syncFromTimer:nil];
-	
-	// update current edited note text (if not already being edited)
+	[self updateSelectedNote];
+}
+
+- (void) updateSelectedNote
+{
+	if (self.isUpdatingNotesList) {
+		return;
+	}
 	NSInteger row = self.tableView.selectedRow;
-	if ((row >= 0) && (row < self.currentNotes.count)) {
-		MBNote* n = [self.currentNotes objectAtIndex:row];
-		if (!n.noteID || ![self.selectedNote.noteID isEqualToNumber:n.noteID]) {
-			self.selectedNote = [n copy];
-			[self setDetailText:self.selectedNote.text forNote:self.selectedNote];
-			[self setDetailBook:self.selectedNote.attachedBookISBN title:self.selectedNote.attachedBookTitle];
-			[self setupMenuForNote:self.selectedNote];
-		}
+	MBNote* note = ((row >= 0) && (row < self.currentNotes.count)) ? self.currentNotes[row] : nil;
+	if (note == self.selectedNote) {
+		return;
 	}
-	else {
-		self.selectedNote = nil;
-		[self setDetailText:@"" forNote:nil];
-		[self setDetailBook:@"" title:@""];
+
+	[self syncFromTimer:nil];
+	BOOL same_text = note.noteID && [self.selectedNote.noteID isEqualToNumber:note.noteID] && [note.text isEqualToString:self.selectedNote.text];
+	self.selectedNote = note;
+	if (!same_text) {
+		[self setDetailText:note.text ?: @"" forNote:note];
 	}
+	[self setDetailBook:note.attachedBookISBN title:note.attachedBookTitle];
+	[self updateDetailSharingFooter];
+	[self setupMenuForNote:note];
 }
 
 #pragma mark -
@@ -1506,25 +1460,13 @@ static NSString* const kNotesSettingsType = @"Setting";
 - (void) textDidChange:(NSNotification *)notification
 {
 	if (self.selectedNote) {
-		// add to sync queue
 		self.selectedNote.text = [self.detailTextView string];
 		[self.editedNotes addObject:self.selectedNote];
-		
-		// also update the copy in the notes list
-		MBNote* n;
-		n = [self findNote:self.selectedNote inArray:self.currentNotes];
-		if (n) {
-			n.text = self.selectedNote.text;
+		[self.failedNotes removeObject:self.selectedNote];
+		if (![self.localNotes containsObject:self.selectedNote]) {
+			[self.localNotes addObject:self.selectedNote];
 		}
-		n = [self findNote:self.selectedNote inArray:self.allNotes];
-		if (n) {
-			n.text = self.selectedNote.text;
-		}
-
-		// do a quick reload of the table row before it syncs
-		if (n) {
-			[self reloadRowForNote:n onlyRecentNotes:YES];
-		}
+		[self reloadRowForNote:self.selectedNote onlyRecentNotes:YES];
 	}
 }
 
