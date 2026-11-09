@@ -39,13 +39,18 @@
 	}
 }
 
-- (void) willOpenMenu:(NSMenu *)menu withEvent:(NSEvent *)event
+- (NSMenu *) menuForEvent:(NSEvent *)event
 {
-	NSInteger row = [self clickedRow];
-	if (row >= 0) {
-		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
-		[self selectRowIndexes:index_set byExtendingSelection:NO];
+	NSPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+	NSInteger row = [self rowAtPoint:point];
+	if (row < 0) {
+		return nil;
 	}
+
+	// Select before AppKit updates the menu so validation uses the clicked movie.
+	[self.window makeFirstResponder:self];
+	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+	return [super menuForEvent:event];
 }
 
 - (BOOL) validateProposedFirstResponder:(NSResponder *)responder forEvent:(NSEvent *)event

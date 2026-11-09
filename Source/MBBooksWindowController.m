@@ -10,6 +10,7 @@
 
 #import "RFBookshelf.h"
 #import "MBBook.h"
+#import "MBNote.h"
 #import "MBNotebook.h"
 #import "MBBookCell.h"
 #import "MBBookNoteController.h"
@@ -58,6 +59,7 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"BookCell" bundle:nil] forIdentifier:@"BookCell"];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
+	self.contextMenu.delegate = self;
 	self.window.initialFirstResponder = self.tableView;
 }
 
@@ -447,6 +449,15 @@
 	}];
 }
 
+- (IBAction) addNote:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if ([MBNote hasSecretKey] && row >= 0 && row < self.currentBooks.count) {
+		MBBookCell* cell = (MBBookCell *)[self.tableView rowViewAtRow:row makeIfNecessary:YES];
+		[cell addNote:sender];
+	}
+}
+
 - (IBAction) delete:(id)sender
 {
 	NSInteger row = self.tableView.selectedRow;
@@ -536,9 +547,22 @@
 	}
 }
 
+- (void) menuNeedsUpdate:(NSMenu *)menu
+{
+	for (NSMenuItem* item in menu.itemArray) {
+		if (item.action == @selector(addNote:)) {
+			item.hidden = ![MBNote hasSecretKey];
+		}
+	}
+}
+
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if (item.action == @selector(assignToBookshelf:)) {
+	if (item.action == @selector(addNote:)) {
+		NSInteger row = self.tableView.selectedRow;
+		return [MBNote hasSecretKey] && row >= 0 && row < self.currentBooks.count;
+	}
+	else if (item.action == @selector(assignToBookshelf:)) {
 		RFBookshelf* shelf = item.representedObject;
 		if ([shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
 			[item setState:NSControlStateValueOn];

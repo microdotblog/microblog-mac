@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class MBMovie;
 
-@interface MBMoviesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
+@interface MBMoviesController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, NSMenuItemValidation, NSMenuDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;

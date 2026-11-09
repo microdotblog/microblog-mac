@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class RFBookshelf;
 @class MBBookNoteController;
 
-@interface MBBooksWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSMenuItemValidation>
+@interface MBBooksWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSMenuItemValidation, NSMenuDelegate>
 
 @property (strong, nonatomic) IBOutlet NSTableView* tableView;
 @property (strong, nonatomic) IBOutlet NSProgressIndicator* progressSpinner;

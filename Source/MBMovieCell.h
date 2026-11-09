@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) setupWithMovie:(MBMovie *)movie;
 - (void) setDisclosureOpen:(BOOL)isOpen;
+- (IBAction) startPost:(id)sender;
 
 @end
 

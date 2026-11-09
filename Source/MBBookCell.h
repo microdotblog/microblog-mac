@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) RFBookshelf* bookshelf;
 
 - (void) setupWithBook:(MBBook *)book inBookshelf:(RFBookshelf *)bookshelf;
+- (IBAction) addNote:(id)sender;
 
 @end
 

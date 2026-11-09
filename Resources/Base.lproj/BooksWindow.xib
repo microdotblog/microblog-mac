@@ -141,6 +141,12 @@
                         <action selector="startNewPost:" target="-2" id="UbM-0I-OqO"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Add Note..." id="WJT-Ac-pmS">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="addNote:" target="-2" id="Wyk-4W-rCq"/>
+                    </connections>
+                </menuItem>
                 <menuItem isSeparatorItem="YES" id="ojn-HI-5Xb"/>
                 <menuItem title="Remove" id="IIb-gO-xa3">
                     <modifierMask key="keyEquivalentModifierMask"/>

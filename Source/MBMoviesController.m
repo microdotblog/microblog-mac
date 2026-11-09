@@ -46,6 +46,7 @@
 	[self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"MovieCell" bundle:nil] forIdentifier:@"MovieCell"];
 	[self.tableView setTarget:self];
 	[self.tableView setDoubleAction:@selector(openRow:)];
+	self.contextMenu.delegate = self;
 	self.tableView.alphaValue = 0.0;
 }
 
@@ -96,6 +97,48 @@
 			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:m.url]];
 		}
 	}
+}
+
+- (IBAction) startNewPost:(id)sender
+{
+	NSInteger row = self.tableView.selectedRow;
+	if (row >= 0 && row < self.movies.count) {
+		MBMovie* movie = self.movies[row];
+		if (movie.username.length == 0 && movie.postText.length > 0) {
+			MBMovieCell* cell = (MBMovieCell *)[self.tableView rowViewAtRow:row makeIfNecessary:YES];
+			[cell startPost:sender];
+		}
+	}
+}
+
+- (void) menuNeedsUpdate:(NSMenu *)menu
+{
+	NSInteger index = [menu indexOfItemWithTarget:self andAction:@selector(startNewPost:)];
+	if (index < 0) {
+		return;
+	}
+
+	NSMenuItem* item = [menu itemAtIndex:index];
+	item.hidden = ![self validateMenuItem:item];
+	if (index + 1 < menu.numberOfItems) {
+		NSMenuItem* separator = [menu itemAtIndex:index + 1];
+		if (separator.isSeparatorItem) {
+			separator.hidden = item.hidden;
+		}
+	}
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	if (item.action == @selector(startNewPost:)) {
+		NSInteger row = self.tableView.selectedRow;
+		if (row < 0 || row >= self.movies.count) {
+			return NO;
+		}
+		MBMovie* movie = self.movies[row];
+		return movie.username.length == 0 && movie.postText.length > 0;
+	}
+	return YES;
 }
 
 - (IBAction) openInBrowser:(id)sender

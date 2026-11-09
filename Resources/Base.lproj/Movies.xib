@@ -127,6 +127,13 @@
         </customView>
         <menu id="59v-IZ-1jn">
             <items>
+                <menuItem title="New Post..." id="LTH-0K-JTg">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="startNewPost:" target="-2" id="gMH-gM-wQY"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="8JS-fY-kQL"/>
                 <menuItem title="Open in Safari..." image="safari" catalog="system" id="ZoC-Pe-9Pr">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
