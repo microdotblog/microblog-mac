@@ -116,6 +116,7 @@ static CGFloat const kPosterCornerRadius = 4.0;
 		self.disclosureTriangle.hidden = YES;
 	}
 
+	[self updateButtonVisibility];
 	[self updateTextColors];
 }
 
@@ -128,8 +129,13 @@ static CGFloat const kPosterCornerRadius = 4.0;
 {
 	[super setSelected:selected];
 	
-	self.postButton.hidden = !selected || (self.movie.username.length > 0);
+	[self updateButtonVisibility];
 	[self updateTextColors];
+}
+
+- (void) updateButtonVisibility
+{
+	self.postButton.hidden = !self.selected || self.movie.username.length > 0 || self.movie.postText.length == 0;
 }
 
 - (void) setEmphasized:(BOOL)emphasized
@@ -178,7 +184,7 @@ static CGFloat const kPosterCornerRadius = 4.0;
 - (IBAction) startPost:(id)sender
 {
 	NSString* text = self.movie.postText;
-	if (text.length == 0) {
+	if (self.movie.username.length > 0 || text.length == 0) {
 		return;
 	}
 

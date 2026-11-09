@@ -29,24 +29,32 @@
 	}
 }
 
-- (void) willOpenMenu:(NSMenu *)menu withEvent:(NSEvent *)event
+- (NSMenu *) menuForEvent:(NSEvent *)event
 {
-	NSInteger row = [self clickedRow];
-	if (row >= 0) {
-		NSIndexSet* index_set = [NSIndexSet indexSetWithIndex:row];
-		[self selectRowIndexes:index_set byExtendingSelection:NO];
+	NSPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+	NSInteger row = [self rowAtPoint:point];
+	if (row < 0) {
+		return nil;
 	}
+
+	// Select before AppKit updates the menu so validation uses the clicked book.
+	[self.window makeFirstResponder:self];
+	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+	return [super menuForEvent:event];
 }
 
 - (BOOL) validateProposedFirstResponder:(NSResponder *)responder forEvent:(NSEvent *)event
 {
-	// for right-clicks, we let the table handle it
-	if (([event modifierFlags] & NSEventModifierFlagControl) || ([event type] == NSEventTypeRightMouseDown)) {
-		return [super validateProposedFirstResponder:responder forEvent:event];
+	// Keep context clicks on the table, including clicks over row controls.
+	if (event.type == NSEventTypeRightMouseDown || (event.type == NSEventTypeLeftMouseDown && (event.modifierFlags & NSEventModifierFlagControl))) {
+		return NO;
 	}
 	
-	// allow clicks in buttons no matter the selection style
-	return YES;
+	// Allow buttons on the first click; use normal routing for labels and images.
+	if ([responder isKindOfClass:[NSButton class]]) {
+		return YES;
+	}
+	return [super validateProposedFirstResponder:responder forEvent:event];
 }
 
 @end

@@ -43,10 +43,7 @@
 		self.coverImageView.image = [book cachedCover];
 	}
 	
-	// search results don't have a book ID, show the add button
-	self.addButton.hidden = (book.bookID != nil);
-	
-	self.addNoteButton.hidden = ![MBNote hasSecretKey];
+	[self updateButtonVisibility];
 }
 
 - (void) drawBackgroundInRect:(NSRect)dirtyRect
@@ -79,10 +76,15 @@
 {
 	[super setSelected:selected];
 	
-	self.optionsButton.hidden = !selected;
-	if ([MBNote hasSecretKey]) {
-		self.addNoteButton.hidden = !selected;
-	}
+	[self updateButtonVisibility];
+}
+
+- (void) updateButtonVisibility
+{
+	// Search results show the add button in place of the options button.
+	self.addButton.hidden = (self.book.bookID != nil);
+	self.optionsButton.hidden = !self.selected || self.book.bookID == nil;
+	self.addNoteButton.hidden = !self.selected || ![MBNote hasSecretKey];
 }
 
 - (IBAction) addBook:(id)sender
@@ -95,13 +97,34 @@
 
 - (IBAction) showOptionsMenu:(id)sender
 {
-	NSTableView* table = (NSTableView *)[self superview];
+	NSView* view = self.superview;
+	while (view && ![view isKindOfClass:[NSTableView class]]) {
+		view = view.superview;
+	}
+	NSTableView* table = (NSTableView *)view;
+	if (!table) {
+		return;
+	}
+
+	NSInteger row = [table rowForView:self];
+	if (row < 0) {
+		return;
+	}
+	[table.window makeFirstResponder:table];
+	[table selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+
 	NSMenu* menu = table.menu;
-	[menu popUpMenuPositioningItem:nil atLocation:[NSEvent mouseLocation] inView:nil];
+	NSButton* button = self.optionsButton;
+	NSPoint point = NSMakePoint(NSMinX(button.bounds), button.isFlipped ? NSMaxY(button.bounds) : NSMinY(button.bounds));
+	[menu popUpMenuPositioningItem:nil atLocation:point inView:button];
 }
 
 - (IBAction) addNote:(id)sender
 {
+	if (![MBNote hasSecretKey]) {
+		return;
+	}
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:kAddNoteNotification object:self userInfo:@{
 		kAddNoteBookKey: self.book,
 		kAddNoteBookshelfKey: self.bookshelf

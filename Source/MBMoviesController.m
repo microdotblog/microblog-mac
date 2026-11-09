@@ -730,6 +730,12 @@
 	return self.movies.count;
 }
 
+- (NSView *) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	// The custom row contains the controls; a column view would cover them.
+	return nil;
+}
+
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
 {
 	MBMovieCell* cell = [tableView makeViewWithIdentifier:@"MovieCell" owner:self];

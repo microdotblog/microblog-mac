@@ -19,6 +19,13 @@
 #import "RFConstants.h"
 #import "NSString+Extras.h"
 #import "NSColor+Extras.h"
+#import "NSError+Extras.h"
+
+@interface MBBooksWindowController ()
+
+@property (assign, nonatomic) BOOL loadingReadingNotebook;
+
+@end
 
 @implementation MBBooksWindowController
 
@@ -348,32 +355,35 @@
 		NSImage* cached_img = [b cachedCover];
 		if (cached_img) {
 			b.coverImage = cached_img;
+			[self updateCoverForBook:b];
 			self.coverDownloadsCount--;
 		}
 		else {
 			NSString* url = [NSString stringWithFormat:@"https://micro.blog/photos/300x/%@", [b.coverURL rf_urlEncoded]];
 			
 			[UUHttpSession get:url queryArguments:nil completionHandler:^(UUHttpResponse* response) {
-				if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
-					NSImage* img = response.parsedResponse;
-					RFDispatchMain(^{
+				RFDispatchMain(^{
+					if ([response.parsedResponse isKindOfClass:[NSImage class]]) {
+						NSImage* img = response.parsedResponse;
 						b.coverImage = img;
 						[b setCachedCover:img];
-						 
-						@try {
-							NSIndexSet* selected_rows = [self.tableView selectedRowIndexes];
-							[self.tableView reloadData];
-							[self.tableView selectRowIndexes:selected_rows byExtendingSelection:NO];
-						}
-						@catch (NSException* e) {
-						}
-						
-						self.coverDownloadsCount--;
-					});
-				}
+						[self updateCoverForBook:b];
+					}
+					self.coverDownloadsCount--;
+				});
 			}];
 		}
 	}
+}
+
+- (void) updateCoverForBook:(MBBook *)book
+{
+	[self.tableView enumerateAvailableRowViewsUsingBlock:^(NSTableRowView* rowView, NSInteger row) {
+		MBBookCell* cell = (MBBookCell *)rowView;
+		if (cell.book == book) {
+			cell.coverImageView.image = book.coverImage;
+		}
+	}];
 }
 
 #pragma mark -
@@ -403,50 +413,69 @@
 
 - (void) addNoteNotification:(NSNotification *)notification
 {
-    MBBook* b = [[notification userInfo] objectForKey:kAddNoteBookKey];
-	RFBookshelf* shelf = [[notification userInfo] objectForKey:kAddNoteBookshelfKey];
-	if (![shelf.bookshelfID isEqualToNumber:self.bookshelf.bookshelfID]) {
-		// ignore notification if not this bookshelf
+	MBBookCell* cell = notification.object;
+	if (![cell isKindOfClass:[MBBookCell class]] || cell.window != self.window) {
+		// Only the window containing the clicked row should open the sheet.
+		return;
+	}
+	if (![MBNote hasSecretKey] || self.loadingReadingNotebook || self.noteController || self.window.attachedSheet) {
 		return;
 	}
 
+	MBBook* book = notification.userInfo[kAddNoteBookKey];
+	self.loadingReadingNotebook = YES;
 	[self.progressSpinner startAnimation:nil];
 
 	// get the reading notebook
 	RFClient* client = [[RFClient alloc] initWithPath:@"/notes/notebooks"];
 	[client getWithQueryArguments:@{} completion:^(UUHttpResponse* response) {
-		if ([response.parsedResponse isKindOfClass:[NSDictionary class]]) {
-			NSArray* items = [response.parsedResponse objectForKey:@"items"];
+		RFDispatchMain(^{
+			self.loadingReadingNotebook = NO;
+			[self.progressSpinner stopAnimation:nil];
+			if (!self.window.isVisible) {
+				return;
+			}
+
+			NSDictionary* result = [response.parsedResponse isKindOfClass:[NSDictionary class]] ? response.parsedResponse : nil;
+			NSArray* items = [result[@"items"] isKindOfClass:[NSArray class]] ? result[@"items"] : nil;
+			if (response.httpError || response.httpResponse.statusCode != 200 || !items) {
+				NSString* message = [response.httpError mb_networkMessageWithResponse:response.httpResponse];
+				[self showAddNoteError:message ?: @"Could not load your notebooks. Please try again."];
+				return;
+			}
+
 			for (NSDictionary* item in items) {
-				NSDictionary* mb = [item objectForKey:@"_microblog"];
-				NSNumber* notebook_id = [item objectForKey:@"id"];
-				NSString* notebook_name = [item objectForKey:@"title"];
-				NSString* light_color = [[mb objectForKey:@"colors"] objectForKey:@"light"];
-				NSString* dark_color = [[mb objectForKey:@"colors"] objectForKey:@"dark"];
-				NSString* type = [mb objectForKey:@"type"];
+				if (![item isKindOfClass:[NSDictionary class]] || ![item[@"id"] isKindOfClass:[NSNumber class]]) {
+					continue;
+				}
+				NSDictionary* mb = [item[@"_microblog"] isKindOfClass:[NSDictionary class]] ? item[@"_microblog"] : nil;
+				if ([mb[@"type"] isEqual:@"reading"] || [item[@"title"] isEqual:@"Reading"]) {
+					NSDictionary* colors = [mb[@"colors"] isKindOfClass:[NSDictionary class]] ? mb[@"colors"] : nil;
+					MBNotebook* notebook = [[MBNotebook alloc] init];
+					notebook.notebookID = item[@"id"];
+					notebook.name = [item[@"title"] isKindOfClass:[NSString class]] ? item[@"title"] : @"Reading";
+					notebook.lightColor = [colors[@"light"] isKindOfClass:[NSString class]] ? [NSColor mb_colorFromString:colors[@"light"]] : [NSColor textBackgroundColor];
+					notebook.darkColor = [colors[@"dark"] isKindOfClass:[NSString class]] ? [NSColor mb_colorFromString:colors[@"dark"]] : [NSColor textBackgroundColor];
 
-				if ([type isEqualToString:@"reading"] || [notebook_name isEqualToString:@"Reading"]) {
-					MBNotebook* nb = [[MBNotebook alloc] init];
-					nb.notebookID = notebook_id;
-					nb.name = notebook_name;
-					nb.lightColor = [NSColor mb_colorFromString:light_color];
-					nb.darkColor = [NSColor mb_colorFromString:dark_color];
-
-					RFDispatchMain(^{
-						// show note sheet
-						self.noteController = [[MBBookNoteController alloc] initWithBook:b readingNotebook:nb];
-						[self.window beginSheet:self.noteController.window completionHandler:^(NSModalResponse returnCode) {
-							self.noteController = nil;
-						}];
-					});
+					self.noteController = [[MBBookNoteController alloc] initWithBook:book readingNotebook:notebook];
+					[self.window beginSheet:self.noteController.window completionHandler:^(NSModalResponse returnCode) {
+						self.noteController = nil;
+					}];
+					return;
 				}
 			}
-		}
-		
-		RFDispatchMain(^{
-			[self.progressSpinner stopAnimation:nil];
+			[self showAddNoteError:@"Your Reading notebook could not be found. Open Notes to finish setting up your notebooks, then try again."];
 		});
 	}];
+}
+
+- (void) showAddNoteError:(NSString *)message
+{
+	NSAlert* alert = [[NSAlert alloc] init];
+	alert.messageText = @"Error Adding Note";
+	alert.informativeText = message;
+	[alert addButtonWithTitle:@"OK"];
+	[alert beginSheetModalForWindow:self.window completionHandler:nil];
 }
 
 - (IBAction) addNote:(id)sender
@@ -609,6 +638,12 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
 	return self.currentBooks.count;
+}
+
+- (NSView *) tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	// The custom row contains the controls; a column view would cover them.
+	return nil;
 }
 
 - (NSTableRowView *) tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row

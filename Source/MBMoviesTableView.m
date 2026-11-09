@@ -55,13 +55,16 @@
 
 - (BOOL) validateProposedFirstResponder:(NSResponder *)responder forEvent:(NSEvent *)event
 {
-	// for right-clicks, we let the table handle it
-	if (([event modifierFlags] & NSEventModifierFlagControl) || ([event type] == NSEventTypeRightMouseDown)) {
-		return [super validateProposedFirstResponder:responder forEvent:event];
+	// Keep context clicks on the table, including clicks over row controls.
+	if (event.type == NSEventTypeRightMouseDown || (event.type == NSEventTypeLeftMouseDown && (event.modifierFlags & NSEventModifierFlagControl))) {
+		return NO;
 	}
 	
-	// allow clicks in buttons no matter the selection style
-	return YES;
+	// Allow buttons on the first click; use normal routing for labels and images.
+	if ([responder isKindOfClass:[NSButton class]]) {
+		return YES;
+	}
+	return [super validateProposedFirstResponder:responder forEvent:event];
 }
 
 @end
