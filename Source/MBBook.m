@@ -7,6 +7,7 @@
 //
 
 #import "MBBook.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation MBBook
 
@@ -22,6 +23,24 @@
 	}
 	NSString* filename = [NSString stringWithFormat:@"%@.tif", self.isbn];
 	return [[self class] pathForCachedImage:filename inFolder:@"Book Covers"];
+}
+
+- (NSString *) pathForCachedBackground
+{
+	if (self.backgroundURL.length == 0) {
+		return nil;
+	}
+
+	// Match the calendar's URL-based filenames so both views share the cache.
+	NSData* url_data = [self.backgroundURL dataUsingEncoding:NSUTF8StringEncoding];
+	unsigned char digest[CC_SHA256_DIGEST_LENGTH];
+	CC_SHA256(url_data.bytes, (CC_LONG)url_data.length, digest);
+	NSMutableString* filename = [NSMutableString string];
+	for (NSUInteger i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
+		[filename appendFormat:@"%02x", digest[i]];
+	}
+	[filename appendString:@".tif"];
+	return [[self class] pathForCachedImage:filename inFolder:@"Book Backgrounds"];
 }
 
 + (NSString *) pathForCachedImage:(NSString *)filename inFolder:(NSString *)folderName

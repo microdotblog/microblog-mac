@@ -10,6 +10,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MBBooksWindowController">
             <connections>
                 <outlet property="booksCountField" destination="dI4-c7-XjA" id="vyX-N4-F6e"/>
+                <outlet property="bookshelfWidthConstraint" destination="aZA-l5-8za" id="uN6-Mb-7Hc"/>
                 <outlet property="browserMenuItem" destination="VDp-cZ-9mK" id="02v-Dy-uV4"/>
                 <outlet property="contextMenu" destination="Z9F-C1-hHf" id="t3Q-wd-58v"/>
                 <outlet property="deleteMenuItem" destination="IIb-gO-xa3" id="eKc-jc-ld7"/>
@@ -24,27 +25,27 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Books" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="BooksWindow" animationBehavior="default" tabbingMode="disallowed" id="vBW-a4-Woh">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="594" y="443" width="491" height="439"/>
+            <rect key="contentRect" x="594" y="443" width="600" height="439"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
-            <value key="minSize" type="size" width="400" height="300"/>
+            <value key="minSize" type="size" width="600" height="300"/>
             <view key="contentView" id="aGr-C3-8Q9">
-                <rect key="frame" x="0.0" y="0.0" width="491" height="439"/>
+                <rect key="frame" x="0.0" y="0.0" width="600" height="439"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="80" horizontalPageScroll="10" verticalLineScroll="80" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ieq-aR-LlJ">
-                        <rect key="frame" x="-1" y="-1" width="493" height="385"/>
+                        <rect key="frame" x="-1" y="-1" width="602" height="385"/>
                         <clipView key="contentView" drawsBackground="NO" id="h4R-hn-ZUu">
-                            <rect key="frame" x="0.0" y="0.0" width="493" height="385"/>
+                            <rect key="frame" x="0.0" y="0.0" width="602" height="385"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" usesAutomaticRowHeights="YES" viewBased="YES" id="uNd-0J-cNj" customClass="MBBooksTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="493" height="385"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="602" height="385"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="color_table_background"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="476" minWidth="40" maxWidth="1000" id="hSX-fE-Pcd">
+                                        <tableColumn width="585" minWidth="40" maxWidth="1000" id="hSX-fE-Pcd">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -66,7 +67,7 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="vXZ-ge-4oI">
-                            <rect key="frame" x="0.0" y="371" width="493" height="16"/>
+                            <rect key="frame" x="0.0" y="371" width="602" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="35F-A5-27r">
@@ -75,7 +76,7 @@
                         </scroller>
                     </scrollView>
                     <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNA-3l-ASe">
-                        <rect key="frame" x="221" y="400" width="250" height="24"/>
+                        <rect key="frame" x="330" y="400" width="250" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="250" id="YBH-fe-BOp"/>
                         </constraints>
@@ -89,13 +90,13 @@
                         </connections>
                     </searchField>
                     <customView verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rdo-mY-zgu" customClass="MBSeparatorView">
-                        <rect key="frame" x="0.0" y="384" width="491" height="1"/>
+                        <rect key="frame" x="0.0" y="384" width="600" height="1"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="8e0-Sz-SnC"/>
                         </constraints>
                     </customView>
                     <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-qI-4Gk">
-                        <rect key="frame" x="197" y="404" width="16" height="16"/>
+                        <rect key="frame" x="306" y="404" width="16" height="16"/>
                     </progressIndicator>
                     <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dI4-c7-XjA">
                         <rect key="frame" x="18" y="404" width="52" height="16"/>

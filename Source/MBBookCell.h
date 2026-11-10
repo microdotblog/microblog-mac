@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet NSButton* addButton;
 @property (strong, nonatomic) IBOutlet NSButton* optionsButton;
 @property (strong, nonatomic) IBOutlet NSButton* addNoteButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* addNoteWidthConstraint;
 
 @property (strong, nonatomic) MBBook* book;
 @property (strong, nonatomic) RFBookshelf* bookshelf;

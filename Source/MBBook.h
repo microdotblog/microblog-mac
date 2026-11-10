@@ -19,9 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSImage* coverImage;
 @property (strong) NSArray* authors; // NSString
 @property (strong) NSString* bookDescription;
+@property (strong) NSString* backgroundURL;
+@property (strong) NSString* backgroundColor;
 
 - (NSString *) microblogURL;
 - (NSString *) pathForCachedCover;
+- (NSString *) pathForCachedBackground;
 + (NSString *) pathForCachedImage:(NSString *)filename inFolder:(NSString *)folderName;
 - (NSImage *) cachedCover;
 - (void) setCachedCover:(NSImage *)image;

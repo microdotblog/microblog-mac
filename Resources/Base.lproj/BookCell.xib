@@ -99,6 +99,7 @@
             <connections>
                 <outlet property="addButton" destination="UYg-Yw-FIb" id="9dJ-Qq-SGO"/>
                 <outlet property="addNoteButton" destination="7Bj-GZ-e5c" id="I8c-GF-0VT"/>
+                <outlet property="addNoteWidthConstraint" destination="Jbv-5N-39a" id="qbt-8M-RE7"/>
                 <outlet property="authorField" destination="bm2-WP-3ly" id="LSW-Qj-gwq"/>
                 <outlet property="coverImageView" destination="jfM-zl-gja" id="gdj-5O-CcR"/>
                 <outlet property="optionsButton" destination="uv3-5k-eaU" id="cRA-o1-0gr"/>

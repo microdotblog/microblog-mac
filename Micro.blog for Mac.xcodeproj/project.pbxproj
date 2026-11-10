@@ -287,6 +287,7 @@
 		4BF7E5272836CAC400500C59 /* MBBooksWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E5262836CAC400500C59 /* MBBooksWindowController.m */; };
 		4BF7E52A2836CB1000500C59 /* BooksWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E5282836CB1000500C59 /* BooksWindow.xib */; };
 		4BF7E52D2836CE2D00500C59 /* MBBookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E52C2836CE2D00500C59 /* MBBookCell.m */; };
+		C0DE20261110000000000001 /* MBBookSearchDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261110000000000002 /* MBBookSearchDetailsController.m */; };
 		4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E52E2836CE4700500C59 /* BookCell.xib */; };
 		4BF7E53328394C5C00500C59 /* MBBooksTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E53128394C5C00500C59 /* MBBooksTableView.m */; };
 		4BFF2CBF289030C900B74D18 /* MBDisableDragImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF2CBE289030C900B74D18 /* MBDisableDragImageView.m */; };
@@ -802,6 +803,8 @@
 		4BF7E5292836CB1000500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BooksWindow.xib; sourceTree = "<group>"; };
 		4BF7E52B2836CE2D00500C59 /* MBBookCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookCell.h; path = Source/MBBookCell.h; sourceTree = "<group>"; };
 		4BF7E52C2836CE2D00500C59 /* MBBookCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookCell.m; path = Source/MBBookCell.m; sourceTree = "<group>"; };
+		C0DE20261110000000000002 /* MBBookSearchDetailsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookSearchDetailsController.m; path = Source/MBBookSearchDetailsController.m; sourceTree = "<group>"; };
+		C0DE20261110000000000003 /* MBBookSearchDetailsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookSearchDetailsController.h; path = Source/MBBookSearchDetailsController.h; sourceTree = "<group>"; };
 		4BF7E52F2836CE4700500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BookCell.xib; sourceTree = "<group>"; };
 		4BF7E53128394C5C00500C59 /* MBBooksTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBBooksTableView.m; path = Source/MBBooksTableView.m; sourceTree = "<group>"; };
 		4BF7E53228394C5C00500C59 /* MBBooksTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBBooksTableView.h; path = Source/MBBooksTableView.h; sourceTree = "<group>"; };
@@ -1138,6 +1141,8 @@
 				4BF7E5262836CAC400500C59 /* MBBooksWindowController.m */,
 				4BF7E52B2836CE2D00500C59 /* MBBookCell.h */,
 				4BF7E52C2836CE2D00500C59 /* MBBookCell.m */,
+				C0DE20261110000000000003 /* MBBookSearchDetailsController.h */,
+				C0DE20261110000000000002 /* MBBookSearchDetailsController.m */,
 				4BF7E5222836085900500C59 /* MBDisabledScrollView.h */,
 				4BF7E5232836085900500C59 /* MBDisabledScrollView.m */,
 				4BF537262247341800CF9D66 /* RFAllPostsController.h */,
@@ -1901,6 +1906,7 @@
 				4BF537342247CD1D00CF9D66 /* RFPost.m in Sources */,
 				4BB9906A2A8694C900C490E2 /* MBTagsTableView.m in Sources */,
 				4BF7E52D2836CE2D00500C59 /* MBBookCell.m in Sources */,
+				C0DE20261110000000000001 /* MBBookSearchDetailsController.m in Sources */,
 				4B19707F2EB7F26500BFFD8E /* MBMoviesTableView.m in Sources */,
 				4BDB3828278A83A300BD457C /* MBPreviewController.m in Sources */,
 				4B2CAB1D1F90667300D9B10E /* parser.c in Sources */,

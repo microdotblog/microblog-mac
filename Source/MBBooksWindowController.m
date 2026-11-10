@@ -14,6 +14,8 @@
 #import "MBNotebook.h"
 #import "MBBookCell.h"
 #import "MBBookNoteController.h"
+#import "MBBookSearchDetailsController.h"
+#import "MBSeparatorView.h"
 #import "RFClient.h"
 #import "RFMacros.h"
 #import "RFConstants.h"
@@ -24,6 +26,11 @@
 @interface MBBooksWindowController ()
 
 @property (assign, nonatomic) BOOL loadingReadingNotebook;
+@property (assign, nonatomic) NSUInteger searchRequestID;
+@property (strong, nonatomic) MBBookSearchDetailsController* searchDetailsController;
+@property (strong, nonatomic) NSView* searchDivider;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* bookshelfWidthConstraint;
+@property (strong, nonatomic) NSLayoutConstraint* searchWidthConstraint;
 
 @end
 
@@ -48,6 +55,7 @@
 	
 	[self setupTitle];
 	[self setupTable];
+	[self setupSearchDetails];
 	[self setupNotifications];
 	[self setupBooksCount];
 	[self setupBrowser];
@@ -74,6 +82,58 @@
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addBookNotification:) name:kAddBookNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNoteNotification:) name:kAddNoteNotification object:nil];
+}
+
+- (void) setupSearchDetails
+{
+	NSView* container = self.window.contentView;
+	NSScrollView* books_scroll_view = self.tableView.enclosingScrollView;
+
+	self.searchDetailsController = [[MBBookSearchDetailsController alloc] init];
+	self.searchDetailsController.book = nil;
+	NSView* details_view = self.searchDetailsController.view;
+	details_view.translatesAutoresizingMaskIntoConstraints = NO;
+	details_view.hidden = YES;
+	[container addSubview:details_view];
+	self.searchDivider = [[MBSeparatorView alloc] initWithFrame:NSZeroRect];
+	self.searchDivider.translatesAutoresizingMaskIntoConstraints = NO;
+	self.searchDivider.hidden = YES;
+	[container addSubview:self.searchDivider];
+
+	// Split only the content below the existing full-width search header.
+	self.searchWidthConstraint = [books_scroll_view.trailingAnchor constraintEqualToAnchor:self.searchDivider.leadingAnchor];
+	[NSLayoutConstraint activateConstraints:@[
+		[details_view.trailingAnchor constraintEqualToAnchor:container.trailingAnchor],
+		[details_view.topAnchor constraintEqualToAnchor:books_scroll_view.topAnchor],
+		[details_view.bottomAnchor constraintEqualToAnchor:container.bottomAnchor],
+		[details_view.widthAnchor constraintEqualToAnchor:container.widthAnchor multiplier:0.35],
+		[self.searchDivider.trailingAnchor constraintEqualToAnchor:details_view.leadingAnchor],
+		[self.searchDivider.topAnchor constraintEqualToAnchor:books_scroll_view.topAnchor],
+		[self.searchDivider.bottomAnchor constraintEqualToAnchor:container.bottomAnchor],
+		[self.searchDivider.widthAnchor constraintEqualToConstant:1]
+	]];
+}
+
+- (void) updateSearchLayout
+{
+	BOOL searching = [self isSearch];
+	[NSLayoutConstraint deactivateConstraints:@[self.bookshelfWidthConstraint, self.searchWidthConstraint]];
+	(searching ? self.searchWidthConstraint : self.bookshelfWidthConstraint).active = YES;
+	self.searchDetailsController.view.hidden = !searching;
+	self.searchDivider.hidden = !searching;
+	[self updateSearchDetails];
+}
+
+- (void) updateSearchDetails
+{
+	NSInteger row = self.tableView.selectedRow;
+	MBBook* book = nil;
+	if ([self isSearch] && row >= 0 && row < self.currentBooks.count) {
+		book = self.currentBooks[row];
+	}
+	if (self.searchDetailsController.book != book) {
+		self.searchDetailsController.book = book;
+	}
 }
 
 - (void) setupBooksCount
@@ -130,7 +190,9 @@
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
 		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
 			RFDispatchMainAsync (^{
-				[self.progressSpinner stopAnimation:nil];
+				if (![self isSearch]) {
+					[self.progressSpinner stopAnimation:nil];
+				}
 			});
 			return;
 		}
@@ -157,19 +219,23 @@
 		RFDispatchMainAsync (^{
 			if (![RFBookshelf isSameBooks:self.allBooks asBooks:new_books]) {
 				self.allBooks = new_books;
-				self.currentBooks = new_books;
-				self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
-				[self.tableView reloadData];
-				[self setupBooksCount];
+				if (![self isSearch]) {
+					self.currentBooks = new_books;
+					[self.tableView reloadData];
+					[self setupBooksCount];
+				}
 			}
 
-			[self.progressSpinner stopAnimation:nil];
+			if (![self isSearch]) {
+				[self.progressSpinner stopAnimation:nil];
+			}
 		});
 	}];
 }
 
 - (void) fetchBooksForSearch:(NSString *)search
 {
+	NSUInteger request_id = ++self.searchRequestID;
 	self.booksCountField.hidden = YES;
 	[self.progressSpinner startAnimation:nil];
 	
@@ -180,9 +246,11 @@
 	
 	RFClient* client = [[RFClient alloc] initWithPath:@"/books/search"];
 	[client getWithQueryArguments:args completion:^(UUHttpResponse* response) {
-		if (![response.parsedResponse isKindOfClass:[NSDictionary class]]) {
+		if (![response.parsedResponse isKindOfClass:[NSDictionary class]] || ![response.parsedResponse[@"items"] isKindOfClass:[NSArray class]]) {
 			RFDispatchMainAsync (^{
-				[self.progressSpinner stopAnimation:nil];
+				if (request_id == self.searchRequestID) {
+					[self.progressSpinner stopAnimation:nil];
+				}
 			});
 			return;
 		}
@@ -203,17 +271,27 @@
 			b.title = [item objectForKey:@"title"];
 			b.authors = author_names;
 			b.coverURL = [item objectForKey:@"image"];
-			b.isbn = [[item objectForKey:@"_microblog"] objectForKey:@"isbn"];
+			NSDictionary* metadata = [item[@"_microblog"] isKindOfClass:[NSDictionary class]] ? item[@"_microblog"] : nil;
+			b.isbn = metadata[@"isbn"];
+			b.backgroundURL = [metadata[@"background_url"] isKindOfClass:[NSString class]] ? metadata[@"background_url"] : nil;
+			b.backgroundColor = [metadata[@"background_color"] isKindOfClass:[NSString class]] ? metadata[@"background_color"] : nil;
 			b.bookDescription = [item objectForKey:@"content_text"];
 
 			[new_books addObject:b];
 		}
 
 		RFDispatchMainAsync (^{
+			if (request_id != self.searchRequestID) {
+				return;
+			}
 			self.currentBooks = new_books;
 			[self.progressSpinner stopAnimation:nil];
-			self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleNone;
 			[self.tableView reloadData];
+			if (new_books.count > 0) {
+				[self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+				[self.tableView scrollRowToVisible:0];
+			}
+			[self updateSearchDetails];
 		});
 	}];
 }
@@ -272,6 +350,7 @@
 		RFDispatchMainAsync (^{
 			[self.progressSpinner stopAnimation:nil];
 			[self.searchField setStringValue:@""];
+			[self search:self.searchField];
 			[self fetchBooks];
 
 			[[NSNotificationCenter defaultCenter] postNotificationName:kBookWasAddedNotification object:self userInfo:@{ kBookWasAddedBookshelfKey: bookshelf }];
@@ -384,21 +463,33 @@
 			cell.coverImageView.image = book.coverImage;
 		}
 	}];
+	if (self.searchDetailsController.book == book) {
+		[self.searchDetailsController updateCover];
+	}
 }
 
 #pragma mark -
 
 - (IBAction) search:(id)sender
 {
+	// Invalidate pending searches even when clearing or shortening the query.
+	self.searchRequestID++;
 	NSString* s = [sender stringValue];
+	[self.tableView deselectAll:nil];
 	if (s.length == 0) {
 		self.currentBooks = self.allBooks;
-		self.tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleRegular;
-		[self.tableView reloadData];
-		[self setupBooksCount];
 	}
-	else if (s.length >= 3) {
+	else {
+		self.currentBooks = @[];
+	}
+	[self.tableView reloadData];
+	[self setupBooksCount];
+	[self updateSearchLayout];
+	if (s.length >= 3) {
 		[self fetchBooksForSearch:s];
+	}
+	else {
+		[self.progressSpinner stopAnimation:nil];
 	}
 }
 
@@ -580,7 +671,7 @@
 {
 	for (NSMenuItem* item in menu.itemArray) {
 		if (item.action == @selector(addNote:)) {
-			item.hidden = ![MBNote hasSecretKey];
+			item.hidden = [self isSearch] || ![MBNote hasSecretKey];
 		}
 	}
 }
@@ -589,7 +680,7 @@
 {
 	if (item.action == @selector(addNote:)) {
 		NSInteger row = self.tableView.selectedRow;
-		return [MBNote hasSecretKey] && row >= 0 && row < self.currentBooks.count;
+		return ![self isSearch] && [MBNote hasSecretKey] && row >= 0 && row < self.currentBooks.count;
 	}
 	else if (item.action == @selector(assignToBookshelf:)) {
 		RFBookshelf* shelf = item.representedObject;
@@ -667,9 +758,9 @@
 	}
 }
 
-- (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+- (void) tableViewSelectionDidChange:(NSNotification *)notification
 {
-	return ![self isSearch];
+	[self updateSearchDetails];
 }
 
 @end

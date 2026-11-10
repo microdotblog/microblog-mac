@@ -84,7 +84,8 @@
 	// Search results show the add button in place of the options button.
 	self.addButton.hidden = (self.book.bookID != nil);
 	self.optionsButton.hidden = !self.selected || self.book.bookID == nil;
-	self.addNoteButton.hidden = !self.selected || ![MBNote hasSecretKey];
+	self.addNoteButton.hidden = !self.selected || self.book.bookID == nil || ![MBNote hasSecretKey];
+	self.addNoteWidthConstraint.constant = self.book.bookID ? 79 : 0;
 }
 
 - (IBAction) addBook:(id)sender
