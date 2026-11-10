@@ -5,6 +5,28 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>Version 4.3.3</title>
+			<description><![CDATA[
+				<style>
+					ul {
+						margin-left: 0px; padding-left: 20px;
+					}
+					li {
+						padding: 2px;
+					}
+				</style>
+				<p>Changes in this version:</p>
+				<ul>
+					<li>Added a book details pane to search results, with larger covers, author info, and book descriptions.</li>
+					<li>Added “New Post…” to right-click menus for movies and TV shows, and “Add Note…” to bookshelf menus.</li>
+					<li>Fixed broken buttons and inconsistent right-click selection in book and movie lists.</li>
+				</ul>
+			]]></description>
+			<pubDate>Tue, 10 Nov 2026 15:30:00 -0500</pubDate>
+			<enclosure url="https://s3.amazonaws.com/micro.blog/mac/Micro.blog_4.3.3.zip" sparkle:shortVersionString="4.3.3" sparkle:version="269" length="18454877" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+		</item>
+		<item>
 			<title>Version 4.3.2</title>
 			<description><![CDATA[
 				<style>
