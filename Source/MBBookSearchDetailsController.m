@@ -129,7 +129,7 @@
 	title_box.boxType = NSBoxCustom;
 	title_box.borderWidth = 0;
 	title_box.titlePosition = NSNoTitle;
-	title_box.cornerRadius = 6;
+	title_box.cornerRadius = 0;
 	title_box.fillColor = [[NSColor controlBackgroundColor] colorWithAlphaComponent:0.8];
 	title_box.contentViewMargins = NSZeroSize;
 	[self.headerView addSubview:title_box];
@@ -173,9 +173,9 @@
 		[self.coverView.heightAnchor constraintEqualToAnchor:self.coverView.widthAnchor multiplier:1.5],
 		cover_width,
 		[title_box.topAnchor constraintEqualToAnchor:self.coverView.bottomAnchor constant:20],
-		[title_box.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor constant:16],
-		[title_box.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor constant:-16],
-		[title_box.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor constant:-20],
+		[title_box.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
+		[title_box.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
+		[title_box.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
 		[title_stack.leadingAnchor constraintEqualToAnchor:title_box.contentView.leadingAnchor constant:12],
 		[title_stack.trailingAnchor constraintEqualToAnchor:title_box.contentView.trailingAnchor constant:-12],
 		[title_stack.topAnchor constraintEqualToAnchor:title_box.contentView.topAnchor constant:12],

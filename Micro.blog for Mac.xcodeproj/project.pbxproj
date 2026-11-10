@@ -184,8 +184,6 @@
 		4B7F0B061BAF520C004553A6 /* RFHeaderBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B051BAF520C004553A6 /* RFHeaderBackgroundView.m */; };
 		4B7F0B091BAF5792004553A6 /* RFPostingBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */; };
 		4B88CFA92BBCB6AE0091BB19 /* MBOutlineHeaderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */; };
-		4B9CD0032FF1000000AA5E01 /* MBSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */; };
-		4B9CD0062FF1000000AA5E01 /* MBMarkdownTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9CD0052FF1000000AA5E01 /* MBMarkdownTextView.m */; };
 		4B88CFAF2BBD92950091BB19 /* Logs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B88CFAD2BBD92950091BB19 /* Logs.xib */; };
 		4B88CFB22BBD92DA0091BB19 /* MBLogsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */; };
 		4B88CFB52BBD95360091BB19 /* MBLogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B88CFB42BBD95360091BB19 /* MBLogCell.m */; };
@@ -206,6 +204,8 @@
 		4B90D0042FD000100000001 /* MBDistributedWorkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B90D0032FD000100000001 /* MBDistributedWorkController.m */; };
 		4B90D0062FD000100000001 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B90D0052FD000100000001 /* IOKit.framework */; };
 		4B9AA00332A0000100ABCDEF /* NSError+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9AA00232A0000100ABCDEF /* NSError+Extras.m */; };
+		4B9CD0032FF1000000AA5E01 /* MBSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */; };
+		4B9CD0062FF1000000AA5E01 /* MBMarkdownTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9CD0052FF1000000AA5E01 /* MBMarkdownTextView.m */; };
 		4B9F06402767BC400007F21D /* Date.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B9F063E2767BC400007F21D /* Date.xib */; };
 		4B9F06432767BCE60007F21D /* MBDateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F06422767BCE60007F21D /* MBDateController.m */; };
 		4B9FDCFE2B7B069C00DE799A /* NSColor+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9FDCFD2B7B069C00DE799A /* NSColor+Extras.m */; };
@@ -287,7 +287,6 @@
 		4BF7E5272836CAC400500C59 /* MBBooksWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E5262836CAC400500C59 /* MBBooksWindowController.m */; };
 		4BF7E52A2836CB1000500C59 /* BooksWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E5282836CB1000500C59 /* BooksWindow.xib */; };
 		4BF7E52D2836CE2D00500C59 /* MBBookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E52C2836CE2D00500C59 /* MBBookCell.m */; };
-		C0DE20261110000000000001 /* MBBookSearchDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261110000000000002 /* MBBookSearchDetailsController.m */; };
 		4BF7E5302836CE4700500C59 /* BookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BF7E52E2836CE4700500C59 /* BookCell.xib */; };
 		4BF7E53328394C5C00500C59 /* MBBooksTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF7E53128394C5C00500C59 /* MBBooksTableView.m */; };
 		4BFF2CBF289030C900B74D18 /* MBDisableDragImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF2CBE289030C900B74D18 /* MBDisableDragImageView.m */; };
@@ -301,6 +300,7 @@
 		C0DE20261003000000000001 /* Source/MBAudioNoteController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000002 /* Source/MBAudioNoteController.m */; };
 		C0DE20261003000000000011 /* Source/MBCalendarController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000012 /* Source/MBCalendarController.m */; };
 		C0DE20261003000000000014 /* Source/MBCalendarMonthView.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261003000000000015 /* Source/MBCalendarMonthView.m */; };
+		C0DE20261110000000000001 /* MBBookSearchDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE20261110000000000002 /* MBBookSearchDetailsController.m */; };
 		C549E92121EEB6D600730675 /* RFUserCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92021EEB6D600730675 /* RFUserCache.m */; };
 		C549E92421EEB75600730675 /* RFAutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C549E92321EEB75600730675 /* RFAutoCompleteCache.m */; };
 		E8353D03F1A941E3A1A01811 /* Source/MBNotesTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E8353D03F1A941E3A1A01812 /* Source/MBNotesTextView.m */; };
@@ -630,10 +630,6 @@
 		4B7F0B081BAF5792004553A6 /* RFPostingBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFPostingBarView.m; path = Source/RFPostingBarView.m; sourceTree = "<group>"; };
 		4B88CFA72BBCB6AE0091BB19 /* MBOutlineHeaderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBOutlineHeaderBox.h; path = Source/MBOutlineHeaderBox.h; sourceTree = "<group>"; };
 		4B88CFA82BBCB6AE0091BB19 /* MBOutlineHeaderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBOutlineHeaderBox.m; path = Source/MBOutlineHeaderBox.m; sourceTree = "<group>"; };
-		4B9CD0012FF1000000AA5E01 /* MBSeparatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSeparatorView.h; path = Source/MBSeparatorView.h; sourceTree = "<group>"; };
-		4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSeparatorView.m; path = Source/MBSeparatorView.m; sourceTree = "<group>"; };
-		4B9CD0042FF1000000AA5E01 /* MBMarkdownTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMarkdownTextView.h; path = Source/MBMarkdownTextView.h; sourceTree = "<group>"; };
-		4B9CD0052FF1000000AA5E01 /* MBMarkdownTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMarkdownTextView.m; path = Source/MBMarkdownTextView.m; sourceTree = "<group>"; };
 		4B88CFAE2BBD92950091BB19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Logs.xib; sourceTree = "<group>"; };
 		4B88CFB02BBD92DA0091BB19 /* MBLogsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBLogsController.h; path = Source/MBLogsController.h; sourceTree = "<group>"; };
 		4B88CFB12BBD92DA0091BB19 /* MBLogsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLogsController.m; path = Source/MBLogsController.m; sourceTree = "<group>"; };
@@ -672,6 +668,10 @@
 		4B90D0082FD100000000001 /* MBLogFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBLogFile.m; path = Source/MBLogFile.m; sourceTree = "<group>"; };
 		4B9AA00132A0000100ABCDEF /* NSError+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSError+Extras.h"; path = "Source/NSError+Extras.h"; sourceTree = "<group>"; };
 		4B9AA00232A0000100ABCDEF /* NSError+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSError+Extras.m"; path = "Source/NSError+Extras.m"; sourceTree = "<group>"; };
+		4B9CD0012FF1000000AA5E01 /* MBSeparatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBSeparatorView.h; path = Source/MBSeparatorView.h; sourceTree = "<group>"; };
+		4B9CD0022FF1000000AA5E01 /* MBSeparatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBSeparatorView.m; path = Source/MBSeparatorView.m; sourceTree = "<group>"; };
+		4B9CD0042FF1000000AA5E01 /* MBMarkdownTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBMarkdownTextView.h; path = Source/MBMarkdownTextView.h; sourceTree = "<group>"; };
+		4B9CD0052FF1000000AA5E01 /* MBMarkdownTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBMarkdownTextView.m; path = Source/MBMarkdownTextView.m; sourceTree = "<group>"; };
 		4B9F063F2767BC400007F21D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/Date.xib; sourceTree = "<group>"; };
 		4B9F06412767BCE60007F21D /* MBDateController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBDateController.h; path = Source/MBDateController.h; sourceTree = "<group>"; };
 		4B9F06422767BCE60007F21D /* MBDateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBDateController.m; path = Source/MBDateController.m; sourceTree = "<group>"; };
@@ -803,8 +803,6 @@
 		4BF7E5292836CB1000500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BooksWindow.xib; sourceTree = "<group>"; };
 		4BF7E52B2836CE2D00500C59 /* MBBookCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookCell.h; path = Source/MBBookCell.h; sourceTree = "<group>"; };
 		4BF7E52C2836CE2D00500C59 /* MBBookCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookCell.m; path = Source/MBBookCell.m; sourceTree = "<group>"; };
-		C0DE20261110000000000002 /* MBBookSearchDetailsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookSearchDetailsController.m; path = Source/MBBookSearchDetailsController.m; sourceTree = "<group>"; };
-		C0DE20261110000000000003 /* MBBookSearchDetailsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookSearchDetailsController.h; path = Source/MBBookSearchDetailsController.h; sourceTree = "<group>"; };
 		4BF7E52F2836CE4700500C59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/BookCell.xib; sourceTree = "<group>"; };
 		4BF7E53128394C5C00500C59 /* MBBooksTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBBooksTableView.m; path = Source/MBBooksTableView.m; sourceTree = "<group>"; };
 		4BF7E53228394C5C00500C59 /* MBBooksTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBBooksTableView.h; path = Source/MBBooksTableView.h; sourceTree = "<group>"; };
@@ -828,6 +826,8 @@
 		C0DE20261003000000000013 /* Source/MBCalendarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBCalendarController.h; sourceTree = "<group>"; };
 		C0DE20261003000000000015 /* Source/MBCalendarMonthView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Source/MBCalendarMonthView.m; sourceTree = "<group>"; };
 		C0DE20261003000000000016 /* Source/MBCalendarMonthView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Source/MBCalendarMonthView.h; sourceTree = "<group>"; };
+		C0DE20261110000000000002 /* MBBookSearchDetailsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBBookSearchDetailsController.m; path = Source/MBBookSearchDetailsController.m; sourceTree = "<group>"; };
+		C0DE20261110000000000003 /* MBBookSearchDetailsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBBookSearchDetailsController.h; path = Source/MBBookSearchDetailsController.h; sourceTree = "<group>"; };
 		C549E91F21EEB6D600730675 /* RFUserCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFUserCache.h; path = Source/RFUserCache.h; sourceTree = "<group>"; };
 		C549E92021EEB6D600730675 /* RFUserCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RFUserCache.m; path = Source/RFUserCache.m; sourceTree = "<group>"; };
 		C549E92221EEB75600730675 /* RFAutoCompleteCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RFAutoCompleteCache.h; path = Source/RFAutoCompleteCache.h; sourceTree = "<group>"; };
@@ -2517,7 +2517,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 268;
+				CURRENT_PROJECT_VERSION = 269;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2554,7 +2554,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 268;
+				CURRENT_PROJECT_VERSION = 269;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
 				ENABLE_HARDENED_RUNTIME = YES;
